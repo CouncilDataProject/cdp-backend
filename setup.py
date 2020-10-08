@@ -62,17 +62,15 @@ setup(
     ],
     description="Data storage utilities and processing pipelines to run on CDP server deployments.",
     entry_points={
-        "console_scripts": [
-            "my_example=cdp_backend.bin.my_example:main"
-        ],
+        "console_scripts": [],
     },
     install_requires=requirements,
     license="MIT license",
     long_description=readme,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    keywords="cdp_backend",
-    name="cdp_backend",
+    keywords="civic technology, open government",
+    name="cdp-backend",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
     python_requires=">=3.7",
     setup_requires=setup_requirements,
