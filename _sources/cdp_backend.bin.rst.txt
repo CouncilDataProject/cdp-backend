@@ -1,0 +1,10 @@
+cdp\_backend.bin package
+========================
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend.bin
+   :members:
+   :undoc-members:
+   :show-inheritance:

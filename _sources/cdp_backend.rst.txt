@@ -1,0 +1,17 @@
+cdp\_backend package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   cdp_backend.bin
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend
+   :members:
+   :undoc-members:
+   :show-inheritance:
