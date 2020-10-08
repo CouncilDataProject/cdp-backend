@@ -1,8 +1,8 @@
 # cdp-backend
 
-[![Build Status](https://github.com/CouncilDataProject/cdp-backend/workflows/Build%20Master/badge.svg)](https://github.com/CouncilDataProject/cdp-backend/actions)
+[![Build Status](https://github.com/CouncilDataProject/cdp-backend/workflows/Build/badge.svg)](https://github.com/CouncilDataProject/cdp-backend/actions)
 [![Documentation](https://github.com/CouncilDataProject/cdp-backend/workflows/Documentation/badge.svg)](https://CouncilDataProject.github.io/cdp-backend)
-[![Code Coverage](https://codecov.io/gh/CouncilDataProject/cdp-backend/branch/master/graph/badge.svg)](https://codecov.io/gh/CouncilDataProject/cdp-backend)
+[![Code Coverage](https://codecov.io/gh/CouncilDataProject/cdp-backend/branch/main/graph/badge.svg)](https://codecov.io/gh/CouncilDataProject/cdp-backend)
 
 Data storage utilities and processing pipelines to run on CDP server deployments.
 
