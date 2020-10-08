@@ -1,4 +1,4 @@
-name: Test and Lint
+name: Check Pull Request
 
 on: pull_request
 
@@ -43,3 +43,19 @@ jobs:
     - name: Check with black
       run: |
         black --check cdp_backend
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install .[dev]
+    - name: Generate Docs
+      run: |
+        make gen-docs

@@ -1,5 +1,5 @@
 Welcome to cdp-backend's documentation!
-======================================
+=======================================
 
 .. toctree::
    :hidden:
