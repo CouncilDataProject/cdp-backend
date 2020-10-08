@@ -71,7 +71,7 @@ setup(
     keywords="civic technology, open government",
     name="cdp-backend",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
-    python_requires="==3.8",
+    python_requires=">=3.8, <3.9",
     setup_requires=setup_requirements,
     test_suite="cdp_backend/tests",
     tests_require=test_requirements,
