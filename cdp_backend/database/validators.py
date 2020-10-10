@@ -9,14 +9,14 @@ from fsspec.core import url_to_fs
 #############################################################################
 
 
-def check_router_string(router_str: Optional[str]) -> bool:
-    if router_str is None:
-        return None
-
-    if re.match(r"^[a-zA-Z]+[\-]?[a-zA-Z]+$", router_str):
+def check_router_string(router_string: Optional[str]) -> bool:
+    if router_string is None:
         return True
 
-    return (False, "Invalid router string provided")
+    if re.match(r"^[a-z]+[\-]?[a-z]+$", router_string):
+        return True
+
+    return False
 
 
 def check_email(email: Optional[str]) -> bool:
@@ -26,7 +26,7 @@ def check_email(email: Optional[str]) -> bool:
     if re.match(r"^[a-zA-Z0-9]+[\.]?[a-zA-Z0-9]+[@]\w+[.]\w{2,3}$", email):
         return True
 
-    return (False, "Invalid email provided")
+    return False
 
 
 def check_resource_exists(uri: Optional[str]) -> bool:
@@ -40,4 +40,4 @@ def check_resource_exists(uri: Optional[str]) -> bool:
     if fs.exists(uri):
         return True
 
-    return (False, "Resource does not exist")
+    return False
