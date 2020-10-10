@@ -5,7 +5,7 @@ import pytest
 
 from cdp_backend.database import validators
 
-from .. import utils
+from .. import test_utils
 
 #############################################################################
 
@@ -59,7 +59,7 @@ def test_local_check_resource_exists(uri, expected_result):
 
 
 @pytest.mark.skipif(
-    not utils.check_internet_available(),
+    not test_utils.check_internet_available(),
     reason="No internet connection",
 )
 @pytest.mark.parametrize(
