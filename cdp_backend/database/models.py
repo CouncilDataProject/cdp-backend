@@ -88,6 +88,7 @@ class Body(Model):
         body = cls()
         body.name = "Full Council"
         body.is_active = True
+        body.start_datetime = datetime.utcnow()
         return body
 
     PRIMARY_KEYS = ("name",)
