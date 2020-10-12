@@ -18,4 +18,4 @@ For full package documentation please visit [CouncilDataProject.github.io/cdp-ba
 ## Development
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
 
-***Free software: MIT license***
+**Free software: MIT license**

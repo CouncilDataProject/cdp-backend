@@ -37,7 +37,13 @@ dev_requirements = [
     "wheel>=0.34.2",
 ]
 
-requirements = []
+requirements = [
+    "dask[bag]>=2.30.0,<3",
+    "fireo>=1.3.3,<2",
+    "fsspec>=0.8.3,<1",
+    "gcsfs>=0.7.1,<1",
+    "pandas>=1.1.3,<2",
+]
 
 extra_requirements = {
     "setup": setup_requirements,
@@ -76,7 +82,7 @@ setup(
     test_suite="cdp_backend/tests",
     tests_require=test_requirements,
     extras_require=extra_requirements,
-    url="https://github.com/CouncilDataProject/cdp_backend",
+    url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bumpversion
     # Details in CONTRIBUTING.rst
     version="3.0.0",

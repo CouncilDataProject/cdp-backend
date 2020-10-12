@@ -18,7 +18,9 @@ jobs:
         pip install .[test]
     - name: Test with pytest
       run: |
-        pytest cdp_backend/tests/
+        pytest --cov-report xml --cov=cdp_backend cdp_backend/tests/
+    - name: Upload Codecov
+      uses: codecov/codecov-action@v1
 
   lint:
     runs-on: ubuntu-latest

@@ -32,13 +32,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/CouncilDataProject/cdp_backend
+    $ git clone git://github.com/CouncilDataProject/cdp-backend
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/CouncilDataProject/cdp_backend/tarball/main
+    $ curl  -OL https://github.com/CouncilDataProject/cdp-backend/tarball/main
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/CouncilDataProject/cdp_backend
-.. _tarball: https://github.com/CouncilDataProject/cdp_backend/tarball/main
+.. _Github repo: https://github.com/CouncilDataProject/cdp-backend
+.. _tarball: https://github.com/CouncilDataProject/cdp-backend/tarball/main
