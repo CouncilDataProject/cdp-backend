@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from typing import NamedTuple, Tuple
 
 from fireo.models import Model
 from fireo import fields
@@ -13,28 +12,12 @@ from ..utils import file_utils
 ###############################################################################
 
 
-class Order:
-    ASCENDING = "ASCENDING"
-    DESCENDING = "DESCENDING"
-
-
-class IndexedField(NamedTuple):
-    name: str
-    order: str
-
-
-class IndexedFieldSet(NamedTuple):
-    fields: Tuple[IndexedField]
-
-
-###############################################################################
-
-
 class File(Model):
     """
     A file from the CDP file store.
     """
-    uri = fields.TextField(required=True)
+
+    uri = fields.TextField(required=True, validator=validators.check_resource_exists)
     name = fields.TextField(required=True)
     description = fields.TextField()
     media_type = fields.TextField()
@@ -57,6 +40,7 @@ class Person(Model):
     Primarily the council members, this could technically include the mayor or city
     manager, or any other "normal" presenters and attendees of meetings.
     """
+
     name = fields.TextField(required=True)
     router_string = fields.TextField(validator=validators.check_router_string)
     email = fields.TextField(validator=validators.check_email)
@@ -74,7 +58,10 @@ class Person(Model):
         person.is_active = True
         return person
 
-    _PRIMARY_KEYS = ("name", "router_string",)
+    _PRIMARY_KEYS = (
+        "name",
+        "router_string",
+    )
     _INDEXES = ()
 
 
@@ -83,6 +70,7 @@ class Body(Model):
     A meeting body. This can be full council, a subcommittee, or "off-council" matters
     such as election debates.
     """
+
     name = fields.TextField(required=True)
     tag = fields.TextField()
     description = fields.TextField()
@@ -107,6 +95,7 @@ class Seat(Model):
     """
     An electable office on the City Council. I.E. "Position 9".
     """
+
     name = fields.TextField(required=True)
     electoral_area = fields.TextField()
     electoral_type = fields.TextField()
@@ -134,6 +123,7 @@ class Role(Model):
     spends a term on the transportation committee and then spends a term on the finance
     committee.
     """
+
     title = fields.TextField(required=True)
     person_ref = fields.ReferenceField(Person, required=True)
     body_ref = fields.ReferenceField(Body, required=True)
@@ -146,9 +136,9 @@ class Role(Model):
     def Example(cls):
         role = cls()
         role.title = "Council President"
-        role.person = Person.Example()
-        role.body = Body.Example()
-        role.seat = Seat.Example()
+        role.person_ref = Person.Example()
+        role.body_ref = Body.Example()
+        role.seat_ref = Seat.Example()
         role.start_datetime = datetime.utcnow()
         return role
 
