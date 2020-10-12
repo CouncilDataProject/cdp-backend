@@ -10,6 +10,20 @@ import dask.dataframe as dd
 
 
 def get_media_type(uri: str) -> Optional[str]:
+    """
+    Get the IANA media type for the provided URI.
+    If one could not be found, return None.
+
+    Parameters
+    ----------
+    uri: str
+        The URI to get the IANA media type for.
+
+    Returns
+    -------
+    mtype: Optional[str]:
+        The found matching IANA media type.
+    """
     # Media types retrieved from:
     # http://www.iana.org/assignments/media-types/media-types.xhtml
     media_types = dd.read_csv(
