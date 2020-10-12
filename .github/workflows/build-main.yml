@@ -27,7 +27,8 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --cov-report xml --cov=cdp_backend cdp_backend/tests/
-        codecov -t ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload Codecov
+      uses: codecov/codecov-action@v1
 
   lint:
     runs-on: ubuntu-latest
