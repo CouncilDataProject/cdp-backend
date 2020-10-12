@@ -1,0 +1,29 @@
+cdp\_backend.utils package
+==========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   cdp_backend.utils.resources
+
+Submodules
+----------
+
+cdp\_backend.utils.file\_utils module
+-------------------------------------
+
+.. automodule:: cdp_backend.utils.file_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

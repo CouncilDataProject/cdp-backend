@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdp_backend.database.models &mdash; cdp-backend 3.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.database.models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.database.models</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">fireo</span> <span class="kn">import</span> <span class="n">fields</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">validators</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">file_utils</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="File"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File">[docs]</a><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A file from the CDP file store.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">check_resource_exists</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">media_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="File.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;gs://cdp-example/central-staff-memo.pdf&quot;</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Central Staff Memo&quot;</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">media_type</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_media_type</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">file</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Person"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person">[docs]</a><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Primarily the council members, this could technically include the mayor or city</span>
+<span class="sd">    manager, or any other &quot;normal&quot; presenters and attendees of meetings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">router_string</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">check_router_string</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">check_email</span><span class="p">)</span>
+    <span class="n">phone</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">()</span>
+    <span class="n">website</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">check_resource_exists</span><span class="p">)</span>
+    <span class="n">picture_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">)</span>
+    <span class="n">is_active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Person.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;M. Lorena González&quot;</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="s2">&quot;lorena-gonzalez&quot;</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">person</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;router_string&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Body">[docs]</a><span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A meeting body. This can be full council, a subcommittee, or &quot;off-council&quot; matters</span>
+<span class="sd">    such as election debates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">start_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">end_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span>
+    <span class="n">is_active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Body.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Body.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Full Council&quot;</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">body</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Seat"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Seat">[docs]</a><span class="k">class</span> <span class="nc">Seat</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An electable office on the City Council. I.E. &quot;Position 9&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">electoral_area</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">electoral_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">image_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Seat.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Seat.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">seat</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">seat</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Position 9&quot;</span>
+        <span class="n">seat</span><span class="o">.</span><span class="n">electoral_area</span> <span class="o">=</span> <span class="s2">&quot;Citywide&quot;</span>
+        <span class="n">seat</span><span class="o">.</span><span class="n">electoral_type</span> <span class="o">=</span> <span class="s2">&quot;at-large&quot;</span>
+        <span class="k">return</span> <span class="n">seat</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Role"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Role">[docs]</a><span class="k">class</span> <span class="nc">Role</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A role is a person&#39;s job for a period of time in the city council. A person can</span>
+<span class="sd">    (and should) have multiple roles. For example: a person has two terms as city</span>
+<span class="sd">    council member for district four then a term as city council member for a citywide</span>
+<span class="sd">    seat. Roles can also be tied to committee chairs. For example: a council member</span>
+<span class="sd">    spends a term on the transportation committee and then spends a term on the finance</span>
+<span class="sd">    committee.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">body_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Body</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">seat_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Seat</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">start_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">end_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Role.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Role.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">role</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Council President&quot;</span>
+        <span class="n">role</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">role</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">Body</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">role</span><span class="o">.</span><span class="n">seat_ref</span> <span class="o">=</span> <span class="n">Seat</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">role</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">role</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="s2">&quot;seat&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -7,6 +7,8 @@ Subpackages
 .. toctree::
 
    cdp_backend.bin
+   cdp_backend.database
+   cdp_backend.utils
 
 Module contents
 ---------------

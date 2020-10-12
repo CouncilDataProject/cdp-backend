@@ -1,0 +1,660 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdp_backend.database package &mdash; cdp-backend 3.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdp_backend.utils package" href="cdp_backend.utils.html" />
+    <link rel="prev" title="cdp_backend.bin package" href="cdp_backend.bin.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">cdp_backend</a> &raquo;</li>
+        
+          <li><a href="cdp_backend.html">cdp_backend package</a> &raquo;</li>
+        
+      <li>cdp_backend.database package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdp_backend.database.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdp_backend.utils.html" class="btn btn-neutral float-right" title="cdp_backend.utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdp_backend.bin.html" class="btn btn-neutral float-left" title="cdp_backend.bin package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdp-backend-database-package">
+<h1>cdp_backend.database package<a class="headerlink" href="#cdp-backend-database-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdp_backend.database.models">
+<span id="cdp-backend-database-models-module"></span><h2>cdp_backend.database.models module<a class="headerlink" href="#module-cdp_backend.database.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdp_backend.database.models.Body">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Body</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
+<p>A meeting body. This can be full council, a subcommittee, or “off-council” matters
+such as election debates.</p>
+<dl class="method">
+<dt id="cdp_backend.database.models.Body.Example">
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Body.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Body.Example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.Meta">
+<code class="sig-name descname">Meta</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.Meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.collection">
+<code class="sig-name descname">collection</code><em class="property">: fireo.managers.managers.Manager</em><em class="property"> = &lt;fireo.managers.managers.Manager object&gt;</em><a class="headerlink" href="#cdp_backend.database.models.Body.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.collection_name">
+<code class="sig-name descname">collection_name</code><em class="property"> = 'body'</em><a class="headerlink" href="#cdp_backend.database.models.Body.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.end_datetime">
+<code class="sig-name descname">end_datetime</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.end_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.is_active">
+<code class="sig-name descname">is_active</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.start_datetime">
+<code class="sig-name descname">start_datetime</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.start_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Body.tag">
+<code class="sig-name descname">tag</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.database.models.File">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">File</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
+<p>A file from the CDP file store.</p>
+<dl class="method">
+<dt id="cdp_backend.database.models.File.Example">
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#File.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.File.Example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.Meta">
+<code class="sig-name descname">Meta</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.File.Meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.collection">
+<code class="sig-name descname">collection</code><em class="property">: fireo.managers.managers.Manager</em><em class="property"> = &lt;fireo.managers.managers.Manager object&gt;</em><a class="headerlink" href="#cdp_backend.database.models.File.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.collection_name">
+<code class="sig-name descname">collection_name</code><em class="property"> = 'file'</em><a class="headerlink" href="#cdp_backend.database.models.File.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.File.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.media_type">
+<code class="sig-name descname">media_type</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.File.media_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.File.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.File.uri">
+<code class="sig-name descname">uri</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.File.uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.database.models.Person">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Person</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
+<p>Primarily the council members, this could technically include the mayor or city
+manager, or any other “normal” presenters and attendees of meetings.</p>
+<dl class="method">
+<dt id="cdp_backend.database.models.Person.Example">
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Person.Example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.Meta">
+<code class="sig-name descname">Meta</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.Meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.collection">
+<code class="sig-name descname">collection</code><em class="property">: fireo.managers.managers.Manager</em><em class="property"> = &lt;fireo.managers.managers.Manager object&gt;</em><a class="headerlink" href="#cdp_backend.database.models.Person.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.collection_name">
+<code class="sig-name descname">collection_name</code><em class="property"> = 'person'</em><a class="headerlink" href="#cdp_backend.database.models.Person.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.email">
+<code class="sig-name descname">email</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.is_active">
+<code class="sig-name descname">is_active</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.phone">
+<code class="sig-name descname">phone</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.phone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.picture_ref">
+<code class="sig-name descname">picture_ref</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.picture_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.router_string">
+<code class="sig-name descname">router_string</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.router_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Person.website">
+<code class="sig-name descname">website</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Person.website" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.database.models.Role">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Role</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Role"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Role" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
+<p>A role is a person’s job for a period of time in the city council. A person can
+(and should) have multiple roles. For example: a person has two terms as city
+council member for district four then a term as city council member for a citywide
+seat. Roles can also be tied to committee chairs. For example: a council member
+spends a term on the transportation committee and then spends a term on the finance
+committee.</p>
+<dl class="method">
+<dt id="cdp_backend.database.models.Role.Example">
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Role.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Role.Example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.Meta">
+<code class="sig-name descname">Meta</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.Meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.body_ref">
+<code class="sig-name descname">body_ref</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.body_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.collection">
+<code class="sig-name descname">collection</code><em class="property">: fireo.managers.managers.Manager</em><em class="property"> = &lt;fireo.managers.managers.Manager object&gt;</em><a class="headerlink" href="#cdp_backend.database.models.Role.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.collection_name">
+<code class="sig-name descname">collection_name</code><em class="property"> = 'role'</em><a class="headerlink" href="#cdp_backend.database.models.Role.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.end_datetime">
+<code class="sig-name descname">end_datetime</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.end_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.person_ref">
+<code class="sig-name descname">person_ref</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.person_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.seat_ref">
+<code class="sig-name descname">seat_ref</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.seat_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.start_datetime">
+<code class="sig-name descname">start_datetime</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.start_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Role.title">
+<code class="sig-name descname">title</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Role.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.database.models.Seat">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Seat</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Seat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Seat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
+<p>An electable office on the City Council. I.E. “Position 9”.</p>
+<dl class="method">
+<dt id="cdp_backend.database.models.Seat.Example">
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Seat.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Seat.Example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.Meta">
+<code class="sig-name descname">Meta</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Seat.Meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.collection">
+<code class="sig-name descname">collection</code><em class="property">: fireo.managers.managers.Manager</em><em class="property"> = &lt;fireo.managers.managers.Manager object&gt;</em><a class="headerlink" href="#cdp_backend.database.models.Seat.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.collection_name">
+<code class="sig-name descname">collection_name</code><em class="property"> = 'seat'</em><a class="headerlink" href="#cdp_backend.database.models.Seat.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.electoral_area">
+<code class="sig-name descname">electoral_area</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Seat.electoral_area" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.electoral_type">
+<code class="sig-name descname">electoral_type</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Seat.electoral_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Seat.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.image_ref">
+<code class="sig-name descname">image_ref</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Seat.image_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.models.Seat.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Seat.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.database.types">
+<span id="cdp-backend-database-types-module"></span><h2>cdp_backend.database.types module<a class="headerlink" href="#module-cdp_backend.database.types" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdp_backend.database.types.IndexedField">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">IndexedField</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">order</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/types.html#IndexedField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.IndexedField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of IndexedField(name, order)</p>
+<dl class="attribute">
+<dt id="cdp_backend.database.types.IndexedField.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#cdp_backend.database.types.IndexedField.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.types.IndexedField.order">
+<code class="sig-name descname">order</code><a class="headerlink" href="#cdp_backend.database.types.IndexedField.order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.database.types.IndexedFieldSet">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">IndexedFieldSet</code><span class="sig-paren">(</span><em class="sig-param">fields</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/types.html#IndexedFieldSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.IndexedFieldSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of IndexedFieldSet(fields,)</p>
+<dl class="attribute">
+<dt id="cdp_backend.database.types.IndexedFieldSet.fields">
+<code class="sig-name descname">fields</code><a class="headerlink" href="#cdp_backend.database.types.IndexedFieldSet.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.database.types.Order">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">Order</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#Order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.Order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="cdp_backend.database.types.Order.ASCENDING">
+<code class="sig-name descname">ASCENDING</code><em class="property"> = 'ASCENDING'</em><a class="headerlink" href="#cdp_backend.database.types.Order.ASCENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.types.Order.DESCENDING">
+<code class="sig-name descname">DESCENDING</code><em class="property"> = 'DESCENDING'</em><a class="headerlink" href="#cdp_backend.database.types.Order.DESCENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.database.validators">
+<span id="cdp-backend-database-validators-module"></span><h2>cdp_backend.database.validators module<a class="headerlink" href="#module-cdp_backend.database.validators" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cdp_backend.database.validators.check_email">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">check_email</code><span class="sig-paren">(</span><em class="sig-param">email: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#check_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.check_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate that a valid email was provided.</p>
+<p>None is a valid option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>email</strong> (<em>Optional[str]</em>) – The email to validate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cdp_backend.database.validators.check_resource_exists">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">check_resource_exists</code><span class="sig-paren">(</span><em class="sig-param">uri: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#check_resource_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.check_resource_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate that the URI provided points to an existing file.</p>
+<p>None is a valid option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>uri</strong> (<em>Optional[str]</em>) – The URI to validate resource existance for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cdp_backend.database.validators.check_router_string">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">check_router_string</code><span class="sig-paren">(</span><em class="sig-param">router_string: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#check_router_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.check_router_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate that the provided router string contains only lowercase alphabetic
+characters and optionally include a hyphen.</p>
+<p>None is a valid option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>router_string</strong> (<em>Optional[str]</em>) – The router string to validate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.database">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.database" title="Permalink to this headline">¶</a></h2>
+<p>Database package for cdp_backend.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

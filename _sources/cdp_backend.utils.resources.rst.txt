@@ -1,0 +1,10 @@
+cdp\_backend.utils.resources package
+====================================
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend.utils.resources
+   :members:
+   :undoc-members:
+   :show-inheritance:
