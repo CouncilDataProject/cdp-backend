@@ -15,8 +15,27 @@ from . import exceptions
 
 def model_is_unique(model: Model):
     """
-    Validate that the primary keys of a to-be-uploaded-model are unique when compared
+    Validate that the primary keys of a to-be-uploaded model are unique when compared
     to the collection.
+
+    Parameters
+    ----------
+    model: Model
+        A to-be-uploaded model instance.
+
+    Raises
+    ------
+    exceptions.UniquenessError: if the model is not unique when comparing primary keys
+    to the existing data in the database.
+
+    Examples
+    --------
+    >>> from cdp_backend.database import models
+    ... from cdp_backend.database.validators import model_is_unique
+    ...
+    ... b = models.Body.Example()
+    ... if model_is_unique(b):
+    ...     b.save()
     """
     # Initialize query
     query = model.__class__.collection
