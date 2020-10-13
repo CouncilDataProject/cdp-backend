@@ -2,12 +2,43 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from unittest import mock
 
-from cdp_backend.database import validators
+from cdp_backend.database import models, validators, exceptions
 
 from .. import test_utils
 
 #############################################################################
+
+
+@pytest.mark.parametrize(
+    "model_name, mock_return_values",
+    [
+        ("Body", []),
+        pytest.param(
+            "Body",
+            [models.Body.Example()],
+            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
+        ),
+        pytest.param(
+            "Body",
+            [models.Body.Example(), models.Body.Example()],
+            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
+        ),
+        pytest.param(
+            "Person",
+            [models.Person.Example()],
+            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
+        ),
+    ],
+)
+def test_uniqueness_validation(model_name, mock_return_values):
+    with mock.patch("fireo.managers.managers.Manager.fetch") as mocked_fetch:
+        mocked_fetch.return_value = mock_return_values
+
+        # Get example from model
+        m = getattr(models, model_name).Example()
+        validators.model_is_unique(m)
 
 
 @pytest.mark.parametrize(
