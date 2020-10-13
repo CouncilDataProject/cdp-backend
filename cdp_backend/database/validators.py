@@ -35,7 +35,7 @@ def model_is_unique(model: Model):
 # Field Validators
 
 
-def check_router_string(router_string: Optional[str]) -> bool:
+def router_string_is_valid(router_string: Optional[str]) -> bool:
     """
     Validate that the provided router string contains only lowercase alphabetic
     characters and optionally include a hyphen.
@@ -61,7 +61,7 @@ def check_router_string(router_string: Optional[str]) -> bool:
     return False
 
 
-def check_email(email: Optional[str]) -> bool:
+def email_is_valid(email: Optional[str]) -> bool:
     """
     Validate that a valid email was provided.
 
@@ -86,7 +86,7 @@ def check_email(email: Optional[str]) -> bool:
     return False
 
 
-def check_resource_exists(uri: Optional[str]) -> bool:
+def resource_exists(uri: Optional[str]) -> bool:
     """
     Validate that the URI provided points to an existing file.
 

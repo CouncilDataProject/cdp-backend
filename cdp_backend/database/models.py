@@ -17,7 +17,7 @@ class File(Model):
     A file from the CDP file store.
     """
 
-    uri = fields.TextField(required=True, validator=validators.check_resource_exists)
+    uri = fields.TextField(required=True, validator=validators.resource_exists)
     name = fields.TextField(required=True)
     description = fields.TextField()
     media_type = fields.TextField()
@@ -42,10 +42,10 @@ class Person(Model):
     """
 
     name = fields.TextField(required=True)
-    router_string = fields.TextField(validator=validators.check_router_string)
-    email = fields.TextField(validator=validators.check_email)
+    router_string = fields.TextField(validator=validators.router_string_is_valid)
+    email = fields.TextField(validator=validators.email_is_valid)
     phone = fields.NumberField()
-    website = fields.TextField(validator=validators.check_resource_exists)
+    website = fields.TextField(validator=validators.resource_exists)
     picture_ref = fields.ReferenceField(File)
     is_active = fields.BooleanField()
     external_source_id = fields.TextField()
