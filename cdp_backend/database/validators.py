@@ -42,7 +42,7 @@ def model_is_unique(model: Model):
 
     # Loop and fill query for each primary key
     for pk in model._PRIMARY_KEYS:
-        query.filter(pk, "==", getattr(model, pk))
+        query = query.filter(pk, "==", getattr(model, pk))
 
     # Fetch and assert single value
     results = list(query.fetch())
