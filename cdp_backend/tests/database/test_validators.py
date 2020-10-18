@@ -33,12 +33,17 @@ from .. import test_utils
     ],
 )
 def test_uniqueness_validation(model_name, mock_return_values):
-    with mock.patch("fireo.managers.managers.Manager.fetch") as mocked_fetch:
+    with mock.patch("fireo.queries.filter_query.FilterQuery.fetch") as mocked_fetch:
         mocked_fetch.return_value = mock_return_values
 
-        # Get example from model
-        m = getattr(models, model_name).Example()
-        validators.model_is_unique(m)
+        # Get model spec from models module
+        spec = getattr(models, model_name)
+
+        # Get instance of model
+        instance = spec.Example()
+
+        # Validate
+        validators.model_is_unique(instance)
 
 
 @pytest.mark.parametrize(
