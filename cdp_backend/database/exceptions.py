@@ -10,6 +10,7 @@ from fireo.models import Model
 
 class UniquenessError(Exception):
     def __init__(self, model: Model, conflicting_results: List[Dict]):
+        super().__init__()
         self.model = model
         self.conflicting_results = conflicting_results
 
