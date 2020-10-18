@@ -108,3 +108,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Project specific
+cdp_database_diagram.*

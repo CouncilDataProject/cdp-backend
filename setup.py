@@ -27,6 +27,7 @@ dev_requirements = [
     *test_requirements,
     "bumpversion>=0.6.0",
     "coverage>=5.1",
+    "graphviz>=0.14",
     "ipython>=7.15.0",
     "m2r>=0.2.1",
     "pytest-runner>=5.2",
@@ -67,7 +68,9 @@ setup(
     ],
     description="Data storage utilities and processing pipelines to run on CDP server deployments.",
     entry_points={
-        "console_scripts": [],
+        "console_scripts": [
+            "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
+        ],
     },
     install_requires=requirements,
     license="MIT license",
