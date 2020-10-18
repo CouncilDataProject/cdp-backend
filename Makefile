@@ -51,6 +51,9 @@ build: ## run tox / run tests and lint
 gen-docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/cdp_backend*.rst
 	rm -f docs/modules.rst
+	rm -f docs/_static/cdp_database_diagram.*
+	create_cdp_database_uml -o docs/_static/cdp_database_diagram.dot
+	dot -T png -o docs/_static/cdp_database_diagram.png docs/_static/cdp_database_diagram.dot
 	sphinx-apidoc -o docs/ cdp_backend **/tests/
 	$(MAKE) -C docs html
 
