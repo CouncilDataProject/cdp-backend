@@ -4,12 +4,57 @@
 import re
 from typing import Optional
 
+from fireo.models import Model
 from fsspec.core import url_to_fs
 
+from . import exceptions
+
 #############################################################################
+# Model Validation
 
 
-def check_router_string(router_string: Optional[str]) -> bool:
+def model_is_unique(model: Model):
+    """
+    Validate that the primary keys of a to-be-uploaded model are unique when compared
+    to the collection.
+
+    Parameters
+    ----------
+    model: Model
+        A to-be-uploaded model instance.
+
+    Raises
+    ------
+    exceptions.UniquenessError: if the model is not unique when comparing primary keys
+    to the existing data in the database.
+
+    Examples
+    --------
+    >>> from cdp_backend.database import models
+    ... from cdp_backend.database.validators import model_is_unique
+    ...
+    ... b = models.Body.Example()
+    ... if model_is_unique(b):
+    ...     b.save()
+    """
+    # Initialize query
+    query = model.__class__.collection
+
+    # Loop and fill query for each primary key
+    for pk in model._PRIMARY_KEYS:
+        query = query.filter(pk, "==", getattr(model, pk))
+
+    # Fetch and assert single value
+    results = list(query.fetch())
+    if len(results) >= 1:
+        raise exceptions.UniquenessError(model=model, conflicting_results=results)
+
+
+#############################################################################
+# Field Validators
+
+
+def router_string_is_valid(router_string: Optional[str]) -> bool:
     """
     Validate that the provided router string contains only lowercase alphabetic
     characters and optionally include a hyphen.
@@ -35,7 +80,7 @@ def check_router_string(router_string: Optional[str]) -> bool:
     return False
 
 
-def check_email(email: Optional[str]) -> bool:
+def email_is_valid(email: Optional[str]) -> bool:
     """
     Validate that a valid email was provided.
 
@@ -60,7 +105,7 @@ def check_email(email: Optional[str]) -> bool:
     return False
 
 
-def check_resource_exists(uri: Optional[str]) -> bool:
+def resource_exists(uri: Optional[str]) -> bool:
     """
     Validate that the URI provided points to an existing file.
 

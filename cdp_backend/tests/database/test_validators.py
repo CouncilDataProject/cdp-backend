@@ -2,12 +2,48 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from unittest import mock
 
-from cdp_backend.database import validators
+from cdp_backend.database import models, validators, exceptions
 
 from .. import test_utils
 
 #############################################################################
+
+
+@pytest.mark.parametrize(
+    "model_name, mock_return_values",
+    [
+        ("Body", []),
+        pytest.param(
+            "Body",
+            [models.Body.Example()],
+            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
+        ),
+        pytest.param(
+            "Body",
+            [models.Body.Example(), models.Body.Example()],
+            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
+        ),
+        pytest.param(
+            "Person",
+            [models.Person.Example()],
+            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
+        ),
+    ],
+)
+def test_uniqueness_validation(model_name, mock_return_values):
+    with mock.patch("fireo.queries.filter_query.FilterQuery.fetch") as mocked_fetch:
+        mocked_fetch.return_value = mock_return_values
+
+        # Get model spec from models module
+        spec = getattr(models, model_name)
+
+        # Get instance of model
+        instance = spec.Example()
+
+        # Validate
+        validators.model_is_unique(instance)
 
 
 @pytest.mark.parametrize(
@@ -22,8 +58,8 @@ from .. import test_utils
         ("lorena gonzalez", False),
     ],
 )
-def test_check_router_string(router_string, expected_result):
-    actual_result = validators.check_router_string(router_string)
+def test_router_string_is_valid(router_string, expected_result):
+    actual_result = validators.router_string_is_valid(router_string)
     assert actual_result == expected_result
 
 
@@ -40,8 +76,8 @@ def test_check_router_string(router_string, expected_result):
         ("Lorena.González@seattle.gov", False),
     ],
 )
-def test_check_email(email, expected_result):
-    actual_result = validators.check_email(email)
+def test_email_is_valid(email, expected_result):
+    actual_result = validators.email_is_valid(email)
     assert actual_result == expected_result
 
 
@@ -53,8 +89,8 @@ def test_check_email(email, expected_result):
         ("file://does-not-exist.txt", False),
     ],
 )
-def test_local_check_resource_exists(uri, expected_result):
-    actual_result = validators.check_resource_exists(uri)
+def test_local_resource_exists(uri, expected_result):
+    actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
 
 
@@ -70,6 +106,6 @@ def test_local_check_resource_exists(uri, expected_result):
         ("https://docs.pytest.org/en/latest/does-not-exist.html", False),
     ],
 )
-def test_remote_check_resource_exists(uri, expected_result):
-    actual_result = validators.check_resource_exists(uri)
+def test_remote_resource_exists(uri, expected_result):
+    actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
