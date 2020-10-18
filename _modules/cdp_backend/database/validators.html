@@ -182,12 +182,57 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
+<span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
 
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">exceptions</span>
+
 <span class="c1">#############################################################################</span>
+<span class="c1"># Model Validation</span>
 
 
-<div class="viewcode-block" id="check_router_string"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.check_router_string">[docs]</a><span class="k">def</span> <span class="nf">check_router_string</span><span class="p">(</span><span class="n">router_string</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="model_is_unique"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.model_is_unique">[docs]</a><span class="k">def</span> <span class="nf">model_is_unique</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate that the primary keys of a to-be-uploaded model are unique when compared</span>
+<span class="sd">    to the collection.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model: Model</span>
+<span class="sd">        A to-be-uploaded model instance.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    exceptions.UniquenessError: if the model is not unique when comparing primary keys</span>
+<span class="sd">    to the existing data in the database.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from cdp_backend.database import models</span>
+<span class="sd">    ... from cdp_backend.database.validators import model_is_unique</span>
+<span class="sd">    ...</span>
+<span class="sd">    ... b = models.Body.Example()</span>
+<span class="sd">    ... if model_is_unique(b):</span>
+<span class="sd">    ...     b.save()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialize query</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">collection</span>
+
+    <span class="c1"># Loop and fill query for each primary key</span>
+    <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_PRIMARY_KEYS</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="p">))</span>
+
+    <span class="c1"># Fetch and assert single value</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">fetch</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UniquenessError</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">conflicting_results</span><span class="o">=</span><span class="n">results</span><span class="p">)</span></div>
+
+
+<span class="c1">#############################################################################</span>
+<span class="c1"># Field Validators</span>
+
+
+<div class="viewcode-block" id="router_string_is_valid"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.router_string_is_valid">[docs]</a><span class="k">def</span> <span class="nf">router_string_is_valid</span><span class="p">(</span><span class="n">router_string</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that the provided router string contains only lowercase alphabetic</span>
 <span class="sd">    characters and optionally include a hyphen.</span>
@@ -213,7 +258,7 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="check_email"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.check_email">[docs]</a><span class="k">def</span> <span class="nf">check_email</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="email_is_valid"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.email_is_valid">[docs]</a><span class="k">def</span> <span class="nf">email_is_valid</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that a valid email was provided.</span>
 
@@ -238,7 +283,7 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="check_resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.check_resource_exists">[docs]</a><span class="k">def</span> <span class="nf">check_resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.resource_exists">[docs]</a><span class="k">def</span> <span class="nf">resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that the URI provided points to an existing file.</span>
 

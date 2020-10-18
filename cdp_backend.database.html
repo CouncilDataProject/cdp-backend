@@ -195,6 +195,25 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-cdp_backend.database.exceptions">
+<span id="cdp-backend-database-exceptions-module"></span><h2>cdp_backend.database.exceptions module<a class="headerlink" href="#module-cdp_backend.database.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="cdp_backend.database.exceptions.UniquenessError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdp_backend.database.exceptions.</code><code class="sig-name descname">UniquenessError</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model, conflicting_results: List[Dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/exceptions.html#UniquenessError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<dl class="method">
+<dt id="cdp_backend.database.exceptions.UniquenessError.conflicting_ids">
+<em class="property">property </em><code class="sig-name descname">conflicting_ids</code><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError.conflicting_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdp_backend.database.exceptions.UniquenessError.pk_values">
+<em class="property">property </em><code class="sig-name descname">pk_values</code><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError.pk_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-cdp_backend.database.models">
 <span id="cdp-backend-database-models-module"></span><h2>cdp_backend.database.models module<a class="headerlink" href="#module-cdp_backend.database.models" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -549,8 +568,8 @@ committee.</p>
 <div class="section" id="module-cdp_backend.database.validators">
 <span id="cdp-backend-database-validators-module"></span><h2>cdp_backend.database.validators module<a class="headerlink" href="#module-cdp_backend.database.validators" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="cdp_backend.database.validators.check_email">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">check_email</code><span class="sig-paren">(</span><em class="sig-param">email: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#check_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.check_email" title="Permalink to this definition">¶</a></dt>
+<dt id="cdp_backend.database.validators.email_is_valid">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">email_is_valid</code><span class="sig-paren">(</span><em class="sig-param">email: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#email_is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.email_is_valid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate that a valid email was provided.</p>
 <p>None is a valid option.</p>
 <dl class="field-list simple">
@@ -567,8 +586,35 @@ committee.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="cdp_backend.database.validators.check_resource_exists">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">check_resource_exists</code><span class="sig-paren">(</span><em class="sig-param">uri: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#check_resource_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.check_resource_exists" title="Permalink to this definition">¶</a></dt>
+<dt id="cdp_backend.database.validators.model_is_unique">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">model_is_unique</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#model_is_unique"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.model_is_unique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate that the primary keys of a to-be-uploaded model are unique when compared
+to the collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>Model</em>) – A to-be-uploaded model instance.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#cdp_backend.database.exceptions.UniquenessError" title="cdp_backend.database.exceptions.UniquenessError"><strong>exceptions.UniquenessError</strong></a> – if the model is not unique when comparing primary keys:</p></li>
+<li><p><strong>to the existing data in the database.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cdp_backend.database</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="gp">... </span><span class="kn">from</span> <span class="nn">cdp_backend.database.validators</span> <span class="kn">import</span> <span class="n">model_is_unique</span>
+<span class="gp">...</span>
+<span class="gp">... </span><span class="n">b</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+<span class="gp">... </span><span class="k">if</span> <span class="n">model_is_unique</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="cdp_backend.database.validators.resource_exists">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">resource_exists</code><span class="sig-paren">(</span><em class="sig-param">uri: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#resource_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.resource_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate that the URI provided points to an existing file.</p>
 <p>None is a valid option.</p>
 <dl class="field-list simple">
@@ -585,8 +631,8 @@ committee.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="cdp_backend.database.validators.check_router_string">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">check_router_string</code><span class="sig-paren">(</span><em class="sig-param">router_string: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#check_router_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.check_router_string" title="Permalink to this definition">¶</a></dt>
+<dt id="cdp_backend.database.validators.router_string_is_valid">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">router_string_is_valid</code><span class="sig-paren">(</span><em class="sig-param">router_string: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#router_string_is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.router_string_is_valid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate that the provided router string contains only lowercase alphabetic
 characters and optionally include a hyphen.</p>
 <p>None is a valid option.</p>
