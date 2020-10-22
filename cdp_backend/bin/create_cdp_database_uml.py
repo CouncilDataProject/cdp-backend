@@ -46,7 +46,7 @@ class Args(argparse.Namespace):
 ###############################################################################
 
 
-def _construct_dot_file(args: Args):
+def _construct_dot_file(output_file: str):
     dot = Digraph(
         comment="CDP Database Diagram",
         graph_attr={
@@ -117,13 +117,13 @@ def _construct_dot_file(args: Args):
                     dot.edge(f"{model_name}:{field_name}", referenced_model)
 
     # Save file
-    dot.save(str(args.output_file))
+    dot.save(str(output_file))
 
 
 def main():
     try:
         args = Args()
-        _construct_dot_file(args)
+        _construct_dot_file(output_file=args.output_file)
     except Exception as e:
         log.error("=============================================")
         log.error("\n\n" + traceback.format_exc())
