@@ -60,7 +60,7 @@ def _construct_dot_file(args: Args):
             "fillcolor": "white",
         },
         edge_attr={
-            "arrowhead": "none",
+            "arrowhead": "vee",
         },
     )
 
@@ -108,7 +108,6 @@ def _construct_dot_file(args: Args):
     for model_name, cls in inspect.getmembers(models, inspect.isclass):
         if model_name not in ["Model", "datetime"]:
             # Attach fields for each model by using the Example
-            fields = []
             m = cls.Example()
 
             # Construct DAG points
