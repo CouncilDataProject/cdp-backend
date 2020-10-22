@@ -17,6 +17,9 @@ test_requirements = [
     "codecov>=2.1.4",
     "flake8>=3.8.3",
     "flake8-debugger>=3.2.1",
+    "graphviz>=0.14",  # graphviz and pygraphviz are different
+    "networkx>=2.5",
+    "pygraphviz>=1.6",  # graphviz and pygraphviz are different
     "pytest>=5.4.3",
     "pytest-cov>=2.9.0",
     "pytest-raises>=0.11",
@@ -27,7 +30,6 @@ dev_requirements = [
     *test_requirements,
     "bumpversion>=0.6.0",
     "coverage>=5.1",
-    "graphviz>=0.14",
     "ipython>=7.15.0",
     "m2r>=0.2.1",
     "pytest-runner>=5.2",
