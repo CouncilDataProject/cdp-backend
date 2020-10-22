@@ -3,6 +3,12 @@
 Contributions are welcome, and they are greatly appreciated! Every little bit
 helps, and credit will always be given.
 
+## Developer Installation
+
+If something goes wrong at any point during installing the library please see how
+[our CI/CD on GitHub Actions](.github/workflows/build-main.yml) installs and builds the
+project as it will always be the most up-to-date.
+
 ## Get Started!
 Ready to contribute? Here's how to set up `cdp-backend` for local development.
 

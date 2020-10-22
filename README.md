@@ -14,7 +14,7 @@ Data storage utilities and processing pipelines to run on CDP server deployments
 
 **Dev Installation:**
 For devs, please ensure that you have [dot / graphviz](https://graphviz.org/download/)
-installed before working with the auto-documentation build script.
+installed before working with tests and auto-documentation generation.
 
 ## Documentation
 For full package documentation please visit [CouncilDataProject.github.io/cdp-backend](https://CouncilDataProject.github.io/cdp-backend).
