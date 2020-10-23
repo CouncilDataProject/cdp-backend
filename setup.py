@@ -17,6 +17,9 @@ test_requirements = [
     "codecov>=2.1.4",
     "flake8>=3.8.3",
     "flake8-debugger>=3.2.1",
+    "graphviz>=0.14",  # graphviz and pygraphviz are different
+    "networkx>=2.5",
+    "pygraphviz>=1.6",  # graphviz and pygraphviz are different
     "pytest>=5.4.3",
     "pytest-cov>=2.9.0",
     "pytest-raises>=0.11",
@@ -67,7 +70,9 @@ setup(
     ],
     description="Data storage utilities and processing pipelines to run on CDP server deployments.",
     entry_points={
-        "console_scripts": [],
+        "console_scripts": [
+            "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
+        ],
     },
     install_requires=requirements,
     license="MIT license",

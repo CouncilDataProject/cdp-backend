@@ -8,7 +8,8 @@ Welcome to cdp-backend's documentation!
 
    Overview <self>
    installation
-   Package modules <modules>
+   Package Modules <modules>
+   Database Schema <database_schema>
    contributing
 
 .. mdinclude:: ../README.md
