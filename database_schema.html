@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cdp_backend &mdash; cdp-backend 3.0.0 documentation</title>
+  <title>CDP Database Schema &mdash; cdp-backend 3.0.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cdp_backend package" href="cdp_backend.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="cdp_backend.utils.resources package" href="cdp_backend.utils.resources.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,7 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Package Modules</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
@@ -107,9 +107,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="database_schema.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation">Implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
@@ -164,13 +164,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>cdp_backend</li>
+      <li>CDP Database Schema</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/database_schema.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -180,10 +180,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="cdp_backend.html" class="btn btn-neutral float-right" title="cdp_backend package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="cdp_backend.utils.resources.html" class="btn btn-neutral float-left" title="cdp_backend.utils.resources package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -192,40 +192,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="cdp-backend">
-<h1>cdp_backend<a class="headerlink" href="#cdp-backend" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html#module-cdp_backend.bin.create_cdp_database_uml">cdp_backend.bin.create_cdp_database_uml module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html#module-cdp_backend.bin">Module contents</a></li>
+  <div class="section" id="cdp-database-schema">
+<h1>CDP Database Schema<a class="headerlink" href="#cdp-database-schema" title="Permalink to this headline">¶</a></h1>
+<p>While CDP utilizes a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Document-oriented_database">NoSQL Document Store</a>
+called <a class="reference external" href="https://firebase.google.com/docs/firestore">Cloud Firestore</a>, it is still
+useful to view the database schema as a UML diagram.</p>
+<a class="reference external image-reference" href="./_static/cdp_database_diagram.png"><img alt="cdp-database-schema" src="_images/cdp_database_diagram.png" /></a>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> denotes that the field is required</p></li>
 </ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="cdp_backend.database.html">cdp_backend.database package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html#module-cdp_backend.database.exceptions">cdp_backend.database.exceptions module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html#module-cdp_backend.database.models">cdp_backend.database.models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html#module-cdp_backend.database.types">cdp_backend.database.types module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html#module-cdp_backend.database.validators">cdp_backend.database.validators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html#module-cdp_backend.database">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html#subpackages">Subpackages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html#module-cdp_backend.utils.file_utils">cdp_backend.utils.file_utils module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html#module-cdp_backend.utils">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
-</ul>
-</li>
-</ul>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>For more details on each document model see
+<a class="reference external" href="./cdp_backend.database.html#module-cdp_backend.database.models">our API docs</a></p>
 </div>
 </div>
 

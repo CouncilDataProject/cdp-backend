@@ -1,6 +1,18 @@
 cdp\_backend.bin package
 ========================
 
+Submodules
+----------
+
+cdp\_backend.bin.create\_cdp\_database\_uml module
+--------------------------------------------------
+
+.. automodule:: cdp_backend.bin.create_cdp_database_uml
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Module contents
 ---------------
 

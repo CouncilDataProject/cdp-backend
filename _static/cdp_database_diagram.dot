@@ -1,0 +1,16 @@
+// CDP Database Diagram
+digraph {
+	graph [bgcolor=transparent rankdir=LR splines=compound]
+	node [fillcolor=white shape=record style=filled]
+	edge [arrowhead=vee]
+	Body [label="Body | name *\l  TextField\r|tag\l  TextField\r|description\l  TextField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|is_active\l  BooleanField\r|external_source_id\l  TextField\r"]
+	File [label="File | uri *\l  TextField\r|name *\l  TextField\r|description\l  TextField\r|media_type\l  TextField\r"]
+	Person [label="Person | name *\l  TextField\r|router_string\l  TextField\r|email\l  TextField\r|phone\l  NumberField\r|website\l  TextField\r|<picture_ref> picture_ref\l  ReferenceField\r|is_active\l  BooleanField\r|external_source_id\l  TextField\r"]
+	Role [label="Role | title *\l  TextField\r|<person_ref> person_ref *\l  ReferenceField\r|<body_ref> body_ref *\l  ReferenceField\r|<seat_ref> seat_ref *\l  ReferenceField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|external_source_id\l  TextField\r"]
+	Seat [label="Seat | name *\l  TextField\r|electoral_area\l  TextField\r|electoral_type\l  TextField\r|<image_ref> image_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
+	Person:picture_ref -> File
+	Role:person_ref -> Person
+	Role:body_ref -> Body
+	Role:seat_ref -> Seat
+	Seat:image_ref -> File
+}

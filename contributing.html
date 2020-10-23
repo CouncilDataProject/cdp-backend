@@ -36,7 +36,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="cdp_backend.utils.resources package" href="cdp_backend.utils.resources.html" /> 
+    <link rel="prev" title="CDP Database Schema" href="database_schema.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,7 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
@@ -106,7 +106,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#developer-installation">Developer Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deploying">Deploying</a></li>
 </ul>
@@ -174,7 +180,7 @@
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
       
-        <a href="cdp_backend.utils.resources.html" class="btn btn-neutral float-left" title="cdp_backend.utils.resources package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="database_schema.html" class="btn btn-neutral float-left" title="CDP Database Schema" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -187,6 +193,12 @@
 <h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
 <p>Contributions are welcome, and they are greatly appreciated! Every little bit
 helps, and credit will always be given.</p>
+<div class="section" id="developer-installation">
+<h2>Developer Installation<a class="headerlink" href="#developer-installation" title="Permalink to this headline">¶</a></h2>
+<p>If something goes wrong at any point during installing the library please see how
+<a class="reference external" href=".github/workflows/build-main.yml">our CI/CD on GitHub Actions</a> installs and builds the
+project as it will always be the most up-to-date.</p>
+</div>
 <div class="section" id="get-started">
 <h2>Get Started!<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h2>
 <p>Ready to contribute? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">cdp-backend</span></code> for local development.</p>
@@ -197,6 +209,7 @@ helps, and credit will always be given.</p>
 </pre></div>
 </div>
 </li>
+<li><p>Install <a class="reference external" href="https://graphviz.org/download/">graphviz</a></p></li>
 <li><p>Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> cdp-backend/
 pip install -e .<span class="o">[</span>dev<span class="o">]</span>
