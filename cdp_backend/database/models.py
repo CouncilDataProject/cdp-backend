@@ -153,7 +153,7 @@ class Role(Model):
         role.start_datetime = datetime.utcnow()
         return role
 
-    _PRIMARY_KEYS = ("title", "person", "body", "seat")
+    _PRIMARY_KEYS = ("title", "person_ref", "body_ref", "seat_ref")
     _INDEXES = ()
 
 
@@ -187,7 +187,7 @@ class Matter(Model):
         )
         return matter
 
-    _PRIMARY_KEYS = "name"
+    _PRIMARY_KEYS = ("name",)
     _INDEXES = ()
 
 
@@ -216,7 +216,7 @@ class MatterStatus(Model):
         matter_status.update_datetime = datetime.utcnow()
         return matter_status
 
-    _PRIMARY_KEYS = "matter_ref"
+    _PRIMARY_KEYS = ("matter_ref",)
     _INDEXES = ()
 
 
@@ -244,7 +244,14 @@ class MatterFile(Model):
         return matter_file
 
     _PRIMARY_KEYS = ("matter_ref", "name", "uri")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="name", order=Order.ASCENDING),
+            )
+        ),
+    )
 
 
 class MatterSponsor(Model):
@@ -287,7 +294,7 @@ class MinutesItem(Model):
         )
         return minutes_item
 
-    _PRIMARY_KEYS = "name"
+    _PRIMARY_KEYS = ("name",)
     _INDEXES = ()
 
 
@@ -321,7 +328,20 @@ class Event(Model):
         return event
 
     _PRIMARY_KEYS = ("body_ref", "event_datetime")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="body_ref", order=Order.ASCENDING),
+                IndexedField(name="event_datetime", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="body_ref", order=Order.ASCENDING),
+                IndexedField(name="event_datetime", order=Order.DESCENDING),
+            )
+        ),
+    )
 
 
 class Session(Model):
@@ -359,6 +379,7 @@ class Transcript(Model):
     session_ref = fields.ReferenceField(Session, required=True)
     file_ref = fields.ReferenceField(File, required=True)
     confidence = fields.NumberField(required=True)
+    created = fields.DateTime(required=True)
 
     @classmethod
     def Example(cls):
@@ -366,10 +387,24 @@ class Transcript(Model):
         transcript.session_ref = Session.Example()
         transcript.file_ref = File.Example()
         transcript.confidence = 0.943
+        transcript.created = datetime.utcnow()
         return transcript
 
     _PRIMARY_KEYS = ("session_ref", "file_ref")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="session_ref", order=Order.ASCENDING),
+                IndexedField(name="created", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="session_ref", order=Order.ASCENDING),
+                IndexedField(name="confidence", order=Order.DESCENDING),
+            )
+        ),
+    )
 
 
 class EventMinutesItem(Model):
@@ -393,7 +428,20 @@ class EventMinutesItem(Model):
         return emi
 
     _PRIMARY_KEYS = ("event_ref", "minutes_item_ref")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(name="index", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(name="index", order=Order.DESCENDING),
+            )
+        ),
+    )
 
 
 class EventMinutesItemFile(Model):
@@ -402,6 +450,7 @@ class EventMinutesItemFile(Model):
     """
 
     event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
+    name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
 
@@ -409,6 +458,7 @@ class EventMinutesItemFile(Model):
     def Example(cls):
         emif = cls()
         emif.event_minutes_item_ref = EventMinutesItem.Example()
+        emif.name = "Levy to Move Seattle Quartly Report"
         emif.uri = (
             "http://legistar2.granicus.com/seattle/attachments/"
             "ec6595cf-e2c3-449d-811b-047675d047df.pdf"
@@ -416,7 +466,14 @@ class EventMinutesItemFile(Model):
         return emif
 
     _PRIMARY_KEYS = ("event_minutes_item_ref", "uri")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_minutes_item_ref", order=Order.ASCENDING),
+                IndexedField(name="name", order=Order.ASCENDING),
+            )
+        ),
+    )
 
 
 class Vote(Model):
