@@ -8,6 +8,17 @@ from fireo import fields
 
 from . import validators
 from ..utils import file_utils
+from .types import IndexedField, IndexedFieldSet, Order
+
+###############################################################################
+
+TESTING_IGNORE_CLASSES = [
+    "Model",
+    "datetime",
+    "IndexedField",
+    "IndexedFieldSet",
+    "Order",
+]
 
 ###############################################################################
 

@@ -66,7 +66,7 @@ def _construct_dot_file(output_file: str):
 
     # First pass: create nodes for each model
     for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in ["Model", "datetime"]:
+        if model_name not in models.TESTING_IGNORE_CLASSES:
             # Attach fields for each model by using the Example
             fields = []
             m = cls.Example()
@@ -106,7 +106,7 @@ def _construct_dot_file(output_file: str):
 
     # Second pass: Create DAG
     for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in ["Model", "datetime"]:
+        if model_name not in models.TESTING_IGNORE_CLASSES:
             # Attach fields for each model by using the Example
             m = cls.Example()
 
