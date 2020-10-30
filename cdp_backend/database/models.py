@@ -12,7 +12,7 @@ from .types import IndexedField, IndexedFieldSet, Order
 
 ###############################################################################
 
-TESTING_IGNORE_CLASSES = [
+_BUILD_IGNORE_CLASSES = [
     "Model",
     "datetime",
     "IndexedField",

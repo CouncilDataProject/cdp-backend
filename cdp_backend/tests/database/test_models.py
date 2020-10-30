@@ -15,7 +15,7 @@ from cdp_backend.database import models
 
 def test_validate_model_definitions():
     for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in models.TESTING_IGNORE_CLASSES:
+        if model_name not in models._BUILD_IGNORE_CLASSES:
             assert hasattr(cls, "Example")
             assert hasattr(cls, "_PRIMARY_KEYS")
             assert hasattr(cls, "_INDEXES")
