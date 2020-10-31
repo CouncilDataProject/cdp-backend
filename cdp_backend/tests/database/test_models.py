@@ -1,40 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import inspect
 from pathlib import Path
 
 from fireo.fields import ReferenceField
 import networkx as nx
 
 from cdp_backend.bin.create_cdp_database_uml import _construct_dot_file
-from cdp_backend.database import models
+from cdp_backend.database import DATABASE_MODELS
 
 ###############################################################################
 
 
 def test_validate_model_definitions():
-    for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in models._BUILD_IGNORE_CLASSES:
-            assert hasattr(cls, "Example")
-            assert hasattr(cls, "_PRIMARY_KEYS")
-            assert hasattr(cls, "_INDEXES")
+    for model_cls in DATABASE_MODELS:
+        assert hasattr(model_cls, "Example")
+        assert hasattr(model_cls, "_PRIMARY_KEYS")
+        assert hasattr(model_cls, "_INDEXES")
 
-            # Check fields for each model by using the Example
-            m = cls.Example()
-            for field_name, field in m._meta.field_list.items():
-                # Assert that reference fields are suffixed with `_ref`
-                if isinstance(field, ReferenceField):
-                    assert field_name.endswith("_ref")
+        # Check fields for each model by using the Example
+        m = model_cls.Example()
+        for field_name, field in m._meta.field_list.items():
+            # Assert that reference fields are suffixed with `_ref`
+            if isinstance(field, ReferenceField):
+                assert field_name.endswith("_ref")
 
-                # Check that all primary keys are valid attributes of the model
-                for pk in cls._PRIMARY_KEYS:
-                    assert hasattr(m, pk)
+            # Check that all primary keys are valid attributes of the model
+            for pk in model_cls._PRIMARY_KEYS:
+                assert hasattr(m, pk)
 
-                # Check that all index fields are valid attributes of the model
-                for idx_field_set in cls._INDEXES:
-                    for idx_field in idx_field_set.fields:
-                        assert hasattr(m, idx_field.name)
+            # Check that all index fields are valid attributes of the model
+            for idx_field_set in model_cls._INDEXES:
+                for idx_field in idx_field_set.fields:
+                    assert hasattr(m, idx_field.name)
 
 
 def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir):
