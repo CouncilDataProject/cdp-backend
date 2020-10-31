@@ -41,11 +41,13 @@ dev_requirements = [
 ]
 
 requirements = [
-    "dask[bag]>=2.30.0,<3",
-    "fireo>=1.3.3,<2",
+    "dask[bag]~=2.30.0",
+    "fireo~=1.3.3",
     "fsspec>=0.8.3,<1",
     "gcsfs>=0.7.1,<1",
-    "pandas>=1.1.3,<2",
+    "pandas~=1.1.3",
+    "pulumi~=2.12.1",
+    "pulumi-gcp~=4.1.0",
 ]
 
 extra_requirements = {
