@@ -12,16 +12,6 @@ from .types import IndexedField, IndexedFieldSet, Order
 
 ###############################################################################
 
-_BUILD_IGNORE_CLASSES = [
-    "Model",
-    "datetime",
-    "IndexedField",
-    "IndexedFieldSet",
-    "Order",
-]
-
-###############################################################################
-
 
 class File(Model):
     """

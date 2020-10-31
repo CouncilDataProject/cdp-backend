@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import inspect
 import logging
 from pathlib import Path
 import sys
@@ -11,7 +10,7 @@ import traceback
 from fireo.fields import ReferenceField
 from graphviz import Digraph
 
-from cdp_backend.database import models
+from cdp_backend.database import DATABASE_MODELS
 
 ###############################################################################
 
@@ -65,56 +64,53 @@ def _construct_dot_file(output_file: str):
     )
 
     # First pass: create nodes for each model
-    for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in models._BUILD_IGNORE_CLASSES:
-            # Attach fields for each model by using the Example
-            fields = []
-            m = cls.Example()
+    for model_cls in DATABASE_MODELS:
+        # Attach fields for each model by using the Example
+        fields = []
+        m = model_cls.Example()
 
-            # Construct label
-            for field_name, field in m._meta.field_list.items():
-                # Check if field is required and if so prepend an asterisk
-                if field.field_attribute.required:
-                    required_status = " *"
-                else:
-                    required_status = ""
+        # Construct label
+        for field_name, field in m._meta.field_list.items():
+            # Check if field is required and if so prepend an asterisk
+            if field.field_attribute.required:
+                required_status = " *"
+            else:
+                required_status = ""
 
-                # Construct basic field text
-                # I.E. "* name       TextField"
-                field_text = (
-                    f"{field_name}{required_status}\\l "
-                    f" {field.__class__.__name__}\\r"
-                )
+            # Construct basic field text
+            # I.E. "* name       TextField"
+            field_text = (
+                f"{field_name}{required_status}\\l " f" {field.__class__.__name__}\\r"
+            )
 
-                # Check if field is a ReferenceField
-                # and append a dot quick ref to the field text
-                # <blah> is a dot quick ref
-                if isinstance(field, ReferenceField):
-                    field_text = f"<{field_name}> {field_text}"
+            # Check if field is a ReferenceField
+            # and append a dot quick ref to the field text
+            # <blah> is a dot quick ref
+            if isinstance(field, ReferenceField):
+                field_text = f"<{field_name}> {field_text}"
 
-                # Finally append to the rest of the fields
-                fields.append(field_text)
+            # Finally append to the rest of the fields
+            fields.append(field_text)
 
-            # All fields are complete, join them with `|` characters for dot format
-            fields_as_text = "|".join(fields)
+        # All fields are complete, join them with `|` characters for dot format
+        fields_as_text = "|".join(fields)
 
-            # Create the entire node label with the header then field rows
-            node_label = f"{model_name} | {fields_as_text}"
+        # Create the entire node label with the header then field rows
+        node_label = f"{model_cls.collection_name} | {fields_as_text}"
 
-            # Attach as a complete node
-            dot.node(model_name, node_label)
+        # Attach as a complete node
+        dot.node(model_cls.collection_name, node_label)
 
     # Second pass: Create DAG
-    for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in models._BUILD_IGNORE_CLASSES:
-            # Attach fields for each model by using the Example
-            m = cls.Example()
+    for model_cls in DATABASE_MODELS:
+        # Attach fields for each model by using the Example
+        m = model_cls.Example()
 
-            # Construct DAG points
-            for field_name, field in m._meta.field_list.items():
-                if isinstance(field, ReferenceField):
-                    referenced_model = field.model_ref.__name__
-                    dot.edge(f"{model_name}:{field_name}", referenced_model)
+        # Construct DAG points
+        for field_name, field in m._meta.field_list.items():
+            if isinstance(field, ReferenceField):
+                referenced_model = field.model_ref.__name__
+                dot.edge(f"{model_cls.collection_name}:{field_name}", referenced_model)
 
     # Save file
     dot.save(str(output_file))
