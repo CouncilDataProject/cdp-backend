@@ -107,6 +107,7 @@ class CDPStack(pulumi.ComponentResource):
         for model_cls in DATABASE_MODELS:
             for idx_field_set in model_cls._INDEXES:
 
+                # Add fields to field list
                 idx_set_name = []
                 idx_set_fields = []
                 for idx_field in idx_field_set.fields:
@@ -120,7 +121,7 @@ class CDPStack(pulumi.ComponentResource):
 
                 # Finish creating the index set name
                 idx_set_name = "_".join(idx_set_name)
-                idx_set_name = f"{model_cls.collection_name}--{idx_set_name}"
+                idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
 
                 gcp.firestore.Index(
                     idx_set_name,
