@@ -1,0 +1,4 @@
+{
+    "stable": "cdp-example-prod",
+    "main": "cdp-example-stg"
+}
