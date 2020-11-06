@@ -216,8 +216,17 @@ class MatterStatus(Model):
         matter_status.update_datetime = datetime.utcnow()
         return matter_status
 
-    _PRIMARY_KEYS = ("matter_ref",)
-    _INDEXES = ()
+    _PRIMARY_KEYS = ("matter_ref", "status", "update_datetime")
+    _INDEXES = (
+        IndexedFieldSet(
+            IndexedField(name="matter_ref", order=Order.ASCENDING),
+            IndexedField(name="update_datetime", order=Order.ASCENDING),
+        ),
+        IndexedFieldSet(
+            IndexedField(name="matter_ref", order=Order.ASCENDING),
+            IndexedField(name="update_datetime", order=Order.DESCENDING),
+        ),
+    )
 
 
 class MatterFile(Model):
