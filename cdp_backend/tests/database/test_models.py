@@ -46,7 +46,7 @@ def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir):
     _construct_dot_file(tmp_save_dot_path)
 
     # Read dot as networkx digraph
-    G = nx.DiGraph(nx.drawing.nx_agraph.read_dot(tmp_save_dot_path))
+    G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(tmp_save_dot_path))
 
     # Get cycles
     cycles = list(nx.simple_cycles(G))

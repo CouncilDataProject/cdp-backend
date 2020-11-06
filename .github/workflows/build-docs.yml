@@ -16,7 +16,7 @@ jobs:
         python-version: 3.8
     - name: Install graphviz
       run: |
-        sudo apt-get install graphviz libgraphviz-dev -y
+        sudo apt-get install graphviz
     - name: Install Dependencies
       run: |
         pip install --upgrade pip
