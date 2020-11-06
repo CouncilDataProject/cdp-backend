@@ -219,12 +219,16 @@ class MatterStatus(Model):
     _PRIMARY_KEYS = ("matter_ref", "status", "update_datetime")
     _INDEXES = (
         IndexedFieldSet(
-            IndexedField(name="matter_ref", order=Order.ASCENDING),
-            IndexedField(name="update_datetime", order=Order.ASCENDING),
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="update_datetime", order=Order.ASCENDING),
+            ),
         ),
         IndexedFieldSet(
-            IndexedField(name="matter_ref", order=Order.ASCENDING),
-            IndexedField(name="update_datetime", order=Order.DESCENDING),
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="update_datetime", order=Order.DESCENDING),
+            ),
         ),
     )
 
