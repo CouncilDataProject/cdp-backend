@@ -5,14 +5,20 @@ on:
     branches:
       - main
   schedule:
-    # <minute [0,59]> <hour [0,23]> <day of the month [1,31]> <month of the year [1,12]> <day of the week [0,6]>
+    # <minute [0,59]> <hour [0,23]> <day of the month [1,31]>
+    # <month of the year [1,12]> <day of the week [0,6]>
     # https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
-    # Run every Monday at 18:00:00 UTC (Monday at 10:00:00 PST)
-    - cron: '0 18 * * 1'
+    # Run every Monday at 18:00:00 UTC (Monday at 10:24:00 PST)
+    # (Since these CRONs are used by a lot of people -
+    # let's be nice to the servers and schedule it _not_ on the hour)
+    - cron: '36 18 * * 1'
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v1
@@ -20,9 +26,18 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - name: Install graphviz
+    - name: Install graphviz (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt-get install graphviz libgraphviz-dev -y
+        sudo apt-get install graphviz
+    - name: Install graphviz (Mac)
+      if: matrix.os == 'macOS-latest'
+      run: |
+        brew install graphviz
+    - name: Install graphviz (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        choco install graphviz
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -44,7 +59,7 @@ jobs:
         python-version: 3.8
     - name: Install graphviz
       run: |
-        sudo apt-get install graphviz libgraphviz-dev -y
+        sudo apt-get install graphviz
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
