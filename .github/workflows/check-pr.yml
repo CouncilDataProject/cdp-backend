@@ -94,6 +94,9 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install .[dev]
+      - name: Dump Dependencies to Example Infrastructure Requirements
+        run: |
+          pip freeze > example-infrastructure/requirements.txt
       - name: Run Pulumi Preview
         uses: docker://pulumi/actions
         with:
