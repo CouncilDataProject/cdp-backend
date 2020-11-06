@@ -11,7 +11,7 @@ on:
     # Run every Monday at 18:00:00 UTC (Monday at 10:24:00 PST)
     # (Since these CRONs are used by a lot of people -
     # let's be nice to the servers and schedule it _not_ on the hour)
-    - cron: '36 18 * * 1'
+    - cron: '24 18 * * 1'
 
 jobs:
   test:
