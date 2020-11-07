@@ -90,13 +90,12 @@ jobs:
       - name: Install graphviz
         run: |
           sudo apt-get install graphviz
-      - name: Install Dependencies
+      - name: Install Dependencies in Virtual Env for Pulumi
         run: |
+          python -m venv pulumi_env
+          source ./pulumi_env/bin/activate
           pip install --upgrade pip
           pip install .[dev]
-      - name: Dump Dependencies to Example Infrastructure Requirements
-        run: |
-          pip freeze > example-infrastructure/requirements.txt
       - name: Run Pulumi Preview
         uses: docker://pulumi/actions
         with:
@@ -106,3 +105,4 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PULUMI_CI: pr
           PULUMI_ROOT: example-infrastructure
+          PULUMI_ENV: pulumi_env
