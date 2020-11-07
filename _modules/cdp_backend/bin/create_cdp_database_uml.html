@@ -250,7 +250,7 @@
 
     <span class="c1"># First pass: create nodes for each model</span>
     <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">_BUILD_IGNORE_CLASSES</span><span class="p">:</span>
             <span class="c1"># Attach fields for each model by using the Example</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">m</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
@@ -290,7 +290,7 @@
 
     <span class="c1"># Second pass: Create DAG</span>
     <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">_BUILD_IGNORE_CLASSES</span><span class="p">:</span>
             <span class="c1"># Attach fields for each model by using the Example</span>
             <span class="n">m</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
 

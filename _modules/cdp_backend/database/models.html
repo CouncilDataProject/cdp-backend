@@ -192,6 +192,17 @@
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">validators</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">file_utils</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">IndexedField</span><span class="p">,</span> <span class="n">IndexedFieldSet</span><span class="p">,</span> <span class="n">Order</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">_BUILD_IGNORE_CLASSES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Model&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;datetime&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IndexedField&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IndexedFieldSet&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Order&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -326,7 +337,371 @@
         <span class="n">role</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">role</span></div>
 
-    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="s2">&quot;seat&quot;</span><span class="p">)</span>
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;body_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;seat_ref&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Matter"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Matter">[docs]</a><span class="k">class</span> <span class="nc">Matter</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A matter is a specific legislative document. A bill, resolution, initiative, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">matter_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Matter.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Matter.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">matter</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">matter</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CB 119858&quot;</span>
+        <span class="n">matter</span><span class="o">.</span><span class="n">matter_type</span> <span class="o">=</span> <span class="s2">&quot;Council Bill&quot;</span>
+        <span class="n">matter</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;AN ORDINANCE relating to the financing of the West Seattle Bridge &quot;</span>
+            <span class="s2">&quot;Immediate Response project; creating a fund for depositing proceeds of &quot;</span>
+            <span class="s2">&quot;taxable limited tax general obligation bonds in 2021; authorizing the &quot;</span>
+            <span class="s2">&quot;loan of funds in the amount of $50,000,000 from the Construction and &quot;</span>
+            <span class="s2">&quot;Inspections Fund and $20,000,000 from the REET II Capital Projects Fund &quot;</span>
+            <span class="s2">&quot;to the 2021 LTGO Taxable Bond Fund for early phases of work on the bridge &quot;</span>
+            <span class="s2">&quot;repair and replacement project; amending Ordinance 126000, which adopted &quot;</span>
+            <span class="s2">&quot;the 2020 Budget, including the 2020-2025 Capital Improvement Program &quot;</span>
+            <span class="s2">&quot;(CIP); changing appropriations to the Seattle Department of &quot;</span>
+            <span class="s2">&quot;Transportation; and revising project allocations and spending plans for &quot;</span>
+            <span class="s2">&quot;certain projects in the 2020-2025 CIP.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">matter</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MatterStatus"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus">[docs]</a><span class="k">class</span> <span class="nc">MatterStatus</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A matter status is the status of a matter at any given time. Useful for tracking</span>
+<span class="sd">    the timelines of matters. I.E. Return me a timeline of matter x.</span>
+
+<span class="sd">    The same matter will have multiple matter statuses.</span>
+<span class="sd">    1. MatterStatus of submitted</span>
+<span class="sd">    2. MatterStatus of passed</span>
+<span class="sd">    3. MatterStatus of signed</span>
+<span class="sd">    4. etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">update_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MatterStatus.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">matter_status</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">matter_status</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">matter_status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
+        <span class="n">matter_status</span><span class="o">.</span><span class="n">update_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">matter_status</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;update_datetime&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;update_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;update_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatterFile"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile">[docs]</a><span class="k">class</span> <span class="nc">MatterFile</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A document related to a matter.</span>
+
+<span class="sd">    This file is usually not stored in CDP infrastructure but a remote source.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MatterFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">matter_file</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">matter_file</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">matter_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Amendment 3 (Sawant) - Sunset&quot;</span>
+        <span class="n">matter_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;http://legistar2.granicus.com/seattle/attachments/&quot;</span>
+            <span class="s2">&quot;789a0c9f-dd9c-401b-aaf5-6c67c2a897b0.pdf&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">matter_file</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatterSponsor"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterSponsor">[docs]</a><span class="k">class</span> <span class="nc">MatterSponsor</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A connection between a matter and it&#39;s sponsor, a Person.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MatterSponsor.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterSponsor.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">matter_sponsor</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">matter_sponsor</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">matter_sponsor</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">matter_sponsor</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ref&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MinutesItem"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MinutesItem">[docs]</a><span class="k">class</span> <span class="nc">MinutesItem</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An item referenced during a meeting.</span>
+<span class="sd">    This can be a matter but it can be a presentation or budget file, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">)</span>  <span class="c1"># Note optional.</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">minutes_item</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">minutes_item</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Inf 1656&quot;</span>
+        <span class="n">minutes_item</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Roadmap to defunding the Police and investing in community.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">minutes_item</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An event can be a normally scheduled meeting, a special event such as a press</span>
+<span class="sd">    conference or election debate, and, can be upcoming or historical.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">body_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Body</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">event_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">static_thumbnail_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">)</span>
+    <span class="n">hover_thumbnail_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">)</span>
+    <span class="n">agenda_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
+    <span class="n">minutes_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Event.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">Body</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">agenda_uri</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;http://legistar2.granicus.com/seattle/meetings/2019/11/&quot;</span>
+            <span class="s2">&quot;4169_A_Select_Budget_Committee_19-11-01_Committee_Agenda.pdf&quot;</span>
+        <span class="p">)</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">minutes_uri</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;http://legistar2.granicus.com/seattle/meetings/2019/7/&quot;</span>
+            <span class="s2">&quot;4041_M_Council_Briefing_19-07-22_Committee_Minutes.pdf&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">event</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;body_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;event_datetime&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;body_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;body_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session">[docs]</a><span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A session is a working period for an event.</span>
+<span class="sd">    An event could have a morning and afternoon session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">event_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">session_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">session_index</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">video_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
+    <span class="n">caption_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Session.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">session_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://video.seattle.gov/media/council/brief_072219_2011957V.mp4&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">session</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;video_uri&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Transcript"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Transcript">[docs]</a><span class="k">class</span> <span class="nc">Transcript</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A transcript is a document per-session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">session_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">file_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">confidence</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Transcript.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Transcript.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">transcript</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span> <span class="o">=</span> <span class="n">Session</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span> <span class="o">=</span> <span class="n">File</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">transcript</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.943</span>
+        <span class="n">transcript</span><span class="o">.</span><span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">transcript</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;session_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;file_ref&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;session_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;created&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;session_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EventMinutesItem"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem">[docs]</a><span class="k">class</span> <span class="nc">EventMinutesItem</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A reference tying a specific minutes item to a specific event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">event_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">MinutesItem</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EventMinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">emi</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">emi</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">emi</span><span class="o">.</span><span class="n">minutes_item_ref</span> <span class="o">=</span> <span class="n">MinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">emi</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">emi</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
+        <span class="k">return</span> <span class="n">emi</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;minutes_item_ref&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EventMinutesItemFile"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile">[docs]</a><span class="k">class</span> <span class="nc">EventMinutesItemFile</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Supporting files for an event minutes item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">EventMinutesItem</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EventMinutesItemFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">emif</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">emif</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">EventMinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">emif</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Levy to Move Seattle Quartly Report&quot;</span>
+        <span class="n">emif</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;http://legistar2.granicus.com/seattle/attachments/&quot;</span>
+            <span class="s2">&quot;ec6595cf-e2c3-449d-811b-047675d047df.pdf&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">emif</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;event_minutes_item_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_minutes_item_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Vote"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Vote">[docs]</a><span class="k">class</span> <span class="nc">Vote</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="s2">&quot;A reference typing a specific person, and an event minutes item together.&quot;</span>
+
+    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">event_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">EventMinutesItem</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">in_majority</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Vote.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Vote.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">vote</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">EventMinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;Approve&quot;</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">in_majority</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">vote</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;event_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;event_minutes_item_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;person_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;decision&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
 </pre></div>
 
