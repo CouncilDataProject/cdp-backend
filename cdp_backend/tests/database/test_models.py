@@ -15,7 +15,7 @@ from cdp_backend.database import models
 
 def test_validate_model_definitions():
     for model_name, cls in inspect.getmembers(models, inspect.isclass):
-        if model_name not in ["Model", "datetime"]:
+        if model_name not in models._BUILD_IGNORE_CLASSES:
             assert hasattr(cls, "Example")
             assert hasattr(cls, "_PRIMARY_KEYS")
             assert hasattr(cls, "_INDEXES")
@@ -26,6 +26,15 @@ def test_validate_model_definitions():
                 # Assert that reference fields are suffixed with `_ref`
                 if isinstance(field, ReferenceField):
                     assert field_name.endswith("_ref")
+
+                # Check that all primary keys are valid attributes of the model
+                for pk in cls._PRIMARY_KEYS:
+                    assert hasattr(m, pk)
+
+                # Check that all index fields are valid attributes of the model
+                for idx_field_set in cls._INDEXES:
+                    for idx_field in idx_field_set.fields:
+                        assert hasattr(m, idx_field.name)
 
 
 def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir):
@@ -39,7 +48,7 @@ def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir):
     _construct_dot_file(tmp_save_dot_path)
 
     # Read dot as networkx digraph
-    G = nx.DiGraph(nx.drawing.nx_agraph.read_dot(tmp_save_dot_path))
+    G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(tmp_save_dot_path))
 
     # Get cycles
     cycles = list(nx.simple_cycles(G))
