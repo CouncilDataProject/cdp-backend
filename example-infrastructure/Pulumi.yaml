@@ -1,6 +1,3 @@
 name: cdp-infrastructure
-runtime:
-    name: python
-    options:
-        virtualenv: pulumi_env
+runtime: python
 description: Example CDP Pulumi stack
