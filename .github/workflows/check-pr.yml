@@ -94,9 +94,8 @@ jobs:
         run: |
           cd example-infrastructure
           python -m venv pulumi_env
-          source ./pulumi_env/bin/activate
-          pip install --upgrade pip
-          pip install ..
+          pulumi_env/bin/python -m pip install --upgrade pip setuptools wheel
+          pulumi_env/bin/python -m pip install ..
       - name: Run Pulumi Preview
         uses: docker://pulumi/actions
         with:
@@ -106,4 +105,3 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PULUMI_CI: pr
           PULUMI_ROOT: example-infrastructure
-          PULUMI_VENV: pulumi_env
