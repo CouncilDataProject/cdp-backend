@@ -35,11 +35,11 @@ def test_validate_model_definitions():
                     assert hasattr(m, idx_field.name)
 
                 # Check that all primary keys are valid attributes of the model
-                for pk in cls._PRIMARY_KEYS:
+                for pk in model_cls._PRIMARY_KEYS:
                     assert hasattr(m, pk)
 
                 # Check that all index fields are valid attributes of the model
-                for idx_field_set in cls._INDEXES:
+                for idx_field_set in model_cls._INDEXES:
                     for idx_field in idx_field_set.fields:
                         assert hasattr(m, idx_field.name)
 
