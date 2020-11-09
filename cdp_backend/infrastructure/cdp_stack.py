@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import Optional
-
 import pulumi
 import pulumi_gcp as gcp
 
@@ -15,7 +13,6 @@ class CDPStack(pulumi.ComponentResource):
     def __init__(
         self,
         gcp_project_id: str,
-        general_name: Optional[str] = None,
         firestore_location: str = "us-west2",
         opts: pulumi.ResourceOptions = None,
     ):
@@ -31,13 +28,6 @@ class CDPStack(pulumi.ComponentResource):
             as a prefix.
             I.E. `cdp-seattle` would create a Cloud Firestore instance called
             `cdp-seattle`, a GCP bucket called `cdp-seattle`, etc.
-
-        general_name: Optional[str]
-            The name for any resources created to be created or prefixed with. This
-            overrides the `gcp_project_id` resource naming.
-            Useful when you want to have a separate resource name used than the GCP
-            project id.
-            Default: None (Use `gcp_project_id` for naming)
 
         firestore_location: str
             The location for the Cloud Firestore database and file storage servers
@@ -60,28 +50,24 @@ class CDPStack(pulumi.ComponentResource):
         # Store parameters
         self.gcp_project_id = gcp_project_id
         self.firestore_location = firestore_location
-        if general_name is not None:
-            self.general_name = general_name
-        else:
-            self.general_name = self.gcp_project_id
 
         # Enable all required services
         self.firestore_service = gcp.projects.Service(
-            f"{self.general_name}-firestore-service",
+            f"{self.gcp_project_id}-firestore-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
             service="firestore.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
         )
         self.speech_service = gcp.projects.Service(
-            f"{self.general_name}-speech-service",
+            f"{self.gcp_project_id}-speech-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
             service="speech.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
         )
         self.compute_service = gcp.projects.Service(
-            f"{self.general_name}-compute-service",
+            f"{self.gcp_project_id}-compute-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
             service="compute.googleapis.com",
@@ -90,7 +76,7 @@ class CDPStack(pulumi.ComponentResource):
 
         # Create the firestore application
         self.firestore_app = gcp.appengine.Application(
-            f"{self.general_name}-firestore-app",
+            f"{self.gcp_project_id}-firestore-app",
             project=self.gcp_project_id,
             location_id=self.firestore_location,
             database_type="CLOUD_FIRESTORE",
