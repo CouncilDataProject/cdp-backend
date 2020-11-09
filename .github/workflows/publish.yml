@@ -26,21 +26,3 @@ jobs:
       with:
         user: CouncilDataProject
         password: ${{ secrets.PYPI_TOKEN }}
-
-  # Update infrastructure on cdp-example-prod
-  pulumi-up:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install graphviz
-        run: |
-          sudo apt-get install graphviz
-      - name: Run Pulumi Preview
-        uses: docker://pulumi/actions
-        with:
-          args: up --yes
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CI: up
-          PULUMI_ROOT: example-infrastructure
