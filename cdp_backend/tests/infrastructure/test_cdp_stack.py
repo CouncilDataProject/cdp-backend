@@ -36,16 +36,19 @@ class InfrastructureTests(unittest.TestCase):
         gcp_project_id = "mocked-testing-stack"
 
         # Write output checks
-        def check_firestore_app(args):
-            app_id, default_bucket = args
+        def check_firestore_app_id(args):
+            app_id = args
             assert app_id == f"{gcp_project_id}.fake-appspot.io"
+
+        def check_firestore_default_bucket(args):
+            default_bucket = args
             assert default_bucket == f"gcs://{gcp_project_id}"
 
         # Init mocked stack
         stack = CDPStack("mocked-testing-stack")
 
         # Check outputs
-        pulumi.Output.all(
-            stack.firestore_app.app_id,
-            stack.firestore_app.default_bucket,
-        ).apply(check_firestore_app)
+        pulumi.Output.all(stack.firestore_app.app_id).apply(check_firestore_app_id)
+        pulumi.Output.all(stack.firestore_app.default_bucket).apply(
+            check_firestore_default_bucket
+        )
