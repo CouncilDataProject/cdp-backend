@@ -12,7 +12,8 @@ from ..database import DATABASE_MODELS
 class CDPStack(pulumi.ComponentResource):
     def __init__(
         self,
-        general_name: str,
+        gcp_project_id: str,
+        general_name: Optional[str] = None,
         firestore_location: str = "us-west2",
         gcp_billing_account_name: str = "My Billing Account",
         opts: pulumi.ResourceOptions = None,
@@ -23,12 +24,19 @@ class CDPStack(pulumi.ComponentResource):
 
         Parameters
         ----------
-        general_name: str
-            The name for a new GCP project, the Pulumi stack, and any other required
-            names for resources created during infrastructure creation.
-            I.E. `cdp-seattle` would create a GCP project called `cdp-seattle`, a Cloud
-            Firestore instance called `cdp-seattle`, a GCP bucket called `cdp-seattle`,
-            etc.
+        gcp_project_id: str
+            The id of the gcp_project, the Pulumi stack, and any other required
+            names for resources created during infrastructure creation will use this id
+            as a prefix.
+            I.E. `cdp-seattle` would create a Cloud Firestore instance called
+            `cdp-seattle`, a GCP bucket called `cdp-seattle`, etc.
+
+        general_name: Optional[str]
+            The name for any resources created to be created or prefixed with. This
+            overrides the `gcp_project_id` resource naming.
+            Useful when you want to have a separate resource name used than the GCP
+            project id.
+            Default: None (Use `gcp_project_id` for naming)
 
         firestore_location: str
             The location for the Cloud Firestore database and file storage servers
@@ -50,46 +58,36 @@ class CDPStack(pulumi.ComponentResource):
         creation to five (5) max. GCP has limits on how many resources you can create
         in parallel.
         """
-        super().__init__("CDPStack", general_name, None, opts)
+        super().__init__("CDPStack", gcp_project_id, None, opts)
 
         # Store parameters
-        self.general_name = general_name
+        self.gcp_project_id = gcp_project_id
         self.firestore_location = firestore_location
         self.gcp_billing_account_name = gcp_billing_account_name
-
-        # Get the organization or user billing account
-        self.gcp_org_billing_account = gcp.organizations.get_billing_account(
-            display_name=self.gcp_billing_account_name,
-            opts=pulumi.ResourceOptions(parent=self),
-        )
-
-        # Create the new GCP project for all resources to reside in
-        self.gcp_project = gcp.organizations.Project(
-            self.general_name,
-            project_id=self.general_name,
-            billing_account=self.gcp_org_billing_account.id,
-            opts=pulumi.ResourceOptions(parent=self),
-        )
+        if general_name is not None:
+            self.general_name = general_name
+        else:
+            self.general_name = self.gcp_project_id
 
         # Enable all required services
         self.firestore_service = gcp.projects.Service(
             f"{self.general_name}-firestore-service",
             disable_dependent_services=True,
-            project=self.gcp_project.project_id,
+            project=self.gcp_project_id,
             service="firestore.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
         )
         self.speech_service = gcp.projects.Service(
             f"{self.general_name}-speech-service",
             disable_dependent_services=True,
-            project=self.gcp_project.project_id,
+            project=self.gcp_project_id,
             service="speech.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
         )
         self.compute_service = gcp.projects.Service(
             f"{self.general_name}-compute-service",
             disable_dependent_services=True,
-            project=self.gcp_project.project_id,
+            project=self.gcp_project_id,
             service="compute.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
         )
@@ -97,7 +95,7 @@ class CDPStack(pulumi.ComponentResource):
         # Create the firestore application
         self.firestore_app = gcp.appengine.Application(
             f"{self.general_name}-firestore-app",
-            project=self.gcp_project.project_id,
+            project=self.gcp_project_id,
             location_id=self.firestore_location,
             database_type="CLOUD_FIRESTORE",
             opts=pulumi.ResourceOptions(parent=self.firestore_service),
@@ -127,7 +125,7 @@ class CDPStack(pulumi.ComponentResource):
                     idx_set_name,
                     collection=model_cls.collection_name,
                     fields=idx_set_fields,
-                    project=self.gcp_project.project_id,
+                    project=self.gcp_project_id,
                     opts=pulumi.ResourceOptions(parent=self.firestore_app),
                 )
 
