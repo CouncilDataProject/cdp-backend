@@ -17,7 +17,6 @@ class CDPStack(pulumi.ComponentResource):
         gcp_project_id: str,
         general_name: Optional[str] = None,
         firestore_location: str = "us-west2",
-        gcp_billing_account_name: str = "My Billing Account",
         opts: pulumi.ResourceOptions = None,
     ):
         """
@@ -46,10 +45,6 @@ class CDPStack(pulumi.ComponentResource):
             List of locations: https://firebase.google.com/docs/firestore/locations
             Default: "us-west2"
 
-        gcp_billing_account_name: str
-            The billing account name to charge resource usage to.
-            Default: "My Billing Account" (the GCP account default)
-
         opts: pulumi.ResourceOptions
             Extra resource options to initialize the entire stack with.
             Default: None
@@ -65,7 +60,6 @@ class CDPStack(pulumi.ComponentResource):
         # Store parameters
         self.gcp_project_id = gcp_project_id
         self.firestore_location = firestore_location
-        self.gcp_billing_account_name = gcp_billing_account_name
         if general_name is not None:
             self.general_name = general_name
         else:
