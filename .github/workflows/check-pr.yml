@@ -80,7 +80,7 @@ jobs:
       run: |
         make gen-docs
 
-  # Compare infrastructure diff for cdp-example-stg
+  # Preview infrastructure changes for cdp-example
   pulumi-preview:
     runs-on: ubuntu-latest
     steps:
