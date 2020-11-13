@@ -3,43 +3,43 @@ digraph {
 	graph [bgcolor=transparent rankdir=LR splines=compound]
 	node [fillcolor=white shape=record style=filled]
 	edge [arrowhead=vee]
-	Body [label="Body | name *\l  TextField\r|tag\l  TextField\r|description\l  TextField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|is_active\l  BooleanField\r|external_source_id\l  TextField\r"]
-	Event [label="Event | <body_ref> body_ref *\l  ReferenceField\r|event_datetime *\l  DateTime\r|<static_thumbnail_ref> static_thumbnail_ref\l  ReferenceField\r|<hover_thumbnail_ref> hover_thumbnail_ref\l  ReferenceField\r|agenda_uri\l  TextField\r|minutes_uri\l  TextField\r|external_source_id\l  TextField\r"]
-	EventMinutesItem [label="EventMinutesItem | <event_ref> event_ref *\l  ReferenceField\r|<minutes_item_ref> minutes_item_ref *\l  ReferenceField\r|index *\l  NumberField\r|decision\l  TextField\r|external_source_id\l  TextField\r"]
-	EventMinutesItemFile [label="EventMinutesItemFile | <event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
-	File [label="File | uri *\l  TextField\r|name *\l  TextField\r|description\l  TextField\r|media_type\l  TextField\r"]
-	Matter [label="Matter | name *\l  TextField\r|matter_type *\l  TextField\r|title *\l  TextField\r|external_source_id\l  TextField\r"]
-	MatterFile [label="MatterFile | <matter_ref> matter_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
-	MatterSponsor [label="MatterSponsor | <matter_ref> matter_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|external_source_id\l  TextField\r"]
-	MatterStatus [label="MatterStatus | <matter_ref> matter_ref *\l  ReferenceField\r|status *\l  TextField\r|update_datetime *\l  DateTime\r|external_source_id\l  TextField\r"]
-	MinutesItem [label="MinutesItem | name *\l  TextField\r|description\l  TextField\r|<matter_ref> matter_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
-	Person [label="Person | name *\l  TextField\r|router_string\l  TextField\r|email\l  TextField\r|phone\l  NumberField\r|website\l  TextField\r|<picture_ref> picture_ref\l  ReferenceField\r|is_active\l  BooleanField\r|external_source_id\l  TextField\r"]
-	Role [label="Role | title *\l  TextField\r|<person_ref> person_ref *\l  ReferenceField\r|<body_ref> body_ref *\l  ReferenceField\r|<seat_ref> seat_ref *\l  ReferenceField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|external_source_id\l  TextField\r"]
-	Seat [label="Seat | name *\l  TextField\r|electoral_area\l  TextField\r|electoral_type\l  TextField\r|<image_ref> image_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
-	Session [label="Session | <event_ref> event_ref *\l  ReferenceField\r|session_datetime *\l  DateTime\r|session_index *\l  NumberField\r|video_uri *\l  TextField\r|caption_uri\l  TextField\r|external_source_id\l  TextField\r"]
-	Transcript [label="Transcript | <session_ref> session_ref *\l  ReferenceField\r|<file_ref> file_ref *\l  ReferenceField\r|confidence *\l  NumberField\r|created *\l  DateTime\r"]
-	Vote [label="Vote | <matter_ref> matter_ref *\l  ReferenceField\r|<event_ref> event_ref *\l  ReferenceField\r|<event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|decision *\l  TextField\r|in_majority *\l  BooleanField\r|external_source_id\l  TextField\r"]
-	Event:body_ref -> Body
-	Event:static_thumbnail_ref -> File
-	Event:hover_thumbnail_ref -> File
-	EventMinutesItem:event_ref -> Event
-	EventMinutesItem:minutes_item_ref -> MinutesItem
-	EventMinutesItemFile:event_minutes_item_ref -> EventMinutesItem
-	MatterFile:matter_ref -> Matter
-	MatterSponsor:matter_ref -> Matter
-	MatterSponsor:person_ref -> Person
-	MatterStatus:matter_ref -> Matter
-	MinutesItem:matter_ref -> Matter
-	Person:picture_ref -> File
-	Role:person_ref -> Person
-	Role:body_ref -> Body
-	Role:seat_ref -> Seat
-	Seat:image_ref -> File
-	Session:event_ref -> Event
-	Transcript:session_ref -> Session
-	Transcript:file_ref -> File
-	Vote:matter_ref -> Matter
-	Vote:event_ref -> Event
-	Vote:event_minutes_item_ref -> EventMinutesItem
-	Vote:person_ref -> Person
+	body [label="body | name *\l  TextField\r|tag\l  TextField\r|description\l  TextField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|is_active\l  BooleanField\r|external_source_id\l  TextField\r"]
+	event [label="event | <body_ref> body_ref *\l  ReferenceField\r|event_datetime *\l  DateTime\r|<static_thumbnail_ref> static_thumbnail_ref\l  ReferenceField\r|<hover_thumbnail_ref> hover_thumbnail_ref\l  ReferenceField\r|agenda_uri\l  TextField\r|minutes_uri\l  TextField\r|external_source_id\l  TextField\r"]
+	event_minutes_item [label="event_minutes_item | <event_ref> event_ref *\l  ReferenceField\r|<minutes_item_ref> minutes_item_ref *\l  ReferenceField\r|index *\l  NumberField\r|decision\l  TextField\r|external_source_id\l  TextField\r"]
+	event_minutes_item_file [label="event_minutes_item_file | <event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
+	file [label="file | uri *\l  TextField\r|name *\l  TextField\r|description\l  TextField\r|media_type\l  TextField\r"]
+	matter [label="matter | name *\l  TextField\r|matter_type *\l  TextField\r|title *\l  TextField\r|external_source_id\l  TextField\r"]
+	matter_file [label="matter_file | <matter_ref> matter_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
+	matter_sponsor [label="matter_sponsor | <matter_ref> matter_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|external_source_id\l  TextField\r"]
+	matter_status [label="matter_status | <matter_ref> matter_ref *\l  ReferenceField\r|status *\l  TextField\r|update_datetime *\l  DateTime\r|external_source_id\l  TextField\r"]
+	minutes_item [label="minutes_item | name *\l  TextField\r|description\l  TextField\r|<matter_ref> matter_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
+	person [label="person | name *\l  TextField\r|router_string\l  TextField\r|email\l  TextField\r|phone\l  NumberField\r|website\l  TextField\r|<picture_ref> picture_ref\l  ReferenceField\r|is_active\l  BooleanField\r|external_source_id\l  TextField\r"]
+	role [label="role | title *\l  TextField\r|<person_ref> person_ref *\l  ReferenceField\r|<body_ref> body_ref *\l  ReferenceField\r|<seat_ref> seat_ref *\l  ReferenceField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|external_source_id\l  TextField\r"]
+	seat [label="seat | name *\l  TextField\r|electoral_area\l  TextField\r|electoral_type\l  TextField\r|<image_ref> image_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
+	session [label="session | <event_ref> event_ref *\l  ReferenceField\r|session_datetime *\l  DateTime\r|session_index *\l  NumberField\r|video_uri *\l  TextField\r|caption_uri\l  TextField\r|external_source_id\l  TextField\r"]
+	transcript [label="transcript | <session_ref> session_ref *\l  ReferenceField\r|<file_ref> file_ref *\l  ReferenceField\r|confidence *\l  NumberField\r|created *\l  DateTime\r"]
+	vote [label="vote | <matter_ref> matter_ref *\l  ReferenceField\r|<event_ref> event_ref *\l  ReferenceField\r|<event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|decision *\l  TextField\r|in_majority *\l  BooleanField\r|external_source_id\l  TextField\r"]
+	event:body_ref -> Body
+	event:static_thumbnail_ref -> File
+	event:hover_thumbnail_ref -> File
+	event_minutes_item:event_ref -> Event
+	event_minutes_item:minutes_item_ref -> MinutesItem
+	event_minutes_item_file:event_minutes_item_ref -> EventMinutesItem
+	matter_file:matter_ref -> Matter
+	matter_sponsor:matter_ref -> Matter
+	matter_sponsor:person_ref -> Person
+	matter_status:matter_ref -> Matter
+	minutes_item:matter_ref -> Matter
+	person:picture_ref -> File
+	role:person_ref -> Person
+	role:body_ref -> Body
+	role:seat_ref -> Seat
+	seat:image_ref -> File
+	session:event_ref -> Event
+	transcript:session_ref -> Session
+	transcript:file_ref -> File
+	vote:matter_ref -> Matter
+	vote:event_ref -> Event
+	vote:event_minutes_item_ref -> EventMinutesItem
+	vote:person_ref -> Person
 }

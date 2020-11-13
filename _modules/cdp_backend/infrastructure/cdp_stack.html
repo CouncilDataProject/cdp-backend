@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdp_backend.infrastructure.cdp_stack &mdash; cdp-backend 3.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.infrastructure.cdp_stack</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.infrastructure.cdp_stack</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">pulumi</span>
+<span class="kn">import</span> <span class="nn">pulumi_gcp</span> <span class="k">as</span> <span class="nn">gcp</span>
+
+<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">DATABASE_MODELS</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="CDPStack"><a class="viewcode-back" href="../../../cdp_backend.infrastructure.html#cdp_backend.infrastructure.cdp_stack.CDPStack">[docs]</a><span class="k">class</span> <span class="nc">CDPStack</span><span class="p">(</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ComponentResource</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">gcp_project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">firestore_location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;us-west2&quot;</span><span class="p">,</span>
+        <span class="n">opts</span><span class="p">:</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates all required infrastructure and enables all required services for CDP</span>
+<span class="sd">        backend stacks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gcp_project_id: str</span>
+<span class="sd">            The id of the gcp_project, the Pulumi stack, and any other required</span>
+<span class="sd">            names for resources created during infrastructure creation will use this id</span>
+<span class="sd">            as a prefix.</span>
+<span class="sd">            I.E. `cdp-seattle` would create a Cloud Firestore instance called</span>
+<span class="sd">            `cdp-seattle`, a GCP bucket called `cdp-seattle`, etc.</span>
+
+<span class="sd">        firestore_location: str</span>
+<span class="sd">            The location for the Cloud Firestore database and file storage servers</span>
+<span class="sd">            to be hosted.</span>
+<span class="sd">            List of locations: https://firebase.google.com/docs/firestore/locations</span>
+<span class="sd">            Default: &quot;us-west2&quot;</span>
+
+<span class="sd">        opts: pulumi.ResourceOptions</span>
+<span class="sd">            Extra resource options to initialize the entire stack with.</span>
+<span class="sd">            Default: None</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        When using this resource it is recommended to run set Pulumi parallel resource</span>
+<span class="sd">        creation to five (5) max. GCP has limits on how many resources you can create</span>
+<span class="sd">        in parallel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;CDPStack&quot;</span><span class="p">,</span> <span class="n">gcp_project_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+
+        <span class="c1"># Store parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span> <span class="o">=</span> <span class="n">gcp_project_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firestore_location</span> <span class="o">=</span> <span class="n">firestore_location</span>
+
+        <span class="c1"># Enable all required services</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firestore_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firestore-service&quot;</span><span class="p">,</span>
+            <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s2">&quot;firestore.googleapis.com&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speech_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-speech-service&quot;</span><span class="p">,</span>
+            <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s2">&quot;speech.googleapis.com&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-compute-service&quot;</span><span class="p">,</span>
+            <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s2">&quot;compute.googleapis.com&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create the firestore application</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">appengine</span><span class="o">.</span><span class="n">Application</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firestore-app&quot;</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">location_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_location</span><span class="p">,</span>
+            <span class="n">database_type</span><span class="o">=</span><span class="s2">&quot;CLOUD_FIRESTORE&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_service</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create all firestore indexes</span>
+        <span class="k">for</span> <span class="n">model_cls</span> <span class="ow">in</span> <span class="n">DATABASE_MODELS</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx_field_set</span> <span class="ow">in</span> <span class="n">model_cls</span><span class="o">.</span><span class="n">_INDEXES</span><span class="p">:</span>
+
+                <span class="c1"># Add fields to field list</span>
+                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">idx_set_fields</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">idx_field</span> <span class="ow">in</span> <span class="n">idx_field_set</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                    <span class="n">idx_set_name</span> <span class="o">+=</span> <span class="p">[</span><span class="n">idx_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">idx_field</span><span class="o">.</span><span class="n">order</span><span class="p">]</span>
+                    <span class="n">idx_set_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;fieldPath&quot;</span><span class="p">:</span> <span class="n">idx_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="n">idx_field</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># Finish creating the index set name</span>
+                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">idx_set_name</span><span class="p">)</span>
+                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">idx_set_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                <span class="n">gcp</span><span class="o">.</span><span class="n">firestore</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span>
+                    <span class="n">idx_set_name</span><span class="p">,</span>
+                    <span class="n">collection</span><span class="o">=</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span>
+                    <span class="n">fields</span><span class="o">=</span><span class="n">idx_set_fields</span><span class="p">,</span>
+                    <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+                    <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="p">),</span>
+                <span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register_outputs</span><span class="p">({})</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

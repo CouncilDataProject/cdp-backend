@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CDP Database Schema &mdash; cdp-backend 3.0.0 documentation</title>
+  <title>cdp_backend.infrastructure package &mdash; cdp-backend 3.0.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contributing" href="contributing.html" />
-    <link rel="prev" title="cdp_backend.utils.resources package" href="cdp_backend.utils.resources.html" /> 
+    <link rel="next" title="cdp_backend.utils package" href="cdp_backend.utils.html" />
+    <link rel="prev" title="cdp_backend.database package" href="cdp_backend.database.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,12 +94,12 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Package Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html">cdp_backend.database package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.infrastructure package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
@@ -108,9 +108,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Database Schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
@@ -165,13 +165,17 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>CDP Database Schema</li>
+          <li><a href="modules.html">cdp_backend</a> &raquo;</li>
+        
+          <li><a href="cdp_backend.html">cdp_backend package</a> &raquo;</li>
+        
+      <li>cdp_backend.infrastructure package</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/database_schema.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/cdp_backend.infrastructure.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -181,10 +185,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="cdp_backend.utils.html" class="btn btn-neutral float-right" title="cdp_backend.utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="cdp_backend.utils.resources.html" class="btn btn-neutral float-left" title="cdp_backend.utils.resources package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="cdp_backend.database.html" class="btn btn-neutral float-left" title="cdp_backend.database package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -193,23 +197,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="cdp-database-schema">
-<h1>CDP Database Schema<a class="headerlink" href="#cdp-database-schema" title="Permalink to this headline">¶</a></h1>
-<p>While CDP utilizes a
-<a class="reference external" href="https://en.wikipedia.org/wiki/Document-oriented_database">NoSQL Document Store</a>
-called <a class="reference external" href="https://firebase.google.com/docs/firestore">Cloud Firestore</a>, it is still
-useful to view the database schema as a UML diagram.</p>
-<a class="reference external image-reference" href="./_static/cdp_database_diagram.png"><img alt="cdp-database-schema" src="_images/cdp_database_diagram.png" /></a>
-<div class="section" id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> denotes that the field is required</p></li>
-</ul>
+  <div class="section" id="cdp-backend-infrastructure-package">
+<h1>cdp_backend.infrastructure package<a class="headerlink" href="#cdp-backend-infrastructure-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="implementation">
-<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
-<p>For more details on each document model see
-<a class="reference external" href="./cdp_backend.database.html#module-cdp_backend.database.models">our API docs</a></p>
+<div class="section" id="module-cdp_backend.infrastructure.cdp_stack">
+<span id="cdp-backend-infrastructure-cdp-stack-module"></span><h2>cdp_backend.infrastructure.cdp_stack module<a class="headerlink" href="#module-cdp_backend.infrastructure.cdp_stack" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdp_backend.infrastructure.cdp_stack.CDPStack">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.infrastructure.cdp_stack.</code><code class="sig-name descname">CDPStack</code><span class="sig-paren">(</span><em class="sig-param">gcp_project_id: str</em>, <em class="sig-param">firestore_location: str = 'us-west2'</em>, <em class="sig-param">opts: pulumi.resource.ResourceOptions = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pulumi.resource.ComponentResource</span></code></p>
+<p>Creates all required infrastructure and enables all required services for CDP
+backend stacks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gcp_project_id</strong> (<em>str</em>) – The id of the gcp_project, the Pulumi stack, and any other required
+names for resources created during infrastructure creation will use this id
+as a prefix.
+I.E. <cite>cdp-seattle</cite> would create a Cloud Firestore instance called
+<cite>cdp-seattle</cite>, a GCP bucket called <cite>cdp-seattle</cite>, etc.</p></li>
+<li><p><strong>firestore_location</strong> (<em>str</em>) – The location for the Cloud Firestore database and file storage servers
+to be hosted.
+List of locations: <a class="reference external" href="https://firebase.google.com/docs/firestore/locations">https://firebase.google.com/docs/firestore/locations</a>
+Default: “us-west2”</p></li>
+<li><p><strong>opts</strong> (<em>pulumi.ResourceOptions</em>) – Extra resource options to initialize the entire stack with.
+Default: None</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>When using this resource it is recommended to run set Pulumi parallel resource
+creation to five (5) max. GCP has limits on how many resources you can create
+in parallel.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.infrastructure">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.infrastructure" title="Permalink to this headline">¶</a></h2>
+<p>Infrastructure package for cdp_backend.</p>
 </div>
 </div>
 
