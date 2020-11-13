@@ -71,7 +71,10 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    description="Data storage utilities and processing pipelines to run on CDP server deployments.",
+    description=(
+        "Data storage utilities and processing pipelines to run on CDP server "
+        "deployments."
+    ),
     entry_points={
         "console_scripts": [
             "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
