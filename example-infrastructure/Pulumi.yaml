@@ -1,0 +1,3 @@
+name: cdp-infrastructure
+description: Example CDP Pulumi stack
+runtime: python

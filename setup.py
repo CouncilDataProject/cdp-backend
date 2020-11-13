@@ -40,12 +40,14 @@ dev_requirements = [
 ]
 
 requirements = [
-    "dask[bag]>=2.30.0,<3",
-    "fireo>=1.3.3,<2",
-    "fsspec>=0.8.3,<1",
-    "gcsfs>=0.7.1,<1",
-    "graphviz>=0.14",
-    "pandas>=1.1.3,<2",
+    "dask[bag]~=2.30.0",
+    "fireo~=1.3.3",
+    "fsspec~=0.8.3",
+    "gcsfs~=0.7.1",
+    "graphviz~=0.14",
+    "pandas~=1.1.3",
+    "pulumi~=2.12.1",
+    "pulumi-gcp~=4.1.0",
 ]
 
 extra_requirements = {
@@ -66,6 +68,7 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
     description="Data storage utilities and processing pipelines to run on CDP server deployments.",
@@ -82,7 +85,7 @@ setup(
     keywords="civic technology, open government",
     name="cdp-backend",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
-    python_requires=">=3.8, <3.9",
+    python_requires=">=3.7",
     setup_requires=setup_requirements,
     test_suite="cdp_backend/tests",
     tests_require=test_requirements,

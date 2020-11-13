@@ -7,6 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        python-version: [3.7, 3.8]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
@@ -14,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.8
+        python-version: ${{ matrix.python-version }}
     - name: Install graphviz (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: |
@@ -78,3 +79,21 @@ jobs:
     - name: Generate Docs
       run: |
         make gen-docs
+
+  # Preview infrastructure changes for cdp-example
+  pulumi-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install graphviz
+        run: |
+          sudo apt-get install graphviz
+      - name: Run Pulumi Preview
+        uses: docker://pulumi/actions
+        with:
+          args: preview
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.CDP_EXAMPLE_GOOGLE_CREDENTIALS }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CI: pr
+          PULUMI_ROOT: example-infrastructure
