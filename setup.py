@@ -27,7 +27,7 @@ test_requirements = [
 dev_requirements = [
     *setup_requirements,
     *test_requirements,
-    "bumpversion>=0.6.0",
+    "bump2version>=1.0.1",
     "coverage>=5.1",
     "ipython>=7.15.0",
     "m2r>=0.2.1",
@@ -96,6 +96,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bumpversion
     # Details in CONTRIBUTING.rst
-    version="3.0.0",
+    version="3.0.0.dev0",
     zip_safe=False,
 )
