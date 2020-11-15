@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contributing &mdash; cdp-backend 3.0.0 documentation</title>
+  <title>Contributing &mdash; cdp-backend 3.0.0.dev0 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.0.0.dev0
               </div>
             
           
@@ -246,7 +246,7 @@ git push origin <span class="o">{</span>your_development_type<span class="o">}</
 <p>A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
 Then run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bumpversion patch <span class="c1"># possible: major / minor / patch</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bump2version dev_release <span class="c1"># possible: major / minor / patch / dev_release</span>
 $ git push
 $ git push --tags
 git branch -D stable
