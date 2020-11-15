@@ -62,7 +62,7 @@ Make sure all your changes are committed.
 Then run:
 
 ```bash
-$ bumpversion patch # possible: major / minor / patch
+$ bump2version dev_release # possible: major / minor / patch / dev_release
 $ git push
 $ git push --tags
 git branch -D stable

@@ -94,7 +94,7 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/CouncilDataProject/cdp-backend",
-    # Do not edit this string manually, always use bumpversion
+    # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
     version="3.0.0.dev0",
     zip_safe=False,
