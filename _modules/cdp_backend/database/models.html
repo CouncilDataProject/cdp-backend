@@ -209,7 +209,7 @@
     <span class="n">media_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="File.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;gs://cdp-example/central-staff-memo.pdf&quot;</span>
         <span class="n">file</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
@@ -237,7 +237,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Person.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">person</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">person</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;M. Lorena González&quot;</span>
         <span class="n">person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="s2">&quot;lorena-gonzalez&quot;</span>
@@ -266,7 +266,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Body.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Body.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">body</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">body</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Full Council&quot;</span>
         <span class="n">body</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">True</span>
@@ -289,7 +289,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Seat.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Seat.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">seat</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">seat</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Position 9&quot;</span>
         <span class="n">seat</span><span class="o">.</span><span class="n">electoral_area</span> <span class="o">=</span> <span class="s2">&quot;Citywide&quot;</span>
@@ -319,7 +319,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Role.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Role.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">role</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">role</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Council President&quot;</span>
         <span class="n">role</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
@@ -343,7 +343,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Matter.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Matter.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">matter</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">matter</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CB 119858&quot;</span>
         <span class="n">matter</span><span class="o">.</span><span class="n">matter_type</span> <span class="o">=</span> <span class="s2">&quot;Council Bill&quot;</span>
@@ -384,7 +384,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="MatterStatus.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">matter_status</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">matter_status</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">matter_status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
@@ -421,7 +421,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="MatterFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">matter_file</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">matter_file</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">matter_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Amendment 3 (Sawant) - Sunset&quot;</span>
@@ -452,7 +452,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="MatterSponsor.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterSponsor.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">matter_sponsor</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">matter_sponsor</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">matter_sponsor</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
@@ -474,7 +474,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="MinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">minutes_item</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">minutes_item</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Inf 1656&quot;</span>
         <span class="n">minutes_item</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
@@ -501,7 +501,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Event.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">event</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">event</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">Body</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
@@ -546,7 +546,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Session.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">session</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">session</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">session</span><span class="o">.</span><span class="n">session_index</span> <span class="o">=</span> <span class="mi">0</span>
@@ -570,7 +570,7 @@
     <span class="n">created</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Transcript.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Transcript.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">transcript</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span> <span class="o">=</span> <span class="n">Session</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span> <span class="o">=</span> <span class="n">File</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
@@ -607,7 +607,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="EventMinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">emi</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">emi</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">emi</span><span class="o">.</span><span class="n">minutes_item_ref</span> <span class="o">=</span> <span class="n">MinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
@@ -643,7 +643,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="EventMinutesItemFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">emif</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">emif</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">EventMinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">emif</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Levy to Move Seattle Quartly Report&quot;</span>
@@ -676,7 +676,7 @@
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Vote.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Vote.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">vote</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">vote</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">vote</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>

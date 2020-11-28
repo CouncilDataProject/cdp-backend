@@ -206,7 +206,7 @@
 <span id="cdp-backend-database-exceptions-module"></span><h2>cdp_backend.database.exceptions module<a class="headerlink" href="#module-cdp_backend.database.exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="cdp_backend.database.exceptions.UniquenessError">
-<em class="property">exception </em><code class="sig-prename descclassname">cdp_backend.database.exceptions.</code><code class="sig-name descname">UniquenessError</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model, conflicting_results: List[Dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/exceptions.html#UniquenessError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-prename descclassname">cdp_backend.database.exceptions.</code><code class="sig-name descname">UniquenessError</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model, conflicting_results: List[fireo.models.model.Model]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/exceptions.html#UniquenessError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <dl class="method">
 <dt id="cdp_backend.database.exceptions.UniquenessError.conflicting_ids">
@@ -231,7 +231,7 @@
 such as election debates.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Body.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Body.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Body.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Body.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Body.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -294,7 +294,7 @@ such as election debates.</p>
 conference or election debate, and, can be upcoming or historical.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Event.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Event.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Event.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Event.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Event.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -356,7 +356,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <p>A reference tying a specific minutes item to a specific event.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.EventMinutesItem.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItem.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItem.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -408,7 +408,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <p>Supporting files for an event minutes item.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.EventMinutesItemFile.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItemFile.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItemFile.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -455,7 +455,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <p>A file from the CDP file store.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.File.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#File.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.File.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#File.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.File.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -502,7 +502,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <p>A matter is a specific legislative document. A bill, resolution, initiative, etc.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Matter.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Matter.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Matter.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Matter.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Matter.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -550,7 +550,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <p>This file is usually not stored in CDP infrastructure but a remote source.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.MatterFile.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterFile.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterFile.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterFile.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterFile.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -597,7 +597,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <p>A connection between a matter and it’s sponsor, a Person.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.MatterSponsor.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterSponsor.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterSponsor.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -645,7 +645,7 @@ the timelines of matters. I.E. Return me a timeline of matter x.</p>
 4. etc.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.MatterStatus.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterStatus.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterStatus.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -693,7 +693,7 @@ the timelines of matters. I.E. Return me a timeline of matter x.</p>
 This can be a matter but it can be a presentation or budget file, etc.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.MinutesItem.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MinutesItem.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#MinutesItem.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -741,7 +741,7 @@ This can be a matter but it can be a presentation or budget file, etc.</p>
 manager, or any other “normal” presenters and attendees of meetings.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Person.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Person.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Person.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -813,7 +813,7 @@ spends a term on the transportation committee and then spends a term on the fina
 committee.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Role.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Role.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Role.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Role.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Role.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -875,7 +875,7 @@ committee.</p>
 <p>An electable office on the City Council. I.E. “Position 9”.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Seat.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Seat.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Seat.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Seat.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Seat.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -928,7 +928,7 @@ committee.</p>
 An event could have a morning and afternoon session.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Session.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Session.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Session.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Session.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Session.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -985,7 +985,7 @@ An event could have a morning and afternoon session.</p>
 <p>A transcript is a document per-session.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Transcript.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Transcript.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Transcript.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Transcript.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Transcript.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1032,7 +1032,7 @@ An event could have a morning and afternoon session.</p>
 <p>A reference typing a specific person, and an event minutes item together.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Vote.Example">
-<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Vote.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Vote.Example" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Vote.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Vote.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1161,7 +1161,7 @@ An event could have a morning and afternoon session.</p>
 
 <dl class="function">
 <dt id="cdp_backend.database.validators.model_is_unique">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">model_is_unique</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#model_is_unique"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.model_is_unique" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">model_is_unique</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/cdp_backend/database/validators.html#model_is_unique"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.model_is_unique" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate that the primary keys of a to-be-uploaded model are unique when compared
 to the collection.</p>
 <dl class="field-list simple">

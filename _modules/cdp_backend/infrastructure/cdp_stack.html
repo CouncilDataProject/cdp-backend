@@ -273,10 +273,10 @@
             <span class="k">for</span> <span class="n">idx_field_set</span> <span class="ow">in</span> <span class="n">model_cls</span><span class="o">.</span><span class="n">_INDEXES</span><span class="p">:</span>
 
                 <span class="c1"># Add fields to field list</span>
-                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">idx_set_name_parts</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">idx_set_fields</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">idx_field</span> <span class="ow">in</span> <span class="n">idx_field_set</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-                    <span class="n">idx_set_name</span> <span class="o">+=</span> <span class="p">[</span><span class="n">idx_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">idx_field</span><span class="o">.</span><span class="n">order</span><span class="p">]</span>
+                    <span class="n">idx_set_name_parts</span> <span class="o">+=</span> <span class="p">[</span><span class="n">idx_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">idx_field</span><span class="o">.</span><span class="n">order</span><span class="p">]</span>
                     <span class="n">idx_set_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="p">{</span>
                             <span class="s2">&quot;fieldPath&quot;</span><span class="p">:</span> <span class="n">idx_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -285,11 +285,11 @@
                     <span class="p">)</span>
 
                 <span class="c1"># Finish creating the index set name</span>
-                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">idx_set_name</span><span class="p">)</span>
-                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">idx_set_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">idx_set_name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">idx_set_name_parts</span><span class="p">)</span>
+                <span class="n">fq_idx_set_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">idx_set_name</span><span class="si">}</span><span class="s2">&quot;</span>
 
                 <span class="n">gcp</span><span class="o">.</span><span class="n">firestore</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span>
-                    <span class="n">idx_set_name</span><span class="p">,</span>
+                    <span class="n">fq_idx_set_name</span><span class="p">,</span>
                     <span class="n">collection</span><span class="o">=</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span>
                     <span class="n">fields</span><span class="o">=</span><span class="n">idx_set_fields</span><span class="p">,</span>
                     <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
