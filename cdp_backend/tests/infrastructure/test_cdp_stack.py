@@ -1,28 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from typing import Any, Dict, List, Optional, Tuple
 import unittest
-import pulumi
 
 from cdp_backend.infrastructure import CDPStack
+import pulumi
 
 ###############################################################################
 
 
 # Create the various mocks.
 class CDPStackMocks(pulumi.runtime.Mocks):
-    def call(self, token, args, provider):
+    def call(self, token: str, args: Any, provider: Optional[str]) -> Dict:
         return {}
 
-    def new_resource(self, type_, name, inputs, provider, id_):
+    def new_resource(
+        self,
+        type_: str,
+        name: str,
+        inputs: Any,
+        provider: Optional[str],
+        id_: Optional[str],
+    ) -> Tuple[str, Dict[Any, Any]]:
         if type_ == "gcp:appengine/application:Application":
             state = {
                 "app_id": f"{name}.fake-appspot.io",
                 "default_bucket": f"gcs://{name}",
             }
-            return [name, dict(inputs, **state)]
+            return (name, dict(inputs, **state))
 
-        return ["", {}]
+        return ("", {})
 
 
 pulumi.runtime.set_mocks(CDPStackMocks())
@@ -32,15 +40,15 @@ pulumi.runtime.set_mocks(CDPStackMocks())
 
 class InfrastructureTests(unittest.TestCase):
     @pulumi.runtime.test
-    def test_basic_run(self):
+    def test_basic_run(self) -> None:
         gcp_project_id = "mocked-testing-stack"
 
         # Write output checks
-        def check_firestore_app_id(args):
+        def check_firestore_app_id(args: List[Any]) -> None:
             app_id = args
             assert app_id == f"{gcp_project_id}.fake-appspot.io"
 
-        def check_firestore_default_bucket(args):
+        def check_firestore_default_bucket(args: List[Any]) -> None:
             default_bucket = args
             assert default_bucket == f"gcs://{gcp_project_id}"
 

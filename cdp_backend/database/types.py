@@ -17,4 +17,4 @@ class IndexedField(NamedTuple):
 
 
 class IndexedFieldSet(NamedTuple):
-    fields: Tuple[IndexedField]
+    fields: Tuple[IndexedField, IndexedField]

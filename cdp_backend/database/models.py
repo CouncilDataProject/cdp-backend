@@ -24,7 +24,7 @@ class File(Model):
     media_type = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         uri = "gs://cdp-example/central-staff-memo.pdf"
         file = cls()
         file.uri = uri
@@ -52,7 +52,7 @@ class Person(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         person = cls()
         person.name = "M. Lorena González"
         person.router_string = "lorena-gonzalez"
@@ -81,7 +81,7 @@ class Body(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         body = cls()
         body.name = "Full Council"
         body.is_active = True
@@ -104,7 +104,7 @@ class Seat(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         seat = cls()
         seat.name = "Position 9"
         seat.electoral_area = "Citywide"
@@ -134,7 +134,7 @@ class Role(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         role = cls()
         role.title = "Council President"
         role.person_ref = Person.Example()
@@ -158,7 +158,7 @@ class Matter(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         matter = cls()
         matter.name = "CB 119858"
         matter.matter_type = "Council Bill"
@@ -199,7 +199,7 @@ class MatterStatus(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         matter_status = cls()
         matter_status.matter_ref = Matter.Example()
         matter_status.status = "Passed"
@@ -236,7 +236,7 @@ class MatterFile(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         matter_file = cls()
         matter_file.matter_ref = Matter.Example()
         matter_file.name = "Amendment 3 (Sawant) - Sunset"
@@ -267,7 +267,7 @@ class MatterSponsor(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         matter_sponsor = cls()
         matter_sponsor.matter_ref = Matter.Example()
         matter_sponsor.person_ref = Person.Example()
@@ -289,7 +289,7 @@ class MinutesItem(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         minutes_item = cls()
         minutes_item.name = "Inf 1656"
         minutes_item.description = (
@@ -316,7 +316,7 @@ class Event(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         event = cls()
         event.body_ref = Body.Example()
         event.event_datetime = datetime.utcnow()
@@ -361,7 +361,7 @@ class Session(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         session = cls()
         session.event_ref = Event.Example()
         session.session_index = 0
@@ -385,7 +385,7 @@ class Transcript(Model):
     created = fields.DateTime(required=True)
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         transcript = cls()
         transcript.session_ref = Session.Example()
         transcript.file_ref = File.Example()
@@ -422,7 +422,7 @@ class EventMinutesItem(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         emi = cls()
         emi.event_ref = Event.Example()
         emi.minutes_item_ref = MinutesItem.Example()
@@ -458,7 +458,7 @@ class EventMinutesItemFile(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         emif = cls()
         emif.event_minutes_item_ref = EventMinutesItem.Example()
         emif.name = "Levy to Move Seattle Quartly Report"
@@ -491,7 +491,7 @@ class Vote(Model):
     external_source_id = fields.TextField()
 
     @classmethod
-    def Example(cls):
+    def Example(cls) -> Model:
         vote = cls()
         vote.matter_ref = Matter.Example()
         vote.event_ref = Event.Example()

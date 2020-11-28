@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from typing import Optional
 
 from cdp_backend.utils import file_utils
 
@@ -25,6 +26,6 @@ from cdp_backend.utils import file_utils
         ("file:///some/dir/image.unknownformat", None),
     ],
 )
-def test_get_media_type(uri, expected_result):
+def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
     actual_result = file_utils.get_media_type(uri)
     assert actual_result == expected_result

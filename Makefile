@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: clean build gen-docs docs help
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -44,6 +44,7 @@ clean:  ## clean all build, python, and testing files
 	rm -fr coverage.xml
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
+	rm -fr .mypy_cache
 
 build: ## run tox / run tests and lint
 	tox

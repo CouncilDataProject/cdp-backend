@@ -12,7 +12,7 @@ from cdp_backend.database import DATABASE_MODELS
 ###############################################################################
 
 
-def test_validate_model_definitions():
+def test_validate_model_definitions() -> None:
     for model_cls in DATABASE_MODELS:
         assert hasattr(model_cls, "Example")
         assert hasattr(model_cls, "_PRIMARY_KEYS")
@@ -44,7 +44,7 @@ def test_validate_model_definitions():
                         assert hasattr(m, idx_field.name)
 
 
-def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir):
+def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir: Path) -> None:
     # Minor edits to:
     # https://blog.jasonantman.com/2012/03/python-script-to-find-dependency-cycles-in-graphviz-dot-files/
 

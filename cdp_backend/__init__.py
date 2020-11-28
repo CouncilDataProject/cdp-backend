@@ -9,5 +9,5 @@ __email__ = "jmaxfieldbrown@gmail.com"
 __version__ = "3.0.0.dev1"
 
 
-def get_module_version():
+def get_module_version() -> str:
     return __version__
