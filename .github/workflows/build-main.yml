@@ -68,6 +68,9 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 cdp_backend --count --verbose --show-source --statistics
+    - name: Check typing with mypy
+      run: |
+        mypy cdp_backend
     - name: Check with black
       run: |
         black --check cdp_backend
