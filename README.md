@@ -34,7 +34,7 @@ A template to be used by the Python `cookiecutter` package to create an entirely
 deployment repository. This is where `cdp-backend` and `cdp-instance` are imported and
 used. If you would like to create a new deployment under the
 `councildataproject.github.io` domain please
-[log a GitHub issue](https://github.com/CouncilDataProject/cookiecutter-cdp-deployment/issues).
+[log a GitHub issue](https://github.com/CouncilDataProject/councildataproject.github.io/issues).
 If you want to utilize a different domain, simply use the template like any other
 `cookiecutter`.
 * [councildataproject.github.io](https://github.com/CouncilDataProject/councildataproject.github.io):
