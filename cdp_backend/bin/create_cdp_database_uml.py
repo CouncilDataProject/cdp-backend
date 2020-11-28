@@ -96,10 +96,10 @@ def _construct_dot_file(output_file: str) -> str:
         fields_as_text = "|".join(fields)
 
         # Create the entire node label with the header then field rows
-        node_label = f"{model_cls.collection_name} | {fields_as_text}"
+        node_label = f"{model_cls.__name__} | {fields_as_text}"
 
         # Attach as a complete node
-        dot.node(model_cls.collection_name, node_label)
+        dot.node(model_cls.__name__, node_label)
 
     # Second pass: Create DAG
     for model_cls in DATABASE_MODELS:
@@ -110,7 +110,7 @@ def _construct_dot_file(output_file: str) -> str:
         for field_name, field in m._meta.field_list.items():
             if isinstance(field, ReferenceField):
                 referenced_model = field.model_ref.__name__
-                dot.edge(f"{model_cls.collection_name}:{field_name}", referenced_model)
+                dot.edge(f"{model_cls.__name__}:{field_name}", referenced_model)
 
     # Save file
     dot.save(str(output_file))
