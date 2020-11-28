@@ -202,6 +202,40 @@
 <a class="reference external image-reference" href="https://codecov.io/gh/CouncilDataProject/cdp-backend"><img alt="Code Coverage" src="https://codecov.io/gh/CouncilDataProject/cdp-backend/branch/main/graph/badge.svg" /></a>
 <p>Data storage utilities and processing pipelines to run on CDP server deployments.</p>
 <hr class="docutils" />
+<div class="section" id="about">
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<p>Council Data Project is an open-source project dedicated to providing journalists,
+activists, researchers, and all members of each community we serve with the tools they
+need to stay informed and hold their Council Members accountable.</p>
+<p>By combining and simplifying sources of information on Council meetings and actions,
+CDP ensures that everyone is empowered to participate in local government.</p>
+<p>Each municipality that CDP supports (<em>a CDP instance</em>) has open source maintainers
+which write code to gather municipality meeting information and compile them into a
+single resource to then be processed, stored, and made accessible by our general CDP
+tooling.</p>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/CouncilDataProject/cdp-backend">cdp-backend</a>: This repo. Contains
+all the database models, data processing pipelines, and infrastructure-as-code for CDP
+deployments. Contributions here will be available to all CDP instances. Entirely
+written in Python.</p></li>
+<li><p><a class="reference external" href="https://github.com/CouncilDataProject/cdp-instance">cdp-instance</a>: Contains all of
+the components used by the web apps to be hosted on GitHub Pages. Contributions here
+will be available to all CDP instances. Entirely written in TypeScript.</p></li>
+<li><p><a class="reference external" href="https://github.com/CouncilDataProject/cookiecutter-cdp-deployment">cookiecutter-cdp-deployment</a>:
+A template to be used by the Python <code class="docutils literal notranslate"><span class="pre">cookiecutter</span></code> package to create an entirely new
+deployment repository. This is where <code class="docutils literal notranslate"><span class="pre">cdp-backend</span></code> and <code class="docutils literal notranslate"><span class="pre">cdp-instance</span></code> are imported and
+used. If you would like to create a new deployment under the
+<code class="docutils literal notranslate"><span class="pre">councildataproject.github.io</span></code> domain please
+<a class="reference external" href="https://github.com/CouncilDataProject/councildataproject.github.io/issues">log a GitHub issue</a>.
+If you want to utilize a different domain, simply use the template like any other
+<code class="docutils literal notranslate"><span class="pre">cookiecutter</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/CouncilDataProject/councildataproject.github.io">councildataproject.github.io</a>:
+Our landing page! Contributions here should largely be text changes and admin updates.</p></li>
+</ul>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p><strong>Stable Release:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cdp_backend</span></code><span class="raw-html-m2r"><br></span>
@@ -221,7 +255,8 @@ deployments.</p>
 </div>
 <div class="section" id="development">
 <h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to developing the code.</p>
+<p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to development of this
+repository.</p>
 <p><strong>Free software: MIT license</strong></p>
 </div>
 </div>
