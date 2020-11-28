@@ -13,7 +13,7 @@ from . import exceptions
 # Model Validation
 
 
-def model_is_unique(model: Model):
+def model_is_unique(model: Model) -> None:
     """
     Validate that the primary keys of a to-be-uploaded model are unique when compared
     to the collection.

@@ -88,10 +88,10 @@ class CDPStack(pulumi.ComponentResource):
             for idx_field_set in model_cls._INDEXES:
 
                 # Add fields to field list
-                idx_set_name = []
+                idx_set_name_parts = []
                 idx_set_fields = []
                 for idx_field in idx_field_set.fields:
-                    idx_set_name += [idx_field.name, idx_field.order]
+                    idx_set_name_parts += [idx_field.name, idx_field.order]
                     idx_set_fields.append(
                         {
                             "fieldPath": idx_field.name,
@@ -100,11 +100,11 @@ class CDPStack(pulumi.ComponentResource):
                     )
 
                 # Finish creating the index set name
-                idx_set_name = "_".join(idx_set_name)
-                idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
+                idx_set_name = "_".join(idx_set_name_parts)
+                fq_idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
 
                 gcp.firestore.Index(
-                    idx_set_name,
+                    fq_idx_set_name,
                     collection=model_cls.collection_name,
                     fields=idx_set_fields,
                     project=self.gcp_project_id,

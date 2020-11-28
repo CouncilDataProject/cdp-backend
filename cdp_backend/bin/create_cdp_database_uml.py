@@ -24,10 +24,10 @@ log = logging.getLogger(__name__)
 
 
 class Args(argparse.Namespace):
-    def __init__(self):
+    def __init__(self) -> None:
         self.__parse()
 
-    def __parse(self):
+    def __parse(self) -> None:
         p = argparse.ArgumentParser(
             prog="create_cdp_database_uml", description="Create a CDP UML dot file."
         )
@@ -45,7 +45,7 @@ class Args(argparse.Namespace):
 ###############################################################################
 
 
-def _construct_dot_file(output_file: str):
+def _construct_dot_file(output_file: str) -> str:
     dot = Digraph(
         comment="CDP Database Diagram",
         graph_attr={
@@ -115,8 +115,10 @@ def _construct_dot_file(output_file: str):
     # Save file
     dot.save(str(output_file))
 
+    return output_file
 
-def main():
+
+def main() -> None:
     try:
         args = Args()
         _construct_dot_file(output_file=args.output_file)

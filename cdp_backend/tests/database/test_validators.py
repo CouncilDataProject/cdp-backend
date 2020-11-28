@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from typing import List
 from unittest import mock
 
 from cdp_backend.database import models, validators, exceptions
+from fireo.models import Model
 
 from .. import test_utils
 
@@ -32,7 +34,10 @@ from .. import test_utils
         ),
     ],
 )
-def test_uniqueness_validation(model_name, mock_return_values):
+def test_uniqueness_validation(
+    model_name: str,
+    mock_return_values: List[Model],
+) -> None:
     with mock.patch("fireo.queries.filter_query.FilterQuery.fetch") as mocked_fetch:
         mocked_fetch.return_value = mock_return_values
 
@@ -58,7 +63,7 @@ def test_uniqueness_validation(model_name, mock_return_values):
         ("lorena gonzalez", False),
     ],
 )
-def test_router_string_is_valid(router_string, expected_result):
+def test_router_string_is_valid(router_string: str, expected_result: bool) -> None:
     actual_result = validators.router_string_is_valid(router_string)
     assert actual_result == expected_result
 
@@ -76,7 +81,7 @@ def test_router_string_is_valid(router_string, expected_result):
         ("Lorena.González@seattle.gov", False),
     ],
 )
-def test_email_is_valid(email, expected_result):
+def test_email_is_valid(email: str, expected_result: bool) -> None:
     actual_result = validators.email_is_valid(email)
     assert actual_result == expected_result
 
@@ -89,13 +94,13 @@ def test_email_is_valid(email, expected_result):
         ("file://does-not-exist.txt", False),
     ],
 )
-def test_local_resource_exists(uri, expected_result):
+def test_local_resource_exists(uri: str, expected_result: bool) -> None:
     actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
 
 
 @pytest.mark.skipif(
-    not test_utils.check_internet_available(),
+    not test_utils.internet_is_available(),
     reason="No internet connection",
 )
 @pytest.mark.parametrize(
@@ -106,6 +111,6 @@ def test_local_resource_exists(uri, expected_result):
         ("https://docs.pytest.org/en/latest/does-not-exist.html", False),
     ],
 )
-def test_remote_resource_exists(uri, expected_result):
+def test_remote_resource_exists(uri: str, expected_result: bool) -> None:
     actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
