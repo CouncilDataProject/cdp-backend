@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 from typing import NamedTuple, Optional, List
 
@@ -58,8 +61,18 @@ class EventMinutesItem(NamedTuple):
     vote: Vote
 
 
+class Body(NamedTuple):
+    name: str
+    tag: Optional[str]
+    description: Optional[str]
+    start_datetime: datetime
+    end_datetime: Optional[datetime]
+    is_active: Optional[bool]
+    external_source_id: Optional[str]
+
+
 class EventData(NamedTuple):
-    body: str
+    body_ref: Body
     event_datetime: datetime
     sessions: List[SessionData]
     external_source_id: Optional[str]
