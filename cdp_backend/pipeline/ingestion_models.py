@@ -55,7 +55,7 @@ class MinutesItem(NamedTuple):
 
 class EventMinutesItem(NamedTuple):
     minutes_item_ref: MinutesItem  # top down
-    index: int
+    event_minutes_item_index: int
     decision: str
     external_source_id: Optional[str]
     vote: Vote
