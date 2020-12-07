@@ -92,7 +92,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".template"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -185,19 +185,17 @@ texinfo_documents = [
 ]
 
 # -- Extra docstring configurations ------------------------------------
-def no_namedtuple_attrib_docstring(app, what, name,
-                                   obj, options, lines):
-    is_namedtuple_docstring = (
-        len(lines) == 1 and
-        lines[0].startswith('Alias for field number')
+def no_namedtuple_attrib_docstring(app, what, name, obj, options, lines):
+    is_namedtuple_docstring = len(lines) == 1 and lines[0].startswith(
+        "Alias for field number"
     )
     if is_namedtuple_docstring:
         # We don't return, so we need to purge in-place
         del lines[:]
 
+
 def setup(app):
     app.connect(
-        'autodoc-process-docstring',
+        "autodoc-process-docstring",
         no_namedtuple_attrib_docstring,
     )
-
