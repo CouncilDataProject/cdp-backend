@@ -1,0 +1,26 @@
+# Event Ingestion Model
+
+We try to make CDP infrastructure as easy as possible to set while also scaling to
+support as much specific data as can be given and processed.
+
+To this end, our event data ingestion model can be seen below where in one example, the
+bare minimum is provided to the `Event` object, while in another, details about minutes
+items that were discussed during the event are attached.
+
+The more data provided to each `Event` object, the more data displayed and queryable
+from CDP services.
+
+For more information on each field available, please see the
+[object definition documentation](./cdp_backend.pipeline.html#module-cdp_backend.pipeline.ingestion_models).
+
+## Minimal Event Data
+
+```python
+{{ minimal_event_data }}
+```
+
+## Expanded Event Data with Event Minutes Items
+
+```python
+{{ filled_event_data }}
+```

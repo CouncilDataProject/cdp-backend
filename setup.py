@@ -31,6 +31,7 @@ dev_requirements = [
     "bump2version>=1.0.1",
     "coverage>=5.1",
     "ipython>=7.15.0",
+    "jinja2>=2.11.2",
     "m2r>=0.2.1",
     "pytest-runner>=5.2",
     "Sphinx>=2.0.0b1,<3",
@@ -79,6 +80,10 @@ setup(
     entry_points={
         "console_scripts": [
             "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
+            (
+                "create_cdp_ingestion_model_doc="
+                "cdp_backend.bin.create_ingestion_model_doc:main"
+            ),
         ],
     },
     install_requires=requirements,
