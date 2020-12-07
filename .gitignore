@@ -111,3 +111,4 @@ ENV/
 
 # Project specific
 cdp_database_diagram.*
+event_data_ingestion_model.md

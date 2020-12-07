@@ -200,7 +200,7 @@ class Role:
 
 
 @dataclass
-class Event:
+class EventIngestionModel:
     """
     An event can be a normally scheduled meeting, a special event such as a press
     conference or election debate, and, can be upcoming or historical.
@@ -226,7 +226,7 @@ class Event:
 ###############################################################################
 
 
-EXAMPLE_MINIMAL_EVENT = Event(
+EXAMPLE_MINIMAL_EVENT = EventIngestionModel(
     body=Body(name="Full Council"),
     sessions=[
         Session(
@@ -237,7 +237,7 @@ EXAMPLE_MINIMAL_EVENT = Event(
 )
 
 
-EXAMPLE_FILLED_EVENT = Event(
+EXAMPLE_FILLED_EVENT = EventIngestionModel(
     body=Body(name="Full Council"),
     sessions=[
         Session(
