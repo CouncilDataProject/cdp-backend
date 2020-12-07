@@ -6,241 +6,354 @@ from datetime import datetime
 from typing import Optional, List
 from dataclasses import dataclass
 
-
-@dataclass
-class File:
-    """
-    Parameters
-    ----------
-    uri: str
-    name: str
-    description: Optional[str]
-    media_type: Optional[str]
-    """
-
-    uri: str
-    name: str
-    description: Optional[str] = None
-    media_type: Optional[str] = None
-
-    @classmethod
-    def Example(cls) -> File:
-        uri = "gs://cdp-example/central-staff-memo.pdf"
-        name = "Central Staff Memo"
-        return cls(uri, name)
+###############################################################################
 
 
 @dataclass
-class Matter:
+class Seat:
     """
-    Parameters
-    ----------
-    name: str
-    matter_type: str
-    title: str
-    external_source_id: Optional[str]
+    An electable office on the City Council. I.E. "Position 9".
+
+    Notes
+    -----
+    The electoral_area and electoral_type will be updated if changed from prior values.
+    The image will be uploaded or updated in the CDP file storage system.
     """
 
     name: str
-    matter_type: str
-    title: str
+    electoral_area: Optional[str] = None
+    electoral_type: Optional[str] = None
+    image_uri: Optional[str] = None
     external_source_id: Optional[str] = None
-
-    @classmethod
-    def Example(cls) -> Matter:
-        name = "CB 119858"
-        matter_type = "Council Bill"
-        title = "A matter title"
-        return cls(name, matter_type, title)
 
 
 @dataclass
 class Person:
     """
-    Parameters
-    ----------
-    name: str
-    router_string: Optional[str]
-    email: Optional[str]
-    phone: Optional[int]
-    website: Optional[str]
-    picture_ref: Optional[File]
-    is_active: Optional[bool]
-    external_source_id: Optional[str]
+    Primarily the council members, this could technically include the mayor or city
+    manager, or any other "normal" presenters and attendees of meetings.
+
+    Notes
+    -----
+    If router_string is not provided, and the Person did not exist prior to ingestion,
+    router_string will be generated from name.
+
+    The email, phone, website will be updated if changed from prior values.
+    The picture will be uploaded or updated in the CDP file storage system.
+
+    If person is operating under new roles or new seat, new Role and Seat documents will
+    be stored.
     """
 
     name: str
+    is_active: bool = True
     router_string: Optional[str] = None
-    is_active: Optional[bool] = None
     email: Optional[str] = None
-    phone: Optional[int] = None
+    phone: Optional[str] = None
     website: Optional[str] = None
-    picture_ref: Optional[File] = None
+    picture_uri: Optional[str] = None
+    seat: Optional[Seat] = None
+    roles: Optional[List[Role]] = None
     external_source_id: Optional[str] = None
-
-    @classmethod
-    def Example(cls) -> Person:
-        name = "M. Lorena González"
-        router_string = "lorena-gonzalez"
-        is_active = True
-        return cls(name, router_string, is_active)
 
 
 @dataclass
 class Vote:
     """
-    Parameters
-    ----------
-    matter_ref: Matter
-    person_ref: Person
-    decision: str
-    in_majority: bool
-    external_source_id: Optional[str]
+    A reference tying a specific person and an event minutes item together.
+
+    Notes
+    -----
+    The in_majority field stored in the database will be calculated from the provided
+    list of votes.
     """
 
-    matter_ref: Matter
-    person_ref: Person
+    person: Person
     decision: str
-    in_majority: bool
     external_source_id: Optional[str] = None
-
-    @classmethod
-    def Example(cls) -> Vote:
-        matter_ref = Matter.Example()
-        person_ref = Person.Example()
-        decision = "Approve"
-        in_majority = True
-        return cls(matter_ref, person_ref, decision, in_majority)
 
 
 @dataclass
-class SessionData:
+class SupportingFile:
     """
-    Parameters
-    ----------
-    session_datetime: datetime
-    session_index: int
-    video_uri: str
-    caption_uri: Optional[str]
-    external_source_id: Optional[str]
+    A file related tied to a matter or minutes item.
+
+    Notes
+    -----
+    This file is not stored in the CDP file storage system.
     """
 
-    session_datetime: datetime
-    session_index: int
-    video_uri: str
-    caption_uri: Optional[str] = None
+    name: str
+    uri: str
     external_source_id: Optional[str] = None
 
-    @classmethod
-    def Example(cls) -> SessionData:
-        session_datetime = datetime.utcnow()
-        session_index = 0
-        video_uri = "https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"
-        return cls(session_datetime, session_index, video_uri)
+
+@dataclass
+class Matter:
+    """
+    A matter is a specific legislative document. A bill, resolution, initiative, etc.
+    """
+
+    name: str
+    matter_type: str
+    title: str
+    sponsors: Optional[List[Person]] = None
+    external_source_id: Optional[str] = None
 
 
 @dataclass
 class MinutesItem:
     """
-    Parameters
-    ----------
-    name: str
-    description: str
-    matter_ref: Optional[Matter]
-    external_source_id: Optional[str]
+    An item referenced during a meeting.
+    This can be a matter but it can be a presentation or budget file, etc.
     """
 
     name: str
-    description: str
-    matter_ref: Optional[Matter] = None
+    description: Optional[str] = None
     external_source_id: Optional[str] = None
-
-    @classmethod
-    def Example(cls) -> MinutesItem:
-        name = "Inf 1656"
-        description = "Roadmap to defunding the Police and investing in community."
-        matter_ref = Matter.Example()
-        return cls(name, description, matter_ref)
 
 
 @dataclass
 class EventMinutesItem:
     """
-    Parameters
-    ----------
-    minutes_item_ref: MinutesItem
-    event_minutes_item_index: int
-    decision: str
-    external_source_id: Optional[str]
-    vote: Vote
+    Details about a specific item during an event.
+
+    Notes
+    -----
+    If index is not provided, the index will be set to the index of the item in the
+    whole EventMinutesItem list on Event.
+
+    If matter is not provided, the supporting_files will be stored as
+    EventMinutesItemFile.
+    If matter is provided, the supporting_files will be additionally be stored as
+    MatterFile.
     """
 
-    minutes_item_ref: MinutesItem  # top down
-    event_minutes_item_index: int
-    decision: str
-    vote: Vote
-    external_source_id: Optional[str] = None
+    minutes_item: MinutesItem
+    index: Optional[int] = None
+    matter: Optional[Matter] = None
+    supporting_files: Optional[List[SupportingFile]] = None
+    decision: Optional[str] = None
+    votes: Optional[List[Vote]] = None
 
-    @classmethod
-    def Example(cls) -> EventMinutesItem:
-        minutes_item_ref = MinutesItem.Example()
-        event_minutes_item_index = 0
-        decision = "Approved"
-        vote = Vote.Example()
-        return cls(minutes_item_ref, event_minutes_item_index, decision, vote)
+
+@dataclass
+class Session:
+    """
+    A session is a working period for an event.
+    For example, an event could have a morning and afternoon session.
+
+    Notes
+    -----
+    If session_index is not provided, the session_index will be set to the index of the
+    item in the whole Session list on Event.
+    """
+
+    session_datetime: datetime
+    video_uri: str
+    session_index: Optional[int] = None
+    caption_uri: Optional[str] = None
+    external_source_id: Optional[str] = None
 
 
 @dataclass
 class Body:
     """
-    Parameters
-    ----------
-    name: str
-    start_datetime: datetime
-    tag: Optional[str]
-    description: Optional[str]
-    end_datetime: Optional[datetime]
-    is_active: Optional[bool]
-    external_source_id: Optional[str]
+    A meeting body. This can be full council, a subcommittee, or "off-council" matters
+    such as election debates.
+
+    Notes
+    -----
+    If start_datetime is not provided, and the Body did not exist prior to ingestion,
+    current datetime.utcnow will be used as start_datetime during storage.
     """
 
     name: str
-    start_datetime: datetime
-    is_active: Optional[bool] = None
-    tag: Optional[str] = None
+    is_active: bool = True
+    start_datetime: Optional[datetime] = None
     description: Optional[str] = None
     end_datetime: Optional[datetime] = None
     external_source_id: Optional[str] = None
 
-    @classmethod
-    def Example(cls) -> Body:
-        name = "Full Council"
-        is_active = True
-        start_datetime = datetime.utcnow()
-        return cls(name, start_datetime, is_active)
+
+@dataclass
+class Role:
+    """
+    A role is a person's job for a period of time in the city council. A person can
+    (and should) have multiple roles. For example: a person has two terms as city
+    council member for district four then a term as city council member for a citywide
+    seat. Roles can also be tied to committee chairs. For example: a council member
+    spends a term on the transportation committee and then spends a term on the finance
+    committee.
+
+    Notes
+    -----
+    If start_datetime is not provided, and the Role did not exist prior to ingestion,
+    current datetime.utcnow will be used as start_datetime during storage.
+    """
+
+    title: str
+    body: Optional[Body] = None
+    start_datetime: Optional[datetime] = None
+    end_datetime: Optional[datetime] = None
+    external_source_id: Optional[str] = None
 
 
 @dataclass
-class EventData:
+class Event:
     """
-    Parameters
-    ----------
-    body_ref: Body
-    event_datetime: datetime
-    sessions: List[SessionData]
-    external_source_id: Optional[str]
-    event_minutes_items: Optional[List[EventMinutesItem]]
+    An event can be a normally scheduled meeting, a special event such as a press
+    conference or election debate, and, can be upcoming or historical.
+
+    Notes
+    -----
+    If static_thumbnail_uri and/or hover_thumbnail_uri is not provided,
+    it will be generated during pipeline processing.
+
+    The earliest session_datetime will be used for the overall event_datetime.
     """
 
-    body_ref: Body
-    event_datetime: datetime
-    sessions: List[SessionData]
+    body: Body
+    sessions: List[Session]
+    event_minutes_items: Optional[List[EventMinutesItem]] = None
+    agenda_uri: Optional[str] = None
+    minutes_uri: Optional[str] = None
+    static_thumbnail_uri: Optional[str] = None
+    hover_thumbnail_uri: Optional[str] = None
     external_source_id: Optional[str] = None
-    event_minutes_items: Optional[List[EventMinutesItem]] = None  # top down
 
-    @classmethod
-    def Example(cls) -> EventData:
-        body_ref = Body.Example()
-        event_datetime = datetime.utcnow()
-        sessions = [SessionData.Example(), SessionData.Example()]
-        return cls(body_ref, event_datetime, sessions)
+
+###############################################################################
+
+
+EXAMPLE_MINIMAL_EVENT = Event(
+    body=Body(name="Full Council"),
+    sessions=[
+        Session(
+            session_datetime=datetime.utcnow(),
+            video_uri="https://youtu.be/dQw4w9WgXcQ",
+        ),
+    ],
+)
+
+
+EXAMPLE_FILLED_EVENT = Event(
+    body=Body(name="Full Council"),
+    sessions=[
+        Session(
+            session_datetime=datetime.utcnow(),
+            video_uri="https://youtu.be/dQw4w9WgXcQ",
+        ),
+    ],
+    event_minutes_items=[
+        EventMinutesItem(
+            minutes_item=MinutesItem(name="Inf 1656"),
+        ),
+        EventMinutesItem(
+            minutes_item=MinutesItem(name="CB 119858"),
+            matter=Matter(
+                name="CB 119858",
+                matter_type="Council Bill",
+                title=(
+                    "AN ORDINANCE relating to the financing of the West Seattle Bridge"
+                ),
+                sponsors=[
+                    Person(
+                        name="M. Lorena González",
+                        seat=Seat(name="Position 9"),
+                        roles=[
+                            Role(title="Council President"),
+                            Role(
+                                title="Chair",
+                                body=Body(name="Governance and Education"),
+                            ),
+                        ],
+                    ),
+                    Person(
+                        name="Teresa Mosqueda",
+                        seat=Seat(name="Position 8"),
+                        roles=[
+                            Role(
+                                title="Chair",
+                                body=Body(name="Finance and Housing"),
+                            ),
+                            Role(
+                                title="Vice Chair",
+                                body=Body(name="Governance and Education"),
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            supporting_files=[
+                SupportingFile(
+                    name="Amendment 3",
+                    uri=(
+                        "http://legistar2.granicus.com/seattle/attachments/"
+                        "789a0c9f-dd9c-401b-aaf5-6c67c2a897b0.pdf"
+                    ),
+                ),
+            ],
+            decision="Passed",
+            votes=[
+                Vote(
+                    person=Person(
+                        name="M. Lorena González",
+                        seat=Seat(name="Position 9"),
+                        roles=[
+                            Role(title="Council President"),
+                            Role(
+                                title="Chair",
+                                body=Body(name="Governance and Education"),
+                            ),
+                        ],
+                    ),
+                    decision="Approve",
+                ),
+                Vote(
+                    person=Person(
+                        name="Teresa Mosqueda",
+                        seat=Seat(name="Position 8"),
+                        roles=[
+                            Role(
+                                title="Chair",
+                                body=Body(name="Finance and Housing"),
+                            ),
+                            Role(
+                                title="Vice Chair",
+                                body=Body(name="Governance and Education"),
+                            ),
+                        ],
+                    ),
+                    decision="Approve",
+                ),
+                Vote(
+                    person=Person(
+                        name="Andrew Lewis",
+                        seat=Seat(name="District 7"),
+                        roles=[
+                            Role(
+                                title="Vice Chair",
+                                body=Body(name="Community Economic Development"),
+                            ),
+                        ],
+                    ),
+                    decision="Approve",
+                ),
+                Vote(
+                    person=Person(
+                        name="Alex Pedersen",
+                        seat=Seat(name="District 4"),
+                        roles=[
+                            Role(
+                                title="Chair",
+                                body=Body("Transportation and Utilities"),
+                            ),
+                        ],
+                    ),
+                    decision="Reject",
+                ),
+            ],
+        ),
+    ],
+)

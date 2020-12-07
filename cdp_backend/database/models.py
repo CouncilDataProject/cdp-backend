@@ -43,12 +43,14 @@ class Person(Model):
     """
 
     name = fields.TextField(required=True)
-    router_string = fields.TextField(validator=validators.router_string_is_valid)
+    router_string = fields.TextField(
+        required=True, validator=validators.router_string_is_valid
+    )
     email = fields.TextField(validator=validators.email_is_valid)
     phone = fields.NumberField()
     website = fields.TextField(validator=validators.resource_exists)
     picture_ref = fields.ReferenceField(File)
-    is_active = fields.BooleanField()
+    is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
 
     @classmethod
@@ -59,10 +61,7 @@ class Person(Model):
         person.is_active = True
         return person
 
-    _PRIMARY_KEYS = (
-        "name",
-        "router_string",
-    )
+    _PRIMARY_KEYS = ("name",)
     _INDEXES = ()
 
 
@@ -73,11 +72,10 @@ class Body(Model):
     """
 
     name = fields.TextField(required=True)
-    tag = fields.TextField()
     description = fields.TextField()
     start_datetime = fields.DateTime(required=True)
     end_datetime = fields.DateTime()
-    is_active = fields.BooleanField()
+    is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
 
     @classmethod
@@ -118,7 +116,7 @@ class Seat(Model):
 class Role(Model):
     """
     A role is a person's job for a period of time in the city council. A person can
-    (and should) have multiple roles. For example: a person has two terms as city
+    (and generally does) have many roles. For example: a person has two terms as city
     council member for district four then a term as city council member for a citywide
     seat. Roles can also be tied to committee chairs. For example: a council member
     spends a term on the transportation committee and then spends a term on the finance
@@ -127,7 +125,7 @@ class Role(Model):
 
     title = fields.TextField(required=True)
     person_ref = fields.ReferenceField(Person, required=True)
-    body_ref = fields.ReferenceField(Body, required=True)
+    body_ref = fields.ReferenceField(Body)
     seat_ref = fields.ReferenceField(Seat, required=True)
     start_datetime = fields.DateTime(required=True)
     end_datetime = fields.DateTime()
@@ -259,7 +257,7 @@ class MatterFile(Model):
 
 class MatterSponsor(Model):
     """
-    A connection between a matter and it's sponsor, a Person.
+    A reference tying a specific person and a matter together.
     """
 
     matter_ref = fields.ReferenceField(Matter, required=True)
@@ -350,7 +348,7 @@ class Event(Model):
 class Session(Model):
     """
     A session is a working period for an event.
-    An event could have a morning and afternoon session.
+    For example, An event could have a morning and afternoon session.
     """
 
     event_ref = fields.ReferenceField(Event, required=True)
@@ -480,7 +478,9 @@ class EventMinutesItemFile(Model):
 
 
 class Vote(Model):
-    "A reference typing a specific person, and an event minutes item together."
+    """
+    A reference tying a specific person and an event minutes item together.
+    """
 
     matter_ref = fields.ReferenceField(Matter, required=True)
     event_ref = fields.ReferenceField(Event, required=True)
