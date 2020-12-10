@@ -74,6 +74,7 @@ def router_string_is_valid(router_string: Optional[str]) -> bool:
     if router_string is None:
         return True
 
+    # Check only lowercase and hyphen allowed
     if re.match(r"^[a-z]+[\-]?[a-z]+$", router_string):
         return True
 

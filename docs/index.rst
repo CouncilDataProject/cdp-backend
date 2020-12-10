@@ -9,6 +9,7 @@ Welcome to cdp-backend's documentation!
    Overview <self>
    installation
    Package Modules <modules>
+   Event Data Ingestion Model <event_data_ingestion_model>
    Database Schema <database_schema>
    contributing
 
