@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdp_backend.pipeline.ingestion_models &mdash; cdp-backend 3.0.0.dev1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_data_ingestion_model.html">Event Data Ingestion Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.pipeline.ingestion_models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.pipeline.ingestion_models</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="Seat"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Seat</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An electable office on the City Council. I.E. &quot;Position 9&quot;.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The electoral_area and electoral_type will be updated if changed from prior values.</span>
+<span class="sd">    The image will be uploaded or updated in the CDP file storage system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">electoral_area</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">electoral_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">image_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Person"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Primarily the council members, this could technically include the mayor or city</span>
+<span class="sd">    manager, or any other &quot;normal&quot; presenters and attendees of meetings.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If router_string is not provided, and the Person did not exist prior to ingestion,</span>
+<span class="sd">    router_string will be generated from name.</span>
+
+<span class="sd">    The email, phone, website will be updated if changed from prior values.</span>
+<span class="sd">    The picture will be uploaded or updated in the CDP file storage system.</span>
+
+<span class="sd">    If person is operating under new roles or new seat, new Role and Seat documents will</span>
+<span class="sd">    be stored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">router_string</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">phone</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">website</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">picture_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">seat</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Seat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">roles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Role</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Vote"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Vote</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A reference tying a specific person and an event minutes item together.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The in_majority field stored in the database will be calculated from the provided</span>
+<span class="sd">    list of votes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">person</span><span class="p">:</span> <span class="n">Person</span>
+    <span class="n">decision</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="SupportingFile"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SupportingFile</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A file related tied to a matter or minutes item.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This file is not stored in the CDP file storage system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Matter"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Matter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A matter is a specific legislative document. A bill, resolution, initiative, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">matter_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">sponsors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Person</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="MinutesItem"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MinutesItem</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An item referenced during a meeting.</span>
+<span class="sd">    This can be a matter but it can be a presentation or budget file, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="EventMinutesItem"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EventMinutesItem</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Details about a specific item during an event.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If index is not provided, the index will be set to the index of the item in the</span>
+<span class="sd">    whole EventMinutesItem list on Event.</span>
+
+<span class="sd">    If matter is not provided, the supporting_files will be stored as</span>
+<span class="sd">    EventMinutesItemFile.</span>
+<span class="sd">    If matter is provided, the supporting_files will be additionally be stored as</span>
+<span class="sd">    MatterFile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">minutes_item</span><span class="p">:</span> <span class="n">MinutesItem</span>
+    <span class="n">index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">matter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Matter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">supporting_files</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SupportingFile</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">votes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Vote</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Session</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A session is a working period for an event.</span>
+<span class="sd">    For example, an event could have a morning and afternoon session.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If session_index is not provided, the session_index will be set to the index of the</span>
+<span class="sd">    item in the whole Session list on Event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">session_datetime</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">session_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">caption_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Body</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A meeting body. This can be full council, a subcommittee, or &quot;off-council&quot; matters</span>
+<span class="sd">    such as election debates.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If start_datetime is not provided, and the Body did not exist prior to ingestion,</span>
+<span class="sd">    current datetime.utcnow will be used as start_datetime during storage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">start_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">end_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Role"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Role</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A role is a person&#39;s job for a period of time in the city council. A person can</span>
+<span class="sd">    (and should) have multiple roles. For example: a person has two terms as city</span>
+<span class="sd">    council member for district four then a term as city council member for a citywide</span>
+<span class="sd">    seat. Roles can also be tied to committee chairs. For example: a council member</span>
+<span class="sd">    spends a term on the transportation committee and then spends a term on the finance</span>
+<span class="sd">    committee.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If start_datetime is not provided, and the Role did not exist prior to ingestion,</span>
+<span class="sd">    current datetime.utcnow will be used as start_datetime during storage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Body</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">start_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">end_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="EventIngestionModel"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EventIngestionModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An event can be a normally scheduled meeting, a special event such as a press</span>
+<span class="sd">    conference or election debate, and, can be upcoming or historical.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If static_thumbnail_uri and/or hover_thumbnail_uri is not provided,</span>
+<span class="sd">    it will be generated during pipeline processing.</span>
+
+<span class="sd">    The earliest session_datetime will be used for the overall event_datetime.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">body</span><span class="p">:</span> <span class="n">Body</span>
+    <span class="n">sessions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Session</span><span class="p">]</span>
+    <span class="n">event_minutes_items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">EventMinutesItem</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">agenda_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">minutes_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">static_thumbnail_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">hover_thumbnail_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<span class="c1">###############################################################################</span>
+
+
+<span class="n">EXAMPLE_MINIMAL_EVENT</span> <span class="o">=</span> <span class="n">EventIngestionModel</span><span class="p">(</span>
+    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Full Council&quot;</span><span class="p">),</span>
+    <span class="n">sessions</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Session</span><span class="p">(</span>
+            <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
+            <span class="n">video_uri</span><span class="o">=</span><span class="s2">&quot;https://youtu.be/dQw4w9WgXcQ&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+
+<span class="n">EXAMPLE_FILLED_EVENT</span> <span class="o">=</span> <span class="n">EventIngestionModel</span><span class="p">(</span>
+    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Full Council&quot;</span><span class="p">),</span>
+    <span class="n">sessions</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Session</span><span class="p">(</span>
+            <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
+            <span class="n">video_uri</span><span class="o">=</span><span class="s2">&quot;https://youtu.be/dQw4w9WgXcQ&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">event_minutes_items</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">EventMinutesItem</span><span class="p">(</span>
+            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Inf 1656&quot;</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">EventMinutesItem</span><span class="p">(</span>
+            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;CB 119858&quot;</span><span class="p">),</span>
+            <span class="n">matter</span><span class="o">=</span><span class="n">Matter</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;CB 119858&quot;</span><span class="p">,</span>
+                <span class="n">matter_type</span><span class="o">=</span><span class="s2">&quot;Council Bill&quot;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="p">(</span>
+                    <span class="s2">&quot;AN ORDINANCE relating to the financing of the West Seattle Bridge&quot;</span>
+                <span class="p">),</span>
+                <span class="n">sponsors</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">Person</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;M. Lorena González&quot;</span><span class="p">,</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 9&quot;</span><span class="p">),</span>
+                        <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Council President&quot;</span><span class="p">),</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">Person</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Teresa Mosqueda&quot;</span><span class="p">,</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 8&quot;</span><span class="p">),</span>
+                        <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Finance and Housing&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">supporting_files</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">SupportingFile</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Amendment 3&quot;</span><span class="p">,</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="p">(</span>
+                        <span class="s2">&quot;http://legistar2.granicus.com/seattle/attachments/&quot;</span>
+                        <span class="s2">&quot;789a0c9f-dd9c-401b-aaf5-6c67c2a897b0.pdf&quot;</span>
+                    <span class="p">),</span>
+                <span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Passed&quot;</span><span class="p">,</span>
+            <span class="n">votes</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">Vote</span><span class="p">(</span>
+                    <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;M. Lorena González&quot;</span><span class="p">,</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 9&quot;</span><span class="p">),</span>
+                        <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Council President&quot;</span><span class="p">),</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Approve&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">Vote</span><span class="p">(</span>
+                    <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Teresa Mosqueda&quot;</span><span class="p">,</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 8&quot;</span><span class="p">),</span>
+                        <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Finance and Housing&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Approve&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">Vote</span><span class="p">(</span>
+                    <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Andrew Lewis&quot;</span><span class="p">,</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;District 7&quot;</span><span class="p">),</span>
+                        <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Community Economic Development&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Approve&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">Vote</span><span class="p">(</span>
+                    <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Alex Pedersen&quot;</span><span class="p">,</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;District 4&quot;</span><span class="p">),</span>
+                        <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">Role</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="s2">&quot;Transportation and Utilities&quot;</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Reject&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

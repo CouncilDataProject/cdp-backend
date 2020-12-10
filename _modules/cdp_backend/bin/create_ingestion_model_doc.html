@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cdp_backend.bin.create_cdp_database_uml &mdash; cdp-backend 3.0.0.dev1 documentation</title>
+  <title>cdp_backend.bin.create_ingestion_model_doc &mdash; cdp-backend 3.0.0.dev1 documentation</title>
   
 
   
@@ -173,7 +173,7 @@
         
           <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
         
-      <li>cdp_backend.bin.create_cdp_database_uml</li>
+      <li>cdp_backend.bin.create_ingestion_model_doc</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,20 +188,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for cdp_backend.bin.create_cdp_database_uml</h1><div class="highlight"><pre>
+  <h1>Source code for cdp_backend.bin.create_ingestion_model_doc</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">fireo.fields</span> <span class="kn">import</span> <span class="n">ReferenceField</span>
-<span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
-
-<span class="kn">from</span> <span class="nn">cdp_backend.database</span> <span class="kn">import</span> <span class="n">DATABASE_MODELS</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.pipeline.ingestion_models</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EXAMPLE_MINIMAL_EVENT</span><span class="p">,</span>
+    <span class="n">EXAMPLE_FILLED_EVENT</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -214,21 +218,34 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_database_uml.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
+<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_ingestion_model_doc.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parse</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;create_cdp_database_uml&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Create a CDP UML dot file.&quot;</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;create_cdp_ingestion_model_doc&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Create the ingestion model documentation file for CDP.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--template-file&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+                <span class="o">/</span> <span class="s2">&quot;docs&quot;</span>
+                <span class="o">/</span> <span class="s2">&quot;event_data_ingestion_model.template&quot;</span>
+            <span class="p">),</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;template_file&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the template markdown file.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
             <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
             <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-            <span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cdp_database_diagram.dot&quot;</span><span class="p">),</span>
+            <span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;event_data_ingestion_model.md&quot;</span><span class="p">),</span>
             <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;output_file&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to where to store the created dot file.&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to where to store the created documentation file.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
@@ -236,83 +253,43 @@
 <span class="c1">###############################################################################</span>
 
 
-<span class="k">def</span> <span class="nf">_construct_dot_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">dot</span> <span class="o">=</span> <span class="n">Digraph</span><span class="p">(</span>
-        <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;CDP Database Diagram&quot;</span><span class="p">,</span>
-        <span class="n">graph_attr</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;rankdir&quot;</span><span class="p">:</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;bgcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;transparent&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;splines&quot;</span><span class="p">:</span> <span class="s2">&quot;compound&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="n">node_attr</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;filled&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;fillcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="n">edge_attr</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;arrowhead&quot;</span><span class="p">:</span> <span class="s2">&quot;vee&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
+<span class="k">def</span> <span class="nf">_filter_none_values</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">_filter_none_values</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">List</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_filter_none_values</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">d</span>
+
+
+<span class="k">def</span> <span class="nf">_construct_ingestion_model_doc</span><span class="p">(</span><span class="n">template_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="n">minimal_event_data</span> <span class="o">=</span> <span class="n">_filter_none_values</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">EXAMPLE_MINIMAL_EVENT</span><span class="p">))</span>
+    <span class="n">filled_event_data</span> <span class="o">=</span> <span class="n">_filter_none_values</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">EXAMPLE_FILLED_EVENT</span><span class="p">))</span>
+
+    <span class="c1"># Read in the template</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+    <span class="c1"># Fill the template with values</span>
+    <span class="n">filled</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+        <span class="n">minimal_event_data</span><span class="o">=</span><span class="n">pformat</span><span class="p">(</span><span class="n">minimal_event_data</span><span class="p">,</span> <span class="n">sort_dicts</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">filled_event_data</span><span class="o">=</span><span class="n">pformat</span><span class="p">(</span><span class="n">filled_event_data</span><span class="p">,</span> <span class="n">sort_dicts</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="c1"># First pass: create nodes for each model</span>
-    <span class="k">for</span> <span class="n">model_cls</span> <span class="ow">in</span> <span class="n">DATABASE_MODELS</span><span class="p">:</span>
-        <span class="c1"># Attach fields for each model by using the Example</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">model_cls</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
-
-        <span class="c1"># Construct label</span>
-        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># Check if field is required and if so prepend an asterisk</span>
-            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">field_attribute</span><span class="o">.</span><span class="n">required</span><span class="p">:</span>
-                <span class="n">required_status</span> <span class="o">=</span> <span class="s2">&quot; *&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">required_status</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="c1"># Construct basic field text</span>
-            <span class="c1"># I.E. &quot;* name       TextField&quot;</span>
-            <span class="n">field_text</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field_name</span><span class="si">}{</span><span class="n">required_status</span><span class="si">}</span><span class="se">\\</span><span class="s2">l &quot;</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="se">\\</span><span class="s2">r&quot;</span>
-            <span class="p">)</span>
-
-            <span class="c1"># Check if field is a ReferenceField</span>
-            <span class="c1"># and append a dot quick ref to the field text</span>
-            <span class="c1"># &lt;blah&gt; is a dot quick ref</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ReferenceField</span><span class="p">):</span>
-                <span class="n">field_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">&gt; </span><span class="si">{</span><span class="n">field_text</span><span class="si">}</span><span class="s2">&quot;</span>
-
-            <span class="c1"># Finally append to the rest of the fields</span>
-            <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_text</span><span class="p">)</span>
-
-        <span class="c1"># All fields are complete, join them with `|` characters for dot format</span>
-        <span class="n">fields_as_text</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
-
-        <span class="c1"># Create the entire node label with the header then field rows</span>
-        <span class="n">node_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">fields_as_text</span><span class="si">}</span><span class="s2">&quot;</span>
-
-        <span class="c1"># Attach as a complete node</span>
-        <span class="n">dot</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">node_label</span><span class="p">)</span>
-
-    <span class="c1"># Second pass: Create DAG</span>
-    <span class="k">for</span> <span class="n">model_cls</span> <span class="ow">in</span> <span class="n">DATABASE_MODELS</span><span class="p">:</span>
-        <span class="c1"># Attach fields for each model by using the Example</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">model_cls</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
-
-        <span class="c1"># Construct DAG points</span>
-        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ReferenceField</span><span class="p">):</span>
-                <span class="n">referenced_model</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">model_ref</span><span class="o">.</span><span class="vm">__name__</span>
-                <span class="n">dot</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">referenced_model</span><span class="p">)</span>
-
-    <span class="c1"># Save file</span>
-    <span class="n">dot</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">))</span>
+    <span class="c1"># Store filled template</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="n">open_resource</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filled</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">output_file</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_database_uml.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_ingestion_model_doc.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
-        <span class="n">_construct_dot_file</span><span class="p">(</span><span class="n">output_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">)</span>
+        <span class="n">_construct_ingestion_model_doc</span><span class="p">(</span>
+            <span class="n">template_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">template_file</span><span class="p">,</span>
+            <span class="n">output_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>

@@ -1,0 +1,684 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdp_backend.pipeline package &mdash; cdp-backend 3.0.0.dev1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdp_backend.utils package" href="cdp_backend.utils.html" />
+    <link rel="prev" title="cdp_backend.infrastructure package" href="cdp_backend.infrastructure.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="event_data_ingestion_model.html">Event Data Ingestion Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">cdp_backend</a> &raquo;</li>
+        
+          <li><a href="cdp_backend.html">cdp_backend package</a> &raquo;</li>
+        
+      <li>cdp_backend.pipeline package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdp_backend.pipeline.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdp_backend.utils.html" class="btn btn-neutral float-right" title="cdp_backend.utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdp_backend.infrastructure.html" class="btn btn-neutral float-left" title="cdp_backend.infrastructure package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdp-backend-pipeline-package">
+<h1>cdp_backend.pipeline package<a class="headerlink" href="#cdp-backend-pipeline-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdp_backend.pipeline.ingestion_models">
+<span id="cdp-backend-pipeline-ingestion-models-module"></span><h2>cdp_backend.pipeline.ingestion_models module<a class="headerlink" href="#module-cdp_backend.pipeline.ingestion_models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Body">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Body</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">is_active: bool = True</em>, <em class="sig-param">start_datetime: Optional[datetime.datetime] = None</em>, <em class="sig-param">description: Optional[str] = None</em>, <em class="sig-param">end_datetime: Optional[datetime.datetime] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A meeting body. This can be full council, a subcommittee, or “off-council” matters
+such as election debates.</p>
+<p class="rubric">Notes</p>
+<p>If start_datetime is not provided, and the Body did not exist prior to ingestion,
+current datetime.utcnow will be used as start_datetime during storage.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Body.description">
+<code class="sig-name descname">description</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Body.end_datetime">
+<code class="sig-name descname">end_datetime</code><em class="property">: Optional[datetime]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.end_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Body.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Body.is_active">
+<code class="sig-name descname">is_active</code><em class="property">: bool</em><em class="property"> = True</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Body.name">
+<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Body.start_datetime">
+<code class="sig-name descname">start_datetime</code><em class="property">: Optional[datetime]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.start_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">EventIngestionModel</code><span class="sig-paren">(</span><em class="sig-param">body: cdp_backend.pipeline.ingestion_models.Body, sessions: List[cdp_backend.pipeline.ingestion_models.Session], event_minutes_items: Optional[List[cdp_backend.pipeline.ingestion_models.EventMinutesItem]] = None, agenda_uri: Optional[str] = None, minutes_uri: Optional[str] = None, static_thumbnail_uri: Optional[str] = None, hover_thumbnail_uri: Optional[str] = None, external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#EventIngestionModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An event can be a normally scheduled meeting, a special event such as a press
+conference or election debate, and, can be upcoming or historical.</p>
+<p class="rubric">Notes</p>
+<p>If static_thumbnail_uri and/or hover_thumbnail_uri is not provided,
+it will be generated during pipeline processing.</p>
+<p>The earliest session_datetime will be used for the overall event_datetime.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.agenda_uri">
+<code class="sig-name descname">agenda_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.agenda_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.body">
+<code class="sig-name descname">body</code><em class="property">: Body</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.body" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.event_minutes_items">
+<code class="sig-name descname">event_minutes_items</code><em class="property">: Optional[List[EventMinutesItem]]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.event_minutes_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.hover_thumbnail_uri">
+<code class="sig-name descname">hover_thumbnail_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.hover_thumbnail_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.minutes_uri">
+<code class="sig-name descname">minutes_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.minutes_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.sessions">
+<code class="sig-name descname">sessions</code><em class="property">: List[Session]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.sessions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventIngestionModel.static_thumbnail_uri">
+<code class="sig-name descname">static_thumbnail_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.static_thumbnail_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">EventMinutesItem</code><span class="sig-paren">(</span><em class="sig-param">minutes_item: cdp_backend.pipeline.ingestion_models.MinutesItem</em>, <em class="sig-param">index: Optional[int] = None</em>, <em class="sig-param">matter: Optional[cdp_backend.pipeline.ingestion_models.Matter] = None</em>, <em class="sig-param">supporting_files: Optional[List[cdp_backend.pipeline.ingestion_models.SupportingFile]] = None</em>, <em class="sig-param">decision: Optional[str] = None</em>, <em class="sig-param">votes: Optional[List[cdp_backend.pipeline.ingestion_models.Vote]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#EventMinutesItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Details about a specific item during an event.</p>
+<p class="rubric">Notes</p>
+<p>If index is not provided, the index will be set to the index of the item in the
+whole EventMinutesItem list on Event.</p>
+<p>If matter is not provided, the supporting_files will be stored as
+EventMinutesItemFile.
+If matter is provided, the supporting_files will be additionally be stored as
+MatterFile.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.decision">
+<code class="sig-name descname">decision</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.decision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.index">
+<code class="sig-name descname">index</code><em class="property">: Optional[int]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.matter">
+<code class="sig-name descname">matter</code><em class="property">: Optional[Matter]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.matter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.minutes_item">
+<code class="sig-name descname">minutes_item</code><em class="property">: MinutesItem</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.supporting_files">
+<code class="sig-name descname">supporting_files</code><em class="property">: Optional[List[SupportingFile]]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.supporting_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.votes">
+<code class="sig-name descname">votes</code><em class="property">: Optional[List[Vote]]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.votes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Matter">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Matter</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">matter_type: str</em>, <em class="sig-param">title: str</em>, <em class="sig-param">sponsors: Optional[List[cdp_backend.pipeline.ingestion_models.Person]] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Matter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Matter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A matter is a specific legislative document. A bill, resolution, initiative, etc.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Matter.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Matter.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Matter.matter_type">
+<code class="sig-name descname">matter_type</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Matter.matter_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Matter.name">
+<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Matter.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Matter.sponsors">
+<code class="sig-name descname">sponsors</code><em class="property">: Optional[List[Person]]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Matter.sponsors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Matter.title">
+<code class="sig-name descname">title</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Matter.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.MinutesItem">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">MinutesItem</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">description: Optional[str] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#MinutesItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.MinutesItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An item referenced during a meeting.
+This can be a matter but it can be a presentation or budget file, etc.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.MinutesItem.description">
+<code class="sig-name descname">description</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.MinutesItem.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.MinutesItem.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.MinutesItem.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.MinutesItem.name">
+<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.MinutesItem.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Person">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Person</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">is_active: bool = True</em>, <em class="sig-param">router_string: Optional[str] = None</em>, <em class="sig-param">email: Optional[str] = None</em>, <em class="sig-param">phone: Optional[str] = None</em>, <em class="sig-param">website: Optional[str] = None</em>, <em class="sig-param">picture_uri: Optional[str] = None</em>, <em class="sig-param">seat: Optional[cdp_backend.pipeline.ingestion_models.Seat] = None</em>, <em class="sig-param">roles: Optional[List[cdp_backend.pipeline.ingestion_models.Role]] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Primarily the council members, this could technically include the mayor or city
+manager, or any other “normal” presenters and attendees of meetings.</p>
+<p class="rubric">Notes</p>
+<p>If router_string is not provided, and the Person did not exist prior to ingestion,
+router_string will be generated from name.</p>
+<p>The email, phone, website will be updated if changed from prior values.
+The picture will be uploaded or updated in the CDP file storage system.</p>
+<p>If person is operating under new roles or new seat, new Role and Seat documents will
+be stored.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.email">
+<code class="sig-name descname">email</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.is_active">
+<code class="sig-name descname">is_active</code><em class="property">: bool</em><em class="property"> = True</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.name">
+<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.phone">
+<code class="sig-name descname">phone</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.phone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.picture_uri">
+<code class="sig-name descname">picture_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.picture_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.roles">
+<code class="sig-name descname">roles</code><em class="property">: Optional[List[Role]]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.roles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.router_string">
+<code class="sig-name descname">router_string</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.router_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.seat">
+<code class="sig-name descname">seat</code><em class="property">: Optional[Seat]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.seat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Person.website">
+<code class="sig-name descname">website</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Person.website" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Role">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Role</code><span class="sig-paren">(</span><em class="sig-param">title: str</em>, <em class="sig-param">body: Optional[cdp_backend.pipeline.ingestion_models.Body] = None</em>, <em class="sig-param">start_datetime: Optional[datetime.datetime] = None</em>, <em class="sig-param">end_datetime: Optional[datetime.datetime] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Role"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A role is a person’s job for a period of time in the city council. A person can
+(and should) have multiple roles. For example: a person has two terms as city
+council member for district four then a term as city council member for a citywide
+seat. Roles can also be tied to committee chairs. For example: a council member
+spends a term on the transportation committee and then spends a term on the finance
+committee.</p>
+<p class="rubric">Notes</p>
+<p>If start_datetime is not provided, and the Role did not exist prior to ingestion,
+current datetime.utcnow will be used as start_datetime during storage.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Role.body">
+<code class="sig-name descname">body</code><em class="property">: Optional[Body]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role.body" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Role.end_datetime">
+<code class="sig-name descname">end_datetime</code><em class="property">: Optional[datetime]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role.end_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Role.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Role.start_datetime">
+<code class="sig-name descname">start_datetime</code><em class="property">: Optional[datetime]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role.start_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Role.title">
+<code class="sig-name descname">title</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Seat">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Seat</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">electoral_area: Optional[str] = None</em>, <em class="sig-param">electoral_type: Optional[str] = None</em>, <em class="sig-param">image_uri: Optional[str] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Seat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Seat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An electable office on the City Council. I.E. “Position 9”.</p>
+<p class="rubric">Notes</p>
+<p>The electoral_area and electoral_type will be updated if changed from prior values.
+The image will be uploaded or updated in the CDP file storage system.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Seat.electoral_area">
+<code class="sig-name descname">electoral_area</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Seat.electoral_area" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Seat.electoral_type">
+<code class="sig-name descname">electoral_type</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Seat.electoral_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Seat.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Seat.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Seat.image_uri">
+<code class="sig-name descname">image_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Seat.image_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Seat.name">
+<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Seat.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Session">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Session</code><span class="sig-paren">(</span><em class="sig-param">session_datetime: datetime.datetime</em>, <em class="sig-param">video_uri: str</em>, <em class="sig-param">session_index: Optional[int] = None</em>, <em class="sig-param">caption_uri: Optional[str] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A session is a working period for an event.
+For example, an event could have a morning and afternoon session.</p>
+<p class="rubric">Notes</p>
+<p>If session_index is not provided, the session_index will be set to the index of the
+item in the whole Session list on Event.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Session.caption_uri">
+<code class="sig-name descname">caption_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.caption_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Session.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Session.session_datetime">
+<code class="sig-name descname">session_datetime</code><em class="property">: datetime</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.session_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Session.session_index">
+<code class="sig-name descname">session_index</code><em class="property">: Optional[int]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.session_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Session.video_uri">
+<code class="sig-name descname">video_uri</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.video_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.SupportingFile">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">SupportingFile</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">uri: str</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#SupportingFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.SupportingFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A file related tied to a matter or minutes item.</p>
+<p class="rubric">Notes</p>
+<p>This file is not stored in the CDP file storage system.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.SupportingFile.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.SupportingFile.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.SupportingFile.name">
+<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.SupportingFile.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.SupportingFile.uri">
+<code class="sig-name descname">uri</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.SupportingFile.uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdp_backend.pipeline.ingestion_models.Vote">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Vote</code><span class="sig-paren">(</span><em class="sig-param">person: cdp_backend.pipeline.ingestion_models.Person</em>, <em class="sig-param">decision: str</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A reference tying a specific person and an event minutes item together.</p>
+<p class="rubric">Notes</p>
+<p>The in_majority field stored in the database will be calculated from the provided
+list of votes.</p>
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Vote.decision">
+<code class="sig-name descname">decision</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Vote.decision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Vote.external_source_id">
+<code class="sig-name descname">external_source_id</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Vote.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.pipeline.ingestion_models.Vote.person">
+<code class="sig-name descname">person</code><em class="property">: Person</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Vote.person" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.pipeline">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.pipeline" title="Permalink to this headline">¶</a></h2>
+<p>Pipeline package for cdp_backend.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

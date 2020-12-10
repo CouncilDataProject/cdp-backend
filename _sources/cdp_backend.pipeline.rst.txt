@@ -1,0 +1,22 @@
+cdp\_backend.pipeline package
+=============================
+
+Submodules
+----------
+
+cdp\_backend.pipeline.ingestion\_models module
+----------------------------------------------
+
+.. automodule:: cdp_backend.pipeline.ingestion_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend.pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:

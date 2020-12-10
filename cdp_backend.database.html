@@ -100,12 +100,18 @@
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.database package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="event_data_ingestion_model.html">Event Data Ingestion Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
@@ -277,11 +283,6 @@ such as election debates.</p>
 <dl class="attribute">
 <dt id="cdp_backend.database.models.Body.start_datetime">
 <code class="sig-name descname">start_datetime</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.start_datetime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cdp_backend.database.models.Body.tag">
-<code class="sig-name descname">tag</code><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.models.Body.tag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -594,7 +595,7 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dt id="cdp_backend.database.models.MatterSponsor">
 <em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">MatterSponsor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterSponsor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
-<p>A connection between a matter and it’s sponsor, a Person.</p>
+<p>A reference tying a specific person and a matter together.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.MatterSponsor.Example">
 <em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterSponsor.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Example" title="Permalink to this definition">¶</a></dt>
@@ -806,7 +807,7 @@ manager, or any other “normal” presenters and attendees of meetings.</p>
 <em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Role</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Role"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Role" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
 <p>A role is a person’s job for a period of time in the city council. A person can
-(and should) have multiple roles. For example: a person has two terms as city
+(and generally does) have many roles. For example: a person has two terms as city
 council member for district four then a term as city council member for a citywide
 seat. Roles can also be tied to committee chairs. For example: a council member
 spends a term on the transportation committee and then spends a term on the finance
@@ -925,7 +926,7 @@ committee.</p>
 <em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Session</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
 <p>A session is a working period for an event.
-An event could have a morning and afternoon session.</p>
+For example, An event could have a morning and afternoon session.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Session.Example">
 <em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Session.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Session.Example" title="Permalink to this definition">¶</a></dt>
@@ -1029,7 +1030,7 @@ An event could have a morning and afternoon session.</p>
 <dt id="cdp_backend.database.models.Vote">
 <em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.models.</code><code class="sig-name descname">Vote</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Vote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
-<p>A reference typing a specific person, and an event minutes item together.</p>
+<p>A reference tying a specific person and an event minutes item together.</p>
 <dl class="method">
 <dt id="cdp_backend.database.models.Vote.Example">
 <em class="property">classmethod </em><code class="sig-name descname">Example</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/models.html#Vote.Example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.models.Vote.Example" title="Permalink to this definition">¶</a></dt>
@@ -1098,14 +1099,12 @@ An event could have a morning and afternoon session.</p>
 <dl class="attribute">
 <dt id="cdp_backend.database.types.IndexedField.name">
 <code class="sig-name descname">name</code><a class="headerlink" href="#cdp_backend.database.types.IndexedField.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="cdp_backend.database.types.IndexedField.order">
 <code class="sig-name descname">order</code><a class="headerlink" href="#cdp_backend.database.types.IndexedField.order" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -1117,8 +1116,7 @@ An event could have a morning and afternoon session.</p>
 <dl class="attribute">
 <dt id="cdp_backend.database.types.IndexedFieldSet.fields">
 <code class="sig-name descname">fields</code><a class="headerlink" href="#cdp_backend.database.types.IndexedFieldSet.fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 

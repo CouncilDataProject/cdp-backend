@@ -12,6 +12,14 @@ cdp\_backend.bin.create\_cdp\_database\_uml module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.create\_ingestion\_model\_doc module
+-----------------------------------------------------
+
+.. automodule:: cdp_backend.bin.create_ingestion_model_doc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
