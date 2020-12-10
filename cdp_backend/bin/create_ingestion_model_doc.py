@@ -86,7 +86,7 @@ def _construct_ingestion_model_doc(template_file: Path, output_file: Path) -> Pa
     )
 
     # Store filled template
-    with open(output_file, "w") as open_resource:
+    with open(output_file, "w", encoding="utf-8") as open_resource:
         open_resource.write(filled)
 
     return output_file
