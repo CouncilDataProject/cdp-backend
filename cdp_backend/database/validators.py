@@ -8,6 +8,9 @@ from typing import Optional
 from fireo.models import Model
 from fsspec.core import url_to_fs
 
+from ..utils.constants_utils import get_all_class_attributes
+from .types import EventMinutesItemDecision, VoteDecision
+
 ###############################################################################
 
 logging.basicConfig(
@@ -143,3 +146,43 @@ def resource_exists(uri: Optional[str]) -> bool:
         return True
 
     return False
+
+
+def vote_decision_is_valid(decision: str) -> bool:
+    """
+    Validate that vote's decision is valid.
+
+    None is not a valid option.
+
+    Parameters
+    ----------
+    decision: str
+        The decision to validate.
+
+    Returns
+    -------
+    status: bool
+        The validation status.
+    """
+    return decision in get_all_class_attributes(VoteDecision)
+
+
+def event_minutes_item_decision_is_valid(decision: Optional[str]) -> bool:
+    """
+    Validate that event minutes item's decision is valid.
+
+    None is a valid option.
+
+    Parameters
+    ----------
+    decision: str
+        The decision to validate.
+
+    Returns
+    -------
+    status: bool
+        The validation status.
+    """
+    if decision:
+        return decision in get_all_class_attributes(EventMinutesItemDecision)
+    return True
