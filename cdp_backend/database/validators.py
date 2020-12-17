@@ -30,10 +30,10 @@ def model_is_unique(model: Model) -> bool:
     model: Model
         A to-be-uploaded model instance.
 
-    Raises
-    ------
-    exceptions.UniquenessError: if the model is not unique when comparing primary keys
-    to the existing data in the database.
+    Returns
+    ----------
+    is_unique: bool
+        Boolean representing if the model is unique in the collection.
 
     Examples
     --------
