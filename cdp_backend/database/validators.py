@@ -175,7 +175,7 @@ def event_minutes_item_decision_is_valid(decision: Optional[str]) -> bool:
 
     Parameters
     ----------
-    decision: str
+    decision: Optional[str]
         The decision to validate.
 
     Returns
