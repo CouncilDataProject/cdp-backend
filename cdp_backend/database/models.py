@@ -8,7 +8,13 @@ from fireo import fields
 
 from . import validators
 from ..utils import file_utils
-from .types import IndexedField, IndexedFieldSet, Order
+from .types import (
+    IndexedField,
+    IndexedFieldSet,
+    Order,
+    EventMinutesItemDecision,
+    VoteDecision,
+)
 
 ###############################################################################
 
@@ -416,7 +422,9 @@ class EventMinutesItem(Model):
     event_ref = fields.ReferenceField(Event, required=True)
     minutes_item_ref = fields.ReferenceField(MinutesItem, required=True)
     index = fields.NumberField(required=True)
-    decision = fields.TextField()
+    decision = fields.TextField(
+        validators=validators.event_minutes_item_decision_is_valid
+    )
     external_source_id = fields.TextField()
 
     @classmethod
@@ -425,7 +433,7 @@ class EventMinutesItem(Model):
         emi.event_ref = Event.Example()
         emi.minutes_item_ref = MinutesItem.Example()
         emi.index = 0
-        emi.decision = "Passed"
+        emi.decision = EventMinutesItemDecision.PASSED
         return emi
 
     _PRIMARY_KEYS = ("event_ref", "minutes_item_ref")
@@ -486,7 +494,9 @@ class Vote(Model):
     event_ref = fields.ReferenceField(Event, required=True)
     event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
     person_ref = fields.ReferenceField(Person, required=True)
-    decision = fields.TextField(required=True)
+    decision = fields.TextField(
+        required=True, validator=validators.vote_decision_is_valid
+    )
     in_majority = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
 
@@ -497,7 +507,7 @@ class Vote(Model):
         vote.event_ref = Event.Example()
         vote.event_minutes_item_ref = EventMinutesItem.Example()
         vote.person_ref = Person.Example()
-        vote.decision = "Approve"
+        vote.decision = VoteDecision.APPROVE
         vote.in_majority = True
         return vote
 
