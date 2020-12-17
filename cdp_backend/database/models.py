@@ -423,7 +423,7 @@ class EventMinutesItem(Model):
     minutes_item_ref = fields.ReferenceField(MinutesItem, required=True)
     index = fields.NumberField(required=True)
     decision = fields.TextField(
-        validators=validators.event_minutes_item_decision_is_valid
+        validator=validators.event_minutes_item_decision_is_valid
     )
     external_source_id = fields.TextField()
 
