@@ -38,7 +38,6 @@ def test_uniqueness_validation(
         instance = spec.Example()
 
         # Validate
-        validators.model_is_unique(instance)
         assert expected == validators.model_is_unique(instance)
 
 

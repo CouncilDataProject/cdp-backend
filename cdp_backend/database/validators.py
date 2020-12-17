@@ -31,7 +31,7 @@ def model_is_unique(model: Model) -> bool:
         A to-be-uploaded model instance.
 
     Returns
-    ----------
+    -------
     is_unique: bool
         Boolean representing if the model is unique in the collection.
 
