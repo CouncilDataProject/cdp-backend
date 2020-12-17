@@ -194,12 +194,18 @@
 
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">fireo</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">validators</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">file_utils</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">IndexedField</span><span class="p">,</span> <span class="n">IndexedFieldSet</span><span class="p">,</span> <span class="n">Order</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">validators</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EventMinutesItemDecision</span><span class="p">,</span>
+    <span class="n">IndexedField</span><span class="p">,</span>
+    <span class="n">IndexedFieldSet</span><span class="p">,</span>
+    <span class="n">Order</span><span class="p">,</span>
+    <span class="n">VoteDecision</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -607,7 +613,9 @@
     <span class="n">event_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">MinutesItem</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">event_minutes_item_decision_is_valid</span>
+    <span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="EventMinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
@@ -616,7 +624,7 @@
         <span class="n">emi</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">emi</span><span class="o">.</span><span class="n">minutes_item_ref</span> <span class="o">=</span> <span class="n">MinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">emi</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">emi</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
+        <span class="n">emi</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="n">EventMinutesItemDecision</span><span class="o">.</span><span class="n">PASSED</span>
         <span class="k">return</span> <span class="n">emi</span></div>
 
     <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;minutes_item_ref&quot;</span><span class="p">)</span>
@@ -677,7 +685,9 @@
     <span class="n">event_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">EventMinutesItem</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">vote_decision_is_valid</span>
+    <span class="p">)</span>
     <span class="n">in_majority</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
@@ -688,7 +698,7 @@
         <span class="n">vote</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">vote</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">EventMinutesItem</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
         <span class="n">vote</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
-        <span class="n">vote</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;Approve&quot;</span>
+        <span class="n">vote</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="n">VoteDecision</span><span class="o">.</span><span class="n">APPROVE</span>
         <span class="n">vote</span><span class="o">.</span><span class="n">in_majority</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">vote</span></div>
 
