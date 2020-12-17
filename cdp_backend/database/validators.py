@@ -13,7 +13,7 @@ from . import exceptions
 # Model Validation
 
 
-def model_is_unique(model: Model) -> None:
+def model_is_unique(model: Model) -> bool:
     """
     Validate that the primary keys of a to-be-uploaded model are unique when compared
     to the collection.
@@ -48,6 +48,8 @@ def model_is_unique(model: Model) -> None:
     results = list(query.fetch())
     if len(results) >= 1:
         raise exceptions.UniquenessError(model=model, conflicting_results=results)
+
+    return True
 
 
 #############################################################################
