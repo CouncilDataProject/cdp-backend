@@ -16,7 +16,6 @@ from .. import test_utils
 @pytest.mark.parametrize(
     "model_name, mock_return_values",
     [
-        ("Body", []),
         pytest.param(
             "Body",
             [models.Body.Example()],
@@ -34,7 +33,7 @@ from .. import test_utils
         ),
     ],
 )
-def test_uniqueness_validation(
+def test_uniqueness_validation_exception(
     model_name: str,
     mock_return_values: List[Model],
 ) -> None:
@@ -49,6 +48,31 @@ def test_uniqueness_validation(
 
         # Validate
         validators.model_is_unique(instance)
+
+
+@pytest.mark.parametrize(
+    "model_name, mock_return_values, expected",
+    [
+        ("Body", [], True),
+        ("Person", [], True),
+    ],
+)
+def test_uniqueness_validation_is_unique(
+    model_name: str,
+    mock_return_values: List[Model],
+    expected: bool,
+) -> None:
+    with mock.patch("fireo.queries.filter_query.FilterQuery.fetch") as mocked_fetch:
+        mocked_fetch.return_value = mock_return_values
+
+        # Get model spec from models module
+        spec = getattr(models, model_name)
+
+        # Get instance of model
+        instance = spec.Example()
+
+        # Validate
+        assert expected == validators.model_is_unique(instance)
 
 
 @pytest.mark.parametrize(
