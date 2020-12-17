@@ -3,16 +3,16 @@
 
 from datetime import datetime
 
-from fireo.models import Model
 from fireo import fields
+from fireo.models import Model
 
-from . import validators
 from ..utils import file_utils
+from . import validators
 from .types import (
+    EventMinutesItemDecision,
     IndexedField,
     IndexedFieldSet,
     Order,
-    EventMinutesItemDecision,
     VoteDecision,
 )
 
