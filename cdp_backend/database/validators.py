@@ -8,7 +8,7 @@ from typing import Optional
 from fireo.models import Model
 from fsspec.core import url_to_fs
 
-from ..utils.constants_utils import get_all_class_attributes
+from ..utils.constants_utils import get_all_class_attr_values
 from .types import EventMinutesItemDecision, VoteDecision
 
 ###############################################################################
@@ -164,7 +164,7 @@ def vote_decision_is_valid(decision: str) -> bool:
     status: bool
         The validation status.
     """
-    return decision in get_all_class_attributes(VoteDecision)
+    return decision in get_all_class_attr_values(VoteDecision)
 
 
 def event_minutes_item_decision_is_valid(decision: Optional[str]) -> bool:
@@ -184,5 +184,5 @@ def event_minutes_item_decision_is_valid(decision: Optional[str]) -> bool:
         The validation status.
     """
     if decision:
-        return decision in get_all_class_attributes(EventMinutesItemDecision)
+        return decision in get_all_class_attr_values(EventMinutesItemDecision)
     return True
