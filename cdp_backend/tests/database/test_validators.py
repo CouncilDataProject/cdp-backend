@@ -5,7 +5,7 @@ import pytest
 from typing import List
 from unittest import mock
 
-from cdp_backend.database import models, validators, exceptions
+from cdp_backend.database import models, validators
 from fireo.models import Model
 
 from .. import test_utils
@@ -14,29 +14,19 @@ from .. import test_utils
 
 
 @pytest.mark.parametrize(
-    "model_name, mock_return_values",
+    "model_name, mock_return_values, expected",
     [
-        ("Body", []),
-        pytest.param(
-            "Body",
-            [models.Body.Example()],
-            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
-        ),
-        pytest.param(
-            "Body",
-            [models.Body.Example(), models.Body.Example()],
-            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
-        ),
-        pytest.param(
-            "Person",
-            [models.Person.Example()],
-            marks=pytest.mark.raises(exception=exceptions.UniquenessError),
-        ),
+        ("Body", [], True),
+        ("Person", [], True),
+        ("Body", [models.Body.Example()], False),
+        ("Body", [models.Body.Example(), models.Body.Example()], False),
+        ("Person", [models.Person.Example()], False),
     ],
 )
 def test_uniqueness_validation(
     model_name: str,
     mock_return_values: List[Model],
+    expected: bool,
 ) -> None:
     with mock.patch("fireo.queries.filter_query.FilterQuery.fetch") as mocked_fetch:
         mocked_fetch.return_value = mock_return_values
@@ -48,7 +38,7 @@ def test_uniqueness_validation(
         instance = spec.Example()
 
         # Validate
-        validators.model_is_unique(instance)
+        assert expected == validators.model_is_unique(instance)
 
 
 @pytest.mark.parametrize(

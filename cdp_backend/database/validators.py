@@ -1,19 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
 import re
 from typing import Optional
 
 from fireo.models import Model
 from fsspec.core import url_to_fs
 
-from . import exceptions
+###############################################################################
 
-#############################################################################
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
+)
+log = logging.getLogger(__name__)
+
+###############################################################################
 # Model Validation
 
 
-def model_is_unique(model: Model) -> None:
+def model_is_unique(model: Model) -> bool:
     """
     Validate that the primary keys of a to-be-uploaded model are unique when compared
     to the collection.
@@ -23,10 +30,10 @@ def model_is_unique(model: Model) -> None:
     model: Model
         A to-be-uploaded model instance.
 
-    Raises
-    ------
-    exceptions.UniquenessError: if the model is not unique when comparing primary keys
-    to the existing data in the database.
+    Returns
+    -------
+    is_unique: bool
+        Boolean representing if the model is unique in the collection.
 
     Examples
     --------
@@ -47,7 +54,10 @@ def model_is_unique(model: Model) -> None:
     # Fetch and assert single value
     results = list(query.fetch())
     if len(results) >= 1:
-        raise exceptions.UniquenessError(model=model, conflicting_results=results)
+        log.info(f"Found conflicting results={results} for model={model}.")
+        return False
+
+    return True
 
 
 #############################################################################
