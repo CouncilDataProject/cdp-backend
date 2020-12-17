@@ -104,3 +104,31 @@ def test_local_resource_exists(uri: str, expected_result: bool) -> None:
 def test_remote_resource_exists(uri: str, expected_result: bool) -> None:
     actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(
+    "decision, expected_result",
+    [
+        (None, False),
+        ("Approve", True),
+        ("INVALID", False),
+    ],
+)
+def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
+    actual_result = validators.vote_decision_is_valid(decision)
+    assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(
+    "decision, expected_result",
+    [
+        (None, True),
+        ("Passed", True),
+        ("INVALID", False),
+    ],
+)
+def test_event_minutes_item_decision_is_valid(
+    decision: str, expected_result: bool
+) -> None:
+    actual_result = validators.event_minutes_item_decision_is_valid(decision)
+    assert actual_result == expected_result

@@ -18,3 +18,14 @@ class IndexedField(NamedTuple):
 
 class IndexedFieldSet(NamedTuple):
     fields: Tuple[IndexedField, IndexedField]
+
+
+class EventMinutesItemDecision:
+    PASSED = "Passed"
+    FAILED = "Failed"
+
+
+class VoteDecision:
+    APPROVE = "Approve"
+    REJECT = "Reject"
+    ABSTAIN = "Abstain"
