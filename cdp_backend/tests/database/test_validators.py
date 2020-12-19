@@ -6,6 +6,7 @@ from typing import List
 from unittest import mock
 
 from cdp_backend.database import models, validators
+from cdp_backend.database.validators import UniquenessValidation
 from fireo.models import Model
 
 from .. import test_utils
@@ -13,20 +14,48 @@ from .. import test_utils
 #############################################################################
 
 
+"""
+Uniqueness test constants 
+
+Defined because Example() uses datetime.utcnow() which interferes 
+with uniqueness testing
+"""
+body = models.Body.Example()
+person = models.Person.Example()
+event = models.Event.Example()
+
+
 @pytest.mark.parametrize(
     "model_name, mock_return_values, expected",
     [
-        ("Body", [], True),
-        ("Person", [], True),
-        ("Body", [models.Body.Example()], False),
-        ("Body", [models.Body.Example(), models.Body.Example()], False),
-        ("Person", [models.Person.Example()], False),
+        ("Body", [], UniquenessValidation(True, [])),
+        ("Person", [], UniquenessValidation(True, [])),
+        (
+            "Body",
+            [body],
+            UniquenessValidation(False, [body]),
+        ),
+        (
+            "Body",
+            [body, body],
+            UniquenessValidation(False, [body, body]),
+        ),
+        (
+            "Person",
+            [person],
+            UniquenessValidation(False, [person]),
+        ),
+        (
+            "Event",
+            [event],
+            UniquenessValidation(False, [event]),
+        ),
     ],
 )
 def test_uniqueness_validation(
     model_name: str,
     mock_return_values: List[Model],
-    expected: bool,
+    expected: UniquenessValidation,
 ) -> None:
     with mock.patch("fireo.queries.filter_query.FilterQuery.fetch") as mocked_fetch:
         mocked_fetch.return_value = mock_return_values
