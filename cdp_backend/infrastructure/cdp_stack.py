@@ -52,13 +52,6 @@ class CDPStack(pulumi.ComponentResource):
         self.firestore_location = firestore_location
 
         # Enable all required services
-        self.firestore_service = gcp.projects.Service(
-            f"{self.gcp_project_id}-firestore-service",
-            disable_dependent_services=True,
-            project=self.gcp_project_id,
-            service="firestore.googleapis.com",
-            opts=pulumi.ResourceOptions(parent=self),
-        )
         self.speech_service = gcp.projects.Service(
             f"{self.gcp_project_id}-speech-service",
             disable_dependent_services=True,
@@ -66,12 +59,19 @@ class CDPStack(pulumi.ComponentResource):
             service="speech.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
         )
-        self.compute_service = gcp.projects.Service(
-            f"{self.gcp_project_id}-compute-service",
+        self.app_engine_service = gcp.projects.Service(
+            f"{self.gcp_project_id}-app-engine-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
-            service="compute.googleapis.com",
+            service="appengine.googleapis.com",
             opts=pulumi.ResourceOptions(parent=self),
+        )
+        self.firestore_service = gcp.projects.Service(
+            f"{self.gcp_project_id}-firestore-service",
+            disable_dependent_services=True,
+            project=self.gcp_project_id,
+            service="firestore.googleapis.com",
+            opts=pulumi.ResourceOptions(parent=self.app_engine_service),
         )
 
         # Create the firestore application
