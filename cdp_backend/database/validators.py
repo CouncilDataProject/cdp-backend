@@ -29,8 +29,8 @@ class UniquenessValidation:
     """
     An object containing uniqueness data of a database model object.
 
-    Notes
-    -----
+    Parameters
+    ----------
     is_unique is a boolean on whether the model is unique by primary key
     in the database collection.
 
@@ -42,7 +42,7 @@ class UniquenessValidation:
     conflicting_models: List[Model]
 
 
-def model_is_unique(model: Model) -> UniquenessValidation:
+def get_model_uniqueness(model: Model) -> UniquenessValidation:
     """
     Validate that the primary keys of a to-be-uploaded model are unique
     when compared to the collection.
@@ -60,10 +60,11 @@ def model_is_unique(model: Model) -> UniquenessValidation:
     Examples
     --------
     >>> from cdp_backend.database import models
-    ... from cdp_backend.database.validators import model_is_unique
+    ... from cdp_backend.database.validators import get_model_uniqueness
     ...
     ... b = models.Body.Example()
-    ... if model_is_unique(b):
+    ... b_uniqueness = get_model_uniqueness(b)
+    ... if b_uniqueness.is_unique:
     ...     b.save()
     """
     # Initialize query

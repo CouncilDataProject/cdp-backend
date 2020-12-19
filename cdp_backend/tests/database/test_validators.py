@@ -67,7 +67,7 @@ def test_uniqueness_validation(
         instance = spec.Example()
 
         # Validate
-        assert expected == validators.model_is_unique(instance)
+        assert expected == validators.get_model_uniqueness(instance)
 
 
 @pytest.mark.parametrize(
