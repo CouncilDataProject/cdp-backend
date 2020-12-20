@@ -31,11 +31,12 @@ class UniquenessValidation:
 
     Parameters
     ----------
-    is_unique is a boolean on whether the model is unique by primary key
-    in the database collection.
+    is_unique: bool
+        A boolean on whether the model is unique by primary key
+        in the database collection.
 
-    conflicting_models is a List[Model] of all existing models that share
-    the same primary keys as the input model.
+    conflicting_models: List[Model]
+        All existing models that share the same primary keys as the input model.
     """
 
     is_unique: bool
