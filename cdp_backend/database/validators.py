@@ -3,7 +3,8 @@
 
 import logging
 import re
-from typing import Optional
+from typing import List, Optional
+from dataclasses import dataclass
 
 from fireo.models import Model
 from fsspec.core import url_to_fs
@@ -23,10 +24,29 @@ log = logging.getLogger(__name__)
 # Model Validation
 
 
-def model_is_unique(model: Model) -> bool:
+@dataclass(frozen=True)
+class UniquenessValidation:
     """
-    Validate that the primary keys of a to-be-uploaded model are unique when compared
-    to the collection.
+    An object containing uniqueness data of a database model object.
+
+    Parameters
+    ----------
+    is_unique: bool
+        A boolean on whether the model is unique by primary key
+        in the database collection.
+
+    conflicting_models: List[Model]
+        All existing models that share the same primary keys as the input model.
+    """
+
+    is_unique: bool
+    conflicting_models: List[Model]
+
+
+def get_model_uniqueness(model: Model) -> UniquenessValidation:
+    """
+    Validate that the primary keys of a to-be-uploaded model are unique
+    when compared to the collection.
 
     Parameters
     ----------
@@ -35,16 +55,17 @@ def model_is_unique(model: Model) -> bool:
 
     Returns
     -------
-    is_unique: bool
-        Boolean representing if the model is unique in the collection.
+    uniqueness_validation: UniquenessValidation
+        An object that contains data on an objects uniqueness and conflicting models.
 
     Examples
     --------
     >>> from cdp_backend.database import models
-    ... from cdp_backend.database.validators import model_is_unique
+    ... from cdp_backend.database.validators import get_model_uniqueness
     ...
     ... b = models.Body.Example()
-    ... if model_is_unique(b):
+    ... b_uniqueness = get_model_uniqueness(b)
+    ... if b_uniqueness.is_unique:
     ...     b.save()
     """
     # Initialize query
@@ -52,15 +73,19 @@ def model_is_unique(model: Model) -> bool:
 
     # Loop and fill query for each primary key
     for pk in model._PRIMARY_KEYS:
-        query = query.filter(pk, "==", getattr(model, pk))
+        field = getattr(model, pk)
+        if issubclass(field.__class__, Model):
+            query = query.filter(pk, "==", field.key)
+        else:
+            query = query.filter(pk, "==", field)
 
     # Fetch and assert single value
     results = list(query.fetch())
     if len(results) >= 1:
         log.info(f"Found conflicting results={results} for model={model}.")
-        return False
+        return UniquenessValidation(is_unique=False, conflicting_models=results)
 
-    return True
+    return UniquenessValidation(is_unique=True, conflicting_models=results)
 
 
 #############################################################################

@@ -43,7 +43,7 @@ dev_requirements = [
 
 requirements = [
     "dask[bag]~=2.30.0",
-    "fireo~=1.3.3",
+    "fireo~=1.3.7",
     "fsspec~=0.8.3",
     "gcsfs~=0.7.1",
     "graphviz~=0.14",
