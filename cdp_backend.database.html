@@ -1157,6 +1157,32 @@ For example, An event could have a morning and afternoon session.</p>
 </div>
 <div class="section" id="module-cdp_backend.database.validators">
 <span id="cdp-backend-database-validators-module"></span><h2>cdp_backend.database.validators module<a class="headerlink" href="#module-cdp_backend.database.validators" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdp_backend.database.validators.UniquenessValidation">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">UniquenessValidation</code><span class="sig-paren">(</span><em class="sig-param">is_unique: bool, conflicting_models: List[fireo.models.model.Model]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#UniquenessValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object containing uniqueness data of a database model object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_unique</strong> (<em>bool</em>) – A boolean on whether the model is unique by primary key
+in the database collection.</p></li>
+<li><p><strong>conflicting_models</strong> (<em>List[Model]</em>) – All existing models that share the same primary keys as the input model.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="cdp_backend.database.validators.UniquenessValidation.conflicting_models">
+<code class="sig-name descname">conflicting_models</code><em class="property">: List[Model]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation.conflicting_models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.validators.UniquenessValidation.is_unique">
+<code class="sig-name descname">is_unique</code><em class="property">: bool</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation.is_unique" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="cdp_backend.database.validators.email_is_valid">
 <code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">email_is_valid</code><span class="sig-paren">(</span><em class="sig-param">email: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#email_is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.email_is_valid" title="Permalink to this definition">¶</a></dt>
@@ -1194,27 +1220,28 @@ For example, An event could have a morning and afternoon session.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="cdp_backend.database.validators.model_is_unique">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">model_is_unique</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#model_is_unique"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.model_is_unique" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate that the primary keys of a to-be-uploaded model are unique when compared
-to the collection.</p>
+<dt id="cdp_backend.database.validators.get_model_uniqueness">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">get_model_uniqueness</code><span class="sig-paren">(</span><em class="sig-param">model: fireo.models.model.Model</em><span class="sig-paren">)</span> &#x2192; cdp_backend.database.validators.UniquenessValidation<a class="reference internal" href="_modules/cdp_backend/database/validators.html#get_model_uniqueness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.get_model_uniqueness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate that the primary keys of a to-be-uploaded model are unique
+when compared to the collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>model</strong> (<em>Model</em>) – A to-be-uploaded model instance.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>is_unique</strong> – Boolean representing if the model is unique in the collection.</p>
+<dd class="field-even"><p><strong>uniqueness_validation</strong> – An object that contains data on an objects uniqueness and conflicting models.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p><a class="reference internal" href="#cdp_backend.database.validators.UniquenessValidation" title="cdp_backend.database.validators.UniquenessValidation">UniquenessValidation</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cdp_backend.database</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="gp">... </span><span class="kn">from</span> <span class="nn">cdp_backend.database.validators</span> <span class="kn">import</span> <span class="n">model_is_unique</span>
+<span class="gp">... </span><span class="kn">from</span> <span class="nn">cdp_backend.database.validators</span> <span class="kn">import</span> <span class="n">get_model_uniqueness</span>
 <span class="gp">...</span>
 <span class="gp">... </span><span class="n">b</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
-<span class="gp">... </span><span class="k">if</span> <span class="n">model_is_unique</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span><span class="n">b_uniqueness</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">if</span> <span class="n">b_uniqueness</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
