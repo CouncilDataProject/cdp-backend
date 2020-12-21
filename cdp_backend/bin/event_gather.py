@@ -66,9 +66,7 @@ def main() -> None:
             example_get_events_func, credentials_file
         )
 
-        # Run
-        # flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
-        # flow.register("CDP Pipelines")
+        # TODO make the flow run on a certain type of Executor?
         flow.run()
 
     except Exception as e:
