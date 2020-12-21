@@ -317,7 +317,7 @@ class Event(Model):
     conference or election debate, and, can be upcoming or historical.
     """
 
-    body_ref = fields.ReferenceField(Body, required=True)
+    body_ref = fields.ReferenceField(Body, required=True, auto_load=False)
     event_datetime = fields.DateTime(required=True)
     static_thumbnail_ref = fields.ReferenceField(File)
     hover_thumbnail_ref = fields.ReferenceField(File)

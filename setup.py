@@ -51,6 +51,7 @@ requirements = [
     "pandas~=1.1.3",
     "pulumi~=2.16.2",
     "pulumi-gcp~=4.6.0",
+    "prefect~=0.14.0"
 ]
 
 extra_requirements = {
@@ -86,6 +87,7 @@ setup(
                 "create_cdp_ingestion_model_doc="
                 "cdp_backend.bin.create_ingestion_model_doc:main"
             ),
+            "event_gather=cdp_backend.bin.event_gather:main",
         ],
     },
     install_requires=requirements,
