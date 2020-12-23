@@ -29,3 +29,9 @@ class VoteDecision:
     APPROVE = "Approve"
     REJECT = "Reject"
     ABSTAIN = "Abstain"
+
+
+class MatterStatusDecision:
+    ADOPTED = "Adopted"
+    REJECTED = "Rejected"
+    IN_PROGRESS = "In Progress"
