@@ -12,6 +12,7 @@ from .types import (
     EventMinutesItemDecision,
     IndexedField,
     IndexedFieldSet,
+    MatterStatusDecision,
     Order,
     VoteDecision,
 )
@@ -198,7 +199,12 @@ class MatterStatus(Model):
     """
 
     matter_ref = fields.ReferenceField(Matter, required=True)
-    status = fields.TextField(required=True)
+    status = fields.TextField(
+        required=True,
+        validator=validators.create_constant_value_validator(
+            MatterStatusDecision, True
+        ),
+    )
     update_datetime = fields.DateTime(required=True)
     external_source_id = fields.TextField()
 
@@ -206,7 +212,7 @@ class MatterStatus(Model):
     def Example(cls) -> Model:
         matter_status = cls()
         matter_status.matter_ref = Matter.Example()
-        matter_status.status = "Passed"
+        matter_status.status = MatterStatusDecision.ADOPTED
         matter_status.update_datetime = datetime.utcnow()
         return matter_status
 
@@ -423,7 +429,9 @@ class EventMinutesItem(Model):
     minutes_item_ref = fields.ReferenceField(MinutesItem, required=True)
     index = fields.NumberField(required=True)
     decision = fields.TextField(
-        validator=validators.event_minutes_item_decision_is_valid
+        validator=validators.create_constant_value_validator(
+            EventMinutesItemDecision, False
+        )
     )
     external_source_id = fields.TextField()
 
@@ -495,7 +503,8 @@ class Vote(Model):
     event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
     person_ref = fields.ReferenceField(Person, required=True)
     decision = fields.TextField(
-        required=True, validator=validators.vote_decision_is_valid
+        required=True,
+        validator=validators.create_constant_value_validator(VoteDecision, True),
     )
     in_majority = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
