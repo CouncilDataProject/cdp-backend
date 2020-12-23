@@ -3,14 +3,13 @@
 
 import logging
 import re
-from typing import List, Optional
+from typing import Callable, List, Optional, Type
 from dataclasses import dataclass
 
 from fireo.models import Model
 from fsspec.core import url_to_fs
 
 from ..utils.constants_utils import get_all_class_attr_values
-from .types import EventMinutesItemDecision, VoteDecision
 
 ###############################################################################
 
@@ -173,41 +172,41 @@ def resource_exists(uri: Optional[str]) -> bool:
     return False
 
 
-def vote_decision_is_valid(decision: str) -> bool:
+def create_constant_value_validator(
+    constant_cls: Type, is_required: bool
+) -> Callable[[str], bool]:
     """
-    Validate that vote's decision is valid.
-
-    None is not a valid option.
+    Create a validator func that validates a value is one of the valid values.
 
     Parameters
     ----------
-    decision: str
-        The decision to validate.
+    constant_cls: Type
+        The constant class that contains the valid values.
+    is_required: bool
+        Whether the value is required.
 
     Returns
     -------
-    status: bool
-        The validation status.
+    validator_func: Callable[[str], bool]
+        The validator func.
     """
-    return decision in get_all_class_attr_values(VoteDecision)
 
+    def is_valid(value: str) -> bool:
+        """
+        Validate that value is valid.
 
-def event_minutes_item_decision_is_valid(decision: Optional[str]) -> bool:
-    """
-    Validate that event minutes item's decision is valid.
+        Parameters
+        ----------
+        value: str
+            The value to validate.
 
-    None is a valid option.
+        Returns
+        -------
+        status: bool
+            The validation status.
+        """
+        if value is None:
+            return not is_required
+        return value in get_all_class_attr_values(constant_cls)
 
-    Parameters
-    ----------
-    decision: Optional[str]
-        The decision to validate.
-
-    Returns
-    -------
-    status: bool
-        The validation status.
-    """
-    if decision:
-        return decision in get_all_class_attr_values(EventMinutesItemDecision)
-    return True
+    return is_valid
