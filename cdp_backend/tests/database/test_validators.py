@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pytest
 from typing import List
 from unittest import mock
 
-from cdp_backend.database import models, validators
-from cdp_backend.database.validators import UniquenessValidation
+import pytest
 from fireo.models import Model
+
+from cdp_backend.database import models, validators
+from cdp_backend.database.types import (
+    EventMinutesItemDecision,
+    MatterStatusDecision,
+    VoteDecision,
+)
+from cdp_backend.database.validators import UniquenessValidation
 
 from .. import test_utils
 
@@ -144,7 +150,8 @@ def test_remote_resource_exists(uri: str, expected_result: bool) -> None:
     ],
 )
 def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
-    actual_result = validators.vote_decision_is_valid(decision)
+    validator_func = validators.create_constant_value_validator(VoteDecision, True)
+    actual_result = validator_func(decision)
     assert actual_result == expected_result
 
 
@@ -159,5 +166,24 @@ def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
 def test_event_minutes_item_decision_is_valid(
     decision: str, expected_result: bool
 ) -> None:
-    actual_result = validators.event_minutes_item_decision_is_valid(decision)
+    validator_func = validators.create_constant_value_validator(
+        EventMinutesItemDecision, False
+    )
+    actual_result = validator_func(decision)
+    assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(
+    "decision, expected_result",
+    [
+        (None, False),
+        ("Adopted", True),
+        ("INVALID", False),
+    ],
+)
+def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -> None:
+    validator_func = validators.create_constant_value_validator(
+        MatterStatusDecision, True
+    )
+    actual_result = validator_func(decision)
     assert actual_result == expected_result
