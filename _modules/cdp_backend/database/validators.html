@@ -194,14 +194,13 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
 
 <span class="kn">from</span> <span class="nn">..utils.constants_utils</span> <span class="kn">import</span> <span class="n">get_all_class_attr_values</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">EventMinutesItemDecision</span><span class="p">,</span> <span class="n">VoteDecision</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -364,44 +363,44 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="vote_decision_is_valid"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.vote_decision_is_valid">[docs]</a><span class="k">def</span> <span class="nf">vote_decision_is_valid</span><span class="p">(</span><span class="n">decision</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="create_constant_value_validator"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.create_constant_value_validator">[docs]</a><span class="k">def</span> <span class="nf">create_constant_value_validator</span><span class="p">(</span>
+    <span class="n">constant_cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">is_required</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validate that vote&#39;s decision is valid.</span>
-
-<span class="sd">    None is not a valid option.</span>
+<span class="sd">    Create a validator func that validates a value is one of the valid values.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    decision: str</span>
-<span class="sd">        The decision to validate.</span>
+<span class="sd">    constant_cls: Type</span>
+<span class="sd">        The constant class that contains the valid values.</span>
+<span class="sd">    is_required: bool</span>
+<span class="sd">        Whether the value is required.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    status: bool</span>
-<span class="sd">        The validation status.</span>
+<span class="sd">    validator_func: Callable[[str], bool]</span>
+<span class="sd">        The validator func.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">decision</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">VoteDecision</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate that value is valid.</span>
 
-<div class="viewcode-block" id="event_minutes_item_decision_is_valid"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.event_minutes_item_decision_is_valid">[docs]</a><span class="k">def</span> <span class="nf">event_minutes_item_decision_is_valid</span><span class="p">(</span><span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validate that event minutes item&#39;s decision is valid.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: str</span>
+<span class="sd">            The value to validate.</span>
 
-<span class="sd">    None is a valid option.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        status: bool</span>
+<span class="sd">            The validation status.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="n">is_required</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">constant_cls</span><span class="p">)</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    decision: Optional[str]</span>
-<span class="sd">        The decision to validate.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    status: bool</span>
-<span class="sd">        The validation status.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">decision</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">decision</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">EventMinutesItemDecision</span><span class="p">)</span>
-    <span class="k">return</span> <span class="kc">True</span></div>
+    <span class="k">return</span> <span class="n">is_valid</span></div>
 </pre></div>
 
            </div>

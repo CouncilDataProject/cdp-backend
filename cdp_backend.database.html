@@ -1118,6 +1118,27 @@ For example, An event could have a morning and afternoon session.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="cdp_backend.database.types.MatterStatusDecision">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">MatterStatusDecision</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#MatterStatusDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="cdp_backend.database.types.MatterStatusDecision.ADOPTED">
+<code class="sig-name descname">ADOPTED</code><em class="property"> = 'Adopted'</em><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision.ADOPTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.types.MatterStatusDecision.IN_PROGRESS">
+<code class="sig-name descname">IN_PROGRESS</code><em class="property"> = 'In Progress'</em><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision.IN_PROGRESS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdp_backend.database.types.MatterStatusDecision.REJECTED">
+<code class="sig-name descname">REJECTED</code><em class="property"> = 'Rejected'</em><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision.REJECTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="cdp_backend.database.types.Order">
 <em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">Order</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#Order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.Order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -1184,6 +1205,26 @@ in the database collection.</p></li>
 </dd></dl>
 
 <dl class="function">
+<dt id="cdp_backend.database.validators.create_constant_value_validator">
+<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">create_constant_value_validator</code><span class="sig-paren">(</span><em class="sig-param">constant_cls: Type</em>, <em class="sig-param">is_required: bool</em><span class="sig-paren">)</span> &#x2192; Callable[[str], bool]<a class="reference internal" href="_modules/cdp_backend/database/validators.html#create_constant_value_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.create_constant_value_validator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a validator func that validates a value is one of the valid values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>constant_cls</strong> (<em>Type</em>) – The constant class that contains the valid values.</p></li>
+<li><p><strong>is_required</strong> (<em>bool</em>) – Whether the value is required.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>validator_func</strong> – The validator func.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Callable[[str], bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="cdp_backend.database.validators.email_is_valid">
 <code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">email_is_valid</code><span class="sig-paren">(</span><em class="sig-param">email: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#email_is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.email_is_valid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate that a valid email was provided.</p>
@@ -1191,24 +1232,6 @@ in the database collection.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>email</strong> (<em>Optional[str]</em>) – The email to validate.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="cdp_backend.database.validators.event_minutes_item_decision_is_valid">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">event_minutes_item_decision_is_valid</code><span class="sig-paren">(</span><em class="sig-param">decision: Optional[str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#event_minutes_item_decision_is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.event_minutes_item_decision_is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate that event minutes item’s decision is valid.</p>
-<p>None is a valid option.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>decision</strong> (<em>Optional[str]</em>) – The decision to validate.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>status</strong> – The validation status.</p>
@@ -1274,24 +1297,6 @@ characters and optionally include a hyphen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>router_string</strong> (<em>Optional[str]</em>) – The router string to validate.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="cdp_backend.database.validators.vote_decision_is_valid">
-<code class="sig-prename descclassname">cdp_backend.database.validators.</code><code class="sig-name descname">vote_decision_is_valid</code><span class="sig-paren">(</span><em class="sig-param">decision: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdp_backend/database/validators.html#vote_decision_is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.validators.vote_decision_is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate that vote’s decision is valid.</p>
-<p>None is not a valid option.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>decision</strong> (<em>str</em>) – The decision to validate.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>status</strong> – The validation status.</p>

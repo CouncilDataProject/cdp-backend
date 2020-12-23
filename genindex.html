@@ -217,6 +217,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.VoteDecision.ABSTAIN">ABSTAIN (cdp_backend.database.types.VoteDecision attribute)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.types.MatterStatusDecision.ADOPTED">ADOPTED (cdp_backend.database.types.MatterStatusDecision attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.agenda_uri">agenda_uri (cdp_backend.database.models.Event attribute)</a>
 
       <ul>
@@ -381,6 +383,8 @@
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.UniquenessValidation.conflicting_models">conflicting_models (cdp_backend.database.validators.UniquenessValidation attribute)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.validators.create_constant_value_validator">create_constant_value_validator() (in module cdp_backend.database.validators)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.created">created (cdp_backend.database.models.Transcript attribute)</a>
 </li>
   </ul></td>
@@ -454,8 +458,6 @@
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event">Event (class in cdp_backend.database.models)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.event_datetime">event_datetime (cdp_backend.database.models.Event attribute)</a>
-</li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.validators.event_minutes_item_decision_is_valid">event_minutes_item_decision_is_valid() (in module cdp_backend.database.validators)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.event_minutes_item_ref">event_minutes_item_ref (cdp_backend.database.models.EventMinutesItemFile attribute)</a>
 
@@ -627,16 +629,18 @@
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.in_majority">in_majority (cdp_backend.database.models.Vote attribute)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.types.MatterStatusDecision.IN_PROGRESS">IN_PROGRESS (cdp_backend.database.types.MatterStatusDecision attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.index">index (cdp_backend.database.models.EventMinutesItem attribute)</a>
 
       <ul>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.index">(cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
 </li>
       </ul></li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedField">IndexedField (class in cdp_backend.database.types)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedField">IndexedField (class in cdp_backend.database.types)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet">IndexedFieldSet (class in cdp_backend.database.types)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.is_active">is_active (cdp_backend.database.models.Body attribute)</a>
@@ -694,6 +698,8 @@
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterSponsor">MatterSponsor (class in cdp_backend.database.models)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterStatus">MatterStatus (class in cdp_backend.database.models)</a>
+</li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.types.MatterStatusDecision">MatterStatusDecision (class in cdp_backend.database.types)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.File.media_type">media_type (cdp_backend.database.models.File attribute)</a>
 </li>
@@ -843,7 +849,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.VoteDecision.REJECT">REJECT (cdp_backend.database.types.VoteDecision attribute)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.types.MatterStatusDecision.REJECTED">REJECTED (cdp_backend.database.types.MatterStatusDecision attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.resource_exists">resource_exists() (in module cdp_backend.database.validators)</a>
+</li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.result_status">result_status (cdp_backend.pipeline.ingestion_models.Matter attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Role">Role (class in cdp_backend.database.models)</a>
 
@@ -985,8 +995,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.validators.vote_decision_is_valid">vote_decision_is_valid() (in module cdp_backend.database.validators)</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.VoteDecision">VoteDecision (class in cdp_backend.database.types)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.votes">votes (cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
