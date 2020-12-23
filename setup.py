@@ -87,7 +87,7 @@ setup(
                 "create_cdp_ingestion_model_doc="
                 "cdp_backend.bin.create_ingestion_model_doc:main"
             ),
-            "event_gather=cdp_backend.bin.event_gather:main",
+            "cdp_event_gather=cdp_backend.bin.cdp_event_gather:main",
         ],
     },
     install_requires=requirements,

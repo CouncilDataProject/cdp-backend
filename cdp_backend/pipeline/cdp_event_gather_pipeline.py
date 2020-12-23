@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 import logging
 from typing import Callable, List
@@ -21,7 +24,7 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-def create_event_gather_flow(
+def create_cdp_event_gather_flow(
     get_events_func: Callable,
     credentials_file: str,
 ) -> Flow:
@@ -29,7 +32,7 @@ def create_event_gather_flow(
     fireo.connection(from_file=credentials_file)
 
     # Create flow
-    with Flow("Event Gather Pipeline") as flow:
+    with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
 
         for event in events:

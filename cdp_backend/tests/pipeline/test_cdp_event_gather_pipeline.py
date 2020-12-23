@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from cdp_backend.pipeline import event_gather_pipeline as pipeline
+from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
 import cdp_backend.database.models as db_models
 import cdp_backend.pipeline.ingestion_models as ingestion_models
 from cdp_backend.database.validators import UniquenessValidation
-from cdp_backend.bin.event_gather import example_get_events_func
+from cdp_backend.bin.cdp_event_gather import example_get_events_func
 
 from prefect import Flow
 from unittest import mock
@@ -17,16 +17,16 @@ ingestion_body = ingestion_models.Body(
 )
 
 
-def test_create_event_gather_flow() -> None:
+def test_create_cdp_event_gather_flow() -> None:
     with mock.patch("fireo.connection") as mock_connector:
         mock_connector.return_value = None
-        flow = pipeline.create_event_gather_flow(example_get_events_func, "/fake/path")
+        flow = pipeline.create_cdp_event_gather_flow(example_get_events_func, "/fake/path")
         assert isinstance(flow, Flow)
 
 
 def test_upload_body_unique() -> None:
     with mock.patch(
-        "cdp_backend.pipeline.event_gather_pipeline.get_model_uniqueness"
+        "cdp_backend.pipeline.cdp_event_gather_pipeline.get_model_uniqueness"
     ) as mock_uniqueness_validator:
         mock_uniqueness_validator.return_value = UniquenessValidation(
             True, [db_body_example]
@@ -42,7 +42,7 @@ def test_upload_body_unique() -> None:
 
 def test_upload_body_not_unique() -> None:
     with mock.patch(
-        "cdp_backend.pipeline.event_gather_pipeline.get_model_uniqueness"
+        "cdp_backend.pipeline.cdp_event_gather_pipeline.get_model_uniqueness"
     ) as mock_uniqueness_validator:
         mock_uniqueness_validator.return_value = UniquenessValidation(
             False, [db_body_example]

@@ -8,7 +8,7 @@ import sys
 import traceback
 from datetime import datetime
 
-import cdp_backend.pipeline.event_gather_pipeline as pipeline
+import cdp_backend.pipeline.cdp_event_gather_pipeline as pipeline
 from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_MINIMAL_EVENT,
     EventIngestionModel,
@@ -33,8 +33,8 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="event_gather",
-            description="Gather events through running the pipeline.",
+            prog="cdp_event_gather",
+            description="Gather, process, and store event data to CDP infrastructure.",
         )
         p.add_argument(
             "-g",
@@ -45,7 +45,7 @@ class Args(argparse.Namespace):
             ),
             type=Path,
             dest="google_credentials_file",
-            help="Path to the google credentials file.",
+            help="Path to the Google Service Account Credentials JSON file.",
         )
         p.parse_args(namespace=self)
 
@@ -62,7 +62,7 @@ def main() -> None:
 
         credentials_file = args.google_credentials_file
 
-        flow = pipeline.create_event_gather_flow(
+        flow = pipeline.create_cdp_event_gather_flow(
             example_get_events_func, credentials_file
         )
 
