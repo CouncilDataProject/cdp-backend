@@ -97,6 +97,7 @@ class Matter:
     name: str
     matter_type: str
     title: str
+    status: str
     sponsors: Optional[List[Person]] = None
     external_source_id: Optional[str] = None
 
@@ -257,6 +258,7 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                 title=(
                     "AN ORDINANCE relating to the financing of the West Seattle Bridge"
                 ),
+                status="Adopted",
                 sponsors=[
                     Person(
                         name="M. Lorena González",
