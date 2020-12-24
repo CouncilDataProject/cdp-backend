@@ -12,6 +12,7 @@ from cdp_backend.database.validators import get_model_uniqueness
 from prefect import Flow, task
 
 import fireo
+from fireo.models import Model
 
 ###############################################################################
 
@@ -36,57 +37,40 @@ def create_cdp_event_gather_flow(
         events: List[EventIngestionModel] = get_events_func()
 
         for event in events:
-            process_event(event)
+            # TODO create/get transcript
+            # TODO create/get audio (happens as part of transcript process)
+
+            # Upload calls for minimal event
+            body_ref = upload_db_model(create_body_from_ingestion_model(event.body))
+
+            # TODO add upload calls for non-minimal event
+
+            event_ref = upload_db_model(
+                create_event_from_ingestion_model(event, body_ref)
+            )
+
+            for session in event.sessions:
+                # upload_session(session, event_ref)
+                upload_db_model(create_session_from_ingestion_model(session, event_ref))
 
     return flow
 
 
-def process_event(event: EventIngestionModel) -> None:
-    # TODO create/get transcript
-    # TODO create/get audio (happens as part of transcript process)
-
-    # Upload converted ingestion models to databae
-    upload_to_database(event)
-
-
-def upload_to_database(event: EventIngestionModel) -> None:
-    # Upload calls for minimal event
-    body_ref = upload_body(event.body)
-
-    # TODO add upload calls for non-minimal event
-
-    event_ref = upload_event(event, body_ref)
-
-    for session in event.sessions:
-        upload_session(session, event_ref)
-
-
 @task
-def upload_event(
-    event: EventIngestionModel, body_ref: db_models.Body
-) -> db_models.Event:
-    db_event = db_models.Event()
+def upload_db_model(model: Model) -> Model:
+    uniqueness_validation = get_model_uniqueness(model)
 
-    # Required fields
-    db_event.body_ref = body_ref
-
-    # Assume that session is same day as event
-    db_event.event_datetime = event.sessions[0].session_datetime
-
-    # TODO add optional fields
-
-    uniqueness_validation = get_model_uniqueness(db_event)
     if uniqueness_validation.is_unique:
-        db_event.save()
-        log.info(f"Saved new Event with document id={db_event.id}.")
+        model.save()
+        log.info(f"Saved new {model.__class__.__name__} with document id={model.id}.")
     else:
         return uniqueness_validation.conflicting_models[0]
 
-    return db_event
+    return model
 
 
 @task
-def upload_body(body: Body) -> db_models.Body:
+def create_body_from_ingestion_model(body: Body) -> db_models.Body:
     db_body = db_models.Body()
 
     # Required fields
@@ -107,18 +91,30 @@ def upload_body(body: Body) -> db_models.Body:
     if body.external_source_id:
         db_body.external_source_id = body.external_source_id
 
-    uniqueness_validation = get_model_uniqueness(db_body)
-    if uniqueness_validation.is_unique:
-        db_body.save()
-        log.info(f"Saved new Body with document id={db_body.id}.")
-    else:
-        return uniqueness_validation.conflicting_models[0]
-
     return db_body
 
 
 @task
-def upload_session(session: Session, event_ref: db_models.Event) -> db_models.Session:
+def create_event_from_ingestion_model(
+    event: EventIngestionModel, body_ref: db_models.Body
+) -> db_models.Event:
+    db_event = db_models.Event()
+
+    # Required fields
+    db_event.body_ref = body_ref
+
+    # Assume that session is same day as event
+    db_event.event_datetime = event.sessions[0].session_datetime
+
+    # TODO add optional fields
+
+    return db_event
+
+
+@task
+def create_session_from_ingestion_model(
+    session: Session, event_ref: db_models.Event
+) -> db_models.Session:
     db_session = db_models.Session()
 
     # Required fields
@@ -138,12 +134,5 @@ def upload_session(session: Session, event_ref: db_models.Event) -> db_models.Se
 
     if session.external_source_id:
         db_session.external_source_id = session.external_source_id
-
-    uniqueness_validation = get_model_uniqueness(db_session)
-    if uniqueness_validation.is_unique:
-        db_session.save()
-        log.info(f"Saved new Session with document id={db_session.id}.")
-    else:
-        return uniqueness_validation.conflicting_models[0]
 
     return db_session
