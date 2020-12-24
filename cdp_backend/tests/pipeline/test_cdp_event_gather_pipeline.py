@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
 import cdp_backend.database.models as db_models
-import cdp_backend.pipeline.ingestion_models as ingestion_models
 from cdp_backend.database.validators import UniquenessValidation
-from cdp_backend.bin.cdp_event_gather import example_get_events_func
+import cdp_backend.pipeline.cdp_event_gather_pipeline as pipeline
+import cdp_backend.pipeline.ingestion_models as ingestion_models
+from cdp_backend.pipeline.ingestion_models import (
+    EXAMPLE_MINIMAL_EVENT,
+    EventIngestionModel,
+)
 
+from datetime import datetime
+from typing import List
 from prefect import Flow
 from unittest import mock
 
@@ -17,10 +22,18 @@ ingestion_body = ingestion_models.Body(
 )
 
 
+def mock_get_events_func() -> List[EventIngestionModel]:
+    event = EXAMPLE_MINIMAL_EVENT
+    event.sessions[0].session_datetime = datetime(2019, 4, 13)
+    return [event]
+
+
 def test_create_cdp_event_gather_flow() -> None:
     with mock.patch("fireo.connection") as mock_connector:
         mock_connector.return_value = None
-        flow = pipeline.create_cdp_event_gather_flow(example_get_events_func, "/fake/path")
+        flow = pipeline.create_cdp_event_gather_flow(
+            mock_get_events_func, "/fake/credentials/path"
+        )
         assert isinstance(flow, Flow)
 
 

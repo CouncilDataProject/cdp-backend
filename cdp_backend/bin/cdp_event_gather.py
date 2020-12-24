@@ -3,18 +3,14 @@
 
 import argparse
 import logging
-from pathlib import Path
 import sys
 import traceback
-from datetime import datetime
+
+from importlib import import_module
+from pathlib import Path
+from typing import Callable
 
 import cdp_backend.pipeline.cdp_event_gather_pipeline as pipeline
-from cdp_backend.pipeline.ingestion_models import (
-    EXAMPLE_MINIMAL_EVENT,
-    EventIngestionModel,
-)
-
-from typing import List
 
 ###############################################################################
 
@@ -47,13 +43,24 @@ class Args(argparse.Namespace):
             dest="google_credentials_file",
             help="Path to the Google Service Account Credentials JSON file.",
         )
+        p.add_argument(
+            "-e",
+            "--get_events_function_path",
+            type=Path,
+            dest="get_events_function_path",
+            help=(
+                "Path to the function (including function name) that "
+                "supplies event data to the CDP event gather pipeline."
+            ),
+        )
         p.parse_args(namespace=self)
 
 
-def example_get_events_func() -> List[EventIngestionModel]:
-    event = EXAMPLE_MINIMAL_EVENT
-    event.sessions[0].session_datetime = datetime(2019, 4, 13)
-    return [event]
+def import_get_events_func(func_path: Path) -> Callable:
+    path, func_name = str(func_path).rsplit(".", 1)
+    mod = import_module(path)
+
+    return getattr(mod, func_name)
 
 
 def main() -> None:
@@ -62,9 +69,9 @@ def main() -> None:
 
         credentials_file = args.google_credentials_file
 
-        flow = pipeline.create_cdp_event_gather_flow(
-            example_get_events_func, credentials_file
-        )
+        get_events_func = import_get_events_func(args.get_events_function_path)
+
+        flow = pipeline.create_cdp_event_gather_flow(get_events_func, credentials_file)
 
         # TODO make the flow run on a certain type of Executor?
         flow.run()
