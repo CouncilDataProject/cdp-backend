@@ -101,9 +101,9 @@ def test_create_body_from_ingestion_model(
     ingestion_model: Body,
     expected: db_models.Body,
 ) -> None:
-    actual = pipeline.create_body_from_ingestion_model.run(
+    actual = pipeline.create_body_from_ingestion_model.run(  # type: ignore
         ingestion_model
-    )  # type: ignore
+    )
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
@@ -118,9 +118,9 @@ def test_create_event_from_ingestion_model(
     ingestion_model: EventIngestionModel,
     expected: db_models.Event,
 ) -> None:
-    actual = pipeline.create_event_from_ingestion_model.run(
+    actual = pipeline.create_event_from_ingestion_model.run(  # type: ignore
         ingestion_model, db_body
-    )  # type: ignore
+    )
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
@@ -135,9 +135,9 @@ def test_create_session_from_ingestion_model(
     ingestion_model: Session,
     expected: db_models.Session,
 ) -> None:
-    actual = pipeline.create_session_from_ingestion_model.run(
+    actual = pipeline.create_session_from_ingestion_model.run(  # type: ignore
         ingestion_model, db_event
-    )  # type: ignore
+    )
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 

@@ -82,8 +82,10 @@ def _construct_ingestion_model_doc(template_file: Path, output_file: Path) -> Pa
 
     # Fill the template with values
     filled = template.render(
-        minimal_event_data=pformat(minimal_event_data, sort_dicts=False),
-        filled_event_data=pformat(filled_event_data, sort_dicts=False),
+        minimal_event_data=pformat(  # type: ignore
+            minimal_event_data, sort_dicts=False
+        ),
+        filled_event_data=pformat(filled_event_data, sort_dicts=False),  # type: ignore
     )
 
     # Store filled template
