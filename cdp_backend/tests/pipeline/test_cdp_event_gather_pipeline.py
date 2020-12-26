@@ -21,6 +21,9 @@ import pytest
 
 
 db_body = db_models.Body.Example()
+db_body.description = "description"
+db_body.end_datetime = datetime(2039, 1, 1)
+db_body.external_source_id = "external_source_id"
 db_body_extra = db_models.Body.Example()
 
 db_event = db_models.Event.Example()
@@ -28,6 +31,8 @@ db_event.body_ref = db_body
 
 db_session = db_models.Session.Example()
 db_session.event_ref = db_event
+db_session.session_index = 1
+db_session.caption_uri = "caption_uri"
 
 minimal_ingestion_body = ingestion_models.Body(
     name=db_body.name, is_active=db_body.is_active
@@ -49,6 +54,7 @@ full_ingestion_session = ingestion_models.Session(
     video_uri=db_session.video_uri,
     caption_uri=db_session.caption_uri,
     external_source_id=db_session.external_source_id,
+    session_index=db_session.session_index,
 )
 
 minimal_ingestion_event = ingestion_models.EventIngestionModel(
