@@ -73,7 +73,6 @@ def main() -> None:
 
         flow = pipeline.create_cdp_event_gather_flow(get_events_func, credentials_file)
 
-        # TODO make the flow run on a certain type of Executor?
         flow.run()
 
     except Exception as e:

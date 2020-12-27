@@ -62,6 +62,29 @@ minimal_ingestion_event = ingestion_models.EventIngestionModel(
 )
 
 
+def mock_get_events_func() -> List[EventIngestionModel]:
+    event = EXAMPLE_MINIMAL_EVENT
+    event.sessions[0].session_datetime = datetime(2019, 4, 13)
+    return [event]
+
+
+def assert_ingestion_and_db_models_equal(
+    ingestion_model: Any,
+    expected_db_model: Model,
+    actual_db_model: Model,
+) -> None:
+    fields = [attr for attr in dir(ingestion_model) if not attr.startswith("__")]
+
+    for field in fields:
+        ingestion_value = getattr(ingestion_model, field)
+
+        # Minimal models may be missing some values
+        # Some fields like reference fields don't match between ingestion and db models
+        # Those are asserted in the more specific methods
+        if ingestion_value and hasattr(expected_db_model, field):
+            assert getattr(expected_db_model, field) == getattr(actual_db_model, field)
+
+
 def test_create_cdp_event_gather_flow() -> None:
     with mock.patch("fireo.connection") as mock_connector:
         mock_connector.return_value = None
@@ -148,26 +171,3 @@ def test_create_session_from_ingestion_model(
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
     assert expected.event_ref == actual.event_ref
-
-
-def mock_get_events_func() -> List[EventIngestionModel]:
-    event = EXAMPLE_MINIMAL_EVENT
-    event.sessions[0].session_datetime = datetime(2019, 4, 13)
-    return [event]
-
-
-def assert_ingestion_and_db_models_equal(
-    ingestion_model: Any,
-    expected_db_model: Model,
-    actual_db_model: Model,
-) -> None:
-    fields = [attr for attr in dir(ingestion_model) if not attr.startswith("__")]
-
-    for field in fields:
-        ingestion_value = getattr(ingestion_model, field)
-
-        # Minimal models may be missing some values
-        # Some fields like reference fields don't match between ingestion and db models
-        # Those are asserted in the more specific methods
-        if ingestion_value and hasattr(expected_db_model, field):
-            assert getattr(expected_db_model, field) == getattr(actual_db_model, field)
