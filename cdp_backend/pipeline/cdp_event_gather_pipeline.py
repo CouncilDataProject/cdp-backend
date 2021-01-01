@@ -3,11 +3,12 @@
 
 from datetime import datetime
 import logging
-from typing import Callable, List
+from typing import Any, Callable, List
 
-from cdp_backend.pipeline.ingestion_models import EventIngestionModel, Body, Session
-import cdp_backend.database.models as db_models
-from cdp_backend.database.validators import get_model_uniqueness
+from .ingestion_models import EventIngestionModel, Body, Session
+from ..database import models as db_models
+from ..database import exceptions
+from ..database.validators import get_model_uniqueness
 
 from prefect import Flow, task
 
@@ -41,32 +42,78 @@ def create_cdp_event_gather_flow(
             # TODO create/get audio (happens as part of transcript process)
 
             # Upload calls for minimal event
-            body_ref = upload_db_model(create_body_from_ingestion_model(event.body))
+            body_ref = upload_db_model(
+                create_body_from_ingestion_model(event.body), event.body
+            )
 
             # TODO add upload calls for non-minimal event
 
             event_ref = upload_db_model(
-                create_event_from_ingestion_model(event, body_ref)
+                create_event_from_ingestion_model(event, body_ref), event
             )
 
             for session in event.sessions:
-                # upload_session(session, event_ref)
-                upload_db_model(create_session_from_ingestion_model(session, event_ref))
+                upload_db_model(
+                    create_session_from_ingestion_model(session, event_ref), session
+                )
 
     return flow
 
 
+def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model:
+    # Filter out base class attrs, class methods, primary keys
+    non_primary_db_fields = [
+        attr
+        for attr in dir(db_model)
+        if (
+            not attr.startswith("_")
+            and attr not in dir(Model)
+            and attr not in db_model._PRIMARY_KEYS
+        )
+    ]
+
+    needs_update = False
+
+    for field in non_primary_db_fields:
+        if hasattr(ingestion_model, field):
+            db_val = getattr(db_model, field)
+            ingestion_val = getattr(ingestion_model, field)
+
+            # If values are different, use the ingestion value
+            # Make sure we don't overwrite with empty values (or should we allow this?)
+            if db_val != ingestion_val and ingestion_val != None:
+                setattr(db_model, field, ingestion_val)
+                needs_update = True
+                log.info(f"Updating {db_key} {field} from {db_val} to {ingestion_val}.")
+
+    # Avoid unnecessary db interactions
+    if needs_update:
+        db_model.update(db_key)
+
+    return db_model
+
+
 @task
-def upload_db_model(model: Model) -> Model:
-    uniqueness_validation = get_model_uniqueness(model)
+def upload_db_model(db_model: Model, ingestion_model: Any) -> Model:
+    uniqueness_validation = get_model_uniqueness(db_model)
 
     if uniqueness_validation.is_unique:
-        model.save()
-        log.info(f"Saved new {model.__class__.__name__} with document id={model.id}.")
-    else:
-        return uniqueness_validation.conflicting_models[0]
+        db_model.save()
+        log.info(
+            f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
+        )
+    elif len(uniqueness_validation.conflicting_models) == 1:
+        updated_db_model = update_db_model(
+            uniqueness_validation.conflicting_models[0], ingestion_model, uniqueness_validation.conflicting_models[0].key
+        )
 
-    return model
+        return updated_db_model
+    else:
+        raise exceptions.UniquenessError(
+            model=db_model, conflicting_results=uniqueness_validation.conflicting_models
+        )
+
+    return db_model
 
 
 @task
@@ -103,8 +150,10 @@ def create_event_from_ingestion_model(
     # Required fields
     db_event.body_ref = body_ref
 
-    # Assume that session is same day as event
-    db_event.event_datetime = event.sessions[0].session_datetime
+    # Assume event datetime is the date of earliest session
+    db_event.event_datetime = min(
+        [session.session_datetime for session in event.sessions]
+    )
 
     # TODO add optional fields
 
@@ -122,7 +171,7 @@ def create_session_from_ingestion_model(
     db_session.session_datetime = session.session_datetime
     db_session.video_uri = session.video_uri
 
-    if session.session_index:
+    if session.session_index is not None:
         db_session.session_index = session.session_index
     else:
         # Is this how we want to handle when session_index isn't provided?

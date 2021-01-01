@@ -10,7 +10,7 @@ from importlib import import_module
 from pathlib import Path
 from typing import Callable
 
-import cdp_backend.pipeline.cdp_event_gather_pipeline as pipeline
+from ..pipeline import cdp_event_gather_pipeline as pipeline
 
 ###############################################################################
 
