@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from typing import Any, Dict, List, Optional, Tuple
 import unittest
+from typing import Any, Dict, List, Optional, Tuple
 
 import pulumi
 import pytest

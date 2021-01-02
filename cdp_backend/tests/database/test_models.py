@@ -3,8 +3,8 @@
 
 from pathlib import Path
 
-from fireo.fields import ReferenceField
 import networkx as nx
+from fireo.fields import ReferenceField
 
 from cdp_backend.bin.create_cdp_database_uml import _construct_dot_file
 from cdp_backend.database import DATABASE_MODELS

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pytest
 from typing import Optional
+
+import pytest
 
 from cdp_backend.utils import file_utils
 

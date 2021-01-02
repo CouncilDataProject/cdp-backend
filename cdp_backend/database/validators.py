@@ -3,8 +3,8 @@
 
 import logging
 import re
-from typing import Callable, List, Optional, Type
 from dataclasses import dataclass
+from typing import Callable, List, Optional, Type
 
 from fireo.models import Model
 from fsspec.core import url_to_fs

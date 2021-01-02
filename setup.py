@@ -17,6 +17,7 @@ test_requirements = [
     "codecov>=2.1.4",
     "flake8>=3.8.3",
     "flake8-debugger>=3.2.1",
+    "isort>=5.7.0",
     "mypy>=0.790",
     "networkx>=2.5",
     "pydot>=1.4",
