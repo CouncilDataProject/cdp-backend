@@ -4,6 +4,14 @@ cdp\_backend.bin package
 Submodules
 ----------
 
+cdp\_backend.bin.cdp\_event\_gather module
+------------------------------------------
+
+.. automodule:: cdp_backend.bin.cdp_event_gather
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.create\_cdp\_database\_uml module
 --------------------------------------------------
 

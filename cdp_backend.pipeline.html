@@ -208,6 +208,19 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-cdp_backend.pipeline.cdp_event_gather_pipeline">
+<span id="cdp-backend-pipeline-cdp-event-gather-pipeline-module"></span><h2>cdp_backend.pipeline.cdp_event_gather_pipeline module<a class="headerlink" href="#module-cdp_backend.pipeline.cdp_event_gather_pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cdp_backend.pipeline.cdp_event_gather_pipeline.create_cdp_event_gather_flow">
+<code class="sig-prename descclassname">cdp_backend.pipeline.cdp_event_gather_pipeline.</code><code class="sig-name descname">create_cdp_event_gather_flow</code><span class="sig-paren">(</span><em class="sig-param">get_events_func: Callable</em>, <em class="sig-param">credentials_file: str</em><span class="sig-paren">)</span> &#x2192; prefect.core.flow.Flow<a class="reference internal" href="_modules/cdp_backend/pipeline/cdp_event_gather_pipeline.html#create_cdp_event_gather_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.cdp_event_gather_pipeline.create_cdp_event_gather_flow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cdp_backend.pipeline.cdp_event_gather_pipeline.update_db_model">
+<code class="sig-prename descclassname">cdp_backend.pipeline.cdp_event_gather_pipeline.</code><code class="sig-name descname">update_db_model</code><span class="sig-paren">(</span><em class="sig-param">db_model: fireo.models.model.Model</em>, <em class="sig-param">ingestion_model: Any</em>, <em class="sig-param">db_key: str</em><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/pipeline/cdp_event_gather_pipeline.html#update_db_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.cdp_event_gather_pipeline.update_db_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-cdp_backend.pipeline.ingestion_models">
 <span id="cdp-backend-pipeline-ingestion-models-module"></span><h2>cdp_backend.pipeline.ingestion_models module<a class="headerlink" href="#module-cdp_backend.pipeline.ingestion_models" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -549,13 +562,10 @@ The image will be uploaded or updated in the CDP file storage system.</p>
 
 <dl class="class">
 <dt id="cdp_backend.pipeline.ingestion_models.Session">
-<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Session</code><span class="sig-paren">(</span><em class="sig-param">session_datetime: datetime.datetime</em>, <em class="sig-param">video_uri: str</em>, <em class="sig-param">session_index: Optional[int] = None</em>, <em class="sig-param">caption_uri: Optional[str] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.pipeline.ingestion_models.</code><code class="sig-name descname">Session</code><span class="sig-paren">(</span><em class="sig-param">session_datetime: datetime.datetime</em>, <em class="sig-param">video_uri: str</em>, <em class="sig-param">session_index: int</em>, <em class="sig-param">caption_uri: Optional[str] = None</em>, <em class="sig-param">external_source_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A session is a working period for an event.
 For example, an event could have a morning and afternoon session.</p>
-<p class="rubric">Notes</p>
-<p>If session_index is not provided, the session_index will be set to the index of the
-item in the whole Session list on Event.</p>
 <dl class="attribute">
 <dt id="cdp_backend.pipeline.ingestion_models.Session.caption_uri">
 <code class="sig-name descname">caption_uri</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.caption_uri" title="Permalink to this definition">¶</a></dt>
@@ -573,7 +583,7 @@ item in the whole Session list on Event.</p>
 
 <dl class="attribute">
 <dt id="cdp_backend.pipeline.ingestion_models.Session.session_index">
-<code class="sig-name descname">session_index</code><em class="property">: Optional[int]</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.session_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">session_index</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.session_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

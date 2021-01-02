@@ -4,6 +4,14 @@ cdp\_backend.pipeline package
 Submodules
 ----------
 
+cdp\_backend.pipeline.cdp\_event\_gather\_pipeline module
+---------------------------------------------------------
+
+.. automodule:: cdp_backend.pipeline.cdp_event_gather_pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.pipeline.ingestion\_models module
 ----------------------------------------------
 

@@ -335,16 +335,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A session is a working period for an event.</span>
 <span class="sd">    For example, an event could have a morning and afternoon session.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    If session_index is not provided, the session_index will be set to the index of the</span>
-<span class="sd">    item in the whole Session list on Event.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">session_datetime</span><span class="p">:</span> <span class="n">datetime</span>
     <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">session_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">session_index</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">caption_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
@@ -425,6 +420,7 @@
         <span class="n">Session</span><span class="p">(</span>
             <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
             <span class="n">video_uri</span><span class="o">=</span><span class="s2">&quot;https://youtu.be/dQw4w9WgXcQ&quot;</span><span class="p">,</span>
+            <span class="n">session_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
@@ -436,6 +432,7 @@
         <span class="n">Session</span><span class="p">(</span>
             <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
             <span class="n">video_uri</span><span class="o">=</span><span class="s2">&quot;https://youtu.be/dQw4w9WgXcQ&quot;</span><span class="p">,</span>
+            <span class="n">session_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">],</span>
     <span class="n">event_minutes_items</span><span class="o">=</span><span class="p">[</span>
