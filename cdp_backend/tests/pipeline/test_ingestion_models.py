@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import asdict
+
 import pytest
 
 from cdp_backend.pipeline.ingestion_models import (
-    EventIngestionModel,
-    EXAMPLE_MINIMAL_EVENT,
     EXAMPLE_FILLED_EVENT,
+    EXAMPLE_MINIMAL_EVENT,
+    EventIngestionModel,
 )
 
 ###############################################################################

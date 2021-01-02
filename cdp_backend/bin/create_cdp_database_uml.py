@@ -3,9 +3,9 @@
 
 import argparse
 import logging
-from pathlib import Path
 import sys
 import traceback
+from pathlib import Path
 
 from fireo.fields import ReferenceField
 from graphviz import Digraph

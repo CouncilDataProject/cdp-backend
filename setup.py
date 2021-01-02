@@ -17,6 +17,7 @@ test_requirements = [
     "codecov>=2.1.4",
     "flake8>=3.8.3",
     "flake8-debugger>=3.2.1",
+    "isort>=5.7.0",
     "mypy>=0.790",
     "networkx>=2.5",
     "pydot>=1.4",
@@ -48,8 +49,8 @@ requirements = [
     "gcsfs~=0.7.1",
     "graphviz~=0.14",
     "pandas~=1.1.3",
-    "pulumi~=2.12.1",
-    "pulumi-gcp~=4.1.0",
+    "pulumi~=2.16.2",
+    "pulumi-gcp~=4.6.0",
 ]
 
 extra_requirements = {
@@ -72,6 +73,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     description=(
         "Data storage utilities and processing pipelines to run on CDP server "

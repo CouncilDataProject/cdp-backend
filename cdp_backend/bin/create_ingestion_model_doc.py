@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-from dataclasses import asdict
 import logging
-from pathlib import Path
-from pprint import pformat
 import sys
 import traceback
+from dataclasses import asdict
+from pathlib import Path
+from pprint import pformat
 from typing import Any, Dict, List, Union
 
-from cdp_backend.pipeline.ingestion_models import (
-    EXAMPLE_MINIMAL_EVENT,
-    EXAMPLE_FILLED_EVENT,
-)
 from jinja2 import Template
+
+from cdp_backend.pipeline.ingestion_models import (
+    EXAMPLE_FILLED_EVENT,
+    EXAMPLE_MINIMAL_EVENT,
+)
 
 ###############################################################################
 
