@@ -190,6 +190,7 @@
 <span></span><span class="kn">import</span> <span class="nn">base64</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
+<span class="kn">from</span> <span class="nn">fireo.managers.errors</span> <span class="kn">import</span> <span class="n">EmptyDocument</span>
 <span class="kn">from</span> <span class="nn">fireo.fields</span> <span class="kn">import</span> <span class="n">NestedModel</span>
 <span class="kn">from</span> <span class="nn">fireo.fields.errors</span> <span class="kn">import</span> <span class="n">FieldNotFound</span>
 <span class="kn">from</span> <span class="nn">fireo.queries</span> <span class="kn">import</span> <span class="n">query_set</span> <span class="k">as</span> <span class="n">queries</span>
@@ -201,6 +202,7 @@
 
 <span class="k">class</span> <span class="nc">ManagerDescriptor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Restrict user to get `Manager` from model instance and from abstract model&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>
 
@@ -208,9 +210,11 @@
         <span class="c1"># reset parent key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">_parent_key</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ManagerError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Manager &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; can not accessible via </span><span class="si">{</span><span class="n">owner</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> instance&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ManagerError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Manager &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; can not accessible via </span><span class="si">{</span><span class="n">owner</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> instance&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">owner</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">abstract</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ManagerError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Manager &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; is not accessible via </span><span class="si">{</span><span class="n">owner</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> abstract model&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ManagerError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Manager &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; is not accessible via </span><span class="si">{</span><span class="n">owner</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> abstract model&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span>
 
 
@@ -306,6 +310,7 @@
 <span class="sd">    end_at(key, **kwargs):</span>
 <span class="sd">        End document at this key or at that matching fields</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_cls</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
@@ -349,6 +354,28 @@
 <span class="sd">        batch:</span>
 <span class="sd">            Firestore batch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_EMPTY_DOC_EXCEPTION</span> <span class="o">=</span> <span class="s2">&quot;Empty document can not be save, Add at least one field value&quot;</span>
+        <span class="c1"># Check if it empty document then don&#39;t save it</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EmptyDocument</span><span class="p">(</span><span class="n">_EMPTY_DOC_EXCEPTION</span><span class="p">)</span>
+
+        <span class="c1"># Check if of the field value is not None</span>
+        <span class="n">is_none_dict</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">default_value</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">field_attribute</span><span class="o">.</span><span class="n">default</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">default_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">is_none_dict</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="n">FieldNotFound</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">default_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">is_none_dict</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">is_none_dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EmptyDocument</span><span class="p">(</span><span class="n">_EMPTY_DOC_EXCEPTION</span><span class="p">)</span>
+
         <span class="n">field_list</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># if mutable instance is none this mean user is creating document directly from manager</span>
         <span class="c1"># For example User.collection.create(name=&quot;Azeem&quot;) in this case mutable instance will be None</span>
@@ -374,6 +401,20 @@
                     <span class="n">field_list</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">nested_model</span><span class="p">()</span><span class="o">.</span><span class="n">_get_fields</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">field_list</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="c1"># If this model has custom IDField then</span>
+        <span class="c1"># Check if field list length is one(1) and field is IDField</span>
+        <span class="c1"># if this one field is IDField then this is also Empty Document</span>
+        <span class="c1"># which can not save</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">field_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># getting first key name from dict</span>
+                <span class="n">first_key_name</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">field_list</span><span class="p">))</span>
+                <span class="n">id_name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">id</span>
+
+                <span class="c1"># Check first key is id</span>
+                <span class="k">if</span> <span class="n">first_key_name</span> <span class="o">==</span> <span class="n">id_name</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">EmptyDocument</span><span class="p">(</span><span class="n">_EMPTY_DOC_EXCEPTION</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryset</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">mutable_instance</span><span class="p">,</span> <span class="n">transaction</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="o">**</span><span class="n">field_list</span><span class="p">)</span>
 

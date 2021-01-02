@@ -255,9 +255,6 @@ Then run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bump2version dev_release <span class="c1"># possible: major / minor / patch / dev_release</span>
 $ git push
 $ git push --tags
-git branch -D stable
-git checkout -b stable
-git push --set-upstream origin stable -f
 </pre></div>
 </div>
 <p>This will release a new package version on Git + GitHub and publish to PyPI.</p>
