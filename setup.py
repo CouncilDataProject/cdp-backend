@@ -48,8 +48,8 @@ requirements = [
     "gcsfs~=0.7.1",
     "graphviz~=0.14",
     "pandas~=1.1.3",
-    "pulumi~=2.12.1",
-    "pulumi-gcp~=4.1.0",
+    "pulumi~=2.16.2",
+    "pulumi-gcp~=4.6.0",
 ]
 
 extra_requirements = {
