@@ -5,7 +5,6 @@ import argparse
 import logging
 import sys
 import traceback
-
 from importlib import import_module
 from pathlib import Path
 from typing import Callable
@@ -35,10 +34,7 @@ class Args(argparse.Namespace):
         p.add_argument(
             "-g",
             "--google-credentials-file",
-            default=(
-                Path(__file__).parent.parent.parent
-                / "stg-cdp-seattle-a910f-45df66e72d75.json"
-            ),
+            default=(Path(__file__).parent.parent.parent / "cdp-dev-infra-creds.json"),
             type=Path,
             dest="google_credentials_file",
             help="Path to the Google Service Account Credentials JSON file.",

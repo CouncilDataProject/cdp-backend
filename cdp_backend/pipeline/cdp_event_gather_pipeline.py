@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 import logging
+from datetime import datetime
 from typing import Any, Callable, List
-
-from .ingestion_models import EventIngestionModel, Body, Session
-from ..database import models as db_models
-from ..database import exceptions
-from ..database.validators import get_model_uniqueness
-
-from prefect import Flow, task
 
 import fireo
 from fireo.models import Model
+from prefect import Flow, task
+
+from ..database import exceptions
+from ..database import models as db_models
+from ..database.validators import get_model_uniqueness
+from .ingestion_models import Body, EventIngestionModel, Session
 
 ###############################################################################
 

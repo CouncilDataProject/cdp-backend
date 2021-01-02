@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ...database import models as db_models
-from ...database import exceptions
-from ...database.validators import UniquenessValidation
-from ...pipeline import cdp_event_gather_pipeline as pipeline
-from ...pipeline import ingestion_models
-from ...pipeline.ingestion_models import (
-    Body,
-    EventIngestionModel,
-    EXAMPLE_MINIMAL_EVENT,
-    Session,
-)
-
 import copy
 from datetime import datetime
-from fireo.models import Model
 from typing import Any, List
-from prefect import Flow
 from unittest import mock
-import pytest
 
+import pytest
+from fireo.models import Model
+from prefect import Flow
+
+from cdp_backend.database import exceptions
+from cdp_backend.database import models as db_models
+from cdp_backend.database.validators import UniquenessValidation
+from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
+from cdp_backend.pipeline import ingestion_models
+from cdp_backend.pipeline.ingestion_models import (
+    EXAMPLE_MINIMAL_EVENT,
+    Body,
+    EventIngestionModel,
+    Session,
+)
 
 db_body = db_models.Body.Example()
 db_body.description = "description"
