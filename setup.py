@@ -72,6 +72,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     description=(
         "Data storage utilities and processing pipelines to run on CDP server "

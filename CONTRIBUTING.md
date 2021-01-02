@@ -10,6 +10,7 @@ If something goes wrong at any point during installing the library please see ho
 project as it will always be the most up-to-date.
 
 ## Get Started!
+
 Ready to contribute? Here's how to set up `cdp-backend` for local development.
 
 1. Fork the `cdp-backend` repo on GitHub.
@@ -65,9 +66,6 @@ Then run:
 $ bump2version dev_release # possible: major / minor / patch / dev_release
 $ git push
 $ git push --tags
-git branch -D stable
-git checkout -b stable
-git push --set-upstream origin stable -f
 ```
 
 This will release a new package version on Git + GitHub and publish to PyPI.
