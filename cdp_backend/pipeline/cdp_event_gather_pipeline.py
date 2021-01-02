@@ -61,7 +61,7 @@ def create_cdp_event_gather_flow(
 
 
 def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model:
-    # Filter out base class attrs, class methods, primary keys
+    # Filter out base class attrs, unrelated class methods, primary keys
     non_primary_db_fields = [
         attr
         for attr in dir(db_model)
@@ -81,7 +81,7 @@ def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model
 
             # If values are different, use the ingestion value
             # Make sure we don't overwrite with empty values (or should we allow this?)
-            if db_val != ingestion_val and ingestion_val != None:
+            if db_val != ingestion_val and ingestion_val is not None:
                 setattr(db_model, field, ingestion_val)
                 needs_update = True
                 log.info(f"Updating {db_key} {field} from {db_val} to {ingestion_val}.")
@@ -104,7 +104,9 @@ def upload_db_model(db_model: Model, ingestion_model: Any) -> Model:
         )
     elif len(uniqueness_validation.conflicting_models) == 1:
         updated_db_model = update_db_model(
-            uniqueness_validation.conflicting_models[0], ingestion_model, uniqueness_validation.conflicting_models[0].key
+            uniqueness_validation.conflicting_models[0],
+            ingestion_model,
+            uniqueness_validation.conflicting_models[0].key,
         )
 
         return updated_db_model
@@ -170,12 +172,7 @@ def create_session_from_ingestion_model(
     db_session.event_ref = event_ref
     db_session.session_datetime = session.session_datetime
     db_session.video_uri = session.video_uri
-
-    if session.session_index is not None:
-        db_session.session_index = session.session_index
-    else:
-        # Is this how we want to handle when session_index isn't provided?
-        db_session.session_index = 0
+    db_session.session_index = session.session_index
 
     # Optional fields
     if session.caption_uri:

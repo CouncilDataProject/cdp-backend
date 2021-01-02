@@ -144,16 +144,11 @@ class Session:
     """
     A session is a working period for an event.
     For example, an event could have a morning and afternoon session.
-
-    Notes
-    -----
-    If session_index is not provided, the session_index will be set to the index of the
-    item in the whole Session list on Event.
     """
 
     session_datetime: datetime
     video_uri: str
-    session_index: Optional[int] = None
+    session_index: int
     caption_uri: Optional[str] = None
     external_source_id: Optional[str] = None
 
@@ -234,6 +229,7 @@ EXAMPLE_MINIMAL_EVENT = EventIngestionModel(
         Session(
             session_datetime=datetime.utcnow(),
             video_uri="https://youtu.be/dQw4w9WgXcQ",
+            session_index=0,
         ),
     ],
 )
@@ -245,6 +241,7 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
         Session(
             session_datetime=datetime.utcnow(),
             video_uri="https://youtu.be/dQw4w9WgXcQ",
+            session_index=0,
         ),
     ],
     event_minutes_items=[

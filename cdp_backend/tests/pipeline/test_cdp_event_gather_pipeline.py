@@ -39,6 +39,7 @@ db_session = db_models.Session.Example()
 db_session.event_ref = db_event
 db_session.session_index = 1
 db_session.caption_uri = "caption_uri"
+db_session.external_source_id = "external_source_id"
 
 minimal_ingestion_body = ingestion_models.Body(
     name=db_body.name, is_active=db_body.is_active
@@ -58,7 +59,9 @@ updated_ingestion_body = ingestion_models.Body(
 )
 
 minimal_ingestion_session = ingestion_models.Session(
-    session_datetime=db_session.session_datetime, video_uri=db_session.video_uri
+    session_datetime=db_session.session_datetime,
+    video_uri=db_session.video_uri,
+    session_index=db_session.session_index,
 )
 full_ingestion_session = ingestion_models.Session(
     session_datetime=db_session.session_datetime,
@@ -104,7 +107,7 @@ def assert_db_models_equality(
                 )
 
     if not equality_check:
-        assert are_not_equal == True
+        assert are_not_equal
 
 
 def assert_ingestion_and_db_models_equal(
@@ -182,7 +185,7 @@ def test_update_db_model(
             UniquenessValidation(False, [db_body, db_body_extra]),
             None,
             marks=pytest.mark.raises(exception=exceptions.UniquenessError),
-        )
+        ),
     ],
 )
 def test_upload_db_model(
@@ -202,9 +205,15 @@ def test_upload_db_model(
             with mock.patch(
                 "cdp_backend.pipeline.cdp_event_gather_pipeline.update_db_model"
             ) as mock_updater:
-                mock_updater.return_value = mock_return_value.conflicting_models[0] if mock_return_value.conflicting_models else None
+                mock_updater.return_value = (
+                    mock_return_value.conflicting_models[0]
+                    if mock_return_value.conflicting_models
+                    else None
+                )
 
-                actual_uploaded_model = pipeline.upload_db_model.run(db_model, ingestion_model)  # type: ignore
+                actual_uploaded_model = pipeline.upload_db_model.run(  # type: ignore
+                    db_model, ingestion_model
+                )
 
                 assert_db_models_equality(expected, actual_uploaded_model, True)
 
