@@ -12,7 +12,7 @@ To install cdp-backend, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install cdp_backend
+    $ pip install cdp-backend
 
 This is the preferred method to install cdp-backend, as it will always install the most recent stable release.
 

@@ -45,7 +45,7 @@ tooling.
 
 ## Installation
 
-**Stable Release:** `pip install cdp_backend`<br>
+**Stable Release:** `pip install cdp-backend`<br>
 **Development Head:** `pip install git+https://github.com/CouncilDataProject/cdp-backend.git`<br>
 
 **Dev Installation:**
