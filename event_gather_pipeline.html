@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CDP Database Schema &mdash; cdp-backend 3.0.0.dev3 documentation</title>
+  <title>Event Gather Pipeline &mdash; cdp-backend 3.0.0.dev3 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contributing" href="contributing.html" />
-    <link rel="prev" title="Event Gather Pipeline" href="event_gather_pipeline.html" /> 
+    <link rel="next" title="CDP Database Schema" href="database_schema.html" />
+    <link rel="prev" title="Event Ingestion Model" href="event_data_ingestion_model.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -114,15 +114,15 @@
 <li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="event_gather_pipeline.html">Event Gather Pipeline</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Database Schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
@@ -177,13 +177,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>CDP Database Schema</li>
+      <li>Event Gather Pipeline</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/database_schema.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/event_gather_pipeline.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -193,10 +193,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="database_schema.html" class="btn btn-neutral float-right" title="CDP Database Schema" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="event_gather_pipeline.html" class="btn btn-neutral float-left" title="Event Gather Pipeline" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="event_data_ingestion_model.html" class="btn btn-neutral float-left" title="Event Ingestion Model" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -205,23 +205,63 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="cdp-database-schema">
-<h1>CDP Database Schema<a class="headerlink" href="#cdp-database-schema" title="Permalink to this headline">¶</a></h1>
-<p>While CDP utilizes a
-<a class="reference external" href="https://en.wikipedia.org/wiki/Document-oriented_database">NoSQL Document Store</a>
-called <a class="reference external" href="https://firebase.google.com/docs/firestore">Cloud Firestore</a>, it is still
-useful to view the database schema as a UML diagram.</p>
-<a class="reference external image-reference" href="./_static/cdp_database_diagram.png"><img alt="cdp-database-schema" src="_images/cdp_database_diagram.png" /></a>
-<div class="section" id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> denotes that the field is required</p></li>
-</ul>
+  <div class="section" id="event-gather-pipeline">
+<h1>Event Gather Pipeline<a class="headerlink" href="#event-gather-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>Council Data Project documentation generally shortens the steps that the
+event gather pipeline takes into three short and easy to remember key points.</p>
+<ol class="arabic simple">
+<li><p><strong>Gather Events</strong><span class="raw-html-m2r"><br></span>
+This function is created by each instance maintainer and
+generally scrapes or requests data from an API and
+returns a list of events to process and store.
+<a class="reference external" href="./cdp-backend/event_data_ingestion_model.html">Learn more about the event ingestion model</a></p></li>
+<li><p><strong>Transcribe</strong><span class="raw-html-m2r"><br></span>
+If the event was provided with a closed caption file we clean the file up
+into the CDP format, if not, CDP tools generate a transcription.</p></li>
+<li><p><strong>Index</strong><span class="raw-html-m2r"><br></span>
+An entirely different pipeline from the event gather pipeline but in
+the context of the short and sweet version, this makes sense to include.
+This is the pipeline that runs to generate and index using all the event
+transcripts.</p></li>
+</ol>
+<p>These key points make sense from the thousand-foot-view, but is not
+satifactory for the developers and others who are simply interested in
+how the event gather pipeline works step-by-step.</p>
+<p>This document gives visualizations of each and every step the event gather
+pipeline takes, starting immediately after the maintainer provided function
+returns the <code class="docutils literal notranslate"><span class="pre">List[EventIngestionModel]</span></code>.</p>
+<div class="section" id="minimal-event-processing">
+<h2>Minimal Event Processing<a class="headerlink" href="#minimal-event-processing" title="Permalink to this headline">¶</a></h2>
+<p>Similar to the <a class="reference external" href="./cdp-backend/event_data_ingestion_model.html">event ingestion model</a>
+documentation, if the event is provided back with only a URI to a
+video and nothing else, the processing is incredibly simple.</p>
+<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_minimal.png"><img alt="minimal cdp event gather flow viz" src="_images/cdp_event_gather_flow_minimal.png" /></a>
 </div>
-<div class="section" id="implementation">
-<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
-<p>For more details on each document model see
-<a class="reference external" href="./cdp_backend.database.html#module-cdp_backend.database.models">our API docs</a></p>
+<div class="section" id="filled-event-processing">
+<h2>Filled Event Processing<a class="headerlink" href="#filled-event-processing" title="Permalink to this headline">¶</a></h2>
+<p>The major difference from the minimal event processing workflow is that the
+pipeline will process, prepare, and upload all of the attachments.</p>
+<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_filled.png"><img alt="filled cdp event gather flow viz" src="_images/cdp_event_gather_flow_filled.png" /></a>
+</div>
+<div class="section" id="workflow-management-and-parallel-processing">
+<h2>Workflow Management and Parallel Processing<a class="headerlink" href="#workflow-management-and-parallel-processing" title="Permalink to this headline">¶</a></h2>
+<p>We utilize <a class="reference external" href="https://github.com/prefecthq/prefect">Prefect Core</a> to generate and
+run the workflow. In general, and by default in our cookiecutter-cdp-deployment,
+we do not run any part of the workflow in parallel. But, this is simply because we
+generally don’t need to. As all event gather pipelines are automated to run every day,
+or multiple times a day, it is rare for a pipeline to pick up more than one event
+to process.</p>
+<p>However, in the case where a maintainer is attempting to backfill large collections of
+events (i.e. processing historical events), we recommend attaching a
+<a class="reference external" href="https://docs.prefect.io/api/latest/executors.html#daskexecutor">Dask Executor</a>
+to the flow for parallel event processing.
+<a class="reference external" href="https://dask.org/">More details about Dask</a></p>
+<p>I.E.
+If the result of the <code class="docutils literal notranslate"><span class="pre">get_events</span></code> function was a list of four
+<code class="docutils literal notranslate"><span class="pre">EventIngestionModel</span></code> objects, the resulting flow would look like the following:</p>
+<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_many.png"><img alt="parallel four wide equal minimal event flows" src="_images/cdp_event_gather_flow_many.png" /></a>
+<p>And, if a <code class="docutils literal notranslate"><span class="pre">DaskExecutor</span></code> is also provided, all single event processing workflows
+would process in parallel (provided enough compute resources).</p>
 </div>
 </div>
 

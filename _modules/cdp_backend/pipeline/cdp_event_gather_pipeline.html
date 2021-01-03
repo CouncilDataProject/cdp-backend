@@ -112,6 +112,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
@@ -220,9 +226,6 @@
     <span class="n">get_events_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
-    <span class="c1"># Initialize fireo connection</span>
-    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
-
     <span class="c1"># Create flow</span>
     <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Gather Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
         <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_events_func</span><span class="p">()</span>
@@ -233,18 +236,24 @@
 
             <span class="c1"># Upload calls for minimal event</span>
             <span class="n">body_ref</span> <span class="o">=</span> <span class="n">upload_db_model</span><span class="p">(</span>
-                <span class="n">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="p">),</span> <span class="n">event</span><span class="o">.</span><span class="n">body</span>
+                <span class="n">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+                <span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                <span class="n">creds_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="c1"># TODO add upload calls for non-minimal event</span>
 
             <span class="n">event_ref</span> <span class="o">=</span> <span class="n">upload_db_model</span><span class="p">(</span>
-                <span class="n">create_event_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">),</span> <span class="n">event</span>
+                <span class="n">create_event_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">),</span>
+                <span class="n">event</span><span class="p">,</span>
+                <span class="n">creds_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
                 <span class="n">upload_db_model</span><span class="p">(</span>
-                    <span class="n">create_session_from_ingestion_model</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">),</span> <span class="n">session</span>
+                    <span class="n">create_session_from_ingestion_model</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">),</span>
+                    <span class="n">session</span><span class="p">,</span>
+                    <span class="n">creds_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">flow</span></div>
@@ -263,7 +272,6 @@
     <span class="p">]</span>
 
     <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">False</span>
-
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">non_primary_db_fields</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
             <span class="n">db_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
@@ -284,9 +292,11 @@
 
 
 <span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">upload_db_model</span><span class="p">(</span><span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
-    <span class="n">uniqueness_validation</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">upload_db_model</span><span class="p">(</span><span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">creds_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+    <span class="c1"># Initialize fireo connection</span>
+    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">creds_file</span><span class="p">)</span>
 
+    <span class="n">uniqueness_validation</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
         <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>

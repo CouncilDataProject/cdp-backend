@@ -10,6 +10,7 @@ Welcome to cdp-backend's documentation!
    installation
    Package Modules <modules>
    Event Data Ingestion Model <event_data_ingestion_model>
+   Event Gather Pipeline <event_gather_pipeline>
    Database Schema <database_schema>
    contributing
 

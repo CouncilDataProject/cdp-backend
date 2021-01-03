@@ -113,6 +113,12 @@
 <li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="database_schema.html#notes">Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
@@ -225,14 +231,16 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.agenda_uri">(cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.VoteDecision.APPROVE">APPROVE (cdp_backend.database.types.VoteDecision attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.bin.html#cdp_backend.bin.cdp_event_gather.Args">Args (class in cdp_backend.bin.cdp_event_gather)</a>
 
       <ul>
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_database_uml.Args">(class in cdp_backend.bin.create_cdp_database_uml)</a>
+</li>
+        <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.Args">(class in cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
 </li>
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_ingestion_model_doc.Args">(class in cdp_backend.bin.create_ingestion_model_doc)</a>
 </li>
@@ -284,6 +292,8 @@
       <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.cdp_event_gather">cdp_backend.bin.cdp_event_gather (module)</a>
 </li>
       <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.create_cdp_database_uml">cdp_backend.bin.create_cdp_database_uml (module)</a>
+</li>
+      <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.create_cdp_event_gather_flow_viz">cdp_backend.bin.create_cdp_event_gather_flow_viz (module)</a>
 </li>
       <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.create_ingestion_model_doc">cdp_backend.bin.create_ingestion_model_doc (module)</a>
 </li>
@@ -593,10 +603,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.EventMinutesItemDecision.FAILED">FAILED (cdp_backend.database.types.EventMinutesItemDecision attribute)</a>
 </li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet.fields">fields (cdp_backend.database.types.IndexedFieldSet attribute)</a>
+      <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_filled">fake_get_events_filled() (in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
+</li>
+      <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_many">fake_get_events_many() (in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_minimal">fake_get_events_minimal() (in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
+</li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet.fields">fields (cdp_backend.database.types.IndexedFieldSet attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.File">File (class in cdp_backend.database.models)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.file_ref">file_ref (cdp_backend.database.models.Transcript attribute)</a>
@@ -679,6 +695,8 @@
 
       <ul>
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_database_uml.main">(in module cdp_backend.bin.create_cdp_database_uml)</a>
+</li>
+        <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.main">(in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
 </li>
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_ingestion_model_doc.main">(in module cdp_backend.bin.create_ingestion_model_doc)</a>
 </li>
