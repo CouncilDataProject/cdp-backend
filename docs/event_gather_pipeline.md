@@ -1,0 +1,64 @@
+# Event Gather Pipeline
+
+Council Data Project documentation generally shortens the steps that the
+event gather pipeline takes into three short and easy to remember key points.
+
+1. **Gather Events**<br>
+   This function is created by each instance maintainer and
+   generally scrapes or requests data from an API and
+   returns a list of events to process and store.
+   [Learn more about the event ingestion model](./cdp-backend/event_data_ingestion_model.html)
+2. **Transcribe**<br>
+   If the event was provided with a closed caption file we clean the file up
+   into the CDP format, if not, CDP tools generate a transcription.
+3. **Index**<br>
+   An entirely different pipeline from the event gather pipeline but in
+   the context of the short and sweet version, this makes sense to include.
+   This is the pipeline that runs to generate and index using all the event
+   transcripts.
+
+These key points make sense from the thousand-foot-view, but is not
+satifactory for the developers and others who are simply interested in
+how the event gather pipeline works step-by-step.
+
+This document gives visualizations of each and every step the event gather
+pipeline takes, starting immediately after the maintainer provided function
+returns the `List[EventIngestionModel]`.
+
+### Minimal Event Processing
+
+Similar to the [event ingestion model](./cdp-backend/event_data_ingestion_model.html)
+documentation, if the event is provided back with only a URI to a
+video and nothing else, the processing is incredibly simple.
+
+![minimal cdp event gather flow viz](./_static/cdp_event_gather_flow_minimal.png)
+
+### Filled Event Processing
+
+The major difference from the minimal event processing workflow is that the
+pipeline will process, prepare, and upload all of the attachments.
+
+![filled cdp event gather flow viz](./_static/cdp_event_gather_flow_filled.png)
+
+### Workflow Management and Parallel Processing
+
+We utilize [Prefect Core](https://github.com/prefecthq/prefect) to generate and
+run the workflow. In general, and by default in our cookiecutter-cdp-deployment,
+we do not run any part of the workflow in parallel. But, this is simply because we
+generally don't need to. As all event gather pipelines are automated to run every day,
+or multiple times a day, it is rare for a pipeline to pick up more than one event
+to process.
+
+However, in the case where a maintainer is attempting to backfill large collections of
+events (i.e. processing historical events), we recommend attaching a
+[Dask Executor](https://docs.prefect.io/api/latest/executors.html#daskexecutor)
+to the flow for parallel event processing.
+[More details about Dask](https://dask.org/)
+
+I.E.
+If the result of the `get_events` function was a list of four
+`EventIngestionModel` objects, the resulting flow would look like the following:
+![parallel four wide equal minimal event flows](./_static/cdp_event_gather_flow_many.png)
+
+And, if a `DaskExecutor` is also provided, all single event processing workflows
+would process in parallel (provided enough compute resources).
