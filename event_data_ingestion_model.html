@@ -110,6 +110,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Event Data Ingestion Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#updating-existing-database-documents">Updating existing database documents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#minimal-event-data">Minimal Event Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
@@ -217,10 +218,20 @@ scaling to support as much specific data as can be given and processed.</p>
 <p>The more data provided, the more data displayed and queryable from CDP services.</p>
 <p>For more information on each field available, please see the
 <a class="reference external" href="./cdp_backend.pipeline.html#module-cdp_backend.pipeline.ingestion_models">object definition documentation</a>.</p>
+<div class="section" id="updating-existing-database-documents">
+<h2>Updating existing database documents<a class="headerlink" href="#updating-existing-database-documents" title="Permalink to this headline">¶</a></h2>
+<p>During the event gather pipeline, if an existing database document is found for an
+ingestion model, the content of the existing database document will be updated
+if there are differences between the ingestion and database data.</p>
+<p>All non-primary fields of the database document will be overwritten with the
+value of the corresponding fields in the ingestion model.</p>
+<p>If the ingestion model field is not provided or <code class="docutils literal notranslate"><span class="pre">None</span></code>, the database document’s
+field will not be overwritten.</p>
+</div>
 <div class="section" id="minimal-event-data">
 <h2>Minimal Event Data<a class="headerlink" href="#minimal-event-data" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full Council&#39;</span><span class="p">,</span> <span class="s1">&#39;is_active&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
- <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">482072</span><span class="p">),</span>
+ <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">779562</span><span class="p">),</span>
                <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://youtu.be/dQw4w9WgXcQ&#39;</span><span class="p">,</span>
                <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]}</span>
 </pre></div>
@@ -229,7 +240,7 @@ scaling to support as much specific data as can be given and processed.</p>
 <div class="section" id="expanded-event-data-with-event-minutes-items">
 <h2>Expanded Event Data with Event Minutes Items<a class="headerlink" href="#expanded-event-data-with-event-minutes-items" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full Council&#39;</span><span class="p">,</span> <span class="s1">&#39;is_active&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
- <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">482083</span><span class="p">),</span>
+ <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">779576</span><span class="p">),</span>
                <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://youtu.be/dQw4w9WgXcQ&#39;</span><span class="p">,</span>
                <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}],</span>
  <span class="s1">&#39;event_minutes_items&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;minutes_item&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Inf 1656&#39;</span><span class="p">}},</span>
