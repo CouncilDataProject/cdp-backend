@@ -29,9 +29,6 @@ def create_cdp_event_gather_flow(
     get_events_func: Callable,
     credentials_file: str,
 ) -> Flow:
-    # Initialize fireo connection
-    fireo.connection(from_file=credentials_file)
-
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
@@ -42,18 +39,24 @@ def create_cdp_event_gather_flow(
 
             # Upload calls for minimal event
             body_ref = upload_db_model(
-                create_body_from_ingestion_model(event.body), event.body
+                create_body_from_ingestion_model(event.body),
+                event.body,
+                creds_file=credentials_file,
             )
 
             # TODO add upload calls for non-minimal event
 
             event_ref = upload_db_model(
-                create_event_from_ingestion_model(event, body_ref), event
+                create_event_from_ingestion_model(event, body_ref),
+                event,
+                creds_file=credentials_file,
             )
 
             for session in event.sessions:
                 upload_db_model(
-                    create_session_from_ingestion_model(session, event_ref), session
+                    create_session_from_ingestion_model(session, event_ref),
+                    session,
+                    creds_file=credentials_file,
                 )
 
     return flow
@@ -72,7 +75,6 @@ def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model
     ]
 
     needs_update = False
-
     for field in non_primary_db_fields:
         if hasattr(ingestion_model, field):
             db_val = getattr(db_model, field)
@@ -93,9 +95,11 @@ def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model
 
 
 @task
-def upload_db_model(db_model: Model, ingestion_model: Any) -> Model:
-    uniqueness_validation = get_model_uniqueness(db_model)
+def upload_db_model(db_model: Model, ingestion_model: Any, creds_file: str) -> Model:
+    # Initialize fireo connection
+    fireo.connection(from_file=creds_file)
 
+    uniqueness_validation = get_model_uniqueness(db_model)
     if uniqueness_validation.is_unique:
         db_model.save()
         log.info(

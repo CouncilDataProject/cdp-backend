@@ -211,11 +211,14 @@ def test_upload_db_model(
                     else None
                 )
 
-                actual_uploaded_model = pipeline.upload_db_model.run(  # type: ignore
-                    db_model, ingestion_model
-                )
+                with mock.patch("fireo.connection") as mock_connector:
+                    mock_connector.return_value = None
 
-                assert_db_models_equality(expected, actual_uploaded_model, True)
+                    actual_uploaded_model = pipeline.upload_db_model.run(
+                        db_model, ingestion_model, creds_file=""  # type: ignore
+                    )
+
+                    assert_db_models_equality(expected, actual_uploaded_model, True)
 
 
 @pytest.mark.parametrize(

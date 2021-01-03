@@ -9,7 +9,7 @@ from importlib import import_module
 from pathlib import Path
 from typing import Callable
 
-from ..pipeline import cdp_event_gather_pipeline as pipeline
+from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
 
 ###############################################################################
 
@@ -34,7 +34,7 @@ class Args(argparse.Namespace):
         p.add_argument(
             "-g",
             "--google-credentials-file",
-            default=(Path(__file__).parent.parent.parent / "cdp-dev-infra-creds.json"),
+            default=(Path(__file__).parent.parent.parent / "cdp-creds.json"),
             type=Path,
             dest="google_credentials_file",
             help="Path to the Google Service Account Credentials JSON file.",
