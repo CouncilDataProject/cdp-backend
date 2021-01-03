@@ -44,15 +44,15 @@ dev_requirements = [
 ]
 
 requirements = [
-    "dask[bag]~=2.30.0",
+    "dask[bag]~=2020.12.0",
     "fireo~=1.3.7",
     "fsspec~=0.8.3",
     "gcsfs~=0.7.1",
     "graphviz~=0.14",
     "pandas~=1.1.3",
+    "prefect~=0.14.0",
     "pulumi~=2.16.2",
     "pulumi-gcp~=4.6.0",
-    "prefect~=0.14.0"
 ]
 
 extra_requirements = {
@@ -87,6 +87,10 @@ setup(
             (
                 "create_cdp_ingestion_model_doc="
                 "cdp_backend.bin.create_ingestion_model_doc:main"
+            ),
+            (
+                "create_cdp_event_gather_flow_viz="
+                "cdp_backend.bin.create_cdp_event_gather_flow_viz:main"
             ),
             "cdp_event_gather=cdp_backend.bin.cdp_event_gather:main",
         ],
