@@ -81,7 +81,7 @@ def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model
             ingestion_val = getattr(ingestion_model, field)
 
             # If values are different, use the ingestion value
-            # Make sure we don't overwrite with empty values (or should we allow this?)
+            # Make sure we don't overwrite with empty values
             if db_val != ingestion_val and ingestion_val is not None:
                 setattr(db_model, field, ingestion_val)
                 needs_update = True
