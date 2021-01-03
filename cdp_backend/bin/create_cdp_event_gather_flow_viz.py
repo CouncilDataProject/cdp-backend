@@ -5,11 +5,15 @@ import argparse
 import logging
 import sys
 import traceback
-from importlib import import_module
 from pathlib import Path
-from typing import Callable
+from typing import List
 
 from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
+from cdp_backend.pipeline.ingestion_models import (
+    EXAMPLE_FILLED_EVENT,
+    EXAMPLE_MINIMAL_EVENT,
+    EventIngestionModel,
+)
 
 ###############################################################################
 
@@ -32,44 +36,53 @@ class Args(argparse.Namespace):
             description="Gather, process, and store event data to CDP infrastructure.",
         )
         p.add_argument(
-            "-g",
-            "--google-credentials-file",
-            default=(Path(__file__).parent.parent.parent / "cdp-creds.json"),
+            "-o",
+            "--output-file-spec",
             type=Path,
-            dest="google_credentials_file",
-            help="Path to the Google Service Account Credentials JSON file.",
-        )
-        p.add_argument(
-            "-e",
-            "--get_events_function_path",
-            type=Path,
-            dest="get_events_function_path",
+            default=Path("cdp_event_gather_flow_{ftype}.png"),
+            dest="output_file",
             help=(
-                "Path to the function (including function name) that "
-                "supplies event data to the CDP event gather pipeline."
+                "Path spec to where to store the created PNG files. "
+                "Use `{ftype}` as the formatted spec parameter."
             ),
         )
         p.parse_args(namespace=self)
 
 
-def import_get_events_func(func_path: Path) -> Callable:
-    path, func_name = str(func_path).rsplit(".", 1)
-    mod = import_module(path)
+def fake_get_events_minimal() -> List[EventIngestionModel]:
+    return [EXAMPLE_MINIMAL_EVENT]
 
-    return getattr(mod, func_name)
+
+def fake_get_events_filled() -> List[EventIngestionModel]:
+    return [EXAMPLE_FILLED_EVENT]
+
+
+def fake_get_events_many() -> List[EventIngestionModel]:
+    return [EXAMPLE_MINIMAL_EVENT] * 4
 
 
 def main() -> None:
     try:
         args = Args()
+        minimal_flow = pipeline.create_cdp_event_gather_flow(
+            fake_get_events_minimal, ""
+        )
+        minimal_flow.visualize(
+            filename=str(args.output_file.with_suffix("")).format(ftype="minimal"),
+            format="png",
+        )
 
-        credentials_file = args.google_credentials_file
+        filled_flow = pipeline.create_cdp_event_gather_flow(fake_get_events_filled, "")
+        filled_flow.visualize(
+            filename=str(args.output_file.with_suffix("")).format(ftype="filled"),
+            format="png",
+        )
 
-        get_events_func = import_get_events_func(args.get_events_function_path)
-
-        flow = pipeline.create_cdp_event_gather_flow(get_events_func, credentials_file)
-
-        flow.run()
+        many_flow = pipeline.create_cdp_event_gather_flow(fake_get_events_many, "")
+        many_flow.visualize(
+            filename=str(args.output_file.with_suffix("")).format(ftype="many"),
+            format="png",
+        )
 
     except Exception as e:
         log.error("=============================================")

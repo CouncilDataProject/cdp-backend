@@ -56,6 +56,7 @@ gen-docs: ## generate Sphinx HTML documentation, including API docs
 	create_cdp_database_uml -o docs/_static/cdp_database_diagram.dot
 	dot -T png -o docs/_static/cdp_database_diagram.png docs/_static/cdp_database_diagram.dot
 	create_cdp_ingestion_model_doc -t docs/event_data_ingestion_model.template -o docs/event_data_ingestion_model.md
+	create_cdp_event_gather_flow_viz -o docs/_static/cdp_event_gather_flow_{ftype}.png
 	sphinx-apidoc -o docs/ cdp_backend **/tests/
 	$(MAKE) -C docs html
 
