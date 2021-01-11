@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cdp_backend.pipeline.transcript_model &mdash; cdp-backend 3.0.0.dev4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_data_ingestion_model.html">Event Ingestion Data Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#updating-existing-database-documents">Updating existing database documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Data Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.pipeline.transcript_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.pipeline.transcript_model</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">dataclass_json</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="TextBlockData"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TextBlockData">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TextBlockData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Text block data for a transcript.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text: str</span>
+<span class="sd">        The full text portion of this data block.</span>
+<span class="sd">    start_time: float</span>
+<span class="sd">        Time in seconds for when this block of data begins.</span>
+<span class="sd">    end_time: float</span>
+<span class="sd">        Time in seconds for when this block of data ends.</span>
+<span class="sd">    speaker: Optional[str]</span>
+<span class="sd">        The speaker identifier for this text block.</span>
+<span class="sd">        Default: None (No speaker identifier available)</span>
+<span class="sd">    annotations: Optional[Dict[str, Any]]</span>
+<span class="sd">        Any annotations specific to this text block.</span>
+<span class="sd">        Default: None (no annotations)</span>
+<span class="sd">        See TextBlockAnnotations for list of known annotations and their dtypes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">speaker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Transcript"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Transcript</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transcript model for all transcripts in CDP databases / filestores.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    confidence: float</span>
+<span class="sd">        A number between 0 and 1.</span>
+<span class="sd">        If available, use the average of all confidence annotations reported for each</span>
+<span class="sd">        text block in the transcript.</span>
+<span class="sd">        Otherwise, make an estimation for (or manually calculate):</span>
+<span class="sd">        `n-correct-tokens / n-total-tokens` for the whole transcript.</span>
+<span class="sd">    generator: str</span>
+<span class="sd">        A descriptive name of the generative process that produced this transcript.</span>
+<span class="sd">        Example: &quot;Google Speech-to-Text -- Lib Version: 2.0.1&quot;</span>
+<span class="sd">    session_datetime: str</span>
+<span class="sd">        ISO formatted datetime for the session that this document transcribes.</span>
+<span class="sd">    created_datetime: str</span>
+<span class="sd">        ISO formatted datetime for when this transcript was created.</span>
+<span class="sd">    data: List[TextBlockData]</span>
+<span class="sd">        A list of text blocks.</span>
+<span class="sd">        See TextBlockData documentation for more information.</span>
+<span class="sd">    annotations: Optional[Dict[str, Any]]</span>
+<span class="sd">        Any annotations that can be applied to the whole transcript.</span>
+<span class="sd">        Default: None (no annotations)</span>
+<span class="sd">        See TranscriptAnnotations for list of known annotations and their dtypes.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Dumping transcript to JSON file.</span>
+
+<span class="sd">    &gt;&gt;&gt; # transcript = Transcript(...)</span>
+<span class="sd">    ... with open(&quot;transcript.json&quot;, &quot;w&quot;) as open_resource:</span>
+<span class="sd">    ...     open_resource.write(transcript.to_json())</span>
+
+<span class="sd">    Reading transcript from JSON file.</span>
+
+<span class="sd">    &gt;&gt;&gt; with open(&quot;transcript.json&quot;, &quot;r&quot;) as open_resource:</span>
+<span class="sd">    ...     transcript = Transcript.from_json(open_resource.read())</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">generator</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">session_datetime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created_datetime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TextBlockData</span><span class="p">]</span>
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Annotation Definitions</span>
+<span class="c1">#</span>
+<span class="c1"># Developers please document any annotation you wish to add.</span>
+<span class="c1"># Docstrings for constants go _after_ the constant.</span>
+
+
+<div class="viewcode-block" id="TranscriptAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TranscriptAnnotations">[docs]</a><span class="k">class</span> <span class="nc">TranscriptAnnotations</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotations that can appear (but are not guaranteed) for the whole transcript.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="TextBlockAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TextBlockAnnotations">[docs]</a><span class="k">class</span> <span class="nc">TextBlockAnnotations</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotations that can appear (but are not guaranteed) on any transcript text block.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Usage pattern for annotation attachment.</span>
+
+<span class="sd">    &gt;&gt;&gt; text_block_annotations = {}</span>
+<span class="sd">    ... text_block_annotations[TextBlockAnnotations.confidence.name] = 0.9421</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">confidence</span> <span class="o">=</span> <span class="nb">float</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A number between 0 and 1.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Most speech-to-text models report confidence values. For more information:</span>
+<span class="sd">    https://cloud.google.com/speech-to-text/docs/basics#confidence-values</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="c1">###############################################################################</span>
+
+
+<span class="n">EXAMPLE_TRANSCRIPT</span> <span class="o">=</span> <span class="n">Transcript</span><span class="p">(</span>
+    <span class="n">confidence</span><span class="o">=</span><span class="mf">0.93325</span><span class="p">,</span>
+    <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;JacksonGen -- Lib Version: 0.0.0&quot;</span><span class="p">,</span>
+    <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+    <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">TextBlockData</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello everyone.&quot;</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.987</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">),</span>
+        <span class="n">TextBlockData</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hey!&quot;</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span>
+            <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;Isaac Na&quot;</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.912</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">),</span>
+        <span class="n">TextBlockData</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello!&quot;</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span>
+            <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;To Huynh&quot;</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.999</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">),</span>
+        <span class="n">TextBlockData</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Who is speaking this?&quot;</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="mf">3.9</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.835</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jackson Maxfield Brown.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

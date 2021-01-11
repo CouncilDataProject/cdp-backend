@@ -28,6 +28,14 @@ cdp\_backend.bin.create\_cdp\_event\_gather\_flow\_viz module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.create\_cdp\_transcript\_model\_doc module
+-----------------------------------------------------------
+
+.. automodule:: cdp_backend.bin.create_cdp_transcript_model_doc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.create\_ingestion\_model\_doc module
 -----------------------------------------------------
 
@@ -35,7 +43,6 @@ cdp\_backend.bin.create\_ingestion\_model\_doc module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

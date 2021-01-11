@@ -36,7 +36,6 @@ cdp\_backend.database.validators module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

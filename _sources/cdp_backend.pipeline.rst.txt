@@ -20,6 +20,13 @@ cdp\_backend.pipeline.ingestion\_models module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.pipeline.transcript\_model module
+----------------------------------------------
+
+.. automodule:: cdp_backend.pipeline.transcript_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------

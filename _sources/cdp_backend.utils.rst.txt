@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    cdp_backend.utils.resources
 
@@ -26,7 +27,6 @@ cdp\_backend.utils.file\_utils module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

@@ -1,0 +1,58 @@
+# Transcript Data Model
+
+While most users will end up browsing and searching transcripts using the CDP frontend
+tooling, we also need a standardized method for storing the transcript data for both
+pipeline processing and enabling a stable API for research and archival purposes.
+
+Below you will find an example transcript.<br>
+For more specific details please see the
+[object definition documentation](./cdp_backend.pipeline.html#module-cdp_backend.pipeline.transcript_model).
+
+## Example Transcript
+```json
+{
+    "confidence": 0.93325,
+    "generator": "JacksonGen -- Lib Version: 0.0.0",
+    "session_datetime": "2021-01-10T15:00:00",
+    "created_datetime": "2021-01-11T19:57:15.127979",
+    "data": [
+        {
+            "text": "Hello everyone.",
+            "start_time": 0.0,
+            "end_time": 1.0,
+            "speaker": "Jackson Maxfield Brown",
+            "annotations": {
+                "confidence": 0.987
+            }
+        },
+        {
+            "text": "Hey!",
+            "start_time": 1.2,
+            "end_time": 1.4,
+            "speaker": "Isaac Na",
+            "annotations": {
+                "confidence": 0.912
+            }
+        },
+        {
+            "text": "Hello!",
+            "start_time": 1.6,
+            "end_time": 1.9,
+            "speaker": "To Huynh",
+            "annotations": {
+                "confidence": 0.999
+            }
+        },
+        {
+            "text": "Who is speaking this?",
+            "start_time": 2.2,
+            "end_time": 3.9,
+            "speaker": null,
+            "annotations": {
+                "confidence": 0.835
+            }
+        }
+    ],
+    "annotations": null
+}
+```

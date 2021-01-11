@@ -12,7 +12,6 @@ cdp\_backend.infrastructure.cdp\_stack module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

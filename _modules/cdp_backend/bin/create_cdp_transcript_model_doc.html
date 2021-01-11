@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cdp_backend.bin.cdp_event_gather &mdash; cdp-backend 3.0.0.dev4 documentation</title>
+  <title>cdp_backend.bin.create_cdp_transcript_model_doc &mdash; cdp-backend 3.0.0.dev4 documentation</title>
   
 
   
@@ -188,7 +188,7 @@
         
           <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
         
-      <li>cdp_backend.bin.cdp_event_gather</li>
+      <li>cdp_backend.bin.create_cdp_transcript_model_doc</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -203,19 +203,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for cdp_backend.bin.cdp_event_gather</h1><div class="highlight"><pre>
+  <h1>Source code for cdp_backend.bin.create_cdp_transcript_model_doc</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 
-<span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">cdp_event_gather_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+
+<span class="kn">from</span> <span class="nn">cdp_backend.pipeline.transcript_model</span> <span class="kn">import</span> <span class="n">EXAMPLE_TRANSCRIPT</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -228,55 +229,67 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.cdp_event_gather.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
+<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_transcript_model_doc.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parse</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;cdp_event_gather&quot;</span><span class="p">,</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gather, process, and store event data to CDP infrastructure.&quot;</span><span class="p">,</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;create_cdp_transcript_model_doc&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Create the transcript model documentation file for CDP.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-g&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--google-credentials-file&quot;</span><span class="p">,</span>
-            <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;cdp-creds.json&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--template-file&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the Google Service Account Credentials JSON file.&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-e&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--get_events_function_path&quot;</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;get_events_function_path&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">&quot;Path to the function (including function name) that &quot;</span>
-                <span class="s2">&quot;supplies event data to the CDP event gather pipeline.&quot;</span>
+            <span class="n">default</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+                <span class="o">/</span> <span class="s2">&quot;docs&quot;</span>
+                <span class="o">/</span> <span class="s2">&quot;transcript_model.template&quot;</span>
             <span class="p">),</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;template_file&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the template markdown file.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;transcript_model.md&quot;</span><span class="p">),</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;output_file&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to where to store the created documentation file.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="import_get_events_func"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.cdp_event_gather.import_get_events_func">[docs]</a><span class="k">def</span> <span class="nf">import_get_events_func</span><span class="p">(</span><span class="n">func_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-    <span class="n">path</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">func_path</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">mod</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span></div>
+<span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.cdp_event_gather.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_construct_transcript_model_doc</span><span class="p">(</span><span class="n">template_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="n">example_transcript_jsons</span> <span class="o">=</span> <span class="n">EXAMPLE_TRANSCRIPT</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+    <span class="n">example_transcript_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">example_transcript_jsons</span><span class="p">)</span>
+    <span class="n">example_transcript_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">example_transcript_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="c1"># Read in the template</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+    <span class="c1"># Fill the template with values</span>
+    <span class="n">filled</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">example_transcript</span><span class="o">=</span><span class="n">example_transcript_str</span><span class="p">)</span>
+
+    <span class="c1"># Store filled template</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="n">open_resource</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filled</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output_file</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_transcript_model_doc.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
-
-        <span class="n">credentials_file</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">google_credentials_file</span>
-
-        <span class="n">get_events_func</span> <span class="o">=</span> <span class="n">import_get_events_func</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">get_events_function_path</span><span class="p">)</span>
-
-        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_cdp_event_gather_flow</span><span class="p">(</span><span class="n">get_events_func</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">)</span>
-
-        <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
+        <span class="n">_construct_transcript_model_doc</span><span class="p">(</span>
+            <span class="n">template_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">template_file</span><span class="p">,</span>
+            <span class="n">output_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
