@@ -59,7 +59,7 @@ class Args(argparse.Namespace):
 
 
 def _construct_transcript_model_doc(template_file: Path, output_file: Path) -> Path:
-    example_transcript_jsons = EXAMPLE_TRANSCRIPT.to_json()
+    example_transcript_jsons = EXAMPLE_TRANSCRIPT.to_json()  # type: ignore
     example_transcript_dict = json.loads(example_transcript_jsons)
     example_transcript_str = json.dumps(example_transcript_dict, indent=4)
 
