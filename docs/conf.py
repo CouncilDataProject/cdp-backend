@@ -21,7 +21,7 @@
 import os
 import sys
 
-import sphinx_rtd_theme
+import sphinx_rtd_theme  # noqa: F401
 
 import cdp_backend
 
@@ -41,7 +41,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
-    "m2r",
+    "m2r2",
 ]
 
 # Control napoleon
@@ -183,6 +183,7 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
 
 # -- Extra docstring configurations ------------------------------------
 def no_namedtuple_attrib_docstring(app, what, name, obj, options, lines):

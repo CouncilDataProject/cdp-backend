@@ -57,6 +57,9 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 cdp_backend --count --verbose --show-source --statistics
+    - name: Check imports with isort
+      run: |
+        isort cdp_backend --check-only
     - name: Check typing with mypy
       run: |
         mypy cdp_backend
