@@ -116,3 +116,4 @@ ENV/
 cdp_database_diagram.*
 cdp_event_gather_flow_*
 event_data_ingestion_model.md
+transcript_model.md
