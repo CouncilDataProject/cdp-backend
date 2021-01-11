@@ -33,11 +33,11 @@ dev_requirements = [
     "coverage>=5.1",
     "ipython>=7.15.0",
     "jinja2>=2.11.2",
-    "m2r>=0.2.1",
+    "m2r2>=0.2.7",
     "prefect[viz]~=0.14.0",
     "pytest-runner>=5.2",
-    "Sphinx>=2.0.0b1,<3",
-    "sphinx_rtd_theme>=0.4.3",
+    "Sphinx>=3.4.3",
+    "sphinx_rtd_theme>=0.5.1",
     "tox>=3.15.2",
     "twine>=3.1.1",
     "wheel>=0.34.2",
@@ -45,6 +45,7 @@ dev_requirements = [
 
 requirements = [
     "dask[bag]~=2020.12.0",
+    "dataclasses-json~=0.5.2",
     "fireo~=1.3.7",
     "fsspec~=0.8.3",
     "gcsfs~=0.7.1",
@@ -87,6 +88,10 @@ setup(
             (
                 "create_cdp_ingestion_model_doc="
                 "cdp_backend.bin.create_ingestion_model_doc:main"
+            ),
+            (
+                "create_cdp_transcript_model_doc="
+                "cdp_backend.bin.create_cdp_transcript_model_doc:main"
             ),
             (
                 "create_cdp_event_gather_flow_viz="
