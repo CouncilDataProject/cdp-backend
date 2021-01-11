@@ -1,0 +1,14 @@
+# Transcript Data Model
+
+While most users will end up browsing and searching transcripts using the CDP frontend
+tooling, we also need a standardized method for storing the transcript data for both
+pipeline processing and enabling a stable API for research and archival purposes.
+
+Below you will find an example transcript.<br>
+For more specific details please see the
+[object definition documentation](./cdp_backend.pipeline.html#module-cdp_backend.pipeline.transcript_model).
+
+## Example Transcript
+```json
+{{ example_transcript }}
+```
