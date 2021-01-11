@@ -134,7 +134,7 @@ class TextBlockAnnotations(Enum):
 
 EXAMPLE_TRANSCRIPT = Transcript(
     confidence=0.93325,
-    generator="Google Speech-to-Text -- Lib Version: 2.0.1",
+    generator="JacksonGen -- Lib Version: 0.0.0",
     session_datetime=(datetime.utcnow() - timedelta(hours=3)).isoformat(),
     created_datetime=datetime.utcnow().isoformat(),
     data=[
