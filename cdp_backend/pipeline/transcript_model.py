@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -135,7 +135,7 @@ class TextBlockAnnotations(Enum):
 EXAMPLE_TRANSCRIPT = Transcript(
     confidence=0.93325,
     generator="JacksonGen -- Lib Version: 0.0.0",
-    session_datetime=(datetime.utcnow() - timedelta(hours=3)).isoformat(),
+    session_datetime=datetime(2021, 1, 10, 15).isoformat(),
     created_datetime=datetime.utcnow().isoformat(),
     data=[
         TextBlockData(
