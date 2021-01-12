@@ -9,10 +9,10 @@ Welcome to cdp-backend's documentation!
    Overview <self>
    installation
    Package Modules <modules>
-   Event Ingestion Data Model <event_data_ingestion_model>
+   Ingestion Models <ingestion_models>
    Event Gather Pipeline <event_gather_pipeline>
    Database Schema <database_schema>
-   Transcript Data Model <transcript_model>
+   Transcript Model <transcript_model>
    contributing
 
 .. mdinclude:: ../README.md

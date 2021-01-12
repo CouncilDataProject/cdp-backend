@@ -115,5 +115,5 @@ ENV/
 # Project specific
 cdp_database_diagram.*
 cdp_event_gather_flow_*
-event_data_ingestion_model.md
+ingestion_models.md
 transcript_model.md
