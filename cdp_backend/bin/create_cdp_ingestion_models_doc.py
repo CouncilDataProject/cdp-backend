@@ -34,8 +34,8 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="create_cdp_ingestion_model_doc",
-            description="Create the ingestion model documentation file for CDP.",
+            prog="create_cdp_ingestion_models_doc",
+            description="Create the ingestion models documentation file for CDP.",
         )
         p.add_argument(
             "-t",
@@ -44,7 +44,7 @@ class Args(argparse.Namespace):
             default=(
                 Path(__file__).parent.parent.parent
                 / "docs"
-                / "event_data_ingestion_model.template"
+                / "ingestion_models.template"
             ),
             dest="template_file",
             help="Path to the template markdown file.",
@@ -53,7 +53,7 @@ class Args(argparse.Namespace):
             "-o",
             "--output-file",
             type=Path,
-            default=Path("event_data_ingestion_model.md"),
+            default=Path("ingestion_models.md"),
             dest="output_file",
             help="Path to where to store the created documentation file.",
         )

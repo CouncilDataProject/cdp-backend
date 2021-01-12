@@ -8,7 +8,7 @@ import pytest
 from fireo.models import Model
 
 from cdp_backend.database import models, validators
-from cdp_backend.database.types import (
+from cdp_backend.database.constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
     VoteDecision,

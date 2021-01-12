@@ -86,8 +86,8 @@ setup(
         "console_scripts": [
             "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
             (
-                "create_cdp_ingestion_model_doc="
-                "cdp_backend.bin.create_ingestion_model_doc:main"
+                "create_cdp_ingestion_models_doc="
+                "cdp_backend.bin.create_cdp_ingestion_models_doc:main"
             ),
             (
                 "create_cdp_transcript_model_doc="
@@ -97,7 +97,7 @@ setup(
                 "create_cdp_event_gather_flow_viz="
                 "cdp_backend.bin.create_cdp_event_gather_flow_viz:main"
             ),
-            "cdp_event_gather=cdp_backend.bin.cdp_event_gather:main",
+            "run_cdp_event_gather=cdp_backend.bin.run_cdp_event_gather:main",
         ],
     },
     install_requires=requirements,

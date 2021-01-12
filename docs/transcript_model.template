@@ -1,4 +1,4 @@
-# Transcript Data Model
+# Transcript Model
 
 While most users will end up browsing and searching transcripts using the CDP frontend
 tooling, we also need a standardized method for storing the transcript data for both

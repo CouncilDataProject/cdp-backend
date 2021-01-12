@@ -9,7 +9,7 @@ from importlib import import_module
 from pathlib import Path
 from typing import Callable
 
-from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
+from cdp_backend.pipeline import event_gather_pipeline as pipeline
 
 ###############################################################################
 
@@ -28,7 +28,7 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="cdp_event_gather",
+            prog="run_cdp_event_gather",
             description="Gather, process, and store event data to CDP infrastructure.",
         )
         p.add_argument(
@@ -67,7 +67,7 @@ def main() -> None:
 
         get_events_func = import_get_events_func(args.get_events_function_path)
 
-        flow = pipeline.create_cdp_event_gather_flow(get_events_func, credentials_file)
+        flow = pipeline.create_event_gather_flow(get_events_func, credentials_file)
 
         flow.run()
 

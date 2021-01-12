@@ -3,15 +3,12 @@
 
 import logging
 from datetime import datetime
-from typing import Any, Callable, List
+from typing import Callable, List
 
-import fireo
-from fireo.models import Model
 from prefect import Flow, task
 
-from ..database import exceptions
+from ..database import functions as db_functions
 from ..database import models as db_models
-from ..database.validators import get_model_uniqueness
 from .ingestion_models import Body, EventIngestionModel, Session
 
 ###############################################################################
@@ -25,10 +22,26 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-def create_cdp_event_gather_flow(
+def create_event_gather_flow(
     get_events_func: Callable,
     credentials_file: str,
 ) -> Flow:
+    """
+    Provided a function to gather new event information, create the Prefect Flow object
+    to preview, run, or visualize.
+
+    Parameters
+    ----------
+    get_events_func: Callable
+        The event gather function written by the CDP instance maintainer(s).
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+
+    Returns
+    -------
+    flow: Flow
+        The constructed CDP Event Gather Pipeline as a Prefect Flow.
+    """
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
@@ -38,7 +51,7 @@ def create_cdp_event_gather_flow(
             # TODO create/get audio (happens as part of transcript process)
 
             # Upload calls for minimal event
-            body_ref = upload_db_model(
+            body_ref = db_functions.upload_db_model_task(
                 create_body_from_ingestion_model(event.body),
                 event.body,
                 creds_file=credentials_file,
@@ -46,79 +59,20 @@ def create_cdp_event_gather_flow(
 
             # TODO add upload calls for non-minimal event
 
-            event_ref = upload_db_model(
+            event_ref = db_functions.upload_db_model_task(
                 create_event_from_ingestion_model(event, body_ref),
                 event,
                 creds_file=credentials_file,
             )
 
             for session in event.sessions:
-                upload_db_model(
+                db_functions.upload_db_model_task(
                     create_session_from_ingestion_model(session, event_ref),
                     session,
                     creds_file=credentials_file,
                 )
 
     return flow
-
-
-def update_db_model(db_model: Model, ingestion_model: Any, db_key: str) -> Model:
-    # Filter out base class attrs, unrelated class methods, primary keys
-    non_primary_db_fields = [
-        attr
-        for attr in dir(db_model)
-        if (
-            not attr.startswith("_")
-            and attr not in dir(Model)
-            and attr not in db_model._PRIMARY_KEYS
-        )
-    ]
-
-    needs_update = False
-    for field in non_primary_db_fields:
-        if hasattr(ingestion_model, field):
-            db_val = getattr(db_model, field)
-            ingestion_val = getattr(ingestion_model, field)
-
-            # If values are different, use the ingestion value
-            # Make sure we don't overwrite with empty values
-            if db_val != ingestion_val and ingestion_val is not None:
-                setattr(db_model, field, ingestion_val)
-                needs_update = True
-                log.info(f"Updating {db_key} {field} from {db_val} to {ingestion_val}.")
-
-    # Avoid unnecessary db interactions
-    if needs_update:
-        db_model.update(db_key)
-
-    return db_model
-
-
-@task
-def upload_db_model(db_model: Model, ingestion_model: Any, creds_file: str) -> Model:
-    # Initialize fireo connection
-    fireo.connection(from_file=creds_file)
-
-    uniqueness_validation = get_model_uniqueness(db_model)
-    if uniqueness_validation.is_unique:
-        db_model.save()
-        log.info(
-            f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
-        )
-    elif len(uniqueness_validation.conflicting_models) == 1:
-        updated_db_model = update_db_model(
-            uniqueness_validation.conflicting_models[0],
-            ingestion_model,
-            uniqueness_validation.conflicting_models[0].key,
-        )
-
-        return updated_db_model
-    else:
-        raise exceptions.UniquenessError(
-            model=db_model, conflicting_results=uniqueness_validation.conflicting_models
-        )
-
-    return db_model
 
 
 @task

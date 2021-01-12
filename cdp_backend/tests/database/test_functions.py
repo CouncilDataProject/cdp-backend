@@ -3,24 +3,19 @@
 
 import copy
 from datetime import datetime
-from typing import Any, List
 from unittest import mock
 
 import pytest
 from fireo.models import Model
-from prefect import Flow
 
 from cdp_backend.database import exceptions
+from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
 from cdp_backend.database.validators import UniquenessValidation
-from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
 from cdp_backend.pipeline import ingestion_models
-from cdp_backend.pipeline.ingestion_models import (
-    EXAMPLE_MINIMAL_EVENT,
-    Body,
-    EventIngestionModel,
-    Session,
-)
+
+###############################################################################
+# Testing constants
 
 db_body = db_models.Body.Example()
 db_body.description = "description"
@@ -75,11 +70,8 @@ minimal_ingestion_event = ingestion_models.EventIngestionModel(
     body=minimal_ingestion_body, sessions=[minimal_ingestion_session]
 )
 
-
-def mock_get_events_func() -> List[EventIngestionModel]:
-    event = EXAMPLE_MINIMAL_EVENT
-    event.sessions[0].session_datetime = datetime(2019, 4, 13)
-    return [event]
+###############################################################################
+# Assertion functions
 
 
 def assert_db_models_equality(
@@ -111,7 +103,7 @@ def assert_db_models_equality(
 
 
 def assert_ingestion_and_db_models_equal(
-    ingestion_model: Any,
+    ingestion_model: ingestion_models.IngestionModel,
     expected_db_model: Model,
     actual_db_model: Model,
 ) -> None:
@@ -127,22 +119,16 @@ def assert_ingestion_and_db_models_equal(
             assert getattr(expected_db_model, field) == getattr(actual_db_model, field)
 
 
-def test_create_cdp_event_gather_flow() -> None:
-    with mock.patch("fireo.connection") as mock_connector:
-        mock_connector.return_value = None
-        flow = pipeline.create_cdp_event_gather_flow(
-            mock_get_events_func, "/fake/credentials/path"
-        )
-        assert isinstance(flow, Flow)
+###############################################################################
+# Tests
 
 
 @pytest.mark.parametrize(
-    "db_model, ingestion_model, db_key, mock_return_value, expected",
+    "db_model, ingestion_model, mock_return_value, expected",
     [
         (
             copy.deepcopy(db_body),
             updated_ingestion_body,
-            db_body.key,
             None,
             db_body_updated,
         ),
@@ -150,8 +136,7 @@ def test_create_cdp_event_gather_flow() -> None:
 )
 def test_update_db_model(
     db_model: Model,
-    ingestion_model: Any,
-    db_key: str,
+    ingestion_model: ingestion_models.IngestionModel,
     mock_return_value: Model,
     expected: Model,
 ) -> None:
@@ -161,9 +146,7 @@ def test_update_db_model(
         # Check that models is different pre-update
         assert_db_models_equality(expected, db_model, False)
 
-        actual_updated_model = pipeline.update_db_model(
-            db_model, ingestion_model, db_key
-        )
+        actual_updated_model = db_functions.update_db_model(db_model, ingestion_model)
 
         # Check that model is correctly updated
         assert_db_models_equality(expected, actual_updated_model, True)
@@ -173,12 +156,14 @@ def test_update_db_model(
     "db_model, ingestion_model, mock_return_value, expected",
     [
         (db_body, full_ingestion_body, UniquenessValidation(True, []), db_body),
+        # Need to update the model
         (
             db_body,
             full_ingestion_body,
             UniquenessValidation(False, [db_body_extra]),
             db_body_extra,
         ),
+        # Raise error
         pytest.param(
             db_body,
             full_ingestion_body,
@@ -190,12 +175,12 @@ def test_update_db_model(
 )
 def test_upload_db_model(
     db_model: Model,
-    ingestion_model: Any,
+    ingestion_model: ingestion_models.IngestionModel,
     mock_return_value: UniquenessValidation,
     expected: Model,
 ) -> None:
     with mock.patch(
-        "cdp_backend.pipeline.cdp_event_gather_pipeline.get_model_uniqueness"
+        "cdp_backend.database.functions.get_model_uniqueness"
     ) as mock_uniqueness_validator:
         mock_uniqueness_validator.return_value = mock_return_value
 
@@ -203,7 +188,7 @@ def test_upload_db_model(
             mock_saver.return_value = None
 
             with mock.patch(
-                "cdp_backend.pipeline.cdp_event_gather_pipeline.update_db_model"
+                "cdp_backend.database.functions.update_db_model"
             ) as mock_updater:
                 mock_updater.return_value = (
                     mock_return_value.conflicting_models[0]
@@ -214,62 +199,8 @@ def test_upload_db_model(
                 with mock.patch("fireo.connection") as mock_connector:
                     mock_connector.return_value = None
 
-                    actual_uploaded_model = pipeline.upload_db_model.run(
-                        db_model, ingestion_model, creds_file=""  # type: ignore
+                    actual_uploaded_model = db_functions.upload_db_model(
+                        db_model, ingestion_model, creds_file=""
                     )
 
                     assert_db_models_equality(expected, actual_uploaded_model, True)
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [
-        (minimal_ingestion_body, db_body),
-        (full_ingestion_body, db_body),
-    ],
-)
-def test_create_body_from_ingestion_model(
-    ingestion_model: Body,
-    expected: db_models.Body,
-) -> None:
-    actual = pipeline.create_body_from_ingestion_model.run(  # type: ignore
-        ingestion_model
-    )
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [
-        (minimal_ingestion_event, db_event),
-    ],
-)
-def test_create_event_from_ingestion_model(
-    ingestion_model: EventIngestionModel,
-    expected: db_models.Event,
-) -> None:
-    actual = pipeline.create_event_from_ingestion_model.run(  # type: ignore
-        ingestion_model, db_body
-    )
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-    assert expected.body_ref == actual.body_ref
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [(minimal_ingestion_session, db_session), (full_ingestion_session, db_session)],
-)
-def test_create_session_from_ingestion_model(
-    ingestion_model: Session,
-    expected: db_models.Session,
-) -> None:
-    actual = pipeline.create_session_from_ingestion_model.run(  # type: ignore
-        ingestion_model, db_event
-    )
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-    assert expected.event_ref == actual.event_ref

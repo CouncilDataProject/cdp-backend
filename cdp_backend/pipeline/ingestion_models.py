@@ -10,8 +10,19 @@ from typing import List, Optional
 ###############################################################################
 
 
+class IngestionModel:
+    """
+    Base class for IngestionModel type.
+    """
+
+    pass
+
+
+###############################################################################
+
+
 @dataclass
-class Seat:
+class Seat(IngestionModel):
     """
     An electable office on the City Council. I.E. "Position 9".
 
@@ -29,7 +40,7 @@ class Seat:
 
 
 @dataclass
-class Person:
+class Person(IngestionModel):
     """
     Primarily the council members, this could technically include the mayor or city
     manager, or any other "normal" presenters and attendees of meetings.
@@ -59,7 +70,7 @@ class Person:
 
 
 @dataclass
-class Vote:
+class Vote(IngestionModel):
     """
     A reference tying a specific person and an event minutes item together.
 
@@ -75,7 +86,7 @@ class Vote:
 
 
 @dataclass
-class SupportingFile:
+class SupportingFile(IngestionModel):
     """
     A file related tied to a matter or minutes item.
 
@@ -90,7 +101,7 @@ class SupportingFile:
 
 
 @dataclass
-class Matter:
+class Matter(IngestionModel):
     """
     A matter is a specific legislative document. A bill, resolution, initiative, etc.
     """
@@ -104,7 +115,7 @@ class Matter:
 
 
 @dataclass
-class MinutesItem:
+class MinutesItem(IngestionModel):
     """
     An item referenced during a meeting.
     This can be a matter but it can be a presentation or budget file, etc.
@@ -116,7 +127,7 @@ class MinutesItem:
 
 
 @dataclass
-class EventMinutesItem:
+class EventMinutesItem(IngestionModel):
     """
     Details about a specific item during an event.
 
@@ -140,7 +151,7 @@ class EventMinutesItem:
 
 
 @dataclass
-class Session:
+class Session(IngestionModel):
     """
     A session is a working period for an event.
     For example, an event could have a morning and afternoon session.
@@ -154,7 +165,7 @@ class Session:
 
 
 @dataclass
-class Body:
+class Body(IngestionModel):
     """
     A meeting body. This can be full council, a subcommittee, or "off-council" matters
     such as election debates.
@@ -174,7 +185,7 @@ class Body:
 
 
 @dataclass
-class Role:
+class Role(IngestionModel):
     """
     A role is a person's job for a period of time in the city council. A person can
     (and should) have multiple roles. For example: a person has two terms as city
@@ -197,7 +208,7 @@ class Role:
 
 
 @dataclass
-class EventIngestionModel:
+class EventIngestionModel(IngestionModel):
     """
     An event can be a normally scheduled meeting, a special event such as a press
     conference or election debate, and, can be upcoming or historical.
