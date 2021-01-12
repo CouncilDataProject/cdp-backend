@@ -28,9 +28,8 @@ returns the `List[EventIngestionModel]`.
 
 ### Minimal Event Processing
 
-Similar to the [event ingestion model](./ingestion_models.html)
-documentation, if the event is provided back with only a URI to a
-video and nothing else, the processing is incredibly simple.
+If any event is provided back with only a URI to a video and nothing else, the
+processing is incredibly simple.
 
 ![minimal cdp event gather flow viz](./_static/cdp_event_gather_flow_minimal.png)
 
