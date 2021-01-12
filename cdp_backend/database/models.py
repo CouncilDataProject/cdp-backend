@@ -8,14 +8,13 @@ from fireo.models import Model
 
 from ..utils import file_utils
 from . import validators
-from .types import (
+from .constants import (
     EventMinutesItemDecision,
-    IndexedField,
-    IndexedFieldSet,
     MatterStatusDecision,
     Order,
     VoteDecision,
 )
+from .types import IndexedField, IndexedFieldSet
 
 ###############################################################################
 

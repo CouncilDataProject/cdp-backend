@@ -8,7 +8,7 @@ import traceback
 from pathlib import Path
 from typing import List
 
-from cdp_backend.pipeline import cdp_event_gather_pipeline as pipeline
+from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_FILLED_EVENT,
     EXAMPLE_MINIMAL_EVENT,
@@ -64,21 +64,19 @@ def fake_get_events_many() -> List[EventIngestionModel]:
 def main() -> None:
     try:
         args = Args()
-        minimal_flow = pipeline.create_cdp_event_gather_flow(
-            fake_get_events_minimal, ""
-        )
+        minimal_flow = pipeline.create_event_gather_flow(fake_get_events_minimal, "")
         minimal_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="minimal"),
             format="png",
         )
 
-        filled_flow = pipeline.create_cdp_event_gather_flow(fake_get_events_filled, "")
+        filled_flow = pipeline.create_event_gather_flow(fake_get_events_filled, "")
         filled_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="filled"),
             format="png",
         )
 
-        many_flow = pipeline.create_cdp_event_gather_flow(fake_get_events_many, "")
+        many_flow = pipeline.create_event_gather_flow(fake_get_events_many, "")
         many_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="many"),
             format="png",
