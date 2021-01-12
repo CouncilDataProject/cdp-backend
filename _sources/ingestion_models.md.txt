@@ -1,4 +1,4 @@
-# Event Ingestion Model
+# Ingestion Models
 
 We try to make CDP infrastructure as easy as possible to set up while also allowing for
 scaling to support as much specific data as can be given and processed.
@@ -12,7 +12,7 @@ The more data provided, the more data displayed and queryable from CDP services.
 For more information on each field available, please see the
 [object definition documentation](./cdp_backend.pipeline.html#module-cdp_backend.pipeline.ingestion_models).
 
-## Updating existing database documents
+## Updating Existing Database Documents
 
 During the event gather pipeline, if an existing database document is found for an 
 ingestion model, the content of the existing database document will be updated 
@@ -26,18 +26,24 @@ field will not be overwritten.
 
 ## Minimal Event Data
 
+Note: while this looks like a Python `Dict`, these objects are of type:
+[IngestionModel](./cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel).
+
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 11, 19, 57, 15, 10129),
+ 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 12, 6, 25, 52, 81854),
                'video_uri': 'https://youtu.be/dQw4w9WgXcQ',
                'session_index': 0}]}
 ```
 
 ## Expanded Event Data with Event Minutes Items
 
+Note: while this looks like a Python `Dict`, these objects are of type:
+[IngestionModel](./cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel).
+
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 11, 19, 57, 15, 10137),
+ 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 12, 6, 25, 52, 81863),
                'video_uri': 'https://youtu.be/dQw4w9WgXcQ',
                'session_index': 0}],
  'event_minutes_items': [{'minutes_item': {'name': 'Inf 1656'}},

@@ -111,10 +111,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="event_data_ingestion_model.html">Event Ingestion Data Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#updating-existing-database-documents">Updating existing database documents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_gather_pipeline.html">Event Gather Pipeline</a><ul>
@@ -128,7 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="transcript_model.html">Transcript Data Model</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="transcript_model.html">Transcript Model</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="transcript_model.html#example-transcript">Example Transcript</a></li>
 </ul>
 </li>
@@ -223,6 +223,83 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-cdp_backend.database.constants">
+<span id="cdp-backend-database-constants-module"></span><h2>cdp_backend.database.constants module<a class="headerlink" href="#module-cdp_backend.database.constants" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="cdp_backend.database.constants.EventMinutesItemDecision">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.constants.</code><code class="sig-name descname">EventMinutesItemDecision</code><a class="reference internal" href="_modules/cdp_backend/database/constants.html#EventMinutesItemDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.constants.EventMinutesItemDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.EventMinutesItemDecision.FAILED">
+<code class="sig-name descname">FAILED</code><em class="property"> = 'Failed'</em><a class="headerlink" href="#cdp_backend.database.constants.EventMinutesItemDecision.FAILED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.EventMinutesItemDecision.PASSED">
+<code class="sig-name descname">PASSED</code><em class="property"> = 'Passed'</em><a class="headerlink" href="#cdp_backend.database.constants.EventMinutesItemDecision.PASSED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="cdp_backend.database.constants.MatterStatusDecision">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.constants.</code><code class="sig-name descname">MatterStatusDecision</code><a class="reference internal" href="_modules/cdp_backend/database/constants.html#MatterStatusDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.constants.MatterStatusDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.MatterStatusDecision.ADOPTED">
+<code class="sig-name descname">ADOPTED</code><em class="property"> = 'Adopted'</em><a class="headerlink" href="#cdp_backend.database.constants.MatterStatusDecision.ADOPTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.MatterStatusDecision.IN_PROGRESS">
+<code class="sig-name descname">IN_PROGRESS</code><em class="property"> = 'In Progress'</em><a class="headerlink" href="#cdp_backend.database.constants.MatterStatusDecision.IN_PROGRESS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.MatterStatusDecision.REJECTED">
+<code class="sig-name descname">REJECTED</code><em class="property"> = 'Rejected'</em><a class="headerlink" href="#cdp_backend.database.constants.MatterStatusDecision.REJECTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="cdp_backend.database.constants.Order">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.constants.</code><code class="sig-name descname">Order</code><a class="reference internal" href="_modules/cdp_backend/database/constants.html#Order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.constants.Order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.Order.ASCENDING">
+<code class="sig-name descname">ASCENDING</code><em class="property"> = 'ASCENDING'</em><a class="headerlink" href="#cdp_backend.database.constants.Order.ASCENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.Order.DESCENDING">
+<code class="sig-name descname">DESCENDING</code><em class="property"> = 'DESCENDING'</em><a class="headerlink" href="#cdp_backend.database.constants.Order.DESCENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="cdp_backend.database.constants.VoteDecision">
+<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.constants.</code><code class="sig-name descname">VoteDecision</code><a class="reference internal" href="_modules/cdp_backend/database/constants.html#VoteDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.VoteDecision.ABSTAIN">
+<code class="sig-name descname">ABSTAIN</code><em class="property"> = 'Abstain'</em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.VoteDecision.APPROVE">
+<code class="sig-name descname">APPROVE</code><em class="property"> = 'Approve'</em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.APPROVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="cdp_backend.database.constants.VoteDecision.REJECT">
+<code class="sig-name descname">REJECT</code><em class="property"> = 'Reject'</em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.REJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-cdp_backend.database.exceptions">
 <span id="cdp-backend-database-exceptions-module"></span><h2>cdp_backend.database.exceptions module<a class="headerlink" href="#module-cdp_backend.database.exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="py exception">
@@ -239,6 +316,56 @@
 <em class="property">property </em><code class="sig-name descname">pk_values</code><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError.pk_values" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.database.functions">
+<span id="cdp-backend-database-functions-module"></span><h2>cdp_backend.database.functions module<a class="headerlink" href="#module-cdp_backend.database.functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="cdp_backend.database.functions.update_db_model">
+<code class="sig-prename descclassname">cdp_backend.database.functions.</code><code class="sig-name descname">update_db_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_model</span><span class="p">:</span> <span class="n">fireo.models.model.Model</span></em>, <em class="sig-param"><span class="n">ingestion_model</span><span class="p">:</span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel" title="cdp_backend.pipeline.ingestion_models.IngestionModel">cdp_backend.pipeline.ingestion_models.IngestionModel</a></span></em><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/functions.html#update_db_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.functions.update_db_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare an existing database model to an ingestion model and if the non-primary
+fields are different, update the database model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_model</strong> (<em>Model</em>) – The existing database model to compare new data against.</p></li>
+<li><p><strong>ingestion_model</strong> (<em>IngestionModel</em>) – The data to compare against and potentially use for updating.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>db_model</strong> – The updated database model.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="cdp_backend.database.functions.upload_db_model">
+<code class="sig-prename descclassname">cdp_backend.database.functions.</code><code class="sig-name descname">upload_db_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_model</span><span class="p">:</span> <span class="n">fireo.models.model.Model</span></em>, <em class="sig-param"><span class="n">ingestion_model</span><span class="p">:</span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel" title="cdp_backend.pipeline.ingestion_models.IngestionModel">cdp_backend.pipeline.ingestion_models.IngestionModel</a></span></em>, <em class="sig-param"><span class="n">creds_file</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; fireo.models.model.Model<a class="reference internal" href="_modules/cdp_backend/database/functions.html#upload_db_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.functions.upload_db_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload or update an existing database model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_model</strong> (<em>Model</em>) – The database model to upload.</p></li>
+<li><p><strong>ingestion_model</strong> (<em>IngestionModel</em>) – The accompanying ingestion model in the case the model already exists and needs
+to be updated rather than inserted.</p></li>
+<li><p><strong>creds_file</strong> (<em>str</em>) – Path to Google Service Account Credentials JSON file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>db_model</strong> – The uploaded, or updated, database model.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Model</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#cdp_backend.database.exceptions.UniquenessError" title="cdp_backend.database.exceptions.UniquenessError"><strong>exceptions.UniquenessError</strong></a> – More than one (1) conflicting model was found in the database. This should
+    never occur and indicates that something is wrong with the database.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1107,22 +1234,6 @@ For example, An event could have a morning and afternoon session.</p>
 <div class="section" id="module-cdp_backend.database.types">
 <span id="cdp-backend-database-types-module"></span><h2>cdp_backend.database.types module<a class="headerlink" href="#module-cdp_backend.database.types" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="cdp_backend.database.types.EventMinutesItemDecision">
-<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">EventMinutesItemDecision</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#EventMinutesItemDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.EventMinutesItemDecision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.EventMinutesItemDecision.FAILED">
-<code class="sig-name descname">FAILED</code><em class="property"> = 'Failed'</em><a class="headerlink" href="#cdp_backend.database.types.EventMinutesItemDecision.FAILED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.EventMinutesItemDecision.PASSED">
-<code class="sig-name descname">PASSED</code><em class="property"> = 'Passed'</em><a class="headerlink" href="#cdp_backend.database.types.EventMinutesItemDecision.PASSED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="cdp_backend.database.types.IndexedField">
 <em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">IndexedField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">order</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/types.html#IndexedField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.IndexedField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
@@ -1147,64 +1258,6 @@ For example, An event could have a morning and afternoon session.</p>
 <dl class="py attribute">
 <dt id="cdp_backend.database.types.IndexedFieldSet.fields">
 <code class="sig-name descname">fields</code><em class="property">: Tuple<span class="p">[</span><a class="reference internal" href="#cdp_backend.database.types.IndexedField" title="cdp_backend.database.types.IndexedField">cdp_backend.database.types.IndexedField</a><span class="p">, </span><a class="reference internal" href="#cdp_backend.database.types.IndexedField" title="cdp_backend.database.types.IndexedField">cdp_backend.database.types.IndexedField</a><span class="p">]</span></em><a class="headerlink" href="#cdp_backend.database.types.IndexedFieldSet.fields" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="cdp_backend.database.types.MatterStatusDecision">
-<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">MatterStatusDecision</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#MatterStatusDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.MatterStatusDecision.ADOPTED">
-<code class="sig-name descname">ADOPTED</code><em class="property"> = 'Adopted'</em><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision.ADOPTED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.MatterStatusDecision.IN_PROGRESS">
-<code class="sig-name descname">IN_PROGRESS</code><em class="property"> = 'In Progress'</em><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision.IN_PROGRESS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.MatterStatusDecision.REJECTED">
-<code class="sig-name descname">REJECTED</code><em class="property"> = 'Rejected'</em><a class="headerlink" href="#cdp_backend.database.types.MatterStatusDecision.REJECTED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="cdp_backend.database.types.Order">
-<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">Order</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#Order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.Order" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.Order.ASCENDING">
-<code class="sig-name descname">ASCENDING</code><em class="property"> = 'ASCENDING'</em><a class="headerlink" href="#cdp_backend.database.types.Order.ASCENDING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.Order.DESCENDING">
-<code class="sig-name descname">DESCENDING</code><em class="property"> = 'DESCENDING'</em><a class="headerlink" href="#cdp_backend.database.types.Order.DESCENDING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="cdp_backend.database.types.VoteDecision">
-<em class="property">class </em><code class="sig-prename descclassname">cdp_backend.database.types.</code><code class="sig-name descname">VoteDecision</code><a class="reference internal" href="_modules/cdp_backend/database/types.html#VoteDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.database.types.VoteDecision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.VoteDecision.ABSTAIN">
-<code class="sig-name descname">ABSTAIN</code><em class="property"> = 'Abstain'</em><a class="headerlink" href="#cdp_backend.database.types.VoteDecision.ABSTAIN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.VoteDecision.APPROVE">
-<code class="sig-name descname">APPROVE</code><em class="property"> = 'Approve'</em><a class="headerlink" href="#cdp_backend.database.types.VoteDecision.APPROVE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="cdp_backend.database.types.VoteDecision.REJECT">
-<code class="sig-name descname">REJECT</code><em class="property"> = 'Reject'</em><a class="headerlink" href="#cdp_backend.database.types.VoteDecision.REJECT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

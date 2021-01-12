@@ -4,10 +4,26 @@ cdp\_backend.database package
 Submodules
 ----------
 
+cdp\_backend.database.constants module
+--------------------------------------
+
+.. automodule:: cdp_backend.database.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.database.exceptions module
 ---------------------------------------
 
 .. automodule:: cdp_backend.database.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdp\_backend.database.functions module
+--------------------------------------
+
+.. automodule:: cdp_backend.database.functions
    :members:
    :undoc-members:
    :show-inheritance:

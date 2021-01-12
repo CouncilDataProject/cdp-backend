@@ -4,14 +4,6 @@ cdp\_backend.bin package
 Submodules
 ----------
 
-cdp\_backend.bin.cdp\_event\_gather module
-------------------------------------------
-
-.. automodule:: cdp_backend.bin.cdp_event_gather
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 cdp\_backend.bin.create\_cdp\_database\_uml module
 --------------------------------------------------
 
@@ -28,6 +20,14 @@ cdp\_backend.bin.create\_cdp\_event\_gather\_flow\_viz module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.create\_cdp\_ingestion\_models\_doc module
+-----------------------------------------------------------
+
+.. automodule:: cdp_backend.bin.create_cdp_ingestion_models_doc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.create\_cdp\_transcript\_model\_doc module
 -----------------------------------------------------------
 
@@ -36,10 +36,10 @@ cdp\_backend.bin.create\_cdp\_transcript\_model\_doc module
    :undoc-members:
    :show-inheritance:
 
-cdp\_backend.bin.create\_ingestion\_model\_doc module
------------------------------------------------------
+cdp\_backend.bin.run\_cdp\_event\_gather module
+-----------------------------------------------
 
-.. automodule:: cdp_backend.bin.create_ingestion_model_doc
+.. automodule:: cdp_backend.bin.run_cdp_event_gather
    :members:
    :undoc-members:
    :show-inheritance:

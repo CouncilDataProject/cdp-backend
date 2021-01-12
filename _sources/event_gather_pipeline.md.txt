@@ -7,10 +7,11 @@ event gather pipeline takes into three short and easy to remember key points.
    This function is created by each instance maintainer and
    generally scrapes or requests data from an API and
    returns a list of events to process and store.
-   [Learn more about the event ingestion model](./cdp-backend/event_data_ingestion_model.html)
+   [Learn more about our ingestion models](./ingestion_models.html).
 2. **Transcribe**<br>
    If the event was provided with a closed caption file we clean the file up
    into the CDP format, if not, CDP tools generate a transcription.
+   [Learn more about the produced transcript model](./transcript_model.html).
 3. **Index**<br>
    An entirely different pipeline from the event gather pipeline but in
    the context of the short and sweet version, this makes sense to include.
@@ -27,9 +28,8 @@ returns the `List[EventIngestionModel]`.
 
 ### Minimal Event Processing
 
-Similar to the [event ingestion model](./cdp-backend/event_data_ingestion_model.html)
-documentation, if the event is provided back with only a URI to a
-video and nothing else, the processing is incredibly simple.
+If any event is provided back with only a URI to a video and nothing else, the
+processing is incredibly simple.
 
 ![minimal cdp event gather flow viz](./_static/cdp_event_gather_flow_minimal.png)
 
@@ -53,7 +53,7 @@ However, in the case where a maintainer is attempting to backfill large collecti
 events (i.e. processing historical events), we recommend attaching a
 [Dask Executor](https://docs.prefect.io/api/latest/executors.html#daskexecutor)
 to the flow for parallel event processing.
-[More details about Dask](https://dask.org/)
+[More details about Dask](https://dask.org/).
 
 I.E.
 If the result of the `get_events` function was a list of four

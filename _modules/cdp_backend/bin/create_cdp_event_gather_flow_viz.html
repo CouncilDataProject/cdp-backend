@@ -109,10 +109,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../event_data_ingestion_model.html">Event Ingestion Data Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#updating-existing-database-documents">Updating existing database documents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
@@ -126,7 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Data Model</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
 </ul>
 </li>
@@ -214,7 +214,7 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">cdp_event_gather_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">event_gather_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline.ingestion_models</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EXAMPLE_FILLED_EVENT</span><span class="p">,</span>
     <span class="n">EXAMPLE_MINIMAL_EVENT</span><span class="p">,</span>
@@ -270,21 +270,19 @@
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
-        <span class="n">minimal_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_cdp_event_gather_flow</span><span class="p">(</span>
-            <span class="n">fake_get_events_minimal</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
-        <span class="p">)</span>
+        <span class="n">minimal_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_minimal</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">minimal_flow</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;minimal&quot;</span><span class="p">),</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">filled_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_cdp_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_filled</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">filled_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_filled</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">filled_flow</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span><span class="p">),</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">many_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_cdp_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_many</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">many_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_many</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">many_flow</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;many&quot;</span><span class="p">),</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>

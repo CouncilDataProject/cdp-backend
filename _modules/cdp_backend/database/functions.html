@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cdp_backend.database.functions &mdash; cdp-backend 3.0.0.dev4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.database.functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.database.functions</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">fireo</span>
+<span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">get_model_uniqueness</span>
+<span class="kn">from</span> <span class="nn">..pipeline.ingestion_models</span> <span class="kn">import</span> <span class="n">IngestionModel</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="update_db_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.update_db_model">[docs]</a><span class="k">def</span> <span class="nf">update_db_model</span><span class="p">(</span>
+    <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare an existing database model to an ingestion model and if the non-primary</span>
+<span class="sd">    fields are different, update the database model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db_model: Model</span>
+<span class="sd">        The existing database model to compare new data against.</span>
+<span class="sd">    ingestion_model: IngestionModel</span>
+<span class="sd">        The data to compare against and potentially use for updating.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    db_model: Model</span>
+<span class="sd">        The updated database model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Filter out base class attrs, unrelated class methods, primary keys</span>
+    <span class="n">non_primary_db_fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">attr</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">Model</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">db_model</span><span class="o">.</span><span class="n">_PRIMARY_KEYS</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">non_primary_db_fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+            <span class="n">db_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="n">ingestion_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+
+            <span class="c1"># If values are different, use the ingestion value</span>
+            <span class="c1"># Make sure we don&#39;t overwrite with empty values</span>
+            <span class="k">if</span> <span class="n">db_val</span> <span class="o">!=</span> <span class="n">ingestion_val</span> <span class="ow">and</span> <span class="n">ingestion_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ingestion_val</span><span class="p">)</span>
+                <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Updating </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">db_val</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">ingestion_val</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+
+    <span class="c1"># Avoid unnecessary db interactions</span>
+    <span class="k">if</span> <span class="n">needs_update</span><span class="p">:</span>
+        <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">db_model</span></div>
+
+
+<div class="viewcode-block" id="upload_db_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.upload_db_model">[docs]</a><span class="k">def</span> <span class="nf">upload_db_model</span><span class="p">(</span>
+    <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
+    <span class="n">creds_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Upload or update an existing database model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db_model: Model</span>
+<span class="sd">        The database model to upload.</span>
+<span class="sd">    ingestion_model: IngestionModel</span>
+<span class="sd">        The accompanying ingestion model in the case the model already exists and needs</span>
+<span class="sd">        to be updated rather than inserted.</span>
+<span class="sd">    creds_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    db_model: Model</span>
+<span class="sd">        The uploaded, or updated, database model.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    exceptions.UniquenessError</span>
+<span class="sd">        More than one (1) conflicting model was found in the database. This should</span>
+<span class="sd">        never occur and indicates that something is wrong with the database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialize fireo connection</span>
+    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">creds_file</span><span class="p">)</span>
+
+    <span class="n">uniqueness_validation</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
+        <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Saved new </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with document id=</span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">updated_db_model</span> <span class="o">=</span> <span class="n">update_db_model</span><span class="p">(</span>
+            <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">ingestion_model</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">updated_db_model</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UniquenessError</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">conflicting_results</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">db_model</span></div>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">upload_db_model_task</span><span class="p">(</span>
+    <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
+    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
+    <span class="n">creds_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+    <span class="c1"># Wraps the standard Python function in Prefect task</span>
+    <span class="k">return</span> <span class="n">upload_db_model</span><span class="p">(</span>
+        <span class="n">db_model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">ingestion_model</span><span class="o">=</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">creds_file</span><span class="o">=</span><span class="n">creds_file</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jackson Maxfield Brown.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

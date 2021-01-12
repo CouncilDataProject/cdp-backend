@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CDP Database Schema" href="database_schema.html" />
-    <link rel="prev" title="Event Ingestion Model" href="event_data_ingestion_model.html" /> 
+    <link rel="prev" title="Ingestion Models" href="ingestion_models.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -111,10 +111,10 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="event_data_ingestion_model.html">Event Ingestion Data Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#updating-existing-database-documents">Updating existing database documents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#minimal-event-data">Minimal Event Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_data_ingestion_model.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Event Gather Pipeline</a><ul>
@@ -128,7 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="database_schema.html#implementation">Implementation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="transcript_model.html">Transcript Data Model</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="transcript_model.html">Transcript Model</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="transcript_model.html#example-transcript">Example Transcript</a></li>
 </ul>
 </li>
@@ -205,7 +205,7 @@
         <a href="database_schema.html" class="btn btn-neutral float-right" title="CDP Database Schema" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
       
       
-        <a href="event_data_ingestion_model.html" class="btn btn-neutral float-left" title="Event Ingestion Model" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ingestion_models.html" class="btn btn-neutral float-left" title="Ingestion Models" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
       
   </div>
   
@@ -223,10 +223,11 @@ event gather pipeline takes into three short and easy to remember key points.</p
 This function is created by each instance maintainer and
 generally scrapes or requests data from an API and
 returns a list of events to process and store.
-<a class="reference external" href="./cdp-backend/event_data_ingestion_model.html">Learn more about the event ingestion model</a></p></li>
+<a class="reference external" href="./ingestion_models.html">Learn more about our ingestion models</a>.</p></li>
 <li><p><strong>Transcribe</strong><span class="raw-html-m2r"><br></span>
 If the event was provided with a closed caption file we clean the file up
-into the CDP format, if not, CDP tools generate a transcription.</p></li>
+into the CDP format, if not, CDP tools generate a transcription.
+<a class="reference external" href="./transcript_model.html">Learn more about the produced transcript model</a>.</p></li>
 <li><p><strong>Index</strong><span class="raw-html-m2r"><br></span>
 An entirely different pipeline from the event gather pipeline but in
 the context of the short and sweet version, this makes sense to include.
@@ -241,9 +242,8 @@ pipeline takes, starting immediately after the maintainer provided function
 returns the <code class="docutils literal notranslate"><span class="pre">List[EventIngestionModel]</span></code>.</p>
 <div class="section" id="minimal-event-processing">
 <h2>Minimal Event Processing<a class="headerlink" href="#minimal-event-processing" title="Permalink to this headline">¶</a></h2>
-<p>Similar to the <a class="reference external" href="./cdp-backend/event_data_ingestion_model.html">event ingestion model</a>
-documentation, if the event is provided back with only a URI to a
-video and nothing else, the processing is incredibly simple.</p>
+<p>If any event is provided back with only a URI to a video and nothing else, the
+processing is incredibly simple.</p>
 <a class="reference external image-reference" href="./_static/cdp_event_gather_flow_minimal.png"><img alt="minimal cdp event gather flow viz" src="_images/cdp_event_gather_flow_minimal.png" /></a>
 </div>
 <div class="section" id="filled-event-processing">
@@ -264,7 +264,7 @@ to process.</p>
 events (i.e. processing historical events), we recommend attaching a
 <a class="reference external" href="https://docs.prefect.io/api/latest/executors.html#daskexecutor">Dask Executor</a>
 to the flow for parallel event processing.
-<a class="reference external" href="https://dask.org/">More details about Dask</a></p>
+<a class="reference external" href="https://dask.org/">More details about Dask</a>.</p>
 <p>I.E.
 If the result of the <code class="docutils literal notranslate"><span class="pre">get_events</span></code> function was a list of four
 <code class="docutils literal notranslate"><span class="pre">EventIngestionModel</span></code> objects, the resulting flow would look like the following:</p>

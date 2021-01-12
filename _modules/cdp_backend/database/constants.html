@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cdp_backend.database.types &mdash; cdp-backend 3.0.0.dev4 documentation</title>
+  <title>cdp_backend.database.constants &mdash; cdp-backend 3.0.0.dev4 documentation</title>
   
 
   
@@ -188,7 +188,7 @@
         
           <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
         
-      <li>cdp_backend.database.types</li>
+      <li>cdp_backend.database.constants</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -203,22 +203,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for cdp_backend.database.types</h1><div class="highlight"><pre>
+  <h1>Source code for cdp_backend.database.constants</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="c1">###############################################################################</span>
-
-
-<div class="viewcode-block" id="IndexedField"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.types.IndexedField">[docs]</a><span class="k">class</span> <span class="nc">IndexedField</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">order</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="Order"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.Order">[docs]</a><span class="k">class</span> <span class="nc">Order</span><span class="p">:</span>
+    <span class="n">ASCENDING</span> <span class="o">=</span> <span class="s2">&quot;ASCENDING&quot;</span>
+    <span class="n">DESCENDING</span> <span class="o">=</span> <span class="s2">&quot;DESCENDING&quot;</span></div>
 
 
-<div class="viewcode-block" id="IndexedFieldSet"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet">[docs]</a><span class="k">class</span> <span class="nc">IndexedFieldSet</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">fields</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IndexedField</span><span class="p">,</span> <span class="n">IndexedField</span><span class="p">]</span></div>
+<div class="viewcode-block" id="EventMinutesItemDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.EventMinutesItemDecision">[docs]</a><span class="k">class</span> <span class="nc">EventMinutesItemDecision</span><span class="p">:</span>
+    <span class="n">PASSED</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span></div>
+
+
+<div class="viewcode-block" id="VoteDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.VoteDecision">[docs]</a><span class="k">class</span> <span class="nc">VoteDecision</span><span class="p">:</span>
+    <span class="n">APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Approve&quot;</span>
+    <span class="n">REJECT</span> <span class="o">=</span> <span class="s2">&quot;Reject&quot;</span>
+    <span class="n">ABSTAIN</span> <span class="o">=</span> <span class="s2">&quot;Abstain&quot;</span></div>
+
+
+<div class="viewcode-block" id="MatterStatusDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.MatterStatusDecision">[docs]</a><span class="k">class</span> <span class="nc">MatterStatusDecision</span><span class="p">:</span>
+    <span class="n">ADOPTED</span> <span class="o">=</span> <span class="s2">&quot;Adopted&quot;</span>
+    <span class="n">REJECTED</span> <span class="o">=</span> <span class="s2">&quot;Rejected&quot;</span>
+    <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">&quot;In Progress&quot;</span></div>
 </pre></div>
 
            </div>
