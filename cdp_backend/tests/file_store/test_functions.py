@@ -65,6 +65,7 @@ def test_get_file_uri(
         (BUCKET, FILEPATH, SAVE_NAME, True, EXISTING_FILE_URI, EXISTING_FILE_URI),
         (BUCKET, FILEPATH, SAVE_NAME, False, EXISTING_FILE_URI, EXISTING_FILE_URI),
         (BUCKET, FILEPATH, None, False, None, GCS_FILE_URI),
+        (BUCKET, FILEPATH, None, True, None, GCS_FILE_URI),
     ],
 )
 def test_upload_file(
@@ -79,12 +80,10 @@ def test_upload_file(
         with mock.patch(
             "cdp_backend.file_store.functions.get_file_uri"
         ) as mock_file_uri:
-            with mock.patch(
-                "cdp_backend.file_store.functions.remove_local_file"
-            ):
+            with mock.patch("cdp_backend.file_store.functions.remove_local_file"):
                 with mock.patch("pathlib.Path.resolve") as mock_path:
                     mock_file_uri.return_value = existing_file_uri
-                    mock_path.return_value.name = FILENAME 
+                    mock_path.return_value.name = FILENAME
 
                     assert expected == functions.upload_file(
                         mock_fs, bucket, filepath, save_name, remove_local
