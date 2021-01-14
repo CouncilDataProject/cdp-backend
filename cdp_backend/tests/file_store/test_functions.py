@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
+import sys
 from tempfile import NamedTemporaryFile
 from typing import Optional, Union
 from unittest import mock
@@ -92,6 +93,9 @@ def test_upload_file(
     return
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="TemporaryFile has issues on windows"
+)
 def test_remove_local_file() -> None:
     f = NamedTemporaryFile()
     f.write(b"Hello world!")
