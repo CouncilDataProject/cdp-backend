@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-import sys
-from tempfile import NamedTemporaryFile
-from typing import Optional, Union
+from typing import Optional
 from unittest import mock
 
 import pytest
@@ -47,15 +45,13 @@ def test_get_file_uri(
     filename: str,
     bucket: str,
     exists: bool,
-    expected: Union[str, None],
+    expected: Optional[str],
 ) -> None:
     with mock.patch("gcsfs.GCSFileSystem.connect"):
         with mock.patch("gcsfs.GCSFileSystem.exists") as mock_exists:
             mock_exists.return_value = exists
 
-            assert expected == functions.get_file_uri(
-                functions.initialize_gcs_file_system("fake/path"), bucket, filename
-            )
+            assert expected == functions.get_file_uri(bucket, filename, "path/to/creds")
 
     return
 
@@ -93,15 +89,13 @@ def test_upload_file(
     return
 
 
-@pytest.mark.skipif(
-    sys.platform.startswith("win"), reason="TemporaryFile has issues on windows"
-)
-def test_remove_local_file() -> None:
-    f = NamedTemporaryFile()
-    f.write(b"Hello world!")
+def test_remove_local_file(tmpdir) -> None:
+    p = tmpdir.mkdir("sub").join("hello.txt")
+    p.write("content")
+    file_path = str(p)
 
-    assert os.path.isfile(f.name)
+    assert os.path.isfile(file_path)
 
-    functions.remove_local_file(f.name)
+    functions.remove_local_file(file_path)
 
-    assert not os.path.isfile(f.name)
+    assert not os.path.isfile(file_path)

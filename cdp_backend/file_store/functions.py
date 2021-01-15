@@ -25,7 +25,9 @@ def initialize_gcs_file_system(credentials_file: str) -> GCSFileSystem:
     return GCSFileSystem(token=credentials_file)
 
 
-def get_file_uri(fs: GCSFileSystem, bucket: str, filename: str) -> str:
+def get_file_uri(bucket: str, filename: str, creds_file: str) -> Optional[str]:
+    fs = initialize_gcs_file_system(creds_file)
+
     if fs.exists(f"{bucket}/{filename}"):
         return GCS_URI.format(bucket=bucket, filename=filename)
 
