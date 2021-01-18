@@ -99,6 +99,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
@@ -400,6 +401,20 @@
 </li>
       </ul></li>
       <li>
+    cdp_backend.file_store
+
+      <ul>
+        <li><a href="cdp_backend.file_store.html#module-cdp_backend.file_store">module</a>
+</li>
+      </ul></li>
+      <li>
+    cdp_backend.file_store.functions
+
+      <ul>
+        <li><a href="cdp_backend.file_store.html#module-cdp_backend.file_store.functions">module</a>
+</li>
+      </ul></li>
+      <li>
     cdp_backend.infrastructure
 
       <ul>
@@ -448,6 +463,8 @@
         <li><a href="cdp_backend.utils.html#module-cdp_backend.utils">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     cdp_backend.utils.constants_utils
 
@@ -455,8 +472,6 @@
         <li><a href="cdp_backend.utils.html#module-cdp_backend.utils.constants_utils">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     cdp_backend.utils.file_utils
 
@@ -795,6 +810,8 @@
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.constants_utils.get_all_class_attr_values">get_all_class_attr_values() (in module cdp_backend.utils.constants_utils)</a>
 </li>
+      <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.get_file_uri">get_file_uri() (in module cdp_backend.file_store.functions)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">get_media_type() (in module cdp_backend.utils.file_utils)</a>
@@ -837,13 +854,15 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.index">(cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedField">IndexedField (class in cdp_backend.database.types)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet">IndexedFieldSet (class in cdp_backend.database.types)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">IngestionModel (class in cdp_backend.pipeline.ingestion_models)</a>
+</li>
+      <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.initialize_gcs_file_system">initialize_gcs_file_system() (in module cdp_backend.file_store.functions)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.is_active">is_active (cdp_backend.database.models.Body attribute)</a>
 
@@ -995,6 +1014,10 @@
 </li>
         <li><a href="cdp_backend.database.html#module-cdp_backend.database.validators">cdp_backend.database.validators</a>
 </li>
+        <li><a href="cdp_backend.file_store.html#module-cdp_backend.file_store">cdp_backend.file_store</a>
+</li>
+        <li><a href="cdp_backend.file_store.html#module-cdp_backend.file_store.functions">cdp_backend.file_store.functions</a>
+</li>
         <li><a href="cdp_backend.infrastructure.html#module-cdp_backend.infrastructure">cdp_backend.infrastructure</a>
 </li>
         <li><a href="cdp_backend.infrastructure.html#module-cdp_backend.infrastructure.cdp_stack">cdp_backend.infrastructure.cdp_stack</a>
@@ -1114,18 +1137,20 @@
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.constants.MatterStatusDecision.REJECTED">REJECTED (cdp_backend.database.constants.MatterStatusDecision attribute)</a>
 </li>
+      <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.remove_local_file">remove_local_file() (in module cdp_backend.file_store.functions)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.resource_exists">resource_exists() (in module cdp_backend.database.validators)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.result_status">result_status (cdp_backend.pipeline.ingestion_models.Matter attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Role">Role (class in cdp_backend.database.models)</a>
 
       <ul>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role">(class in cdp_backend.pipeline.ingestion_models)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.roles">roles (cdp_backend.pipeline.ingestion_models.Person attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Person.router_string">router_string (cdp_backend.database.models.Person attribute)</a>
@@ -1268,9 +1293,11 @@
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.functions.update_db_model">update_db_model() (in module cdp_backend.database.functions)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.upload_db_model">upload_db_model() (in module cdp_backend.database.functions)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.upload_db_model">upload_db_model() (in module cdp_backend.database.functions)</a>
+      <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.upload_file">upload_file() (in module cdp_backend.file_store.functions)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.uri">uri (cdp_backend.database.models.EventMinutesItemFile attribute)</a>
 

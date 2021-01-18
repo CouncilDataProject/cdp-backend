@@ -9,6 +9,7 @@ Subpackages
 
    cdp_backend.bin
    cdp_backend.database
+   cdp_backend.file_store
    cdp_backend.infrastructure
    cdp_backend.pipeline
    cdp_backend.utils

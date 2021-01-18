@@ -1,0 +1,21 @@
+cdp\_backend.file\_store package
+================================
+
+Submodules
+----------
+
+cdp\_backend.file\_store.functions module
+-----------------------------------------
+
+.. automodule:: cdp_backend.file_store.functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend.file_store
+   :members:
+   :undoc-members:
+   :show-inheritance:
