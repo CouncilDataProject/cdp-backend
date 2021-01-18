@@ -53,8 +53,6 @@ def test_get_file_uri(
 
             assert expected == functions.get_file_uri(bucket, filename, "path/to/creds")
 
-    return
-
 
 @pytest.mark.parametrize(
     "bucket, filepath, save_name, remove_local, existing_file_uri, expected",
@@ -73,7 +71,7 @@ def test_upload_file(
     existing_file_uri: str,
     expected: str,
 ) -> None:
-    with mock.patch("gcsfs.GCSFileSystem") as mock_fs:
+    with mock.patch("cdp_backend.file_store.functions.initialize_gcs_file_system"):
         with mock.patch(
             "cdp_backend.file_store.functions.get_file_uri"
         ) as mock_file_uri:
@@ -83,10 +81,8 @@ def test_upload_file(
                     mock_path.return_value.name = FILENAME
 
                     assert expected == functions.upload_file(
-                        mock_fs, bucket, filepath, save_name, remove_local
+                        "path/to/creds", bucket, filepath, save_name, remove_local
                     )
-
-    return
 
 
 def test_remove_local_file(tmpdir) -> None:
