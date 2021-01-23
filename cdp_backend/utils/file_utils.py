@@ -72,7 +72,7 @@ def external_resource_copy(
         the same name if it already exists.
     Returns
     -------
-    saved_path: str 
+    saved_path: str
         The path of where the resource ended up getting copied to.
     """
     if dst is None:
