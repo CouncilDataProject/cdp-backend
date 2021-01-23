@@ -57,7 +57,7 @@ def get_media_type(uri: str) -> Optional[str]:
 
 def external_resource_copy(
     uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
-) -> Path:
+) -> str:
     """
     Copy an external resource to a local destination on the machine.
     Parameters
@@ -72,7 +72,7 @@ def external_resource_copy(
         the same name if it already exists.
     Returns
     -------
-    saved_path: Path
+    saved_path: str 
         The path of where the resource ended up getting copied to.
     """
     if dst is None:
@@ -94,4 +94,4 @@ def external_resource_copy(
     log.debug(f"Completed external resource copy from: {uri}")
     log.info(f"Stored external resource copy: {dst}")
 
-    return dst
+    return str(dst)
