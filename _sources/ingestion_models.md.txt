@@ -31,7 +31,7 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 18, 0, 26, 23, 474187),
+ 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 23, 21, 44, 18, 31029),
                'video_uri': 'https://youtu.be/dQw4w9WgXcQ',
                'session_index': 0}]}
 ```
@@ -43,7 +43,7 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 18, 0, 26, 23, 474197),
+ 'sessions': [{'session_datetime': datetime.datetime(2021, 1, 23, 21, 44, 18, 31039),
                'video_uri': 'https://youtu.be/dQw4w9WgXcQ',
                'session_index': 0}],
  'event_minutes_items': [{'minutes_item': {'name': 'Inf 1656'}},
