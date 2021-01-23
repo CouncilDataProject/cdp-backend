@@ -7,6 +7,7 @@ from unittest import mock
 
 import pytest
 from gcsfs import GCSFileSystem
+from py._path.local import LocalPath
 
 from cdp_backend.file_store import functions
 
@@ -85,7 +86,7 @@ def test_upload_file(
                     )
 
 
-def test_remove_local_file(tmpdir) -> None:
+def test_remove_local_file(tmpdir: LocalPath) -> None:
     p = tmpdir.mkdir("sub").join("hello.txt")
     p.write("content")
     file_path = str(p)
