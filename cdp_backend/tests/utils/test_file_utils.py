@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import Optional
+from __future__ import annotations
+
+from pathlib import Path
+from typing import BinaryIO, Generator, Optional
 from unittest import mock
 
 import pytest
+from py._path.local import LocalPath
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import external_resource_copy
@@ -13,31 +17,31 @@ from cdp_backend.utils.file_utils import external_resource_copy
 
 
 @pytest.fixture
-def example_video(data_dir):
+def example_video(data_dir: Path) -> Path:
     return data_dir / "example_video.mp4"
 
 
 class MockedResponse:
-    def __init__(self, filepath):
+    def __init__(self, filepath: Path) -> None:
         self.filepath = filepath
         self.opened = open(self.filepath, "rb")
 
-    def __enter__(self):
+    def __enter__(self) -> MockedResponse:
         return self
 
-    def __exit__(self, exception_type, exception_value, tb):
+    def __exit__(self, exception_type, exception_value, tb):  # type: ignore
         self.opened.close()
 
-    def raise_for_status(self):
+    def raise_for_status(self) -> bool:
         return True
 
     @property
-    def raw(self):
+    def raw(self) -> BinaryIO:
         return self.opened
 
 
 @pytest.fixture
-def mocked_request(example_video):
+def mocked_request(example_video: Path) -> Generator:
     with mock.patch("requests.get") as MockRequest:
         MockRequest.return_value = MockedResponse(example_video)
         yield MockRequest
@@ -65,6 +69,6 @@ def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
     assert actual_result == expected_result
 
 
-def test_external_resource_copy(tmpdir, mocked_request):
+def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) -> None:
     save_path = tmpdir / "tmpcopy.mp4"
     external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
