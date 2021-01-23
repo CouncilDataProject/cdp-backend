@@ -7,7 +7,7 @@ from unittest import mock
 
 import pytest
 from gcsfs import GCSFileSystem
-from py.path.local import LocalPath
+from py._path.local import LocalPath
 
 from cdp_backend.file_store import functions
 
