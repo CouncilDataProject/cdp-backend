@@ -72,3 +72,31 @@ def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
 def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) -> None:
     save_path = tmpdir / "tmpcopy.mp4"
     external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
+
+
+@pytest.mark.parametrize(
+    "audio_save_path",
+    [
+        ("test.wav"),
+        (Path("test.wav")),
+        pytest.param(__file__, marks=pytest.mark.raises(exception=FileExistsError)),
+        pytest.param(
+            Path(__file__), marks=pytest.mark.raises(exception=FileExistsError)
+        ),
+        pytest.param(
+            Path(__file__).parent, marks=pytest.mark.raises(exception=IsADirectoryError)
+        ),
+    ],
+)
+def test_split_audio(
+    tmpdir: LocalPath, example_video: str, audio_save_path: Union[str, Path]
+) -> None:
+    # Append save name to tmpdir
+    audio_save_path = Path(tmpdir) / audio_save_path
+
+    # Mock split
+    with mock.patch("ffmpeg.run") as mocked_ffmpeg:
+        mocked_ffmpeg.return_value = (b"OUTPUT", b"ERROR")
+        file_utils.split_audio(
+            video_read_path=example_video, audio_save_path=audio_save_path
+        )
