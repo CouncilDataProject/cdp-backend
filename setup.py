@@ -31,6 +31,7 @@ dev_requirements = [
     *test_requirements,
     "bump2version>=1.0.1",
     "coverage>=5.1",
+    "ffmpeg-python>=0.2.0",
     "ipython>=7.15.0",
     "jinja2>=2.11.2",
     "m2r2>=0.2.7",
