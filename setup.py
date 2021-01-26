@@ -31,7 +31,6 @@ dev_requirements = [
     *test_requirements,
     "bump2version>=1.0.1",
     "coverage>=5.1",
-    "ffmpeg-python>=0.2.0",
     "ipython>=7.15.0",
     "jinja2>=2.11.2",
     "m2r2>=0.2.7",
@@ -47,6 +46,7 @@ dev_requirements = [
 requirements = [
     "dask[bag]~=2020.12.0",
     "dataclasses-json~=0.5.2",
+    "ffmpeg-python>=0.2.0",
     "fireo~=1.3.7",
     "fsspec~=0.8.3",
     "gcsfs~=0.7.1",
