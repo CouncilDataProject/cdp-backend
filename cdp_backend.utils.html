@@ -299,6 +299,26 @@ If one could not be found, return None.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="cdp_backend.utils.file_utils.split_audio">
+<code class="sig-prename descclassname">cdp_backend.utils.file_utils.</code><code class="sig-name descname">split_audio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">video_read_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">audio_save_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#split_audio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.split_audio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split and store the audio from a video file using ffmpeg.
+:Parameters: * <strong>video_read_path</strong> (<em>str</em>) – Path to the video to split the audio from.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>audio_save_path</strong> (<em>str</em>) – Path to where the audio should be stored.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>audio_save_path</strong> – Path to where the split audio was saved.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-cdp_backend.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.utils" title="Permalink to this headline">¶</a></h2>
