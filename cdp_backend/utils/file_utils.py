@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional, Union
 
 import dask.dataframe as dd
+import ffmpeg
 import requests
 
 ###############################################################################
@@ -95,3 +96,56 @@ def external_resource_copy(
     log.info(f"Stored external resource copy: {dst}")
 
     return str(dst)
+
+
+def split_audio(
+    video_read_path: str,
+    audio_save_path: str,
+    overwrite: bool = False,
+) -> str:
+    """
+    Split and store the audio from a video file using ffmpeg.
+    Parameters
+    ----------
+    video_read_path: str
+        Path to the video to split the audio from.
+    audio_save_path: str
+        Path to where the audio should be stored.
+    Returns
+    -------
+    audio_save_path: str
+        Path to where the split audio was saved.
+    """
+
+    # Check paths
+    resolved_video_read_path = Path(video_read_path).resolve(strict=True)
+    resolved_audio_save_path = Path(audio_save_path).resolve()
+    if resolved_audio_save_path.is_file() and not overwrite:
+        raise FileExistsError(resolved_audio_save_path)
+    if resolved_audio_save_path.is_dir():
+        raise IsADirectoryError(resolved_audio_save_path)
+
+    # Construct ffmpeg dag
+    stream = ffmpeg.input(resolved_video_read_path)
+    stream = ffmpeg.output(
+        stream,
+        filename=resolved_audio_save_path,
+        format="wav",
+        acodec="pcm_s16le",
+        ac=1,
+        ar="16k",
+    )
+
+    # Run dag
+    log.debug(f"Beginning audio separation for: {video_read_path}")
+    out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
+    log.debug(f"Completed audio separation for: {video_read_path}")
+    log.info(f"Stored audio: {audio_save_path}")
+
+    # Store logs
+    with open(resolved_audio_save_path.with_suffix(".out"), "wb") as write_out:
+        write_out.write(out)
+    with open(resolved_audio_save_path.with_suffix(".err"), "wb") as write_err:
+        write_err.write(err)
+
+    return str(resolved_audio_save_path)
