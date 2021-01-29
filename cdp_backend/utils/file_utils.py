@@ -118,18 +118,18 @@ def split_audio(
     """
 
     # Check paths
-    video_read_path = Path(video_read_path).resolve(strict=True)
-    audio_save_path = Path(audio_save_path).resolve()
-    if audio_save_path.is_file() and not overwrite:
-        raise FileExistsError(audio_save_path)
-    if audio_save_path.is_dir():
-        raise IsADirectoryError(audio_save_path)
+    resolved_video_read_path = Path(video_read_path).resolve(strict=True)
+    resolved_audio_save_path = Path(audio_save_path).resolve()
+    if resolved_audio_save_path.is_file() and not overwrite:
+        raise FileExistsError(resolved_audio_save_path)
+    if resolved_audio_save_path.is_dir():
+        raise IsADirectoryError(resolved_audio_save_path)
 
     # Construct ffmpeg dag
-    stream = ffmpeg.input(video_read_path)
+    stream = ffmpeg.input(resolved_video_read_path)
     stream = ffmpeg.output(
         stream,
-        filename=audio_save_path,
+        filename=resolved_audio_save_path,
         format="wav",
         acodec="pcm_s16le",
         ac=1,
@@ -143,9 +143,9 @@ def split_audio(
     log.info(f"Stored audio: {audio_save_path}")
 
     # Store logs
-    with open(audio_save_path.with_suffix(".out"), "wb") as write_out:
+    with open(resolved_audio_save_path.with_suffix(".out"), "wb") as write_out:
         write_out.write(out)
-    with open(audio_save_path.with_suffix(".err"), "wb") as write_err:
+    with open(resolved_audio_save_path.with_suffix(".err"), "wb") as write_err:
         write_err.write(err)
 
-    return str(audio_save_path)
+    return str(resolved_audio_save_path)
