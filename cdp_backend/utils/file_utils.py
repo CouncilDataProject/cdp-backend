@@ -4,6 +4,7 @@ import logging
 import shutil
 from pathlib import Path
 from typing import Optional, Tuple, Union
+from prefect import task
 
 import dask.dataframe as dd
 import ffmpeg
@@ -159,4 +160,21 @@ def split_audio(
         str(resolved_audio_save_path),
         str(ffmpeg_stdout_path),
         str(ffmpeg_stderr_path),
+
+
+@task
+def external_resource_copy_task(
+    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+) -> str:
+    return external_resource_copy(uri=uri, dst=dst, overwrite=overwrite)
+
+
+@task
+def split_audio_task(
+    video_read_path: str,
+    audio_save_path: str,
+    overwrite: bool = False,
+) -> str:
+    return split_audio(
+        video_read_path=video_read_path, audio_save_path=audio_save_path, overwrite=overwrite
     )

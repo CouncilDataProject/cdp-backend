@@ -4,6 +4,7 @@
 import logging
 from pathlib import Path
 from typing import Optional, Union
+from prefect import task
 
 from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
@@ -142,3 +143,18 @@ def remove_local_file(filepath: Union[str, Path]) -> None:
     fs.rm(filepath)
 
     log.info(f"Removed {filepath} from local file system.")
+
+
+@task
+def upload_file_task(
+    credentials_file: str,
+    bucket: str,
+    filepath: str,
+    save_name: Optional[str] = None,
+    remove_local: bool = False,
+) -> str:
+    return upload_file(
+        credentials_file=credentials_file, bucket=bucket, filepath=filepath,
+        save_name=save_name, remove_local=remove_local
+    )
+
