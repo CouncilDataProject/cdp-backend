@@ -100,14 +100,14 @@ def test_split_audio(
     with mock.patch("ffmpeg.run") as mocked_ffmpeg:
         mocked_ffmpeg.return_value = (b"OUTPUT", b"ERROR")
         try:
-            output = file_utils.split_audio(
+            audio_file, stdout_log, stderr_log = file_utils.split_audio(
                 video_read_path=example_video,
                 audio_save_path=str(tmp_dir_audio_save_path),
             )
 
-            assert str(tmp_dir_audio_save_path) == output[0]
-            assert str(tmp_dir_audio_save_path.with_suffix(".out")) == output[1]
-            assert str(tmp_dir_audio_save_path.with_suffix(".err")) == output[2]
+            assert str(tmp_dir_audio_save_path) == audio_file
+            assert str(tmp_dir_audio_save_path.with_suffix(".out")) == stdout_log
+            assert str(tmp_dir_audio_save_path.with_suffix(".err")) == stderr_log
 
         except Exception as e:
             raise e
