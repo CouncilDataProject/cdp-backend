@@ -112,7 +112,7 @@ ENV/
 # VSCode
 .vscode
 
-# VIM swap files
+# Vim swap files
 *.swp
 *.swo
 
