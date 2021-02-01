@@ -112,6 +112,10 @@ ENV/
 # VSCode
 .vscode
 
+# VIM swap files
+*.swp
+*.swo
+
 # Project specific
 cdp_database_diagram.*
 cdp_event_gather_flow_*
