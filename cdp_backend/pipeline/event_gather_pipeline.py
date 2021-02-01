@@ -9,6 +9,8 @@ from prefect import Flow, task
 
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..file_store import functions as fs_functions
+from ..utils import file_utils as file_util_functions
 from .ingestion_models import Body, EventIngestionModel, Session
 
 ###############################################################################
@@ -139,3 +141,62 @@ def create_session_from_ingestion_model(
         db_session.external_source_id = session.external_source_id
 
     return db_session
+
+def create_or_get_audio(
+    key: str, 
+    video_uri: str,
+    bucket: str,
+    credentials_file: str
+) -> str:
+    tmp_audio_filepath = f"{key}_audio.wav"
+    try:
+        audio_uri = fs_functions.get_file_uri(
+            bucket=bucket, 
+            filename=tmp_audio_filepath, 
+            credentials_file=credentials_file
+        )
+    except FileNotFoundError:
+        # Store the video in temporary file
+        filename = video_uri.split("/")[-1]
+        if "." in filename:
+            suffix = filename.split(".")[-1]
+        else:
+            suffix = ""
+
+        tmp_video_filename = f"tmp_{key}_video.{suffix}"
+        tmp_video_filepath = file_util_functions.external_resource_copy_task(
+            uri=video_uri, dst=tmp_video_filename
+        )
+
+        # Split and store the audio in temporary file prior to upload
+        tmp_audio_filepath = file_util_functions.split_audio_task(
+            video_read_path=tmp_video_filepath,
+            audio_save_path=tmp_audio_filepath,
+        )
+        tmp_audio_log_out_filepath = tmp_audio_filepath.with_suffix(".out")
+        tmp_audio_log_err_filepath = tmp_audio_filepath.with_suffix(".err")
+
+        # Remove tmp video file
+        fs_functions.remove_local_file(tmp_video_filepath)
+
+        # Store audio and logs
+        audio_uri = fs_functions.upload_file_task(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=tmp_audio_filepath
+        )
+        audio_log_out_uri = fs_functions.upload_file_task(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=tmp_audio_log_out_filepath
+        )
+        audio_log_err_uri = fs_functions.upload_file_task(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=tmp_audio_log_err_filepath
+        )
+
+        # TODO 
+        # Store database records
+
+    return audio_uri
