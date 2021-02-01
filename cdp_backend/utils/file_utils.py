@@ -3,7 +3,7 @@
 import logging
 import shutil
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
@@ -102,7 +102,7 @@ def split_audio(
     video_read_path: str,
     audio_save_path: str,
     overwrite: bool = False,
-) -> str:
+) -> Tuple[str, str, str]:
     """
     Split and store the audio from a video file using ffmpeg.
     Parameters
@@ -113,8 +113,12 @@ def split_audio(
         Path to where the audio should be stored.
     Returns
     -------
-    audio_save_path: str
-        Path to where the split audio was saved.
+    resolved_audio_save_path: str
+        Path to where the split audio file was saved.
+    ffmpeg_stdout_path: str
+        Path to the ffmpeg stdout log file.
+    ffmpeg stderr path: str
+        Path to the ffmpeg stderr log file.
     """
 
     # Check paths
@@ -143,9 +147,16 @@ def split_audio(
     log.info(f"Stored audio: {audio_save_path}")
 
     # Store logs
-    with open(resolved_audio_save_path.with_suffix(".out"), "wb") as write_out:
+    ffmpeg_stdout_path = resolved_audio_save_path.with_suffix(".out")
+    ffmpeg_stderr_path = resolved_audio_save_path.with_suffix(".err")
+
+    with open(ffmpeg_stdout_path, "wb") as write_out:
         write_out.write(out)
-    with open(resolved_audio_save_path.with_suffix(".err"), "wb") as write_err:
+    with open(ffmpeg_stderr_path, "wb") as write_err:
         write_err.write(err)
 
-    return str(resolved_audio_save_path)
+    return (
+        str(resolved_audio_save_path),
+        str(ffmpeg_stdout_path),
+        str(ffmpeg_stderr_path),
+    )
