@@ -113,8 +113,9 @@ def split_audio(
         Path to where the audio should be stored.
     Returns
     -------
-    audio_save_path: str
-        Path to where the split audio was saved.
+    save_paths: Tuple[str, str, str]
+        Tuple of path to where the split audio was saved, ffmpeg stdout path, and
+        ffmpeg stderr path.
     """
 
     # Check paths
