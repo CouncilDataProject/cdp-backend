@@ -49,8 +49,6 @@ def create_event_gather_flow(
         events: List[EventIngestionModel] = get_events_func()
 
         for event in events:
-            # TODO create/get transcript
-            # TODO create/get audio (happens as part of transcript process)
 
             # Upload calls for minimal event
             body_ref = db_functions.upload_db_model_task(
@@ -73,6 +71,17 @@ def create_event_gather_flow(
                     session,
                     creds_file=credentials_file,
                 )
+
+                # TODO create/get audio (happens as part of transcript process)
+
+                key = hashlib.sha256(session.video_uri.encode("utf8")).hexdigest()
+
+                # TODO create/get transcript
+                # TODO pass bucket in via args
+                bucket = 
+                create_or_get_audio(key, session.video_uri, bucket, credentials_file)
+
+
 
     return flow
 
@@ -141,6 +150,18 @@ def create_session_from_ingestion_model(
         db_session.external_source_id = session.external_source_id
 
     return db_session
+
+
+@task
+def create_file(
+    name: str,
+    uri: str
+) -> db_models.File:
+    db_file = db_models.File()
+    db_file.name = name
+    db_file.uri = uri
+
+    return db_file
 
 def create_or_get_audio(
     key: str, 
