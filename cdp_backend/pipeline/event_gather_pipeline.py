@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import hashlib
 import logging
 from datetime import datetime
 from typing import Callable, List
 
-from prefect import Flow, task
+from prefect import Flow, task, case
 
 from ..database import functions as db_functions
 from ..database import models as db_models
@@ -78,7 +79,7 @@ def create_event_gather_flow(
 
                 # TODO create/get transcript
                 # TODO pass bucket in via args
-                bucket = 
+                bucket = "stg-cdp-seattle-a910f.appspot.com"
                 create_or_get_audio(key, session.video_uri, bucket, credentials_file)
 
 
@@ -170,13 +171,14 @@ def create_or_get_audio(
     credentials_file: str
 ) -> str:
     tmp_audio_filepath = f"{key}_audio.wav"
-    try:
-        audio_uri = fs_functions.get_file_uri(
-            bucket=bucket, 
-            filename=tmp_audio_filepath, 
-            credentials_file=credentials_file
-        )
-    except FileNotFoundError:
+    audio_uri = fs_functions.get_file_uri_task(
+        bucket=bucket, 
+        filename=tmp_audio_filepath, 
+        credentials_file=credentials_file
+    )
+
+    # If no existing audio uri 
+    with case(audio_uri, None):
         # Store the video in temporary file
         filename = video_uri.split("/")[-1]
         if "." in filename:
@@ -190,15 +192,10 @@ def create_or_get_audio(
         )
 
         # Split and store the audio in temporary file prior to upload
-        tmp_audio_filepath = file_util_functions.split_audio_task(
+        tmp_audio_filepath, tmp_audio_log_out_filepath, tmp_audio_log_err_filepath = file_util_functions.split_audio_task(
             video_read_path=tmp_video_filepath,
             audio_save_path=tmp_audio_filepath,
         )
-        tmp_audio_log_out_filepath = tmp_audio_filepath.with_suffix(".out")
-        tmp_audio_log_err_filepath = tmp_audio_filepath.with_suffix(".err")
-
-        # Remove tmp video file
-        fs_functions.remove_local_file(tmp_video_filepath)
 
         # Store audio and logs
         audio_uri = fs_functions.upload_file_task(
@@ -217,7 +214,15 @@ def create_or_get_audio(
             filepath=tmp_audio_log_err_filepath
         )
 
+        # Remove tmp files after they're dependent tasks are finished
+        fs_functions.remove_local_file_task(tmp_video_filepath, tmp_audio_filepath)
+        fs_functions.remove_local_file_task(tmp_audio_filepath, audio_uri)
+        fs_functions.remove_local_file_task(tmp_audio_log_out_filepath, audio_log_out_uri)
+        fs_functions.remove_local_file_task(tmp_audio_log_err_filepath, audio_log_err_uri)
+
+
         # TODO 
         # Store database records
 
     return audio_uri
+

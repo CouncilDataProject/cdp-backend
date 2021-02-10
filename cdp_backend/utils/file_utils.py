@@ -122,6 +122,7 @@ def split_audio(
         Path to the ffmpeg stderr log file.
     """
 
+
     # Check paths
     resolved_video_read_path = Path(video_read_path).resolve(strict=True)
     resolved_audio_save_path = Path(audio_save_path).resolve()
@@ -159,7 +160,7 @@ def split_audio(
     return (
         str(resolved_audio_save_path),
         str(ffmpeg_stdout_path),
-        str(ffmpeg_stderr_path),
+        str(ffmpeg_stderr_path))
 
 
 @task
@@ -169,12 +170,12 @@ def external_resource_copy_task(
     return external_resource_copy(uri=uri, dst=dst, overwrite=overwrite)
 
 
-@task
+@task(nout=3)
 def split_audio_task(
     video_read_path: str,
     audio_save_path: str,
     overwrite: bool = False,
-) -> str:
+) -> Tuple[str, str, str]:
     return split_audio(
         video_read_path=video_read_path, audio_save_path=audio_save_path, overwrite=overwrite
     )
