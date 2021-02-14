@@ -4,7 +4,7 @@
 import hashlib
 import logging
 from datetime import datetime
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 from prefect import Flow, task, case
 
