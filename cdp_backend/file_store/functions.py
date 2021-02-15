@@ -4,10 +4,10 @@
 import logging
 from pathlib import Path
 from typing import Any, Optional, Union
-from prefect import task
 
 from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
+from prefect import task
 
 ###############################################################################
 
@@ -109,7 +109,7 @@ def upload_file(
         save_name = resolved_filepath.name
 
     # Try to get the file first
-    uri = get_file_uri(bucket, save_name, credentials_file) 
+    uri = get_file_uri(bucket, save_name, credentials_file)
 
     # Return existing uri and remove local copy if desired
     if uri:
@@ -154,8 +154,11 @@ def upload_file_task(
     remove_local: bool = False,
 ) -> str:
     return upload_file(
-        credentials_file=credentials_file, bucket=bucket, filepath=filepath,
-        save_name=save_name, remove_local=remove_local
+        credentials_file=credentials_file,
+        bucket=bucket,
+        filepath=filepath,
+        save_name=save_name,
+        remove_local=remove_local,
     )
 
 
@@ -163,6 +166,11 @@ def upload_file_task(
 def remove_local_file_task(filepath: Union[str, Path], trigger: Any) -> None:
     remove_local_file(filepath)
 
+
 @task
-def get_file_uri_task(bucket: str, filename: str, credentials_file: str) -> Optional[str]:
-    return get_file_uri(bucket=bucket, filename=filename, credentials_file=credentials_file)
+def get_file_uri_task(
+    bucket: str, filename: str, credentials_file: str
+) -> Optional[str]:
+    return get_file_uri(
+        bucket=bucket, filename=filename, credentials_file=credentials_file
+    )

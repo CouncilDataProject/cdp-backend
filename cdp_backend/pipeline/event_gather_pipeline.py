@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 from typing import Callable, List, Optional
 
-from prefect import Flow, task, case
+from prefect import Flow, case, task
 
 from ..database import functions as db_functions
 from ..database import models as db_models
@@ -28,6 +28,7 @@ log = logging.getLogger(__name__)
 def create_event_gather_flow(
     get_events_func: Callable,
     credentials_file: str,
+    bucket: str,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -39,6 +40,8 @@ def create_event_gather_flow(
         The event gather function written by the CDP instance maintainer(s).
     credentials_file: str
         Path to Google Service Account Credentials JSON file.
+    bucket: str
+        Name of the GCS bucket to upload files to.
 
     Returns
     -------
@@ -73,16 +76,14 @@ def create_event_gather_flow(
                     creds_file=credentials_file,
                 )
 
+                # TODO create/get transcript
+                # TODO pass bucket in via args
+
                 # TODO create/get audio (happens as part of transcript process)
 
                 key = hashlib.sha256(session.video_uri.encode("utf8")).hexdigest()
 
-                # TODO create/get transcript
-                # TODO pass bucket in via args
-                bucket = "stg-cdp-seattle-a910f.appspot.com"
                 create_or_get_audio(key, session.video_uri, bucket, credentials_file)
-
-
 
     return flow
 
@@ -154,30 +155,23 @@ def create_session_from_ingestion_model(
 
 
 @task
-def create_file(
-    name: str,
-    uri: str
-) -> db_models.File:
+def create_file(name: str, uri: str) -> db_models.File:
     db_file = db_models.File()
     db_file.name = name
     db_file.uri = uri
 
     return db_file
 
+
 def create_or_get_audio(
-    key: str, 
-    video_uri: str,
-    bucket: str,
-    credentials_file: str
+    key: str, video_uri: str, bucket: str, credentials_file: str
 ) -> str:
     tmp_audio_filepath = f"{key}_audio.wav"
     audio_uri = fs_functions.get_file_uri_task(
-        bucket=bucket, 
-        filename=tmp_audio_filepath, 
-        credentials_file=credentials_file
+        bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
     )
 
-    # If no existing audio uri 
+    # If no existing audio uri
     with case(audio_uri, None):
         # Store the video in temporary file
         filename = video_uri.split("/")[-1]
@@ -192,7 +186,11 @@ def create_or_get_audio(
         )
 
         # Split and store the audio in temporary file prior to upload
-        tmp_audio_filepath, tmp_audio_log_out_filepath, tmp_audio_log_err_filepath = file_util_functions.split_audio_task(
+        (
+            tmp_audio_filepath,
+            tmp_audio_log_out_filepath,
+            tmp_audio_log_err_filepath,
+        ) = file_util_functions.split_audio_task(
             video_read_path=tmp_video_filepath,
             audio_save_path=tmp_audio_filepath,
         )
@@ -201,28 +199,30 @@ def create_or_get_audio(
         audio_uri = fs_functions.upload_file_task(
             credentials_file=credentials_file,
             bucket=bucket,
-            filepath=tmp_audio_filepath
+            filepath=tmp_audio_filepath,
         )
         audio_log_out_uri = fs_functions.upload_file_task(
             credentials_file=credentials_file,
             bucket=bucket,
-            filepath=tmp_audio_log_out_filepath
+            filepath=tmp_audio_log_out_filepath,
         )
         audio_log_err_uri = fs_functions.upload_file_task(
             credentials_file=credentials_file,
             bucket=bucket,
-            filepath=tmp_audio_log_err_filepath
+            filepath=tmp_audio_log_err_filepath,
         )
 
         # Remove tmp files after they're dependent tasks are finished
         fs_functions.remove_local_file_task(tmp_video_filepath, tmp_audio_filepath)
         fs_functions.remove_local_file_task(tmp_audio_filepath, audio_uri)
-        fs_functions.remove_local_file_task(tmp_audio_log_out_filepath, audio_log_out_uri)
-        fs_functions.remove_local_file_task(tmp_audio_log_err_filepath, audio_log_err_uri)
+        fs_functions.remove_local_file_task(
+            tmp_audio_log_out_filepath, audio_log_out_uri
+        )
+        fs_functions.remove_local_file_task(
+            tmp_audio_log_err_filepath, audio_log_err_uri
+        )
 
-
-        # TODO 
+        # TODO
         # Store database records
 
     return audio_uri
-

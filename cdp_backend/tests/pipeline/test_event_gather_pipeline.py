@@ -40,6 +40,7 @@ def test_create_event_gather_flow() -> None:
     flow = pipeline.create_event_gather_flow(
         get_events_func=mock_get_events_func,
         credentials_file="/fake/credentials/path",
+        bucket="bucket",
     )
     assert isinstance(flow, Flow)
 
@@ -54,7 +55,7 @@ def test_create_event_gather_flow() -> None:
     [
         # TODO add test case for when audio uri doesn't exist
         ("123", "video_uri", None, "audio_uri", "audio_uri")
-    ]
+    ],
 )
 def test_create_or_get_audio(
     mock_get_file_uri,
@@ -77,7 +78,7 @@ def test_create_or_get_audio(
         key=key,
         video_uri=video_uri,
         bucket="bucket",
-        credentials_file="/fake/credentials/path"
+        credentials_file="/fake/credentials/path",
     )
 
     assert expected_audio_uri == actual_audio_uri

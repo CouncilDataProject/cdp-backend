@@ -49,6 +49,14 @@ class Args(argparse.Namespace):
                 "supplies event data to the CDP event gather pipeline."
             ),
         )
+        p.add_argument(
+            "-b",
+            "--google_cloud_storage_bucket_name",
+            type=Path,
+            dest="gcs_bucket",
+            help=("Google Cloud Storage bucket name for file uploads."),
+        )
+
         p.parse_args(namespace=self)
 
 
@@ -67,7 +75,11 @@ def main() -> None:
 
         get_events_func = import_get_events_func(args.get_events_function_path)
 
-        flow = pipeline.create_event_gather_flow(get_events_func, credentials_file)
+        bucket = args.gcs_bucket
+
+        flow = pipeline.create_event_gather_flow(
+            get_events_func, credentials_file, bucket
+        )
 
         flow.run()
 
