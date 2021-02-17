@@ -64,19 +64,21 @@ def fake_get_events_many() -> List[EventIngestionModel]:
 def main() -> None:
     try:
         args = Args()
-        minimal_flow = pipeline.create_event_gather_flow(fake_get_events_minimal, "")
+        minimal_flow = pipeline.create_event_gather_flow(
+            fake_get_events_minimal, "", ""
+        )
         minimal_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="minimal"),
             format="png",
         )
 
-        filled_flow = pipeline.create_event_gather_flow(fake_get_events_filled, "")
+        filled_flow = pipeline.create_event_gather_flow(fake_get_events_filled, "", "")
         filled_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="filled"),
             format="png",
         )
 
-        many_flow = pipeline.create_event_gather_flow(fake_get_events_many, "")
+        many_flow = pipeline.create_event_gather_flow(fake_get_events_many, "", "")
         many_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="many"),
             format="png",

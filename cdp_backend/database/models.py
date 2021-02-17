@@ -24,7 +24,7 @@ class File(Model):
     A file from the CDP file store.
     """
 
-    uri = fields.TextField(required=True, validator=validators.resource_exists)
+    uri = fields.TextField(required=True)
     name = fields.TextField(required=True)
     description = fields.TextField()
     media_type = fields.TextField()

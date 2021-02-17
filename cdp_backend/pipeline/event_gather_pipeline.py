@@ -4,7 +4,8 @@
 import hashlib
 import logging
 from datetime import datetime
-from typing import Callable, List, Optional
+from pathlib import Path
+from typing import Callable, List
 
 from prefect import Flow, case, task
 
@@ -77,12 +78,11 @@ def create_event_gather_flow(
                 )
 
                 # TODO create/get transcript
-                # TODO pass bucket in via args
 
-                # TODO create/get audio (happens as part of transcript process)
-
+                # Create unique key for video uri
                 key = hashlib.sha256(session.video_uri.encode("utf8")).hexdigest()
 
+                # create/get audio (happens as part of transcript process)
                 create_or_get_audio(key, session.video_uri, bucket, credentials_file)
 
     return flow
@@ -163,6 +163,11 @@ def create_file(name: str, uri: str) -> db_models.File:
     return db_file
 
 
+@task
+def create_filename_from_filepath(filepath: str) -> str:
+    return Path(filepath).resolve(strict=True).name
+
+
 def create_or_get_audio(
     key: str, video_uri: str, bucket: str, credentials_file: str
 ) -> str:
@@ -172,7 +177,7 @@ def create_or_get_audio(
     )
 
     # If no existing audio uri
-    with case(audio_uri, None):
+    with case(audio_uri, None):  # type: ignore
         # Store the video in temporary file
         filename = video_uri.split("/")[-1]
         if "." in filename:
@@ -212,17 +217,39 @@ def create_or_get_audio(
             filepath=tmp_audio_log_err_filepath,
         )
 
-        # Remove tmp files after they're dependent tasks are finished
+        # Create database models for audio files
+        audio_file_db_model = create_file(
+            name=create_filename_from_filepath(tmp_audio_filepath),
+            uri=audio_uri,
+        )
+        audio_out_file_db_model = create_file(
+            name=create_filename_from_filepath(tmp_audio_log_out_filepath),
+            uri=audio_log_out_uri,
+        )
+        audio_err_file_db_model = create_file(
+            name=create_filename_from_filepath(tmp_audio_log_err_filepath),
+            uri=audio_log_err_uri,
+        )
+
+        # Upload files to database
+        uploaded_file_db_model = db_functions.upload_db_model_task(
+            audio_file_db_model, None, credentials_file
+        )
+        uploaded_out_db_model = db_functions.upload_db_model_task(
+            audio_out_file_db_model, None, credentials_file
+        )
+        uploaded_err_db_model = db_functions.upload_db_model_task(
+            audio_err_file_db_model, None, credentials_file
+        )
+
+        # Remove tmp files after their final dependent tasks are finished
         fs_functions.remove_local_file_task(tmp_video_filepath, tmp_audio_filepath)
-        fs_functions.remove_local_file_task(tmp_audio_filepath, audio_uri)
+        fs_functions.remove_local_file_task(tmp_audio_filepath, uploaded_file_db_model)
         fs_functions.remove_local_file_task(
-            tmp_audio_log_out_filepath, audio_log_out_uri
+            tmp_audio_log_out_filepath, uploaded_out_db_model
         )
         fs_functions.remove_local_file_task(
-            tmp_audio_log_err_filepath, audio_log_err_uri
+            tmp_audio_log_err_filepath, uploaded_err_db_model
         )
 
-        # TODO
-        # Store database records
-
-    return audio_uri
+    return audio_uri  # type: ignore

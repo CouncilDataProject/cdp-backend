@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from typing import Optional
 
 import fireo
 from fireo.models import Model
@@ -77,7 +78,7 @@ def update_db_model(
 
 def upload_db_model(
     db_model: Model,
-    ingestion_model: IngestionModel,
+    ingestion_model: Optional[IngestionModel],
     creds_file: str,
 ) -> Model:
     """
@@ -87,7 +88,7 @@ def upload_db_model(
     ----------
     db_model: Model
         The database model to upload.
-    ingestion_model: IngestionModel
+    ingestion_model: Optional[IngestionModel]
         The accompanying ingestion model in the case the model already exists and needs
         to be updated rather than inserted.
     creds_file: str
@@ -113,7 +114,10 @@ def upload_db_model(
         log.info(
             f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
         )
-    elif len(uniqueness_validation.conflicting_models) == 1:
+    elif (
+        len(uniqueness_validation.conflicting_models) == 1
+        and ingestion_model is not None
+    ):
         updated_db_model = update_db_model(
             uniqueness_validation.conflicting_models[0],
             ingestion_model,

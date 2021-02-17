@@ -4,6 +4,7 @@
 from datetime import datetime
 from typing import List
 from unittest import mock
+from unittest.mock import MagicMock
 
 import pytest
 from prefect import Flow
@@ -46,6 +47,9 @@ def test_create_event_gather_flow() -> None:
 
 
 @mock.patch("cdp_backend.file_store.functions.remove_local_file_task")
+@mock.patch("cdp_backend.database.functions.upload_db_model_task")
+@mock.patch("cdp_backend.pipeline.event_gather_pipeline.create_file")
+@mock.patch("cdp_backend.pipeline.event_gather_pipeline.create_filename_from_filepath")
 @mock.patch("cdp_backend.utils.file_utils.split_audio_task")
 @mock.patch("cdp_backend.utils.file_utils.external_resource_copy_task")
 @mock.patch("cdp_backend.file_store.functions.upload_file_task")
@@ -58,11 +62,14 @@ def test_create_event_gather_flow() -> None:
     ],
 )
 def test_create_or_get_audio(
-    mock_get_file_uri,
-    mock_upload_file,
-    mock_external_copy,
-    mock_audio,
-    mock_remove_file,
+    mock_get_file_uri: MagicMock,
+    mock_upload_file: MagicMock,
+    mock_external_copy: MagicMock,
+    mock_audio: MagicMock,
+    mock_create_filename: MagicMock,
+    mock_create_file: MagicMock,
+    mock_upload_db: MagicMock,
+    mock_remove_file: MagicMock,
     key: str,
     video_uri: str,
     get_file_uri_value: str,

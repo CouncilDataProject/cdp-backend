@@ -239,7 +239,9 @@ EXAMPLE_MINIMAL_EVENT = EventIngestionModel(
     sessions=[
         Session(
             session_datetime=datetime.utcnow(),
-            video_uri="https://video.seattle.gov/media/council/brief_072219_2011957V.mp4",
+            video_uri=(
+                "https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"
+            ),
             session_index=0,
         ),
     ],
