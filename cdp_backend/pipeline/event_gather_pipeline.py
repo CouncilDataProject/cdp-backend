@@ -175,6 +175,23 @@ def create_or_get_audio(
     audio_uri = fs_functions.get_file_uri_task(
         bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
     )
+    """
+    Creates an audio file from a video uri and uploads it to the filestore and db.
+
+    Parameters
+    ----------
+    key: str
+        The unique key made from a hash value of the video uri. 
+    bucket: str
+        Name of the GCS bucket to upload files to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+
+    Returns
+    -------
+    audio_uri: str
+        The uri of the created audio file in the file store. 
+    """
 
     # If no existing audio uri
     with case(audio_uri, None):  # type: ignore
