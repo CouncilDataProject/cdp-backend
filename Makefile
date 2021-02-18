@@ -64,3 +64,8 @@ gen-docs: ## generate Sphinx HTML documentation, including API docs
 docs: ## generate Sphinx HTML documentation, including API docs, and serve to browser
 	make gen-docs
 	$(BROWSER) docs/_build/html/index.html
+
+run-mock-event-pipeline:  ## run event pipe using mock ingestion model, requires "key"
+	run_cdp_event_gather \
+		-g $(key) \
+		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.mock_get_events_func

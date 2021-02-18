@@ -49,30 +49,27 @@ restart your terminal after installation._
 After `pulumi` and `gcloud` have both been installed and terminal restarted, run the
 following commands to setup your local machine with credentials to both services.
 
-1. `pulumi login`
-2. `gcloud auth login`
-3. `gcloud auth application-default login`
+```bash
+make init {project_name}
+make build
+```
+
+-   `make init` will (for the project name provided):
+
+    -   request logins to `gcloud` and `pulumi`
+    -   create the new project in Google Cloud
+    -   initialize the pulumi stack (but not deploy)
+    -   generate a GCP service account JSON
+
+-   `make build` will setup the infrastructure and services for the current pulumi stack
 
 **Note:** Pulumi only supports Python 3.7, when creating dev infrastructures you
 need to run these scripts in a py37 environment.
 
-## Stack Initialization
+## Common Commands
 
-To setup a new CDP Infrastructure stack run:
-
-`pulumi stack init {gcp-project-id}`
-
-And fill the `{gcp-project-id}` with the Id of the GCP project you created earlier.
-_Note: The GCP Project Id isn't always the same as the GCP project name._
-
-By default, the current `__main__.py` file used by `pulumi`, assumes the stack name
-matches the GCP project id for the GCP project you want to deploy the infrastructure on.
-
-## Deployment Process and Common Commands
-
--   To create a new deployment or update an existing deployment, run: `pulumi up -p 5`
-    -   Note: the `-p 5` sets the maximum number of parallel resources that can be created
-        at any one time, we do this to resolve Google's API limits.
+-   To create a new deployment or update an existing deployment, run: `make build`
+    -   Note: this is shorthand for `pulumi up -p 5`
 -   To delete an existing deployment, run: `pulumi destroy`
 -   To view all created and managed stacks, run: `pulumi stack ls`
 -   To switch to a different stack, run: `pulumi stack select {stack-name}`
