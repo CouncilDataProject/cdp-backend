@@ -8,6 +8,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from prefect import Flow
+from py._path.local import LocalPath
 
 from cdp_backend.database import models as db_models
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
@@ -29,6 +30,10 @@ from ..database.test_functions import (
     minimal_ingestion_event,
     minimal_ingestion_session,
 )
+
+example_file = db_models.File()
+example_file.name = "file name"
+example_file.uri = "uri"
 
 
 def mock_get_events_func() -> List[EventIngestionModel]:
@@ -143,3 +148,19 @@ def test_create_session_from_ingestion_model(
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
     assert expected.event_ref == actual.event_ref
+
+
+def test_create_file() -> None:
+    db_file = pipeline.create_file.run("file name", "uri")  # type: ignore
+
+    assert example_file.name == db_file.name
+    assert example_file.uri == db_file.uri
+
+
+def test_create_filename_from_filepath(tmpdir: LocalPath) -> None:
+    p = tmpdir.mkdir("sub").join("hello.txt")
+    p.write("content")
+    filepath = str(p)
+    assert "hello.txt" == pipeline.create_filename_from_filepath.run(  # type: ignore
+        filepath
+    )
