@@ -71,12 +71,6 @@ def create_event_gather_flow(
             )
 
             for session in event.sessions:
-                db_functions.upload_db_model_task(
-                    create_session_from_ingestion_model(session, event_ref),
-                    session,
-                    creds_file=credentials_file,
-                )
-
                 # TODO create/get transcript
 
                 # Create unique key for video uri
@@ -84,6 +78,12 @@ def create_event_gather_flow(
 
                 # create/get audio (happens as part of transcript process)
                 create_or_get_audio(key, session.video_uri, bucket, credentials_file)
+
+                db_functions.upload_db_model_task(
+                    create_session_from_ingestion_model(session, event_ref),
+                    session,
+                    creds_file=credentials_file,
+                )
 
     return flow
 
@@ -171,17 +171,13 @@ def create_filename_from_filepath(filepath: str) -> str:
 def create_or_get_audio(
     key: str, video_uri: str, bucket: str, credentials_file: str
 ) -> str:
-    tmp_audio_filepath = f"{key}_audio.wav"
-    audio_uri = fs_functions.get_file_uri_task(
-        bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
-    )
     """
     Creates an audio file from a video uri and uploads it to the filestore and db.
 
     Parameters
     ----------
     key: str
-        The unique key made from a hash value of the video uri. 
+        The unique key made from a hash value of the video uri.
     bucket: str
         Name of the GCS bucket to upload files to.
     credentials_file: str
@@ -190,8 +186,13 @@ def create_or_get_audio(
     Returns
     -------
     audio_uri: str
-        The uri of the created audio file in the file store. 
+        The uri of the created audio file in the file store.
     """
+
+    tmp_audio_filepath = f"{key}_audio.wav"
+    audio_uri = fs_functions.get_file_uri_task(
+        bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
+    )
 
     # If no existing audio uri
     with case(audio_uri, None):  # type: ignore
@@ -260,13 +261,17 @@ def create_or_get_audio(
         )
 
         # Remove tmp files after their final dependent tasks are finished
-        fs_functions.remove_local_file_task(tmp_video_filepath, tmp_audio_filepath)
-        fs_functions.remove_local_file_task(tmp_audio_filepath, uploaded_file_db_model)
         fs_functions.remove_local_file_task(
-            tmp_audio_log_out_filepath, uploaded_out_db_model
+            tmp_video_filepath, upstream_tasks=[tmp_audio_filepath]
         )
         fs_functions.remove_local_file_task(
-            tmp_audio_log_err_filepath, uploaded_err_db_model
+            tmp_audio_filepath, upstream_tasks=[uploaded_file_db_model]
+        )
+        fs_functions.remove_local_file_task(
+            tmp_audio_log_out_filepath, upstream_tasks=[uploaded_out_db_model]
+        )
+        fs_functions.remove_local_file_task(
+            tmp_audio_log_err_filepath, upstream_tasks=[uploaded_err_db_model]
         )
 
     return audio_uri  # type: ignore

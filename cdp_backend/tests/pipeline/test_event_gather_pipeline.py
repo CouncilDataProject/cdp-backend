@@ -82,7 +82,7 @@ def test_create_or_get_audio(
     expected_audio_uri: str,
 ) -> None:
     mock_get_file_uri.return_value = get_file_uri_value
-    mock_external_copy.return_value = "stupid shit"
+    mock_external_copy.return_value = "mock value"
     mock_audio.return_value = ("audio path", "err", "out")
     mock_upload_file.return_value = upload_file_value
 

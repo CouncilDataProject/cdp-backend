@@ -3,7 +3,7 @@
 
 import logging
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
@@ -163,7 +163,7 @@ def upload_file_task(
 
 
 @task
-def remove_local_file_task(filepath: Union[str, Path], trigger: Any) -> None:
+def remove_local_file_task(filepath: Union[str, Path]) -> None:
     remove_local_file(filepath)
 
 
