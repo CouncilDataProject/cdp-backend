@@ -174,3 +174,8 @@ def get_file_uri_task(
     return get_file_uri(
         bucket=bucket, filename=filename, credentials_file=credentials_file
     )
+
+
+@task
+def create_filename_from_filepath(filepath: str) -> str:
+    return Path(filepath).resolve(strict=True).name

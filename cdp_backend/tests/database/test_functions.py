@@ -70,6 +70,10 @@ minimal_ingestion_event = ingestion_models.EventIngestionModel(
     body=minimal_ingestion_body, sessions=[minimal_ingestion_session]
 )
 
+example_file = db_models.File()
+example_file.name = "file name"
+example_file.uri = "uri"
+
 ###############################################################################
 # Assertion functions
 
@@ -204,3 +208,64 @@ def test_upload_db_model(
                     )
 
                     assert_db_models_equality(expected, actual_uploaded_model, True)
+
+
+def test_create_file() -> None:
+    db_file = db_functions.create_file.run("file name", "uri")  # type: ignore
+
+    assert example_file.name == db_file.name
+    assert example_file.uri == db_file.uri
+
+
+@pytest.mark.parametrize(
+    "ingestion_model, expected",
+    [
+        (minimal_ingestion_body, db_body),
+        (full_ingestion_body, db_body),
+    ],
+)
+def test_create_body_from_ingestion_model(
+    ingestion_model: ingestion_models.Body,
+    expected: db_models.Body,
+) -> None:
+    actual = db_functions.create_body_from_ingestion_model.run(  # type: ignore
+        ingestion_model
+    )
+
+    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
+
+
+@pytest.mark.parametrize(
+    "ingestion_model, expected",
+    [
+        (minimal_ingestion_event, db_event),
+    ],
+)
+def test_create_event_from_ingestion_model(
+    ingestion_model: ingestion_models.EventIngestionModel,
+    expected: db_models.Event,
+) -> None:
+    actual = db_functions.create_event_from_ingestion_model.run(  # type: ignore
+        ingestion_model, db_body
+    )
+
+    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
+
+    assert expected.body_ref == actual.body_ref
+
+
+@pytest.mark.parametrize(
+    "ingestion_model, expected",
+    [(minimal_ingestion_session, db_session), (full_ingestion_session, db_session)],
+)
+def test_create_session_from_ingestion_model(
+    ingestion_model: ingestion_models.Session,
+    expected: db_models.Session,
+) -> None:
+    actual = db_functions.create_session_from_ingestion_model.run(  # type: ignore
+        ingestion_model, db_event
+    )
+
+    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
+
+    assert expected.event_ref == actual.event_ref

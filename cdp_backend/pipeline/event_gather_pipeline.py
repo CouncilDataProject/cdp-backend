@@ -3,17 +3,14 @@
 
 import hashlib
 import logging
-from datetime import datetime
-from pathlib import Path
 from typing import Callable, List
 
-from prefect import Flow, case, task
+from prefect import Flow, case
 
 from ..database import functions as db_functions
-from ..database import models as db_models
 from ..file_store import functions as fs_functions
 from ..utils import file_utils as file_util_functions
-from .ingestion_models import Body, EventIngestionModel, Session
+from .ingestion_models import EventIngestionModel
 
 ###############################################################################
 
@@ -57,7 +54,7 @@ def create_event_gather_flow(
 
             # Upload calls for minimal event
             body_ref = db_functions.upload_db_model_task(
-                create_body_from_ingestion_model(event.body),
+                db_functions.create_body_from_ingestion_model(event.body),
                 event.body,
                 creds_file=credentials_file,
             )
@@ -65,7 +62,7 @@ def create_event_gather_flow(
             # TODO add upload calls for non-minimal event
 
             event_ref = db_functions.upload_db_model_task(
-                create_event_from_ingestion_model(event, body_ref),
+                db_functions.create_event_from_ingestion_model(event, body_ref),
                 event,
                 creds_file=credentials_file,
             )
@@ -80,92 +77,14 @@ def create_event_gather_flow(
                 create_or_get_audio(key, session.video_uri, bucket, credentials_file)
 
                 db_functions.upload_db_model_task(
-                    create_session_from_ingestion_model(session, event_ref),
+                    db_functions.create_session_from_ingestion_model(
+                        session, event_ref
+                    ),
                     session,
                     creds_file=credentials_file,
                 )
 
     return flow
-
-
-@task
-def create_body_from_ingestion_model(body: Body) -> db_models.Body:
-    db_body = db_models.Body()
-
-    # Required fields
-    db_body.name = body.name
-    db_body.is_active = body.is_active
-    if body.start_datetime is None:
-        db_body.start_datetime = datetime.utcnow()
-    else:
-        db_body.start_datetime = body.start_datetime
-
-    # Optional fields
-    if body.end_datetime:
-        db_body.end_datetime = body.end_datetime
-
-    if body.description:
-        db_body.description = body.description
-
-    if body.external_source_id:
-        db_body.external_source_id = body.external_source_id
-
-    return db_body
-
-
-@task
-def create_event_from_ingestion_model(
-    event: EventIngestionModel, body_ref: db_models.Body
-) -> db_models.Event:
-    db_event = db_models.Event()
-
-    # Required fields
-    db_event.body_ref = body_ref
-
-    # Assume event datetime is the date of earliest session
-    db_event.event_datetime = min(
-        [session.session_datetime for session in event.sessions]
-    )
-
-    # TODO add optional fields
-
-    return db_event
-
-
-@task
-def create_session_from_ingestion_model(
-    session: Session, event_ref: db_models.Event
-) -> db_models.Session:
-    db_session = db_models.Session()
-
-    # Required fields
-    db_session.event_ref = event_ref
-    db_session.session_datetime = session.session_datetime
-    db_session.video_uri = session.video_uri
-    db_session.session_index = session.session_index
-
-    # Optional fields
-    if session.caption_uri:
-        db_session.caption_uri = session.caption_uri
-
-    if session.external_source_id:
-        db_session.external_source_id = session.external_source_id
-
-    return db_session
-
-
-@task
-def create_file(name: str, uri: str) -> db_models.File:
-    db_file = db_models.File()
-    db_file.name = name
-    db_file.uri = uri
-
-    return db_file
-
-
-@task
-def create_filename_from_filepath(filepath: str) -> str:
-    return Path(filepath).resolve(strict=True).name
 
 
 def create_or_get_audio(
@@ -236,16 +155,16 @@ def create_or_get_audio(
         )
 
         # Create database models for audio files
-        audio_file_db_model = create_file(
-            name=create_filename_from_filepath(tmp_audio_filepath),
+        audio_file_db_model = db_functions.create_file(
+            name=fs_functions.create_filename_from_filepath(tmp_audio_filepath),
             uri=audio_uri,
         )
-        audio_out_file_db_model = create_file(
-            name=create_filename_from_filepath(tmp_audio_log_out_filepath),
+        audio_out_file_db_model = db_functions.create_file(
+            name=fs_functions.create_filename_from_filepath(tmp_audio_log_out_filepath),
             uri=audio_log_out_uri,
         )
-        audio_err_file_db_model = create_file(
-            name=create_filename_from_filepath(tmp_audio_log_err_filepath),
+        audio_err_file_db_model = db_functions.create_file(
+            name=fs_functions.create_filename_from_filepath(tmp_audio_log_err_filepath),
             uri=audio_log_err_uri,
         )
 

@@ -8,32 +8,12 @@ from unittest.mock import MagicMock
 
 import pytest
 from prefect import Flow
-from py._path.local import LocalPath
 
-from cdp_backend.database import models as db_models
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_MINIMAL_EVENT,
-    Body,
     EventIngestionModel,
-    Session,
 )
-
-from ..database.test_functions import (
-    assert_ingestion_and_db_models_equal,
-    db_body,
-    db_event,
-    db_session,
-    full_ingestion_body,
-    full_ingestion_session,
-    minimal_ingestion_body,
-    minimal_ingestion_event,
-    minimal_ingestion_session,
-)
-
-example_file = db_models.File()
-example_file.name = "file name"
-example_file.uri = "uri"
 
 
 def mock_get_events_func() -> List[EventIngestionModel]:
@@ -53,8 +33,8 @@ def test_create_event_gather_flow() -> None:
 
 @mock.patch("cdp_backend.file_store.functions.remove_local_file_task")
 @mock.patch("cdp_backend.database.functions.upload_db_model_task")
-@mock.patch("cdp_backend.pipeline.event_gather_pipeline.create_file")
-@mock.patch("cdp_backend.pipeline.event_gather_pipeline.create_filename_from_filepath")
+@mock.patch("cdp_backend.database.functions.create_file")
+@mock.patch("cdp_backend.file_store.functions.create_filename_from_filepath")
 @mock.patch("cdp_backend.utils.file_utils.split_audio_task")
 @mock.patch("cdp_backend.utils.file_utils.external_resource_copy_task")
 @mock.patch("cdp_backend.file_store.functions.upload_file_task")
@@ -94,73 +74,3 @@ def test_create_or_get_audio(
     )
 
     assert expected_audio_uri == actual_audio_uri
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [
-        (minimal_ingestion_body, db_body),
-        (full_ingestion_body, db_body),
-    ],
-)
-def test_create_body_from_ingestion_model(
-    ingestion_model: Body,
-    expected: db_models.Body,
-) -> None:
-    actual = pipeline.create_body_from_ingestion_model.run(  # type: ignore
-        ingestion_model
-    )
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [
-        (minimal_ingestion_event, db_event),
-    ],
-)
-def test_create_event_from_ingestion_model(
-    ingestion_model: EventIngestionModel,
-    expected: db_models.Event,
-) -> None:
-    actual = pipeline.create_event_from_ingestion_model.run(  # type: ignore
-        ingestion_model, db_body
-    )
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-    assert expected.body_ref == actual.body_ref
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [(minimal_ingestion_session, db_session), (full_ingestion_session, db_session)],
-)
-def test_create_session_from_ingestion_model(
-    ingestion_model: Session,
-    expected: db_models.Session,
-) -> None:
-    actual = pipeline.create_session_from_ingestion_model.run(  # type: ignore
-        ingestion_model, db_event
-    )
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-    assert expected.event_ref == actual.event_ref
-
-
-def test_create_file() -> None:
-    db_file = pipeline.create_file.run("file name", "uri")  # type: ignore
-
-    assert example_file.name == db_file.name
-    assert example_file.uri == db_file.uri
-
-
-def test_create_filename_from_filepath(tmpdir: LocalPath) -> None:
-    p = tmpdir.mkdir("sub").join("hello.txt")
-    p.write("content")
-    filepath = str(p)
-    assert "hello.txt" == pipeline.create_filename_from_filepath.run(  # type: ignore
-        filepath
-    )

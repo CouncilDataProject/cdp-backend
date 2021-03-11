@@ -96,3 +96,12 @@ def test_remove_local_file(tmpdir: LocalPath) -> None:
     functions.remove_local_file(file_path)
 
     assert not os.path.isfile(file_path)
+
+
+def test_create_filename_from_filepath(tmpdir: LocalPath) -> None:
+    p = tmpdir.mkdir("sub").join("hello.txt")
+    p.write("content")
+    filepath = str(p)
+    assert "hello.txt" == functions.create_filename_from_filepath.run(  # type: ignore
+        filepath
+    )
