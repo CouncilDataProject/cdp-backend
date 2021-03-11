@@ -8,6 +8,7 @@ from typing import Optional, Tuple, Union
 import dask.dataframe as dd
 import ffmpeg
 import requests
+from prefect import task
 
 ###############################################################################
 
@@ -159,4 +160,24 @@ def split_audio(
         str(resolved_audio_save_path),
         str(ffmpeg_stdout_path),
         str(ffmpeg_stderr_path),
+    )
+
+
+@task
+def external_resource_copy_task(
+    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+) -> str:
+    return external_resource_copy(uri=uri, dst=dst, overwrite=overwrite)
+
+
+@task(nout=3)
+def split_audio_task(
+    video_read_path: str,
+    audio_save_path: str,
+    overwrite: bool = False,
+) -> Tuple[str, str, str]:
+    return split_audio(
+        video_read_path=video_read_path,
+        audio_save_path=audio_save_path,
+        overwrite=overwrite,
     )
