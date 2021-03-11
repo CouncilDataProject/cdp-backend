@@ -366,15 +366,21 @@
 <span class="sd">    status: bool</span>
 <span class="sd">        The validation status.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="c1"># Get file system</span>
-    <span class="n">fs</span><span class="p">,</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-
-    <span class="c1"># Check exists</span>
-    <span class="k">if</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
+    <span class="c1"># TODO Replace after finding way to pass custom fs through FireO validator</span>
+    <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;gs://&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get file system</span>
+        <span class="n">fs</span><span class="p">,</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+        <span class="c1"># Check exists</span>
+        <span class="k">if</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 

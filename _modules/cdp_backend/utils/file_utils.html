@@ -215,6 +215,7 @@
 <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
 <span class="kn">import</span> <span class="nn">ffmpeg</span>
 <span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">task</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -367,6 +368,26 @@
         <span class="nb">str</span><span class="p">(</span><span class="n">ffmpeg_stdout_path</span><span class="p">),</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">ffmpeg_stderr_path</span><span class="p">),</span>
     <span class="p">)</span></div>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">external_resource_copy_task</span><span class="p">(</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">external_resource_copy</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">split_audio_task</span><span class="p">(</span>
+    <span class="n">video_read_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">audio_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">split_audio</span><span class="p">(</span>
+        <span class="n">video_read_path</span><span class="o">=</span><span class="n">video_read_path</span><span class="p">,</span>
+        <span class="n">audio_save_path</span><span class="o">=</span><span class="n">audio_save_path</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+    <span class="p">)</span>
 </pre></div>
 
            </div>

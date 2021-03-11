@@ -209,13 +209,17 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">task</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
 <span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">get_model_uniqueness</span>
+<span class="kn">from</span> <span class="nn">..pipeline</span> <span class="kn">import</span> <span class="n">ingestion_models</span>
 <span class="kn">from</span> <span class="nn">..pipeline.ingestion_models</span> <span class="kn">import</span> <span class="n">IngestionModel</span>
 
 <span class="c1">###############################################################################</span>
@@ -284,7 +288,7 @@
 
 <div class="viewcode-block" id="upload_db_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.upload_db_model">[docs]</a><span class="k">def</span> <span class="nf">upload_db_model</span><span class="p">(</span>
     <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
-    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
+    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IngestionModel</span><span class="p">],</span>
     <span class="n">creds_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -294,7 +298,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    db_model: Model</span>
 <span class="sd">        The database model to upload.</span>
-<span class="sd">    ingestion_model: IngestionModel</span>
+<span class="sd">    ingestion_model: Optional[IngestionModel]</span>
 <span class="sd">        The accompanying ingestion model in the case the model already exists and needs</span>
 <span class="sd">        to be updated rather than inserted.</span>
 <span class="sd">    creds_file: str</span>
@@ -320,7 +324,10 @@
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Saved new </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with document id=</span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="ow">and</span> <span class="n">ingestion_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">):</span>
         <span class="n">updated_db_model</span> <span class="o">=</span> <span class="n">update_db_model</span><span class="p">(</span>
             <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">ingestion_model</span><span class="p">,</span>
@@ -345,6 +352,81 @@
     <span class="k">return</span> <span class="n">upload_db_model</span><span class="p">(</span>
         <span class="n">db_model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">ingestion_model</span><span class="o">=</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">creds_file</span><span class="o">=</span><span class="n">creds_file</span>
     <span class="p">)</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">:</span>
+    <span class="n">db_body</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">()</span>
+
+    <span class="c1"># Required fields</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">is_active</span>
+    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span>
+
+    <span class="c1"># Optional fields</span>
+    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span><span class="p">:</span>
+        <span class="n">db_body</span><span class="o">.</span><span class="n">end_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span>
+
+    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+        <span class="n">db_body</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">description</span>
+
+    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
+        <span class="n">db_body</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_body</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_event_from_ingestion_model</span><span class="p">(</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">EventIngestionModel</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">:</span>
+    <span class="n">db_event</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+    <span class="c1"># Required fields</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">body_ref</span>
+
+    <span class="c1"># Assume event datetime is the date of earliest session</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">event_datetime</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span> <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># TODO add optional fields</span>
+
+    <span class="k">return</span> <span class="n">db_event</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_session_from_ingestion_model</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
+    <span class="n">db_session</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
+    <span class="c1"># Required fields</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_ref</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">session_datetime</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">session_index</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_index</span>
+
+    <span class="c1"># Optional fields</span>
+    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">:</span>
+        <span class="n">db_session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span>
+
+    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
+        <span class="n">db_session</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_session</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">:</span>
+    <span class="n">db_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">()</span>
+    <span class="n">db_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">db_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
+
+    <span class="k">return</span> <span class="n">db_file</span>
 </pre></div>
 
            </div>

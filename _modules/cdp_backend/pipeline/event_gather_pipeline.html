@@ -208,15 +208,16 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
+<span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">case</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
-<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
-<span class="kn">from</span> <span class="nn">.ingestion_models</span> <span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">EventIngestionModel</span><span class="p">,</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">..file_store</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fs_functions</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">file_utils</span> <span class="k">as</span> <span class="n">file_util_functions</span>
+<span class="kn">from</span> <span class="nn">.ingestion_models</span> <span class="kn">import</span> <span class="n">EventIngestionModel</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -232,6 +233,7 @@
 <div class="viewcode-block" id="create_event_gather_flow"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow">[docs]</a><span class="k">def</span> <span class="nf">create_event_gather_flow</span><span class="p">(</span>
     <span class="n">get_events_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provided a function to gather new event information, create the Prefect Flow object</span>
@@ -243,6 +245,8 @@
 <span class="sd">        The event gather function written by the CDP instance maintainer(s).</span>
 <span class="sd">    credentials_file: str</span>
 <span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+<span class="sd">    bucket: str</span>
+<span class="sd">        Name of the GCS bucket to upload files to.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -254,12 +258,10 @@
         <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_events_func</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
-            <span class="c1"># TODO create/get transcript</span>
-            <span class="c1"># TODO create/get audio (happens as part of transcript process)</span>
 
             <span class="c1"># Upload calls for minimal event</span>
             <span class="n">body_ref</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
-                <span class="n">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+                <span class="n">db_functions</span><span class="o">.</span><span class="n">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
                 <span class="n">event</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
                 <span class="n">creds_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="p">)</span>
@@ -267,14 +269,24 @@
             <span class="c1"># TODO add upload calls for non-minimal event</span>
 
             <span class="n">event_ref</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
-                <span class="n">create_event_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">),</span>
+                <span class="n">db_functions</span><span class="o">.</span><span class="n">create_event_from_ingestion_model</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">),</span>
                 <span class="n">event</span><span class="p">,</span>
                 <span class="n">creds_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
+                <span class="c1"># TODO create/get transcript</span>
+
+                <span class="c1"># Create unique key for video uri</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+                <span class="c1"># create/get audio (happens as part of transcript process)</span>
+                <span class="n">create_or_get_audio</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">)</span>
+
                 <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
-                    <span class="n">create_session_from_ingestion_model</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">),</span>
+                    <span class="n">db_functions</span><span class="o">.</span><span class="n">create_session_from_ingestion_model</span><span class="p">(</span>
+                        <span class="n">session</span><span class="p">,</span> <span class="n">event_ref</span>
+                    <span class="p">),</span>
                     <span class="n">session</span><span class="p">,</span>
                     <span class="n">creds_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -282,70 +294,113 @@
     <span class="k">return</span> <span class="n">flow</span></div>
 
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">:</span>
-    <span class="n">db_body</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">()</span>
+<div class="viewcode-block" id="create_or_get_audio"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_or_get_audio">[docs]</a><span class="k">def</span> <span class="nf">create_or_get_audio</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates an audio file from a video uri and uploads it to the filestore and db.</span>
 
-    <span class="c1"># Required fields</span>
-    <span class="n">db_body</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">name</span>
-    <span class="n">db_body</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">is_active</span>
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    key: str</span>
+<span class="sd">        The unique key made from a hash value of the video uri.</span>
+<span class="sd">    bucket: str</span>
+<span class="sd">        Name of the GCS bucket to upload files to.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
 
-    <span class="c1"># Optional fields</span>
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">end_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    audio_uri: str</span>
+<span class="sd">        The uri of the created audio file in the file store.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">description</span>
-
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span>
-
-    <span class="k">return</span> <span class="n">db_body</span>
-
-
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_event_from_ingestion_model</span><span class="p">(</span>
-    <span class="n">event</span><span class="p">:</span> <span class="n">EventIngestionModel</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">:</span>
-    <span class="n">db_event</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
-
-    <span class="c1"># Required fields</span>
-    <span class="n">db_event</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">body_ref</span>
-
-    <span class="c1"># Assume event datetime is the date of earliest session</span>
-    <span class="n">db_event</span><span class="o">.</span><span class="n">event_datetime</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span> <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">]</span>
+    <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_audio.wav&quot;</span>
+    <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">get_file_uri_task</span><span class="p">(</span>
+        <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span> <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span>
     <span class="p">)</span>
 
-    <span class="c1"># TODO add optional fields</span>
+    <span class="c1"># If no existing audio uri</span>
+    <span class="k">with</span> <span class="n">case</span><span class="p">(</span><span class="n">audio_uri</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+        <span class="c1"># Store the video in temporary file</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">video_uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">db_event</span>
+        <span class="n">tmp_video_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;tmp_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_video.</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">file_util_functions</span><span class="o">.</span><span class="n">external_resource_copy_task</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">tmp_video_filename</span>
+        <span class="p">)</span>
 
+        <span class="c1"># Split and store the audio in temporary file prior to upload</span>
+        <span class="p">(</span>
+            <span class="n">tmp_audio_filepath</span><span class="p">,</span>
+            <span class="n">tmp_audio_log_out_filepath</span><span class="p">,</span>
+            <span class="n">tmp_audio_log_err_filepath</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">file_util_functions</span><span class="o">.</span><span class="n">split_audio_task</span><span class="p">(</span>
+            <span class="n">video_read_path</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
+            <span class="n">audio_save_path</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_session_from_ingestion_model</span><span class="p">(</span>
-    <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
-    <span class="n">db_session</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="c1"># Store audio and logs</span>
+        <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file_task</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">audio_log_out_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file_task</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_out_filepath</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">audio_log_err_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file_task</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_err_filepath</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="c1"># Required fields</span>
-    <span class="n">db_session</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_ref</span>
-    <span class="n">db_session</span><span class="o">.</span><span class="n">session_datetime</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span>
-    <span class="n">db_session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
-    <span class="n">db_session</span><span class="o">.</span><span class="n">session_index</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_index</span>
+        <span class="c1"># Create database models for audio files</span>
+        <span class="n">audio_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">fs_functions</span><span class="o">.</span><span class="n">create_filename_from_filepath</span><span class="p">(</span><span class="n">tmp_audio_filepath</span><span class="p">),</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">audio_out_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">fs_functions</span><span class="o">.</span><span class="n">create_filename_from_filepath</span><span class="p">(</span><span class="n">tmp_audio_log_out_filepath</span><span class="p">),</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">audio_log_out_uri</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">audio_err_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">fs_functions</span><span class="o">.</span><span class="n">create_filename_from_filepath</span><span class="p">(</span><span class="n">tmp_audio_log_err_filepath</span><span class="p">),</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">audio_log_err_uri</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="c1"># Optional fields</span>
-    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">:</span>
-        <span class="n">db_session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span>
+        <span class="c1"># Upload files to database</span>
+        <span class="n">uploaded_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
+            <span class="n">audio_file_db_model</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">credentials_file</span>
+        <span class="p">)</span>
+        <span class="n">uploaded_out_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
+            <span class="n">audio_out_file_db_model</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">credentials_file</span>
+        <span class="p">)</span>
+        <span class="n">uploaded_err_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
+            <span class="n">audio_err_file_db_model</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">credentials_file</span>
+        <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
-        <span class="n">db_session</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span>
+        <span class="c1"># Remove tmp files after their final dependent tasks are finished</span>
+        <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file_task</span><span class="p">(</span>
+            <span class="n">tmp_video_filepath</span><span class="p">,</span> <span class="n">upstream_tasks</span><span class="o">=</span><span class="p">[</span><span class="n">tmp_audio_filepath</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file_task</span><span class="p">(</span>
+            <span class="n">tmp_audio_filepath</span><span class="p">,</span> <span class="n">upstream_tasks</span><span class="o">=</span><span class="p">[</span><span class="n">uploaded_file_db_model</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file_task</span><span class="p">(</span>
+            <span class="n">tmp_audio_log_out_filepath</span><span class="p">,</span> <span class="n">upstream_tasks</span><span class="o">=</span><span class="p">[</span><span class="n">uploaded_out_db_model</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file_task</span><span class="p">(</span>
+            <span class="n">tmp_audio_log_err_filepath</span><span class="p">,</span> <span class="n">upstream_tasks</span><span class="o">=</span><span class="p">[</span><span class="n">uploaded_err_db_model</span><span class="p">]</span>
+        <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">db_session</span>
+    <span class="k">return</span> <span class="n">audio_uri</span>  <span class="c1"># type: ignore</span></div>
 </pre></div>
 
            </div>
