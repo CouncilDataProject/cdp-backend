@@ -6,7 +6,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import nltk
 import requests
@@ -138,9 +138,11 @@ class WebVTTSRModel(SRModel):
         self,
         file_uri: Union[str, Path],
         raw_transcript_save_path: Union[str, Path],
-        timestamped_sentences_save_path: Union[str, Path],
-        timestamped_speaker_turns_save_path: Union[str, Path],
-        **kwargs,
+        timestamped_words_save_path: Optional[Union[str, Path]] = None,
+        timestamped_sentences_save_path: Optional[Union[str, Path]] = None,
+        timestamped_speaker_turns_save_path: Optional[Union[str, Path]] = None,
+        phrases: Optional[List[str]] = None,
+        **kwargs: Any,
     ) -> SRModelOutputs:
         # Check paths
         raw_transcript_save_path = Path(raw_transcript_save_path).resolve()
