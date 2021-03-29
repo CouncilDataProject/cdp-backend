@@ -50,11 +50,15 @@ requirements = [
     "fireo~=1.3.7",
     "fsspec~=0.8.3",
     "gcsfs~=0.7.1",
+    "google-cloud-speech~=1.3.2",
     "graphviz~=0.14",
+    "nltk>=3.5",
     "pandas~=1.1.3",
     "prefect~=0.14.0",
     "pulumi~=2.16.2",
     "pulumi-gcp~=4.6.0",
+    "truecase>=0.0.9",
+    "webvtt-py>=0.4.5",
 ]
 
 extra_requirements = {
