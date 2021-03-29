@@ -65,6 +65,7 @@ class SRModel(ABC):
         timestamped_words_save_path: Optional[Union[str, Path]] = None,
         timestamped_sentences_save_path: Optional[Union[str, Path]] = None,
         timestamped_speaker_turns_save_path: Optional[Union[str, Path]] = None,
+        phrases: Optional[List[str]] = None,
         **kwargs: Any
     ) -> SRModelOutputs:
         """

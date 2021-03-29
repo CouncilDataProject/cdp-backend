@@ -114,7 +114,7 @@ def test_webvtt_sr_model_transcribe(example_webvtt_sr_model, fake_caption, tmpdi
 
     example_webvtt_sr_model.transcribe(
         "any-caption-uri",
-        tmpdir / "raw.json",
-        tmpdir / "timestamped_sentences.json",
-        tmpdir / "timestamped_speaker_turns.json",
+        raw_transcript_save_path=tmpdir / "raw.json",
+        timestamped_sentences_save_path=tmpdir / "timestamped_sentences.json",
+        timestamped_speaker_turns_save_path=tmpdir / "timestamped_speaker_turns.json",
     )
