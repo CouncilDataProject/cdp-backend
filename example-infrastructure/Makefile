@@ -15,38 +15,43 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-init:  ## See README, must provide "project_name"
+init:  ## See README, must provide "project"
 	pulumi login
 	gcloud auth login
 	gcloud auth application-default login
-	gcloud projects create $(project_name) --set-as-default
-	pulumi stack init $(project_name)
-	mkdir ../.keys/ -p
-	gcloud iam service-accounts create $(project_name)-$(USER)-dev \
-    	--description="CDP Dev Service Account for $(USER)" \
-    	--display-name="$(project_name)-$(USER)-dev"
-	gcloud iam service-accounts keys create ../.keys/$(project_name)-$(USER)-dev.json \
-  		--iam-account \
-		$(project_name)-$(USER)-dev@$(project_name).iam.gserviceaccount.com
-	gcloud iam service-accounts add-iam-policy-binding \
-		$(project_name)-$(USER)-dev \
-		--member="serviceAccount:$(project_name)-$(USER)-dev@$(project_name).iam.gserviceaccount.com" \
-		--role="roles/owner"
+	gcloud projects create $(project) --set-as-default
+	pulumi stack init $(project)
+	echo "----------------------------------------------------------------------------"
+	echo "Follow the link to setup billing for the created GCloud account."
+	echo "https://console.cloud.google.com/billing/linkedaccount?project=${project}"
 
-gen-key:  ## Generate a service account JSON, must provide "project_name"
-	gcloud iam service-accounts create $(project_name)-$(USER)-dev \
-    	--description="CDP Dev Service Account for $(USER)" \
-    	--display-name="$(project_name)-$(USER)-dev"
-	gcloud iam service-accounts add-iam-policy-binding \
-		$(project_name)-$(USER)-dev@$(project_name).iam.gserviceaccount.com \
-		--member=serviceAccount:$(project_name)-$(USER)-dev@$(project_name).iam.gserviceaccount.com \
-		--role=roles/owner
-	gcloud projects add-iam-policy-binding $(project_name) \
-    	--member=serviceAccount:$(project_name)-$(USER)-dev@$(project_name).iam.gserviceaccount.com \
-		--role=roles/owner
-	gcloud iam service-accounts keys create ../.keys/$(project_name)-$(USER)-dev.json \
-  		--iam-account \
-		$(project_name)-$(USER)-dev@$(project_name).iam.gserviceaccount.com
-
-build:  ## run pulumi up for infra setup
+build:  ## Run pulumi up for infra setup
 	pulumi up -p 5
+
+reset:  ## Run pulumi destroy and make build, must provide "project"
+	pulumi destroy -p 5
+	echo "----------------------------------------------------------------------------"
+	echo "Sleeping for three minutes while resources clean up"
+	sleep 180
+	make build
+
+destroy:  ## Fully teardown Pulumi and GCloud, must provide "project"
+	pulumi destroy -p 5
+	pulumi stack rm ${project}
+	gcloud projects delete ${project}
+
+gen-key:  ## Generate a service account JSON, must provide "project"
+	mkdir ../.keys/ -p
+	gcloud iam service-accounts create $(project)-$(USER)-dev \
+    	--description="CDP Dev Service Account for $(USER)" \
+    	--display-name="$(project)-$(USER)-dev"
+	gcloud iam service-accounts add-iam-policy-binding \
+		$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com \
+		--member=serviceAccount:$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com \
+		--role=roles/owner
+	gcloud projects add-iam-policy-binding $(project) \
+    	--member=serviceAccount:$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com \
+		--role=roles/owner
+	gcloud iam service-accounts keys create ../.keys/$(project)-$(USER)-dev.json \
+  		--iam-account \
+		$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com

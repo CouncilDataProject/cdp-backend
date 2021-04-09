@@ -15,22 +15,29 @@ If you are just trying to process example CDP data (or for front-end: visualize 
 CDP data) and not _upload_ data, it is recommended to simply point your requests at the
 example stack.
 
+For in-depth details on infrastructure terminology and uses refer to the documentation
+found in our
+[cookiecutter-cdp-deployment repository](https://github.com/CouncilDataProject/cookiecutter-cdp-deployment).
+
 ---
 
 ## Dependencies
 
-Deploying the CDP infrastructure requires having `cdp-backend` installed. Please see the
-[project installation details](https://github.com/CouncilDataProject/cdp-backend#installation)
-for more information.
+Deploying the CDP infrastructure requires having `cdp-backend` installed.
+
+```bash
+pip install -e ../[dev]
+```
+
+For more detail information please see the
+[project installation details](https://github.com/CouncilDataProject/cdp-backend#installation).
 
 ## GCP Account Setup
 
--   [Create or Sign-in to a Google Cloud account](https://console.cloud.google.com/)
--   Once signed in, setup a [billing account](https://console.cloud.google.com/billing)
-
-Additionally, you will need to
-[create a GCP project](https://console.cloud.google.com/projectselector2/home/dashboard)
-for the stack and all it's services to live in -- i.e. `cdp-dev-jackson-5`
+1.  Create (or sign in to) a Google Cloud Platform (GCP) account.
+    ([Google Cloud Console Home](https://console.cloud.google.com/))
+2.  Create (or re-use) a [billing account](https://console.cloud.google.com/billing)
+    and attach it to your GCP account.
 
 Note: Try to use the same project and infrastructure as much as possible, there are
 limits for how many projects and Firestore applications a single user can have.
@@ -49,36 +56,54 @@ restart your terminal after installation._
 After `pulumi` and `gcloud` have both been installed and terminal restarted, run the
 following commands to setup your local machine with credentials to both services.
 
-```bash
-make init {project_name}
-make build
-```
-
--   `make init` will (for the project name provided):
-
-    -   request logins to `gcloud` and `pulumi`
-    -   create the new project in Google Cloud
-    -   initialize the pulumi stack (but not deploy)
-    -   generate a GCP service account JSON
-
--   `make build` will setup the infrastructure and services for the current pulumi stack
-
 **Note:** Pulumi only supports Python 3.7, when creating dev infrastructures you
 need to run these scripts in a py37 environment.
 
-## Common Commands
+```bash
+make init project={project-name}
+make build
+```
 
--   To create a new deployment or update an existing deployment, run: `make build`
-    -   Note: this is shorthand for `pulumi up -p 5`
--   To delete an existing deployment, run: `pulumi destroy`
--   To view all created and managed stacks, run: `pulumi stack ls`
--   To switch to a different stack, run: `pulumi stack select {stack-name}`
--   To completely destroy a stack and it's history, run: `pulumi stack rm {stack-name}`
-    -   Note: this doesn't not remove the GCP project and the infrastructure on it, just
-        the Pulumi stack.
+## Infrastrure Management Commands
 
-For a full list of `pulumi` CLI commands, see their
-[documentation](https://www.pulumi.com/docs/reference/cli/)
+-   When starting up a new dev infrastructure:
+
+    ```bash
+    make init project={project-name}
+    ```
+
+    And follow the link logged to link a billing account to the created project.
+
+-   When setting up infrastructure:
+
+    ```bash
+    make build
+    ```
+
+-   When resetting infrastructure but reusing the same Google project (good practice):
+
+    ```bash
+    make reset
+    ```
+
+-   When cleaning up all Pulumi and GCloud resources entirely:
+
+    ```bash
+    make destroy project={project-name}
+    ```
+
+-   When creating a new service account JSON key:
+
+    ```bash
+    make gen-key project={project-name}
+    ```
+
+### All Commands
+
+-   See Makefile commands with `make help`.
+    Or simply open the Makefile. All the commands are decently easy to follow.
+-   See Pulumi [CLI documentation](https://www.pulumi.com/docs/reference/cli/)
+    for all Pulumi commands.
 
 ## Non-Default Parameters
 
