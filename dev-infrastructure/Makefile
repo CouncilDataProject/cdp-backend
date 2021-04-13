@@ -45,16 +45,14 @@ destroy: ## Fully teardown Pulumi and GCloud, must provide "project"
 
 gen-key: ## Generate a service account JSON, must provide "project"
 	mkdir ../.keys/ -p
-	gcloud iam service-accounts create $(project)-$(USER)-dev \
+	gcloud iam service-accounts create $(project)-sa-dev \
     	--description="CDP Dev Service Account for $(USER)" \
-    	--display-name="$(project)-$(USER)-dev"
-	gcloud iam service-accounts add-iam-policy-binding \
-		$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com \
-		--member=serviceAccount:$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com \
-		--role=roles/owner
+    	--display-name="$(project)-sa-dev"
 	gcloud projects add-iam-policy-binding $(project) \
-    	--member=serviceAccount:$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com \
-		--role=roles/owner
-	gcloud iam service-accounts keys create ../.keys/$(project)-$(USER)-dev.json \
-  		--iam-account \
-		$(project)-$(USER)-dev@$(project).iam.gserviceaccount.com
+    	--member="serviceAccount:$(project)-sa-dev@$(project).iam.gserviceaccount.com" \
+		--role="roles/owner"
+	gcloud iam service-accounts keys create ../.keys/$(project)-sa-dev.json \
+  		--iam-account "$(project)-sa-dev@$(project).iam.gserviceaccount.com"
+	echo "----------------------------------------------------------------------------"
+	echo "Sleeping for one minute while resources set up"
+	sleep 60
