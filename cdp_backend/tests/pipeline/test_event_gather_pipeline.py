@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from typing import List
+from typing import Callable, List
 
 import pytest
 from prefect import Flow
@@ -15,6 +15,7 @@ from cdp_backend.pipeline.ingestion_models import (
     EventIngestionModel,
     Session,
 )
+from cdp_backend.pipeline.mock_get_events import get_events as rand_get_events
 
 from ..database.test_functions import (
     assert_ingestion_and_db_models_equal,
@@ -29,15 +30,16 @@ from ..database.test_functions import (
 )
 
 
-def mock_get_events_func() -> List[EventIngestionModel]:
+def min_get_events() -> List[EventIngestionModel]:
     event = EXAMPLE_MINIMAL_EVENT
     event.sessions[0].session_datetime = datetime(2019, 4, 13)
     return [event]
 
 
-def test_create_event_gather_flow() -> None:
+@pytest.mark.parametrize("func", [min_get_events, rand_get_events])
+def test_create_event_gather_flow(func: Callable) -> None:
     flow = pipeline.create_event_gather_flow(
-        get_events_func=mock_get_events_func,
+        get_events_func=func,
         credentials_file="/fake/credentials/path",
     )
     assert isinstance(flow, Flow)
