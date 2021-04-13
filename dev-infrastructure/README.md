@@ -120,3 +120,21 @@ make build
 If you want to edit the default behavior of the `__main__.py` file and change the
 parameters, please see the documentation for the
 [CDPStack object](https://councildataproject.github.io/cdp-backend/cdp_backend.infrastructure.html#module-cdp_backend.infrastructure.cdp_stack)
+
+## Running Pipelines Against Dev Infra
+
+Once you have a dev infrastructure set up and a key downloaded (`make gen-key`)
+you can run pipelines and store data in the infrastructure by moving up to the
+base directory of this repository and running the following:
+
+-   To run a semi-random (large permutation) event pipeline:
+
+    ```bash
+    make run-rand-event-pipeline key=.keys/{key-name.json}
+    ```
+
+-   To run a minimal (by definition) event pipeline:
+
+    ```bash
+    make run-min-event-pipeline key=.keys/{key-name.json}
+    ```
