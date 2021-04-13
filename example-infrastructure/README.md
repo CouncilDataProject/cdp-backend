@@ -66,7 +66,7 @@ make build
 
 ## Infrastrure Management Commands
 
--   When starting up a new dev infrastructure:
+-   To create a new dev infrastructure:
 
     ```bash
     make init project={project-name}
@@ -74,25 +74,29 @@ make build
 
     And follow the link logged to link a billing account to the created project.
 
--   When setting up infrastructure:
+    **Note:** This will create a new GCP project.
+
+-   To set up infrastructure:
 
     ```bash
     make build
     ```
 
--   When resetting infrastructure but reusing the same Google project (good practice):
+-   To reset infrastructure but reuse the same Google project (good practice):
 
     ```bash
     make reset
     ```
 
--   When cleaning up all Pulumi and GCloud resources entirely:
+-   To delete all Pulumi and GCloud resources entirely:
 
     ```bash
     make destroy project={project-name}
     ```
 
--   When creating a new service account JSON key:
+    **Note:** This will delete the GCP project.
+
+-   To create a new service account JSON key:
 
     ```bash
     make gen-key project={project-name}
