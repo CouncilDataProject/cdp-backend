@@ -102,6 +102,12 @@ make build
     make gen-key project={project-name}
     ```
 
+-   To log in to GCloud and Pulumi:
+
+    ```bash
+    make login
+    ```
+
 ### All Commands
 
 -   See Makefile commands with `make help`.
