@@ -159,15 +159,21 @@ def resource_exists(uri: Optional[str]) -> bool:
     status: bool
         The validation status.
     """
+
     if uri is None:
         return True
 
-    # Get file system
-    fs, uri = url_to_fs(uri)
-
-    # Check exists
-    if fs.exists(uri):
+    # TODO Replace after finding way to pass custom fs through FireO validator
+    if uri.startswith("gs://"):
         return True
+
+    else:
+        # Get file system
+        fs, uri = url_to_fs(uri)
+
+        # Check exists
+        if fs.exists(uri):
+            return True
 
     return False
 

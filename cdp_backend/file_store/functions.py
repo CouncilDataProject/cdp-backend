@@ -7,6 +7,7 @@ from typing import Optional, Union
 
 from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
+from prefect import task
 
 ###############################################################################
 
@@ -35,7 +36,7 @@ def initialize_gcs_file_system(credentials_file: str) -> GCSFileSystem:
     file_system: GCSFileSystem
         An initialized GCSFileSystem.
     """
-    return GCSFileSystem(token=credentials_file)
+    return GCSFileSystem(token=str(credentials_file))
 
 
 def get_file_uri(bucket: str, filename: str, credentials_file: str) -> Optional[str]:
@@ -108,7 +109,7 @@ def upload_file(
         save_name = resolved_filepath.name
 
     # Try to get the file first
-    uri = get_file_uri(fs, bucket, save_name)
+    uri = get_file_uri(bucket, save_name, credentials_file)
 
     # Return existing uri and remove local copy if desired
     if uri:
@@ -142,3 +143,39 @@ def remove_local_file(filepath: Union[str, Path]) -> None:
     fs.rm(filepath)
 
     log.info(f"Removed {filepath} from local file system.")
+
+
+@task
+def upload_file_task(
+    credentials_file: str,
+    bucket: str,
+    filepath: str,
+    save_name: Optional[str] = None,
+    remove_local: bool = False,
+) -> str:
+    return upload_file(
+        credentials_file=credentials_file,
+        bucket=bucket,
+        filepath=filepath,
+        save_name=save_name,
+        remove_local=remove_local,
+    )
+
+
+@task
+def remove_local_file_task(filepath: Union[str, Path]) -> None:
+    remove_local_file(filepath)
+
+
+@task
+def get_file_uri_task(
+    bucket: str, filename: str, credentials_file: str
+) -> Optional[str]:
+    return get_file_uri(
+        bucket=bucket, filename=filename, credentials_file=credentials_file
+    )
+
+
+@task
+def create_filename_from_filepath(filepath: str) -> str:
+    return Path(filepath).resolve(strict=True).name

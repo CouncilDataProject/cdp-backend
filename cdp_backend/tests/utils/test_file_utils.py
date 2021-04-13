@@ -89,7 +89,9 @@ def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) ->
     ],
 )
 def test_split_audio(
-    tmpdir: LocalPath, example_video: str, audio_save_path: str
+    tmpdir: LocalPath,
+    example_video: str,
+    audio_save_path: str,
 ) -> None:
     # Append save name to tmpdir
     tmp_dir_audio_save_path = Path(tmpdir) / Path(audio_save_path).resolve()
@@ -97,6 +99,15 @@ def test_split_audio(
     # Mock split
     with mock.patch("ffmpeg.run") as mocked_ffmpeg:
         mocked_ffmpeg.return_value = (b"OUTPUT", b"ERROR")
-        file_utils.split_audio(
-            video_read_path=example_video, audio_save_path=str(tmp_dir_audio_save_path)
-        )
+        try:
+            audio_file, stdout_log, stderr_log = file_utils.split_audio(
+                video_read_path=example_video,
+                audio_save_path=str(tmp_dir_audio_save_path),
+            )
+
+            assert str(tmp_dir_audio_save_path) == audio_file
+            assert str(tmp_dir_audio_save_path.with_suffix(".out")) == stdout_log
+            assert str(tmp_dir_audio_save_path.with_suffix(".err")) == stderr_log
+
+        except Exception as e:
+            raise e
