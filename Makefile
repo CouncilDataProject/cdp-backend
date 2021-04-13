@@ -29,7 +29,7 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-clean:  ## clean all build, python, and testing files
+clean:  ## Clean all build, python, and testing files
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
@@ -46,26 +46,39 @@ clean:  ## clean all build, python, and testing files
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
 
-build: ## run tox / run tests and lint
+build: ## Run tox / run tests and lint
 	tox
 
-gen-docs: ## generate Sphinx HTML documentation, including API docs
+gen-docs: ## Generate Sphinx HTML documentation, including API docs
 	rm -f docs/cdp_backend*.rst
 	rm -f docs/modules.rst
 	rm -f docs/_static/cdp_database_diagram.*
-	create_cdp_database_uml -o docs/_static/cdp_database_diagram.dot
-	dot -T png -o docs/_static/cdp_database_diagram.png docs/_static/cdp_database_diagram.dot
-	create_cdp_ingestion_models_doc -t docs/ingestion_models.template -o docs/ingestion_models.md
-	create_cdp_transcript_model_doc -t docs/transcript_model.template -o docs/transcript_model.md
-	create_cdp_event_gather_flow_viz -o docs/_static/cdp_event_gather_flow_{ftype}.png
+	create_cdp_database_uml \
+		-o docs/_static/cdp_database_diagram.dot
+	dot \
+		-T png \
+		-o docs/_static/cdp_database_diagram.png docs/_static/cdp_database_diagram.dot
+	create_cdp_ingestion_models_doc \
+		-t docs/ingestion_models.template \
+		-o docs/ingestion_models.md
+	create_cdp_transcript_model_doc \
+		-t docs/transcript_model.template \
+		-o docs/transcript_model.md
+	create_cdp_event_gather_flow_viz \
+		-o docs/_static/cdp_event_gather_flow_{ftype}.png
 	sphinx-apidoc -o docs/ cdp_backend **/tests/
 	$(MAKE) -C docs html
 
-docs: ## generate Sphinx HTML documentation, including API docs, and serve to browser
+docs: ## Generate Sphinx HTML documentation, including API docs, and serve to browser
 	make gen-docs
 	$(BROWSER) docs/_build/html/index.html
 
-run-mock-event-pipeline:  ## run event pipe using mock ingestion model, requires "key"
+run-rand-event-pipeline: ## Run event pipeline using random event gen, requires "key"
 	run_cdp_event_gather \
 		-g $(key) \
-		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.mock_get_events_func
+		-e cdp_backend.pipeline.mock_get_events.get_events
+
+run-min-event-pipeline: ## Run event pipeline using minimal event def, requires "key"
+	run_cdp_event_gather \
+		-g ${key} \
+		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.min_get_events
