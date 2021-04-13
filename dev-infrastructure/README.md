@@ -1,4 +1,4 @@
-# Example CDP Infrastructure
+# Dev CDP Infrastructure
 
 Full infrastructure setup for whole system / integration level testing.
 
