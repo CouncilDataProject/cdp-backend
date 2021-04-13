@@ -68,7 +68,7 @@ extra_requirements = {
 }
 
 setup(
-    author="Jackson Maxfield Brown",
+    author="Jackson Maxfield Brown, To Huynh, Isaac Na",
     author_email="jmaxfieldbrown@gmail.com",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
