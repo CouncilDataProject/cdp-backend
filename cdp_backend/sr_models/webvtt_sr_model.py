@@ -7,12 +7,12 @@ import logging
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
-from webvtt.structures import Caption
 
 import nltk
 import requests
 import truecase
 import webvtt
+from webvtt.structures import Caption
 
 from . import constants
 from .sr_model import SRModel, SRModelOutputs
@@ -167,7 +167,9 @@ class WebVTTSRModel(SRModel):
         # Normalized the text of transcript
         for speaker_turn in timestamped_speaker_turns:
             for sentence in speaker_turn["data"]:
-                normalized_sentence_text = self._normalize_text(sentence["text"])  # type: ignore
+                normalized_sentence_text = self._normalize_text(
+                    sentence["text"]  # type: ignore
+                )
                 sentence["text"] = normalized_sentence_text  # type: ignore
 
         # Create raw transcript
@@ -180,8 +182,12 @@ class WebVTTSRModel(SRModel):
         )
         raw_transcript = [
             {
-                "start_time": timestamped_speaker_turns[0]["data"][0]["start_time"],  # type: ignore
-                "end_time": timestamped_speaker_turns[-1]["data"][-1]["end_time"],  # type: ignore
+                "start_time": timestamped_speaker_turns[0]["data"][0][
+                    "start_time"  # type: ignore
+                ],
+                "end_time": timestamped_speaker_turns[-1]["data"][-1][
+                    "end_time"  # type: ignore
+                ],
                 "text": raw_text,
             }
         ]
@@ -208,7 +214,7 @@ class WebVTTSRModel(SRModel):
             confidence=self.confidence,
         )
 
-        timestamped_speaker_turns = self.wrap_and_format_transcript_data(  # type: ignore
+        timestamped_speaker_turns = self.wrap_and_format_transcript_data(  # type: ignore # noqa: E501
             data=timestamped_speaker_turns,  # type: ignore
             transcript_format=constants.TranscriptFormats.timestamped_speaker_turns,
             confidence=self.confidence,

@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import random
-from unittest import mock
-from typing import Any, List, Type
-from py._path.local import LocalPath
 from pathlib import Path
-
+from typing import Any, List, Type
+from unittest import mock
 
 import pytest
 from google.cloud import speech_v1p1beta1 as speech
+from py._path.local import LocalPath
 
 from cdp_backend.sr_models.google_cloud_sr_model import GoogleCloudSRModel
 
@@ -118,7 +117,9 @@ def test_clean_phrases(phrases: List[str], cleaned: List[str]) -> None:
     assert GoogleCloudSRModel._clean_phrases(phrases) == cleaned
 
 
-def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str, tmpdir: LocalPath) -> None:
+def test_google_cloud_transcribe(
+    fake_creds_path: str, example_audio: str, tmpdir: LocalPath
+) -> None:
     with mock.patch(
         "google.cloud.speech_v1p1beta1.SpeechClient.from_service_account_json"
     ) as mocked_client_init:

@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from unittest.mock import Mock
 from typing import Any, List
-from py._path.local import LocalPath
+from unittest.mock import Mock
 
 import pytest
+from py._path.local import LocalPath
 from requests import RequestException
 from webvtt.structures import Caption
 
@@ -26,7 +26,9 @@ def example_webvtt_sr_model() -> WebVTTSRModel:
 
 # Check whether WebVTTSRModel raise an RequestException if the uri of caption file is
 # invalid
-def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model: WebVTTSRModel) -> None:
+def test_webvtt_sr_model_request_caption_content(
+    example_webvtt_sr_model: WebVTTSRModel,
+) -> None:
     with pytest.raises(RequestException):
         example_webvtt_sr_model._request_caption_content("invalid-caption-uri")
 
@@ -105,14 +107,18 @@ def test_webvtt_sr_model_create_timestamped_speaker_turns(
         assert len(ts_speaker_turns[i]["data"]) == len(speaker_turn)
         # Check if sentence string matches expected sentence string
         for j, sentence in enumerate(speaker_turn):
-            assert ts_speaker_turns[i]["data"][j]["text"] == sentence  #type: ignore
+            assert ts_speaker_turns[i]["data"][j]["text"] == sentence  # type: ignore
 
 
-def test_webvtt_sr_model_transcribe(example_webvtt_sr_model: WebVTTSRModel, fake_caption: Caption, tmpdir: LocalPath) -> None:
+def test_webvtt_sr_model_transcribe(
+    example_webvtt_sr_model: WebVTTSRModel, fake_caption: Caption, tmpdir: LocalPath
+) -> None:
     with open(fake_caption, "r") as fake_caption_file:
         caption_text = fake_caption_file.read()
 
-    example_webvtt_sr_model._request_caption_content = Mock(return_value=caption_text)  # type: ignore
+    example_webvtt_sr_model._request_caption_content = Mock(  # type: ignore
+        return_value=caption_text
+    )  # type: ignore
 
     example_webvtt_sr_model.transcribe(
         "any-caption-uri",
