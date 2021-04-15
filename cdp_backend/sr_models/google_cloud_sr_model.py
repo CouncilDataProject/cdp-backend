@@ -57,9 +57,9 @@ class GoogleCloudSRModel(SRModel):
     ) -> SRModelOutputs:
         # Check paths
         raw_transcript_save_path = Path(raw_transcript_save_path).resolve()
-        timestamped_words_save_path = Path(timestamped_words_save_path).resolve()
+        timestamped_words_save_path = Path(timestamped_words_save_path).resolve()  # type: ignore
         timestamped_sentences_save_path = Path(
-            timestamped_sentences_save_path
+            timestamped_sentences_save_path  # type: ignore
         ).resolve()
 
         # Create client
@@ -146,7 +146,7 @@ class GoogleCloudSRModel(SRModel):
         raw_transcript = " ".join(
             [sentence_details["text"] for sentence_details in timestamped_sentences]
         )
-        raw_transcript = [
+        raw_transcript_with_time = [
             {
                 "start_time": 0,
                 "text": raw_transcript,
@@ -162,17 +162,17 @@ class GoogleCloudSRModel(SRModel):
         log.info(f"Completed transcription for: {file_uri}. Confidence: {confidence}")
 
         # Wrap each transcript in the standard format
-        raw_transcript = self.wrap_and_format_transcript_data(
-            data=raw_transcript,
+        raw_transcript_wrapped = self.wrap_and_format_transcript_data(
+            data=raw_transcript_with_time,
             transcript_format=constants.TranscriptFormats.raw,
             confidence=confidence,
         )
-        timestamped_words = self.wrap_and_format_transcript_data(
+        timestamped_words_wrapped = self.wrap_and_format_transcript_data(
             data=timestamped_words,
             transcript_format=constants.TranscriptFormats.timestamped_words,
             confidence=confidence,
         )
-        timestamped_sentences = self.wrap_and_format_transcript_data(
+        timestamped_sentences_wrapped = self.wrap_and_format_transcript_data(
             data=timestamped_sentences,
             transcript_format=constants.TranscriptFormats.timestamped_sentences,
             confidence=confidence,
@@ -180,13 +180,13 @@ class GoogleCloudSRModel(SRModel):
 
         # Write files
         with open(timestamped_words_save_path, "w") as write_out:
-            json.dump(timestamped_words, write_out)
+            json.dump(timestamped_words_wrapped, write_out)
 
         with open(timestamped_sentences_save_path, "w") as write_out:
-            json.dump(timestamped_sentences, write_out)
+            json.dump(timestamped_sentences_wrapped, write_out)
 
         with open(raw_transcript_save_path, "w") as write_out:
-            json.dump(raw_transcript, write_out)
+            json.dump(raw_transcript_wrapped, write_out)
 
         # Return the save path
         return SRModelOutputs(

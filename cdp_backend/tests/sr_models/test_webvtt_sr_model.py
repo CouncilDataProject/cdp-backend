@@ -3,6 +3,8 @@
 
 from pathlib import Path
 from unittest.mock import Mock
+from typing import Any, List
+from py._path.local import LocalPath
 
 import pytest
 from requests import RequestException
@@ -12,7 +14,7 @@ from cdp_backend.sr_models.webvtt_sr_model import WebVTTSRModel
 
 
 @pytest.fixture
-def fake_caption(data_dir) -> Path:
+def fake_caption(data_dir: Path) -> Path:
     return data_dir / "fake_caption.vtt"
 
 
@@ -24,7 +26,7 @@ def example_webvtt_sr_model() -> WebVTTSRModel:
 
 # Check whether WebVTTSRModel raise an RequestException if the uri of caption file is
 # invalid
-def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
+def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model: WebVTTSRModel) -> None:
     with pytest.raises(RequestException):
         example_webvtt_sr_model._request_caption_content("invalid-caption-uri")
 
@@ -90,8 +92,8 @@ def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
     ],
 )
 def test_webvtt_sr_model_create_timestamped_speaker_turns(
-    captions, expected, example_webvtt_sr_model
-):
+    captions: List[Caption], expected: Any, example_webvtt_sr_model: WebVTTSRModel
+) -> None:
     speaker_turns = example_webvtt_sr_model._get_speaker_turns(captions)
     ts_speaker_turns = example_webvtt_sr_model._create_timestamped_speaker_turns(
         speaker_turns
@@ -103,14 +105,14 @@ def test_webvtt_sr_model_create_timestamped_speaker_turns(
         assert len(ts_speaker_turns[i]["data"]) == len(speaker_turn)
         # Check if sentence string matches expected sentence string
         for j, sentence in enumerate(speaker_turn):
-            assert ts_speaker_turns[i]["data"][j]["text"] == sentence
+            assert ts_speaker_turns[i]["data"][j]["text"] == sentence  #type: ignore
 
 
-def test_webvtt_sr_model_transcribe(example_webvtt_sr_model, fake_caption, tmpdir):
+def test_webvtt_sr_model_transcribe(example_webvtt_sr_model: WebVTTSRModel, fake_caption: Caption, tmpdir: LocalPath) -> None:
     with open(fake_caption, "r") as fake_caption_file:
         caption_text = fake_caption_file.read()
 
-    example_webvtt_sr_model._request_caption_content = Mock(return_value=caption_text)
+    example_webvtt_sr_model._request_caption_content = Mock(return_value=caption_text)  # type: ignore
 
     example_webvtt_sr_model.transcribe(
         "any-caption-uri",
