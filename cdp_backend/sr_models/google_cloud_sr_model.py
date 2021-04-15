@@ -57,7 +57,9 @@ class GoogleCloudSRModel(SRModel):
     ) -> SRModelOutputs:
         # Check paths
         raw_transcript_save_path = Path(raw_transcript_save_path).resolve()
-        timestamped_words_save_path = Path(timestamped_words_save_path).resolve()  # type: ignore
+        timestamped_words_save_path = Path(
+            timestamped_words_save_path  # type: ignore
+        ).resolve()
         timestamped_sentences_save_path = Path(
             timestamped_sentences_save_path  # type: ignore
         ).resolve()
