@@ -98,7 +98,7 @@ class SRModel(ABC):
         return SRModelOutputs(
             Path(raw_transcript_save_path),
             1.0,
-            Path(timestamped_words_save_path),
-            Path(timestamped_sentences_save_path),
-            Path(timestamped_speaker_turns_save_path),
+            Path(timestamped_words_save_path),  # type: ignore
+            Path(timestamped_sentences_save_path),  # type: ignore
+            Path(timestamped_speaker_turns_save_path),  # type: ignore
         )

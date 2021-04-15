@@ -7,6 +7,7 @@ import logging
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
+from webvtt.structures import Caption
 
 import nltk
 import requests
@@ -24,7 +25,7 @@ log = logging.getLogger(__name__)
 
 
 class WebVTTSRModel(SRModel):
-    def __init__(self, new_turn_pattern: str, confidence: float = 1, **kwargs):
+    def __init__(self, new_turn_pattern: str, confidence: float = 1, **kwargs: Any):
         # Download punkt for truecase module
         nltk.download("punkt")
         # New speaker turn must begin with one or more new_turn_pattern str
@@ -66,9 +67,9 @@ class WebVTTSRModel(SRModel):
         self, captions: List[webvtt.structures.Caption]
     ) -> List[List[webvtt.structures.Caption]]:
         # Create list of speaker turns
-        speaker_turns = []
+        speaker_turns = []  # type: List[List[Caption]]
         # List of captions of a speaker turn
-        speaker_turn = []
+        speaker_turn = []  # type: List[Caption]
         for caption in captions:
             new_turn_search = re.search(self.new_turn_pattern, caption.text)
             # Caption block is start of a new speaker turn
@@ -132,7 +133,7 @@ class WebVTTSRModel(SRModel):
             # Get timestamped sentences for a speaker turn
             sentences = self._get_sentences(speaker_turn)
             timestamped_speaker_turns.append({"speaker": "", "data": sentences})
-        return timestamped_speaker_turns
+        return timestamped_speaker_turns  # type: ignore
 
     def transcribe(
         self,
@@ -147,14 +148,14 @@ class WebVTTSRModel(SRModel):
         # Check paths
         raw_transcript_save_path = Path(raw_transcript_save_path).resolve()
         timestamped_sentences_save_path = Path(
-            timestamped_sentences_save_path
+            timestamped_sentences_save_path  # type: ignore
         ).resolve()
         timestamped_speaker_turns_save_path = Path(
-            timestamped_speaker_turns_save_path
+            timestamped_speaker_turns_save_path  # type: ignore
         ).resolve()
 
         # Get content of file uri
-        closed_caption_content = self._request_caption_content(file_uri)
+        closed_caption_content = self._request_caption_content(str(file_uri))
         # Get list of caption blocks from closed caption file
         captions = self._get_captions(closed_caption_content)
         # Convert list of caption blocks to list of speaker turns
@@ -166,21 +167,21 @@ class WebVTTSRModel(SRModel):
         # Normalized the text of transcript
         for speaker_turn in timestamped_speaker_turns:
             for sentence in speaker_turn["data"]:
-                normalized_sentence_text = self._normalize_text(sentence["text"])
-                sentence["text"] = normalized_sentence_text
+                normalized_sentence_text = self._normalize_text(sentence["text"])  # type: ignore
+                sentence["text"] = normalized_sentence_text  # type: ignore
 
         # Create raw transcript
         raw_text = " ".join(
             [
-                sentence["text"]
+                sentence["text"]  # type: ignore
                 for turn in timestamped_speaker_turns
                 for sentence in turn["data"]
             ]
         )
         raw_transcript = [
             {
-                "start_time": timestamped_speaker_turns[0]["data"][0]["start_time"],
-                "end_time": timestamped_speaker_turns[-1]["data"][-1]["end_time"],
+                "start_time": timestamped_speaker_turns[0]["data"][0]["start_time"],  # type: ignore
+                "end_time": timestamped_speaker_turns[-1]["data"][-1]["end_time"],  # type: ignore
                 "text": raw_text,
             }
         ]
@@ -195,20 +196,20 @@ class WebVTTSRModel(SRModel):
             f"Completed transcription for: {file_uri}. Confidence: {self.confidence}"
         )
         # Wrap each transcript in the standard format
-        raw_transcript = self.wrap_and_format_transcript_data(
+        raw_transcript = self.wrap_and_format_transcript_data(  # type: ignore
             data=raw_transcript,
             transcript_format=constants.TranscriptFormats.raw,
             confidence=self.confidence,
         )
 
-        timestamped_sentences = self.wrap_and_format_transcript_data(
-            data=timestamped_sentences,
+        timestamped_sentences = self.wrap_and_format_transcript_data(  # type: ignore
+            data=timestamped_sentences,  # type: ignore
             transcript_format=constants.TranscriptFormats.timestamped_sentences,
             confidence=self.confidence,
         )
 
-        timestamped_speaker_turns = self.wrap_and_format_transcript_data(
-            data=timestamped_speaker_turns,
+        timestamped_speaker_turns = self.wrap_and_format_transcript_data(  # type: ignore
+            data=timestamped_speaker_turns,  # type: ignore
             transcript_format=constants.TranscriptFormats.timestamped_speaker_turns,
             confidence=self.confidence,
         )
