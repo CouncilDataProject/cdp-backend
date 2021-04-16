@@ -20,6 +20,14 @@ cdp\_backend.pipeline.ingestion\_models module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.pipeline.mock\_get\_events module
+----------------------------------------------
+
+.. automodule:: cdp_backend.pipeline.mock_get_events
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.pipeline.transcript\_model module
 ----------------------------------------------
 

@@ -4,6 +4,22 @@ cdp\_backend.bin package
 Submodules
 ----------
 
+cdp\_backend.bin.clean\_cdp\_database module
+--------------------------------------------
+
+.. automodule:: cdp_backend.bin.clean_cdp_database
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdp\_backend.bin.clean\_cdp\_filestore module
+---------------------------------------------
+
+.. automodule:: cdp_backend.bin.clean_cdp_filestore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.create\_cdp\_database\_uml module
 --------------------------------------------------
 

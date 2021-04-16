@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cdp_backend.pipeline.mock_get_events &mdash; cdp-backend 3.0.0.dev5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.pipeline.mock_get_events</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.pipeline.mock_get_events</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">bisect</span> <span class="kn">import</span> <span class="n">bisect_left</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">..database.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EventMinutesItemDecision</span><span class="p">,</span>
+    <span class="n">MatterStatusDecision</span><span class="p">,</span>
+    <span class="n">VoteDecision</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils.constants_utils</span> <span class="kn">import</span> <span class="n">get_all_class_attr_values</span>
+<span class="kn">from</span> <span class="nn">.ingestion_models</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Body</span><span class="p">,</span>
+    <span class="n">EventIngestionModel</span><span class="p">,</span>
+    <span class="n">EventMinutesItem</span><span class="p">,</span>
+    <span class="n">Matter</span><span class="p">,</span>
+    <span class="n">MinutesItem</span><span class="p">,</span>
+    <span class="n">Person</span><span class="p">,</span>
+    <span class="n">Role</span><span class="p">,</span>
+    <span class="n">Seat</span><span class="p">,</span>
+    <span class="n">Session</span><span class="p">,</span>
+    <span class="n">SupportingFile</span><span class="p">,</span>
+    <span class="n">Vote</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.get_events">[docs]</a><span class="k">def</span> <span class="nf">get_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A mock get_events function that will generate entirely random events</span>
+<span class="sd">    based off a set of permutation settings.</span>
+
+<span class="sd">    Useful when running a pipeline test against a dev infrastructure.</span>
+
+<span class="sd">    Also imported and used in the example repo and integration tests.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_get_example_event</span><span class="p">()]</span></div>
+
+
+<span class="c1">###############################################################################</span>
+
+
+<span class="n">NUM_COUNCIL_SEATS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">RAND_BODY_RANGE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">RAND_EVENT_MINUTES_ITEMS_RANGE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">RAND_MATTER_RANGE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">ALL_EVENT_MINUTES_ITEM_DECISIONS</span> <span class="o">=</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">EventMinutesItemDecision</span><span class="p">)</span>
+<span class="n">PASSING_VOTE_DECISIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">APPROVE</span><span class="p">]</span>
+<span class="n">FAILING_VOTE_DECISIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">ABSTAIN</span><span class="p">,</span> <span class="n">VoteDecision</span><span class="o">.</span><span class="n">REJECT</span><span class="p">]</span>
+
+<span class="n">DUMMY_FILE_URI</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf&quot;</span>
+<span class="p">)</span>
+<span class="n">PERSON_PICTURE_URI</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;https://councildataproject.github.io/imgs/public-speaker-light-purple.svg&quot;</span>
+<span class="p">)</span>
+<span class="n">SEAT_URI</span> <span class="o">=</span> <span class="s2">&quot;https://councildataproject.github.io/imgs/seattle.jpg&quot;</span>
+
+<span class="n">SESSIONS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;https://youtu.be/BkWNBqlZjGk&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_101220_2022077.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+    <span class="p">),</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;https://youtu.be/DU1pycy73yI&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+    <span class="p">),</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;https://youtu.be/ePTZs5ZxCnc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+    <span class="p">),</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;https://youtu.be/51jNLMQ3qB8&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+    <span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;https://youtu.be/fgr2sYYJy0Q&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_example_person</span><span class="p">(</span><span class="n">seat_num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Person</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a fake example person</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a list of roles</span>
+    <span class="n">roles</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Councilmember&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">)),</span>
+        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)),</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Add Council President role for seat position 1</span>
+    <span class="k">if</span> <span class="n">seat_num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">roles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Council President&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">))</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Get the seat electoral type num</span>
+    <span class="n">seat_electoral_type</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">seat_num</span> <span class="o">&lt;=</span> <span class="n">NUM_COUNCIL_SEATS</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">Person</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Person </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">email</span><span class="o">=</span><span class="s2">&quot;person@example.com&quot;</span><span class="p">,</span>
+        <span class="n">phone</span><span class="o">=</span><span class="s2">&quot;123-456-7890&quot;</span><span class="p">,</span>
+        <span class="n">website</span><span class="o">=</span><span class="s2">&quot;www.example.com&quot;</span><span class="p">,</span>
+        <span class="n">picture_uri</span><span class="o">=</span><span class="n">PERSON_PICTURE_URI</span><span class="p">,</span>
+        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Seat Position </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">electoral_area</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Electoral Area </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">electoral_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Electoral Type </span><span class="si">{</span><span class="n">seat_electoral_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">image_uri</span><span class="o">=</span><span class="n">SEAT_URI</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">roles</span><span class="o">=</span><span class="n">roles</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_example_event</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EventIngestionModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a fake example event data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a body for the event</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="n">RAND_BODY_RANGE</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example Description&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create sessions for the event</span>
+    <span class="n">sessions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Session</span><span class="p">(</span>
+            <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">3</span><span class="p">)),</span>
+            <span class="n">session_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+            <span class="n">video_uri</span><span class="o">=</span><span class="n">session</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">caption_uri</span><span class="o">=</span><span class="n">session</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">session</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">SESSIONS</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Get a number of event minutes items for the event</span>
+    <span class="n">num_event_minutes_items</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="n">RAND_EVENT_MINUTES_ITEMS_RANGE</span><span class="p">)</span>
+
+    <span class="c1"># Get the decision for each event minutes item</span>
+    <span class="n">event_minutes_item_decisions</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span>
+        <span class="n">ALL_EVENT_MINUTES_ITEM_DECISIONS</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">num_event_minutes_items</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Get the majority number of votes for each event minutes item</span>
+    <span class="n">vote_majority_nums</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span>
+        <span class="nb">range</span><span class="p">(</span><span class="n">NUM_COUNCIL_SEATS</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NUM_COUNCIL_SEATS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">num_event_minutes_items</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Get the vote decisions for each event minutes item</span>
+    <span class="n">vote_decisions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span>
+                <span class="n">PASSING_VOTE_DECISIONS</span>
+                <span class="k">if</span> <span class="n">event_minutes_item_decisions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventMinutesItemDecision</span><span class="o">.</span><span class="n">PASSED</span>
+                <span class="k">else</span> <span class="n">FAILING_VOTE_DECISIONS</span><span class="p">,</span>
+                <span class="n">k</span><span class="o">=</span><span class="n">vote_majority_nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span>
+                <span class="n">FAILING_VOTE_DECISIONS</span>
+                <span class="k">if</span> <span class="n">event_minutes_item_decisions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventMinutesItemDecision</span><span class="o">.</span><span class="n">PASSED</span>
+                <span class="k">else</span> <span class="n">PASSING_VOTE_DECISIONS</span><span class="p">,</span>
+                <span class="n">k</span><span class="o">=</span><span class="n">NUM_COUNCIL_SEATS</span> <span class="o">-</span> <span class="n">vote_majority_nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_event_minutes_items</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Get a matter number for each event minutes item</span>
+    <span class="n">matter_nums</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+        <span class="nb">range</span><span class="p">(</span><span class="n">RAND_MATTER_RANGE</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">RAND_MATTER_RANGE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">num_event_minutes_items</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Bin/discretize matter num.</span>
+    <span class="c1"># The bin num for each matter are used to</span>
+    <span class="c1"># determine the matter type and sponsor of the matter</span>
+    <span class="n">bins</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">RAND_MATTER_RANGE</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">RAND_MATTER_RANGE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">NUM_COUNCIL_SEATS</span><span class="p">)</span>
+    <span class="n">bin_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">matter_num</span><span class="p">)</span> <span class="k">for</span> <span class="n">matter_num</span> <span class="ow">in</span> <span class="n">matter_nums</span><span class="p">]</span>
+
+    <span class="c1"># Create a list of event minutes item for the event</span>
+    <span class="n">event_minutes_items</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">EventMinutesItem</span><span class="p">(</span>
+            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Minutes Item </span><span class="si">{</span><span class="n">matter_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example Description&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">matter</span><span class="o">=</span><span class="n">Matter</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Matter </span><span class="si">{</span><span class="n">matter_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">matter_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Matter Type </span><span class="si">{</span><span class="n">bin_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Example Matter Title&quot;</span><span class="p">,</span>
+                <span class="n">result_status</span><span class="o">=</span><span class="n">MatterStatusDecision</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">,</span>
+                <span class="n">sponsors</span><span class="o">=</span><span class="p">[</span><span class="n">_get_example_person</span><span class="p">(</span><span class="n">bin_nums</span><span class="p">[</span><span class="n">i</span><span class="p">])],</span>
+            <span class="p">),</span>
+            <span class="n">supporting_files</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">SupportingFile</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Supporting File Name </span><span class="si">{</span><span class="n">file_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="n">DUMMY_FILE_URI</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">file_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">],</span>
+            <span class="n">decision</span><span class="o">=</span><span class="n">event_minutes_item_decisions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">votes</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">Vote</span><span class="p">(</span>
+                    <span class="n">person</span><span class="o">=</span><span class="n">_get_example_person</span><span class="p">(</span><span class="n">seat_num</span><span class="p">),</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="n">vote_decisions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">seat_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">seat_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">NUM_COUNCIL_SEATS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_event_minutes_items</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Insert a non-matter event minutes item</span>
+    <span class="n">event_minutes_items</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="n">EventMinutesItem</span><span class="p">(</span>
+            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Approval of Agenda&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example Description&quot;</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">EventIngestionModel</span><span class="p">(</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+        <span class="n">sessions</span><span class="o">=</span><span class="n">sessions</span><span class="p">,</span>
+        <span class="n">event_minutes_items</span><span class="o">=</span><span class="n">event_minutes_items</span><span class="p">,</span>
+        <span class="n">agenda_uri</span><span class="o">=</span><span class="n">DUMMY_FILE_URI</span><span class="p">,</span>
+        <span class="n">minutes_uri</span><span class="o">=</span><span class="n">DUMMY_FILE_URI</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jackson Maxfield Brown.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
