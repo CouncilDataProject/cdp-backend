@@ -31,6 +31,10 @@ init: ## See README, must provide "project"
 build: ## Run pulumi up for infra setup
 	pulumi up -p 5
 
+clean: ## Remove all database documents and filestore objects, must provide "key"
+	clean_cdp_database ${key}
+	clean_cdp_filestore ${key}
+
 reset: ## Run pulumi destroy and make build, must provide "project"
 	pulumi destroy -p 5
 	echo "----------------------------------------------------------------------------"
@@ -56,3 +60,4 @@ gen-key: ## Generate a service account JSON, must provide "project"
 	echo "----------------------------------------------------------------------------"
 	echo "Sleeping for one minute while resources set up"
 	sleep 60
+	echo "Key generation complete"

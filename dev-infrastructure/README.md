@@ -29,18 +29,17 @@ Deploying the CDP infrastructure requires having `cdp-backend` installed.
 pip install -e ../[dev]
 ```
 
-For more detail information please see the
+For more detailed information please see the
 [project installation details](https://github.com/CouncilDataProject/cdp-backend#installation).
 
-## GCP Account Setup
+## Account Setup
 
 1.  Create (or sign in to) a Google Cloud Platform (GCP) account.
     ([Google Cloud Console Home](https://console.cloud.google.com/))
 2.  Create (or re-use) a [billing account](https://console.cloud.google.com/billing)
     and attach it to your GCP account.
-
-Note: Try to use the same project and infrastructure as much as possible, there are
-limits for how many projects and Firestore applications a single user can have.
+3.  Create (or sign in to) a
+    [Pulumi account](https://app.pulumi.com/signup).
 
 ## Environment Setup
 
@@ -60,11 +59,24 @@ following commands to setup your local machine with credentials to both services
 need to run these scripts in a py37 environment.
 
 ```bash
+make login
 make init project={project-name}
 make build
 ```
 
 ## Infrastrure Management Commands
+
+-   To log in to GCloud and Pulumi:
+
+    ```bash
+    make login
+    ```
+
+-   To create a new service account JSON key:
+
+    ```bash
+    make gen-key project={project-name}
+    ```
 
 -   To create a new dev infrastructure:
 
@@ -82,11 +94,25 @@ make build
     make build
     ```
 
--   To reset infrastructure but reuse the same Google project (good practice):
+-   To clean and remove all database documents and file store objects:
+
+    ```bash
+    make clean key={path-to-key}
+    ```
+
+    **Note:** Cleaning infrastructure is best practice when comparing pipeline
+    outputs and database models aren't changing (specifically database indices).
+
+-   To reset infrastructure but reuse the same Google project:
 
     ```bash
     make reset
     ```
+
+    **Note:** Reseting infrastructure is likely required when iterating on
+    database models (specifically database indices). Cleaning infrastructure
+    should always be attempted first before reset or destroy as `make clean`
+    will not use any extra Google Cloud (or Firebase) projects and applications.
 
 -   To delete all Pulumi and GCloud resources entirely:
 
@@ -96,17 +122,8 @@ make build
 
     **Note:** This will delete the GCP project.
 
--   To create a new service account JSON key:
-
-    ```bash
-    make gen-key project={project-name}
-    ```
-
--   To log in to GCloud and Pulumi:
-
-    ```bash
-    make login
-    ```
+Try to use the same project and infrastructure as much as possible, there are
+limits for how many projects and Firestore applications a single user can have.
 
 ### All Commands
 
