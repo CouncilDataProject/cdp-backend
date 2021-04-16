@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from typing import List
+from typing import Callable, List
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -14,17 +14,19 @@ from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_MINIMAL_EVENT,
     EventIngestionModel,
 )
+from cdp_backend.pipeline.mock_get_events import get_events as rand_get_events
 
 
-def mock_get_events_func() -> List[EventIngestionModel]:
+def min_get_events() -> List[EventIngestionModel]:
     event = EXAMPLE_MINIMAL_EVENT
     event.sessions[0].session_datetime = datetime(2019, 4, 13)
     return [event]
 
 
-def test_create_event_gather_flow() -> None:
+@pytest.mark.parametrize("func", [min_get_events, rand_get_events])
+def test_create_event_gather_flow(func: Callable) -> None:
     flow = pipeline.create_event_gather_flow(
-        get_events_func=mock_get_events_func,
+        get_events_func=func,
         credentials_file="/fake/credentials/path",
         bucket="bucket",
     )

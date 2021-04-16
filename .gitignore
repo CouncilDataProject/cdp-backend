@@ -121,3 +121,10 @@ cdp_database_diagram.*
 cdp_event_gather_flow_*
 ingestion_models.md
 transcript_model.md
+test.err
+test.out
+
+# Common credentials directories
+.keys/
+.credentials/
+.creds/

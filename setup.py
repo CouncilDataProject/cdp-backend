@@ -68,7 +68,7 @@ extra_requirements = {
 }
 
 setup(
-    author="Jackson Maxfield Brown",
+    author="Jackson Maxfield Brown, To Huynh, Isaac Na",
     author_email="jmaxfieldbrown@gmail.com",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
@@ -85,6 +85,8 @@ setup(
     ),
     entry_points={
         "console_scripts": [
+            "clean_cdp_database=cdp_backend.bin.clean_cdp_database:main",
+            "clean_cdp_filestore=cdp_backend.bin.clean_cdp_filestore:main",
             "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
             (
                 "create_cdp_ingestion_models_doc="
