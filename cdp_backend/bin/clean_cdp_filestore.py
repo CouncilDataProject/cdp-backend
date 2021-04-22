@@ -53,7 +53,11 @@ def _clean_cdp_filestore(google_creds_path: Path) -> None:
     # Remove all files in bucket
     bucket = f"{project_id}.appspot.com"
     log.info(f"Cleaning bucket: {bucket}")
-    fs.rm(f"{bucket}/*")
+    try:
+        fs.rm(f"{bucket}/*")
+    # Handle empty bucket
+    except FileNotFoundError:
+        pass
 
     log.info("Filestore cleaning complete")
 
