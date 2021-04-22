@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import json
 import logging
 import sys
 import traceback
@@ -54,7 +55,10 @@ class Args(argparse.Namespace):
             "--google_cloud_storage_bucket_name",
             type=Path,
             dest="gcs_bucket",
-            help=("Google Cloud Storage bucket name for file uploads."),
+            help=(
+                "Google Cloud Storage bucket name for file uploads. "
+                "Default: None (assume bucket name from GCP project id)"
+            ),
         )
 
         p.parse_args(namespace=self)
@@ -71,11 +75,18 @@ def main() -> None:
     try:
         args = Args()
 
+        # Unpack args
         credentials_file = args.google_credentials_file
-
         get_events_func = import_get_events_func(args.get_events_function_path)
 
-        bucket = args.gcs_bucket
+        # Handle default None bucket
+        if args.gcs_bucket is None:
+            with open(credentials_file, "r") as open_resource:
+                project_id = json.load(open_resource)["project_id"]
+                bucket = f"{project_id}.appspot.com"
+                log.info(f"Defaulting to bucket: {bucket}")
+        else:
+            bucket = args.gcs_bucket
 
         flow = pipeline.create_event_gather_flow(
             get_events_func, credentials_file, bucket
