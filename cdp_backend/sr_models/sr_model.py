@@ -20,43 +20,6 @@ class SRModelOutputs(NamedTuple):
 
 
 class SRModel(ABC):
-    @staticmethod
-    def wrap_and_format_transcript_data(
-        data: constants.TranscriptDataJSON,
-        transcript_format: str,
-        confidence: float,
-        annotations: List[Dict[str, Any]] = [],
-    ) -> Dict[
-        str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]
-    ]:
-        """
-        A very simple function to just make sure that a transcript has all the details
-        neccessary prior to storing as a JSON file.
-
-        Parameters
-        ----------
-        data: constants.TranscriptDataJSON
-            The list of dictionaries that act as the transcript data.
-        transcript_format: str
-            One of the transcript formats available from constants.TranscriptFormats.
-        confidence: float
-            The overall confidence that the transcript is accurate.
-        annotations: List[Dict[str, Any]]
-            A list of dictionaries to act as annotations for the transcript.
-
-        Returns
-        -------
-        storage_ready: Dict[str, Union[str, float, List[Dict[str, Any]],
-        constants.TranscriptDataJSON]]
-            The in memory version of a transcript file about to be dumped to JSON.
-        """
-        return {
-            "format": transcript_format,
-            "annotations": annotations,
-            "confidence": confidence,
-            "data": data,
-        }
-
     @abstractmethod
     def transcribe(
         self,

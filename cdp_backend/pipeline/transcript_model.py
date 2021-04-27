@@ -89,8 +89,29 @@ class Transcript:
     generator: str
     session_datetime: str
     created_datetime: str
-    data: List[TextBlockData]
+    sentences: List[Sentence]
     annotations: Optional[Dict[str, Any]] = None
+
+@dataclass_json
+@dataclass
+class Sentence:
+    index: int
+    confidence: str
+    start_time: float
+    end_time: float
+    speaker: Optional[str]
+    annotations: Dict[str, Any]
+    words: List[Word]
+
+@dataclass_json
+@dataclass
+class Word:
+    index: int
+    start_time: float
+    end_time: float
+    text: str
+    annotations: Dict[str, Any]
+
 
 
 ###############################################################################
