@@ -94,6 +94,15 @@ make build
     make build
     ```
 
+    **Note:** You should run `make gen-key` prior to build and ensure you have
+    `GOOGLE_CREDENTIALS` set in your environment variables using:
+
+    ```bash
+    export GOOGLE_CREDENTIALS=$(cat ../.keys/{project-name}-sa-dev.json)
+    ```
+
+    and replacing `{project-name}` with your project name.
+
 -   To clean and remove all database documents and file store objects:
 
     ```bash
