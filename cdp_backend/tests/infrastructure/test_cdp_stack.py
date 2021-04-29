@@ -13,38 +13,28 @@ import pytest
 
 # Create the various mocks.
 class CDPStackMocks(pulumi.runtime.Mocks):
-    def call(self, token: str, args: Any, provider: Optional[str]) -> Dict:
-        return {}
+    def call(
+        self, args: pulumi.runtime.MockCallArgs
+    ) -> Tuple[Dict[Any, Any], Optional[List[Tuple[str, str]]]]:
+        return {}, None
 
     def new_resource(
-        self,
-        type_: str,
-        name: str,
-        inputs: Any,
-        provider: Optional[str],
-        id_: Optional[str],
-    ) -> Tuple[str, Dict[Any, Any]]:
-        if type_ == "gcp:appengine/application:Application":
-            state = {
-                "app_id": f"{name}.fake-appspot.io",
-                "default_bucket": f"gcs://{name}",
-            }
-            return (name, dict(inputs, **state))
-
-        return ("", {})
+        self, args: pulumi.runtime.MockResourceArgs
+    ) -> Tuple[Optional[str], Dict[Any, Any]]:
+        return (args.name + "_id", args.inputs)
 
 
 pulumi.runtime.set_mocks(CDPStackMocks())
+
+from cdp_backend.infrastructure import CDPStack
 
 ###############################################################################
 
 
 class InfrastructureTests(unittest.TestCase):
-    @pytest.mark.skipif(sys.version_info >= (3, 8), reason="Pulumi requires on Py37")
+    @pytest.mark.skipif(sys.version_info >= (3, 8), reason="Pulumi runs on Py37")
     @pulumi.runtime.test
     def test_basic_run(self) -> None:
-        from cdp_backend.infrastructure import CDPStack
-
         gcp_project_id = "mocked-testing-stack"
 
         # Write output checks
