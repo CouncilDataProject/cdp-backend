@@ -1,4 +1,4 @@
-.PHONY: clean build gen-docs docs help
+.PHONY: help login init build clean reset destroy gen-key
 .DEFAULT_GOAL := help
 
 define PRINT_HELP_PYSCRIPT
@@ -21,7 +21,6 @@ login: ## Run GCloud and Pulumi logins
 	gcloud auth application-default login
 
 init: ## See README, must provide "project"
-	make login
 	gcloud projects create $(project) --set-as-default
 	pulumi stack init $(project)
 	echo "----------------------------------------------------------------------------"
@@ -29,21 +28,21 @@ init: ## See README, must provide "project"
 	echo "https://console.cloud.google.com/billing/linkedaccount?project=${project}"
 
 build: ## Run pulumi up for infra setup
-	pulumi up -p 5
+	pulumi up -p 4
 
 clean: ## Remove all database documents and filestore objects, must provide "key"
 	clean_cdp_database ${key}
 	clean_cdp_filestore ${key}
 
 reset: ## Run pulumi destroy and make build, must provide "project"
-	pulumi destroy -p 5
+	pulumi destroy -p 4
 	echo "----------------------------------------------------------------------------"
 	echo "Sleeping for three minutes while resources clean up"
 	sleep 180
 	make build
 
 destroy: ## Fully teardown Pulumi and GCloud, must provide "project"
-	pulumi destroy -p 5
+	pulumi destroy -p 4
 	pulumi stack rm ${project}
 	gcloud projects delete ${project}
 

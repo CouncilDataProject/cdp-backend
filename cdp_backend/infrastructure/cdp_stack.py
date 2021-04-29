@@ -3,6 +3,7 @@
 
 import pulumi
 import pulumi_gcp as gcp
+from pulumi_google_native.firestore import v1 as firestore
 
 from ..database import DATABASE_MODELS
 
@@ -93,21 +94,24 @@ class CDPStack(pulumi.ComponentResource):
                 for idx_field in idx_field_set.fields:
                     idx_set_name_parts += [idx_field.name, idx_field.order]
                     idx_set_fields.append(
-                        {
-                            "fieldPath": idx_field.name,
-                            "order": idx_field.order,
-                        }
+                        firestore.GoogleFirestoreAdminV1IndexFieldArgs(
+                            field_path=idx_field.name,
+                            order=idx_field.order,
+                        )
                     )
 
                 # Finish creating the index set name
                 idx_set_name = "_".join(idx_set_name_parts)
                 fq_idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
 
-                gcp.firestore.Index(
+                firestore.DatabaseCollectionGroupIndex(
                     fq_idx_set_name,
-                    collection=model_cls.collection_name,
+                    projects_id=self.gcp_project_id,
+                    databases_id="(default)",
+                    collection_groups_id=model_cls.collection_name,
+                    indexes_id=fq_idx_set_name,
                     fields=idx_set_fields,
-                    project=self.gcp_project_id,
+                    query_scope="COLLECTION",
                     opts=pulumi.ResourceOptions(parent=self.firestore_app),
                 )
 

@@ -53,8 +53,9 @@ requirements = [
     "graphviz~=0.14",
     "pandas~=1.1.3",
     "prefect~=0.14.0",
-    "pulumi~=2.16.2",
-    "pulumi-gcp~=4.6.0",
+    "pulumi~=3.0.0",
+    "pulumi-google-native~=0.1.0",
+    "pulumi-gcp~=5.0.0",
 ]
 
 extra_requirements = {
