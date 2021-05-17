@@ -5,6 +5,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Any, List, Optional, Union
+from ..pipeline.transcript_model import Word, Sentence
 
 from google.cloud import speech_v1p1beta1 as speech
 
@@ -94,8 +95,12 @@ class GoogleCloudSRModel(SRModel):
         log.debug(f"Beginning transcription for: {file_uri}")
         operation = client.long_running_recognize(config, audio)
 
+        print("starting transcription")
+
         # Wait for complete
         response = operation.result(timeout=10800)
+
+        print("DONE with transcription")
 
         # Select highest confidence transcripts
         confidence_sum = 0
@@ -106,12 +111,22 @@ class GoogleCloudSRModel(SRModel):
             if len(result.alternatives) > 0:
                 # Check length of transcript result
                 word_list = result.alternatives[0].words
+                print("WORD LIST")
+                #print(str(word_list))
                 if len(word_list) > 0:
-                    for word in word_list:
+                    #for word in word_list:
+                    for i in range(0, len(word_list)):
+                        word = word_list[i]
+                        print(str(word.word))
+
                         start_time = (
                             word.start_time.seconds + word.start_time.nanos * 1e-9
                         )
                         end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
+
+                        # Create Word model
+                        timestamped_word = Word(index=i, start_time=start_time, end_time=end_time, text=word.word, annotations=None) 
+                        """
                         timestamped_words.append(
                             {
                                 "text": word.word,
@@ -119,30 +134,47 @@ class GoogleCloudSRModel(SRModel):
                                 "end_time": end_time,
                             }
                         )
+                        """
+                        timestamped_words.append(timestamped_word)
 
                     # Update confidence stats
                     confidence_sum += result.alternatives[0].confidence
                     segments += 1
 
+        print("ASDF")
+        print(str(timestamped_words))
+
         # Create timestamped sentences
         timestamped_sentences = []
         current_sentence = None
+        sentence_index = 0
         for word_details in timestamped_words:
             # Create new sentence
             if current_sentence is None:
+                print("Starting new sentence")
+                current_sentence = Sentence(index=sentence_index, confidence="", start_time=word_details["start_time"], end_time=None, speaker=None, annotations=None, word_details=[word_details["text"]])
+
+                """
                 current_sentence = {
                     "text": word_details["text"],
                     "start_time": word_details["start_time"],
                 }
-            # Update current sentence
-            else:
-                current_sentence["text"] += " {}".format(word_details["text"])
+                """
 
             # End current sentence and reset
-            if word_details["text"][-1] == ".":
-                current_sentence["end_time"] = word_details["end_time"]
+            # TODO: Account for non-sentence ending periods, such as prefixes like "Mr." or "Dr."
+            elif word_details["text"][-1] == ".":
+                current_sentence.end_time = word_details["end_time"]
+                current_sentence.text += " {}".format(word_details["text"])
                 timestamped_sentences.append(current_sentence)
                 current_sentence = None
+                sentence_index += 1
+
+            # Update current sentence
+            else:
+                #current_sentence["text"] += " {}".format(word_details["text"])
+                current_sentence.text += " {}".format(word_details["text"])
+
 
         # Create raw transcript
         raw_transcript = " ".join(
