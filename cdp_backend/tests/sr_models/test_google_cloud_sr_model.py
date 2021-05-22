@@ -2,15 +2,18 @@
 # -*- coding: utf-8 -*-
 
 import random
+import re
 from pathlib import Path
 from typing import Any, List, Type
 from unittest import mock
 
 import pytest
 from google.cloud import speech_v1p1beta1 as speech
-from py._path.local import LocalPath
 
-from cdp_backend.sr_models.google_cloud_sr_model import GoogleCloudSRModel
+from cdp_backend.sr_models import GoogleCloudSRModel
+
+expected_sentence_1 = "Hello everyone, and thank you for coming."
+expected_sentence_2 = "Will the clerk begin by taking roll."
 
 
 @pytest.fixture
@@ -54,7 +57,7 @@ class FakeRecognizeResults:
                 FakeRecognizeAlternative(
                     [
                         FakeRecognizeWord("Hello", 0.0, 0.6),
-                        FakeRecognizeWord("everyone", 0.7, 1.1),
+                        FakeRecognizeWord("everyone,", 0.7, 1.1),
                         FakeRecognizeWord("and", 1.2, 1.4),
                         FakeRecognizeWord("thank", 1.5, 1.7),
                         FakeRecognizeWord("you", 1.8, 1.9),
@@ -117,9 +120,7 @@ def test_clean_phrases(phrases: List[str], cleaned: List[str]) -> None:
     assert GoogleCloudSRModel._clean_phrases(phrases) == cleaned
 
 
-def test_google_cloud_transcribe(
-    fake_creds_path: str, example_audio: str, tmpdir: LocalPath
-) -> None:
+def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> None:
     with mock.patch(
         "google.cloud.speech_v1p1beta1.SpeechClient.from_service_account_json"
     ) as mocked_client_init:
@@ -129,9 +130,17 @@ def test_google_cloud_transcribe(
 
         sr_model = GoogleCloudSRModel(fake_creds_path)
 
-        sr_model.transcribe(
-            str(example_audio),
-            tmpdir / "raw.json",
-            tmpdir / "words.json",
-            tmpdir / "sentences.json",
-        )
+        transcript = sr_model.transcribe(str(example_audio))
+
+        assert expected_sentence_1 == transcript.sentences[0].text
+        assert expected_sentence_2 == transcript.sentences[1].text
+        assert transcript.sentences[0].index == 0
+        assert transcript.sentences[1].index == 1
+
+        for sentence in transcript.sentences:
+            for word in sentence.words:
+                assert has_only_non_deliminating_chars(word.text) is True
+
+
+def has_only_non_deliminating_chars(word: str) -> bool:
+    return not re.search(r"[^a-zA-Z0-9'\-]", word)
