@@ -4,8 +4,6 @@
 import hashlib
 import logging
 from typing import Callable, List
-from pathlib import Path
-import pathlib
 
 from prefect import Flow, case
 
@@ -13,8 +11,6 @@ from ..database import functions as db_functions
 from ..file_store import functions as fs_functions
 from ..utils import file_utils as file_util_functions
 from .ingestion_models import EventIngestionModel
-
-from ..sr_models import GoogleCloudSRModel
 
 ###############################################################################
 
@@ -52,10 +48,6 @@ def create_event_gather_flow(
     """
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
-        sr_model = GoogleCloudSRModel(credentials_path=credentials_file)
-        sr_model.transcribe("gs://stg-cdp-seattle-a910f.appspot.com/e8d80518f82842c149de46fba8a703bf2cf9c6e4eb3c1bfffea1b40b943cc8a6_audio.wav", "stuff.txt", ".", ".")
-
-        """
         events: List[EventIngestionModel] = get_events_func()
 
         for event in events:
@@ -91,8 +83,6 @@ def create_event_gather_flow(
                     session,
                     creds_file=credentials_file,
                 )
-        """
-
 
     return flow
 
