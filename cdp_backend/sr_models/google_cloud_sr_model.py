@@ -101,7 +101,6 @@ class GoogleCloudSRModel(SRModel):
             if len(result.alternatives) > 0:
                 # Check length of transcript result
                 word_list = result.alternatives[0].words
-                # print(str(word_list))
                 if len(word_list) > 0:
                     for word in word_list:
                         # create Word
