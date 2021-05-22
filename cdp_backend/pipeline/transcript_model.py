@@ -28,7 +28,7 @@ class Word:
     text: str
         The text of the word, cleaned of all non-deliminating chars.
     annotations: Optional[Dict[str, Any]]
-        Any annotations specific to this word. 
+        Any annotations specific to this word.
         Default: None (no annotations)
     """
 
@@ -58,17 +58,17 @@ class Sentence:
     speaker: Optional[str]
         The optional speaker for the sentence.
     annotations: Optional[Dict[str, Any]]
-        Any annotations specific to this sentence. 
+        Any annotations specific to this sentence.
         Default: None (no annotations)
     words: List[Word]
-        The list of word for the sentence. 
+        The list of word for the sentence.
         See Word model for more info.
     text: str
         The text of the sentence including non-deliminating chars.
     """
 
     index: int
-    confidence: float 
+    confidence: float
     start_time: float
     end_time: float
     speaker: Optional[str]

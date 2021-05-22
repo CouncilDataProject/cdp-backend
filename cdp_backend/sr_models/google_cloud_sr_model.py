@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 import logging
+import re
+from datetime import datetime
 from pathlib import Path
 from typing import Any, List, Optional, Union
-from ..pipeline.transcript_model import Word, Sentence, Transcript
 
 from google.cloud import speech_v1p1beta1 as speech
-from datetime import datetime
 
+from ..pipeline.transcript_model import Sentence, Transcript, Word
 from .sr_model import SRModel
 
 ###############################################################################
@@ -137,7 +137,7 @@ class GoogleCloudSRModel(SRModel):
                             word_index += 1
 
                         # End current sentence and reset
-                        # TODO: Account for non-sentence ending periods, such as 
+                        # TODO: Account for non-sentence ending periods, such as
                         # prefixes like "Mr." or "Dr."
                         elif bool(re.match(r"\.|\?", word.word[-1])):
                             # Finish sentence and append
