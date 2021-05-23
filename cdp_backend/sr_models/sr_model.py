@@ -3,20 +3,11 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Optional, Union
+from typing import Any, List, Optional, Union
 
 from ..pipeline.transcript_model import Transcript
 
 ###############################################################################
-
-
-class SRModelOutputs(NamedTuple):
-    raw_path: Path
-    confidence: float
-    timestamped_words_path: Optional[Path] = None
-    timestamped_sentences_path: Optional[Path] = None
-    timestamped_speaker_turns_path: Optional[Path] = None
-    extras: Optional[Dict[str, Any]] = None
 
 
 class SRModel(ABC):
@@ -28,12 +19,14 @@ class SRModel(ABC):
         **kwargs: Any
     ) -> Transcript:
         """
-        Transcribe audio from file and store in text file.
+        Transcribe audio from file and return a Transcript model.
 
         Parameters
         ----------
         file_uri: Union[str, Path]
             The uri to the audio file or caption file to transcribe.
+        phrases: Optional[List[str]] = None
+            A list of strings that make the SR model perform better.
 
         Returns
         -------

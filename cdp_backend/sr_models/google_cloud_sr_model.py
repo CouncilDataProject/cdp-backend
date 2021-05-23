@@ -43,8 +43,7 @@ class GoogleCloudSRModel(SRModel):
                     total_character_count += len(cleaned_phrase)
 
             return cleaned
-        else:
-            return []
+        return []
 
     def transcribe(
         self,
@@ -52,6 +51,23 @@ class GoogleCloudSRModel(SRModel):
         phrases: Optional[List[str]] = None,
         **kwargs: Any,
     ) -> Transcript:
+        """
+        Transcribe audio from GCS file and return a Transcript model.
+
+        Parameters
+        ----------
+        file_uri: Union[str, Path]
+            The GCS file uri to the audio file or caption file to transcribe.
+            It should be in format 'gs://...'.
+        phrases: Optional[List[str]] = None
+            A list of strings that make the SR model perform better.
+
+        Returns
+        -------
+        outputs: Transcript
+            The transcript model for the supplied media file.
+        """
+
         # Create client
         client = speech.SpeechClient.from_service_account_json(self.credentials_path)
 
@@ -88,7 +104,6 @@ class GoogleCloudSRModel(SRModel):
         # Select highest confidence transcripts
         confidence_sum = 0
         segments = 0
-        # timestamped_words = []
 
         # Create timestamped sentences
         timestamped_sentences: List[Sentence] = []
@@ -109,9 +124,9 @@ class GoogleCloudSRModel(SRModel):
                         )
                         end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
 
-                        # Clean everything but non-delimiting characters
+                        # Clean everything but non-delimiting characters make lowercase
                         regex = re.compile(r"[^a-zA-Z0-9'\-]")
-                        cleaned_word = regex.sub("", word.word)
+                        cleaned_word = regex.sub("", word.word).lower()
                         timestamped_word = Word(
                             index=word_index,
                             start_time=start_time,
@@ -127,9 +142,7 @@ class GoogleCloudSRModel(SRModel):
                                 confidence=result.alternatives[0].confidence,
                                 start_time=word.start_time,
                                 end_time=word.end_time,
-                                # TODO: Add speaker and annotations
-                                speaker=None,
-                                annotations=None,
+                                # TODO: Add speaker and annotations?
                                 words=[timestamped_word],
                                 text=word.word,
                             )

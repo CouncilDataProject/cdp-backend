@@ -26,7 +26,7 @@ class Word:
     end_time: float
         Time in seconds for when this word ends.
     text: str
-        The text of the word, cleaned of all non-deliminating chars.
+        The raw text of the word, lowercased and cleaned of all non-deliminating chars.
     annotations: Optional[Dict[str, Any]]
         Any annotations specific to this word.
         Default: None (no annotations)
@@ -64,17 +64,17 @@ class Sentence:
         The list of word for the sentence.
         See Word model for more info.
     text: str
-        The text of the sentence including non-deliminating chars.
+        The text of the sentence including all formatting and non-deliminating chars.
     """
 
     index: int
     confidence: float
     start_time: float
     end_time: float
-    speaker: Optional[str]
-    annotations: Optional[Dict[str, Any]]
     words: List[Word]
     text: str
+    speaker: Optional[str] = None
+    annotations: Optional[Dict[str, Any]] = None
 
 
 @dataclass_json
@@ -98,7 +98,7 @@ class Transcript:
         ISO formatted datetime for the session that this document transcribes.
     created_datetime: str
         ISO formatted datetime for when this transcript was created.
-    sentences: List[Sentences]
+    sentences: List[Sentence]
         A list of sentences.
         See Sentence documentation for more information.
     annotations: Optional[Dict[str, Any]]
