@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Any, Union
 
 from ..pipeline.transcript_model import Transcript
 
