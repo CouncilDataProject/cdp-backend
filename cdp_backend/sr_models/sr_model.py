@@ -12,11 +12,7 @@ from ..pipeline.transcript_model import Transcript
 
 class SRModel(ABC):
     @abstractmethod
-    def transcribe(
-        self,
-        file_uri: Union[str, Path],
-        **kwargs: Any
-    ) -> Transcript:
+    def transcribe(self, file_uri: Union[str, Path], **kwargs: Any) -> Transcript:
         """
         Transcribe audio from file and return a Transcript model.
 
