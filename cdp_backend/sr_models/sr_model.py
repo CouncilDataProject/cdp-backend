@@ -15,7 +15,6 @@ class SRModel(ABC):
     def transcribe(
         self,
         file_uri: Union[str, Path],
-        phrases: Optional[List[str]] = None,
         **kwargs: Any
     ) -> Transcript:
         """
@@ -25,8 +24,6 @@ class SRModel(ABC):
         ----------
         file_uri: Union[str, Path]
             The uri to the audio file or caption file to transcribe.
-        phrases: Optional[List[str]] = None
-            A list of strings that make the SR model perform better.
 
         Returns
         -------
