@@ -186,7 +186,7 @@ EXAMPLE_TRANSCRIPT = Transcript(
                     index=0,
                     start_time=0.0,
                     end_time=0.5,
-                    text="Hello",
+                    text="hello",
                     annotations=None,
                 ),
                 Word(
@@ -213,7 +213,7 @@ EXAMPLE_TRANSCRIPT = Transcript(
                     index=0,
                     start_time=1.0,
                     end_time=1.5,
-                    text="Hi",
+                    text="hi",
                     annotations=None,
                 ),
                 Word(
