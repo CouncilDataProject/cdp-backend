@@ -13,30 +13,66 @@ from dataclasses_json import dataclass_json
 
 @dataclass_json
 @dataclass
-class TextBlockData:
+class Word:
     """
-    Text block data for a transcript.
+    Data for a word in a transcript.
 
     Parameters
     ----------
-    text: str
-        The full text portion of this data block.
+    index: int
+        The index of the word in it's respective sentence.
     start_time: float
-        Time in seconds for when this block of data begins.
+        Time in seconds for when this word begins.
     end_time: float
-        Time in seconds for when this block of data ends.
-    speaker: Optional[str]
-        The speaker identifier for this text block.
-        Default: None (No speaker identifier available)
+        Time in seconds for when this word ends.
+    text: str
+        The raw text of the word, lowercased and cleaned of all non-deliminating chars.
     annotations: Optional[Dict[str, Any]]
-        Any annotations specific to this text block.
+        Any annotations specific to this word.
         Default: None (no annotations)
-        See TextBlockAnnotations for list of known annotations and their dtypes.
     """
 
-    text: str
+    index: int
     start_time: float
     end_time: float
+    text: str
+    annotations: Optional[Dict[str, Any]]
+
+
+@dataclass_json
+@dataclass
+class Sentence:
+    """
+    Data for a sentence in a transcript.
+
+    Parameters
+    ----------
+    index: int
+        The index of the sentence in it's respective transcript.
+    confidence: float
+        A number between 0 and 1 for the confidence of the sentence accuracy.
+    start_time: float
+        Time in seconds for when this sentence begins.
+    end_time: float
+        Time in seconds for when this sentence ends.
+    speaker: Optional[str]
+        The optional speaker for the sentence.
+    annotations: Optional[Dict[str, Any]]
+        Any annotations specific to this sentence.
+        Default: None (no annotations)
+    words: List[Word]
+        The list of word for the sentence.
+        See Word model for more info.
+    text: str
+        The text of the sentence including all formatting and non-deliminating chars.
+    """
+
+    index: int
+    confidence: float
+    start_time: float
+    end_time: float
+    words: List[Word]
+    text: str
     speaker: Optional[str] = None
     annotations: Optional[Dict[str, Any]] = None
 
@@ -58,13 +94,13 @@ class Transcript:
     generator: str
         A descriptive name of the generative process that produced this transcript.
         Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
-    session_datetime: str
+    session_datetime: Optional[str]
         ISO formatted datetime for the session that this document transcribes.
     created_datetime: str
         ISO formatted datetime for when this transcript was created.
-    data: List[TextBlockData]
-        A list of text blocks.
-        See TextBlockData documentation for more information.
+    sentences: List[Sentence]
+        A list of sentences.
+        See Sentence documentation for more information.
     annotations: Optional[Dict[str, Any]]
         Any annotations that can be applied to the whole transcript.
         Default: None (no annotations)
@@ -87,9 +123,9 @@ class Transcript:
 
     confidence: float
     generator: str
-    session_datetime: str
+    session_datetime: Optional[str]
     created_datetime: str
-    data: List[TextBlockData]
+    sentences: List[Sentence]
     annotations: Optional[Dict[str, Any]] = None
 
 
@@ -137,40 +173,59 @@ EXAMPLE_TRANSCRIPT = Transcript(
     generator="JacksonGen -- Lib Version: 0.0.0",
     session_datetime=datetime(2021, 1, 10, 15).isoformat(),
     created_datetime=datetime.utcnow().isoformat(),
-    data=[
-        TextBlockData(
+    sentences=[
+        Sentence(
+            index=0,
             text="Hello everyone.",
+            confidence=0.9,
             start_time=0.0,
             end_time=1.0,
             speaker="Jackson Maxfield Brown",
+            words=[
+                Word(
+                    index=0,
+                    start_time=0.0,
+                    end_time=0.5,
+                    text="hello",
+                    annotations=None,
+                ),
+                Word(
+                    index=1,
+                    start_time=0.5,
+                    end_time=1.0,
+                    text="everyone",
+                    annotations=None,
+                ),
+            ],
             annotations={
                 TextBlockAnnotations.confidence.name: 0.987,
             },
         ),
-        TextBlockData(
-            text="Hey!",
-            start_time=1.2,
-            end_time=1.4,
+        Sentence(
+            index=1,
+            text="Hi all.",
+            confidence=0.95,
+            start_time=1.0,
+            end_time=2.0,
             speaker="Isaac Na",
+            words=[
+                Word(
+                    index=0,
+                    start_time=1.0,
+                    end_time=1.5,
+                    text="hi",
+                    annotations=None,
+                ),
+                Word(
+                    index=1,
+                    start_time=1.5,
+                    end_time=2.0,
+                    text="all",
+                    annotations=None,
+                ),
+            ],
             annotations={
-                TextBlockAnnotations.confidence.name: 0.912,
-            },
-        ),
-        TextBlockData(
-            text="Hello!",
-            start_time=1.6,
-            end_time=1.9,
-            speaker="To Huynh",
-            annotations={
-                TextBlockAnnotations.confidence.name: 0.999,
-            },
-        ),
-        TextBlockData(
-            text="Who is speaking this?",
-            start_time=2.2,
-            end_time=3.9,
-            annotations={
-                TextBlockAnnotations.confidence.name: 0.835,
+                TextBlockAnnotations.confidence.name: 0.987,
             },
         ),
     ],
