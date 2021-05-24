@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -39,7 +42,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="cdp_backend.utils.resources package" href="cdp_backend.utils.resources.html" />
-    <link rel="prev" title="cdp_backend.pipeline package" href="cdp_backend.pipeline.html" /> 
+    <link rel="prev" title="cdp_backend.sr_models package" href="cdp_backend.sr_models.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -104,6 +107,7 @@
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.utils package</a></li>
 </ul>
 </li>
@@ -210,7 +214,7 @@
         <a href="cdp_backend.utils.resources.html" class="btn btn-neutral float-right" title="cdp_backend.utils.resources package" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
       
       
-        <a href="cdp_backend.pipeline.html" class="btn btn-neutral float-left" title="cdp_backend.pipeline package" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cdp_backend.sr_models.html" class="btn btn-neutral float-left" title="cdp_backend.sr_models package" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
       
   </div>
   
@@ -238,8 +242,8 @@
 <div class="section" id="module-cdp_backend.utils.constants_utils">
 <span id="cdp-backend-utils-constants-utils-module"></span><h2>cdp_backend.utils.constants_utils module<a class="headerlink" href="#module-cdp_backend.utils.constants_utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="cdp_backend.utils.constants_utils.get_all_class_attr_values">
-<code class="sig-prename descclassname"><span class="pre">cdp_backend.utils.constants_utils.</span></code><code class="sig-name descname"><span class="pre">get_all_class_attr_values</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/cdp_backend/utils/constants_utils.html#get_all_class_attr_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.constants_utils.get_all_class_attr_values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.utils.constants_utils.get_all_class_attr_values">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.constants_utils.</span></span><span class="sig-name descname"><span class="pre">get_all_class_attr_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/cdp_backend/utils/constants_utils.html#get_all_class_attr_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.constants_utils.get_all_class_attr_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all class attributes of the provided class.
 Intended to be used to get all constant values of a class.</p>
 <dl class="field-list simple">
@@ -259,8 +263,8 @@ Intended to be used to get all constant values of a class.</p>
 <div class="section" id="module-cdp_backend.utils.file_utils">
 <span id="cdp-backend-utils-file-utils-module"></span><h2>cdp_backend.utils.file_utils module<a class="headerlink" href="#module-cdp_backend.utils.file_utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="cdp_backend.utils.file_utils.external_resource_copy">
-<code class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></code><code class="sig-name descname"><span class="pre">external_resource_copy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#external_resource_copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.external_resource_copy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.external_resource_copy">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">external_resource_copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#external_resource_copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.external_resource_copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy an external resource to a local destination on the machine.
 :Parameters: * <strong>uri</strong> (<em>str</em>) – The uri for the external resource to copy.</p>
 <blockquote>
@@ -282,8 +286,8 @@ the same name if it already exists.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="cdp_backend.utils.file_utils.get_media_type">
-<code class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></code><code class="sig-name descname"><span class="pre">get_media_type</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#get_media_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.get_media_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.get_media_type">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">get_media_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#get_media_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.get_media_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the IANA media type for the provided URI.
 If one could not be found, return None.</p>
 <dl class="field-list simple">
@@ -300,8 +304,8 @@ If one could not be found, return None.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="cdp_backend.utils.file_utils.split_audio">
-<code class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></code><code class="sig-name descname"><span class="pre">split_audio</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_read_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_save_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#split_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.split_audio" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.split_audio">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">split_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_read_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_save_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#split_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.split_audio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split and store the audio from a video file using ffmpeg.
 :Parameters: * <strong>video_read_path</strong> (<em>str</em>) – Path to the video to split the audio from.</p>
 <blockquote>

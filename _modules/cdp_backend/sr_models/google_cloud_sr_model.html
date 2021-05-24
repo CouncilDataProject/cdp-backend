@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cdp_backend.sr_models.google_cloud_sr_model &mdash; cdp-backend 3.0.0.dev5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.sr_models.google_cloud_sr_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.sr_models.google_cloud_sr_model</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">google.cloud</span> <span class="kn">import</span> <span class="n">speech_v1p1beta1</span> <span class="k">as</span> <span class="n">speech</span>
+
+<span class="kn">from</span> <span class="nn">..pipeline.transcript_model</span> <span class="kn">import</span> <span class="n">Sentence</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">,</span> <span class="n">Word</span>
+<span class="kn">from</span> <span class="nn">.sr_model</span> <span class="kn">import</span> <span class="n">SRModel</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="GoogleCloudSRModel"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel">[docs]</a><span class="k">class</span> <span class="nc">GoogleCloudSRModel</span><span class="p">(</span><span class="n">SRModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credentials_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="c1"># Resolve credentials</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">credentials_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">credentials_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">phrases</span><span class="p">:</span>
+            <span class="c1"># Clean and apply usage limits</span>
+            <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">total_character_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">phrases</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]:</span>
+                <span class="k">if</span> <span class="n">total_character_count</span> <span class="o">&lt;=</span> <span class="mi">9900</span><span class="p">:</span>
+                    <span class="n">cleaned_phrase</span> <span class="o">=</span> <span class="n">phrase</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
+
+                    <span class="c1"># Make the phrase a bit nicer by chunking to nearest complete word</span>
+                    <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">cleaned_phrase</span><span class="p">:</span>
+                        <span class="n">cleaned_phrase</span> <span class="o">=</span> <span class="n">cleaned_phrase</span><span class="p">[:</span> <span class="n">cleaned_phrase</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)]</span>
+
+                    <span class="c1"># Append cleaned phrase and increase character count</span>
+                    <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cleaned_phrase</span><span class="p">)</span>
+                    <span class="n">total_character_count</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned_phrase</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">cleaned</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="GoogleCloudSRModel.transcribe"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel.transcribe">[docs]</a>    <span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file_uri</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+        <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transcript</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transcribe audio from GCS file and return a Transcript model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_uri: Union[str, Path]</span>
+<span class="sd">            The GCS file uri to the audio file or caption file to transcribe.</span>
+<span class="sd">            It should be in format &#39;gs://...&#39;.</span>
+<span class="sd">        phrases: Optional[List[str]] = None</span>
+<span class="sd">            A list of strings that make the SR model perform better.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        outputs: Transcript</span>
+<span class="sd">            The transcript model for the supplied media file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create client</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechClient</span><span class="o">.</span><span class="n">from_service_account_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials_path</span><span class="p">)</span>
+
+        <span class="c1"># Create basic metadata</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="p">()</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">interaction_type</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">speech</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">DISCUSSION</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add phrases</span>
+        <span class="n">speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span>
+            <span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Prepare for transcription</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="p">(</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="n">speech</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="o">.</span><span class="n">AudioEncoding</span><span class="o">.</span><span class="n">LINEAR16</span><span class="p">,</span>
+            <span class="n">sample_rate_hertz</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+            <span class="n">language_code</span><span class="o">=</span><span class="s2">&quot;en-US&quot;</span><span class="p">,</span>
+            <span class="n">enable_automatic_punctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">enable_word_time_offsets</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">speech_contexts</span><span class="o">=</span><span class="p">[</span><span class="n">speech_context</span><span class="p">],</span>
+            <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionAudio</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">file_uri</span><span class="p">)</span>
+
+        <span class="c1"># Begin transcription</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning transcription for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">long_running_recognize</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">audio</span><span class="p">)</span>
+
+        <span class="c1"># Wait for complete</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10800</span><span class="p">)</span>
+
+        <span class="c1"># Select highest confidence transcripts</span>
+        <span class="n">confidence_sum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Create timestamped sentences</span>
+        <span class="n">timestamped_sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sentence</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">current_sentence</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">sentence_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">word_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+            <span class="c1"># Some portions of audio may not have text</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Check length of transcript result</span>
+                <span class="n">word_list</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">words</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_list</span><span class="p">:</span>
+                        <span class="c1"># create Word</span>
+                        <span class="n">start_time</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
+                        <span class="p">)</span>
+                        <span class="n">end_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
+
+                        <span class="c1"># Clean everything but non-delimiting characters make lowercase</span>
+                        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9&#39;\-]&quot;</span><span class="p">)</span>
+                        <span class="n">cleaned_word</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                        <span class="n">timestamped_word</span> <span class="o">=</span> <span class="n">Word</span><span class="p">(</span>
+                            <span class="n">index</span><span class="o">=</span><span class="n">word_index</span><span class="p">,</span>
+                            <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+                            <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span>
+                            <span class="n">text</span><span class="o">=</span><span class="n">cleaned_word</span><span class="p">,</span>
+                            <span class="c1"># TODO: Add annotations</span>
+                            <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">current_sentence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">current_sentence</span> <span class="o">=</span> <span class="n">Sentence</span><span class="p">(</span>
+                                <span class="n">index</span><span class="o">=</span><span class="n">sentence_index</span><span class="p">,</span>
+                                <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                                <span class="n">start_time</span><span class="o">=</span><span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
+                                <span class="n">end_time</span><span class="o">=</span><span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
+                                <span class="c1"># TODO: Add speaker and annotations?</span>
+                                <span class="n">words</span><span class="o">=</span><span class="p">[</span><span class="n">timestamped_word</span><span class="p">],</span>
+                                <span class="n">text</span><span class="o">=</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">word_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="c1"># End current sentence and reset</span>
+                        <span class="c1"># TODO: Account for non-sentence ending periods, such as</span>
+                        <span class="c1"># prefixes like &quot;Mr.&quot; or &quot;Dr.&quot;</span>
+                        <span class="k">elif</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.|\?&quot;</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+                            <span class="c1"># Finish sentence and append</span>
+                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span>
+                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamped_word</span><span class="p">)</span>
+
+                            <span class="n">timestamped_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_sentence</span><span class="p">)</span>
+
+                            <span class="c1"># Adjust indices</span>
+                            <span class="n">current_sentence</span> <span class="o">=</span> <span class="kc">None</span>
+                            <span class="n">sentence_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">word_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+                        <span class="c1"># Update current sentence</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamped_word</span><span class="p">)</span>
+                            <span class="n">word_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="c1"># Update confidence stats</span>
+                    <span class="n">confidence_sum</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
+                    <span class="n">segments</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Compute mean confidence</span>
+        <span class="k">if</span> <span class="n">segments</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence_sum</span> <span class="o">/</span> <span class="n">segments</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed transcription for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">. Confidence: </span><span class="si">{</span><span class="n">confidence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create transcript model</span>
+        <span class="n">transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="p">(</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;Google Speech-to-Text&quot;</span><span class="p">,</span>
+            <span class="n">session_datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">sentences</span><span class="o">=</span><span class="n">timestamped_sentences</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transcript</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jackson Maxfield Brown.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

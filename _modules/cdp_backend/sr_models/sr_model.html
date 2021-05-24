@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cdp_backend.database.constants &mdash; cdp-backend 3.0.0.dev5 documentation</title>
+  <title>cdp_backend.sr_models.sr_model &mdash; cdp-backend 3.0.0.dev5 documentation</title>
   
 
   
@@ -193,7 +193,7 @@
         
           <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
         
-      <li>cdp_backend.database.constants</li>
+      <li>cdp_backend.sr_models.sr_model</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -208,31 +208,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for cdp_backend.database.constants</h1><div class="highlight"><pre>
+  <h1>Source code for cdp_backend.sr_models.sr_model</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 
-<div class="viewcode-block" id="Order"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.Order">[docs]</a><span class="k">class</span> <span class="nc">Order</span><span class="p">:</span>
-    <span class="n">ASCENDING</span> <span class="o">=</span> <span class="s2">&quot;ASCENDING&quot;</span>
-    <span class="n">DESCENDING</span> <span class="o">=</span> <span class="s2">&quot;DESCENDING&quot;</span></div>
+<span class="kn">from</span> <span class="nn">..pipeline.transcript_model</span> <span class="kn">import</span> <span class="n">Transcript</span>
 
-
-<div class="viewcode-block" id="EventMinutesItemDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.EventMinutesItemDecision">[docs]</a><span class="k">class</span> <span class="nc">EventMinutesItemDecision</span><span class="p">:</span>
-    <span class="n">PASSED</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
-    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span></div>
+<span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="VoteDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.VoteDecision">[docs]</a><span class="k">class</span> <span class="nc">VoteDecision</span><span class="p">:</span>
-    <span class="n">APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Approve&quot;</span>
-    <span class="n">REJECT</span> <span class="o">=</span> <span class="s2">&quot;Reject&quot;</span>
-    <span class="n">ABSTAIN</span> <span class="o">=</span> <span class="s2">&quot;Abstain&quot;</span></div>
+<div class="viewcode-block" id="SRModel"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.sr_model.SRModel">[docs]</a><span class="k">class</span> <span class="nc">SRModel</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="SRModel.transcribe"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.sr_model.SRModel.transcribe">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_uri</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transcript</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transcribe audio from file and return a Transcript model.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_uri: Union[str, Path]</span>
+<span class="sd">            The uri to the audio file or caption file to transcribe.</span>
 
-<div class="viewcode-block" id="MatterStatusDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.MatterStatusDecision">[docs]</a><span class="k">class</span> <span class="nc">MatterStatusDecision</span><span class="p">:</span>
-    <span class="n">ADOPTED</span> <span class="o">=</span> <span class="s2">&quot;Adopted&quot;</span>
-    <span class="n">REJECTED</span> <span class="o">=</span> <span class="s2">&quot;Rejected&quot;</span>
-    <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">&quot;In Progress&quot;</span></div>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        outputs: Transcript</span>
+<span class="sd">            The transcript model for the supplied media file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Transcript</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">[])</span></div></div>
 </pre></div>
 
            </div>

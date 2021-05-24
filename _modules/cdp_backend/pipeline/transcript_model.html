@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -102,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
@@ -218,32 +222,68 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="TextBlockData"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TextBlockData">[docs]</a><span class="nd">@dataclass_json</span>
+<div class="viewcode-block" id="Word"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">TextBlockData</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Word</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Text block data for a transcript.</span>
+<span class="sd">    Data for a word in a transcript.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    text: str</span>
-<span class="sd">        The full text portion of this data block.</span>
+<span class="sd">    index: int</span>
+<span class="sd">        The index of the word in it&#39;s respective sentence.</span>
 <span class="sd">    start_time: float</span>
-<span class="sd">        Time in seconds for when this block of data begins.</span>
+<span class="sd">        Time in seconds for when this word begins.</span>
 <span class="sd">    end_time: float</span>
-<span class="sd">        Time in seconds for when this block of data ends.</span>
-<span class="sd">    speaker: Optional[str]</span>
-<span class="sd">        The speaker identifier for this text block.</span>
-<span class="sd">        Default: None (No speaker identifier available)</span>
+<span class="sd">        Time in seconds for when this word ends.</span>
+<span class="sd">    text: str</span>
+<span class="sd">        The raw text of the word, lowercased and cleaned of all non-deliminating chars.</span>
 <span class="sd">    annotations: Optional[Dict[str, Any]]</span>
-<span class="sd">        Any annotations specific to this text block.</span>
+<span class="sd">        Any annotations specific to this word.</span>
 <span class="sd">        Default: None (no annotations)</span>
-<span class="sd">        See TextBlockAnnotations for list of known annotations and their dtypes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="Sentence"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Sentence</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data for a sentence in a transcript.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    index: int</span>
+<span class="sd">        The index of the sentence in it&#39;s respective transcript.</span>
+<span class="sd">    confidence: float</span>
+<span class="sd">        A number between 0 and 1 for the confidence of the sentence accuracy.</span>
+<span class="sd">    start_time: float</span>
+<span class="sd">        Time in seconds for when this sentence begins.</span>
+<span class="sd">    end_time: float</span>
+<span class="sd">        Time in seconds for when this sentence ends.</span>
+<span class="sd">    speaker: Optional[str]</span>
+<span class="sd">        The optional speaker for the sentence.</span>
+<span class="sd">    annotations: Optional[Dict[str, Any]]</span>
+<span class="sd">        Any annotations specific to this sentence.</span>
+<span class="sd">        Default: None (no annotations)</span>
+<span class="sd">    words: List[Word]</span>
+<span class="sd">        The list of word for the sentence.</span>
+<span class="sd">        See Word model for more info.</span>
+<span class="sd">    text: str</span>
+<span class="sd">        The text of the sentence including all formatting and non-deliminating chars.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Word</span><span class="p">]</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">speaker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
@@ -265,13 +305,13 @@
 <span class="sd">    generator: str</span>
 <span class="sd">        A descriptive name of the generative process that produced this transcript.</span>
 <span class="sd">        Example: &quot;Google Speech-to-Text -- Lib Version: 2.0.1&quot;</span>
-<span class="sd">    session_datetime: str</span>
+<span class="sd">    session_datetime: Optional[str]</span>
 <span class="sd">        ISO formatted datetime for the session that this document transcribes.</span>
 <span class="sd">    created_datetime: str</span>
 <span class="sd">        ISO formatted datetime for when this transcript was created.</span>
-<span class="sd">    data: List[TextBlockData]</span>
-<span class="sd">        A list of text blocks.</span>
-<span class="sd">        See TextBlockData documentation for more information.</span>
+<span class="sd">    sentences: List[Sentence]</span>
+<span class="sd">        A list of sentences.</span>
+<span class="sd">        See Sentence documentation for more information.</span>
 <span class="sd">    annotations: Optional[Dict[str, Any]]</span>
 <span class="sd">        Any annotations that can be applied to the whole transcript.</span>
 <span class="sd">        Default: None (no annotations)</span>
@@ -294,9 +334,9 @@
 
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">generator</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">session_datetime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">session_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">created_datetime</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TextBlockData</span><span class="p">]</span>
+    <span class="n">sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sentence</span><span class="p">]</span>
     <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
@@ -344,40 +384,59 @@
     <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;JacksonGen -- Lib Version: 0.0.0&quot;</span><span class="p">,</span>
     <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
     <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
-    <span class="n">data</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">TextBlockData</span><span class="p">(</span>
+    <span class="n">sentences</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Sentence</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello everyone.&quot;</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
             <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
             <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
+            <span class="n">words</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">Word</span><span class="p">(</span>
+                    <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                    <span class="n">end_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
+                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">Word</span><span class="p">(</span>
+                    <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">start_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;everyone&quot;</span><span class="p">,</span>
+                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">],</span>
             <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
                 <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.987</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">),</span>
-        <span class="n">TextBlockData</span><span class="p">(</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hey!&quot;</span><span class="p">,</span>
-            <span class="n">start_time</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
-            <span class="n">end_time</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span>
+        <span class="n">Sentence</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hi all.&quot;</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
             <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;Isaac Na&quot;</span><span class="p">,</span>
+            <span class="n">words</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">Word</span><span class="p">(</span>
+                    <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">start_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                    <span class="n">end_time</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;hi&quot;</span><span class="p">,</span>
+                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">Word</span><span class="p">(</span>
+                    <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">start_time</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                    <span class="n">end_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">],</span>
             <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
-                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.912</span><span class="p">,</span>
-            <span class="p">},</span>
-        <span class="p">),</span>
-        <span class="n">TextBlockData</span><span class="p">(</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello!&quot;</span><span class="p">,</span>
-            <span class="n">start_time</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>
-            <span class="n">end_time</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span>
-            <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;To Huynh&quot;</span><span class="p">,</span>
-            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
-                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.999</span><span class="p">,</span>
-            <span class="p">},</span>
-        <span class="p">),</span>
-        <span class="n">TextBlockData</span><span class="p">(</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Who is speaking this?&quot;</span><span class="p">,</span>
-            <span class="n">start_time</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span>
-            <span class="n">end_time</span><span class="o">=</span><span class="mf">3.9</span><span class="p">,</span>
-            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
-                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.835</span><span class="p">,</span>
+                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.987</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">),</span>
     <span class="p">],</span>

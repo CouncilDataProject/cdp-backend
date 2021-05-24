@@ -12,6 +12,7 @@ Subpackages
    cdp_backend.file_store
    cdp_backend.infrastructure
    cdp_backend.pipeline
+   cdp_backend.sr_models
    cdp_backend.utils
 
 Module contents

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -104,6 +107,7 @@
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.infrastructure package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
@@ -227,8 +231,8 @@
 <div class="section" id="module-cdp_backend.infrastructure.cdp_stack">
 <span id="cdp-backend-infrastructure-cdp-stack-module"></span><h2>cdp_backend.infrastructure.cdp_stack module<a class="headerlink" href="#module-cdp_backend.infrastructure.cdp_stack" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="cdp_backend.infrastructure.cdp_stack.CDPStack">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></code><code class="sig-name descname"><span class="pre">CDPStack</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_project_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firestore_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'us-west2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pulumi.resource.ResourceOptions</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.CDPStack">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">CDPStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_project_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firestore_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'us-west2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pulumi.resource.ResourceOptions</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pulumi.resource.ComponentResource</span></code></p>
 <p>Creates all required infrastructure and enables all required services for CDP
 backend stacks.</p>

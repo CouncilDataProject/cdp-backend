@@ -14,42 +14,60 @@ For more specific details please see the
     "confidence": 0.93325,
     "generator": "JacksonGen -- Lib Version: 0.0.0",
     "session_datetime": "2021-01-10T15:00:00",
-    "created_datetime": "2021-04-29T14:53:11.254707",
-    "data": [
+    "created_datetime": "2021-05-24T05:17:38.567067",
+    "sentences": [
         {
-            "text": "Hello everyone.",
+            "index": 0,
+            "confidence": 0.9,
             "start_time": 0.0,
             "end_time": 1.0,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 0.0,
+                    "end_time": 0.5,
+                    "text": "hello",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 0.5,
+                    "end_time": 1.0,
+                    "text": "everyone",
+                    "annotations": null
+                }
+            ],
+            "text": "Hello everyone.",
             "speaker": "Jackson Maxfield Brown",
             "annotations": {
                 "confidence": 0.987
             }
         },
         {
-            "text": "Hey!",
-            "start_time": 1.2,
-            "end_time": 1.4,
+            "index": 1,
+            "confidence": 0.95,
+            "start_time": 1.0,
+            "end_time": 2.0,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 1.0,
+                    "end_time": 1.5,
+                    "text": "hi",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 1.5,
+                    "end_time": 2.0,
+                    "text": "all",
+                    "annotations": null
+                }
+            ],
+            "text": "Hi all.",
             "speaker": "Isaac Na",
             "annotations": {
-                "confidence": 0.912
-            }
-        },
-        {
-            "text": "Hello!",
-            "start_time": 1.6,
-            "end_time": 1.9,
-            "speaker": "To Huynh",
-            "annotations": {
-                "confidence": 0.999
-            }
-        },
-        {
-            "text": "Who is speaking this?",
-            "start_time": 2.2,
-            "end_time": 3.9,
-            "speaker": null,
-            "annotations": {
-                "confidence": 0.835
+                "confidence": 0.987
             }
         }
     ],
