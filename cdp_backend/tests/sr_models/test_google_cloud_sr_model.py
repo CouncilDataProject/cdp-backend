@@ -131,13 +131,6 @@ def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> No
         mocked_client.long_running_recognize.return_value = FakeRecognizeOperation()
         mocked_client_init.return_value = mocked_client
 
-        """
-        with mock.patch(
-            "spacy.lang.en.English.make_doc"
-        ) as mock_nlp:
-            mock_nlp.return_value = FakeDoc([expected_sentence_1, expected_sentence_2])
-        """
-
         sr_model = GoogleCloudSRModel(fake_creds_path)
 
         transcript = sr_model.transcribe(str(example_audio))
