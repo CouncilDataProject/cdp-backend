@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, List, Optional, Union
 
 from google.cloud import speech_v1p1beta1 as speech
+from spacy.lang.en import English
 
 from ..pipeline.transcript_model import Sentence, Transcript, Word
 from .sr_model import SRModel
@@ -107,28 +108,65 @@ class GoogleCloudSRModel(SRModel):
 
         # Create timestamped sentences
         timestamped_sentences: List[Sentence] = []
-        current_sentence = None
-        sentence_index = 0
-        word_index = 0
+        transcript_sentence_index = 0
+
+        # Create sentence boundary pipeline
+        nlp = English()
+        nlp.add_pipe("sentencizer")
 
         for result in response.results:
             # Some portions of audio may not have text
             if len(result.alternatives) > 0:
-                # Check length of transcript result
-                word_list = result.alternatives[0].words
-                if len(word_list) > 0:
-                    for word in word_list:
-                        # create Word
+                # Split transcript into sentences
+                doc = nlp(result.alternatives[0].transcript)
+
+                # Convert generator to list
+                sentences = [str(sent) for sent in doc.sents]
+
+                # Index holder for word results of response
+                w_marker = 0
+
+                for s_ind in range(0, len(sentences)):
+                    # Sentence text
+                    s_text = sentences[s_ind]
+
+                    num_words = len(s_text.split())
+
+                    # Initialize sentence model
+                    timestamped_sentence = Sentence(
+                        index=transcript_sentence_index,
+                        confidence=result.alternatives[0].confidence,
+                        # Start and end time are laceholder values
+                        start_time=0.0,
+                        end_time=0.0,
+                        words=[],
+                        text=s_text,
+                    )
+
+                    for w_ind in range(w_marker, w_marker + num_words):
+                        # Extract word from response
+                        word = result.alternatives[0].words[w_ind]
+
                         start_time = (
                             word.start_time.seconds + word.start_time.nanos * 1e-9
                         )
                         end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
 
+                        # Add start_time to Sentence if first word
+                        if w_ind - w_marker == 0:
+                            timestamped_sentence.start_time = start_time
+
+                        # Add end_time to Sentence if last word
+                        if (w_ind - w_marker) == (num_words - 1):
+                            timestamped_sentence.end_time = end_time
+
                         # Clean everything but non-delimiting characters make lowercase
                         regex = re.compile(r"[^a-zA-Z0-9'\-]")
                         cleaned_word = regex.sub("", word.word).lower()
+
+                        # Create Word model
                         timestamped_word = Word(
-                            index=word_index,
+                            index=w_ind - w_marker,
                             start_time=start_time,
                             end_time=end_time,
                             text=cleaned_word,
@@ -136,43 +174,20 @@ class GoogleCloudSRModel(SRModel):
                             annotations=None,
                         )
 
-                        if current_sentence is None:
-                            current_sentence = Sentence(
-                                index=sentence_index,
-                                confidence=result.alternatives[0].confidence,
-                                start_time=word.start_time,
-                                end_time=word.end_time,
-                                # TODO: Add speaker and annotations?
-                                words=[timestamped_word],
-                                text=word.word,
-                            )
-                            word_index += 1
+                        timestamped_sentence.words.append(timestamped_word)
 
-                        # End current sentence and reset
-                        # TODO: Account for non-sentence ending periods, such as
-                        # prefixes like "Mr." or "Dr."
-                        elif bool(re.match(r"\.|\?", word.word[-1])):
-                            # Finish sentence and append
-                            current_sentence.end_time = word.end_time
-                            current_sentence.text += " {}".format(word.word)
-                            current_sentence.words.append(timestamped_word)
+                    # Increment word marker
+                    w_marker += num_words
 
-                            timestamped_sentences.append(current_sentence)
+                    # Add Sentence to sentence list
+                    timestamped_sentences.append(timestamped_sentence)
 
-                            # Adjust indices
-                            current_sentence = None
-                            sentence_index += 1
-                            word_index = 0
+                    # Increment transcript sentence index
+                    transcript_sentence_index += 1
 
-                        # Update current sentence
-                        else:
-                            current_sentence.text += " {}".format(word.word)
-                            current_sentence.words.append(timestamped_word)
-                            word_index += 1
-
-                    # Update confidence stats
-                    confidence_sum += result.alternatives[0].confidence
-                    segments += 1
+                # Update confidence stats
+                confidence_sum += result.alternatives[0].confidence
+                segments += 1
 
         # Compute mean confidence
         if segments > 0:
@@ -190,5 +205,7 @@ class GoogleCloudSRModel(SRModel):
             sentences=timestamped_sentences,
             annotations=None,
         )
+
+        print(transcript)
 
         return transcript

@@ -40,8 +40,9 @@ class FakeRecognizeWord:
 
 
 class FakeRecognizeAlternative:
-    def __init__(self, words: List[FakeRecognizeWord]):
+    def __init__(self, transcript: str, words: List[FakeRecognizeWord]):
         self.words = words
+        self.transcript = transcript
         self.confidence = random.random()
 
 
@@ -55,6 +56,7 @@ class FakeRecognizeResults:
         FakeRecognizeResult(
             [
                 FakeRecognizeAlternative(
+                    "Hello everyone, and thank you for coming.",
                     [
                         FakeRecognizeWord("Hello", 0.0, 0.6),
                         FakeRecognizeWord("everyone,", 0.7, 1.1),
@@ -63,13 +65,14 @@ class FakeRecognizeResults:
                         FakeRecognizeWord("you", 1.8, 1.9),
                         FakeRecognizeWord("for", 2.0, 2.1),
                         FakeRecognizeWord("coming.", 2.2, 2.4),
-                    ]
+                    ],
                 )
             ]
         ),
         FakeRecognizeResult(
             [
                 FakeRecognizeAlternative(
+                    "Will the clerk begin by taking roll.",
                     [
                         FakeRecognizeWord("Will", 3.0, 3.1),
                         FakeRecognizeWord("the", 3.2, 3.3),
@@ -78,7 +81,7 @@ class FakeRecognizeResults:
                         FakeRecognizeWord("by", 3.8, 3.9),
                         FakeRecognizeWord("taking", 4.0, 4.1),
                         FakeRecognizeWord("roll.", 4.2, 4.3),
-                    ]
+                    ],
                 )
             ]
         ),
@@ -127,6 +130,13 @@ def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> No
         mocked_client = mock.Mock(spec=speech.SpeechClient)
         mocked_client.long_running_recognize.return_value = FakeRecognizeOperation()
         mocked_client_init.return_value = mocked_client
+
+        """
+        with mock.patch(
+            "spacy.lang.en.English.make_doc"
+        ) as mock_nlp:
+            mock_nlp.return_value = FakeDoc([expected_sentence_1, expected_sentence_2])
+        """
 
         sr_model = GoogleCloudSRModel(fake_creds_path)
 
