@@ -206,6 +206,4 @@ class GoogleCloudSRModel(SRModel):
             annotations=None,
         )
 
-        print(transcript)
-
         return transcript
