@@ -219,6 +219,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">google.cloud</span> <span class="kn">import</span> <span class="n">speech_v1p1beta1</span> <span class="k">as</span> <span class="n">speech</span>
+<span class="kn">from</span> <span class="nn">spacy.lang.en</span> <span class="kn">import</span> <span class="n">English</span>
 
 <span class="kn">from</span> <span class="nn">..pipeline.transcript_model</span> <span class="kn">import</span> <span class="n">Sentence</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">,</span> <span class="n">Word</span>
 <span class="kn">from</span> <span class="nn">.sr_model</span> <span class="kn">import</span> <span class="n">SRModel</span>
@@ -318,28 +319,65 @@
 
         <span class="c1"># Create timestamped sentences</span>
         <span class="n">timestamped_sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sentence</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">current_sentence</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">sentence_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">word_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">transcript_sentence_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Create sentence boundary pipeline</span>
+        <span class="n">nlp</span> <span class="o">=</span> <span class="n">English</span><span class="p">()</span>
+        <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;sentencizer&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
             <span class="c1"># Some portions of audio may not have text</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># Check length of transcript result</span>
-                <span class="n">word_list</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">words</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_list</span><span class="p">:</span>
-                        <span class="c1"># create Word</span>
+                <span class="c1"># Split transcript into sentences</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transcript</span><span class="p">)</span>
+
+                <span class="c1"># Convert generator to list</span>
+                <span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">]</span>
+
+                <span class="c1"># Index holder for word results of response</span>
+                <span class="n">w_marker</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">for</span> <span class="n">s_ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">)):</span>
+                    <span class="c1"># Sentence text</span>
+                    <span class="n">s_text</span> <span class="o">=</span> <span class="n">sentences</span><span class="p">[</span><span class="n">s_ind</span><span class="p">]</span>
+
+                    <span class="n">num_words</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s_text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+                    <span class="c1"># Initialize sentence model</span>
+                    <span class="n">timestamped_sentence</span> <span class="o">=</span> <span class="n">Sentence</span><span class="p">(</span>
+                        <span class="n">index</span><span class="o">=</span><span class="n">transcript_sentence_index</span><span class="p">,</span>
+                        <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                        <span class="c1"># Start and end time are placeholder values</span>
+                        <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">end_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">words</span><span class="o">=</span><span class="p">[],</span>
+                        <span class="n">text</span><span class="o">=</span><span class="n">s_text</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">w_ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">w_marker</span><span class="p">,</span> <span class="n">w_marker</span> <span class="o">+</span> <span class="n">num_words</span><span class="p">):</span>
+                        <span class="c1"># Extract word from response</span>
+                        <span class="n">word</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">w_ind</span><span class="p">]</span>
+
                         <span class="n">start_time</span> <span class="o">=</span> <span class="p">(</span>
                             <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
                         <span class="p">)</span>
                         <span class="n">end_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
 
+                        <span class="c1"># Add start_time to Sentence if first word</span>
+                        <span class="k">if</span> <span class="n">w_ind</span> <span class="o">-</span> <span class="n">w_marker</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">timestamped_sentence</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">start_time</span>
+
+                        <span class="c1"># Add end_time to Sentence if last word</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">w_ind</span> <span class="o">-</span> <span class="n">w_marker</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_words</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                            <span class="n">timestamped_sentence</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">end_time</span>
+
                         <span class="c1"># Clean everything but non-delimiting characters make lowercase</span>
                         <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9&#39;\-]&quot;</span><span class="p">)</span>
                         <span class="n">cleaned_word</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+                        <span class="c1"># Create Word model</span>
                         <span class="n">timestamped_word</span> <span class="o">=</span> <span class="n">Word</span><span class="p">(</span>
-                            <span class="n">index</span><span class="o">=</span><span class="n">word_index</span><span class="p">,</span>
+                            <span class="n">index</span><span class="o">=</span><span class="n">w_ind</span> <span class="o">-</span> <span class="n">w_marker</span><span class="p">,</span>
                             <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
                             <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span>
                             <span class="n">text</span><span class="o">=</span><span class="n">cleaned_word</span><span class="p">,</span>
@@ -347,43 +385,20 @@
                             <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="p">)</span>
 
-                        <span class="k">if</span> <span class="n">current_sentence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">current_sentence</span> <span class="o">=</span> <span class="n">Sentence</span><span class="p">(</span>
-                                <span class="n">index</span><span class="o">=</span><span class="n">sentence_index</span><span class="p">,</span>
-                                <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
-                                <span class="n">start_time</span><span class="o">=</span><span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
-                                <span class="n">end_time</span><span class="o">=</span><span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
-                                <span class="c1"># TODO: Add speaker and annotations?</span>
-                                <span class="n">words</span><span class="o">=</span><span class="p">[</span><span class="n">timestamped_word</span><span class="p">],</span>
-                                <span class="n">text</span><span class="o">=</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="n">word_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">timestamped_sentence</span><span class="o">.</span><span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamped_word</span><span class="p">)</span>
 
-                        <span class="c1"># End current sentence and reset</span>
-                        <span class="c1"># TODO: Account for non-sentence ending periods, such as</span>
-                        <span class="c1"># prefixes like &quot;Mr.&quot; or &quot;Dr.&quot;</span>
-                        <span class="k">elif</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.|\?&quot;</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
-                            <span class="c1"># Finish sentence and append</span>
-                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span>
-                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
-                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamped_word</span><span class="p">)</span>
+                    <span class="c1"># Increment word marker</span>
+                    <span class="n">w_marker</span> <span class="o">+=</span> <span class="n">num_words</span>
 
-                            <span class="n">timestamped_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_sentence</span><span class="p">)</span>
+                    <span class="c1"># Add Sentence to sentence list</span>
+                    <span class="n">timestamped_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamped_sentence</span><span class="p">)</span>
 
-                            <span class="c1"># Adjust indices</span>
-                            <span class="n">current_sentence</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">sentence_index</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="n">word_index</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="c1"># Increment transcript sentence index</span>
+                    <span class="n">transcript_sentence_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
-                        <span class="c1"># Update current sentence</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
-                            <span class="n">current_sentence</span><span class="o">.</span><span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timestamped_word</span><span class="p">)</span>
-                            <span class="n">word_index</span> <span class="o">+=</span> <span class="mi">1</span>
-
-                    <span class="c1"># Update confidence stats</span>
-                    <span class="n">confidence_sum</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
-                    <span class="n">segments</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># Update confidence stats</span>
+                <span class="n">confidence_sum</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
+                <span class="n">segments</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># Compute mean confidence</span>
         <span class="k">if</span> <span class="n">segments</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
