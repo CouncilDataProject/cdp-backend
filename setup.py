@@ -58,11 +58,9 @@ requirements = [
     "pulumi~=3.0.0",
     "pulumi-google-native~=0.1.0",
     "pulumi-gcp~=5.0.0",
-    "setuptools~=57.0.0",
     "spacy~=3.0.6",
     "truecase>=0.0.9",
-    "webvtt-py>=0.4.5",
-    "wheel~=0.36.2"
+    "webvtt-py>=0.4.5"
 ]
 
 extra_requirements = {

@@ -136,7 +136,7 @@ class GoogleCloudSRModel(SRModel):
                     timestamped_sentence = Sentence(
                         index=transcript_sentence_index,
                         confidence=result.alternatives[0].confidence,
-                        # Start and end time are laceholder values
+                        # Start and end time are placeholder values
                         start_time=0.0,
                         end_time=0.0,
                         words=[],
