@@ -40,8 +40,9 @@ class FakeRecognizeWord:
 
 
 class FakeRecognizeAlternative:
-    def __init__(self, words: List[FakeRecognizeWord]):
+    def __init__(self, transcript: str, words: List[FakeRecognizeWord]):
         self.words = words
+        self.transcript = transcript
         self.confidence = random.random()
 
 
@@ -55,6 +56,7 @@ class FakeRecognizeResults:
         FakeRecognizeResult(
             [
                 FakeRecognizeAlternative(
+                    "Hello everyone, and thank you for coming.",
                     [
                         FakeRecognizeWord("Hello", 0.0, 0.6),
                         FakeRecognizeWord("everyone,", 0.7, 1.1),
@@ -63,13 +65,14 @@ class FakeRecognizeResults:
                         FakeRecognizeWord("you", 1.8, 1.9),
                         FakeRecognizeWord("for", 2.0, 2.1),
                         FakeRecognizeWord("coming.", 2.2, 2.4),
-                    ]
+                    ],
                 )
             ]
         ),
         FakeRecognizeResult(
             [
                 FakeRecognizeAlternative(
+                    "Will the clerk begin by taking roll.",
                     [
                         FakeRecognizeWord("Will", 3.0, 3.1),
                         FakeRecognizeWord("the", 3.2, 3.3),
@@ -78,7 +81,7 @@ class FakeRecognizeResults:
                         FakeRecognizeWord("by", 3.8, 3.9),
                         FakeRecognizeWord("taking", 4.0, 4.1),
                         FakeRecognizeWord("roll.", 4.2, 4.3),
-                    ]
+                    ],
                 )
             ]
         ),
