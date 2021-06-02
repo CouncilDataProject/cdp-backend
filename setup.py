@@ -60,7 +60,7 @@ requirements = [
     "pulumi-gcp~=5.0.0",
     "spacy~=3.0.6",
     "truecase>=0.0.9",
-    "webvtt-py>=0.4.5"
+    "webvtt-py>=0.4.5",
 ]
 
 extra_requirements = {
