@@ -92,6 +92,21 @@ def test_hash_file_contents(tmpdir) -> None:
 
 
 @pytest.mark.parametrize(
+    "parts, extension, delimiter, expected",
+    [
+        (["hello", "world"], "mp4", "_", "hello_world.mp4"),
+        (["a", "b", "c"], "wav", "-", "a-b-c.wav"),
+        (["single"], "png", "***", "single.png"),
+    ],
+)
+def test_join_strs_and_extension(parts, extension, delimiter, expected) -> None:
+    result = file_utils.join_strs_and_extension.run(
+        parts=parts, extension=extension, delimiter=delimiter
+    )
+    assert result == expected
+
+
+@pytest.mark.parametrize(
     "audio_save_path",
     [
         ("test.wav"),

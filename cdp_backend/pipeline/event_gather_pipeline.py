@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import hashlib
 import logging
 from typing import Callable, List
 
-from prefect import Flow, case
+from prefect import Flow
+from prefect.tasks.control_flow import case
 
 from ..database import functions as db_functions
 from ..file_store import functions as fs_functions
@@ -70,11 +70,8 @@ def create_event_gather_flow(
             for session in event.sessions:
                 # TODO create/get transcript
 
-                # Create unique key for video uri
-                key = hashlib.sha256(session.video_uri.encode("utf8")).hexdigest()
-
-                # create/get audio (happens as part of transcript process)
-                create_or_get_audio(key, session.video_uri, bucket, credentials_file)
+                # Create or get audio (happens as part of transcript process)
+                create_or_get_audio(session.video_uri, bucket, credentials_file)
 
                 db_functions.upload_db_model_task(
                     db_functions.create_session_from_ingestion_model(
@@ -87,16 +84,14 @@ def create_event_gather_flow(
     return flow
 
 
-def create_or_get_audio(
-    key: str, video_uri: str, bucket: str, credentials_file: str
-) -> str:
+def create_or_get_audio(video_uri: str, bucket: str, credentials_file: str) -> str:
     """
     Creates an audio file from a video uri and uploads it to the filestore and db.
 
     Parameters
     ----------
-    key: str
-        The unique key made from a hash value of the video uri.
+    video_uri: str
+        The uri to the video file to split audio from.
     bucket: str
         Name of the GCS bucket to upload files to.
     credentials_file: str
@@ -107,26 +102,25 @@ def create_or_get_audio(
     audio_uri: str
         The uri of the created audio file in the file store.
     """
+    # Get just the video filename from the full uri
+    video_filename = video_uri.split("/")[-1]
+    tmp_video_filepath = file_util_functions.external_resource_copy_task(
+        uri=video_uri, dst=video_filename
+    )
 
-    tmp_audio_filepath = f"{key}_audio.wav"
+    # Hash the video contents
+    key = file_util_functions.hash_file_contents_task(uri=tmp_video_filepath)
+
+    # Check for existing audio
+    tmp_audio_filepath = file_util_functions.join_strs_and_extension(
+        parts=[key, "audio"], extension="wav"
+    )
     audio_uri = fs_functions.get_file_uri_task(
         bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
     )
 
-    # If no existing audio uri
-    with case(audio_uri, None):  # type: ignore
-        # Store the video in temporary file
-        filename = video_uri.split("/")[-1]
-        if "." in filename:
-            suffix = filename.split(".")[-1]
-        else:
-            suffix = ""
-
-        tmp_video_filename = f"tmp_{key}_video.{suffix}"
-        tmp_video_filepath = file_util_functions.external_resource_copy_task(
-            uri=video_uri, dst=tmp_video_filename
-        )
-
+    # If no existing audio uri, process video
+    with case(audio_uri, None):
         # Split and store the audio in temporary file prior to upload
         (
             tmp_audio_filepath,

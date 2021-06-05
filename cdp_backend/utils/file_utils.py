@@ -4,7 +4,7 @@ import logging
 import shutil
 from hashlib import sha256
 from pathlib import Path
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
@@ -64,6 +64,7 @@ def external_resource_copy(
 ) -> str:
     """
     Copy an external resource to a local destination on the machine.
+
     Parameters
     ----------
     uri: str
@@ -74,6 +75,7 @@ def external_resource_copy(
     overwrite: bool
         Boolean value indicating whether or not to overwrite a local resource with
         the same name if it already exists.
+
     Returns
     -------
     saved_path: str
@@ -108,12 +110,14 @@ def split_audio(
 ) -> Tuple[str, str, str]:
     """
     Split and store the audio from a video file using ffmpeg.
+
     Parameters
     ----------
     video_read_path: str
         Path to the video to split the audio from.
     audio_save_path: str
         Path to where the audio should be stored.
+
     Returns
     -------
     resolved_audio_save_path: str
@@ -194,6 +198,14 @@ def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+@task
+def join_strs_and_extension(
+    parts: List[str], extension: str, delimiter: str = "_"
+) -> str:
+    name_without_suffix = delimiter.join(parts)
+    return f"{name_without_suffix}.{extension}"
 
 
 @task
