@@ -24,7 +24,7 @@ GCS_FILE_URI = functions.GCS_URI.format(bucket=BUCKET, filename=FILENAME)
 
 
 def test_initialize_gcs_file_system() -> None:
-    with mock.patch("gcsfs.GCSFileSystem.connect"):
+    with mock.patch("gcsfs.credentials.GoogleCredentials.connect"):
         assert isinstance(
             functions.initialize_gcs_file_system("path/to/credentials"), GCSFileSystem
         )
@@ -48,7 +48,7 @@ def test_get_file_uri(
     exists: bool,
     expected: Optional[str],
 ) -> None:
-    with mock.patch("gcsfs.GCSFileSystem.connect"):
+    with mock.patch("gcsfs.credentials.GoogleCredentials.connect"):
         with mock.patch("gcsfs.GCSFileSystem.exists") as mock_exists:
             mock_exists.return_value = exists
 
