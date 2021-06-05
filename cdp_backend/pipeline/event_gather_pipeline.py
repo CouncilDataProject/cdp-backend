@@ -9,6 +9,7 @@ from prefect import Flow, case
 
 from ..database import functions as db_functions
 from ..file_store import functions as fs_functions
+from ..sr_models import GoogleCloudSRModel
 from ..utils import file_utils as file_util_functions
 from .ingestion_models import EventIngestionModel
 
@@ -50,6 +51,9 @@ def create_event_gather_flow(
     with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
 
+        sr_model = GoogleCloudSRModel(credentials_file)
+        sr_model.transcribe("gs://stg-cdp-seattle-a910f.appspot.com/short_audio.wav")
+
         for event in events:
 
             # Upload calls for minimal event
@@ -68,13 +72,27 @@ def create_event_gather_flow(
             )
 
             for session in event.sessions:
-                # TODO create/get transcript
-
                 # Create unique key for video uri
                 key = hashlib.sha256(session.video_uri.encode("utf8")).hexdigest()
 
                 # create/get audio (happens as part of transcript process)
-                create_or_get_audio(key, session.video_uri, bucket, credentials_file)
+                audio_uri = create_or_get_audio(key, session.video_uri, bucket, credentials_file)
+
+                # Create transcript from audio file
+                transcript = sr_model.transcribe(audio_uri)
+
+                # TODO 
+                # Create transcript save path with json 
+                transcript_save_path = file_util_functions.save_json_as_file(transcript.tojson(), audio_uri + "_transcript")
+
+                
+               transcript_file_uri = fs_functions.upload_file_task(
+                       credentials_file=credentials_file,
+                        bucket=bucket,
+                        filepath=transcript_save_path,
+                        save_name=None,
+                        remove_local=True) 
+                # call db_functions.create_transcript on that file and transcript
 
                 db_functions.upload_db_model_task(
                     db_functions.create_session_from_ingestion_model(

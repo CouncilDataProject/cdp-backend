@@ -181,3 +181,13 @@ def split_audio_task(
         audio_save_path=audio_save_path,
         overwrite=overwrite,
     )
+
+@task
+def save_json_as_file(
+    json: str 
+    save_path: str
+) -> str:
+    with open(save_path, "wb") as write_out:
+        write_out.write(json)
+
+    return save_path
