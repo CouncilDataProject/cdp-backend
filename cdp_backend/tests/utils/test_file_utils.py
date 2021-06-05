@@ -74,6 +74,23 @@ def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) ->
     external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
 
 
+def test_hash_file_contents(tmpdir) -> None:
+    tmpdir = Path(tmpdir)
+    test_file = tmpdir / "a.txt"
+
+    with open(test_file, "w") as open_f:
+        open_f.write("hello")
+
+    hash_a = file_utils.hash_file_contents_task.run(str(test_file.absolute()))
+
+    with open(test_file, "w") as open_f:
+        open_f.write("world")
+
+    hash_b = file_utils.hash_file_contents_task.run(str(test_file.absolute()))
+
+    assert hash_a != hash_b
+
+
 @pytest.mark.parametrize(
     "audio_save_path",
     [

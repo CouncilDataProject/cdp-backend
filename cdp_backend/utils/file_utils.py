@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 import logging
 import shutil
+from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
+import fsspec
 import requests
 from prefect import task
 
@@ -161,6 +163,37 @@ def split_audio(
         str(ffmpeg_stdout_path),
         str(ffmpeg_stderr_path),
     )
+
+
+@task
+def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
+    """
+    Return the SHA256 hash of a file's content.
+
+    Parameters
+    ----------
+    uri: str
+        The uri for the file to hash.
+    buffer_size: int
+        The number of bytes to read at a time.
+        Default: 2^16 (64KB)
+
+    Returns
+    -------
+    hash: str
+        The SHA256 hash for the file contents.
+    """
+    hasher = sha256()
+
+    with fsspec.open(uri, "rb") as open_resource:
+        while True:
+            block = open_resource.read(buffer_size)
+            if not block:
+                break
+
+            hasher.update(block)
+
+    return hasher.hexdigest()
 
 
 @task
