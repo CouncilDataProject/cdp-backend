@@ -44,23 +44,22 @@ dev_requirements = [
 ]
 
 requirements = [
-    "dask[bag]~=2020.12.0",
+    "dask[bag]~=2021.6.0",
     "dataclasses-json~=0.5.2",
     "ffmpeg-python~=0.2.0",
     "fireo~=1.3.7",
-    "fsspec~=0.8.3",
-    "gcsfs~=0.7.1",
+    "fsspec~=2021.5.0",
+    "gcsfs~=2021.5.0",
     "google-cloud-speech~=1.3.2",
-    "graphviz~=0.14",
-    "nltk>=3.5",
-    "pandas~=1.1.3",
+    "graphviz~=0.16",
+    "pandas~=1.2.4",
     "prefect~=0.14.0",
-    "pulumi~=3.0.0",
+    "pulumi~=3.3.0",
     "pulumi-google-native~=0.1.0",
-    "pulumi-gcp~=5.0.0",
+    "pulumi-gcp~=5.7.0",
     "spacy~=3.0.6",
-    "truecase>=0.0.9",
-    "webvtt-py>=0.4.5",
+    "truecase~=0.0.9",
+    "webvtt-py~=0.4.6",
 ]
 
 extra_requirements = {
