@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import BinaryIO, Generator, Optional
+from typing import BinaryIO, Generator, List, Optional
 from unittest import mock
 
 import pytest
@@ -74,19 +74,22 @@ def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) ->
     external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
 
 
-def test_hash_file_contents(tmpdir) -> None:
-    tmpdir = Path(tmpdir)
-    test_file = tmpdir / "a.txt"
+def test_hash_file_contents(tmpdir: LocalPath) -> None:
+    test_file = Path(tmpdir) / "a.txt"
 
     with open(test_file, "w") as open_f:
         open_f.write("hello")
 
-    hash_a = file_utils.hash_file_contents_task.run(str(test_file.absolute()))
+    hash_a = file_utils.hash_file_contents_task.run(
+        str(test_file.absolute())
+    )  # type: ignore
 
     with open(test_file, "w") as open_f:
         open_f.write("world")
 
-    hash_b = file_utils.hash_file_contents_task.run(str(test_file.absolute()))
+    hash_b = file_utils.hash_file_contents_task.run(
+        str(test_file.absolute())
+    )  # type: ignore
 
     assert hash_a != hash_b
 
@@ -99,10 +102,12 @@ def test_hash_file_contents(tmpdir) -> None:
         (["single"], "png", "***", "single.png"),
     ],
 )
-def test_join_strs_and_extension(parts, extension, delimiter, expected) -> None:
+def test_join_strs_and_extension(
+    parts: List[str], extension: str, delimiter: str, expected: str
+) -> None:
     result = file_utils.join_strs_and_extension.run(
         parts=parts, extension=extension, delimiter=delimiter
-    )
+    )  # type: ignore
     assert result == expected
 
 
