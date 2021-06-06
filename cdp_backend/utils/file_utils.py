@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 import logging
 import shutil
+from hashlib import sha256
 from pathlib import Path
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
+import fsspec
 import requests
 from prefect import task
 
@@ -62,6 +64,7 @@ def external_resource_copy(
 ) -> str:
     """
     Copy an external resource to a local destination on the machine.
+
     Parameters
     ----------
     uri: str
@@ -72,6 +75,7 @@ def external_resource_copy(
     overwrite: bool
         Boolean value indicating whether or not to overwrite a local resource with
         the same name if it already exists.
+
     Returns
     -------
     saved_path: str
@@ -106,12 +110,14 @@ def split_audio(
 ) -> Tuple[str, str, str]:
     """
     Split and store the audio from a video file using ffmpeg.
+
     Parameters
     ----------
     video_read_path: str
         Path to the video to split the audio from.
     audio_save_path: str
         Path to where the audio should be stored.
+
     Returns
     -------
     resolved_audio_save_path: str
@@ -161,6 +167,45 @@ def split_audio(
         str(ffmpeg_stdout_path),
         str(ffmpeg_stderr_path),
     )
+
+
+@task
+def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
+    """
+    Return the SHA256 hash of a file's content.
+
+    Parameters
+    ----------
+    uri: str
+        The uri for the file to hash.
+    buffer_size: int
+        The number of bytes to read at a time.
+        Default: 2^16 (64KB)
+
+    Returns
+    -------
+    hash: str
+        The SHA256 hash for the file contents.
+    """
+    hasher = sha256()
+
+    with fsspec.open(uri, "rb") as open_resource:
+        while True:
+            block = open_resource.read(buffer_size)
+            if not block:
+                break
+
+            hasher.update(block)
+
+    return hasher.hexdigest()
+
+
+@task
+def join_strs_and_extension(
+    parts: List[str], extension: str, delimiter: str = "_"
+) -> str:
+    name_without_suffix = delimiter.join(parts)
+    return f"{name_without_suffix}.{extension}"
 
 
 @task

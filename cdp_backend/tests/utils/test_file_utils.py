@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import BinaryIO, Generator, Optional
+from typing import BinaryIO, Generator, List, Optional
 from unittest import mock
 
 import pytest
@@ -72,6 +72,43 @@ def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
 def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) -> None:
     save_path = tmpdir / "tmpcopy.mp4"
     external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
+
+
+def test_hash_file_contents(tmpdir: LocalPath) -> None:
+    test_file = Path(tmpdir) / "a.txt"
+
+    with open(test_file, "w") as open_f:
+        open_f.write("hello")
+
+    hash_a = file_utils.hash_file_contents_task.run(
+        str(test_file.absolute())
+    )  # type: ignore
+
+    with open(test_file, "w") as open_f:
+        open_f.write("world")
+
+    hash_b = file_utils.hash_file_contents_task.run(
+        str(test_file.absolute())
+    )  # type: ignore
+
+    assert hash_a != hash_b
+
+
+@pytest.mark.parametrize(
+    "parts, extension, delimiter, expected",
+    [
+        (["hello", "world"], "mp4", "_", "hello_world.mp4"),
+        (["a", "b", "c"], "wav", "-", "a-b-c.wav"),
+        (["single"], "png", "***", "single.png"),
+    ],
+)
+def test_join_strs_and_extension(
+    parts: List[str], extension: str, delimiter: str, expected: str
+) -> None:
+    result = file_utils.join_strs_and_extension.run(
+        parts=parts, extension=extension, delimiter=delimiter
+    )  # type: ignore
+    assert result == expected
 
 
 @pytest.mark.parametrize(
