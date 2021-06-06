@@ -212,11 +212,11 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">case</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">prefect.tasks.control_flow</span> <span class="kn">import</span> <span class="n">case</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
 <span class="kn">from</span> <span class="nn">..file_store</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fs_functions</span>
@@ -281,11 +281,8 @@
             <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
                 <span class="c1"># TODO create/get transcript</span>
 
-                <span class="c1"># Create unique key for video uri</span>
-                <span class="n">key</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-
-                <span class="c1"># create/get audio (happens as part of transcript process)</span>
-                <span class="n">create_or_get_audio</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">)</span>
+                <span class="c1"># Create or get audio (happens as part of transcript process)</span>
+                <span class="n">create_or_get_audio</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">)</span>
 
                 <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model_task</span><span class="p">(</span>
                     <span class="n">db_functions</span><span class="o">.</span><span class="n">create_session_from_ingestion_model</span><span class="p">(</span>
@@ -298,16 +295,14 @@
     <span class="k">return</span> <span class="n">flow</span></div>
 
 
-<div class="viewcode-block" id="create_or_get_audio"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_or_get_audio">[docs]</a><span class="k">def</span> <span class="nf">create_or_get_audio</span><span class="p">(</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="create_or_get_audio"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_or_get_audio">[docs]</a><span class="k">def</span> <span class="nf">create_or_get_audio</span><span class="p">(</span><span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates an audio file from a video uri and uploads it to the filestore and db.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    key: str</span>
-<span class="sd">        The unique key made from a hash value of the video uri.</span>
+<span class="sd">    video_uri: str</span>
+<span class="sd">        The uri to the video file to split audio from.</span>
 <span class="sd">    bucket: str</span>
 <span class="sd">        Name of the GCS bucket to upload files to.</span>
 <span class="sd">    credentials_file: str</span>
@@ -318,26 +313,25 @@
 <span class="sd">    audio_uri: str</span>
 <span class="sd">        The uri of the created audio file in the file store.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get just the video filename from the full uri</span>
+    <span class="n">video_filename</span> <span class="o">=</span> <span class="n">video_uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">file_util_functions</span><span class="o">.</span><span class="n">external_resource_copy_task</span><span class="p">(</span>
+        <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">video_filename</span>
+    <span class="p">)</span>
 
-    <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_audio.wav&quot;</span>
+    <span class="c1"># Hash the video contents</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">file_util_functions</span><span class="o">.</span><span class="n">hash_file_contents_task</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
+
+    <span class="c1"># Check for existing audio</span>
+    <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="n">file_util_functions</span><span class="o">.</span><span class="n">join_strs_and_extension</span><span class="p">(</span>
+        <span class="n">parts</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;audio&quot;</span><span class="p">],</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span>
+    <span class="p">)</span>
     <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">get_file_uri_task</span><span class="p">(</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span> <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span>
     <span class="p">)</span>
 
-    <span class="c1"># If no existing audio uri</span>
-    <span class="k">with</span> <span class="n">case</span><span class="p">(</span><span class="n">audio_uri</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-        <span class="c1"># Store the video in temporary file</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">video_uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-        <span class="n">tmp_video_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;tmp_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_video.</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">file_util_functions</span><span class="o">.</span><span class="n">external_resource_copy_task</span><span class="p">(</span>
-            <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">tmp_video_filename</span>
-        <span class="p">)</span>
-
+    <span class="c1"># If no existing audio uri, process video</span>
+    <span class="k">with</span> <span class="n">case</span><span class="p">(</span><span class="n">audio_uri</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Split and store the audio in temporary file prior to upload</span>
         <span class="p">(</span>
             <span class="n">tmp_audio_filepath</span><span class="p">,</span>

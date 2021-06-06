@@ -213,11 +213,13 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
 <span class="kn">import</span> <span class="nn">ffmpeg</span>
+<span class="kn">import</span> <span class="nn">fsspec</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">task</span>
 
@@ -273,6 +275,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy an external resource to a local destination on the machine.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    uri: str</span>
@@ -283,6 +286,7 @@
 <span class="sd">    overwrite: bool</span>
 <span class="sd">        Boolean value indicating whether or not to overwrite a local resource with</span>
 <span class="sd">        the same name if it already exists.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    saved_path: str</span>
@@ -317,12 +321,14 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split and store the audio from a video file using ffmpeg.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    video_read_path: str</span>
 <span class="sd">        Path to the video to split the audio from.</span>
 <span class="sd">    audio_save_path: str</span>
 <span class="sd">        Path to where the audio should be stored.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    resolved_audio_save_path: str</span>
@@ -372,6 +378,45 @@
         <span class="nb">str</span><span class="p">(</span><span class="n">ffmpeg_stdout_path</span><span class="p">),</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">ffmpeg_stderr_path</span><span class="p">),</span>
     <span class="p">)</span></div>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">hash_file_contents_task</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the SHA256 hash of a file&#39;s content.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    uri: str</span>
+<span class="sd">        The uri for the file to hash.</span>
+<span class="sd">    buffer_size: int</span>
+<span class="sd">        The number of bytes to read at a time.</span>
+<span class="sd">        Default: 2^16 (64KB)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hash: str</span>
+<span class="sd">        The SHA256 hash for the file contents.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">sha256</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">block</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">join_strs_and_extension</span><span class="p">(</span>
+    <span class="n">parts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">name_without_suffix</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name_without_suffix</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&quot;</span>
 
 
 <span class="nd">@task</span>
