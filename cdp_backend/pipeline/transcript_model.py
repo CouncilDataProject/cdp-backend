@@ -96,7 +96,7 @@ class Transcript:
         Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
     session_datetime: Optional[str]
         ISO formatted datetime for the session that this document transcribes.
-    created_datetime: str
+    created_datetime: datetime
         ISO formatted datetime for when this transcript was created.
     sentences: List[Sentence]
         A list of sentences.
@@ -124,7 +124,7 @@ class Transcript:
     confidence: float
     generator: str
     session_datetime: Optional[str]
-    created_datetime: str
+    created_datetime: datetime
     sentences: List[Sentence]
     annotations: Optional[Dict[str, Any]] = None
 
@@ -172,7 +172,7 @@ EXAMPLE_TRANSCRIPT = Transcript(
     confidence=0.93325,
     generator="JacksonGen -- Lib Version: 0.0.0",
     session_datetime=datetime(2021, 1, 10, 15).isoformat(),
-    created_datetime=datetime.utcnow().isoformat(),
+    created_datetime=datetime.utcnow(),
     sentences=[
         Sentence(
             index=0,

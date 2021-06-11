@@ -201,7 +201,7 @@ class GoogleCloudSRModel(SRModel):
             confidence=confidence,
             generator="Google Speech-to-Text",
             session_datetime=None,
-            created_datetime=datetime.utcnow().isoformat(),
+            created_datetime=datetime.utcnow(),
             sentences=timestamped_sentences,
             annotations=None,
         )

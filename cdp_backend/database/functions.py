@@ -113,11 +113,13 @@ def upload_db_model(
     fireo.connection(from_file=creds_file)
 
     uniqueness_validation = get_model_uniqueness(db_model)
+
     if uniqueness_validation.is_unique:
         db_model.save()
         log.info(
             f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
         )
+    # TODO: Cover case for when ingestion model is None
     elif (
         len(uniqueness_validation.conflicting_models) == 1
         and ingestion_model is not None

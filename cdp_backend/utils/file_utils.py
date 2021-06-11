@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+##!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import logging
 import shutil
+import json
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
@@ -182,12 +183,45 @@ def split_audio_task(
         overwrite=overwrite,
     )
 
+
 @task
-def save_json_as_file(
-    json: str 
+def save_data_as_json_file(
+    data: str,
     save_path: str
 ) -> str:
-    with open(save_path, "wb") as write_out:
-        write_out.write(json)
+    """
+    Save json formattable data to a local file.
+    ----------
+    data: str
+        Data to be formatted into JSON and saved.
+    save_path: str
+        Path to where the data should be stored.
+    Returns
+    -------
+    save_path: str
+        Path to the saved json file with the .json extension added.
+    """
 
-    return save_path
+    # Remove any '/' from save path
+    dst = save_path.split("/")[-1]
+
+    # Ensure dst doesn't exist
+    dst = Path(dst).resolve()
+    if dst.is_dir():
+        dst = dst / uri.split("/")[-1]
+    if dst.is_file() and not overwrite:
+        raise FileExistsError(dst)
+
+    cleaned_save_path = str(dst) + ".json"
+
+    with open(cleaned_save_path, "w+") as f:
+        json.dump(data.to_json(), f)
+
+    return cleaned_save_path
+
+
+@task
+def create_filename_from_file_uri(
+    file_uri: str
+) -> str:
+    return file_uri.split("/")[-1]
