@@ -17,13 +17,13 @@ expected_sentence_2 = "Will the clerk begin by taking roll."
 
 
 @pytest.fixture
-def example_audio(data_dir: Path) -> Path:
-    return data_dir / "example_audio.wav"
+def example_audio(resources_dir: Path) -> Path:
+    return resources_dir / "example_audio.wav"
 
 
 @pytest.fixture
-def fake_creds_path(data_dir: Path) -> Path:
-    return data_dir / "fake_creds.json"
+def fake_creds_path(resources_dir: Path) -> Path:
+    return resources_dir / "fake_creds.json"
 
 
 class FakeRecognizeTime:
