@@ -11,6 +11,8 @@ import fsspec
 import nltk
 import truecase
 import webvtt
+from spacy.lang.en import English
+from webvtt.structures import Caption
 
 from ..pipeline.transcript_model import Sentence, Transcript, Word
 from .sr_model import SRModel
@@ -60,8 +62,8 @@ class WebVTTSRModel(SRModel):
             captions = webvtt.read(open_resource)
 
         # Keep track of current speaker caption collection
-        all_speaker_captions = []
-        current_speaker_captions: Optional[List[str]] = None
+        all_speaker_captions: List[List[Caption]] = []
+        current_speaker_captions: Optional[List[Caption]] = None
 
         # Parse all captions
         for caption in captions:
@@ -76,24 +78,24 @@ class WebVTTSRModel(SRModel):
                         all_speaker_captions.append(current_speaker_captions)
                         current_speaker_captions = None
 
-                    # Create new current speaker
-                    if current_speaker_captions is None:
-                        current_speaker_captions = [caption]
+                # Create new current speaker
+                if current_speaker_captions is None:
+                    current_speaker_captions = [caption]
 
                 # Otherwise append
                 else:
                     current_speaker_captions.append(caption)
 
         # Add the last current speaker caption
-        # Fence-post problems
-        all_speaker_captions.append(current_speaker_captions)
+        # Fence-post problem
+        if current_speaker_captions is not None:
+            all_speaker_captions.append(current_speaker_captions)
 
-        # Parse speaker captions into timestamped sentences and words
-        timestamped_sentences: List[Sentence] = []
-        transcript_sentence_index = 0
+        # Parse speaker captions one giant sentence of words, we will run sentencizer
+        # afterwards as it's safer / more robust than our regex.
+        all_speaker_sentences: List[Sentence] = []
         for speaker_captions in all_speaker_captions:
-            all_sentences_words = []
-            current_sentence_words = None
+            current_speaker_words = []
 
             # Clean new speaker markings
             for caption in speaker_captions:
@@ -103,22 +105,105 @@ class WebVTTSRModel(SRModel):
                 else:
                     caption_text = caption.text
 
-                # Look for sentence end
-                sentence_end_search = re.search(
-                    self.end_of_sentence_pattern, caption_text
+                # Calc caption duration
+                # for linear interpolation of word offsets
+                caption_duration = caption.end_in_seconds - caption.start_in_seconds
+
+                # Add words
+                raw_words = caption_text.split()
+                for i, word in enumerate(raw_words):
+                    current_speaker_words.append(
+                        Word(
+                            index=0,
+                            start_time=(
+                                # Linear words per second
+                                # offset by start time of caption
+                                caption.start_in_seconds
+                                + ((i / len(raw_words)) * caption_duration)
+                            ),
+                            end_time=(
+                                # Linear words per second
+                                # offset by start time of caption + 1
+                                caption.start_in_seconds
+                                + (((i + 1) / len(raw_words)) * caption_duration)
+                            ),
+                            text=self._clean_word(word),
+                            # Temp raw word storage
+                            # will remove after we truecase and sentenceizer
+                            annotations={"raw": word},
+                        )
+                    )
+
+            all_speaker_sentences.append(
+                Sentence(
+                    index=0,
+                    confidence=self.confidence,
+                    start_time=0,
+                    end_time=0,
+                    words=current_speaker_words,
+                    text=" ".join(
+                        [
+                            word.annotations["raw"]
+                            for word in current_speaker_words
+                            if word.annotations is not None
+                        ]
+                    ),
+                    annotations=None,
                 )
-                # Add previous sentence text to all sentences
-                # (and reset current sentence)
-                if current_sentence_words is not None:
-                    all_sentences_words.append(current_sentence_words)
-                    current_sentence_words = None
+            )
 
-                # Create new current sentence
-                if current_sentence_words is None:
-                    current_sentence_words = [caption_text]
+        # Split single sentence into many for each speaker and truecase the whole block
+        nlp = English()
+        nlp.add_pipe("sentencizer")
 
-                # Otherwise append
-                else:
-                    current_sentence_words.append(caption_text)
+        timestamped_sentences: List[Sentence] = []
+        current_timestamped_sentence_index = 0
+        for speaker_index, all_speaker_sentence in enumerate(all_speaker_sentences):
+            # Truecase and sentence
+            truecased = self._normalize_text(all_speaker_sentence.text)
+            sentences = [str(s).capitalize() for s in nlp(truecased).sents]
 
-        return all_speaker_captions
+            # Make actual transcript
+            overall_word_index = 0
+            for sentence_index, sentence in enumerate(sentences):
+                sentence_words = []
+                for word_index, word in enumerate(sentence.split()):
+                    existing_word = all_speaker_sentence.words[overall_word_index]
+                    sentence_words.append(
+                        Word(
+                            index=word_index,
+                            start_time=existing_word.start_time,
+                            end_time=existing_word.end_time,
+                            text=existing_word.text,
+                            annotations=None,
+                        )
+                    )
+                    overall_word_index += 1
+
+                # Append the full sentence details
+                timestamped_sentences.append(
+                    Sentence(
+                        index=current_timestamped_sentence_index,
+                        confidence=self.confidence,
+                        start_time=min([word.start_time for word in sentence_words]),
+                        end_time=max([word.end_time for word in sentence_words]),
+                        words=sentence_words,
+                        text=sentence,
+                        speaker_index=speaker_index,
+                        speaker_name=None,
+                        annotations=None,
+                    )
+                )
+                current_timestamped_sentence_index += 1
+
+        return Transcript(
+            confidence=(
+                sum([s.confidence for s in timestamped_sentences])
+                / len(timestamped_sentences)
+            ),
+            generator="CDP WebVTT Conversion",
+            session_datetime=None,
+            created_datetime=datetime.utcnow().isoformat(),
+            sentences=timestamped_sentences,
+            annotations=None,
+        )
