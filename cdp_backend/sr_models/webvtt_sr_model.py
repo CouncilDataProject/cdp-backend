@@ -50,6 +50,19 @@ class WebVTTSRModel(SRModel):
         return normalized_text
 
     def transcribe(self, file_uri: Union[str, Path], **kwargs: Any) -> Transcript:
+        """
+        Converts a WebVTT closed caption file into the CDP Transcript Model.
+
+        Parameters
+        ----------
+        file_uri: Union[str, Path]
+            The file URI or path to the VTT file to convert.
+
+        Returns
+        -------
+        transcript: Transcript
+            The contents of the VTT file as a CDP Transcript.
+        """
         # Download punkt for truecase module
         nltk.download("punkt")
 
