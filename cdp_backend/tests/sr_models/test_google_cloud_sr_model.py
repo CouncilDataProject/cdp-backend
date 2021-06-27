@@ -123,6 +123,10 @@ def test_clean_phrases(phrases: List[str], cleaned: List[str]) -> None:
     assert GoogleCloudSRModel._clean_phrases(phrases) == cleaned
 
 
+def has_only_non_deliminating_chars(word: str) -> bool:
+    return not re.search(r"[^a-zA-Z0-9'\-]", word)
+
+
 def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> None:
     with mock.patch(
         "google.cloud.speech_v1p1beta1.SpeechClient.from_service_account_json"
@@ -143,7 +147,3 @@ def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> No
         for sentence in transcript.sentences:
             for word in sentence.words:
                 assert has_only_non_deliminating_chars(word.text) is True
-
-
-def has_only_non_deliminating_chars(word: str) -> bool:
-    return not re.search(r"[^a-zA-Z0-9'\-]", word)
