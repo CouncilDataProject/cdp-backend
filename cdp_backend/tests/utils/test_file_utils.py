@@ -12,6 +12,7 @@ from py._path.local import LocalPath
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import external_resource_copy
+from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
 
 #############################################################################
 
@@ -111,3 +112,29 @@ def test_split_audio(
 
         except Exception as e:
             raise e
+
+
+@pytest.mark.parametrize("save_path", [("transcript_path")])
+def test_save_data_as_json_file(
+    tmpdir: LocalPath,
+    save_path: str,
+) -> None:
+
+    expected_save_path = str(Path(tmpdir) / Path(save_path + ".json").resolve())
+
+    assert expected_save_path == file_utils.save_dataclass_as_json_file.run(
+        EXAMPLE_TRANSCRIPT, save_path
+    )
+
+
+@pytest.mark.parametrize(
+    "file_uri, expected",
+    [
+        ("gs://file_uri.txt", "file_uri.txt"),
+    ],
+)
+def test_create_filename_from_file_uri(
+    file_uri: str,
+    expected: str,
+) -> None:
+    assert file_utils.create_filename_from_file_uri.run(file_uri) == expected

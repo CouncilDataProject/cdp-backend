@@ -17,6 +17,7 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
+
 @task
 def transcribe_task(
     sr_model: SRModel,
@@ -25,4 +26,3 @@ def transcribe_task(
     **kwargs: Any
 ) -> Transcript:
     return sr_model.transcribe(file_uri, phrases, **kwargs)
-

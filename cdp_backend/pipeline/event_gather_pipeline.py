@@ -3,7 +3,7 @@
 
 import hashlib
 import logging
-from typing import Callable, List
+from typing import Any, Callable, List
 
 from prefect import Flow, case, task
 from prefect.triggers import all_successful, all_finished
@@ -86,17 +86,23 @@ def create_event_gather_flow(
                 key = hashlib.sha256(session.video_uri.encode("utf8")).hexdigest()
 
                 # create/get audio (happens as part of transcript process)
-                audio_uri = create_audio_and_transcript(key, session.video_uri, bucket, credentials_file, session_ref)
+                audio_uri = create_audio_and_transcript(
+                    key, session.video_uri, bucket, credentials_file, session_ref
+                )
 
                 # TODO: Figure out how to make this happen when prefect case skips
                 # Create transcript
-                #create_transcript(audio_uri, session_ref, bucket, credentials_file)
+                # create_transcript(audio_uri, session_ref, bucket, credentials_file)
 
     return flow
 
 
 def create_audio_and_transcript(
-        key: str, video_uri: str, bucket: str, credentials_file: str, session_ref: db_models.Session
+    key: str,
+    video_uri: str,
+    bucket: str,
+    credentials_file: str,
+    session_ref: db_models.Session,
 ) -> str:
     """
     Creates an audio file from a video uri and uploads it to the filestore and db.
@@ -122,11 +128,11 @@ def create_audio_and_transcript(
     )
 
     # Check if audio_uri is None or not
-    exists = audio_uri_exists(audio_uri)
+    exists = task_result_exists(audio_uri)
 
     # Create transcript with existing audio_uri
     with case(exists, True):
-        create_transcript(audio_uri, session_ref, bucket, credentials_file)
+        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)
 
     # If no existing audio uri
     with case(exists, False):  # type: ignore
@@ -150,7 +156,7 @@ def create_audio_and_transcript(
         ) = file_util_functions.split_audio_task(
             video_read_path=tmp_video_filepath,
             audio_save_path=tmp_audio_filepath,
-            overwrite=True
+            overwrite=True,
         )
 
         # Store audio and logs
@@ -213,16 +219,13 @@ def create_audio_and_transcript(
         )
 
         # Create transcript
-        create_transcript(audio_uri, session_ref, bucket, credentials_file)
-        
-    return audio_uri  # type: ignore
+        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)
+
+    return (audio_uri, transcript)  # type: ignore
 
 
 def create_transcript(
-    audio_uri: str, 
-    session_ref: db_models.Session,
-    bucket: str, 
-    credentials_file: str
+    audio_uri: str, session_ref: db_models.Session, bucket: str, credentials_file: str
 ) -> db_models.Transcript:
     """
     Creates a transcript from an audio uri and uploads it to the filestore and db.
@@ -230,7 +233,7 @@ def create_transcript(
     Parameters
     ----------
     audio_uri: str
-        The uri of the audio file to transcribe. 
+        The uri of the audio file to transcribe.
         Should be in form of 'gs://...'
     bucket: str
         Name of the GCS bucket to upload files to.
@@ -247,53 +250,45 @@ def create_transcript(
     sr_model = GoogleCloudSRModel(credentials_file)
 
     # Create Transcript with SRModel
-    transcript = sr_functions.transcribe_task(
-        sr_model=sr_model, 
-        file_uri=audio_uri
+    transcript = sr_functions.transcribe_task(sr_model=sr_model, file_uri=audio_uri)
+
+    # Save transcript locally as JSON file
+    save_path = file_util_functions.save_dataclass_as_json_file(
+        data=transcript, save_path=audio_uri + "_transcript"
     )
 
-    # Save transcript locally as JSON file 
-    save_path = file_util_functions.save_data_as_json_file(
-        data=transcript, 
-        save_path=audio_uri + "_transcript"
-    )
-
-    # Upload transcript as file 
+    # Upload transcript as file
     transcript_file_uri = fs_functions.upload_file_task(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=save_path,
-        remove_local=True) 
+        remove_local=True,
+    )
+
+    # Create filename for db model of file for transcript
+    filename = file_util_functions.create_filename_from_file_uri(transcript_file_uri)
 
     # Create file db model for transcript
-    db_file_model = db_functions.create_file(
-        name=file_util_functions.create_filename_from_file_uri(
-            transcript_file_uri), 
-        uri=transcript_file_uri
-    )
+    db_file_model = db_functions.create_file(name=filename, uri=transcript_file_uri)
 
     # Upload file db model for transcript
     db_file_ref = db_functions.upload_db_model_task(
-        db_model=db_file_model, 
-        ingestion_model=None, 
-        creds_file=credentials_file)
-    
+        db_model=db_file_model, ingestion_model=None, creds_file=credentials_file
+    )
+
     # Create transcript db model
     db_transcript_model = db_functions.create_transcript(
-        transcript_file=db_file_ref,
-        session=session_ref,
-        transcript = transcript
+        transcript_file=db_file_ref, session=session_ref, transcript=transcript
     )
 
     # Upload transcript db model
     db_transcript_ref = db_functions.upload_db_model_task(
-        db_model=db_transcript_model,
-        ingestion_model=None,
-        creds_file=credentials_file
+        db_model=db_transcript_model, ingestion_model=None, creds_file=credentials_file
     )
 
-    return db_transcript_ref 
+    return db_transcript_ref
+
 
 @task
-def audio_uri_exists(uri: str) -> bool:
-    return uri is not None
+def task_result_exists(result: Any) -> bool:
+    return result is not None

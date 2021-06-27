@@ -12,4 +12,8 @@ def test_model_serdes() -> None:
         example_transcript_str
     )
 
+    # from_json adds tz info when a field is datetime
+    cleaned_dt = example_transcript_des.created_datetime.replace(tzinfo=None)
+    example_transcript_des.created_datetime = cleaned_dt
+
     assert EXAMPLE_TRANSCRIPT == example_transcript_des

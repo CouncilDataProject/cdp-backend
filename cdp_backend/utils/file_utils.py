@@ -4,7 +4,7 @@ import logging
 import shutil
 import json
 from pathlib import Path
-from typing import Optional, Tuple, Union
+from typing import Any, Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
@@ -185,15 +185,13 @@ def split_audio_task(
 
 
 @task
-def save_data_as_json_file(
-    data: str,
-    save_path: str
-) -> str:
+def save_dataclass_as_json_file(data: Any, save_path: str) -> str:
     """
     Save json formattable data to a local file.
     ----------
-    data: str
-        Data to be formatted into JSON and saved.
+    data: Any
+        An dataclass annotated object to be formatted
+        into JSON and saved.
     save_path: str
         Path to where the data should be stored.
     Returns
@@ -221,7 +219,5 @@ def save_data_as_json_file(
 
 
 @task
-def create_filename_from_file_uri(
-    file_uri: str
-) -> str:
+def create_filename_from_file_uri(file_uri: str) -> str:
     return file_uri.split("/")[-1]
