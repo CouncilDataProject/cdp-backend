@@ -35,10 +35,6 @@ class WebVTTSRModel(SRModel):
         # This will create a regex pattern to allow for one or more of the pattern
         self.new_turn_pattern = r"({})+\s*(.+)$".format(new_turn_pattern)
 
-        # Sentence must be ended by period, question mark, or exclamation point.
-        # (or a new speaker starts)
-        self.end_of_sentence_pattern = r"^.+[.?!]\s*$"
-
         # Confidence is tricky. We allow it to be a parameter because closed captions
         # aren't always 100% accurate. For Seattle, I would guess they are about 97%
         # accurate.
