@@ -1,6 +1,5 @@
 from ..sr_models import SRModel
 from prefect import task
-from prefect.triggers import all_finished
 from ..pipeline.transcript_model import Transcript
 from typing import Any, List, Optional, Union
 import logging

@@ -110,7 +110,7 @@ def test_create_or_get_audio(
 @mock.patch("cdp_backend.utils.file_utils.save_dataclass_as_json_file")
 @mock.patch("cdp_backend.sr_models.sr_functions.transcribe_task")
 @pytest.mark.parametrize(
-    "transcript, save_path, transcript_uri, db_file, db_file_ref, db_transcript, db_transcript_ref",
+    "transcript, save_path, transcript_uri, db_file, db_file_ref, db_transcript, db_transcript_ref",  # noqa: E501
     [
         # TODO add test case for when audio uri doesn't exist
         (
@@ -154,5 +154,5 @@ def test_create_transcript(
 
 
 def test_task_result_exists() -> None:
-    assert pipeline.task_result_exists.run(1) == True  # type: ignore
-    assert pipeline.task_result_exists.run(None) == False  # type: ignore
+    assert pipeline.task_result_exists.run(1) is True  # type: ignore
+    assert pipeline.task_result_exists.run(None) is False  # type: ignore

@@ -6,7 +6,6 @@ import logging
 from typing import Any, Callable, List
 
 from prefect import Flow, case, task
-from prefect.triggers import all_successful, all_finished
 
 from ..database import functions as db_functions
 from ..database import models as db_models
@@ -53,8 +52,6 @@ def create_event_gather_flow(
     with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
 
-        sr_model = GoogleCloudSRModel(credentials_file)
-
         for event in events:
 
             # Upload calls for minimal event
@@ -87,12 +84,20 @@ def create_event_gather_flow(
 
                 # create/get audio (happens as part of transcript process)
                 audio_uri = create_audio_and_transcript(
-                        key, session.video_uri, bucket, credentials_file, session_ref  # type: ignore
+                    key,
+                    session.video_uri,
+                    bucket,
+                    credentials_file,
+                    session_ref,  # type: ignore
                 )
 
-                # TODO: Figure out how to make this happen when prefect case skips
                 # Create transcript
-                # create_transcript(audio_uri, session_ref, bucket, credentials_file)
+                create_transcript(
+                    audio_uri,  # type: ignore
+                    session_ref,  # type: ignore
+                    bucket,
+                    credentials_file,
+                )
 
     return flow
 
@@ -132,7 +137,9 @@ def create_audio_and_transcript(
 
     # Create transcript with existing audio_uri
     with case(exists, True):  # type: ignore
-        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)  # type: ignore
+        transcript = create_transcript(
+            audio_uri, session_ref, bucket, credentials_file  # type: ignore
+        )  # type: ignore
 
     # If no existing audio uri
     with case(exists, False):  # type: ignore
@@ -219,7 +226,9 @@ def create_audio_and_transcript(
         )
 
         # Create transcript
-        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)  # type: ignore
+        transcript = create_transcript(
+            audio_uri, session_ref, bucket, credentials_file  # type: ignore
+        )  # type: ignore
 
     return (audio_uri, transcript)  # type: ignore
 

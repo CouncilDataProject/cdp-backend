@@ -13,7 +13,7 @@ from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
 from cdp_backend.database.validators import UniquenessValidation
 from cdp_backend.pipeline import ingestion_models
-from cdp_backend.pipeline.transcript_model import Transcript, EXAMPLE_TRANSCRIPT
+from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
 
 ###############################################################################
 # Testing constants
@@ -277,6 +277,8 @@ def test_create_transcript() -> None:
     db_session = db_models.Session()
 
     assert isinstance(
-            db_functions.create_transcript.run(db_file, db_session, EXAMPLE_TRANSCRIPT),  # type: ignore
+        db_functions.create_transcript.run(  # type: ignore
+            db_file, db_session, EXAMPLE_TRANSCRIPT
+        ),
         db_models.Transcript,
     )
