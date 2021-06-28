@@ -87,7 +87,7 @@ def create_event_gather_flow(
 
                 # create/get audio (happens as part of transcript process)
                 audio_uri = create_audio_and_transcript(
-                    key, session.video_uri, bucket, credentials_file, session_ref
+                        key, session.video_uri, bucket, credentials_file, session_ref  # type: ignore
                 )
 
                 # TODO: Figure out how to make this happen when prefect case skips
@@ -131,8 +131,8 @@ def create_audio_and_transcript(
     exists = task_result_exists(audio_uri)
 
     # Create transcript with existing audio_uri
-    with case(exists, True):
-        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)
+    with case(exists, True):  # type: ignore
+        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)  # type: ignore
 
     # If no existing audio uri
     with case(exists, False):  # type: ignore
@@ -219,7 +219,7 @@ def create_audio_and_transcript(
         )
 
         # Create transcript
-        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)
+        transcript = create_transcript(audio_uri, session_ref, bucket, credentials_file)  # type: ignore
 
     return (audio_uri, transcript)  # type: ignore
 
@@ -286,7 +286,7 @@ def create_transcript(
         db_model=db_transcript_model, ingestion_model=None, creds_file=credentials_file
     )
 
-    return db_transcript_ref
+    return db_transcript_ref  # type: ignore
 
 
 @task

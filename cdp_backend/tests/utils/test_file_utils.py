@@ -122,7 +122,7 @@ def test_save_data_as_json_file(
 
     expected_save_path = str(Path(tmpdir) / Path(save_path + ".json").resolve())
 
-    assert expected_save_path == file_utils.save_dataclass_as_json_file.run(
+    assert expected_save_path == file_utils.save_dataclass_as_json_file.run(  # type: ignore
         EXAMPLE_TRANSCRIPT, save_path
     )
 
@@ -137,4 +137,4 @@ def test_create_filename_from_file_uri(
     file_uri: str,
     expected: str,
 ) -> None:
-    assert file_utils.create_filename_from_file_uri.run(file_uri) == expected
+    assert file_utils.create_filename_from_file_uri.run(file_uri) == expected  # type: ignore

@@ -201,14 +201,12 @@ def save_dataclass_as_json_file(data: Any, save_path: str) -> str:
     """
 
     # Remove any '/' from save path
-    dst = save_path.split("/")[-1]
+    dst: Union[str, Path] = save_path.split("/")[-1]
 
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
-        dst = dst / uri.split("/")[-1]
-    if dst.is_file() and not overwrite:
-        raise FileExistsError(dst)
+        dst = dst / save_path.split("/")[-1]
 
     cleaned_save_path = str(dst) + ".json"
 

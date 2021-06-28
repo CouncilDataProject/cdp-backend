@@ -4,6 +4,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Union
+from datetime import datetime
 
 from ..pipeline.transcript_model import Transcript
 
@@ -27,4 +28,4 @@ class SRModel(ABC):
             The transcript model for the supplied media file.
         """
 
-        return Transcript(0.0, "", "", "", [])
+        return Transcript(0.0, "", "", datetime.utcnow(), [])

@@ -25,4 +25,4 @@ def transcribe_task(
     phrases: Optional[List[str]] = None,
     **kwargs: Any
 ) -> Transcript:
-    return sr_model.transcribe(file_uri, phrases, **kwargs)
+    return sr_model.transcribe(file_uri, phrases=phrases, **kwargs)

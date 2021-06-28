@@ -154,5 +154,5 @@ def test_create_transcript(
 
 
 def test_task_result_exists() -> None:
-    assert pipeline.task_result_exists.run(1) == True
-    assert pipeline.task_result_exists.run(None) == False
+    assert pipeline.task_result_exists.run(1) == True  # type: ignore
+    assert pipeline.task_result_exists.run(None) == False  # type: ignore

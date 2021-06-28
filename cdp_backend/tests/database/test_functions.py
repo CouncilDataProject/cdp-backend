@@ -277,6 +277,6 @@ def test_create_transcript() -> None:
     db_session = db_models.Session()
 
     assert isinstance(
-        db_functions.create_transcript.run(db_file, db_session, EXAMPLE_TRANSCRIPT),
+            db_functions.create_transcript.run(db_file, db_session, EXAMPLE_TRANSCRIPT),  # type: ignore
         db_models.Transcript,
     )
