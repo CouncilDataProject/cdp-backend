@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABC, abstractmethod
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Union
-from datetime import datetime
 
 from ..pipeline.transcript_model import Transcript
 

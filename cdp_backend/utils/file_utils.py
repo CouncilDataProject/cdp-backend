@@ -1,11 +1,11 @@
 ##!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import json
 import logging
 import shutil
-import json
-from typing import Any, List, Optional, Tuple, Union
 from hashlib import sha256
 from pathlib import Path
+from typing import Any, List, Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg

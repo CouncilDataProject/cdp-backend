@@ -79,7 +79,7 @@ def create_event_gather_flow(
                 )
 
                 # Create or get audio (happens as part of transcript process)
-                audio_uri = create_audio_and_transcript(
+                create_audio_and_transcript(
                     session.video_uri,
                     bucket,
                     credentials_file,

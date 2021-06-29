@@ -1,10 +1,11 @@
-from ..sr_models import SRModel
-from prefect import task
-from ..pipeline.transcript_model import Transcript
-from typing import Any, List, Optional, Union
 import logging
-
 from pathlib import Path
+from typing import Any, List, Optional, Union
+
+from prefect import task
+
+from ..pipeline.transcript_model import Transcript
+from ..sr_models import SRModel
 
 ###############################################################################
 

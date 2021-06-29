@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+from pathlib import Path
 from typing import Callable, List
 from unittest import mock
 from unittest.mock import MagicMock
-from py._path.local import LocalPath
-from pathlib import Path
 
 import pytest
 from prefect import Flow
+from py._path.local import LocalPath
 
+from cdp_backend.database import models as db_models
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline import transcript_model
 from cdp_backend.pipeline.ingestion_models import (
@@ -18,7 +19,6 @@ from cdp_backend.pipeline.ingestion_models import (
     EventIngestionModel,
 )
 from cdp_backend.pipeline.mock_get_events import get_events as rand_get_events
-from cdp_backend.database import models as db_models
 from cdp_backend.tests.database.test_functions import assert_db_models_equality
 
 

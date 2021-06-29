@@ -10,9 +10,9 @@ from unittest import mock
 import pytest
 from py._path.local import LocalPath
 
+from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import external_resource_copy
-from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
 
 #############################################################################
 
@@ -81,16 +81,16 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
     with open(test_file, "w") as open_f:
         open_f.write("hello")
 
-    hash_a = file_utils.hash_file_contents_task.run(
+    hash_a = file_utils.hash_file_contents_task.run(  # type: ignore
         str(test_file.absolute())
-    )  # type: ignore
+    )
 
     with open(test_file, "w") as open_f:
         open_f.write("world")
 
-    hash_b = file_utils.hash_file_contents_task.run(
+    hash_b = file_utils.hash_file_contents_task.run(  # type: ignore
         str(test_file.absolute())
-    )  # type: ignore
+    )
 
     assert hash_a != hash_b
 
@@ -106,9 +106,9 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
 def test_join_strs_and_extension(
     parts: List[str], extension: str, delimiter: str, expected: str
 ) -> None:
-    result = file_utils.join_strs_and_extension.run(
+    result = file_utils.join_strs_and_extension.run(  # type: ignore
         parts=parts, extension=extension, delimiter=delimiter
-    )  # type: ignore
+    )
     assert result == expected
 
 
