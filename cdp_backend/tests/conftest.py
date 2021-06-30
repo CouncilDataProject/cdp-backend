@@ -22,5 +22,5 @@ import pytest
 
 
 @pytest.fixture
-def data_dir() -> Path:
-    return Path(__file__).parent / "data"
+def resources_dir() -> Path:
+    return Path(__file__).parent / "resources"

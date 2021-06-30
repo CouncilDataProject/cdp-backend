@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
@@ -29,3 +30,10 @@ class SRModel(ABC):
         """
 
         return Transcript(0.0, "", "", datetime.utcnow(), [])
+
+    @staticmethod
+    def _clean_word(word: str) -> str:
+        text_cleaner = re.compile(r"[^a-zA-Z0-9'\-]")
+        cleaned_word = text_cleaner.sub("", word).lower()
+
+        return cleaned_word

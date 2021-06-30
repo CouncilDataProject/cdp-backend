@@ -18,8 +18,8 @@ from cdp_backend.utils.file_utils import external_resource_copy
 
 
 @pytest.fixture
-def example_video(data_dir: Path) -> Path:
-    return data_dir / "example_video.mp4"
+def example_video(resources_dir: Path) -> Path:
+    return resources_dir / "example_video.mp4"
 
 
 class MockedResponse:

@@ -17,13 +17,13 @@ expected_sentence_2 = "Will the clerk begin by taking roll."
 
 
 @pytest.fixture
-def example_audio(data_dir: Path) -> Path:
-    return data_dir / "example_audio.wav"
+def example_audio(resources_dir: Path) -> Path:
+    return resources_dir / "example_audio.wav"
 
 
 @pytest.fixture
-def fake_creds_path(data_dir: Path) -> Path:
-    return data_dir / "fake_creds.json"
+def fake_creds_path(resources_dir: Path) -> Path:
+    return resources_dir / "fake_creds.json"
 
 
 class FakeRecognizeTime:
@@ -123,6 +123,10 @@ def test_clean_phrases(phrases: List[str], cleaned: List[str]) -> None:
     assert GoogleCloudSRModel._clean_phrases(phrases) == cleaned
 
 
+def has_only_non_deliminating_chars(word: str) -> bool:
+    return not re.search(r"[^a-zA-Z0-9'\-]", word)
+
+
 def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> None:
     with mock.patch(
         "google.cloud.speech_v1p1beta1.SpeechClient.from_service_account_json"
@@ -143,7 +147,3 @@ def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> No
         for sentence in transcript.sentences:
             for word in sentence.words:
                 assert has_only_non_deliminating_chars(word.text) is True
-
-
-def has_only_non_deliminating_chars(word: str) -> bool:
-    return not re.search(r"[^a-zA-Z0-9'\-]", word)

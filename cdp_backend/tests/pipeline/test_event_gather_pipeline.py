@@ -23,8 +23,8 @@ from cdp_backend.tests.database.test_functions import assert_db_models_equality
 
 
 @pytest.fixture
-def fake_creds_path(data_dir: Path) -> Path:
-    return data_dir / "fake_creds.json"
+def fake_creds_path(resources_dir: Path) -> Path:
+    return resources_dir / "fake_creds.json"
 
 
 def min_get_events() -> List[EventIngestionModel]:

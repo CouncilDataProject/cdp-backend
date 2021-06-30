@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, List, Optional, Union
@@ -68,7 +67,6 @@ class GoogleCloudSRModel(SRModel):
         outputs: Transcript
             The transcript model for the supplied media file.
         """
-
         # Create client
         client = speech.SpeechClient.from_service_account_json(self.credentials_path)
 
@@ -125,8 +123,7 @@ class GoogleCloudSRModel(SRModel):
 
                 # Index holder for word results of response
                 w_marker = 0
-
-                for s_ind in range(0, len(sentences)):
+                for s_ind, _ in enumerate(sentences):
                     # Sentence text
                     s_text = sentences[s_ind]
 
@@ -160,16 +157,12 @@ class GoogleCloudSRModel(SRModel):
                         if (w_ind - w_marker) == (num_words - 1):
                             timestamped_sentence.end_time = end_time
 
-                        # Clean everything but non-delimiting characters make lowercase
-                        regex = re.compile(r"[^a-zA-Z0-9'\-]")
-                        cleaned_word = regex.sub("", word.word).lower()
-
                         # Create Word model
                         timestamped_word = Word(
                             index=w_ind - w_marker,
                             start_time=start_time,
                             end_time=end_time,
-                            text=cleaned_word,
+                            text=self._clean_word(word.word),
                             # TODO: Add annotations
                             annotations=None,
                         )
@@ -201,7 +194,7 @@ class GoogleCloudSRModel(SRModel):
             confidence=confidence,
             generator="Google Speech-to-Text",
             session_datetime=None,
-            created_datetime=datetime.utcnow(),
+            created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,
             annotations=None,
         )
