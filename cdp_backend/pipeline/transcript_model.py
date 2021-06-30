@@ -99,7 +99,7 @@ class Transcript:
         Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
     session_datetime: Optional[str]
         ISO formatted datetime for the session that this document transcribes.
-    created_datetime: Optional[str]
+    created_datetime: str
         ISO formatted datetime for when this transcript was created.
     sentences: List[Sentence]
         A list of sentences.
@@ -127,7 +127,7 @@ class Transcript:
     confidence: float
     generator: str
     session_datetime: Optional[str]
-    created_datetime: Optional[str]
+    created_datetime: str
     sentences: List[Sentence]
     annotations: Optional[Dict[str, Any]] = None
 

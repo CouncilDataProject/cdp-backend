@@ -215,7 +215,7 @@ class WebVTTSRModel(SRModel):
             ),
             generator="CDP WebVTT Conversion",
             session_datetime=None,
-            created_datetime=datetime.utcnow(),
+            created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,
             annotations=None,
         )

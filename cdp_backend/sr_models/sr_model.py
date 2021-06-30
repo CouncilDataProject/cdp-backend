@@ -29,7 +29,7 @@ class SRModel(ABC):
             The transcript model for the supplied media file.
         """
 
-        return Transcript(0.0, "", "", datetime.utcnow(), [])
+        return Transcript(0.0, "", "", datetime.utcnow().isoformat(), [])
 
     @staticmethod
     def _clean_word(word: str) -> str:
