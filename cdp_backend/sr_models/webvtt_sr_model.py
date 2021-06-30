@@ -5,7 +5,7 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, List, NamedTuple, Optional, Union
+from typing import Any, List, NamedTuple, Union
 
 import fsspec
 import nltk
@@ -77,7 +77,7 @@ class WebVTTSRModel(SRModel):
 
         # Keep track of current speaker caption collection
         all_speaker_captions: List[List[Caption]] = []
-        current_speaker_captions: Optional[List[Caption]] = None
+        current_speaker_captions: List[Caption] = []
 
         # Parse all captions
         for caption in captions:
@@ -88,21 +88,21 @@ class WebVTTSRModel(SRModel):
                 if new_speaker_search:
                     # Add previous speaker captions to all speaker captions
                     # (and reset current speaker captions)
-                    if current_speaker_captions is not None:
+                    if len(current_speaker_captions) > 0:
                         all_speaker_captions.append(current_speaker_captions)
-                        current_speaker_captions = None
+                        current_speaker_captions = []
 
-                # Create new current speaker
-                if current_speaker_captions is None:
+                # Start new speaker
+                if len(current_speaker_captions) == 0:
                     current_speaker_captions = [caption]
 
-                # Otherwise append
+                # Create new current speaker
                 else:
                     current_speaker_captions.append(caption)
 
         # Add the last current speaker caption
         # Fence-post problem
-        if current_speaker_captions is not None:
+        if len(current_speaker_captions) > 0:
             all_speaker_captions.append(current_speaker_captions)
 
         # Parse speaker captions one giant sentence of words, we will run sentencizer
