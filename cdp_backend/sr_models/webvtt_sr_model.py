@@ -5,7 +5,7 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Any, List, NamedTuple, Optional, Union
 
 import fsspec
 import nltk
@@ -22,6 +22,11 @@ from .sr_model import SRModel
 log = logging.getLogger(__name__)
 
 ###############################################################################
+
+
+class SpeakerRawBlock(NamedTuple):
+    words: List[Word]
+    raw_text: str
 
 
 class WebVTTSRModel(SRModel):
@@ -102,7 +107,7 @@ class WebVTTSRModel(SRModel):
 
         # Parse speaker captions one giant sentence of words, we will run sentencizer
         # afterwards as it's safer / more robust than our regex.
-        all_speaker_sentences: List[Sentence] = []
+        all_speaker_sentences: List[SpeakerRawBlock] = []
         for speaker_captions in all_speaker_captions:
             current_speaker_words = []
 
@@ -143,21 +148,19 @@ class WebVTTSRModel(SRModel):
                         )
                     )
 
+            # Store the whole raw speaker block as a single list of words and the joined
+            # raw text. We will use the spacy sentencizer and truecasing after this to
+            # produce better overall results.
             all_speaker_sentences.append(
-                Sentence(
-                    index=0,
-                    confidence=self.confidence,
-                    start_time=0,
-                    end_time=0,
+                SpeakerRawBlock(
                     words=current_speaker_words,
-                    text=" ".join(
+                    raw_text=" ".join(
                         [
                             word.annotations["raw"]
                             for word in current_speaker_words
                             if word.annotations is not None
-                        ]
+                        ],
                     ),
-                    annotations=None,
                 )
             )
 
@@ -169,7 +172,7 @@ class WebVTTSRModel(SRModel):
         current_timestamped_sentence_index = 0
         for speaker_index, all_speaker_sentence in enumerate(all_speaker_sentences):
             # Truecase and sentence
-            truecased = self._normalize_text(all_speaker_sentence.text)
+            truecased = self._normalize_text(all_speaker_sentence.raw_text)
             sentences = [str(s).capitalize() for s in nlp(truecased).sents]
 
             # Make actual transcript
