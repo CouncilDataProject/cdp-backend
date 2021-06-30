@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cdp_backend.sr_models.webvtt_sr_model &mdash; cdp-backend 3.0.0.dev5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
+        
+      <li>cdp_backend.sr_models.webvtt_sr_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.sr_models.webvtt_sr_model</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">import</span> <span class="nn">truecase</span>
+<span class="kn">import</span> <span class="nn">webvtt</span>
+<span class="kn">from</span> <span class="nn">spacy.lang.en</span> <span class="kn">import</span> <span class="n">English</span>
+<span class="kn">from</span> <span class="nn">webvtt.structures</span> <span class="kn">import</span> <span class="n">Caption</span>
+
+<span class="kn">from</span> <span class="nn">..pipeline.transcript_model</span> <span class="kn">import</span> <span class="n">Sentence</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">,</span> <span class="n">Word</span>
+<span class="kn">from</span> <span class="nn">.sr_model</span> <span class="kn">import</span> <span class="n">SRModel</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="SpeakerRawBlock"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.SpeakerRawBlock">[docs]</a><span class="k">class</span> <span class="nc">SpeakerRawBlock</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Word</span><span class="p">]</span>
+    <span class="n">raw_text</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="WebVTTSRModel"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel">[docs]</a><span class="k">class</span> <span class="nc">WebVTTSRModel</span><span class="p">(</span><span class="n">SRModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">new_turn_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&amp;gt;&quot;</span><span class="p">,</span>
+        <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># New speaker turn must begin with one or more new_turn_pattern str</span>
+        <span class="c1"># This will create a regex pattern to allow for one or more of the pattern</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)+\s*(.+)$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_turn_pattern</span><span class="p">)</span>
+
+        <span class="c1"># Confidence is tricky. We allow it to be a parameter because closed captions</span>
+        <span class="c1"># aren&#39;t always 100% accurate. For Seattle, I would guess they are about 97%</span>
+        <span class="c1"># accurate.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence</span>
+
+    <span class="k">def</span> <span class="nf">_normalize_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">truecase</span><span class="o">.</span><span class="n">get_true_case</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Fix some punctuation issue, e.g. `roughly$ 19` bececomes `roughly $19`</span>
+        <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;([#$(&lt;[{]) &quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">normalized_text</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">normalized_text</span>
+
+<div class="viewcode-block" id="WebVTTSRModel.transcribe"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">[docs]</a>    <span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_uri</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transcript</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts a WebVTT closed caption file into the CDP Transcript Model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_uri: Union[str, Path]</span>
+<span class="sd">            The file URI or path to the VTT file to convert.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        transcript: Transcript</span>
+<span class="sd">            The contents of the VTT file as a CDP Transcript.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Download punkt for truecase module</span>
+        <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;punkt&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Read the caption file</span>
+        <span class="k">with</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_uri</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+            <span class="n">captions</span> <span class="o">=</span> <span class="n">webvtt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">open_resource</span><span class="p">)</span>
+
+        <span class="c1"># Keep track of current speaker caption collection</span>
+        <span class="n">all_speaker_captions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Caption</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">current_speaker_captions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Caption</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Parse all captions</span>
+        <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">captions</span><span class="p">:</span>
+            <span class="c1"># Safety measure to protect against empty portions of captioning</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Check for new speaker turn</span>
+                <span class="n">new_speaker_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span><span class="p">,</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">new_speaker_search</span><span class="p">:</span>
+                    <span class="c1"># Add previous speaker captions to all speaker captions</span>
+                    <span class="c1"># (and reset current speaker captions)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_speaker_captions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">all_speaker_captions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_speaker_captions</span><span class="p">)</span>
+                        <span class="n">current_speaker_captions</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="c1"># Start new speaker</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_speaker_captions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">current_speaker_captions</span> <span class="o">=</span> <span class="p">[</span><span class="n">caption</span><span class="p">]</span>
+
+                <span class="c1"># Create new current speaker</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">current_speaker_captions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caption</span><span class="p">)</span>
+
+        <span class="c1"># Add the last current speaker caption</span>
+        <span class="c1"># Fence-post problem</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_speaker_captions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">all_speaker_captions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_speaker_captions</span><span class="p">)</span>
+
+        <span class="c1"># Parse speaker captions one giant sentence of words, we will run sentencizer</span>
+        <span class="c1"># afterwards as it&#39;s safer / more robust than our regex.</span>
+        <span class="n">all_speaker_sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpeakerRawBlock</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">speaker_captions</span> <span class="ow">in</span> <span class="n">all_speaker_captions</span><span class="p">:</span>
+            <span class="n">current_speaker_words</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Clean new speaker markings</span>
+            <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">speaker_captions</span><span class="p">:</span>
+                <span class="n">new_speaker_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span><span class="p">,</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">new_speaker_search</span><span class="p">:</span>
+                    <span class="n">caption_text</span> <span class="o">=</span> <span class="n">new_speaker_search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">caption_text</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span>
+
+                <span class="c1"># Calc caption duration</span>
+                <span class="c1"># for linear interpolation of word offsets</span>
+                <span class="n">caption_duration</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">end_in_seconds</span> <span class="o">-</span> <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
+
+                <span class="c1"># Add words</span>
+                <span class="n">raw_words</span> <span class="o">=</span> <span class="n">caption_text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raw_words</span><span class="p">):</span>
+                    <span class="n">current_speaker_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Word</span><span class="p">(</span>
+                            <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">start_time</span><span class="o">=</span><span class="p">(</span>
+                                <span class="c1"># Linear words per second</span>
+                                <span class="c1"># offset by start time of caption</span>
+                                <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
+                                <span class="o">+</span> <span class="p">((</span><span class="n">i</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_words</span><span class="p">))</span> <span class="o">*</span> <span class="n">caption_duration</span><span class="p">)</span>
+                            <span class="p">),</span>
+                            <span class="n">end_time</span><span class="o">=</span><span class="p">(</span>
+                                <span class="c1"># Linear words per second</span>
+                                <span class="c1"># offset by start time of caption + 1</span>
+                                <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
+                                <span class="o">+</span> <span class="p">(((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_words</span><span class="p">))</span> <span class="o">*</span> <span class="n">caption_duration</span><span class="p">)</span>
+                            <span class="p">),</span>
+                            <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_word</span><span class="p">(</span><span class="n">word</span><span class="p">),</span>
+                            <span class="c1"># Temp raw word storage</span>
+                            <span class="c1"># will remove after we truecase and sentenceizer</span>
+                            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="n">word</span><span class="p">},</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># Store the whole raw speaker block as a single list of words and the joined</span>
+            <span class="c1"># raw text. We will use the spacy sentencizer and truecasing after this to</span>
+            <span class="c1"># produce better overall results.</span>
+            <span class="n">all_speaker_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">SpeakerRawBlock</span><span class="p">(</span>
+                    <span class="n">words</span><span class="o">=</span><span class="n">current_speaker_words</span><span class="p">,</span>
+                    <span class="n">raw_text</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">word</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
+                            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">current_speaker_words</span>
+                            <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">annotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Split single sentence into many for each speaker and truecase the whole block</span>
+        <span class="n">nlp</span> <span class="o">=</span> <span class="n">English</span><span class="p">()</span>
+        <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;sentencizer&quot;</span><span class="p">)</span>
+
+        <span class="n">timestamped_sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sentence</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">current_timestamped_sentence_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">speaker_index</span><span class="p">,</span> <span class="n">all_speaker_sentence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_speaker_sentences</span><span class="p">):</span>
+            <span class="c1"># Truecase and sentence</span>
+            <span class="n">truecased</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">all_speaker_sentence</span><span class="o">.</span><span class="n">raw_text</span><span class="p">)</span>
+            <span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">nlp</span><span class="p">(</span><span class="n">truecased</span><span class="p">)</span><span class="o">.</span><span class="n">sents</span><span class="p">]</span>
+
+            <span class="c1"># Make actual transcript</span>
+            <span class="n">overall_word_index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">sentence_index</span><span class="p">,</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
+                <span class="n">sentence_words</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">word_index</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">split</span><span class="p">()):</span>
+                    <span class="n">existing_word</span> <span class="o">=</span> <span class="n">all_speaker_sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">overall_word_index</span><span class="p">]</span>
+                    <span class="n">sentence_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Word</span><span class="p">(</span>
+                            <span class="n">index</span><span class="o">=</span><span class="n">word_index</span><span class="p">,</span>
+                            <span class="n">start_time</span><span class="o">=</span><span class="n">existing_word</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
+                            <span class="n">end_time</span><span class="o">=</span><span class="n">existing_word</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
+                            <span class="n">text</span><span class="o">=</span><span class="n">existing_word</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                            <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">overall_word_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># Append the full sentence details</span>
+                <span class="n">timestamped_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Sentence</span><span class="p">(</span>
+                        <span class="n">index</span><span class="o">=</span><span class="n">current_timestamped_sentence_index</span><span class="p">,</span>
+                        <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                        <span class="n">start_time</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">word</span><span class="o">.</span><span class="n">start_time</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sentence_words</span><span class="p">]),</span>
+                        <span class="n">end_time</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">word</span><span class="o">.</span><span class="n">end_time</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sentence_words</span><span class="p">]),</span>
+                        <span class="n">words</span><span class="o">=</span><span class="n">sentence_words</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="n">sentence</span><span class="p">,</span>
+                        <span class="n">speaker_index</span><span class="o">=</span><span class="n">speaker_index</span><span class="p">,</span>
+                        <span class="n">speaker_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">current_timestamped_sentence_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">Transcript</span><span class="p">(</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="p">(</span>
+                <span class="nb">sum</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">confidence</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">timestamped_sentences</span><span class="p">])</span>
+                <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">timestamped_sentences</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;CDP WebVTT Conversion&quot;</span><span class="p">,</span>
+            <span class="n">session_datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">sentences</span><span class="o">=</span><span class="n">timestamped_sentences</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jackson Maxfield Brown.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -213,7 +213,6 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
@@ -279,7 +278,6 @@
 <span class="sd">        outputs: Transcript</span>
 <span class="sd">            The transcript model for the supplied media file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># Create client</span>
         <span class="n">client</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechClient</span><span class="o">.</span><span class="n">from_service_account_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials_path</span><span class="p">)</span>
 
@@ -336,8 +334,7 @@
 
                 <span class="c1"># Index holder for word results of response</span>
                 <span class="n">w_marker</span> <span class="o">=</span> <span class="mi">0</span>
-
-                <span class="k">for</span> <span class="n">s_ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">s_ind</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
                     <span class="c1"># Sentence text</span>
                     <span class="n">s_text</span> <span class="o">=</span> <span class="n">sentences</span><span class="p">[</span><span class="n">s_ind</span><span class="p">]</span>
 
@@ -371,16 +368,12 @@
                         <span class="k">if</span> <span class="p">(</span><span class="n">w_ind</span> <span class="o">-</span> <span class="n">w_marker</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_words</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                             <span class="n">timestamped_sentence</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">end_time</span>
 
-                        <span class="c1"># Clean everything but non-delimiting characters make lowercase</span>
-                        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9&#39;\-]&quot;</span><span class="p">)</span>
-                        <span class="n">cleaned_word</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-
                         <span class="c1"># Create Word model</span>
                         <span class="n">timestamped_word</span> <span class="o">=</span> <span class="n">Word</span><span class="p">(</span>
                             <span class="n">index</span><span class="o">=</span><span class="n">w_ind</span> <span class="o">-</span> <span class="n">w_marker</span><span class="p">,</span>
                             <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
                             <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span>
-                            <span class="n">text</span><span class="o">=</span><span class="n">cleaned_word</span><span class="p">,</span>
+                            <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_word</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">),</span>
                             <span class="c1"># TODO: Add annotations</span>
                             <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="p">)</span>

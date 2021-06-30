@@ -20,6 +20,14 @@ cdp\_backend.sr\_models.sr\_model module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.sr\_models.webvtt\_sr\_model module
+------------------------------------------------
+
+.. automodule:: cdp_backend.sr_models.webvtt_sr_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

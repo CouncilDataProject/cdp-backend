@@ -511,6 +511,13 @@
 </li>
       </ul></li>
       <li>
+    cdp_backend.sr_models.webvtt_sr_model
+
+      <ul>
+        <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models.webvtt_sr_model">module</a>
+</li>
+      </ul></li>
+      <li>
     cdp_backend.utils
 
       <ul>
@@ -1040,10 +1047,10 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.Meta">(cdp_backend.database.models.Vote attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.minutes_item">minutes_item (cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.minutes_item_ref">minutes_item_ref (cdp_backend.database.models.EventMinutesItem attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.minutes_uri">minutes_uri (cdp_backend.database.models.Event attribute)</a>
@@ -1117,6 +1124,8 @@
         <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models.google_cloud_sr_model">cdp_backend.sr_models.google_cloud_sr_model</a>
 </li>
         <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models.sr_model">cdp_backend.sr_models.sr_model</a>
+</li>
+        <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models.webvtt_sr_model">cdp_backend.sr_models.webvtt_sr_model</a>
 </li>
         <li><a href="cdp_backend.utils.html#module-cdp_backend.utils">cdp_backend.utils</a>
 </li>
@@ -1221,6 +1230,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.SpeakerRawBlock.raw_text">raw_text (cdp_backend.sr_models.webvtt_sr_model.SpeakerRawBlock attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.constants.VoteDecision.REJECT">REJECT (cdp_backend.database.constants.VoteDecision attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.constants.MatterStatusDecision.REJECTED">REJECTED (cdp_backend.database.constants.MatterStatusDecision attribute)</a>
@@ -1297,13 +1308,17 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.session_index">(cdp_backend.pipeline.ingestion_models.Session attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.session_ref">session_ref (cdp_backend.database.models.Transcript attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.sessions">sessions (cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
 </li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.speaker">speaker (cdp_backend.pipeline.transcript_model.Sentence attribute)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.speaker_index">speaker_index (cdp_backend.pipeline.transcript_model.Sentence attribute)</a>
+</li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.speaker_name">speaker_name (cdp_backend.pipeline.transcript_model.Sentence attribute)</a>
+</li>
+      <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.SpeakerRawBlock">SpeakerRawBlock (class in cdp_backend.sr_models.webvtt_sr_model)</a>
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.split_audio">split_audio() (in module cdp_backend.utils.file_utils)</a>
 </li>
@@ -1384,6 +1399,8 @@
       <ul>
         <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.sr_model.SRModel.transcribe">(cdp_backend.sr_models.sr_model.SRModel method)</a>
 </li>
+        <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">(cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel method)</a>
+</li>
       </ul></li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript">Transcript (class in cdp_backend.database.models)</a>
 
@@ -1459,12 +1476,18 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.website">(cdp_backend.pipeline.ingestion_models.Person attribute)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel">WebVTTSRModel (class in cdp_backend.sr_models.webvtt_sr_model)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word">Word (class in cdp_backend.pipeline.transcript_model)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.words">words (cdp_backend.pipeline.transcript_model.Sentence attribute)</a>
+
+      <ul>
+        <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.SpeakerRawBlock.words">(cdp_backend.sr_models.webvtt_sr_model.SpeakerRawBlock attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

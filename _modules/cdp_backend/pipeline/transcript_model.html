@@ -266,8 +266,10 @@
 <span class="sd">        Time in seconds for when this sentence begins.</span>
 <span class="sd">    end_time: float</span>
 <span class="sd">        Time in seconds for when this sentence ends.</span>
-<span class="sd">    speaker: Optional[str]</span>
-<span class="sd">        The optional speaker for the sentence.</span>
+<span class="sd">    speaker_index: Optional[int]</span>
+<span class="sd">        The optional speaker index for the sentence.</span>
+<span class="sd">    speaker_name: Optional[str]</span>
+<span class="sd">        The optional speaker name for the sentence.</span>
 <span class="sd">    annotations: Optional[Dict[str, Any]]</span>
 <span class="sd">        Any annotations specific to this sentence.</span>
 <span class="sd">        Default: None (no annotations)</span>
@@ -284,7 +286,8 @@
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Word</span><span class="p">]</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">speaker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">speaker_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">speaker_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
@@ -391,7 +394,8 @@
             <span class="n">confidence</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
             <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
+            <span class="n">speaker_name</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
+            <span class="n">speaker_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">words</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -418,7 +422,8 @@
             <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
             <span class="n">start_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
             <span class="n">end_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-            <span class="n">speaker</span><span class="o">=</span><span class="s2">&quot;Isaac Na&quot;</span><span class="p">,</span>
+            <span class="n">speaker_name</span><span class="o">=</span><span class="s2">&quot;Isaac Na&quot;</span><span class="p">,</span>
+            <span class="n">speaker_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">words</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
