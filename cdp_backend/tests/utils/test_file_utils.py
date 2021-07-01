@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import BinaryIO, Generator, List, Optional
 from unittest import mock
@@ -151,6 +152,7 @@ def test_split_audio(
             raise e
 
 
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="tmpdir windows trouble")
 @pytest.mark.parametrize("save_path", [("transcript_path")])
 def test_save_data_as_json_file(
     tmpdir: LocalPath,
