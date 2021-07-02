@@ -212,7 +212,7 @@ def test_upload_db_model(
 
 
 def test_create_file() -> None:
-    db_file = db_functions.create_file.run("file name", "uri")  # type: ignore
+    db_file = db_functions.create_file("file name", "uri")  # type: ignore
 
     assert example_file.name == db_file.name
     assert example_file.uri == db_file.uri
