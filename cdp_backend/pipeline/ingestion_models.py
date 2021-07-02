@@ -256,6 +256,15 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
             video_uri="https://youtu.be/dQw4w9WgXcQ",
             session_index=0,
         ),
+        Session(
+            session_datetime=datetime.utcnow(),
+            video_uri="https://youtu.be/dQw4w9WgXcQ",
+            caption_uri=(
+                "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/"
+                "2021/council_062821_2022151.vtt"
+            ),
+            session_index=1,
+        ),
     ],
     event_minutes_items=[
         EventMinutesItem(
