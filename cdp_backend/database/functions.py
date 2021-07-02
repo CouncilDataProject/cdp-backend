@@ -213,7 +213,6 @@ def create_session_from_ingestion_model(
     return db_session
 
 
-@task
 def create_file(name: str, uri: str) -> db_models.File:
     db_file = db_models.File()
     db_file.name = name

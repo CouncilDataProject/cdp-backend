@@ -40,7 +40,7 @@ def test_create_event_gather_flow(func: Callable) -> None:
 @mock.patch("cdp_backend.utils.file_utils.hash_file_contents_task")
 @mock.patch("cdp_backend.utils.file_utils.join_strs_and_extension")
 @mock.patch("cdp_backend.utils.file_utils.split_audio_task")
-@mock.patch("cdp_backend.utils.file_utils.external_resource_copy_task")
+@mock.patch("cdp_backend.utils.file_utils.resource_copy_task")
 @mock.patch("cdp_backend.file_store.functions.upload_file_task")
 @mock.patch("cdp_backend.file_store.functions.get_file_uri_task")
 @pytest.mark.parametrize(

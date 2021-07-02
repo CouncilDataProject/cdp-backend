@@ -11,7 +11,7 @@ import pytest
 from py._path.local import LocalPath
 
 from cdp_backend.utils import file_utils
-from cdp_backend.utils.file_utils import external_resource_copy
+from cdp_backend.utils.file_utils import resource_copy
 
 #############################################################################
 
@@ -69,9 +69,9 @@ def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
     assert actual_result == expected_result
 
 
-def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) -> None:
+def test_resource_copy(tmpdir: LocalPath, mocked_request: Generator) -> None:
     save_path = tmpdir / "tmpcopy.mp4"
-    external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
+    resource_copy("https://doesntmatter.com/example.mp4", save_path)
 
 
 def test_hash_file_contents(tmpdir: LocalPath) -> None:
