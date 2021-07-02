@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+##!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+import json
 import logging
 import shutil
 from hashlib import sha256
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
@@ -202,3 +204,40 @@ def join_strs_and_extension(
 ) -> str:
     name_without_suffix = delimiter.join(parts)
     return f"{name_without_suffix}.{extension}"
+
+
+@task
+def save_dataclass_as_json_file(data: Any, save_path: str) -> str:
+    """
+    Save json formattable data to a local file.
+    ----------
+    data: Any
+        An dataclass annotated object to be formatted
+        into JSON and saved.
+    save_path: str
+        Path to where the data should be stored.
+    Returns
+    -------
+    save_path: str
+        Path to the saved json file with the .json extension added.
+    """
+
+    # Remove any '/' from save path
+    dst: Union[str, Path] = save_path.split("/")[-1]
+
+    # Ensure dst doesn't exist
+    dst = Path(dst).resolve()
+    if dst.is_dir():
+        dst = dst / save_path.split("/")[-1]
+
+    cleaned_save_path = str(dst) + ".json"
+
+    with open(cleaned_save_path, "w+") as f:
+        json.dump(data.to_json(), f)
+
+    return cleaned_save_path
+
+
+@task
+def create_filename_from_file_uri(file_uri: str) -> str:
+    return file_uri.split("/")[-1]

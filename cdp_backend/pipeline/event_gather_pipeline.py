@@ -56,6 +56,15 @@ def create_event_gather_flow(
             for session in event.sessions:
                 # TODO create/get transcript
 
+                # Create db session
+                # session_ref = db_functions.upload_db_model_task(
+                #     db_functions.create_session_from_ingestion_model(
+                #         session, event_ref
+                #     ),
+                #     session,
+                #     creds_file=credentials_file,
+                # )
+
                 # Get or create audio
                 audio_uri = get_video_and_split_audio(
                     video_uri=session.video_uri,
@@ -151,6 +160,7 @@ def get_video_and_split_audio(
         ) = file_util_functions.split_audio(
             video_read_path=tmp_video_filepath,
             audio_save_path=tmp_audio_filepath,
+            overwrite=True,
         )
 
         # Store audio and logs
@@ -183,6 +193,9 @@ def get_video_and_split_audio(
             name=fs_functions.create_filename_from_filepath(tmp_audio_log_err_filepath),
             uri=audio_log_err_uri,
         )
+
+        # TODO: Either add ingestion model to upload_db_model_task call
+        # or support db model updates without ingestion model
 
         # Upload files to database
         for db_model in [

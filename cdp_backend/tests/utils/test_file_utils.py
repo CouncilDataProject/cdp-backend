@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import BinaryIO, Generator, List, Optional
 from unittest import mock
@@ -10,6 +11,7 @@ from unittest import mock
 import pytest
 from py._path.local import LocalPath
 
+from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import resource_copy
 
@@ -80,16 +82,16 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
     with open(test_file, "w") as open_f:
         open_f.write("hello")
 
-    hash_a = file_utils.hash_file_contents_task.run(
+    hash_a = file_utils.hash_file_contents_task.run(  # type: ignore
         str(test_file.absolute())
-    )  # type: ignore
+    )
 
     with open(test_file, "w") as open_f:
         open_f.write("world")
 
-    hash_b = file_utils.hash_file_contents_task.run(
+    hash_b = file_utils.hash_file_contents_task.run(  # type: ignore
         str(test_file.absolute())
-    )  # type: ignore
+    )
 
     assert hash_a != hash_b
 
@@ -105,9 +107,9 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
 def test_join_strs_and_extension(
     parts: List[str], extension: str, delimiter: str, expected: str
 ) -> None:
-    result = file_utils.join_strs_and_extension.run(
+    result = file_utils.join_strs_and_extension.run(  # type: ignore
         parts=parts, extension=extension, delimiter=delimiter
-    )  # type: ignore
+    )
     assert result == expected
 
 
@@ -148,3 +150,35 @@ def test_split_audio(
 
         except Exception as e:
             raise e
+
+
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="tmpdir windows trouble")
+@pytest.mark.parametrize("save_path", [("transcript_path")])
+def test_save_data_as_json_file(
+    tmpdir: LocalPath,
+    save_path: str,
+) -> None:
+
+    expected_save_path = str(Path(tmpdir) / Path(save_path + ".json").resolve())
+
+    assert expected_save_path == (
+        file_utils.save_dataclass_as_json_file.run(  # type: ignore
+            EXAMPLE_TRANSCRIPT, save_path
+        )
+    )
+
+
+@pytest.mark.parametrize(
+    "file_uri, expected",
+    [
+        ("gs://file_uri.txt", "file_uri.txt"),
+    ],
+)
+def test_create_filename_from_file_uri(
+    file_uri: str,
+    expected: str,
+) -> None:
+    assert (
+        file_utils.create_filename_from_file_uri.run(file_uri)  # type: ignore
+        == expected
+    )

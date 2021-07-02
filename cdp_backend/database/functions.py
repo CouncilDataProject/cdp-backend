@@ -14,6 +14,7 @@ from ..database import models as db_models
 from ..database.validators import get_model_uniqueness
 from ..pipeline import ingestion_models
 from ..pipeline.ingestion_models import IngestionModel
+from ..pipeline.transcript_model import Transcript
 
 ###############################################################################
 
@@ -219,3 +220,17 @@ def create_file(name: str, uri: str) -> db_models.File:
     db_file.uri = uri
 
     return db_file
+
+
+@task
+def create_transcript(
+    transcript_file: db_models.File, session: db_models.Session, transcript: Transcript
+) -> db_models.Transcript:
+    db_transcript = db_models.Transcript()
+
+    db_transcript.session_ref = session
+    db_transcript.file_ref = transcript_file
+    db_transcript.confidence = transcript.confidence
+    db_transcript.created = datetime.fromisoformat(transcript.created_datetime)
+
+    return db_transcript
