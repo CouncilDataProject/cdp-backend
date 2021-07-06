@@ -166,19 +166,3 @@ def test_save_data_as_json_file(
             EXAMPLE_TRANSCRIPT, save_path
         )
     )
-
-
-@pytest.mark.parametrize(
-    "file_uri, expected",
-    [
-        ("gs://file_uri.txt", "file_uri.txt"),
-    ],
-)
-def test_create_filename_from_file_uri(
-    file_uri: str,
-    expected: str,
-) -> None:
-    assert (
-        file_utils.create_filename_from_file_uri.run(file_uri)  # type: ignore
-        == expected
-    )

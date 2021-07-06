@@ -110,7 +110,6 @@ def test_create_audio_and_transcript(
 @mock.patch("cdp_backend.database.functions.create_transcript")
 @mock.patch("cdp_backend.database.functions.upload_db_model_task")
 @mock.patch("cdp_backend.database.functions.create_file")
-@mock.patch("cdp_backend.utils.file_utils.create_filename_from_file_uri")
 @mock.patch("cdp_backend.file_store.functions.upload_file_task")
 @mock.patch("cdp_backend.utils.file_utils.save_dataclass_as_json_file")
 @mock.patch("cdp_backend.sr_models.sr_functions.transcribe_task")
@@ -133,7 +132,6 @@ def test_create_transcript(
     mock_transcribe_task: MagicMock,
     mock_save_as_json_task: MagicMock,
     mock_upload_file_task: MagicMock,
-    mock_create_filename_task: MagicMock,
     mock_create_file_task: MagicMock,
     mock_upload_db_model_task: MagicMock,
     mock_create_transcript: MagicMock,

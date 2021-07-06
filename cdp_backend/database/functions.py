@@ -222,7 +222,6 @@ def create_file(name: str, uri: str) -> db_models.File:
     return db_file
 
 
-@task
 def create_transcript(
     transcript_file: db_models.File, session: db_models.Session, transcript: Transcript
 ) -> db_models.Transcript:
