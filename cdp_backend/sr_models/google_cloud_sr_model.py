@@ -20,9 +20,9 @@ log = logging.getLogger(__name__)
 
 
 class GoogleCloudSRModel(SRModel):
-    def __init__(self, credentials_path: Union[str, Path], **kwargs: Any):
+    def __init__(self, credentials_file: Union[str, Path], **kwargs: Any):
         # Resolve credentials
-        self.credentials_path = Path(credentials_path).resolve(strict=True)
+        self.credentials_file = Path(credentials_file).resolve(strict=True)
 
     @staticmethod
     def _clean_phrases(phrases: Optional[List[str]] = None) -> List[str]:
@@ -60,7 +60,7 @@ class GoogleCloudSRModel(SRModel):
             The GCS file uri to the audio file or caption file to transcribe.
             It should be in format 'gs://...'.
         phrases: Optional[List[str]] = None
-            A list of strings that make the SR model perform better.
+            A list of strings to feed as targets to the model.
 
         Returns
         -------
@@ -68,7 +68,7 @@ class GoogleCloudSRModel(SRModel):
             The transcript model for the supplied media file.
         """
         # Create client
-        client = speech.SpeechClient.from_service_account_json(self.credentials_path)
+        client = speech.SpeechClient.from_service_account_json(self.credentials_file)
 
         # Create basic metadata
         metadata = speech.types.RecognitionMetadata()
