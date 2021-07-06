@@ -30,6 +30,22 @@ class SpeakerRawBlock(NamedTuple):
 
 
 class WebVTTSRModel(SRModel):
+    """
+    Initialize a WebVTT Conversion Model.
+
+    This doesn't do any actual speaker recognition, but rather will simply convert
+    from WebVTT format into a CDP transcript object.
+
+    Parameters
+    ----------
+    new_turn_pattern: str
+        The character(s) to look for that indicate a new speaker turn.
+        Default: "&gt;"
+    confidence: float
+        The confidence value to assign to the produced Transcript object.
+        Default: 1.0
+    """
+
     def __init__(
         self,
         new_turn_pattern: str = "&gt;",
