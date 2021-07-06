@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import logging
-from typing import Callable, List, Tuple
+from typing import Callable, List, Optional, Tuple
 
 from prefect import Flow, task
 
 from ..database import functions as db_functions
 from ..database import models as db_models
 from ..file_store import functions as fs_functions
+from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import file_utils as file_util_functions
 from .ingestion_models import EventIngestionModel, Session
 from .transcript_model import Transcript
@@ -28,6 +30,8 @@ def create_event_gather_flow(
     get_events_func: Callable,
     credentials_file: str,
     bucket: str,
+    caption_new_speaker_turn_pattern: Optional[str] = None,
+    caption_confidence: Optional[float] = None,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -41,6 +45,10 @@ def create_event_gather_flow(
         Path to Google Service Account Credentials JSON file.
     bucket: str
         Name of the GCS bucket to upload files to.
+    caption_new_speaker_turn_pattern: Optional[str]
+        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
+    caption_confidence: Optional[float]
+        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
 
     Returns
     -------
@@ -66,7 +74,7 @@ def create_event_gather_flow(
                 # )
 
                 # Get or create audio
-                audio_uri = get_video_and_split_audio(
+                session_content_hash, audio_uri = get_video_and_split_audio(
                     video_uri=session.video_uri,
                     bucket=bucket,
                     credentials_file=credentials_file,
@@ -74,10 +82,13 @@ def create_event_gather_flow(
 
                 # Generate transcript
                 transcript_uri = generate_transcript(
+                    session_content_hash=session_content_hash,
                     audio_uri=audio_uri,
                     session=session,
                     bucket=bucket,
                     credentials_file=credentials_file,
+                    caption_new_speaker_turn_pattern=caption_new_speaker_turn_pattern,
+                    caption_confidence=caption_confidence,
                 )
 
                 # Generate thumbnails
@@ -85,6 +96,7 @@ def create_event_gather_flow(
                     static_thumbnail_uri,
                     hover_thumbnail_uri,
                 ) = get_video_and_generate_thumbnails(
+                    session_content_hash=session_content_hash,
                     video_uri=session.video_uri,
                     bucket=bucket,
                     credentials_file=credentials_file,
@@ -111,7 +123,7 @@ def create_event_gather_flow(
 # store_processed_event_data(event, transcript, static_thumbnail, hover_thumbnail)
 
 
-@task
+@task(nout=2)
 def get_video_and_split_audio(
     video_uri: str, bucket: str, credentials_file: str
 ) -> str:
@@ -130,6 +142,8 @@ def get_video_and_split_audio(
 
     Returns
     -------
+    session_content_hash: str
+        The unique key (SHA256 hash of video content) for this session processing.
     audio_uri: str
         The URI to the uploaded audio file.
     """
@@ -140,11 +154,11 @@ def get_video_and_split_audio(
     )
 
     # Hash the video contents
-    key = file_util_functions.hash_file_contents(uri=tmp_video_filepath)
+    session_content_hash = file_util_functions.hash_file_contents(uri=tmp_video_filepath)
 
     # Check for existing audio
     tmp_audio_filepath = file_util_functions.join_strs_and_extension(
-        parts=[key, "audio"], extension="wav"
+        parts=[session_content_hash, "audio"], extension="wav"
     )
     audio_uri = fs_functions.get_file_uri(
         bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
@@ -218,11 +232,43 @@ def get_video_and_split_audio(
         ]:
             fs_functions.remove_local_file(local_path)
 
-    return audio_uri
+    return session_content_hash, audio_uri
 
 
 @task
-def get_captions_and_generate_transcript(caption_uri: str) -> Transcript:
+def use_speech_to_text_and_generate_transcript(
+    audio_uri: str,
+    credentials_file: str,
+    phrases: Optional[List[str]] = None,
+) -> Transcript:
+    """
+    Pass the audio URI through to Google Speech-to-Text.
+
+    Parameters
+    ----------
+    audio_uri: str
+        The URI to the audio path. The audio must already be stored in a GCS bucket.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+    phrases: Optional[List[str]]
+        A list of strings to feed as targets to the model.
+
+    Returns
+    -------
+    transcript: Transcript
+        The generated Transcript object.
+    """
+    # Init model
+    model = GoogleCloudSRModel(credentials_file=credentials_file)
+    return model.transcribe(file_uri=audio_uri, phrases=phrases)
+
+
+@task
+def get_captions_and_generate_transcript(
+    caption_uri: str,
+    new_turn_pattern: Optional[str] = None,
+    confidence: Optional[float] = None,
+) -> Transcript:
     """
     Download (or copy) a WebVTT closed caption file and convert to CDP Transcript model.
 
@@ -230,9 +276,9 @@ def get_captions_and_generate_transcript(caption_uri: str) -> Transcript:
     ----------
     caption_uri: str
         The URI to the caption file to transform into the transcript.
-    new_turn_pattern: str
+    new_turn_pattern: Optional[str]
         New speaker turn pattern to pass through to the WebVTT transformer.
-    confidence: float
+    confidence: Optional[float]
         Confidence to provide to the produced transcript.
 
     Returns
@@ -240,39 +286,111 @@ def get_captions_and_generate_transcript(caption_uri: str) -> Transcript:
     transcript: Transcript
         The produced transcript.
     """
-    pass
+    # If value provided, passthrough, otherwise ignore
+    model_kwargs = {}
+    if new_turn_pattern is not None:
+        model_kwargs["new_turn_pattern"] = new_turn_pattern
+    if confidence is not None:
+        model_kwargs["confidence"] = confidence
+
+    # Init model
+    model = WebVTTSRModel(**model_kwargs)
+
+    # Download or copy resource to local
+    caption_filename = caption_uri.split("/")[-1]
+    local_captions = file_util_functions.resource_copy(
+        uri=caption_uri, dst=f"caption-transcribing-{caption_filename}"
+    )
+
+    # Transcribe
+    transcript = model.transcribe(file_uri=local_captions)
+
+    # Remove temp file
+    fs_functions.remove_local_file(local_captions)
+
+    # Return generated transcript
+    return transcript
 
 
 @task
-def get_audio_and_generate_transcript(
-    audio_uri: str,
-    bucket: str,
-    credentials_file: str,
-) -> Transcript:
-    pass
-
-
-@task
-def finalize_and_upload_transcript(
+def finalize_and_archive_transcript(
+    session_content_hash: str,
     transcript: Transcript,
     bucket: str,
     credentials_file: str,
     session: Session,
 ) -> str:
-    pass
+    """
+    Finalizes metadata for a Transcript object, stores the transcript as JSON to object
+    storage and finally adds transcript and file objects to database.
+
+    Parameters
+    ----------
+    session_content_hash: str
+        The unique key (SHA256 hash of video content) for this session processing.
+    transcript: Transcript
+        The transcript to finish processing and store.
+    bucket: str
+        The bucket to store the transcript to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+    session: Session
+        The event session to pull extra metadata from.
+
+    Returns
+    -------
+    transcript_db_id: str
+        The id of the stored transcript reference in the database.
+    """
+    # Add session datetime to transcript
+    transcript.session_datetime = session.session_datetime
+
+    # Dump to JSON
+    transcript_save_name = f"{session_content_hash}.json"
+    with open(transcript_save_name, "w") as open_resource:
+        json.dump(transcript.to_json(), open_resource)
+
+    # Store to file store
+    transcript_file_uri = fs_functions.upload_file(
+        credentials_file=credentials_file,
+        bucket=bucket,
+        filepath=transcript_save_name,
+    )
+
+    # Store reference to file
+    file_ref = db_functions.create_file(
+        name=transcript_save_name,
+        uri=transcript_file_uri,
+    )
+
+    # Store transcript reference
+    # TODO:
+    # Handle session / metadata upload
+    transcript_ref = db_functions.create_transcript(
+        transcript_file=file_ref,
+        session=session,
+        transcript=transcript,
+    )
+
+    return transcript_ref.id
 
 
 def generate_transcript(
+    session_content_hash: str,
     audio_uri: str,
     session: Session,
     bucket: str,
     credentials_file: str,
+    caption_new_speaker_turn_pattern: Optional[str] = None,
+    caption_confidence: Optional[float] = None,
 ) -> str:
     """
     Route transcript generation to the correct processing.
 
     Parameters
     ----------
+    session_content_hash: str
+        The unique key (SHA256 hash of video content) for this session processing.
     audio_uri: str
         The URI to the audio file to generate a transcript from.
     session: Session
@@ -284,6 +402,10 @@ def generate_transcript(
         The name of the GCS bucket to upload the produced audio to.
     credentials_file: str
         Path to Google Service Account Credentials JSON file.
+    caption_new_speaker_turn_pattern: Optional[str]
+        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
+    caption_confidence: Optional[float]
+        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
 
     Returns
     -------
@@ -291,20 +413,24 @@ def generate_transcript(
     """
     # If no captions, generate transcript with Google Speech-to-Text
     if session.caption_uri is None:
-        transcript = get_audio_and_generate_transcript(
+        # TODO:
+        # Get feeder phrases
+        transcript = use_speech_to_text_and_generate_transcript(
             audio_uri=audio_uri,
-            bucket=bucket,
             credentials_file=credentials_file,
         )
 
     # Process captions
     else:
         transcript = get_captions_and_generate_transcript(
-            caption_uri=session.caption_uri
+            caption_uri=session.caption_uri,
+            new_turn_pattern=caption_new_speaker_turn_pattern,
+            confidence=caption_confidence,
         )
 
     # Add extra metadata and upload
-    return finalize_and_upload_transcript(
+    return finalize_and_archive_transcript(
+        session_content_hash=session_content_hash,
         transcript=transcript,
         bucket=bucket,
         credentials_file=credentials_file,
@@ -314,7 +440,7 @@ def generate_transcript(
 
 @task(nout=2)
 def get_video_and_generate_thumbnails(
-    video_uri: str, bucket: str, credentials_file: str
+    session_content_hash: str, video_uri: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
     pass
 
