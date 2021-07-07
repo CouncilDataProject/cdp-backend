@@ -76,7 +76,8 @@ docs: ## Generate Sphinx HTML documentation, including API docs, and serve to br
 run-rand-event-pipeline: ## Run event pipeline using random event gen, requires "key"
 	run_cdp_event_gather \
 		-g $(key) \
-		-e cdp_backend.pipeline.mock_get_events.get_events
+		-e cdp_backend.pipeline.mock_get_events.get_events \
+		--parallel
 
 run-min-event-pipeline: ## Run event pipeline using minimal event def, requires "key"
 	run_cdp_event_gather \

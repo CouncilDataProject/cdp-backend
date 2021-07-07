@@ -10,6 +10,10 @@ from importlib import import_module
 from pathlib import Path
 from typing import Callable
 
+from distributed import Client, LocalCluster
+from prefect.engine.executors.dask import DaskExecutor
+from prefect.engine.executors.local import LocalExecutor
+
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 
 ###############################################################################
@@ -60,6 +64,16 @@ class Args(argparse.Namespace):
                 "Default: None (assume bucket name from GCP project id)"
             ),
         )
+        p.add_argument(
+            "--p",
+            "--parallel",
+            action="store_true",
+            dest="parallel",
+            help=(
+                "Boolean option to spin up a local multi-threaded "
+                "Dask Distributed cluster for event processing."
+            ),
+        )
 
         p.parse_args(namespace=self)
 
@@ -88,11 +102,32 @@ def main() -> None:
         else:
             bucket = args.gcs_bucket
 
+        # Get flow definition
         flow = pipeline.create_event_gather_flow(
             get_events_func, credentials_file, bucket
         )
 
-        flow.run()
+        # Determine executor
+        if args.parallel:
+            # Create local cluster
+            log.info("Creating LocalCluster")
+            cluster = LocalCluster(processes=False)
+            log.info("Created LocalCluster")
+
+            # Set distributed_executor_address
+            distributed_executor_address = cluster.scheduler_address
+
+            # Log dashboard URI
+            log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
+
+            # Use dask cluster
+            exe = DaskExecutor(distributed_executor_address)
+
+        else:
+            # Default to local
+            exe = LocalExecutor()
+
+        flow.run(executor=exe)
 
     except Exception as e:
         log.error("=============================================")
