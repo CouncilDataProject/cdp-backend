@@ -63,22 +63,22 @@ SEAT_URI = "https://councildataproject.github.io/imgs/seattle.jpg"
 
 SESSIONS = [
     (
-        "https://youtu.be/BkWNBqlZjGk",
-        "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_101220_2022077.vtt",  # noqa
+        "https://video.seattle.gov/media/council/council_010421_2022101V.mp4",
+        "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_010421_2022101V.vtt",  # noqa
     ),
     (
-        "https://youtu.be/DU1pycy73yI",
+        "https://video.seattle.gov/media/council/council_113020_2022091V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt",  # noqa
     ),
     (
-        "https://youtu.be/ePTZs5ZxCnc",
+        "https://video.seattle.gov/media/council/council_112320_2022089V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt",  # noqa
     ),
     (
-        "https://youtu.be/51jNLMQ3qB8",
+        "https://video.seattle.gov/media/council/council_110920_2022085V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt",  # noqa
     ),
-    ("https://youtu.be/fgr2sYYJy0Q", None),
+    ("https://video.seattle.gov/media/council/council_101220_2022077V.mp4", None),
 ]
 
 
