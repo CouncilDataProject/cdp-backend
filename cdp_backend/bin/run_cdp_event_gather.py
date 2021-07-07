@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Callable
 
 from distributed import LocalCluster
-from prefect.engine import executors
+from prefect import executors
 
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 
