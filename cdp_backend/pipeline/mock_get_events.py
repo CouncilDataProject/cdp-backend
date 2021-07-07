@@ -64,7 +64,7 @@ SEAT_URI = "https://councildataproject.github.io/imgs/seattle.jpg"
 SESSIONS = [
     (
         "https://video.seattle.gov/media/council/council_010421_2022101V.mp4",
-        "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_010421_2022101V.vtt",  # noqa
+        "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2021/council_010421_2022101.vtt",  # noqa
     ),
     (
         "https://video.seattle.gov/media/council/council_113020_2022091V.mp4",
