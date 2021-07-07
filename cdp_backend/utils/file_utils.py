@@ -92,7 +92,7 @@ def resource_copy(
 
     # Open requests connection to uri as a stream
     log.debug(f"Beginning external resource copy from: {uri}")
-    with fsspec.open(uri, "rb") as open_source:
+    with fsspec.open(uri, "rb", block_size=0) as open_source:
         with open(dst, "wb") as open_target:
             shutil.copyfileobj(open_source, open_target)
     log.debug(f"Completed external resource copy from: {uri}")
@@ -167,7 +167,7 @@ def split_audio(
     )
 
 
-def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
+def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
     """
     Return the SHA256 hash of a file's content.
 
