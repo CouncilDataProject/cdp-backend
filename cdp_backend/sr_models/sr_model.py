@@ -33,7 +33,6 @@ class SRModel(ABC):
 
     @staticmethod
     def _clean_word(word: str) -> str:
-        text_cleaner = re.compile(r"[^a-zA-Z0-9'\-]")
-        cleaned_word = text_cleaner.sub("", word).lower()
+        cleaned_word = re.sub(r"[^\w\/\-\']+", "", word).lower()
 
         return cleaned_word
