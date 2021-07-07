@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
 import logging
+from pathlib import Path
 from typing import Callable, List, Optional, Tuple
 
 from prefect import Flow, task
@@ -150,18 +150,26 @@ def get_video_and_split_audio(
     # Get just the video filename from the full uri
     video_filename = video_uri.split("/")[-1]
     tmp_video_filepath = file_util_functions.resource_copy(
-        uri=video_uri, dst=f"audio-splitting-{video_filename}"
+        uri=video_uri,
+        dst=f"audio-splitting-{video_filename}",
+        overwrite=True,
     )
 
     # Hash the video contents
-    session_content_hash = file_util_functions.hash_file_contents(uri=tmp_video_filepath)
+    session_content_hash = file_util_functions.hash_file_contents(
+        uri=tmp_video_filepath
+    )
 
     # Check for existing audio
     tmp_audio_filepath = file_util_functions.join_strs_and_extension(
-        parts=[session_content_hash, "audio"], extension="wav"
+        parts=[session_content_hash, "audio"],
+        extension="wav",
+        delimiter="-",
     )
     audio_uri = fs_functions.get_file_uri(
-        bucket=bucket, filename=tmp_audio_filepath, credentials_file=credentials_file
+        bucket=bucket,
+        filename=tmp_audio_filepath,
+        credentials_file=credentials_file,
     )
 
     # If no pre-existing audio, split
@@ -196,15 +204,15 @@ def get_video_and_split_audio(
 
         # Create database models for audio files
         audio_file_db_model = db_functions.create_file(
-            name=fs_functions.create_filename_from_filepath(tmp_audio_filepath),
+            name=Path(tmp_audio_filepath).name,
             uri=audio_uri,
         )
         audio_out_file_db_model = db_functions.create_file(
-            name=fs_functions.create_filename_from_filepath(tmp_audio_log_out_filepath),
+            name=Path(tmp_audio_log_out_filepath).name,
             uri=audio_log_out_uri,
         )
         audio_err_file_db_model = db_functions.create_file(
-            name=fs_functions.create_filename_from_filepath(tmp_audio_log_err_filepath),
+            name=Path(tmp_audio_log_err_filepath).name,
             uri=audio_log_err_uri,
         )
 
@@ -299,7 +307,9 @@ def get_captions_and_generate_transcript(
     # Download or copy resource to local
     caption_filename = caption_uri.split("/")[-1]
     local_captions = file_util_functions.resource_copy(
-        uri=caption_uri, dst=f"caption-transcribing-{caption_filename}"
+        uri=caption_uri,
+        dst=f"caption-transcribing-{caption_filename}",
+        overwrite=True,
     )
 
     # Transcribe
@@ -346,9 +356,9 @@ def finalize_and_archive_transcript(
     transcript.session_datetime = session.session_datetime
 
     # Dump to JSON
-    transcript_save_name = f"{session_content_hash}.json"
+    transcript_save_name = f"{session_content_hash}-transcript.json"
     with open(transcript_save_name, "w") as open_resource:
-        json.dump(transcript.to_json(), open_resource)
+        open_resource.write(transcript.to_json())
 
     # Store to file store
     transcript_file_uri = fs_functions.upload_file(
@@ -366,13 +376,16 @@ def finalize_and_archive_transcript(
     # Store transcript reference
     # TODO:
     # Handle session / metadata upload
-    transcript_ref = db_functions.create_transcript(
-        transcript_file=file_ref,
-        session=session,
-        transcript=transcript,
-    )
+    # transcript_ref = db_functions.create_transcript(
+    #     transcript_file=file_ref,
+    #     session=session,
+    #     transcript=transcript,
+    # )
 
-    return transcript_ref.id
+    # Remove local transcript
+    fs_functions.remove_local_file(transcript_save_name)
+
+    return file_ref
 
 
 def generate_transcript(
@@ -442,7 +455,7 @@ def generate_transcript(
 def get_video_and_generate_thumbnails(
     session_content_hash: str, video_uri: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
-    pass
+    return (None, None)
 
 
 @task
