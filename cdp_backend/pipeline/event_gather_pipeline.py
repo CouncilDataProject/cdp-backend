@@ -3,12 +3,11 @@
 
 import logging
 from pathlib import Path
-from typing import Callable, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from prefect import Flow, task
 
 from ..database import functions as db_functions
-from ..database import models as db_models
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import file_utils as file_util_functions
@@ -126,7 +125,7 @@ def create_event_gather_flow(
 @task(nout=2)
 def get_video_and_split_audio(
     video_uri: str, bucket: str, credentials_file: str
-) -> str:
+) -> Tuple[str, str]:
     """
     Download (or copy) a video file to temp storage, split's the audio, and uploads
     the audio to Google storage.
@@ -295,7 +294,7 @@ def get_captions_and_generate_transcript(
         The produced transcript.
     """
     # If value provided, passthrough, otherwise ignore
-    model_kwargs = {}
+    model_kwargs: Dict[str, Any] = {}
     if new_turn_pattern is not None:
         model_kwargs["new_turn_pattern"] = new_turn_pattern
     if confidence is not None:
@@ -353,12 +352,12 @@ def finalize_and_archive_transcript(
         The id of the stored transcript reference in the database.
     """
     # Add session datetime to transcript
-    transcript.session_datetime = session.session_datetime
+    transcript.session_datetime = session.session_datetime.isoformat()
 
     # Dump to JSON
     transcript_save_name = f"{session_content_hash}-transcript.json"
     with open(transcript_save_name, "w") as open_resource:
-        open_resource.write(transcript.to_json())
+        open_resource.write(transcript.to_json())  # type: ignore
 
     # Store to file store
     transcript_file_uri = fs_functions.upload_file(
@@ -448,14 +447,14 @@ def generate_transcript(
         bucket=bucket,
         credentials_file=credentials_file,
         session=session,
-    )
+    )  # type: ignore
 
 
 @task(nout=2)
 def get_video_and_generate_thumbnails(
     session_content_hash: str, video_uri: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
-    return (None, None)
+    return ("", "")
 
 
 @task
@@ -465,5 +464,5 @@ def store_processed_session(
     transcript_uri: str,
     static_thumbnail_uri: str,
     hover_thumbnail_uri: str,
-) -> db_models.Session:
+) -> None:
     pass

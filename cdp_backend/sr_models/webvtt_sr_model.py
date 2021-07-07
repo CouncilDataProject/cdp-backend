@@ -75,9 +75,9 @@ class WebVTTSRModel(SRModel):
 
     def _get_speaker_turns(self, captions: List[Caption]) -> List[List[Caption]]:
         # Create list of speaker turns
-        speaker_turns = []
+        speaker_turns: List[List[Caption]] = []
         # List of captions of a speaker turn
-        speaker_turn = []
+        speaker_turn_captions: List[Caption] = []
         for caption in captions:
             new_turn_search = re.search(self.new_turn_pattern, caption.text)
 
@@ -86,20 +86,20 @@ class WebVTTSRModel(SRModel):
                 # Remove the new speaker turn pattern from caption's text
                 caption.text = new_turn_search.group(2)
                 # Append speaker turn to list of speaker turns
-                if speaker_turn:
-                    speaker_turns.append(speaker_turn)
+                if speaker_turn_captions:
+                    speaker_turns.append(speaker_turn_captions)
 
                 # Reset speaker_turn with this caption, for start of a new speaker turn
-                speaker_turn = [caption]
+                speaker_turn_captions = [caption]
 
             # Caption block is not a start of a new speaker turn
             else:
                 # Append caption to current speaker turn
-                speaker_turn.append(caption)
+                speaker_turn_captions.append(caption)
 
         # Add the last speaker turn
-        if speaker_turn:
-            speaker_turns.append(speaker_turn)
+        if speaker_turn_captions:
+            speaker_turns.append(speaker_turn_captions)
 
         return speaker_turns
 
@@ -190,7 +190,7 @@ class WebVTTSRModel(SRModel):
                 start_time = None
 
         # If any leftovers in lines, add a sentence for that.
-        if len(lines) > 0:
+        if len(lines) > 0 and start_time is not None:
             sentences.append(
                 self._construct_sentence(
                     lines=lines,

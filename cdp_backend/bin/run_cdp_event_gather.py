@@ -10,9 +10,8 @@ from importlib import import_module
 from pathlib import Path
 from typing import Callable
 
-from distributed import Client, LocalCluster
-from prefect.engine.executors.dask import DaskExecutor
-from prefect.engine.executors.local import LocalExecutor
+from distributed import LocalCluster
+from prefect.engine import executors
 
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 
@@ -121,13 +120,12 @@ def main() -> None:
             log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
 
             # Use dask cluster
-            exe = DaskExecutor(distributed_executor_address)
+            flow.run(
+                executor=executors.DaskExecutor(address=distributed_executor_address),
+            )
 
         else:
-            # Default to local
-            exe = LocalExecutor()
-
-        flow.run(executor=exe)
+            flow.run()
 
     except Exception as e:
         log.error("=============================================")
