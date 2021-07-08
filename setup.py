@@ -55,6 +55,7 @@ requirements = [
     "graphviz~=0.16",
     "imageio~=2.9.0",
     "imageio-ffmpeg~=0.4.4",
+    "nltk~=3.6.2",
     "pandas~=1.2.4",
     "prefect~=0.14.0",
     "pulumi~=3.3.0",
