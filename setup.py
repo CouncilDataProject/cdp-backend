@@ -62,7 +62,7 @@ requirements = [
     "pulumi-google-native~=0.1.0",
     "pulumi-gcp~=5.7.0",
     "spacy~=3.0.6",
-    "truecase~=0.0.9",
+    "truecase~=0.0.12",
     "webvtt-py~=0.4.6",
 ]
 
