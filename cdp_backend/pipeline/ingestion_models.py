@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
+from dataclasses_json import dataclass_json
+
 ###############################################################################
 
 
@@ -21,6 +23,7 @@ class IngestionModel:
 ###############################################################################
 
 
+@dataclass_json
 @dataclass
 class Seat(IngestionModel):
     """
@@ -39,6 +42,7 @@ class Seat(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Person(IngestionModel):
     """
@@ -69,6 +73,7 @@ class Person(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Vote(IngestionModel):
     """
@@ -85,6 +90,7 @@ class Vote(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class SupportingFile(IngestionModel):
     """
@@ -100,6 +106,7 @@ class SupportingFile(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Matter(IngestionModel):
     """
@@ -114,6 +121,7 @@ class Matter(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class MinutesItem(IngestionModel):
     """
@@ -126,6 +134,7 @@ class MinutesItem(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class EventMinutesItem(IngestionModel):
     """
@@ -150,6 +159,7 @@ class EventMinutesItem(IngestionModel):
     votes: Optional[List[Vote]] = None
 
 
+@dataclass_json
 @dataclass
 class Session(IngestionModel):
     """
@@ -164,6 +174,7 @@ class Session(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Body(IngestionModel):
     """
@@ -184,6 +195,7 @@ class Body(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Role(IngestionModel):
     """
@@ -207,6 +219,7 @@ class Role(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class EventIngestionModel(IngestionModel):
     """
