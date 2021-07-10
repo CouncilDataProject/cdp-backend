@@ -113,19 +113,7 @@ def create_event_gather_flow(
         events: List[EventIngestionModel] = get_events_func()
 
         for event in events:
-            # TODO add upload calls for non-minimal event
             for session in event.sessions:
-                # TODO create/get transcript
-
-                # Create db session
-                # session_ref = db_functions.upload_db_model_task(
-                #     db_functions.create_session_from_ingestion_model(
-                #         session, event_ref
-                #     ),
-                #     session,
-                #     creds_file=credentials_file,
-                # )
-
                 # Get or create audio
                 session_content_hash, audio_uri = get_video_and_split_audio(
                     video_uri=session.video_uri,
@@ -462,7 +450,7 @@ def generate_transcript(
     # Check for existing transcript
     transcript_uri = fs_functions.get_file_uri(
         bucket=bucket,
-        filename=tmp_transcript_filepath,
+        filename=tmp_transcript_filepath,  # type: ignore
         credentials_file=credentials_file,
     )
 
@@ -486,15 +474,15 @@ def generate_transcript(
             )
 
         # Add extra metadata and upload
-        transcript_uri = finalize_and_archive_transcript(
+        return finalize_and_archive_transcript(  # type: ignore
             transcript=transcript,
             transcript_save_path=tmp_transcript_filepath,
             bucket=bucket,
             credentials_file=credentials_file,
             session=session,
         )
-
-    return transcript_uri
+    else:
+        return transcript_uri
 
 
 @task(nout=2)
@@ -511,5 +499,11 @@ def store_processed_session(
     transcript_uri: str,
     static_thumbnail_uri: str,
     hover_thumbnail_uri: str,
+    credentials_file: str,
 ) -> None:
+    # session_ref = db_functions.upload_db_model_task(
+    #     db_functions.create_session_from_ingestion_model(session, event_ref),
+    #     session,
+    #     creds_file=credentials_file,
+    # )
     pass
