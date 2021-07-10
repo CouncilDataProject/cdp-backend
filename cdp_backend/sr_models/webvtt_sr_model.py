@@ -14,6 +14,7 @@ import webvtt
 from webvtt.structures import Caption
 
 from ..pipeline.transcript_model import Sentence, Transcript, Word
+from ..version import __version__
 from .sr_model import SRModel
 
 ###############################################################################
@@ -240,11 +241,14 @@ class WebVTTSRModel(SRModel):
             sentence.index = sentence_index
             sentence.text = self._normalize_text(sentence.text)
 
-        return Transcript(
+        transcript = Transcript(
             confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
-            generator="CDP WebVTT Conversion",
+            generator=f"CDP WebVTT Conversion -- CDP v{__version__}",
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=sentences,
             annotations=None,
         )
+        log.info(f"Completed WebVTT transcript conversion for: {file_uri}")
+
+        return transcript

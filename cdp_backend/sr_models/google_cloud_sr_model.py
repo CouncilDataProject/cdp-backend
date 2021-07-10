@@ -10,6 +10,7 @@ from google.cloud import speech_v1p1beta1 as speech
 from spacy.lang.en import English
 
 from ..pipeline.transcript_model import Sentence, Transcript, Word
+from ..version import __version__
 from .sr_model import SRModel
 
 ###############################################################################
@@ -192,7 +193,7 @@ class GoogleCloudSRModel(SRModel):
         # Create transcript model
         transcript = Transcript(
             confidence=confidence,
-            generator="Google Speech-to-Text",
+            generator=f"Google Speech-to-Text -- CDP v{__version__}",
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,
