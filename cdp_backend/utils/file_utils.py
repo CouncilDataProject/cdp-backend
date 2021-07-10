@@ -96,7 +96,7 @@ def resource_copy(
         with open(dst, "wb") as open_target:
             shutil.copyfileobj(open_source, open_target)
     log.debug(f"Completed external resource copy from: {uri}")
-    log.info(f"Stored external resource copy: {dst}")
+    log.debug(f"Stored external resource copy: {dst}")
 
     return str(dst)
 
@@ -149,7 +149,7 @@ def split_audio(
     log.debug(f"Beginning audio separation for: {video_read_path}")
     out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
     log.debug(f"Completed audio separation for: {video_read_path}")
-    log.info(f"Stored audio: {audio_save_path}")
+    log.debug(f"Stored audio: {audio_save_path}")
 
     # Store logs
     ffmpeg_stdout_path = resolved_audio_save_path.with_suffix(".out")

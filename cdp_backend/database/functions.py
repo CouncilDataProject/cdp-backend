@@ -69,7 +69,7 @@ def update_db_model(
             if db_val != ingestion_val and ingestion_val is not None:
                 setattr(db_model, field, ingestion_val)
                 needs_update = True
-                log.info(
+                log.debug(
                     f"Updating {db_model.key} {field} from {db_val} to {ingestion_val}."
                 )
 
@@ -115,7 +115,7 @@ def upload_db_model(
     uniqueness_validation = get_model_uniqueness(db_model)
     if uniqueness_validation.is_unique:
         db_model.save()
-        log.info(
+        log.debug(
             f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
         )
     elif (

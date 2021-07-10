@@ -81,7 +81,7 @@ def get_model_uniqueness(model: Model) -> UniquenessValidation:
     # Fetch and assert single value
     results = list(query.fetch())
     if len(results) >= 1:
-        log.info(f"Found conflicting results={results} for model={model}.")
+        log.warning(f"Found conflicting results={results} for model={model}.")
         return UniquenessValidation(is_unique=False, conflicting_models=results)
 
     return UniquenessValidation(is_unique=True, conflicting_models=results)

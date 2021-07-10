@@ -120,12 +120,13 @@ def upload_file(
     # If no existing file, upload and remove local copy if desired
     else:
         save_url = GCS_URI.format(bucket=bucket, filename=save_name)
-
-        fs.put_file(resolved_filepath, f"{bucket}/{save_name}")
+        remote_uri = f"{bucket}/{save_name}"
+        fs.put_file(resolved_filepath, remote_uri)
 
         if remove_local:
             remove_local_file(resolved_filepath)
 
+        log.info(f"Stored local file: {resolved_filepath} to {remote_uri}")
         return save_url
 
 
@@ -141,4 +142,4 @@ def remove_local_file(filepath: Union[str, Path]) -> None:
     fs = LocalFileSystem()
     fs.rm(filepath)
 
-    log.info(f"Removed {filepath} from local file system.")
+    log.debug(f"Removed {filepath} from local file system.")
