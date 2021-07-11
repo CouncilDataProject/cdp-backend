@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Tuple
 
+import fireo
 from prefect import Flow, task
 
-# from ..database import functions as db_functions
+from ..database import functions as db_functions
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import file_utils as file_util_functions
@@ -33,50 +34,13 @@ log = logging.getLogger(__name__)
 # TODO: Either add ingestion model to upload_db_model_task call
 # or support db model updates without ingestion model
 
-# Audio
 
-# Create database models for audio files
-# audio_file_db_model = db_functions.create_file(
-#     name=Path(tmp_audio_filepath).name,
-#     uri=audio_uri,
-# )
-# audio_out_file_db_model = db_functions.create_file(
-#     name=Path(tmp_audio_log_out_filepath).name,
-#     uri=audio_log_out_uri,
-# )
-# audio_err_file_db_model = db_functions.create_file(
-#     name=Path(tmp_audio_log_err_filepath).name,
-#     uri=audio_log_err_uri,
-# )
-
-# Upload files to database
-# for db_model in [
-#     audio_file_db_model,
-#     audio_out_file_db_model,
-#     audio_err_file_db_model,
-# ]:
-#     db_functions.upload_db_model(
-#         db_model=db_model,
-#         ingestion_model=None,
-#         creds_file=credentials_file,
-#     )
-
-# Transcript
-
-# Store reference to file
-# file_ref = db_functions.create_file(
-#     name=transcript_save_name,
-#     uri=transcript_file_uri,
-# )
-
-# Store transcript reference
-# TODO:
-# Handle session / metadata upload
-# transcript_ref = db_functions.create_transcript(
-#     transcript_file=file_ref,
-#     session=session,
-#     transcript=transcript,
-# )
+class SessionProcessingResult(NamedTuple):
+    session: Session
+    audio_uri: str
+    transcript_uri: str
+    static_thumbnail_uri: str
+    hover_thumbnail_uri: str
 
 
 def create_event_gather_flow(
@@ -113,6 +77,7 @@ def create_event_gather_flow(
         events: List[EventIngestionModel] = get_events_func()
 
         for event in events:
+            session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
                 # Get or create audio
                 session_content_hash, audio_uri = get_video_and_split_audio(
@@ -144,13 +109,22 @@ def create_event_gather_flow(
                 )
 
                 # Store all processed and provided data
-                store_processed_session(
-                    session=session,
-                    audio_uri=audio_uri,
-                    transcript_uri=transcript_uri,
-                    static_thumbnail_uri=static_thumbnail_uri,
-                    hover_thumbnail_uri=hover_thumbnail_uri,
+                session_processing_results.append(
+                    compile_session_processing_result(  # type: ignore
+                        session=session,
+                        audio_uri=audio_uri,
+                        transcript_uri=transcript_uri,
+                        static_thumbnail_uri=static_thumbnail_uri,
+                        hover_thumbnail_uri=hover_thumbnail_uri,
+                    )
                 )
+
+            # Process all metadata and store event
+            store_event_processing_results(
+                event=event,
+                session_processing_results=session_processing_results,
+                credentials_file=credentials_file,
+            )
 
     return flow
 
@@ -489,21 +463,105 @@ def generate_transcript(
 def get_video_and_generate_thumbnails(
     session_content_hash: str, video_uri: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
-    return ("", "")
+    return (
+        f"{session_content_hash}-static-thumb.png",
+        f"{session_content_hash}-hover-thumb.gif",
+    )
 
 
 @task
-def store_processed_session(
+def compile_session_processing_result(
     session: Session,
     audio_uri: str,
     transcript_uri: str,
     static_thumbnail_uri: str,
     hover_thumbnail_uri: str,
+) -> SessionProcessingResult:
+    return SessionProcessingResult(
+        session=session,
+        audio_uri=audio_uri,
+        transcript_uri=transcript_uri,
+        static_thumbnail_uri=static_thumbnail_uri,
+        hover_thumbnail_uri=hover_thumbnail_uri,
+    )
+
+
+@task
+def store_event_processing_results(
+    event: EventIngestionModel,
+    session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
 ) -> None:
-    # session_ref = db_functions.upload_db_model_task(
-    #     db_functions.create_session_from_ingestion_model(session, event_ref),
-    #     session,
-    #     creds_file=credentials_file,
-    # )
-    pass
+    # Init transaction and auth
+    fireo.connection(from_file=credentials_file)
+
+    # Get high level event metadata and db models
+    # Upload body
+    body_db_model = db_functions.create_body_from_ingestion_model(body=event.body)
+    body_db_model = db_functions.upload_db_model(
+        db_model=body_db_model,
+        ingestion_model=event.body,
+    )
+
+    # Upload event
+    event_db_model = db_functions.create_event_from_ingestion_model(
+        event=event,
+        body_ref=body_db_model,
+    )
+    event_db_model = db_functions.upload_db_model(
+        db_model=event_db_model,
+        ingestion_model=event,
+    )
+
+    # Iter sessions
+    for session_result in session_processing_results:
+        # Upload audio file
+        audio_file_db_model = db_functions.create_file(uri=session_result.audio_uri)
+        audio_file_db_model = db_functions.upload_db_model(
+            db_model=audio_file_db_model,
+            exist_ok=True,
+        )
+
+        # Upload transcript file
+        transcript_file_db_model = db_functions.create_file(
+            uri=session_result.transcript_uri,
+        )
+        transcript_file_db_model = db_functions.upload_db_model(
+            db_model=transcript_file_db_model,
+            exist_ok=True,
+        )
+
+        # Upload static thumbnail
+        # static_thumbnail_file_db_model = db_functions.create_file(
+        #     uri=session_result.static_thumbnail_uri,
+        # )
+        # static_thumbnail_file_db_model = db_functions.upload_db_model(
+        #     db_model=static_thumbnail_file_db_model,
+        #     exist_ok=True,
+        # )
+
+        # Upload hover thumbnail
+        # hover_thumbnail_file_db_model = db_functions.create_file(
+        #     uri=session_result.hover_thumbnail_uri,
+        # )
+        # hover_thumbnail_file_db_model = db_functions.upload_db_model(
+        #     db_model=hover_thumbnail_file_db_model,
+        #     exist_ok=True,
+        # )
+
+        # Create session
+        session_db_model = db_functions.create_session_from_ingestion_model(
+            session=session_result.session,
+            event_ref=event_db_model,
+        )
+        session_db_model = db_functions.upload_db_model(
+            db_model=session_db_model,
+            ingestion_model=session_result.session,
+        )
+
+        # Create transcript
+        # transcript_db_model = db_functions.create_transcript(
+        #     transcript_file_ref=transcript_file_db_model,
+        #     session_ref=session_db_model,
+        #     transcript=transcript,
+        # )

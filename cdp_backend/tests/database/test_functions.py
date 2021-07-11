@@ -205,7 +205,8 @@ def test_upload_db_model(
                     mock_connector.return_value = None
 
                     actual_uploaded_model = db_functions.upload_db_model(
-                        db_model, ingestion_model, creds_file=""
+                        db_model,
+                        ingestion_model,
                     )
 
                     assert_db_models_equality(expected, actual_uploaded_model, True)
