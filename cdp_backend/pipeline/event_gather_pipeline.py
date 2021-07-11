@@ -4,7 +4,6 @@
 import logging
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Tuple
 
-import fireo
 from prefect import Flow, task
 
 from ..database import functions as db_functions
@@ -492,14 +491,12 @@ def store_event_processing_results(
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
 ) -> None:
-    # Init transaction and auth
-    fireo.connection(from_file=credentials_file)
-
     # Get high level event metadata and db models
     # Upload body
     body_db_model = db_functions.create_body_from_ingestion_model(body=event.body)
     body_db_model = db_functions.upload_db_model(
         db_model=body_db_model,
+        credentials_file=credentials_file,
         ingestion_model=event.body,
     )
 
@@ -510,6 +507,7 @@ def store_event_processing_results(
     )
     event_db_model = db_functions.upload_db_model(
         db_model=event_db_model,
+        credentials_file=credentials_file,
         ingestion_model=event,
     )
 
@@ -519,6 +517,7 @@ def store_event_processing_results(
         audio_file_db_model = db_functions.create_file(uri=session_result.audio_uri)
         audio_file_db_model = db_functions.upload_db_model(
             db_model=audio_file_db_model,
+            credentials_file=credentials_file,
             exist_ok=True,
         )
 
@@ -528,6 +527,7 @@ def store_event_processing_results(
         )
         transcript_file_db_model = db_functions.upload_db_model(
             db_model=transcript_file_db_model,
+            credentials_file=credentials_file,
             exist_ok=True,
         )
 
@@ -556,6 +556,7 @@ def store_event_processing_results(
         )
         session_db_model = db_functions.upload_db_model(
             db_model=session_db_model,
+            credentials_file=credentials_file,
             ingestion_model=session_result.session,
         )
 

@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from typing import Optional
 
+import fireo
 from fireo.models import Model
 from google.cloud.firestore_v1.transaction import Transaction
 
@@ -83,6 +84,7 @@ def update_db_model(
 
 def upload_db_model(
     db_model: Model,
+    credentials_file: str,
     transaction: Optional[Transaction] = None,
     ingestion_model: Optional[IngestionModel] = None,
     exist_ok: bool = False,
@@ -94,6 +96,8 @@ def upload_db_model(
     ----------
     db_model: Model
         The database model to upload.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
     transaction: Optional[Transaction]
         The transaction to write this model during.
     ingestion_model: Optional[IngestionModel]
@@ -115,6 +119,9 @@ def upload_db_model(
         More than one (1) conflicting model was found in the database. This should
         never occur and indicates that something is wrong with the database.
     """
+    # Init transaction and auth
+    fireo.connection(from_file=credentials_file)
+
     uniqueness_validation = get_model_uniqueness(db_model)
     if uniqueness_validation.is_unique:
         db_model.save(transaction=transaction)
