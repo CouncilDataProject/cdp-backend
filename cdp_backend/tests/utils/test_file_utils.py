@@ -3,10 +3,12 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import BinaryIO, Generator, List, Optional
 from unittest import mock
 
+import imageio
 import pytest
 from py._path.local import LocalPath
 
@@ -15,10 +17,12 @@ from cdp_backend.utils.file_utils import external_resource_copy
 
 #############################################################################
 
+example_file = "example_video.mp4"
+
 
 @pytest.fixture
 def example_video(resources_dir: Path) -> Path:
-    return resources_dir / "example_video.mp4"
+    return resources_dir / example_file
 
 
 class MockedResponse:
@@ -148,3 +152,62 @@ def test_split_audio(
 
         except Exception as e:
             raise e
+
+
+ending = "-static-thumbnail.png"
+
+
+@pytest.mark.parametrize(
+    "args, expected",
+    [
+        ([example_file, "example"], "example" + ending),
+        ([example_file, "example2", 45], "example2" + ending),
+        (["fake.mp4", "example"], Exception),
+        (["fake_creds.json", "example"], Exception),
+    ],
+)
+def test_static_thumbnail_generator(resources_dir: Path, args, expected: str):
+    args[0] = str(resources_dir) + "/" + args[0]
+
+    if type(expected) == type:
+        with pytest.raises(expected):
+            file_utils.get_static_thumbnail(*args)
+    else:
+        expected = str(resources_dir) + "/" + expected
+        result = file_utils.get_static_thumbnail(*args)
+        assert result == expected
+
+        assert Path(result).stat().st_size > 0
+
+        os.remove(result)
+
+
+ending = "-hover-thumbnail.gif"
+
+
+@pytest.mark.parametrize(
+    "args, expected, num_frames_expected",
+    [
+        ([example_file, "example"], "example" + ending, 10),
+        ([example_file, "example2", 15], "example2" + ending, 15),
+        (["fake.mp4", "example"], Exception, 0),
+        (["fake_creds.json", "example"], Exception, 0),
+    ],
+)
+def test_hover_thumbnail_generator(
+    resources_dir: Path, args, expected: str, num_frames_expected: int
+):
+    args[0] = str(resources_dir) + "/" + args[0]
+
+    if type(expected) == type:
+        with pytest.raises(expected):
+            file_utils.get_hover_thumbnail(*args)
+    else:
+        expected = str(resources_dir) + "/" + expected
+        result = file_utils.get_hover_thumbnail(*args)
+        assert result == expected
+
+        reader = imageio.get_reader(result)
+        assert reader._length == num_frames_expected
+
+        os.remove(result)

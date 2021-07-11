@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import logging
+import math
+import os
 import shutil
 from hashlib import sha256
 from pathlib import Path
@@ -9,6 +11,7 @@ from typing import List, Optional, Tuple, Union
 import dask.dataframe as dd
 import ffmpeg
 import fsspec
+import imageio
 import requests
 from prefect import task
 
@@ -167,6 +170,91 @@ def split_audio(
         str(ffmpeg_stdout_path),
         str(ffmpeg_stderr_path),
     )
+
+
+def get_static_thumbnail(
+    video_url: str, session_content_hash: str, seconds: int = 30
+) -> str:
+    """
+    A function that produces a png thumbnail image from an mp4 video file
+
+    Parameters
+    ----------
+    video_url: str
+        The URL of the video from which the thumbnail will be produced
+    session_content_hash: str
+        The hash of the video from which the thumbnail will be produced
+    seconds: int
+        Determines after how many seconds a frame will be selected to produce the
+        thumbnail. The default is 30 seconds
+
+
+    Returns
+    -------
+    str: cover_name
+        The name of the thumbnail file: Always the same as the name of the video file,
+        only a 'png' replaces the 'mp4'
+    """
+
+    reader = imageio.get_reader(video_url)
+    png_path = ""
+    if reader.get_length() > 1:
+        png_path = (
+            f"{os.path.dirname(video_url)}/{session_content_hash}"
+            + "-static-thumbnail.png"
+        )
+
+    try:
+        frame_to_take = math.floor(reader.get_meta_data()["fps"] * seconds)
+        image = reader.get_data(frame_to_take)
+        imageio.imwrite(png_path, image)
+    except:
+        image = reader.get_data(0)
+        imageio.imwrite(png_path, image)
+
+    return png_path
+
+
+def get_hover_thumbnail(
+    video_url: str, session_content_hash: str, num_frames: int = 10
+) -> str:
+    """
+    A function that produces a gif hover thumbnail from an mp4 video file
+
+    Parameters
+    ----------
+    video_url: str
+        The URL of the video from which the thumbnail will be produced
+    session_content_hash: str
+        The hash of the video from which the thumbnail will be produced
+    num_frames: int
+        Determines the number of frames in the thumbnail
+
+
+    Returns
+    -------
+    str: cover_name
+        The name of the thumbnail file: Always the same as the name of the video file,
+        only a 'gif' replaces the 'mp4'
+    """
+    reader = imageio.get_reader(video_url)
+    gif_path = ""
+    if reader.get_length() > 1:
+        gif_path = (
+            f"{os.path.dirname(video_url)}/{session_content_hash}"
+            + "-hover-thumbnail.gif"
+        )
+
+    count = 0
+    for i, image in enumerate(reader):
+        count += 1
+    step_length = math.floor(count / num_frames)
+
+    with imageio.get_writer(gif_path, mode="I") as writer:
+        for i in range(0, num_frames):
+            writer.append_data(reader.get_data(i * step_length))
+
+    return gif_path
 
 
 @task
