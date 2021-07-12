@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Tuple
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
 
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
@@ -17,15 +16,8 @@ from .transcript_model import Transcript
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
-)
-log = logging.getLogger(__name__)
-
-###############################################################################
-
 # TODO:
+# 2. add bin script config passing
 # 2. tests
 
 
@@ -85,6 +77,7 @@ def create_event_gather_flow(
                     session_content_hash=session_content_hash,
                     audio_uri=audio_uri,
                     session=session,
+                    event=event,
                     bucket=bucket,
                     credentials_file=credentials_file,
                     caption_new_speaker_turn_pattern=caption_new_speaker_turn_pattern,
@@ -217,6 +210,130 @@ def get_video_and_split_audio(
 
 
 @task
+def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List[str]:
+    """
+    Construct a list of phrases to use for Google Speech-to-Text speech adaption.
+
+    See: https://cloud.google.com/speech-to-text/docs/speech-adaptation
+
+    Parameters
+    ----------
+    event: EventIngestionModel
+        The event details to pull context from.
+
+    Returns
+    -------
+    phrases: List[str]
+        Compiled list of strings to act as target weights for the model.
+
+    Notes
+    -----
+    Phrases are added in order of importance until GCP phrase limits are met.
+    The order of importance is defined as:
+    1. body name
+    2. event minutes item names
+    3. councilmember names
+    4. matter titles
+    5. councilmember role titles
+    """
+    # Note: Google Speech-to-Text allows max 500 phrases
+    phrases: Set[str] = set()
+
+    PHRASE_LIMIT = 500
+    CUM_CHAR_LIMIT = 9900
+
+    # In line def for get character count
+    # Google Speech-to-Text allows cumulative max 9900 characters
+    def _get_total_char_count(phrases: Set[str]) -> int:
+        chars = 0
+        for phrase in phrases:
+            chars += len(phrase)
+
+        return chars
+
+    def _get_if_added_sum(phrases: Set[str], next_addition: str) -> int:
+        current_len = _get_total_char_count(phrases)
+        return current_len + len(next_addition)
+
+    def _within_limit(phrases: Set[str]) -> bool:
+        return (
+            _get_total_char_count(phrases) < CUM_CHAR_LIMIT
+            and len(phrases) < PHRASE_LIMIT
+        )
+
+    # Get body name
+    if _within_limit(phrases):
+        if _get_if_added_sum(phrases, event.body.name) < CUM_CHAR_LIMIT:
+            phrases.add(event.body.name)
+
+    # Extras from event minutes items
+    if event.event_minutes_items is not None:
+        # Get minutes item name
+        for event_minutes_item in event.event_minutes_items:
+            if _within_limit(phrases):
+                if (
+                    _get_if_added_sum(phrases, event_minutes_item.minutes_item.name)
+                    < CUM_CHAR_LIMIT
+                ):
+                    phrases.add(event_minutes_item.minutes_item.name)
+
+        # Get councilmember names from sponsors and votes
+        for event_minutes_item in event.event_minutes_items:
+            if event_minutes_item.matter is not None:
+                if event_minutes_item.matter.sponsors is not None:
+                    for sponsor in event_minutes_item.matter.sponsors:
+                        if _within_limit(phrases):
+                            if (
+                                _get_if_added_sum(phrases, sponsor.name)
+                                < CUM_CHAR_LIMIT
+                            ):
+                                phrases.add(sponsor.name)
+            if event_minutes_item.votes is not None:
+                for vote in event_minutes_item.votes:
+                    if _within_limit(phrases):
+                        if (
+                            _get_if_added_sum(phrases, vote.person.name)
+                            < CUM_CHAR_LIMIT
+                        ):
+                            phrases.add(vote.person.name)
+
+        # Get matter titles
+        for event_minutes_item in event.event_minutes_items:
+            if event_minutes_item.matter is not None:
+                if _within_limit(phrases):
+                    if (
+                        _get_if_added_sum(phrases, event_minutes_item.matter.title)
+                        < CUM_CHAR_LIMIT
+                    ):
+                        phrases.add(event_minutes_item.matter.title)
+
+        # Get councilmember role titles from sponsors and votes
+        for event_minutes_item in event.event_minutes_items:
+            if event_minutes_item.matter is not None:
+                if event_minutes_item.matter.sponsors is not None:
+                    for sponsor in event_minutes_item.matter.sponsors:
+                        if sponsor.roles is not None:
+                            for role in sponsor.roles:
+                                if (
+                                    _get_if_added_sum(phrases, role.title)
+                                    < CUM_CHAR_LIMIT
+                                ):
+                                    phrases.add(role.title)
+            if event_minutes_item.votes is not None:
+                for vote in event_minutes_item.votes:
+                    if vote.person.roles is not None:
+                        for role in vote.person.roles:
+                            if _within_limit(phrases):
+                                if (
+                                    _get_if_added_sum(phrases, role.title)
+                                    < CUM_CHAR_LIMIT
+                                ):
+                                    phrases.add(role.title)
+
+    return list(phrases)
+
+
+@task
 def use_speech_to_text_and_generate_transcript(
     audio_uri: str,
     credentials_file: str,
@@ -322,8 +439,8 @@ def finalize_and_archive_transcript(
 
     Returns
     -------
-    transcript_db_id: str
-        The id of the stored transcript reference in the database.
+    transcript_uri: str
+        The URI of the stored transcript JSON.
     """
     # Add session datetime to transcript
     transcript.session_datetime = session.session_datetime.isoformat()
@@ -373,6 +490,7 @@ def generate_transcript(
     session_content_hash: str,
     audio_uri: str,
     session: Session,
+    event: EventIngestionModel,
     bucket: str,
     credentials_file: str,
     caption_new_speaker_turn_pattern: Optional[str] = None,
@@ -392,6 +510,9 @@ def generate_transcript(
         Additionally, if a closed caption URI is available on the session object,
         the transcript produced from this function will have been created using WebVTT
         caption transform rather than Google Speech-to-Text.
+    event: EventIngestionModel
+        The parent event of the session. If no captions are available,
+        speech context phrases will be pulled from the whole event details.
     bucket: str
         The name of the GCS bucket to upload the produced audio to.
     credentials_file: str
@@ -420,11 +541,11 @@ def generate_transcript(
     with case(transcript_exists, False):
         # If no captions, generate transcript with Google Speech-to-Text
         if session.caption_uri is None:
-            # TODO:
-            # Get feeder phrases
+            phrases = construct_speech_to_text_phrases_context(event=event)
             transcript = use_speech_to_text_and_generate_transcript(
                 audio_uri=audio_uri,
                 credentials_file=credentials_file,
+                phrases=phrases,
             )
 
         # Process captions
