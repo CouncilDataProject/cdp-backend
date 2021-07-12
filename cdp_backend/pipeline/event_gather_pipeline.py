@@ -5,6 +5,7 @@ import logging
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Tuple
 
 from prefect import Flow, task
+from prefect.tasks.control_flow import case, merge
 
 from ..database import functions as db_functions
 from ..file_store import functions as fs_functions
@@ -25,13 +26,7 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 # TODO:
-# 2. move all db uploads to end
-# 4. session database upload
-# 5. tests
-
-# DB TODOS:
-# TODO: Either add ingestion model to upload_db_model_task call
-# or support db model updates without ingestion model
+# 2. tests
 
 
 class SessionProcessingResult(NamedTuple):
@@ -350,32 +345,28 @@ def finalize_and_archive_transcript(
     return transcript_file_uri
 
 
-@task
-def hash_transcription_parameters_for_filename(
+@task(nout=3)
+def check_for_existing_transcript(
     session_content_hash: str,
-    session: Session,
-) -> str:
-    # Get transcription params uniqueness
-    # Dump session to JSON and hash
-    tmp_session_storage = f"{session_content_hash}-session.json"
-    with open(tmp_session_storage, "w") as open_resource:
-        open_resource.write(session.to_json())  # type: ignore
-
-    # Get hash of full session parameters
-    session_parameters_hash = file_util_functions.hash_file_contents(
-        uri=tmp_session_storage,
-    )
-
-    # Remove local session file
-    fs_functions.remove_local_file(tmp_session_storage)
-
+    bucket: str,
+    credentials_file: str,
+) -> Tuple[str, Optional[str], bool]:
     # Combine to transcript filename
-    return (
+    tmp_transcript_filepath = (
         f"{session_content_hash}-"
-        f"{session_parameters_hash}-"
         f"cdp_{__version__.replace('.', '_')}-"
         f"transcript.json"
     )
+
+    # Check for existing transcript
+    transcript_uri = fs_functions.get_file_uri(
+        bucket=bucket,
+        filename=tmp_transcript_filepath,
+        credentials_file=credentials_file,
+    )
+    transcript_exists = True if transcript_uri is not None else False
+
+    return (tmp_transcript_filepath, transcript_uri, transcript_exists)
 
 
 def generate_transcript(
@@ -415,20 +406,18 @@ def generate_transcript(
     transcript_uri: The URI to the uploaded transcript file.
     """
     # Get unique transcript name from parameters and current lib version
-    tmp_transcript_filepath = hash_transcription_parameters_for_filename(
+    (
+        tmp_transcript_filepath,
+        transcript_uri,
+        transcript_exists,
+    ) = check_for_existing_transcript(
         session_content_hash=session_content_hash,
-        session=session,
-    )
-
-    # Check for existing transcript
-    transcript_uri = fs_functions.get_file_uri(
         bucket=bucket,
-        filename=tmp_transcript_filepath,  # type: ignore
         credentials_file=credentials_file,
     )
 
     # If no pre-existing transcript with the same parameters, generate
-    if transcript_uri is None:
+    with case(transcript_exists, False):
         # If no captions, generate transcript with Google Speech-to-Text
         if session.caption_uri is None:
             # TODO:
@@ -447,15 +436,19 @@ def generate_transcript(
             )
 
         # Add extra metadata and upload
-        return finalize_and_archive_transcript(  # type: ignore
+        generated_transcript = finalize_and_archive_transcript(
             transcript=transcript,
             transcript_save_path=tmp_transcript_filepath,
             bucket=bucket,
             credentials_file=credentials_file,
             session=session,
         )
-    else:
-        return transcript_uri
+
+    # Existing transcript
+    with case(transcript_uri, True):
+        found_transcript = transcript_uri
+
+    return merge(generated_transcript, found_transcript)  # type: ignore
 
 
 @task(nout=2)
