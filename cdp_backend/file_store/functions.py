@@ -126,7 +126,7 @@ def upload_file(
         if remove_local:
             remove_local_file(resolved_filepath)
 
-        log.info(f"Stored local file: {resolved_filepath} to {remote_uri}")
+        log.info(f"Uploaded local file: {resolved_filepath} to {remote_uri}")
         return save_url
 
 
