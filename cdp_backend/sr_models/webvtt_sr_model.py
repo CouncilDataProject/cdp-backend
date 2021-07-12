@@ -13,7 +13,7 @@ import truecase
 import webvtt
 from webvtt.structures import Caption
 
-from ..pipeline.transcript_model import Sentence, Transcript, Word
+from ..pipeline import transcript_model
 from ..version import __version__
 from .sr_model import SRModel
 
@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 
 
 class SpeakerRawBlock(NamedTuple):
-    words: List[Word]
+    words: List[transcript_model.Word]
     raw_text: str
 
 
@@ -111,7 +111,7 @@ class WebVTTSRModel(SRModel):
         start_time: float,
         confidence: float,
         speaker_index: int,
-    ) -> Sentence:
+    ) -> transcript_model.Sentence:
         # Construct sentence and raw words for Word and sentence processing
         text = " ".join(lines)
         raw_words = text.split()
@@ -121,10 +121,10 @@ class WebVTTSRModel(SRModel):
         caption_duration = caption.end_in_seconds - caption.start_in_seconds
 
         # Create collection of words
-        words: List[Word] = []
+        words: List[transcript_model.Word] = []
         for word_index, word in enumerate(raw_words):
             words.append(
-                Word(
+                transcript_model.Word(
                     index=word_index,
                     start_time=(
                         # Linear words per second
@@ -144,7 +144,7 @@ class WebVTTSRModel(SRModel):
             )
 
         # Append full sentence
-        return Sentence(
+        return transcript_model.Sentence(
             index=0,
             confidence=confidence,
             start_time=start_time,
@@ -159,7 +159,7 @@ class WebVTTSRModel(SRModel):
         self,
         speaker_turn_captions: List[Caption],
         speaker_index: int,
-    ) -> List[Sentence]:
+    ) -> List[transcript_model.Sentence]:
         # Create timestamped sentences
         sentences = []
         # List of text, representing a sentence
@@ -204,7 +204,9 @@ class WebVTTSRModel(SRModel):
 
         return sentences
 
-    def transcribe(self, file_uri: Union[str, Path], **kwargs: Any) -> Transcript:
+    def transcribe(
+        self, file_uri: Union[str, Path], **kwargs: Any
+    ) -> transcript_model.Transcript:
         """
         Converts a WebVTT closed caption file into the CDP Transcript Model.
 
@@ -215,7 +217,7 @@ class WebVTTSRModel(SRModel):
 
         Returns
         -------
-        transcript: Transcript
+        transcript: transcript_model.Transcript
             The contents of the VTT file as a CDP Transcript.
         """
         # Download punkt for truecase module
@@ -229,7 +231,7 @@ class WebVTTSRModel(SRModel):
         speaker_turns = self._get_speaker_turns(captions=captions)
 
         # Parse turns for sentences
-        sentences: List[Sentence] = []
+        sentences: List[transcript_model.Sentence] = []
         for speaker_index, speaker_turn in enumerate(speaker_turns):
             sentences += self._get_sentences(
                 speaker_turn_captions=speaker_turn,
@@ -241,7 +243,7 @@ class WebVTTSRModel(SRModel):
             sentence.index = sentence_index
             sentence.text = self._normalize_text(sentence.text)
 
-        transcript = Transcript(
+        transcript = transcript_model.Transcript(
             confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
             generator=f"CDP WebVTT Conversion -- CDP v{__version__}",
             session_datetime=None,
