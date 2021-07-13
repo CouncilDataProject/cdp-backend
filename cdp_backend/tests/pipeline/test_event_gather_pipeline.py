@@ -15,6 +15,7 @@ from cdp_backend.database import models as db_models
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline import transcript_model
 from cdp_backend.pipeline.ingestion_models import (
+    EXAMPLE_FILLED_EVENT,
     EXAMPLE_MINIMAL_EVENT,
     EventIngestionModel,
 )
@@ -29,6 +30,11 @@ def fake_creds_path(resources_dir: Path) -> Path:
 def min_get_events() -> List[EventIngestionModel]:
     event = EXAMPLE_MINIMAL_EVENT
     event.sessions[0].session_datetime = datetime(2019, 4, 13)
+    return [event]
+
+
+def filled_get_events() -> List[EventIngestionModel]:
+    event = EXAMPLE_FILLED_EVENT
     return [event]
 
 

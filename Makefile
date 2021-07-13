@@ -83,3 +83,9 @@ run-min-event-pipeline: ## Run event pipeline using minimal event def, requires 
 	run_cdp_event_gather \
 		-g ${key} \
 		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.min_get_events
+
+run-filled-event-pipeline: ## Run event pipeline using the filled event, requires "key"
+	run_cdp_event_gather \
+		-g $(key) \
+		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.filled_get_events \
+		--parallel

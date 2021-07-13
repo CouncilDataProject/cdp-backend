@@ -266,15 +266,18 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
     sessions=[
         Session(
             session_datetime=datetime.utcnow(),
-            video_uri="https://youtu.be/dQw4w9WgXcQ",
+            video_uri=(
+                "https://video.seattle.gov/media/council/council_101220_2022077V.mp4"
+            ),
             session_index=0,
         ),
         Session(
             session_datetime=datetime.utcnow(),
-            video_uri="https://youtu.be/dQw4w9WgXcQ",
+            video_uri=(
+                "https://video.seattle.gov/media/council/council_113020_2022091V.mp4"
+            ),
             caption_uri=(
-                "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/"
-                "2021/council_062821_2022151.vtt"
+                "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt"  # noqa: E501
             ),
             session_index=1,
         ),
