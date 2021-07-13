@@ -207,14 +207,10 @@ def test_hover_thumbnail_generator(
 ):
     args[0] = resources_dir / args[0]
 
-    if type(expected) == type:
-        with pytest.raises(expected):
-            file_utils.get_hover_thumbnail(*args)
-    else:
-        result = file_utils.get_hover_thumbnail(*args)
-        assert result == expected
+    result = file_utils.get_hover_thumbnail(*args)
+    assert result == expected
 
-        reader = imageio.get_reader(result)
-        assert reader._length == num_frames_expected
+    reader = imageio.get_reader(result)
+    assert reader._length == num_frames_expected
 
-        # os.remove(result)
+    os.remove(result)
