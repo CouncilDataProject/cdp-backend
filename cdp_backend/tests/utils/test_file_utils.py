@@ -154,60 +154,67 @@ def test_split_audio(
             raise e
 
 
-ending = "-static-thumbnail.png"
-
-
 @pytest.mark.parametrize(
     "args, expected",
     [
-        ([example_file, "example"], "example" + ending),
-        ([example_file, "example2", 45], "example2" + ending),
-        (["fake.mp4", "example"], Exception),
-        (["fake_creds.json", "example"], Exception),
+        ([example_file, "example"], "example-static-thumbnail.png"),
+        ([example_file, "example2", 45], "example2-static-thumbnail.png"),
+        ([example_file, "example3", 999999], "example3-static-thumbnail.png"),
+        pytest.param(
+            ["fake.mp4", "example"],
+            "",
+            marks=pytest.mark.raises(exception=FileNotFoundError),
+        ),
+        pytest.param(
+            ["fake_creds.json", "example"],
+            "",
+            marks=pytest.mark.raises(exception=ValueError),
+        ),
     ],
 )
 def test_static_thumbnail_generator(resources_dir: Path, args, expected: str):
-    args[0] = str(resources_dir) + "/" + args[0]
+    args[0] = resources_dir / args[0]
 
-    if type(expected) == type:
-        with pytest.raises(expected):
-            file_utils.get_static_thumbnail(*args)
-    else:
-        expected = str(resources_dir) + "/" + expected
-        result = file_utils.get_static_thumbnail(*args)
-        assert result == expected
+    result = file_utils.get_static_thumbnail(*args)
+    assert result == expected
 
-        assert Path(result).stat().st_size > 0
+    assert Path(result).stat().st_size > 0
 
-        os.remove(result)
-
-
-ending = "-hover-thumbnail.gif"
+    os.remove(result)
 
 
 @pytest.mark.parametrize(
     "args, expected, num_frames_expected",
     [
-        ([example_file, "example"], "example" + ending, 10),
-        ([example_file, "example2", 15], "example2" + ending, 15),
-        (["fake.mp4", "example"], Exception, 0),
-        (["fake_creds.json", "example"], Exception, 0),
+        ([example_file, "example"], "example-hover-thumbnail.gif", 10),
+        ([example_file, "example2", 15], "example2-hover-thumbnail.gif", 15),
+        pytest.param(
+            ["fake.mp4", "example"],
+            "",
+            0,
+            marks=pytest.mark.raises(exception=FileNotFoundError),
+        ),
+        pytest.param(
+            ["fake_creds.json", "example"],
+            "",
+            0,
+            marks=pytest.mark.raises(exception=ValueError),
+        ),
     ],
 )
 def test_hover_thumbnail_generator(
     resources_dir: Path, args, expected: str, num_frames_expected: int
 ):
-    args[0] = str(resources_dir) + "/" + args[0]
+    args[0] = resources_dir / args[0]
 
     if type(expected) == type:
         with pytest.raises(expected):
             file_utils.get_hover_thumbnail(*args)
     else:
-        expected = str(resources_dir) + "/" + expected
         result = file_utils.get_hover_thumbnail(*args)
         assert result == expected
 
         reader = imageio.get_reader(result)
         assert reader._length == num_frames_expected
 
-        os.remove(result)
+        # os.remove(result)
