@@ -155,27 +155,38 @@ def test_split_audio(
 
 
 @pytest.mark.parametrize(
-    "args, expected",
+    "video_url, session_content_hash, seconds, expected",
     [
-        ([example_file, "example"], "example-static-thumbnail.png"),
-        ([example_file, "example2", 45], "example2-static-thumbnail.png"),
-        ([example_file, "example3", 999999], "example3-static-thumbnail.png"),
+        (example_file, "example2", 45, "example2-static-thumbnail.png"),
+        (example_file, "example3", 999999, "example3-static-thumbnail.png"),
         pytest.param(
-            ["fake.mp4", "example"],
+            "fake.mp4",
+            "example",
+            30,
             "",
             marks=pytest.mark.raises(exception=FileNotFoundError),
         ),
         pytest.param(
-            ["fake_creds.json", "example"],
+            "fake_creds.json",
+            "example",
+            30,
             "",
             marks=pytest.mark.raises(exception=ValueError),
         ),
     ],
 )
-def test_static_thumbnail_generator(resources_dir: Path, args, expected: str):
-    args[0] = resources_dir / args[0]
+def test_static_thumbnail_generator(
+    resources_dir: Path,
+    video_url: Path,
+    session_content_hash: str,
+    seconds: int,
+    expected: str,
+) -> None:
+    video_url = resources_dir / video_url
 
-    result = file_utils.get_static_thumbnail(*args)
+    result = file_utils.get_static_thumbnail(
+        str(video_url), session_content_hash, seconds
+    )
     assert result == expected
 
     assert Path(result).stat().st_size > 0
@@ -184,33 +195,40 @@ def test_static_thumbnail_generator(resources_dir: Path, args, expected: str):
 
 
 @pytest.mark.parametrize(
-    "args, expected, num_frames_expected",
+    "video_url, session_content_hash, num_frames, expected",
     [
-        ([example_file, "example"], "example-hover-thumbnail.gif", 10),
-        ([example_file, "example2", 15], "example2-hover-thumbnail.gif", 15),
+        (example_file, "example2", 15, "example2-hover-thumbnail.gif"),
         pytest.param(
-            ["fake.mp4", "example"],
+            "fake.mp4",
+            "example",
+            10,
             "",
-            0,
             marks=pytest.mark.raises(exception=FileNotFoundError),
         ),
         pytest.param(
-            ["fake_creds.json", "example"],
+            "fake_creds.json",
+            "example",
+            10,
             "",
-            0,
             marks=pytest.mark.raises(exception=ValueError),
         ),
     ],
 )
 def test_hover_thumbnail_generator(
-    resources_dir: Path, args, expected: str, num_frames_expected: int
-):
-    args[0] = resources_dir / args[0]
+    resources_dir: Path,
+    video_url: Path,
+    session_content_hash: str,
+    num_frames: int,
+    expected: str,
+) -> None:
+    video_url = resources_dir / video_url
 
-    result = file_utils.get_hover_thumbnail(*args)
+    result = file_utils.get_hover_thumbnail(
+        str(video_url), session_content_hash, num_frames
+    )
     assert result == expected
 
     reader = imageio.get_reader(result)
-    assert reader._length == num_frames_expected
+    assert reader._length == num_frames
 
     os.remove(result)

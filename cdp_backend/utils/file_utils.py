@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import logging
 import math
-import os
 import shutil
 from hashlib import sha256
 from pathlib import Path
@@ -183,7 +182,7 @@ def get_static_thumbnail(
     video_path: str
         The URL of the video from which the thumbnail will be produced
     session_content_hash: str
-        The hash of the video from which the thumbnail will be produced
+        The video content hash. This will be used in the produced image file's name
     seconds: int
         Determines after how many seconds a frame will be selected to produce the
         thumbnail. The default is 30 seconds
@@ -205,7 +204,7 @@ def get_static_thumbnail(
     try:
         frame_to_take = math.floor(reader.get_meta_data()["fps"] * seconds)
         image = reader.get_data(frame_to_take)
-    except (ValueError, IndexError) as e:
+    except (ValueError, IndexError):
         reader = imageio.get_reader(video_path)
         image = reader.get_data(0)
     imageio.imwrite(png_path, image)
@@ -224,7 +223,7 @@ def get_hover_thumbnail(
     video_path: str
         The URL of the video from which the thumbnail will be produced
     session_content_hash: str
-        The hash of the video from which the thumbnail will be produced
+        The video content hash. This will be used in the produced image file's name
     num_frames: int
         Determines the number of frames in the thumbnail
 
