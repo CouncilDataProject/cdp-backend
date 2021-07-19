@@ -89,7 +89,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
@@ -212,6 +212,7 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -220,6 +221,7 @@
 <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
 <span class="kn">import</span> <span class="nn">ffmpeg</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">imageio</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">task</span>
 
@@ -378,6 +380,86 @@
         <span class="nb">str</span><span class="p">(</span><span class="n">ffmpeg_stdout_path</span><span class="p">),</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">ffmpeg_stderr_path</span><span class="p">),</span>
     <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_static_thumbnail"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">[docs]</a><span class="k">def</span> <span class="nf">get_static_thumbnail</span><span class="p">(</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that produces a png thumbnail image from a video file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    video_path: str</span>
+<span class="sd">        The URL of the video from which the thumbnail will be produced</span>
+<span class="sd">    session_content_hash: str</span>
+<span class="sd">        The video content hash. This will be used in the produced image file&#39;s name</span>
+<span class="sd">    seconds: int</span>
+<span class="sd">        Determines after how many seconds a frame will be selected to produce the</span>
+<span class="sd">        thumbnail. The default is 30 seconds</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str: cover_name</span>
+<span class="sd">        The name of the thumbnail file:</span>
+<span class="sd">        Always session_content_hash + &quot;-static-thumbnail.png&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
+    <span class="n">png_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">png_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-static-thumbnail.png&quot;</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">frame_to_take</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get_meta_data</span><span class="p">()[</span><span class="s2">&quot;fps&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">seconds</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">frame_to_take</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">imageio</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">png_path</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">png_path</span></div>
+
+
+<div class="viewcode-block" id="get_hover_thumbnail"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_hover_thumbnail">[docs]</a><span class="k">def</span> <span class="nf">get_hover_thumbnail</span><span class="p">(</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that produces a gif hover thumbnail from an mp4 video file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    video_path: str</span>
+<span class="sd">        The URL of the video from which the thumbnail will be produced</span>
+<span class="sd">    session_content_hash: str</span>
+<span class="sd">        The video content hash. This will be used in the produced image file&#39;s name</span>
+<span class="sd">    num_frames: int</span>
+<span class="sd">        Determines the number of frames in the thumbnail</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str: cover_name</span>
+<span class="sd">        The name of the thumbnail file:</span>
+<span class="sd">        Always session_content_hash + &quot;-hover-thumbnail.png&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
+    <span class="n">gif_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">gif_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-hover-thumbnail.gif&quot;</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">step_length</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">count</span> <span class="o">/</span> <span class="n">num_frames</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">gif_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">):</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">step_length</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">gif_path</span></div>
 
 
 <span class="nd">@task</span>
