@@ -13,10 +13,6 @@ from ..utils.constants_utils import get_all_class_attr_values
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
-)
 log = logging.getLogger(__name__)
 
 ###############################################################################

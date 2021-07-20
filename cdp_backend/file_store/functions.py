@@ -10,10 +10,6 @@ from gcsfs import GCSFileSystem
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
-)
 log = logging.getLogger(__name__)
 
 GCS_URI = "gs://{bucket}/{filename}"
