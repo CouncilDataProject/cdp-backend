@@ -6,14 +6,9 @@ import logging
 import sys
 import traceback
 from pathlib import Path
-from typing import List
 
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
-from cdp_backend.pipeline.ingestion_models import (
-    EXAMPLE_FILLED_EVENT,
-    EXAMPLE_MINIMAL_EVENT,
-    EventIngestionModel,
-)
+from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 
 ###############################################################################
 
@@ -49,36 +44,50 @@ class Args(argparse.Namespace):
         p.parse_args(namespace=self)
 
 
-def fake_get_events_minimal() -> List[EventIngestionModel]:
-    return [EXAMPLE_MINIMAL_EVENT]
-
-
-def fake_get_events_filled() -> List[EventIngestionModel]:
-    return [EXAMPLE_FILLED_EVENT]
-
-
-def fake_get_events_many() -> List[EventIngestionModel]:
-    return [EXAMPLE_MINIMAL_EVENT] * 4
-
-
 def main() -> None:
     try:
         args = Args()
-        minimal_flow = pipeline.create_event_gather_flow(
-            fake_get_events_minimal, "", ""
+
+        # Minimum event flow
+        minimal_flow_config = EventGatherPipelineConfig(
+            google_credentials_file="",
+            get_events_function_path=(
+                "cdp_backend.tests.pipeline.test_event_gather_pipeline.min_get_events"  # noqa: E501
+            ),
+            gcs_bucket_name="",
         )
+        minimal_flow_config._validated_gcs_bucket_name = ""
+        minimal_flow = pipeline.create_event_gather_flow(minimal_flow_config)
         minimal_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="minimal"),
             format="png",
         )
 
-        filled_flow = pipeline.create_event_gather_flow(fake_get_events_filled, "", "")
+        # Filled event flow
+        filled_flow_config = EventGatherPipelineConfig(
+            google_credentials_file="",
+            get_events_function_path=(
+                "cdp_backend.tests.pipeline.test_event_gather_pipeline.filled_get_events"  # noqa: E501
+            ),
+            gcs_bucket_name="",
+        )
+        filled_flow_config._validated_gcs_bucket_name = ""
+        filled_flow = pipeline.create_event_gather_flow(filled_flow_config)
         filled_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="filled"),
             format="png",
         )
 
-        many_flow = pipeline.create_event_gather_flow(fake_get_events_many, "", "")
+        # Many events flow
+        many_flow_config = EventGatherPipelineConfig(
+            google_credentials_file="",
+            get_events_function_path=(
+                "cdp_backend.tests.pipeline.test_event_gather_pipeline.many_get_events"  # noqa: E501
+            ),
+            gcs_bucket_name="",
+        )
+        many_flow_config._validated_gcs_bucket_name = ""
+        many_flow = pipeline.create_event_gather_flow(many_flow_config)
         many_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="many"),
             format="png",

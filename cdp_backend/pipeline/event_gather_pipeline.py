@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from importlib import import_module
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
 
 from prefect import Flow, task
@@ -12,13 +13,13 @@ from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import file_utils as file_util_functions
 from ..version import __version__
 from .ingestion_models import EventIngestionModel, Session
+from .pipeline_config import EventGatherPipelineConfig
 from .transcript_model import Transcript
 
 ###############################################################################
 
 # TODO:
-# 2. add bin script config passing
-# 2. tests
+# 1. tests
 
 
 class SessionProcessingResult(NamedTuple):
@@ -29,35 +30,31 @@ class SessionProcessingResult(NamedTuple):
     hover_thumbnail_uri: str
 
 
-def create_event_gather_flow(
-    get_events_func: Callable,
-    credentials_file: str,
-    bucket: str,
-    caption_new_speaker_turn_pattern: Optional[str] = None,
-    caption_confidence: Optional[float] = None,
-) -> Flow:
+def import_get_events_func(func_path: str) -> Callable:
+    path, func_name = str(func_path).rsplit(".", 1)
+    mod = import_module(path)
+
+    return getattr(mod, func_name)
+
+
+def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
     to preview, run, or visualize.
 
     Parameters
     ----------
-    get_events_func: Callable
-        The event gather function written by the CDP instance maintainer(s).
-    credentials_file: str
-        Path to Google Service Account Credentials JSON file.
-    bucket: str
-        Name of the GCS bucket to upload files to.
-    caption_new_speaker_turn_pattern: Optional[str]
-        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
-    caption_confidence: Optional[float]
-        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
+    config: EventGatherPipelineConfig
+        Configuration options for the pipeline.
 
     Returns
     -------
     flow: Flow
         The constructed CDP Event Gather Pipeline as a Prefect Flow.
     """
+    # Load get_events_func
+    get_events_func = import_get_events_func(config.get_events_function_path)
+
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
@@ -68,8 +65,8 @@ def create_event_gather_flow(
                 # Get or create audio
                 session_content_hash, audio_uri = get_video_and_split_audio(
                     video_uri=session.video_uri,
-                    bucket=bucket,
-                    credentials_file=credentials_file,
+                    bucket=config.validated_gcs_bucket_name,
+                    credentials_file=config.google_credentials_file,
                 )
 
                 # Generate transcript
@@ -78,10 +75,12 @@ def create_event_gather_flow(
                     audio_uri=audio_uri,
                     session=session,
                     event=event,
-                    bucket=bucket,
-                    credentials_file=credentials_file,
-                    caption_new_speaker_turn_pattern=caption_new_speaker_turn_pattern,
-                    caption_confidence=caption_confidence,
+                    bucket=config.validated_gcs_bucket_name,
+                    credentials_file=config.google_credentials_file,
+                    caption_new_speaker_turn_pattern=(
+                        config.caption_new_speaker_turn_pattern
+                    ),
+                    caption_confidence=config.caption_confidence,
                 )
 
                 # Generate thumbnails
@@ -91,8 +90,8 @@ def create_event_gather_flow(
                 ) = get_video_and_generate_thumbnails(
                     session_content_hash=session_content_hash,
                     video_uri=session.video_uri,
-                    bucket=bucket,
-                    credentials_file=credentials_file,
+                    bucket=config.validated_gcs_bucket_name,
+                    credentials_file=config.google_credentials_file,
                 )
 
                 # Store all processed and provided data
@@ -110,7 +109,7 @@ def create_event_gather_flow(
             store_event_processing_results(
                 event=event,
                 session_processing_results=session_processing_results,
-                credentials_file=credentials_file,
+                credentials_file=config.google_credentials_file,
             )
 
     return flow

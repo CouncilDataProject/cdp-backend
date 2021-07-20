@@ -73,19 +73,16 @@ docs: ## Generate Sphinx HTML documentation, including API docs, and serve to br
 	make gen-docs
 	$(BROWSER) docs/_build/html/index.html
 
-run-rand-event-pipeline: ## Run event pipeline using random event gen, requires "key"
+run-rand-event-pipeline: ## Run event pipeline using random event gen
 	run_cdp_event_gather \
-		-g $(key) \
-		-e cdp_backend.pipeline.mock_get_events.get_events \
+		example-configs/random-event.json \
 		--parallel
 
-run-min-event-pipeline: ## Run event pipeline using minimal event def, requires "key"
+run-min-event-pipeline: ## Run event pipeline using minimal event def
 	run_cdp_event_gather \
-		-g ${key} \
-		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.min_get_events
+		example-configs/min-event.json
 
-run-filled-event-pipeline: ## Run event pipeline using the filled event, requires "key"
+run-filled-event-pipeline: ## Run event pipeline using the filled event
 	run_cdp_event_gather \
-		-g $(key) \
-		-e cdp_backend.tests.pipeline.test_event_gather_pipeline.filled_get_events \
+		example-configs/filled-event.json \
 		--parallel

@@ -38,6 +38,11 @@ def filled_get_events() -> List[EventIngestionModel]:
     return [event]
 
 
+def many_get_events() -> List[EventIngestionModel]:
+    event = EXAMPLE_MINIMAL_EVENT
+    return [event] * 4
+
+
 @pytest.mark.parametrize("func", [min_get_events, rand_get_events])
 def test_create_event_gather_flow(func: Callable, tmpdir: LocalPath) -> None:
     flow = pipeline.create_event_gather_flow(
