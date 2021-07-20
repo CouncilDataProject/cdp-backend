@@ -12,7 +12,6 @@ import dask.dataframe as dd
 import ffmpeg
 import fsspec
 import imageio
-from prefect import task
 
 ###############################################################################
 
@@ -250,8 +249,7 @@ def get_hover_thumbnail(
     return gif_path
 
 
-@task
-def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
+def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
     """
     Return the SHA256 hash of a file's content.
 
