@@ -43,7 +43,7 @@ class WebVTTSRModel(SRModel):
         Default: "&gt;"
     confidence: float
         The confidence value to assign to the produced Transcript object.
-        Default: 1.0
+        Default: 0.97
     """
 
     END_OF_SENTENCE_PATTERN = r"^.+[.?!]\s*$"
@@ -51,7 +51,7 @@ class WebVTTSRModel(SRModel):
     def __init__(
         self,
         new_turn_pattern: str = "&gt;",
-        confidence: float = 1.0,
+        confidence: float = 0.97,
         **kwargs: Any,
     ):
         # New speaker turn must begin with one or more new_turn_pattern str
