@@ -156,11 +156,7 @@ def get_video_and_split_audio(
     )
 
     # Check for existing audio
-    tmp_audio_filepath = file_util_functions.join_strs_and_extension(
-        parts=[session_content_hash, "audio"],
-        extension="wav",
-        delimiter="-",
-    )
+    tmp_audio_filepath = f"{session_content_hash}-audio.wav"
     audio_uri = fs_functions.get_file_uri(
         bucket=bucket,
         filename=tmp_audio_filepath,

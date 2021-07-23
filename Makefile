@@ -86,3 +86,8 @@ run-filled-event-pipeline: ## Run event pipeline using the filled event
 	run_cdp_event_gather \
 		example-configs/filled-event.json \
 		--parallel
+
+run-many-event-pipeline: ## Run event pipeline using multiple events
+	run_cdp_event_gather \
+		example-configs/many-event.json \
+		--parallel

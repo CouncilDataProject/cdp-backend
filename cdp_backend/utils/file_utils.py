@@ -6,7 +6,7 @@ import math
 import shutil
 from hashlib import sha256
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
@@ -273,10 +273,3 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
-
-
-def join_strs_and_extension(
-    parts: List[str], extension: str, delimiter: str = "_"
-) -> str:
-    name_without_suffix = delimiter.join(parts)
-    return f"{name_without_suffix}.{extension}"
