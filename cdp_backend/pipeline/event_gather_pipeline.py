@@ -19,9 +19,6 @@ from .transcript_model import Transcript
 
 ###############################################################################
 
-# TODO:
-# 1. tests
-
 
 class SessionProcessingResult(NamedTuple):
     session: Session
