@@ -61,7 +61,10 @@ def test_get_video_and_split_audio(
     mock_get_file_uri.return_value = get_file_uri_value
     mock_upload_file.return_value = audio_upload_file_return
 
-    session_content_hash, audio_uri = pipeline.get_video_and_split_audio.run(
+    (
+        session_content_hash,
+        audio_uri,
+    ) = pipeline.get_video_and_split_audio.run(  # type: ignore
         video_uri=str(example_video),
         bucket="bucket",
         credentials_file="/fake/credentials/path",
