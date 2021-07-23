@@ -4,6 +4,7 @@
 from importlib import import_module
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
 
+from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
 
@@ -25,6 +26,7 @@ from .transcript_model import Transcript
 class SessionProcessingResult(NamedTuple):
     session: Session
     audio_uri: str
+    transcript: Transcript
     transcript_uri: str
     static_thumbnail_uri: str
     hover_thumbnail_uri: str
@@ -70,7 +72,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
                 )
 
                 # Generate transcript
-                transcript_uri = generate_transcript(
+                transcript_uri, transcript = generate_transcript(
                     session_content_hash=session_content_hash,
                     audio_uri=audio_uri,
                     session=session,
@@ -99,6 +101,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
                     compile_session_processing_result(  # type: ignore
                         session=session,
                         audio_uri=audio_uri,
+                        transcript=transcript,
                         transcript_uri=transcript_uri,
                         static_thumbnail_uri=static_thumbnail_uri,
                         hover_thumbnail_uri=hover_thumbnail_uri,
@@ -411,14 +414,14 @@ def get_captions_and_generate_transcript(
     return transcript
 
 
-@task
+@task(nout=2)
 def finalize_and_archive_transcript(
     transcript: Transcript,
     transcript_save_path: str,
     bucket: str,
     credentials_file: str,
     session: Session,
-) -> str:
+) -> Tuple[str, Transcript]:
     """
     Finalizes metadata for a Transcript object, stores the transcript as JSON to object
     storage and finally adds transcript and file objects to database.
@@ -440,6 +443,8 @@ def finalize_and_archive_transcript(
     -------
     transcript_uri: str
         The URI of the stored transcript JSON.
+    transcript: Transcript
+        The finalized in memory Transcript object.
     """
     # Add session datetime to transcript
     transcript.session_datetime = session.session_datetime.isoformat()
@@ -458,15 +463,39 @@ def finalize_and_archive_transcript(
     # Remove local transcript
     fs_functions.remove_local_file(transcript_save_path)
 
-    return transcript_file_uri
+    return transcript_file_uri, transcript
 
 
-@task(nout=3)
+@task(nout=4)
 def check_for_existing_transcript(
     session_content_hash: str,
     bucket: str,
     credentials_file: str,
-) -> Tuple[str, Optional[str], bool]:
+) -> Tuple[str, Optional[str], Optional[Transcript], bool]:
+    """
+    Check and load any existing transcript object.
+
+    Parameters
+    ----------
+    session_content_hash: str
+        The unique key (SHA256 hash of video content) for this session processing.
+    bucket: str
+        The bucket to store the transcript to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+
+    Returns
+    -------
+    transcript_filename: str
+        The filename of the transcript to create (or found).
+    transcript_uri: Optional[str]
+        If found, the transcript uri. Else, None.
+    transcript: Optional[Transcript]
+        If found, the loaded in-memory Transcript object. Else, None.
+    transcript_exists: bool
+        Boolean value for if the transcript was found or not.
+        Required for downstream Prefect usage.
+    """
     # Combine to transcript filename
     tmp_transcript_filepath = (
         f"{session_content_hash}-"
@@ -482,7 +511,15 @@ def check_for_existing_transcript(
     )
     transcript_exists = True if transcript_uri is not None else False
 
-    return (tmp_transcript_filepath, transcript_uri, transcript_exists)
+    # Load transcript if exists
+    if transcript_exists:
+        fs = GCSFileSystem(token=credentials_file)
+        with fs.open(transcript_uri, "r") as open_resource:
+            transcript = Transcript.from_json(open_resource.read())  # type: ignore
+    else:
+        transcript = None
+
+    return (tmp_transcript_filepath, transcript_uri, transcript, transcript_exists)
 
 
 def generate_transcript(
@@ -494,7 +531,7 @@ def generate_transcript(
     credentials_file: str,
     caption_new_speaker_turn_pattern: Optional[str] = None,
     caption_confidence: Optional[float] = None,
-) -> str:
+) -> Tuple[str, Transcript]:
     """
     Route transcript generation to the correct processing.
 
@@ -523,12 +560,16 @@ def generate_transcript(
 
     Returns
     -------
-    transcript_uri: The URI to the uploaded transcript file.
+    transcript_uri: str
+        The URI to the uploaded transcript file.
+    transcript: Transcript
+        The in-memory Transcript object.
     """
     # Get unique transcript name from parameters and current lib version
     (
         tmp_transcript_filepath,
         transcript_uri,
+        transcript,
         transcript_exists,
     ) = check_for_existing_transcript(
         session_content_hash=session_content_hash,
@@ -541,7 +582,7 @@ def generate_transcript(
         # If no captions, generate transcript with Google Speech-to-Text
         if session.caption_uri is None:
             phrases = construct_speech_to_text_phrases_context(event=event)
-            transcript = use_speech_to_text_and_generate_transcript(
+            generated_transcript = use_speech_to_text_and_generate_transcript(
                 audio_uri=audio_uri,
                 credentials_file=credentials_file,
                 phrases=phrases,
@@ -549,15 +590,18 @@ def generate_transcript(
 
         # Process captions
         else:
-            transcript = get_captions_and_generate_transcript(
+            generated_transcript = get_captions_and_generate_transcript(
                 caption_uri=session.caption_uri,
                 new_turn_pattern=caption_new_speaker_turn_pattern,
                 confidence=caption_confidence,
             )
 
         # Add extra metadata and upload
-        generated_transcript = finalize_and_archive_transcript(
-            transcript=transcript,
+        (
+            generated_transcript_uri,
+            generated_transcript,
+        ) = finalize_and_archive_transcript(
+            transcript=generated_transcript,
             transcript_save_path=tmp_transcript_filepath,
             bucket=bucket,
             credentials_file=credentials_file,
@@ -566,9 +610,13 @@ def generate_transcript(
 
     # Existing transcript
     with case(transcript_uri, True):
-        found_transcript = transcript_uri
+        found_transcript_uri = transcript_uri
+        found_transcript = transcript
 
-    return merge(generated_transcript, found_transcript)  # type: ignore
+    return (
+        merge(generated_transcript_uri, found_transcript_uri),  # type: ignore
+        merge(generated_transcript, found_transcript),  # type: ignore
+    )
 
 
 @task(nout=2)
@@ -585,6 +633,7 @@ def get_video_and_generate_thumbnails(
 def compile_session_processing_result(
     session: Session,
     audio_uri: str,
+    transcript: Transcript,
     transcript_uri: str,
     static_thumbnail_uri: str,
     hover_thumbnail_uri: str,
@@ -592,6 +641,7 @@ def compile_session_processing_result(
     return SessionProcessingResult(
         session=session,
         audio_uri=audio_uri,
+        transcript=transcript,
         transcript_uri=transcript_uri,
         static_thumbnail_uri=static_thumbnail_uri,
         hover_thumbnail_uri=hover_thumbnail_uri,
@@ -674,8 +724,12 @@ def store_event_processing_results(
         )
 
         # Create transcript
-        # transcript_db_model = db_functions.create_transcript(
-        #     transcript_file_ref=transcript_file_db_model,
-        #     session_ref=session_db_model,
-        #     transcript=transcript,
-        # )
+        transcript_db_model = db_functions.create_transcript(
+            transcript_file_ref=transcript_file_db_model,
+            session_ref=session_db_model,
+            transcript=session_result.transcript,
+        )
+        transcript_db_model = db_functions.upload_db_model(
+            db_model=transcript_db_model,
+            credentials_file=credentials_file,
+        )
