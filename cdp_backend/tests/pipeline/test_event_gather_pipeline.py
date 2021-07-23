@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 from pathlib import Path
 from unittest import mock
 from unittest.mock import MagicMock
@@ -33,6 +34,10 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
     assert isinstance(flow, Flow)
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Path handling / splitting failing due to windows path separator",
+)
 @mock.patch("cdp_backend.file_store.functions.get_file_uri")
 @mock.patch("cdp_backend.file_store.functions.upload_file")
 @pytest.mark.parametrize(

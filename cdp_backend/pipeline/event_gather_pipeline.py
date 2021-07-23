@@ -140,6 +140,8 @@ def get_video_and_split_audio(
         The URI to the uploaded audio file.
     """
     # Get just the video filename from the full uri
+    # TODO: Handle windows file splitting???
+    # Generally this is a URI but we do have a goal of a local file processing too...
     video_filename = video_uri.split("/")[-1]
     tmp_video_filepath = file_util_functions.resource_copy(
         uri=video_uri,
