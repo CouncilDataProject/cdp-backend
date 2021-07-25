@@ -23,14 +23,16 @@ Ready to contribute? Here's how to set up `cdp-backend` for local development.
 
 3. Install [graphviz](https://graphviz.org/download/)
 
-4. Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):
+4. Install [ffmpeg](https://ffmpeg.org/download.html)
+
+5. Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):
 
     ```bash
     cd cdp-backend/
     pip install -e .[dev]
     ```
 
-5. Create a branch for local development:
+6. Create a branch for local development:
 
     ```bash
     git checkout -b {your_development_type}/short-description
@@ -39,14 +41,14 @@ Ready to contribute? Here's how to set up `cdp-backend` for local development.
     Ex: feature/read-tiff-files or bugfix/handle-file-not-found<br>
     Now you can make your changes locally.
 
-6. When you're done making changes, check that your changes pass linting and
+7. When you're done making changes, check that your changes pass linting and
    tests, including testing other Python versions with make:
 
     ```bash
     make build
     ```
 
-7. Commit your changes and push your branch to GitHub:
+8. Commit your changes and push your branch to GitHub:
 
     ```bash
     git add .
@@ -54,7 +56,7 @@ Ready to contribute? Here's how to set up `cdp-backend` for local development.
     git push origin {your_development_type}/short-description
     ```
 
-8. Submit a pull request through the GitHub website.
+9. Submit a pull request through the GitHub website.
 
 ## Deploying
 
