@@ -111,6 +111,8 @@
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -126,6 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
@@ -232,7 +235,7 @@
 <span id="cdp-backend-sr-models-google-cloud-sr-model-module"></span><h2>cdp_backend.sr_models.google_cloud_sr_model module<a class="headerlink" href="#module-cdp_backend.sr_models.google_cloud_sr_model" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.sr_models.google_cloud_sr_model.</span></span><span class="sig-name descname"><span class="pre">GoogleCloudSRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credentials_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/sr_models/google_cloud_sr_model.html#GoogleCloudSRModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.sr_models.google_cloud_sr_model.</span></span><span class="sig-name descname"><span class="pre">GoogleCloudSRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/sr_models/google_cloud_sr_model.html#GoogleCloudSRModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#cdp_backend.sr_models.sr_model.SRModel" title="cdp_backend.sr_models.sr_model.SRModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdp_backend.sr_models.sr_model.SRModel</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel.transcribe">
@@ -243,14 +246,14 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_uri</strong> (<em>Union[str, Path]</em>) – The GCS file uri to the audio file or caption file to transcribe.
 It should be in format ‘gs://…’.</p></li>
-<li><p><strong>phrases</strong> (<em>Optional[List[str]] = None</em>) – A list of strings that make the SR model perform better.</p></li>
+<li><p><strong>phrases</strong> (<em>Optional[List[str]] = None</em>) – A list of strings to feed as targets to the model.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>outputs</strong> – The transcript model for the supplied media file.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Transcript" title="cdp_backend.database.models.Transcript">Transcript</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript">transcript_model.Transcript</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -276,7 +279,7 @@ It should be in format ‘gs://…’.</p></li>
 <dd class="field-even"><p><strong>outputs</strong> – The transcript model for the supplied media file.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Transcript" title="cdp_backend.database.models.Transcript">Transcript</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript">transcript_model.Transcript</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -305,8 +308,26 @@ It should be in format ‘gs://…’.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.sr_models.webvtt_sr_model.</span></span><span class="sig-name descname"><span class="pre">WebVTTSRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_turn_pattern</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'&amp;gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/sr_models/webvtt_sr_model.html#WebVTTSRModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.sr_models.webvtt_sr_model.</span></span><span class="sig-name descname"><span class="pre">WebVTTSRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_turn_pattern</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'&amp;gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.97</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/sr_models/webvtt_sr_model.html#WebVTTSRModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#cdp_backend.sr_models.sr_model.SRModel" title="cdp_backend.sr_models.sr_model.SRModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdp_backend.sr_models.sr_model.SRModel</span></code></a></p>
+<p>Initialize a WebVTT Conversion Model.</p>
+<p>This doesn’t do any actual speaker recognition, but rather will simply convert
+from WebVTT format into a CDP transcript object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_turn_pattern</strong> (<em>str</em>) – The character(s) to look for that indicate a new speaker turn.
+Default: “&amp;gt;”</p></li>
+<li><p><strong>confidence</strong> (<em>float</em>) – The confidence value to assign to the produced Transcript object.
+Default: 0.97</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.END_OF_SENTENCE_PATTERN">
+<span class="sig-name descname"><span class="pre">END_OF_SENTENCE_PATTERN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'^.+[.?!]\\s*$'</span></em><a class="headerlink" href="#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.END_OF_SENTENCE_PATTERN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">
 <span class="sig-name descname"><span class="pre">transcribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript"><span class="pre">cdp_backend.pipeline.transcript_model.Transcript</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/sr_models/webvtt_sr_model.html#WebVTTSRModel.transcribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe" title="Permalink to this definition">¶</a></dt>
@@ -319,7 +340,7 @@ It should be in format ‘gs://…’.</p></li>
 <dd class="field-even"><p><strong>transcript</strong> – The contents of the VTT file as a CDP Transcript.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Transcript" title="cdp_backend.database.models.Transcript">Transcript</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript">transcript_model.Transcript</a></p>
 </dd>
 </dl>
 </dd></dl>

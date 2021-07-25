@@ -109,6 +109,8 @@
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -124,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
@@ -274,6 +277,8 @@
       </ul></li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.constants.Order.ASCENDING">ASCENDING (cdp_backend.database.constants.Order attribute)</a>
 </li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.audio_uri">audio_uri (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -306,6 +311,10 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.caption_confidence">caption_confidence (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
+</li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.caption_new_speaker_turn_pattern">caption_new_speaker_turn_pattern (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Session.caption_uri">caption_uri (cdp_backend.database.models.Session attribute)</a>
 
       <ul>
@@ -481,6 +490,13 @@
 </li>
       </ul></li>
       <li>
+    cdp_backend.pipeline.pipeline_config
+
+      <ul>
+        <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.pipeline_config">module</a>
+</li>
+      </ul></li>
+      <li>
     cdp_backend.pipeline.transcript_model
 
       <ul>
@@ -501,8 +517,6 @@
         <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models.google_cloud_sr_model">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     cdp_backend.sr_models.sr_model
 
@@ -510,6 +524,8 @@
         <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models.sr_model">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     cdp_backend.sr_models.webvtt_sr_model
 
@@ -543,6 +559,13 @@
 
       <ul>
         <li><a href="cdp_backend.utils.resources.html#module-cdp_backend.utils.resources">module</a>
+</li>
+      </ul></li>
+      <li>
+    cdp_backend.version
+
+      <ul>
+        <li><a href="cdp_backend.html#module-cdp_backend.version">module</a>
 </li>
       </ul></li>
       <li><a href="cdp_backend.infrastructure.html#cdp_backend.infrastructure.cdp_stack.CDPStack">CDPStack (class in cdp_backend.infrastructure.cdp_stack)</a>
@@ -629,11 +652,19 @@
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.UniquenessValidation.conflicting_models">conflicting_models (cdp_backend.database.validators.UniquenessValidation attribute)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_body_from_ingestion_model">create_body_from_ingestion_model() (in module cdp_backend.database.functions)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.create_constant_value_validator">create_constant_value_validator() (in module cdp_backend.database.validators)</a>
+</li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_event_from_ingestion_model">create_event_from_ingestion_model() (in module cdp_backend.database.functions)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow">create_event_gather_flow() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
 </li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_or_get_audio">create_or_get_audio() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_file">create_file() (in module cdp_backend.database.functions)</a>
+</li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_session_from_ingestion_model">create_session_from_ingestion_model() (in module cdp_backend.database.functions)</a>
+</li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_transcript">create_transcript() (in module cdp_backend.database.functions)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.created">created (cdp_backend.database.models.Transcript attribute)</a>
 </li>
@@ -707,6 +738,8 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.end_datetime">(cdp_backend.pipeline.ingestion_models.Role attribute)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.END_OF_SENTENCE_PATTERN">END_OF_SENTENCE_PATTERN (cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel attribute)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.end_time">end_time (cdp_backend.pipeline.transcript_model.Sentence attribute)</a>
 
       <ul>
@@ -733,6 +766,8 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.event_ref">(cdp_backend.database.models.Vote attribute)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig">EventGatherPipelineConfig (class in cdp_backend.pipeline.pipeline_config)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel">EventIngestionModel (class in cdp_backend.pipeline.ingestion_models)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem">EventMinutesItem (class in cdp_backend.database.models)</a>
@@ -781,8 +816,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.external_resource_copy">external_resource_copy() (in module cdp_backend.utils.file_utils)</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.external_source_id">external_source_id (cdp_backend.database.models.Body attribute)</a>
 
       <ul>
@@ -841,31 +874,75 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.constants.EventMinutesItemDecision.FAILED">FAILED (cdp_backend.database.constants.EventMinutesItemDecision attribute)</a>
 </li>
-      <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_filled">fake_get_events_filled() (in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
-</li>
-      <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_many">fake_get_events_many() (in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
-</li>
-      <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_minimal">fake_get_events_minimal() (in module cdp_backend.bin.create_cdp_event_gather_flow_viz)</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet.fields">fields (cdp_backend.database.types.IndexedFieldSet attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.File">File (class in cdp_backend.database.models)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.file_ref">file_ref (cdp_backend.database.models.Transcript attribute)</a>
 </li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.from_dict">from_dict() (cdp_backend.pipeline.transcript_model.Sentence class method)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.filled_get_events">filled_get_events() (in module cdp_backend.pipeline.mock_get_events)</a>
+</li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.from_dict">from_dict() (cdp_backend.pipeline.ingestion_models.Body class method)</a>
 
       <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.from_dict">(cdp_backend.pipeline.ingestion_models.EventIngestionModel class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.from_dict">(cdp_backend.pipeline.ingestion_models.EventMinutesItem class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.from_dict">(cdp_backend.pipeline.ingestion_models.Matter class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem.from_dict">(cdp_backend.pipeline.ingestion_models.MinutesItem class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.from_dict">(cdp_backend.pipeline.ingestion_models.Person class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.from_dict">(cdp_backend.pipeline.ingestion_models.Role class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.from_dict">(cdp_backend.pipeline.ingestion_models.Seat class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.from_dict">(cdp_backend.pipeline.ingestion_models.Session class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile.from_dict">(cdp_backend.pipeline.ingestion_models.SupportingFile class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote.from_dict">(cdp_backend.pipeline.ingestion_models.Vote class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.from_dict">(cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.from_dict">(cdp_backend.pipeline.transcript_model.Sentence class method)</a>
+</li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.from_dict">(cdp_backend.pipeline.transcript_model.Transcript class method)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word.from_dict">(cdp_backend.pipeline.transcript_model.Word class method)</a>
 </li>
       </ul></li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.from_json">from_json() (cdp_backend.pipeline.transcript_model.Sentence class method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.from_json">from_json() (cdp_backend.pipeline.ingestion_models.Body class method)</a>
 
       <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.from_json">(cdp_backend.pipeline.ingestion_models.EventIngestionModel class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.from_json">(cdp_backend.pipeline.ingestion_models.EventMinutesItem class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.from_json">(cdp_backend.pipeline.ingestion_models.Matter class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem.from_json">(cdp_backend.pipeline.ingestion_models.MinutesItem class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.from_json">(cdp_backend.pipeline.ingestion_models.Person class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.from_json">(cdp_backend.pipeline.ingestion_models.Role class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.from_json">(cdp_backend.pipeline.ingestion_models.Seat class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.from_json">(cdp_backend.pipeline.ingestion_models.Session class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile.from_json">(cdp_backend.pipeline.ingestion_models.SupportingFile class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote.from_json">(cdp_backend.pipeline.ingestion_models.Vote class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.from_json">(cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.from_json">(cdp_backend.pipeline.transcript_model.Sentence class method)</a>
+</li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.from_json">(cdp_backend.pipeline.transcript_model.Transcript class method)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word.from_json">(cdp_backend.pipeline.transcript_model.Word class method)</a>
@@ -877,25 +954,31 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.gcs_bucket_name">gcs_bucket_name (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
+</li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.generate_transcript">generate_transcript() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.generator">generator (cdp_backend.pipeline.transcript_model.Transcript attribute)</a>
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.constants_utils.get_all_class_attr_values">get_all_class_attr_values() (in module cdp_backend.utils.constants_utils)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.get_events">get_events() (in module cdp_backend.pipeline.mock_get_events)</a>
 </li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.get_events_function_path">get_events_function_path (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.get_file_uri">get_file_uri() (in module cdp_backend.file_store.functions)</a>
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_hover_thumbnail">get_hover_thumbnail() (in module cdp_backend.utils.file_utils)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">get_media_type() (in module cdp_backend.utils.file_utils)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.get_model_uniqueness">get_model_uniqueness() (in module cdp_backend.database.validators)</a>
 </li>
-      <li><a href="cdp_backend.html#cdp_backend.get_module_version">get_module_version() (in module cdp_backend)</a>
-</li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">get_static_thumbnail() (in module cdp_backend.utils.file_utils)</a>
+</li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.google_credentials_file">google_credentials_file (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
 </li>
       <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel">GoogleCloudSRModel (class in cdp_backend.sr_models.google_cloud_sr_model)</a>
 </li>
@@ -905,12 +988,18 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.hash_file_contents">hash_file_contents() (in module cdp_backend.utils.file_utils)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.hover_thumbnail_ref">hover_thumbnail_ref (cdp_backend.database.models.Event attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.hover_thumbnail_uri">hover_thumbnail_uri (cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.hover_thumbnail_uri">hover_thumbnail_uri (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
+
+      <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.hover_thumbnail_uri">(cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -921,7 +1010,7 @@
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.image_uri">image_uri (cdp_backend.pipeline.ingestion_models.Seat attribute)</a>
 </li>
-      <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.import_get_events_func">import_get_events_func() (in module cdp_backend.bin.run_cdp_event_gather)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.import_get_events_func">import_get_events_func() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.in_majority">in_majority (cdp_backend.database.models.Vote attribute)</a>
 </li>
@@ -981,6 +1070,8 @@
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.main">(in module cdp_backend.bin.run_cdp_event_gather)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.many_get_events">many_get_events() (in module cdp_backend.pipeline.mock_get_events)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.matter">matter (cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Matter">Matter (class in cdp_backend.database.models)</a>
@@ -1051,6 +1142,8 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.Meta">(cdp_backend.database.models.Vote attribute)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.min_get_events">min_get_events() (in module cdp_backend.pipeline.mock_get_events)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.minutes_item">minutes_item (cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
 </li>
   </ul></td>
@@ -1121,6 +1214,8 @@
 </li>
         <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.mock_get_events">cdp_backend.pipeline.mock_get_events</a>
 </li>
+        <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.pipeline_config">cdp_backend.pipeline.pipeline_config</a>
+</li>
         <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.transcript_model">cdp_backend.pipeline.transcript_model</a>
 </li>
         <li><a href="cdp_backend.sr_models.html#module-cdp_backend.sr_models">cdp_backend.sr_models</a>
@@ -1138,6 +1233,8 @@
         <li><a href="cdp_backend.utils.html#module-cdp_backend.utils.file_utils">cdp_backend.utils.file_utils</a>
 </li>
         <li><a href="cdp_backend.utils.resources.html#module-cdp_backend.utils.resources">cdp_backend.utils.resources</a>
+</li>
+        <li><a href="cdp_backend.html#module-cdp_backend.version">cdp_backend.version</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1242,12 +1339,14 @@
 </li>
       <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.remove_local_file">remove_local_file() (in module cdp_backend.file_store.functions)</a>
 </li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.validators.resource_exists">resource_exists() (in module cdp_backend.database.validators)</a>
+      <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.resource_copy">resource_copy() (in module cdp_backend.utils.file_utils)</a>
 </li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.result_status">result_status (cdp_backend.pipeline.ingestion_models.Matter attribute)</a>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.validators.resource_exists">resource_exists() (in module cdp_backend.database.validators)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.result_status">result_status (cdp_backend.pipeline.ingestion_models.Matter attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Role">Role (class in cdp_backend.database.models)</a>
 
       <ul>
@@ -1270,9 +1369,33 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.schema">schema() (cdp_backend.pipeline.transcript_model.Sentence class method)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.schema">schema() (cdp_backend.pipeline.ingestion_models.Body class method)</a>
 
       <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.schema">(cdp_backend.pipeline.ingestion_models.EventIngestionModel class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.schema">(cdp_backend.pipeline.ingestion_models.EventMinutesItem class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.schema">(cdp_backend.pipeline.ingestion_models.Matter class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem.schema">(cdp_backend.pipeline.ingestion_models.MinutesItem class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.schema">(cdp_backend.pipeline.ingestion_models.Person class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.schema">(cdp_backend.pipeline.ingestion_models.Role class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.schema">(cdp_backend.pipeline.ingestion_models.Seat class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.schema">(cdp_backend.pipeline.ingestion_models.Session class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile.schema">(cdp_backend.pipeline.ingestion_models.SupportingFile class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote.schema">(cdp_backend.pipeline.ingestion_models.Vote class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.schema">(cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig class method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.schema">(cdp_backend.pipeline.transcript_model.Sentence class method)</a>
+</li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.schema">(cdp_backend.pipeline.transcript_model.Transcript class method)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word.schema">(cdp_backend.pipeline.transcript_model.Word class method)</a>
@@ -1292,6 +1415,8 @@
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.sentences">sentences (cdp_backend.pipeline.transcript_model.Transcript attribute)</a>
 </li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session">session (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Session">Session (class in cdp_backend.database.models)</a>
 
       <ul>
@@ -1306,6 +1431,8 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.session_datetime">(cdp_backend.pipeline.transcript_model.Transcript attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Session.session_index">session_index (cdp_backend.database.models.Session attribute)</a>
 
       <ul>
@@ -1314,8 +1441,8 @@
       </ul></li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.session_ref">session_ref (cdp_backend.database.models.Transcript attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult">SessionProcessingResult (class in cdp_backend.pipeline.event_gather_pipeline)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.sessions">sessions (cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.speaker_index">speaker_index (cdp_backend.pipeline.transcript_model.Sentence attribute)</a>
@@ -1348,8 +1475,12 @@
       </ul></li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.static_thumbnail_ref">static_thumbnail_ref (cdp_backend.database.models.Event attribute)</a>
 </li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.static_thumbnail_uri">static_thumbnail_uri (cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.static_thumbnail_uri">static_thumbnail_uri (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
+
+      <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.static_thumbnail_uri">(cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
 </li>
+      </ul></li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterStatus.status">status (cdp_backend.database.models.MatterStatus attribute)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.supporting_files">supporting_files (cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>
@@ -1380,9 +1511,33 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.title">(cdp_backend.pipeline.ingestion_models.Role attribute)</a>
 </li>
       </ul></li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.to_dict">to_dict() (cdp_backend.pipeline.transcript_model.Sentence method)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.to_dict">to_dict() (cdp_backend.pipeline.ingestion_models.Body method)</a>
 
       <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.to_dict">(cdp_backend.pipeline.ingestion_models.EventIngestionModel method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.to_dict">(cdp_backend.pipeline.ingestion_models.EventMinutesItem method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.to_dict">(cdp_backend.pipeline.ingestion_models.Matter method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem.to_dict">(cdp_backend.pipeline.ingestion_models.MinutesItem method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.to_dict">(cdp_backend.pipeline.ingestion_models.Person method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.to_dict">(cdp_backend.pipeline.ingestion_models.Role method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.to_dict">(cdp_backend.pipeline.ingestion_models.Seat method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.to_dict">(cdp_backend.pipeline.ingestion_models.Session method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile.to_dict">(cdp_backend.pipeline.ingestion_models.SupportingFile method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote.to_dict">(cdp_backend.pipeline.ingestion_models.Vote method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.to_dict">(cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.to_dict">(cdp_backend.pipeline.transcript_model.Sentence method)</a>
+</li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.to_dict">(cdp_backend.pipeline.transcript_model.Transcript method)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word.to_dict">(cdp_backend.pipeline.transcript_model.Word method)</a>
@@ -1390,9 +1545,33 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.to_json">to_json() (cdp_backend.pipeline.transcript_model.Sentence method)</a>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.to_json">to_json() (cdp_backend.pipeline.ingestion_models.Body method)</a>
 
       <ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.to_json">(cdp_backend.pipeline.ingestion_models.EventIngestionModel method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.to_json">(cdp_backend.pipeline.ingestion_models.EventMinutesItem method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter.to_json">(cdp_backend.pipeline.ingestion_models.Matter method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem.to_json">(cdp_backend.pipeline.ingestion_models.MinutesItem method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.to_json">(cdp_backend.pipeline.ingestion_models.Person method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.to_json">(cdp_backend.pipeline.ingestion_models.Role method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.to_json">(cdp_backend.pipeline.ingestion_models.Seat method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.to_json">(cdp_backend.pipeline.ingestion_models.Session method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile.to_json">(cdp_backend.pipeline.ingestion_models.SupportingFile method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote.to_json">(cdp_backend.pipeline.ingestion_models.Vote method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.to_json">(cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig method)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence.to_json">(cdp_backend.pipeline.transcript_model.Sentence method)</a>
+</li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.to_json">(cdp_backend.pipeline.transcript_model.Transcript method)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word.to_json">(cdp_backend.pipeline.transcript_model.Word method)</a>
@@ -1406,12 +1585,16 @@
         <li><a href="cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">(cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel method)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript">transcript (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript">Transcript (class in cdp_backend.database.models)</a>
 
       <ul>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript">(class in cdp_backend.pipeline.transcript_model)</a>
 </li>
       </ul></li>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript_uri">transcript_uri (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TranscriptAnnotations">TranscriptAnnotations (class in cdp_backend.pipeline.transcript_model)</a>
 </li>
   </ul></td>
@@ -1450,20 +1633,22 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.validated_gcs_bucket_name">validated_gcs_bucket_name (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig property)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Session.video_uri">video_uri (cdp_backend.database.models.Session attribute)</a>
 
       <ul>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session.video_uri">(cdp_backend.pipeline.ingestion_models.Session attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote">Vote (class in cdp_backend.database.models)</a>
 
       <ul>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote">(class in cdp_backend.pipeline.ingestion_models)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.database.html#cdp_backend.database.constants.VoteDecision">VoteDecision (class in cdp_backend.database.constants)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem.votes">votes (cdp_backend.pipeline.ingestion_models.EventMinutesItem attribute)</a>

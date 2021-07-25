@@ -109,6 +109,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -124,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
@@ -191,8 +194,6 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
-        
       <li>cdp_backend.bin.run_cdp_event_gather</li>
     
     
@@ -213,15 +214,16 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">executors</span>
 
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">event_gather_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.pipeline.pipeline_config</span> <span class="kn">import</span> <span class="n">EventGatherPipelineConfig</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -244,66 +246,59 @@
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gather, process, and store event data to CDP infrastructure.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-g&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--google-credentials-file&quot;</span><span class="p">,</span>
-            <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;cdp-creds.json&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;config_file&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the Google Service Account Credentials JSON file.&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-e&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--get_events_function_path&quot;</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;get_events_function_path&quot;</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">&quot;Path to the function (including function name) that &quot;</span>
-                <span class="s2">&quot;supplies event data to the CDP event gather pipeline.&quot;</span>
+                <span class="s2">&quot;Path to the pipeline configuration file. &quot;</span>
+                <span class="s2">&quot;See cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig &quot;</span>
+                <span class="s2">&quot;for more details.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--google_cloud_storage_bucket_name&quot;</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gcs_bucket&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--p&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--parallel&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">&quot;Google Cloud Storage bucket name for file uploads. &quot;</span>
-                <span class="s2">&quot;Default: None (assume bucket name from GCP project id)&quot;</span>
+                <span class="s2">&quot;Boolean option to spin up a local multi-threaded &quot;</span>
+                <span class="s2">&quot;Dask Distributed cluster for event processing.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="import_get_events_func"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.import_get_events_func">[docs]</a><span class="k">def</span> <span class="nf">import_get_events_func</span><span class="p">(</span><span class="n">func_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-    <span class="n">path</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">func_path</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">mod</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">EventGatherPipelineConfig</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                <span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="p">)</span>
 
-        <span class="c1"># Unpack args</span>
-        <span class="n">credentials_file</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">google_credentials_file</span>
-        <span class="n">get_events_func</span> <span class="o">=</span> <span class="n">import_get_events_func</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">get_events_function_path</span><span class="p">)</span>
+        <span class="c1"># Get flow definition</span>
+        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 
-        <span class="c1"># Handle default None bucket</span>
-        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gcs_bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
-                <span class="n">project_id</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_resource</span><span class="p">)[</span><span class="s2">&quot;project_id&quot;</span><span class="p">]</span>
-                <span class="n">bucket</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.appspot.com&quot;</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Defaulting to bucket: </span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Determine executor</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">parallel</span><span class="p">:</span>
+            <span class="c1"># Create local cluster</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating LocalCluster&quot;</span><span class="p">)</span>
+            <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created LocalCluster&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Set distributed_executor_address</span>
+            <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
+
+            <span class="c1"># Log dashboard URI</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Use dask cluster</span>
+            <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">executor</span><span class="o">=</span><span class="n">executors</span><span class="o">.</span><span class="n">DaskExecutor</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">),</span>
+            <span class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">bucket</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">gcs_bucket</span>
-
-        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span>
-            <span class="n">get_events_func</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">,</span> <span class="n">bucket</span>
-        <span class="p">)</span>
-
-        <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>

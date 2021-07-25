@@ -62,3 +62,11 @@ If the result of the `get_events` function was a list of four
 
 And, if a `DaskExecutor` is also provided, all single event processing workflows
 would process in parallel (provided enough compute resources).
+
+### Pipeline Configuration
+
+Pipeline configuration is generally quite simple but can be quite complex if you
+need to parametrize specific tasks in the workflow. While generally you will only
+need to provide credential details and the `get_events_function` path, full pipeline
+configuration can be done with the options found in our
+[EventGatherPipelineConfig documentation](./cdp_backend.pipeline.html#module-cdp_backend.pipeline.pipeline_config)

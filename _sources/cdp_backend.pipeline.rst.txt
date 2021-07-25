@@ -28,6 +28,14 @@ cdp\_backend.pipeline.mock\_get\_events module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.pipeline.pipeline\_config module
+---------------------------------------------
+
+.. automodule:: cdp_backend.pipeline.pipeline_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.pipeline.transcript\_model module
 ----------------------------------------------
 

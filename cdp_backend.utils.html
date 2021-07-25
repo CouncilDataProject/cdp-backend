@@ -111,6 +111,8 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -126,6 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
@@ -263,29 +266,6 @@ Intended to be used to get all constant values of a class.</p>
 <div class="section" id="module-cdp_backend.utils.file_utils">
 <span id="cdp-backend-utils-file-utils-module"></span><h2>cdp_backend.utils.file_utils module<a class="headerlink" href="#module-cdp_backend.utils.file_utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.external_resource_copy">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">external_resource_copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#external_resource_copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.external_resource_copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy an external resource to a local destination on the machine.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>uri</strong> (<em>str</em>) – The uri for the external resource to copy.</p></li>
-<li><p><strong>dst</strong> (<em>Optional[Union[str, Path]]</em>) – A specific destination to where the copy should be placed. If None provided
-stores the resource in the current working directory.</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em>) – Boolean value indicating whether or not to overwrite a local resource with
-the same name if it already exists.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>saved_path</strong> – The path of where the resource ended up getting copied to.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.utils.file_utils.get_hover_thumbnail">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">get_hover_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_content_hash</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#get_hover_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.get_hover_thumbnail" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that produces a gif hover thumbnail from an mp4 video file</p>
@@ -344,6 +324,50 @@ Always session_content_hash + “-static-thumbnail.png”</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>cover_name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.hash_file_contents">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">hash_file_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">65536</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#hash_file_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.hash_file_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the SHA256 hash of a file’s content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uri</strong> (<em>str</em>) – The uri for the file to hash.</p></li>
+<li><p><strong>buffer_size</strong> (<em>int</em>) – The number of bytes to read at a time.
+Default: 2^16 (64KB)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>hash</strong> – The SHA256 hash for the file contents.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.resource_copy">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">resource_copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#resource_copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.resource_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a resource (local or remote) to a local destination on the machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uri</strong> (<em>str</em>) – The uri for the resource to copy.</p></li>
+<li><p><strong>dst</strong> (<em>Optional[Union[str, Path]]</em>) – A specific destination to where the copy should be placed. If None provided
+stores the resource in the current working directory.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Boolean value indicating whether or not to overwrite a local resource with
+the same name if it already exists.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>saved_path</strong> – The path of where the resource ended up getting copied to.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>

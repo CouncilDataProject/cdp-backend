@@ -111,6 +111,8 @@
 <li class="toctree-l4"><a class="reference internal" href="cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -126,6 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a><ul>
@@ -246,7 +249,7 @@ field will not be overwritten.</p>
 <p>Note: while this looks like a Python <code class="docutils literal notranslate"><span class="pre">Dict</span></code>, these objects are of type:
 <a class="reference external" href="./cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">IngestionModel</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full Council&#39;</span><span class="p">,</span> <span class="s1">&#39;is_active&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
- <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">556637</span><span class="p">),</span>
+ <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">556322</span><span class="p">),</span>
                <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://video.seattle.gov/media/council/brief_072219_2011957V.mp4&#39;</span><span class="p">,</span>
                <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]}</span>
 </pre></div>
@@ -257,9 +260,13 @@ field will not be overwritten.</p>
 <p>Note: while this looks like a Python <code class="docutils literal notranslate"><span class="pre">Dict</span></code>, these objects are of type:
 <a class="reference external" href="./cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">IngestionModel</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full Council&#39;</span><span class="p">,</span> <span class="s1">&#39;is_active&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
- <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">556646</span><span class="p">),</span>
-               <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://youtu.be/dQw4w9WgXcQ&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}],</span>
+ <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">556333</span><span class="p">),</span>
+               <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://video.seattle.gov/media/council/council_101220_2022077V.mp4&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+              <span class="p">{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">556335</span><span class="p">),</span>
+               <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://video.seattle.gov/media/council/council_113020_2022091V.mp4&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+               <span class="s1">&#39;caption_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&#39;</span><span class="p">}],</span>
  <span class="s1">&#39;event_minutes_items&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;minutes_item&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Inf 1656&#39;</span><span class="p">}},</span>
                          <span class="p">{</span><span class="s1">&#39;minutes_item&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;CB 119858&#39;</span><span class="p">},</span>
                           <span class="s1">&#39;matter&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;CB 119858&#39;</span><span class="p">,</span>

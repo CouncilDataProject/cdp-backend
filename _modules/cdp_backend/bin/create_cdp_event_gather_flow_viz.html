@@ -109,6 +109,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -124,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
@@ -191,8 +194,6 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
-        
       <li>cdp_backend.bin.create_cdp_event_gather_flow_viz</li>
     
     
@@ -217,13 +218,12 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">event_gather_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
-<span class="kn">from</span> <span class="nn">cdp_backend.pipeline.ingestion_models</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">EXAMPLE_FILLED_EVENT</span><span class="p">,</span>
-    <span class="n">EXAMPLE_MINIMAL_EVENT</span><span class="p">,</span>
-    <span class="n">EventIngestionModel</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.pipeline.mock_get_events</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">FILLED_FLOW_CONFIG</span><span class="p">,</span>
+    <span class="n">MANY_FLOW_CONFIG</span><span class="p">,</span>
+    <span class="n">MINIMAL_FLOW_CONFIG</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
@@ -260,36 +260,26 @@
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="fake_get_events_minimal"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_minimal">[docs]</a><span class="k">def</span> <span class="nf">fake_get_events_minimal</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">EXAMPLE_MINIMAL_EVENT</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="fake_get_events_filled"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_filled">[docs]</a><span class="k">def</span> <span class="nf">fake_get_events_filled</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">EXAMPLE_FILLED_EVENT</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="fake_get_events_many"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.fake_get_events_many">[docs]</a><span class="k">def</span> <span class="nf">fake_get_events_many</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">EXAMPLE_MINIMAL_EVENT</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span></div>
-
-
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.create_cdp_event_gather_flow_viz.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
-        <span class="n">minimal_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span>
-            <span class="n">fake_get_events_minimal</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
-        <span class="p">)</span>
+
+        <span class="c1"># Minimum event flow</span>
+        <span class="n">minimal_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">MINIMAL_FLOW_CONFIG</span><span class="p">)</span>
         <span class="n">minimal_flow</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;minimal&quot;</span><span class="p">),</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">filled_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_filled</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># Filled event flow</span>
+        <span class="n">filled_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">FILLED_FLOW_CONFIG</span><span class="p">)</span>
         <span class="n">filled_flow</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span><span class="p">),</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">many_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">fake_get_events_many</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># Many events flow</span>
+        <span class="n">many_flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">MANY_FLOW_CONFIG</span><span class="p">)</span>
         <span class="n">many_flow</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;many&quot;</span><span class="p">),</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>

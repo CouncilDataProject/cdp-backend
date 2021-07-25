@@ -109,6 +109,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
 </ul>
 </li>
@@ -124,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
@@ -191,8 +194,6 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-          <li><a href="../../cdp_backend.html">cdp_backend</a> &raquo;</li>
-        
       <li>cdp_backend.database.functions</li>
     
     
@@ -218,20 +219,16 @@
 
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">task</span>
+<span class="kn">from</span> <span class="nn">google.cloud.firestore_v1.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">exceptions</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
 <span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">get_model_uniqueness</span>
-<span class="kn">from</span> <span class="nn">..pipeline</span> <span class="kn">import</span> <span class="n">ingestion_models</span>
+<span class="kn">from</span> <span class="nn">..pipeline</span> <span class="kn">import</span> <span class="n">ingestion_models</span><span class="p">,</span> <span class="n">transcript_model</span>
 <span class="kn">from</span> <span class="nn">..pipeline.ingestion_models</span> <span class="kn">import</span> <span class="n">IngestionModel</span>
 
 <span class="c1">###############################################################################</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
-    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
-<span class="p">)</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
@@ -240,6 +237,7 @@
 <div class="viewcode-block" id="update_db_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.update_db_model">[docs]</a><span class="k">def</span> <span class="nf">update_db_model</span><span class="p">(</span>
     <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
     <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
+    <span class="n">transaction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compare an existing database model to an ingestion model and if the non-primary</span>
@@ -251,6 +249,8 @@
 <span class="sd">        The existing database model to compare new data against.</span>
 <span class="sd">    ingestion_model: IngestionModel</span>
 <span class="sd">        The data to compare against and potentially use for updating.</span>
+<span class="sd">    transaction: Optional[Transaction]</span>
+<span class="sd">        The transaction to write this model during.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -279,21 +279,23 @@
             <span class="k">if</span> <span class="n">db_val</span> <span class="o">!=</span> <span class="n">ingestion_val</span> <span class="ow">and</span> <span class="n">ingestion_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ingestion_val</span><span class="p">)</span>
                 <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Updating </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">db_val</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">ingestion_val</span><span class="si">}</span><span class="s2">.&quot;</span>
                 <span class="p">)</span>
 
     <span class="c1"># Avoid unnecessary db interactions</span>
     <span class="k">if</span> <span class="n">needs_update</span><span class="p">:</span>
-        <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">db_model</span></div>
 
 
 <div class="viewcode-block" id="upload_db_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.upload_db_model">[docs]</a><span class="k">def</span> <span class="nf">upload_db_model</span><span class="p">(</span>
     <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
-    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IngestionModel</span><span class="p">],</span>
-    <span class="n">creds_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">transaction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">exist_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Upload or update an existing database model.</span>
@@ -302,11 +304,17 @@
 <span class="sd">    ----------</span>
 <span class="sd">    db_model: Model</span>
 <span class="sd">        The database model to upload.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+<span class="sd">    transaction: Optional[Transaction]</span>
+<span class="sd">        The transaction to write this model during.</span>
 <span class="sd">    ingestion_model: Optional[IngestionModel]</span>
 <span class="sd">        The accompanying ingestion model in the case the model already exists and needs</span>
 <span class="sd">        to be updated rather than inserted.</span>
-<span class="sd">    creds_file: str</span>
-<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+<span class="sd">    exist_ok: bool</span>
+<span class="sd">        If there is an existing database document found during upload, is it okay for</span>
+<span class="sd">        it to exist and simply return.</span>
+<span class="sd">        Default: False</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -319,13 +327,13 @@
 <span class="sd">        More than one (1) conflicting model was found in the database. This should</span>
 <span class="sd">        never occur and indicates that something is wrong with the database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Initialize fireo connection</span>
-    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">creds_file</span><span class="p">)</span>
+    <span class="c1"># Init transaction and auth</span>
+    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
 
     <span class="n">uniqueness_validation</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
-        <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Saved new </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with document id=</span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="p">(</span>
@@ -333,11 +341,14 @@
         <span class="ow">and</span> <span class="n">ingestion_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="n">updated_db_model</span> <span class="o">=</span> <span class="n">update_db_model</span><span class="p">(</span>
-            <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">ingestion_model</span><span class="p">,</span>
+            <span class="n">db_model</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">ingestion_model</span><span class="o">=</span><span class="n">ingestion_model</span><span class="p">,</span>
+            <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">updated_db_model</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">exist_ok</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UniquenessError</span><span class="p">(</span>
             <span class="n">model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">conflicting_results</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span>
@@ -346,20 +357,7 @@
     <span class="k">return</span> <span class="n">db_model</span></div>
 
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">upload_db_model_task</span><span class="p">(</span>
-    <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
-    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
-    <span class="n">creds_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
-    <span class="c1"># Wraps the standard Python function in Prefect task</span>
-    <span class="k">return</span> <span class="n">upload_db_model</span><span class="p">(</span>
-        <span class="n">db_model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">ingestion_model</span><span class="o">=</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">creds_file</span><span class="o">=</span><span class="n">creds_file</span>
-    <span class="p">)</span>
-
-
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">:</span>
+<div class="viewcode-block" id="create_body_from_ingestion_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_body_from_ingestion_model">[docs]</a><span class="k">def</span> <span class="nf">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">:</span>
     <span class="n">db_body</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">()</span>
 
     <span class="c1"># Required fields</span>
@@ -380,11 +378,10 @@
     <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
         <span class="n">db_body</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span>
 
-    <span class="k">return</span> <span class="n">db_body</span>
+    <span class="k">return</span> <span class="n">db_body</span></div>
 
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_event_from_ingestion_model</span><span class="p">(</span>
+<div class="viewcode-block" id="create_event_from_ingestion_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_event_from_ingestion_model">[docs]</a><span class="k">def</span> <span class="nf">create_event_from_ingestion_model</span><span class="p">(</span>
     <span class="n">event</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">EventIngestionModel</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">:</span>
     <span class="n">db_event</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
@@ -399,11 +396,10 @@
 
     <span class="c1"># TODO add optional fields</span>
 
-    <span class="k">return</span> <span class="n">db_event</span>
+    <span class="k">return</span> <span class="n">db_event</span></div>
 
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_session_from_ingestion_model</span><span class="p">(</span>
+<div class="viewcode-block" id="create_session_from_ingestion_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_session_from_ingestion_model">[docs]</a><span class="k">def</span> <span class="nf">create_session_from_ingestion_model</span><span class="p">(</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
     <span class="n">db_session</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
@@ -421,16 +417,30 @@
     <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
         <span class="n">db_session</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span>
 
-    <span class="k">return</span> <span class="n">db_session</span>
+    <span class="k">return</span> <span class="n">db_session</span></div>
 
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">:</span>
+<div class="viewcode-block" id="create_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_file">[docs]</a><span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">:</span>
     <span class="n">db_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">()</span>
-    <span class="n">db_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">db_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">db_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
 
-    <span class="k">return</span> <span class="n">db_file</span>
+    <span class="k">return</span> <span class="n">db_file</span></div>
+
+
+<div class="viewcode-block" id="create_transcript"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_transcript">[docs]</a><span class="k">def</span> <span class="nf">create_transcript</span><span class="p">(</span>
+    <span class="n">transcript_file_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">,</span>
+    <span class="n">session_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span>
+    <span class="n">transcript</span><span class="p">:</span> <span class="n">transcript_model</span><span class="o">.</span><span class="n">Transcript</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">:</span>
+    <span class="n">db_transcript</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">()</span>
+
+    <span class="n">db_transcript</span><span class="o">.</span><span class="n">session_ref</span> <span class="o">=</span> <span class="n">session_ref</span>
+    <span class="n">db_transcript</span><span class="o">.</span><span class="n">file_ref</span> <span class="o">=</span> <span class="n">transcript_file_ref</span>
+    <span class="n">db_transcript</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">confidence</span>
+    <span class="n">db_transcript</span><span class="o">.</span><span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">transcript</span><span class="o">.</span><span class="n">created_datetime</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">db_transcript</span></div>
 </pre></div>
 
            </div>
