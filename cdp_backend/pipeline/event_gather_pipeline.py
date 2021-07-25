@@ -604,14 +604,24 @@ def generate_transcript(
         )
 
     # Existing transcript
-    with case(transcript_uri, True):
+    with case(transcript_exists, True):
         found_transcript_uri = transcript_uri
         found_transcript = transcript
 
-    return (
-        merge(generated_transcript_uri, found_transcript_uri),  # type: ignore
-        merge(generated_transcript, found_transcript),  # type: ignore
+    # Merge the two paths and results
+    # Set the names of the merge for visualization and testing purposes
+    result_transcript_uri = merge(  # type: ignore
+        generated_transcript_uri,
+        found_transcript_uri,
     )
+    result_transcript_uri.name = "merge_transcript_uri"
+    result_transcript = merge(  # type: ignore
+        generated_transcript,
+        found_transcript,
+    )
+    result_transcript.name = "merge_in_memory_transcript"
+
+    return (result_transcript_uri, result_transcript)
 
 
 @task(nout=2)
