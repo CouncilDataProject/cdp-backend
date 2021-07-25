@@ -188,7 +188,7 @@ def test_generate_transcript(
     state = flow.run()
 
     # Check state and results
-    assert state.is_successful()
+    assert state.is_successful()  # type: ignore
 
 
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
@@ -236,7 +236,7 @@ def test_store_event_processing_results(
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
 ) -> None:
-    pipeline.store_event_processing_results.run(
+    pipeline.store_event_processing_results.run(  # type: ignore
         event=event,
         session_processing_results=session_processing_results,
         credentials_file="fake/credentials.json",
