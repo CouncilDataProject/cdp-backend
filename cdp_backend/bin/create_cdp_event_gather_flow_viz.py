@@ -6,13 +6,12 @@ import logging
 import sys
 import traceback
 from pathlib import Path
-from typing import List
 
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
-from cdp_backend.pipeline.ingestion_models import (
-    EXAMPLE_FILLED_EVENT,
-    EXAMPLE_MINIMAL_EVENT,
-    EventIngestionModel,
+from cdp_backend.pipeline.mock_get_events import (
+    FILLED_FLOW_CONFIG,
+    MANY_FLOW_CONFIG,
+    MINIMAL_FLOW_CONFIG,
 )
 
 ###############################################################################
@@ -49,36 +48,26 @@ class Args(argparse.Namespace):
         p.parse_args(namespace=self)
 
 
-def fake_get_events_minimal() -> List[EventIngestionModel]:
-    return [EXAMPLE_MINIMAL_EVENT]
-
-
-def fake_get_events_filled() -> List[EventIngestionModel]:
-    return [EXAMPLE_FILLED_EVENT]
-
-
-def fake_get_events_many() -> List[EventIngestionModel]:
-    return [EXAMPLE_MINIMAL_EVENT] * 4
-
-
 def main() -> None:
     try:
         args = Args()
-        minimal_flow = pipeline.create_event_gather_flow(
-            fake_get_events_minimal, "", ""
-        )
+
+        # Minimum event flow
+        minimal_flow = pipeline.create_event_gather_flow(MINIMAL_FLOW_CONFIG)
         minimal_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="minimal"),
             format="png",
         )
 
-        filled_flow = pipeline.create_event_gather_flow(fake_get_events_filled, "", "")
+        # Filled event flow
+        filled_flow = pipeline.create_event_gather_flow(FILLED_FLOW_CONFIG)
         filled_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="filled"),
             format="png",
         )
 
-        many_flow = pipeline.create_event_gather_flow(fake_get_events_many, "", "")
+        # Many events flow
+        many_flow = pipeline.create_event_gather_flow(MANY_FLOW_CONFIG)
         many_flow.visualize(
             filename=str(args.output_file.with_suffix("")).format(ftype="many"),
             format="png",

@@ -13,6 +13,7 @@ from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
 from cdp_backend.database.validators import UniquenessValidation
 from cdp_backend.pipeline import ingestion_models
+from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
 
 ###############################################################################
 # Testing constants
@@ -71,8 +72,8 @@ minimal_ingestion_event = ingestion_models.EventIngestionModel(
 )
 
 example_file = db_models.File()
-example_file.name = "file name"
-example_file.uri = "uri"
+example_file.name = "name.ext"
+example_file.uri = "ex://name.ext"
 
 ###############################################################################
 # Assertion functions
@@ -111,7 +112,17 @@ def assert_ingestion_and_db_models_equal(
     expected_db_model: Model,
     actual_db_model: Model,
 ) -> None:
+    # Get rid of dunderscore methods and attrs
     fields = [attr for attr in dir(ingestion_model) if not attr.startswith("__")]
+    # Get rid of specific methods
+    fields = [
+        attr
+        for attr in fields
+        if attr
+        not in [
+            "to_dict",
+        ]
+    ]
 
     for field in fields:
         ingestion_value = getattr(ingestion_model, field)
@@ -204,14 +215,16 @@ def test_upload_db_model(
                     mock_connector.return_value = None
 
                     actual_uploaded_model = db_functions.upload_db_model(
-                        db_model, ingestion_model, creds_file=""
+                        db_model=db_model,
+                        credentials_file="",
+                        ingestion_model=ingestion_model,
                     )
 
                     assert_db_models_equality(expected, actual_uploaded_model, True)
 
 
 def test_create_file() -> None:
-    db_file = db_functions.create_file.run("file name", "uri")  # type: ignore
+    db_file = db_functions.create_file("ex://name.ext")
 
     assert example_file.name == db_file.name
     assert example_file.uri == db_file.uri
@@ -228,9 +241,7 @@ def test_create_body_from_ingestion_model(
     ingestion_model: ingestion_models.Body,
     expected: db_models.Body,
 ) -> None:
-    actual = db_functions.create_body_from_ingestion_model.run(  # type: ignore
-        ingestion_model
-    )
+    actual = db_functions.create_body_from_ingestion_model(ingestion_model)
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
@@ -245,9 +256,7 @@ def test_create_event_from_ingestion_model(
     ingestion_model: ingestion_models.EventIngestionModel,
     expected: db_models.Event,
 ) -> None:
-    actual = db_functions.create_event_from_ingestion_model.run(  # type: ignore
-        ingestion_model, db_body
-    )
+    actual = db_functions.create_event_from_ingestion_model(ingestion_model, db_body)
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
@@ -262,10 +271,18 @@ def test_create_session_from_ingestion_model(
     ingestion_model: ingestion_models.Session,
     expected: db_models.Session,
 ) -> None:
-    actual = db_functions.create_session_from_ingestion_model.run(  # type: ignore
-        ingestion_model, db_event
-    )
+    actual = db_functions.create_session_from_ingestion_model(ingestion_model, db_event)
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
     assert expected.event_ref == actual.event_ref
+
+
+def test_create_transcript() -> None:
+    db_file = db_models.File()
+    db_session = db_models.Session()
+
+    assert isinstance(
+        db_functions.create_transcript(db_file, db_session, EXAMPLE_TRANSCRIPT),
+        db_models.Transcript,
+    )

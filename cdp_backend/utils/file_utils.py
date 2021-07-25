@@ -1,25 +1,20 @@
-#!/usr/bin/env python
+##!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import logging
 import math
 import shutil
 from hashlib import sha256
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
 import dask.dataframe as dd
 import ffmpeg
 import fsspec
 import imageio
-import requests
-from prefect import task
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
-)
 log = logging.getLogger(__name__)
 
 ###############################################################################
@@ -61,16 +56,16 @@ def get_media_type(uri: str) -> Optional[str]:
     return None
 
 
-def external_resource_copy(
+def resource_copy(
     uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
 ) -> str:
     """
-    Copy an external resource to a local destination on the machine.
+    Copy a resource (local or remote) to a local destination on the machine.
 
     Parameters
     ----------
     uri: str
-        The uri for the external resource to copy.
+        The uri for the resource to copy.
     dst: Optional[Union[str, Path]]
         A specific destination to where the copy should be placed. If None provided
         stores the resource in the current working directory.
@@ -95,12 +90,11 @@ def external_resource_copy(
 
     # Open requests connection to uri as a stream
     log.debug(f"Beginning external resource copy from: {uri}")
-    with requests.get(uri, stream=True) as streamed_read:
-        streamed_read.raise_for_status()
-        with open(dst, "wb") as streamed_write:
-            shutil.copyfileobj(streamed_read.raw, streamed_write)
+    with fsspec.open(uri, "rb", block_size=0) as open_source:
+        with open(dst, "wb") as open_target:
+            shutil.copyfileobj(open_source, open_target)
     log.debug(f"Completed external resource copy from: {uri}")
-    log.info(f"Stored external resource copy: {dst}")
+    log.debug(f"Stored external resource copy: {dst}")
 
     return str(dst)
 
@@ -153,7 +147,7 @@ def split_audio(
     log.debug(f"Beginning audio separation for: {video_read_path}")
     out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
     log.debug(f"Completed audio separation for: {video_read_path}")
-    log.info(f"Stored audio: {audio_save_path}")
+    log.debug(f"Stored audio: {audio_save_path}")
 
     # Store logs
     ffmpeg_stdout_path = resolved_audio_save_path.with_suffix(".out")
@@ -251,8 +245,7 @@ def get_hover_thumbnail(
     return gif_path
 
 
-@task
-def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
+def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
     """
     Return the SHA256 hash of a file's content.
 
@@ -280,31 +273,3 @@ def hash_file_contents_task(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
-
-
-@task
-def join_strs_and_extension(
-    parts: List[str], extension: str, delimiter: str = "_"
-) -> str:
-    name_without_suffix = delimiter.join(parts)
-    return f"{name_without_suffix}.{extension}"
-
-
-@task
-def external_resource_copy_task(
-    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
-) -> str:
-    return external_resource_copy(uri=uri, dst=dst, overwrite=overwrite)
-
-
-@task(nout=3)
-def split_audio_task(
-    video_read_path: str,
-    audio_save_path: str,
-    overwrite: bool = False,
-) -> Tuple[str, str, str]:
-    return split_audio(
-        video_read_path=video_read_path,
-        audio_save_path=audio_save_path,
-        overwrite=overwrite,
-    )

@@ -5,16 +5,16 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, List, NamedTuple, Union
+from typing import Any, List, NamedTuple, Optional, Union
 
 import fsspec
 import nltk
 import truecase
 import webvtt
-from spacy.lang.en import English
 from webvtt.structures import Caption
 
-from ..pipeline.transcript_model import Sentence, Transcript, Word
+from ..pipeline import transcript_model
+from ..version import __version__
 from .sr_model import SRModel
 
 ###############################################################################
@@ -25,15 +25,33 @@ log = logging.getLogger(__name__)
 
 
 class SpeakerRawBlock(NamedTuple):
-    words: List[Word]
+    words: List[transcript_model.Word]
     raw_text: str
 
 
 class WebVTTSRModel(SRModel):
+    """
+    Initialize a WebVTT Conversion Model.
+
+    This doesn't do any actual speaker recognition, but rather will simply convert
+    from WebVTT format into a CDP transcript object.
+
+    Parameters
+    ----------
+    new_turn_pattern: str
+        The character(s) to look for that indicate a new speaker turn.
+        Default: "&gt;"
+    confidence: float
+        The confidence value to assign to the produced Transcript object.
+        Default: 0.97
+    """
+
+    END_OF_SENTENCE_PATTERN = r"^.+[.?!]\s*$"
+
     def __init__(
         self,
         new_turn_pattern: str = "&gt;",
-        confidence: float = 1.0,
+        confidence: float = 0.97,
         **kwargs: Any,
     ):
         # New speaker turn must begin with one or more new_turn_pattern str
@@ -48,13 +66,147 @@ class WebVTTSRModel(SRModel):
     def _normalize_text(self, text: str) -> str:
         normalized_text = truecase.get_true_case(text)
 
-        # Fix some punctuation issue, e.g. `roughly$ 19` bececomes `roughly $19`
+        # Fix some punctuation issues, e.g. `roughly$ 19` becomes `roughly $19`
         normalized_text = re.sub(
-            r"([#$(<[{]) ", lambda x: f" {x.group(1)}", normalized_text
+            r"([#$(<[{]) ",
+            lambda x: f" {x.group(1)}",
+            normalized_text,
         )
         return normalized_text
 
-    def transcribe(self, file_uri: Union[str, Path], **kwargs: Any) -> Transcript:
+    def _get_speaker_turns(self, captions: List[Caption]) -> List[List[Caption]]:
+        # Create list of speaker turns
+        speaker_turns: List[List[Caption]] = []
+        # List of captions of a speaker turn
+        speaker_turn_captions: List[Caption] = []
+        for caption in captions:
+            new_turn_search = re.search(self.new_turn_pattern, caption.text)
+
+            # Caption block is start of a new speaker turn
+            if new_turn_search:
+                # Remove the new speaker turn pattern from caption's text
+                caption.text = new_turn_search.group(2)
+                # Append speaker turn to list of speaker turns
+                if speaker_turn_captions:
+                    speaker_turns.append(speaker_turn_captions)
+
+                # Reset speaker_turn with this caption, for start of a new speaker turn
+                speaker_turn_captions = [caption]
+
+            # Caption block is not a start of a new speaker turn
+            else:
+                # Append caption to current speaker turn
+                speaker_turn_captions.append(caption)
+
+        # Add the last speaker turn
+        if speaker_turn_captions:
+            speaker_turns.append(speaker_turn_captions)
+
+        return speaker_turns
+
+    @staticmethod
+    def _construct_sentence(
+        lines: List[str],
+        caption: Caption,
+        start_time: float,
+        confidence: float,
+        speaker_index: int,
+    ) -> transcript_model.Sentence:
+        # Construct sentence and raw words for Word and sentence processing
+        text = " ".join(lines)
+        raw_words = text.split()
+
+        # Calc caption duration
+        # for linear interpolation of word offsets
+        caption_duration = caption.end_in_seconds - caption.start_in_seconds
+
+        # Create collection of words
+        words: List[transcript_model.Word] = []
+        for word_index, word in enumerate(raw_words):
+            words.append(
+                transcript_model.Word(
+                    index=word_index,
+                    start_time=(
+                        # Linear words per second
+                        # offset by start time of caption
+                        caption.start_in_seconds
+                        + ((word_index / len(raw_words)) * caption_duration)
+                    ),
+                    end_time=(
+                        # Linear words per second
+                        # offset by start time of caption + 1
+                        caption.start_in_seconds
+                        + (((word_index + 1) / len(raw_words)) * caption_duration)
+                    ),
+                    text=WebVTTSRModel._clean_word(word),
+                    annotations=None,
+                )
+            )
+
+        # Append full sentence
+        return transcript_model.Sentence(
+            index=0,
+            confidence=confidence,
+            start_time=start_time,
+            end_time=caption.end_in_seconds,
+            text=text.capitalize(),
+            words=words,
+            speaker_name=None,
+            speaker_index=speaker_index,
+        )
+
+    def _get_sentences(
+        self,
+        speaker_turn_captions: List[Caption],
+        speaker_index: int,
+    ) -> List[transcript_model.Sentence]:
+        # Create timestamped sentences
+        sentences = []
+        # List of text, representing a sentence
+        lines: List[str] = []
+        start_time: Optional[float] = None
+        for caption in speaker_turn_captions:
+            if start_time is None:
+                start_time = caption.start_in_seconds
+            lines.append(caption.text)
+
+            # Check for sentence end
+            end_sentence_search = re.search(
+                WebVTTSRModel.END_OF_SENTENCE_PATTERN,
+                caption.text,
+            )
+            if end_sentence_search:
+                sentences.append(
+                    self._construct_sentence(
+                        lines=lines,
+                        caption=caption,
+                        start_time=start_time,
+                        confidence=self.confidence,
+                        speaker_index=speaker_index,
+                    )
+                )
+
+                # Reset lines and start_time, for start of new sentence
+                lines = []
+                start_time = None
+
+        # If any leftovers in lines, add a sentence for that.
+        if len(lines) > 0 and start_time is not None:
+            sentences.append(
+                self._construct_sentence(
+                    lines=lines,
+                    caption=speaker_turn_captions[-1],
+                    start_time=start_time,
+                    confidence=self.confidence,
+                    speaker_index=speaker_index,
+                )
+            )
+
+        return sentences
+
+    def transcribe(
+        self, file_uri: Union[str, Path], **kwargs: Any
+    ) -> transcript_model.Transcript:
         """
         Converts a WebVTT closed caption file into the CDP Transcript Model.
 
@@ -65,7 +217,7 @@ class WebVTTSRModel(SRModel):
 
         Returns
         -------
-        transcript: Transcript
+        transcript: transcript_model.Transcript
             The contents of the VTT file as a CDP Transcript.
         """
         # Download punkt for truecase module
@@ -75,147 +227,30 @@ class WebVTTSRModel(SRModel):
         with fsspec.open(file_uri, "rb") as open_resource:
             captions = webvtt.read(open_resource)
 
-        # Keep track of current speaker caption collection
-        all_speaker_captions: List[List[Caption]] = []
-        current_speaker_captions: List[Caption] = []
+        # Get speaker turns
+        speaker_turns = self._get_speaker_turns(captions=captions)
 
-        # Parse all captions
-        for caption in captions:
-            # Safety measure to protect against empty portions of captioning
-            if len(caption.text) >= 0:
-                # Check for new speaker turn
-                new_speaker_search = re.search(self.new_turn_pattern, caption.text)
-                if new_speaker_search:
-                    # Add previous speaker captions to all speaker captions
-                    # (and reset current speaker captions)
-                    if len(current_speaker_captions) > 0:
-                        all_speaker_captions.append(current_speaker_captions)
-                        current_speaker_captions = []
-
-                # Start new speaker
-                if len(current_speaker_captions) == 0:
-                    current_speaker_captions = [caption]
-
-                # Create new current speaker
-                else:
-                    current_speaker_captions.append(caption)
-
-        # Add the last current speaker caption
-        # Fence-post problem
-        if len(current_speaker_captions) > 0:
-            all_speaker_captions.append(current_speaker_captions)
-
-        # Parse speaker captions one giant sentence of words, we will run sentencizer
-        # afterwards as it's safer / more robust than our regex.
-        all_speaker_sentences: List[SpeakerRawBlock] = []
-        for speaker_captions in all_speaker_captions:
-            current_speaker_words = []
-
-            # Clean new speaker markings
-            for caption in speaker_captions:
-                new_speaker_search = re.search(self.new_turn_pattern, caption.text)
-                if new_speaker_search:
-                    caption_text = new_speaker_search.group(2)
-                else:
-                    caption_text = caption.text
-
-                # Calc caption duration
-                # for linear interpolation of word offsets
-                caption_duration = caption.end_in_seconds - caption.start_in_seconds
-
-                # Add words
-                raw_words = caption_text.split()
-                for i, word in enumerate(raw_words):
-                    current_speaker_words.append(
-                        Word(
-                            index=0,
-                            start_time=(
-                                # Linear words per second
-                                # offset by start time of caption
-                                caption.start_in_seconds
-                                + ((i / len(raw_words)) * caption_duration)
-                            ),
-                            end_time=(
-                                # Linear words per second
-                                # offset by start time of caption + 1
-                                caption.start_in_seconds
-                                + (((i + 1) / len(raw_words)) * caption_duration)
-                            ),
-                            text=self._clean_word(word),
-                            # Temp raw word storage
-                            # will remove after we truecase and sentenceizer
-                            annotations={"raw": word},
-                        )
-                    )
-
-            # Store the whole raw speaker block as a single list of words and the joined
-            # raw text. We will use the spacy sentencizer and truecasing after this to
-            # produce better overall results.
-            all_speaker_sentences.append(
-                SpeakerRawBlock(
-                    words=current_speaker_words,
-                    raw_text=" ".join(
-                        [
-                            word.annotations["raw"]
-                            for word in current_speaker_words
-                            if word.annotations is not None
-                        ],
-                    ),
-                )
+        # Parse turns for sentences
+        sentences: List[transcript_model.Sentence] = []
+        for speaker_index, speaker_turn in enumerate(speaker_turns):
+            sentences += self._get_sentences(
+                speaker_turn_captions=speaker_turn,
+                speaker_index=speaker_index,
             )
 
-        # Split single sentence into many for each speaker and truecase the whole block
-        nlp = English()
-        nlp.add_pipe("sentencizer")
+        # Final processing and normalization
+        for sentence_index, sentence in enumerate(sentences):
+            sentence.index = sentence_index
+            sentence.text = self._normalize_text(sentence.text)
 
-        timestamped_sentences: List[Sentence] = []
-        current_timestamped_sentence_index = 0
-        for speaker_index, all_speaker_sentence in enumerate(all_speaker_sentences):
-            # Truecase and sentence
-            truecased = self._normalize_text(all_speaker_sentence.raw_text)
-            sentences = [str(s).capitalize() for s in nlp(truecased).sents]
-
-            # Make actual transcript
-            overall_word_index = 0
-            for sentence_index, sentence in enumerate(sentences):
-                sentence_words = []
-                for word_index, word in enumerate(sentence.split()):
-                    existing_word = all_speaker_sentence.words[overall_word_index]
-                    sentence_words.append(
-                        Word(
-                            index=word_index,
-                            start_time=existing_word.start_time,
-                            end_time=existing_word.end_time,
-                            text=existing_word.text,
-                            annotations=None,
-                        )
-                    )
-                    overall_word_index += 1
-
-                # Append the full sentence details
-                timestamped_sentences.append(
-                    Sentence(
-                        index=current_timestamped_sentence_index,
-                        confidence=self.confidence,
-                        start_time=min([word.start_time for word in sentence_words]),
-                        end_time=max([word.end_time for word in sentence_words]),
-                        words=sentence_words,
-                        text=sentence,
-                        speaker_index=speaker_index,
-                        speaker_name=None,
-                        annotations=None,
-                    )
-                )
-                current_timestamped_sentence_index += 1
-
-        return Transcript(
-            confidence=(
-                sum([s.confidence for s in timestamped_sentences])
-                / len(timestamped_sentences)
-            ),
-            generator="CDP WebVTT Conversion",
+        transcript = transcript_model.Transcript(
+            confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
+            generator=f"CDP WebVTT Conversion -- CDP v{__version__}",
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
-            sentences=timestamped_sentences,
+            sentences=sentences,
             annotations=None,
         )
+        log.info(f"Completed WebVTT transcript conversion for: {file_uri}")
+
+        return transcript

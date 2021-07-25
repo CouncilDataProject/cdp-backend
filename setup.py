@@ -30,6 +30,7 @@ test_requirements = [
 dev_requirements = [
     *setup_requirements,
     *test_requirements,
+    "bokeh>=2.3.2",
     "bump2version>=1.0.1",
     "coverage>=5.1",
     "ipython>=7.15.0",
@@ -47,6 +48,7 @@ dev_requirements = [
 requirements = [
     "dask[bag]~=2021.6.0",
     "dataclasses-json~=0.5.2",
+    "distributed~=2021.6.0",
     "ffmpeg-python~=0.2.0",
     "fireo~=1.3.7",
     "fsspec~=2021.5.0",

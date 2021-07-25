@@ -4,8 +4,9 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
-from typing import BinaryIO, Generator, List, Optional
+from typing import Optional
 from unittest import mock
 
 import imageio
@@ -13,42 +14,11 @@ import pytest
 from py._path.local import LocalPath
 
 from cdp_backend.utils import file_utils
-from cdp_backend.utils.file_utils import external_resource_copy
+from cdp_backend.utils.file_utils import resource_copy
+
+from ..conftest import EXAMPLE_VIDEO_FILENAME
 
 #############################################################################
-
-example_file = "example_video.mp4"
-
-
-@pytest.fixture
-def example_video(resources_dir: Path) -> Path:
-    return resources_dir / example_file
-
-
-class MockedResponse:
-    def __init__(self, filepath: Path) -> None:
-        self.filepath = filepath
-        self.opened = open(self.filepath, "rb")
-
-    def __enter__(self) -> MockedResponse:
-        return self
-
-    def __exit__(self, exception_type, exception_value, tb):  # type: ignore
-        self.opened.close()
-
-    def raise_for_status(self) -> bool:
-        return True
-
-    @property
-    def raw(self) -> BinaryIO:
-        return self.opened
-
-
-@pytest.fixture
-def mocked_request(example_video: Path) -> Generator:
-    with mock.patch("requests.get") as MockRequest:
-        MockRequest.return_value = MockedResponse(example_video)
-        yield MockRequest
 
 
 @pytest.mark.parametrize(
@@ -73,9 +43,9 @@ def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
     assert actual_result == expected_result
 
 
-def test_external_resource_copy(tmpdir: LocalPath, mocked_request: Generator) -> None:
-    save_path = tmpdir / "tmpcopy.mp4"
-    external_resource_copy("https://doesntmatter.com/example.mp4", save_path)
+def test_resource_copy(tmpdir: LocalPath, example_video: Path) -> None:
+    save_path = tmpdir / EXAMPLE_VIDEO_FILENAME
+    resource_copy(str(example_video), save_path)
 
 
 def test_hash_file_contents(tmpdir: LocalPath) -> None:
@@ -84,35 +54,14 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
     with open(test_file, "w") as open_f:
         open_f.write("hello")
 
-    hash_a = file_utils.hash_file_contents_task.run(
-        str(test_file.absolute())
-    )  # type: ignore
+    hash_a = file_utils.hash_file_contents(str(test_file.absolute()))
 
     with open(test_file, "w") as open_f:
         open_f.write("world")
 
-    hash_b = file_utils.hash_file_contents_task.run(
-        str(test_file.absolute())
-    )  # type: ignore
+    hash_b = file_utils.hash_file_contents(str(test_file.absolute()))
 
     assert hash_a != hash_b
-
-
-@pytest.mark.parametrize(
-    "parts, extension, delimiter, expected",
-    [
-        (["hello", "world"], "mp4", "_", "hello_world.mp4"),
-        (["a", "b", "c"], "wav", "-", "a-b-c.wav"),
-        (["single"], "png", "***", "single.png"),
-    ],
-)
-def test_join_strs_and_extension(
-    parts: List[str], extension: str, delimiter: str, expected: str
-) -> None:
-    result = file_utils.join_strs_and_extension.run(
-        parts=parts, extension=extension, delimiter=delimiter
-    )  # type: ignore
-    assert result == expected
 
 
 @pytest.mark.parametrize(
@@ -154,11 +103,15 @@ def test_split_audio(
             raise e
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="File removal for test cleanup sometimes fails on Windows",
+)
 @pytest.mark.parametrize(
     "video_url, session_content_hash, seconds, expected",
     [
-        (example_file, "example2", 45, "example2-static-thumbnail.png"),
-        (example_file, "example3", 999999, "example3-static-thumbnail.png"),
+        (EXAMPLE_VIDEO_FILENAME, "example2", 45, "example2-static-thumbnail.png"),
+        (EXAMPLE_VIDEO_FILENAME, "example3", 999999, "example3-static-thumbnail.png"),
         pytest.param(
             "fake.mp4",
             "example",
@@ -194,10 +147,14 @@ def test_static_thumbnail_generator(
     os.remove(result)
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="File removal for test cleanup sometimes fails on Windows",
+)
 @pytest.mark.parametrize(
     "video_url, session_content_hash, num_frames, expected",
     [
-        (example_file, "example2", 15, "example2-hover-thumbnail.gif"),
+        (EXAMPLE_VIDEO_FILENAME, "example2", 15, "example2-hover-thumbnail.gif"),
         pytest.param(
             "fake.mp4",
             "example",

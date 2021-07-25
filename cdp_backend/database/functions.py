@@ -7,20 +7,16 @@ from typing import Optional
 
 import fireo
 from fireo.models import Model
-from prefect import task
+from google.cloud.firestore_v1.transaction import Transaction
 
 from ..database import exceptions
 from ..database import models as db_models
 from ..database.validators import get_model_uniqueness
-from ..pipeline import ingestion_models
+from ..pipeline import ingestion_models, transcript_model
 from ..pipeline.ingestion_models import IngestionModel
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
-)
 log = logging.getLogger(__name__)
 
 ###############################################################################
@@ -29,6 +25,7 @@ log = logging.getLogger(__name__)
 def update_db_model(
     db_model: Model,
     ingestion_model: IngestionModel,
+    transaction: Optional[Transaction] = None,
 ) -> Model:
     """
     Compare an existing database model to an ingestion model and if the non-primary
@@ -40,6 +37,8 @@ def update_db_model(
         The existing database model to compare new data against.
     ingestion_model: IngestionModel
         The data to compare against and potentially use for updating.
+    transaction: Optional[Transaction]
+        The transaction to write this model during.
 
     Returns
     -------
@@ -68,21 +67,23 @@ def update_db_model(
             if db_val != ingestion_val and ingestion_val is not None:
                 setattr(db_model, field, ingestion_val)
                 needs_update = True
-                log.info(
+                log.debug(
                     f"Updating {db_model.key} {field} from {db_val} to {ingestion_val}."
                 )
 
     # Avoid unnecessary db interactions
     if needs_update:
-        db_model.update(db_model.key)
+        db_model.update(db_model.key, transaction=transaction)
 
     return db_model
 
 
 def upload_db_model(
     db_model: Model,
-    ingestion_model: Optional[IngestionModel],
-    creds_file: str,
+    credentials_file: str,
+    transaction: Optional[Transaction] = None,
+    ingestion_model: Optional[IngestionModel] = None,
+    exist_ok: bool = False,
 ) -> Model:
     """
     Upload or update an existing database model.
@@ -91,11 +92,17 @@ def upload_db_model(
     ----------
     db_model: Model
         The database model to upload.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+    transaction: Optional[Transaction]
+        The transaction to write this model during.
     ingestion_model: Optional[IngestionModel]
         The accompanying ingestion model in the case the model already exists and needs
         to be updated rather than inserted.
-    creds_file: str
-        Path to Google Service Account Credentials JSON file.
+    exist_ok: bool
+        If there is an existing database document found during upload, is it okay for
+        it to exist and simply return.
+        Default: False
 
     Returns
     -------
@@ -108,13 +115,13 @@ def upload_db_model(
         More than one (1) conflicting model was found in the database. This should
         never occur and indicates that something is wrong with the database.
     """
-    # Initialize fireo connection
-    fireo.connection(from_file=creds_file)
+    # Init transaction and auth
+    fireo.connection(from_file=credentials_file)
 
     uniqueness_validation = get_model_uniqueness(db_model)
     if uniqueness_validation.is_unique:
-        db_model.save()
-        log.info(
+        db_model.save(transaction=transaction)
+        log.debug(
             f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
         )
     elif (
@@ -122,11 +129,14 @@ def upload_db_model(
         and ingestion_model is not None
     ):
         updated_db_model = update_db_model(
-            uniqueness_validation.conflicting_models[0],
-            ingestion_model,
+            db_model=uniqueness_validation.conflicting_models[0],
+            ingestion_model=ingestion_model,
+            transaction=transaction,
         )
 
         return updated_db_model
+    elif len(uniqueness_validation.conflicting_models) == 1 and exist_ok:
+        return uniqueness_validation.conflicting_models[0]
     else:
         raise exceptions.UniquenessError(
             model=db_model, conflicting_results=uniqueness_validation.conflicting_models
@@ -135,19 +145,6 @@ def upload_db_model(
     return db_model
 
 
-@task
-def upload_db_model_task(
-    db_model: Model,
-    ingestion_model: IngestionModel,
-    creds_file: str,
-) -> Model:
-    # Wraps the standard Python function in Prefect task
-    return upload_db_model(
-        db_model=db_model, ingestion_model=ingestion_model, creds_file=creds_file
-    )
-
-
-@task
 def create_body_from_ingestion_model(body: ingestion_models.Body) -> db_models.Body:
     db_body = db_models.Body()
 
@@ -172,7 +169,6 @@ def create_body_from_ingestion_model(body: ingestion_models.Body) -> db_models.B
     return db_body
 
 
-@task
 def create_event_from_ingestion_model(
     event: ingestion_models.EventIngestionModel, body_ref: db_models.Body
 ) -> db_models.Event:
@@ -191,7 +187,6 @@ def create_event_from_ingestion_model(
     return db_event
 
 
-@task
 def create_session_from_ingestion_model(
     session: ingestion_models.Session, event_ref: db_models.Event
 ) -> db_models.Session:
@@ -213,10 +208,24 @@ def create_session_from_ingestion_model(
     return db_session
 
 
-@task
-def create_file(name: str, uri: str) -> db_models.File:
+def create_file(uri: str) -> db_models.File:
     db_file = db_models.File()
-    db_file.name = name
+    db_file.name = uri.split("/")[-1]
     db_file.uri = uri
 
     return db_file
+
+
+def create_transcript(
+    transcript_file_ref: db_models.File,
+    session_ref: db_models.Session,
+    transcript: transcript_model.Transcript,
+) -> db_models.Transcript:
+    db_transcript = db_models.Transcript()
+
+    db_transcript.session_ref = session_ref
+    db_transcript.file_ref = transcript_file_ref
+    db_transcript.confidence = transcript.confidence
+    db_transcript.created = datetime.fromisoformat(transcript.created_datetime)
+
+    return db_transcript

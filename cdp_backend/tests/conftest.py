@@ -24,3 +24,11 @@ import pytest
 @pytest.fixture
 def resources_dir() -> Path:
     return Path(__file__).parent / "resources"
+
+
+EXAMPLE_VIDEO_FILENAME = "example_video.mp4"
+
+
+@pytest.fixture
+def example_video(resources_dir: Path) -> Path:
+    return resources_dir / EXAMPLE_VIDEO_FILENAME

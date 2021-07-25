@@ -9,7 +9,8 @@ from typing import Any, List, Optional, Union
 from google.cloud import speech_v1p1beta1 as speech
 from spacy.lang.en import English
 
-from ..pipeline.transcript_model import Sentence, Transcript, Word
+from ..pipeline import transcript_model
+from ..version import __version__
 from .sr_model import SRModel
 
 ###############################################################################
@@ -20,9 +21,9 @@ log = logging.getLogger(__name__)
 
 
 class GoogleCloudSRModel(SRModel):
-    def __init__(self, credentials_path: Union[str, Path], **kwargs: Any):
+    def __init__(self, credentials_file: Union[str, Path], **kwargs: Any):
         # Resolve credentials
-        self.credentials_path = Path(credentials_path).resolve(strict=True)
+        self.credentials_file = Path(credentials_file).resolve(strict=True)
 
     @staticmethod
     def _clean_phrases(phrases: Optional[List[str]] = None) -> List[str]:
@@ -50,7 +51,7 @@ class GoogleCloudSRModel(SRModel):
         file_uri: Union[str, Path],
         phrases: Optional[List[str]] = None,
         **kwargs: Any,
-    ) -> Transcript:
+    ) -> transcript_model.Transcript:
         """
         Transcribe audio from GCS file and return a Transcript model.
 
@@ -60,15 +61,15 @@ class GoogleCloudSRModel(SRModel):
             The GCS file uri to the audio file or caption file to transcribe.
             It should be in format 'gs://...'.
         phrases: Optional[List[str]] = None
-            A list of strings that make the SR model perform better.
+            A list of strings to feed as targets to the model.
 
         Returns
         -------
-        outputs: Transcript
+        outputs: transcript_model.Transcript
             The transcript model for the supplied media file.
         """
         # Create client
-        client = speech.SpeechClient.from_service_account_json(self.credentials_path)
+        client = speech.SpeechClient.from_service_account_json(self.credentials_file)
 
         # Create basic metadata
         metadata = speech.types.RecognitionMetadata()
@@ -105,7 +106,7 @@ class GoogleCloudSRModel(SRModel):
         segments = 0
 
         # Create timestamped sentences
-        timestamped_sentences: List[Sentence] = []
+        timestamped_sentences: List[transcript_model.Sentence] = []
         transcript_sentence_index = 0
 
         # Create sentence boundary pipeline
@@ -130,7 +131,7 @@ class GoogleCloudSRModel(SRModel):
                     num_words = len(s_text.split())
 
                     # Initialize sentence model
-                    timestamped_sentence = Sentence(
+                    timestamped_sentence = transcript_model.Sentence(
                         index=transcript_sentence_index,
                         confidence=result.alternatives[0].confidence,
                         # Start and end time are placeholder values
@@ -158,7 +159,7 @@ class GoogleCloudSRModel(SRModel):
                             timestamped_sentence.end_time = end_time
 
                         # Create Word model
-                        timestamped_word = Word(
+                        timestamped_word = transcript_model.Word(
                             index=w_ind - w_marker,
                             start_time=start_time,
                             end_time=end_time,
@@ -190,9 +191,9 @@ class GoogleCloudSRModel(SRModel):
         log.info(f"Completed transcription for: {file_uri}. Confidence: {confidence}")
 
         # Create transcript model
-        transcript = Transcript(
+        transcript = transcript_model.Transcript(
             confidence=confidence,
-            generator="Google Speech-to-Text",
+            generator=f"Google Speech-to-Text -- CDP v{__version__}",
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,

@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
+from dataclasses_json import dataclass_json
+
 ###############################################################################
 
 
@@ -21,6 +23,7 @@ class IngestionModel:
 ###############################################################################
 
 
+@dataclass_json
 @dataclass
 class Seat(IngestionModel):
     """
@@ -39,6 +42,7 @@ class Seat(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Person(IngestionModel):
     """
@@ -69,6 +73,7 @@ class Person(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Vote(IngestionModel):
     """
@@ -85,6 +90,7 @@ class Vote(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class SupportingFile(IngestionModel):
     """
@@ -100,6 +106,7 @@ class SupportingFile(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Matter(IngestionModel):
     """
@@ -114,6 +121,7 @@ class Matter(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class MinutesItem(IngestionModel):
     """
@@ -126,6 +134,7 @@ class MinutesItem(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class EventMinutesItem(IngestionModel):
     """
@@ -150,6 +159,7 @@ class EventMinutesItem(IngestionModel):
     votes: Optional[List[Vote]] = None
 
 
+@dataclass_json
 @dataclass
 class Session(IngestionModel):
     """
@@ -164,6 +174,7 @@ class Session(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Body(IngestionModel):
     """
@@ -184,6 +195,7 @@ class Body(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class Role(IngestionModel):
     """
@@ -207,6 +219,7 @@ class Role(IngestionModel):
     external_source_id: Optional[str] = None
 
 
+@dataclass_json
 @dataclass
 class EventIngestionModel(IngestionModel):
     """
@@ -253,8 +266,20 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
     sessions=[
         Session(
             session_datetime=datetime.utcnow(),
-            video_uri="https://youtu.be/dQw4w9WgXcQ",
+            video_uri=(
+                "https://video.seattle.gov/media/council/council_101220_2022077V.mp4"
+            ),
             session_index=0,
+        ),
+        Session(
+            session_datetime=datetime.utcnow(),
+            video_uri=(
+                "https://video.seattle.gov/media/council/council_113020_2022091V.mp4"
+            ),
+            caption_uri=(
+                "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt"  # noqa: E501
+            ),
+            session_index=1,
         ),
     ],
     event_minutes_items=[

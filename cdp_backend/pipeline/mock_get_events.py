@@ -13,6 +13,8 @@ from ..database.constants import (
 )
 from ..utils.constants_utils import get_all_class_attr_values
 from .ingestion_models import (
+    EXAMPLE_FILLED_EVENT,
+    EXAMPLE_MINIMAL_EVENT,
     Body,
     EventIngestionModel,
     EventMinutesItem,
@@ -25,21 +27,7 @@ from .ingestion_models import (
     SupportingFile,
     Vote,
 )
-
-###############################################################################
-
-
-def get_events() -> List[EventIngestionModel]:
-    """
-    A mock get_events function that will generate entirely random events
-    based off a set of permutation settings.
-
-    Useful when running a pipeline test against a dev infrastructure.
-
-    Also imported and used in the example repo and integration tests.
-    """
-    return [_get_example_event()]
-
+from .pipeline_config import EventGatherPipelineConfig
 
 ###############################################################################
 
@@ -63,22 +51,22 @@ SEAT_URI = "https://councildataproject.github.io/imgs/seattle.jpg"
 
 SESSIONS = [
     (
-        "https://youtu.be/BkWNBqlZjGk",
-        "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_101220_2022077.vtt",  # noqa
+        "https://video.seattle.gov/media/council/council_010421_2022101V.mp4",
+        "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2021/council_010421_2022101.vtt",  # noqa
     ),
     (
-        "https://youtu.be/DU1pycy73yI",
+        "https://video.seattle.gov/media/council/council_113020_2022091V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt",  # noqa
     ),
     (
-        "https://youtu.be/ePTZs5ZxCnc",
+        "https://video.seattle.gov/media/council/council_112320_2022089V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt",  # noqa
     ),
     (
-        "https://youtu.be/51jNLMQ3qB8",
+        "https://video.seattle.gov/media/council/council_110920_2022085V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt",  # noqa
     ),
-    ("https://youtu.be/fgr2sYYJy0Q", None),
+    ("https://video.seattle.gov/media/council/council_101220_2022077V.mp4", None),
 ]
 
 
@@ -232,3 +220,63 @@ def _get_example_event() -> EventIngestionModel:
         agenda_uri=DUMMY_FILE_URI,
         minutes_uri=DUMMY_FILE_URI,
     )
+
+
+def get_events() -> List[EventIngestionModel]:
+    """
+    A mock get_events function that will generate entirely random events
+    based off a set of permutation settings.
+
+    Useful when running a pipeline test against a dev infrastructure.
+
+    Also imported and used in the example repo and integration tests.
+    """
+    return [_get_example_event()]
+
+
+RANDOM_FLOW_CONFIG = EventGatherPipelineConfig(
+    google_credentials_file="",
+    get_events_function_path="cdp_backend.pipeline.mock_get_events.get_events",
+    gcs_bucket_name="",
+)
+RANDOM_FLOW_CONFIG._validated_gcs_bucket_name = ""
+
+
+def min_get_events() -> List[EventIngestionModel]:
+    event = EXAMPLE_MINIMAL_EVENT
+    event.sessions[0].session_datetime = datetime(2019, 4, 13)
+    return [event]
+
+
+MINIMAL_FLOW_CONFIG = EventGatherPipelineConfig(
+    google_credentials_file="",
+    get_events_function_path="cdp_backend.pipeline.mock_get_events.min_get_events",
+    gcs_bucket_name="",
+)
+MINIMAL_FLOW_CONFIG._validated_gcs_bucket_name = ""
+
+
+def filled_get_events() -> List[EventIngestionModel]:
+    event = EXAMPLE_FILLED_EVENT
+    return [event]
+
+
+FILLED_FLOW_CONFIG = EventGatherPipelineConfig(
+    google_credentials_file="",
+    get_events_function_path="cdp_backend.pipeline.mock_get_events.filled_get_events",
+    gcs_bucket_name="",
+)
+FILLED_FLOW_CONFIG._validated_gcs_bucket_name = ""
+
+
+def many_get_events() -> List[EventIngestionModel]:
+    event = EXAMPLE_MINIMAL_EVENT
+    return [event] * 4
+
+
+MANY_FLOW_CONFIG = EventGatherPipelineConfig(
+    google_credentials_file="",
+    get_events_function_path="cdp_backend.pipeline.mock_get_events.many_get_events",
+    gcs_bucket_name="",
+)
+MANY_FLOW_CONFIG._validated_gcs_bucket_name = ""

@@ -1,0 +1,4 @@
+{
+    "google_credentials_file": ".keys/cdp-dev.json",
+    "get_events_function_path": "cdp_backend.pipeline.mock_get_events.min_get_events"
+}
