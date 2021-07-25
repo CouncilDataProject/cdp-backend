@@ -737,4 +737,5 @@ def store_event_processing_results(
         transcript_db_model = db_functions.upload_db_model(
             db_model=transcript_db_model,
             credentials_file=credentials_file,
+            exist_ok=True,
         )
