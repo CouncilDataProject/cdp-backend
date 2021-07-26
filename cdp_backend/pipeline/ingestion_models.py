@@ -145,8 +145,6 @@ class EventMinutesItem(IngestionModel):
     If index is not provided, the index will be set to the index of the item in the
     whole EventMinutesItem list on Event.
 
-    If matter is not provided, the supporting_files will be stored as
-    EventMinutesItemFile.
     If matter is provided, the supporting_files will be additionally be stored as
     MatterFile.
     """
@@ -184,7 +182,8 @@ class Body(IngestionModel):
     Notes
     -----
     If start_datetime is not provided, and the Body did not exist prior to ingestion,
-    current datetime.utcnow will be used as start_datetime during storage.
+    the session datetime associated with this ingestion will be used as start_datetime
+    during storage.
     """
 
     name: str
@@ -209,7 +208,8 @@ class Role(IngestionModel):
     Notes
     -----
     If start_datetime is not provided, and the Role did not exist prior to ingestion,
-    current datetime.utcnow will be used as start_datetime during storage.
+    the session datetime associated with this ingestion will be used as start_datetime
+    during storage.
     """
 
     title: str
