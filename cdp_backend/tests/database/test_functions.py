@@ -237,11 +237,11 @@ def test_create_file() -> None:
         (full_ingestion_body, db_body),
     ],
 )
-def test_create_body_from_ingestion_model(
+def test_create_body(
     ingestion_model: ingestion_models.Body,
     expected: db_models.Body,
 ) -> None:
-    actual = db_functions.create_body_from_ingestion_model(ingestion_model)
+    actual = db_functions.create_body(ingestion_model)
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
@@ -252,11 +252,11 @@ def test_create_body_from_ingestion_model(
         (minimal_ingestion_event, db_event),
     ],
 )
-def test_create_event_from_ingestion_model(
+def test_create_event(
     ingestion_model: ingestion_models.EventIngestionModel,
     expected: db_models.Event,
 ) -> None:
-    actual = db_functions.create_event_from_ingestion_model(ingestion_model, db_body)
+    actual = db_functions.create_event(ingestion_model, db_body)
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 
@@ -267,11 +267,11 @@ def test_create_event_from_ingestion_model(
     "ingestion_model, expected",
     [(minimal_ingestion_session, db_session), (full_ingestion_session, db_session)],
 )
-def test_create_session_from_ingestion_model(
+def test_create_session(
     ingestion_model: ingestion_models.Session,
     expected: db_models.Session,
 ) -> None:
-    actual = db_functions.create_session_from_ingestion_model(ingestion_model, db_event)
+    actual = db_functions.create_session(ingestion_model, db_event)
 
     assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
 

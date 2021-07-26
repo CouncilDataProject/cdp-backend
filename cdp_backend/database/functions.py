@@ -302,7 +302,7 @@ def create_matter_sponsor(
     matter_ref: db_models.Matter,
     person_ref: db_models.Person,
     external_source_id: Optional[str] = None,
-):
+) -> db_models.MatterSponsor:
     db_matter_sponsor = db_models.MatterSponsor()
 
     db_matter_sponsor.matter_ref = matter_ref
@@ -332,7 +332,7 @@ def create_person(
 
 def create_seat(
     seat: ingestion_models.Seat,
-    image_ref: db_models.File,
+    image_ref: Optional[db_models.File],
 ) -> db_models.Seat:
     db_seat = db_models.Seat()
 

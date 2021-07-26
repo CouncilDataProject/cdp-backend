@@ -11,8 +11,6 @@ from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
 
-from cdp_backend.pipeline import ingestion_models
-
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
@@ -20,6 +18,7 @@ from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
 from ..version import __version__
+from . import ingestion_models
 from .ingestion_models import EventIngestionModel, Session
 from .pipeline_config import EventGatherPipelineConfig
 from .transcript_model import Transcript
@@ -693,6 +692,7 @@ def _process_person_ingestion(
     bucket: str,
 ) -> db_models.Person:
     # Store person picture file
+    person_picture_db_model: Optional[db_models.File]
     if person.picture_uri is not None:
         try:
             tmp_person_picture_path = file_utils.resource_copy(person.picture_uri)
@@ -738,6 +738,7 @@ def _process_person_ingestion(
     # Create seat
     if person.seat is not None:
         # Store seat picture file
+        person_seat_image_db_model: Optional[db_models.File]
         try:
             if person.seat.image_uri is not None:
                 tmp_person_seat_image_path = file_utils.resource_copy(
@@ -782,6 +783,7 @@ def _process_person_ingestion(
     if person.roles is not None:
         for person_role in person.roles:
             # Create any bodies for roles
+            person_role_body_db_model: Optional[db_models.Body]
             if person_role.body is not None:
                 # Use or default role body start_datetime
                 if person_role.body.start_datetime is None:
@@ -1023,7 +1025,7 @@ def store_event_processing_results(
                         )
 
             else:
-                matter_db_model = None
+                matter_db_model = None  # type: ignore
 
             # Create minutes item
             minutes_item_db_model = db_functions.create_minutes_item(
