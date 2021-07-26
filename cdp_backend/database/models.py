@@ -89,13 +89,17 @@ class Person(Model):
     @staticmethod
     def generate_router_string(name: str) -> str:
         non_accented = Person.strip_accents(name)
-        char_cleaner = re.compile(r"[^a-zA-Z\s\-]")
+        char_cleaner = re.compile(r"[^a-zA-Z0-9\s\-]")
         char_cleaned = re.sub(char_cleaner, "", non_accented)
         whitespace_cleaner = re.compile(r"[\s]+")
         whitespace_cleaned = re.sub(whitespace_cleaner, " ", char_cleaned)
         spaces_replaced = whitespace_cleaned.replace(" ", "-")
+        if spaces_replaced[-1] == "-":
+            fully_cleaned = spaces_replaced[:-1]
+        else:
+            fully_cleaned = spaces_replaced
 
-        return spaces_replaced.lower()
+        return fully_cleaned.lower()
 
 
 class Body(Model):
