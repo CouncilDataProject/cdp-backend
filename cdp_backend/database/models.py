@@ -31,6 +31,9 @@ class File(Model):
     description = fields.TextField()
     media_type = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         uri = "gs://cdp-example/central-staff-memo.pdf"
@@ -60,6 +63,9 @@ class Person(Model):
     picture_ref = fields.ReferenceField(File)
     is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -105,6 +111,9 @@ class Body(Model):
     is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         body = cls()
@@ -127,6 +136,9 @@ class Seat(Model):
     electoral_type = fields.TextField()
     image_ref = fields.ReferenceField(File)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -158,6 +170,9 @@ class Role(Model):
     end_datetime = fields.DateTime()
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         role = cls()
@@ -181,6 +196,9 @@ class Matter(Model):
     matter_type = fields.TextField(required=True)
     title = fields.TextField(required=True)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -228,6 +246,9 @@ class MatterStatus(Model):
     update_datetime = fields.DateTime(required=True)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         matter_status = cls()
@@ -265,6 +286,9 @@ class MatterFile(Model):
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         matter_file = cls()
@@ -296,6 +320,9 @@ class MatterSponsor(Model):
     person_ref = fields.ReferenceField(Person, required=True)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         matter_sponsor = cls()
@@ -317,6 +344,9 @@ class MinutesItem(Model):
     description = fields.TextField()
     matter_ref = fields.ReferenceField(Matter)  # Note optional.
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -344,6 +374,9 @@ class Event(Model):
     agenda_uri = fields.TextField(validator=validators.resource_exists)
     minutes_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -390,6 +423,9 @@ class Session(Model):
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         session = cls()
@@ -413,6 +449,9 @@ class Transcript(Model):
     file_ref = fields.ReferenceField(File, required=True)
     confidence = fields.NumberField(required=True)
     created = fields.DateTime(required=True)
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -455,6 +494,9 @@ class EventMinutesItem(Model):
     )
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         emi = cls()
@@ -490,6 +532,9 @@ class EventMinutesItemFile(Model):
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -528,6 +573,9 @@ class Vote(Model):
     )
     in_majority = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
