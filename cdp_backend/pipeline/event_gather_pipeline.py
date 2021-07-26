@@ -1122,7 +1122,11 @@ def store_event_processing_results(
                         )
 
                         # Calc in_majority
-                        in_majority = vote.decision == event_minutes_item.decision
+                        in_majority = (
+                            vote.decision == db_constants.VoteDecision.APPROVE
+                            and event_minutes_item.decision
+                            == db_constants.EventMinutesItemDecision.PASSED
+                        )
 
                         # Create vote
                         try:

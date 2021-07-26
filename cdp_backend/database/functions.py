@@ -398,6 +398,8 @@ def create_minimal_event_minutes_item(
     else:
         db_event_minutes_item.index = event_minutes_item.index
 
+    db_event_minutes_item.decision = event_minutes_item.decision
+
     return db_event_minutes_item
 
 
@@ -413,8 +415,6 @@ def create_event_minutes_item(
         minutes_item_ref=minutes_item_ref,
         default_index=default_index,
     )
-
-    db_event_minutes_item.decision = event_minutes_item.minutes_item.external_source_id
 
     return db_event_minutes_item
 
