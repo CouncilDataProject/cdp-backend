@@ -6,7 +6,7 @@ from importlib import import_module
 from operator import attrgetter
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
 
-from fireo.fields.errors import FieldValidationFailed, RequiredField
+from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
@@ -725,7 +725,7 @@ def _process_person_ingestion(
             credentials_file=credentials_file,
             ingestion_model=person,
         )
-    except (FieldValidationFailed, RequiredField):
+    except (FieldValidationFailed, RequiredField, InvalidFieldType):
         person_db_model = db_functions.create_minimal_person(person=person)
         # No ingestion model provided here so that we don't try to
         # re-validate the already failed model upload
@@ -1051,7 +1051,7 @@ def store_event_processing_results(
                     credentials_file=credentials_file,
                     exist_ok=True,
                 )
-            except FieldValidationFailed:
+            except (FieldValidationFailed, InvalidFieldType):
                 event_minutes_item_db_model = (
                     db_functions.create_minimal_event_minutes_item(
                         event_minutes_item=event_minutes_item,
@@ -1146,7 +1146,7 @@ def store_event_processing_results(
                                 credentials_file=credentials_file,
                                 exist_ok=True,
                             )
-                        except FieldValidationFailed:
+                        except (FieldValidationFailed, RequiredField, InvalidFieldType):
                             allowed_vote_decisions = (
                                 constants_utils.get_all_class_attr_values(
                                     db_constants.VoteDecision
