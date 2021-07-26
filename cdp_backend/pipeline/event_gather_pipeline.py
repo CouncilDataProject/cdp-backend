@@ -809,12 +809,6 @@ def _process_person_ingestion(
             else:
                 person_role_start_datetime = person_role.start_datetime
 
-            # print("person role", person_role)
-            # print("person db model", person_db_model)
-            # print("seat ref", person_seat_db_model)
-            # print("start datetime", person_role_start_datetime)
-            # print("body ref", person_role_body_db_model)
-
             # Actual role creation
             person_role_db_model = db_functions.create_role(
                 role=person_role,
@@ -1124,6 +1118,7 @@ def store_event_processing_results(
                         )
 
                         # Calc in_majority
+                        # TODO: Handle abstain??
                         in_majority = (
                             vote.decision == db_constants.VoteDecision.APPROVE
                             and event_minutes_item.decision
