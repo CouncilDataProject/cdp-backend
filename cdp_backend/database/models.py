@@ -58,7 +58,7 @@ class Person(Model):
         required=True, validator=validators.router_string_is_valid
     )
     email = fields.TextField(validator=validators.email_is_valid)
-    phone = fields.NumberField()
+    phone = fields.TextField()
     website = fields.TextField(validator=validators.resource_exists)
     picture_ref = fields.ReferenceField(File)
     is_active = fields.BooleanField(required=True)
