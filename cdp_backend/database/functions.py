@@ -293,6 +293,7 @@ def create_minimal_person(
 
     db_person.name = person.name
     db_person.is_active = person.is_active
+    db_person.router_string = db_models.Person.generate_router_string(person.name)
 
     return db_person
 
@@ -313,7 +314,7 @@ def create_matter_sponsor(
 
 def create_person(
     person: ingestion_models.Person,
-    picture_ref: db_models.File,
+    picture_ref: Optional[db_models.File] = None,
 ) -> db_models.Person:
     # Get minimal
     db_person = create_minimal_person(person=person)
@@ -341,7 +342,7 @@ def create_seat(
     db_seat.image_ref = image_ref
     db_seat.external_source_id = seat.external_source_id
 
-    return seat
+    return db_seat
 
 
 def create_role(
@@ -369,13 +370,13 @@ def create_role(
 
 def create_minutes_item(
     minutes_item: ingestion_models.MinutesItem,
-    matter_ref: db_models.Matter,
+    matter_ref: Optional[db_models.Matter] = None,
 ) -> db_models.MinutesItem:
     db_minutes_item = db_models.MinutesItem()
 
     db_minutes_item.name = minutes_item.name
     db_minutes_item.description = minutes_item.description
-    db_minutes_item.matter_ref = (matter_ref,)
+    db_minutes_item.matter_ref = matter_ref
     db_minutes_item.external_source_id = minutes_item.external_source_id
 
     return db_minutes_item

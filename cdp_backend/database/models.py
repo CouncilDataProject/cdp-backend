@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+import unicodedata
 from datetime import datetime
 
 from fireo import fields
@@ -69,6 +71,25 @@ class Person(Model):
 
     _PRIMARY_KEYS = ("name",)
     _INDEXES = ()
+
+    @staticmethod
+    def strip_accents(name: str) -> str:
+        return "".join(
+            char
+            for char in unicodedata.normalize("NFKD", name)
+            if unicodedata.category(char) != "Mn"
+        )
+
+    @staticmethod
+    def generate_router_string(name: str) -> str:
+        non_accented = Person.strip_accents(name)
+        char_cleaner = re.compile(r"[^a-zA-Z\s\-]")
+        char_cleaned = re.sub(char_cleaner, "", non_accented)
+        whitespace_cleaner = re.compile(r"[\s]+")
+        whitespace_cleaned = re.sub(whitespace_cleaner, " ", char_cleaned)
+        spaces_replaced = whitespace_cleaned.replace(" ", "-")
+
+        return spaces_replaced.lower()
 
 
 class Body(Model):
