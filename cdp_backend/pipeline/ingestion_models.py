@@ -320,6 +320,7 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                                 body=Body(name="Governance and Education"),
                             ),
                         ],
+                        picture_uri="https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg",  # noqa: E501
                     ),
                 ],
             ),
@@ -368,7 +369,10 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                 Vote(
                     person=Person(
                         name="Andrew Lewis",
-                        seat=Seat(name="District 7"),
+                        seat=Seat(
+                            name="District 7",
+                            image_uri="http://www.seattle.gov/Images/Clerk/district7_50x50.jpg",  # noqa: E501
+                        ),
                         roles=[
                             Role(
                                 title="Vice Chair",

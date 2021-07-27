@@ -22,6 +22,7 @@ from cdp_backend.pipeline.mock_get_events import (
     MANY_FLOW_CONFIG,
     MINIMAL_FLOW_CONFIG,
     RANDOM_FLOW_CONFIG,
+    _get_example_event,
 )
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
@@ -191,6 +192,41 @@ def test_generate_transcript(
     assert state.is_successful()  # type: ignore
 
 
+###############################################################################
+# Database storage tests prep
+
+# Generate random events and construct session processing results for each
+# While we can't guarentee this will cover all cases,
+# this should cover most cases.
+
+RANDOM_EVENTS_AND_PROC_RESULTS = []
+for _ in range(5):
+    rand_event = _get_example_event()
+    proc_results = []
+    for session in rand_event.sessions:
+        proc_results.append(
+            pipeline.SessionProcessingResult(
+                session=session,
+                audio_uri="fake://doesnt-matter.wav",
+                transcript=EXAMPLE_TRANSCRIPT,
+                transcript_uri="fake://doesnt-matter-transcript.json",
+                static_thumbnail_uri="fake://doesnt-matter-static-thumbnail.png",
+                hover_thumbnail_uri="fake://doesnt-matter-hover-thumbnail.gif",
+            )
+        )
+
+    # Append rand event and proce results as tuple
+    RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results))
+
+# Cast to tuple for drop in usage
+RANDOM_EVENTS_AND_PROC_RESULTS = tuple(RANDOM_EVENTS_AND_PROC_RESULTS)
+
+###############################################################################
+
+
+@mock.patch(f"{PIPELINE_PATH}.file_utils.resource_copy")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
 @pytest.mark.parametrize(
     "event, session_processing_results",
@@ -229,15 +265,25 @@ def test_generate_transcript(
                 ),
             ],
         ),
+        *RANDOM_EVENTS_AND_PROC_RESULTS,
     ],
 )
 def test_store_event_processing_results(
     mock_upload_db_model: MagicMock,
+    mock_remove_local_file: MagicMock,
+    mock_upload_file: MagicMock,
+    mock_resource_copy: MagicMock,
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
 ) -> None:
+    # All of the resource copies relate to image file uploads / archival.
+    # But we aren't actually uploading so just make sure that we aren't downloading
+    # externally either.
+    mock_resource_copy.return_value = __file__
+
     pipeline.store_event_processing_results.run(  # type: ignore
         event=event,
         session_processing_results=session_processing_results,
         credentials_file="fake/credentials.json",
+        bucket="doesnt://matter",
     )

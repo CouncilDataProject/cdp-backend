@@ -193,6 +193,8 @@ def test_upload_db_model(
 # Mypy can type check for us so no real need to have tedious tests for every
 # db model creation function.
 
+# Attribute unpacking and setting gets tested in event pipeline tests.
+
 
 @pytest.mark.parametrize(
     "uri, expected_name, expected_uri",
