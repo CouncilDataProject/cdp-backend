@@ -200,7 +200,7 @@ def test_generate_transcript(
 # this should cover most cases.
 
 RANDOM_EVENTS_AND_PROC_RESULTS = []
-for _ in range(5):
+for i in range(6):
     rand_event = _get_example_event()
     proc_results = []
     for session in rand_event.sessions:
@@ -216,7 +216,8 @@ for _ in range(5):
         )
 
     # Append rand event and proce results as tuple
-    RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results))
+    # Set fail_file_uploads to even param sets
+    RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results, i % 2 == 0))
 
 # Cast to tuple for drop in usage
 RANDOM_EVENTS_AND_PROC_RESULTS = tuple(RANDOM_EVENTS_AND_PROC_RESULTS)
@@ -229,7 +230,7 @@ RANDOM_EVENTS_AND_PROC_RESULTS = tuple(RANDOM_EVENTS_AND_PROC_RESULTS)
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
 @pytest.mark.parametrize(
-    "event, session_processing_results",
+    "event, session_processing_results, fail_file_uploads",
     [
         (
             EXAMPLE_MINIMAL_EVENT,
@@ -243,6 +244,7 @@ RANDOM_EVENTS_AND_PROC_RESULTS = tuple(RANDOM_EVENTS_AND_PROC_RESULTS)
                     hover_thumbnail_uri="ex://abc123-hover-thumbnail.gif",
                 ),
             ],
+            False,
         ),
         (
             EXAMPLE_FILLED_EVENT,
@@ -264,6 +266,7 @@ RANDOM_EVENTS_AND_PROC_RESULTS = tuple(RANDOM_EVENTS_AND_PROC_RESULTS)
                     hover_thumbnail_uri="ex://def456-hover-thumbnail.gif",
                 ),
             ],
+            False,
         ),
         *RANDOM_EVENTS_AND_PROC_RESULTS,
     ],
@@ -275,11 +278,16 @@ def test_store_event_processing_results(
     mock_resource_copy: MagicMock,
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
+    fail_file_uploads: bool,
 ) -> None:
     # All of the resource copies relate to image file uploads / archival.
     # But we aren't actually uploading so just make sure that we aren't downloading
     # externally either.
-    mock_resource_copy.return_value = __file__
+    mock_resource_copy.return_value = "doesnt-matter.ext"
+
+    # Set file upload side effect
+    if fail_file_uploads:
+        mock_upload_file.side_effect = FileNotFoundError()
 
     pipeline.store_event_processing_results.run(  # type: ignore
         event=event,
