@@ -219,9 +219,6 @@ for i in range(6):
     # Set fail_file_uploads to even param sets
     RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results, i % 2 == 0))
 
-# Cast to tuple for drop in usage
-RANDOM_EVENTS_AND_PROC_RESULTS = tuple(RANDOM_EVENTS_AND_PROC_RESULTS)
-
 ###############################################################################
 
 
