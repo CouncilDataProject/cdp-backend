@@ -46,33 +46,6 @@ def assert_db_models_equality(
         assert are_not_equal
 
 
-def assert_ingestion_and_db_models_equal(
-    ingestion_model: ingestion_models.IngestionModel,
-    expected_db_model: Model,
-    actual_db_model: Model,
-) -> None:
-    # Get rid of dunderscore methods and attrs
-    fields = [attr for attr in dir(ingestion_model) if not attr.startswith("__")]
-    # Get rid of specific methods
-    fields = [
-        attr
-        for attr in fields
-        if attr
-        not in [
-            "to_dict",
-        ]
-    ]
-
-    for field in fields:
-        ingestion_value = getattr(ingestion_model, field)
-
-        # Minimal models may be missing some values
-        # Some fields like reference fields don't match between ingestion and db models
-        # Those are asserted in the more specific methods
-        if ingestion_value and hasattr(expected_db_model, field):
-            assert getattr(expected_db_model, field) == getattr(actual_db_model, field)
-
-
 ###############################################################################
 # Tests
 
