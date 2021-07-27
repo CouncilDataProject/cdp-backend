@@ -4,10 +4,12 @@
 from pathlib import Path
 
 import networkx as nx
+import pytest
 from fireo.fields import ReferenceField
 
 from cdp_backend.bin.create_cdp_database_uml import _construct_dot_file
 from cdp_backend.database import DATABASE_MODELS
+from cdp_backend.database.models import Person
 
 ###############################################################################
 
@@ -63,3 +65,15 @@ def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir: Path) -> None:
     # Check for cycles
     if len(cycles) >= 1:
         raise ValueError(f"Found cyclic dependencies in CDP Database Model: {cycles}")
+
+
+@pytest.mark.parametrize(
+    "name, expected",
+    [
+        ("M. Lorena González", "m-lorena-gonzalez"),
+        ("Example Person 256", "example-person-256"),
+        ("lot's  of  spaces     ", "lots-of-spaces"),
+    ],
+)
+def test_person_generate_router_string(name: str, expected: str) -> None:
+    assert Person.generate_router_string(name) == expected

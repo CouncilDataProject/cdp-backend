@@ -1032,13 +1032,19 @@ def store_event_processing_results(
                 exist_ok=True,
             )
 
+            # Handle event minutes item index
+            if event_minutes_item.index is None:
+                event_minutes_item_index = emi_index
+            else:
+                event_minutes_item_index = event_minutes_item.index
+
             # Create event minutes item
             try:
                 event_minutes_item_db_model = db_functions.create_event_minutes_item(
                     event_minutes_item=event_minutes_item,
                     event_ref=event_db_model,
                     minutes_item_ref=minutes_item_db_model,
-                    default_index=emi_index,
+                    index=event_minutes_item_index,
                 )
                 event_minutes_item_db_model = db_functions.upload_db_model(
                     db_model=event_minutes_item_db_model,
@@ -1048,10 +1054,9 @@ def store_event_processing_results(
             except (FieldValidationFailed, InvalidFieldType):
                 event_minutes_item_db_model = (
                     db_functions.create_minimal_event_minutes_item(
-                        event_minutes_item=event_minutes_item,
                         event_ref=event_db_model,
                         minutes_item_ref=minutes_item_db_model,
-                        default_index=emi_index,
+                        index=event_minutes_item_index,
                     )
                 )
                 event_minutes_item_db_model = db_functions.upload_db_model(

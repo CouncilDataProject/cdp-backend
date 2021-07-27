@@ -192,7 +192,7 @@ def create_event(
     db_event.body_ref = body_ref
     db_event.event_datetime = event_datetime
 
-    # Optional fiels
+    # Optional fields
     db_event.static_thumbnail_ref = static_thumbnail_ref
     db_event.hover_thumbnail_ref = hover_thumbnail_ref
     db_event.agenda_uri = agenda_uri
@@ -383,22 +383,15 @@ def create_minutes_item(
 
 
 def create_minimal_event_minutes_item(
-    event_minutes_item: ingestion_models.EventMinutesItem,
     event_ref: db_models.Event,
     minutes_item_ref: db_models.MinutesItem,
-    default_index: int,
+    index: int,
 ) -> db_models.EventMinutesItem:
     db_event_minutes_item = db_models.EventMinutesItem()
 
     db_event_minutes_item.event_ref = event_ref
     db_event_minutes_item.minutes_item_ref = minutes_item_ref
-
-    if event_minutes_item.index is None:
-        db_event_minutes_item.index = default_index
-    else:
-        db_event_minutes_item.index = event_minutes_item.index
-
-    db_event_minutes_item.decision = event_minutes_item.decision
+    db_event_minutes_item.index = index
 
     return db_event_minutes_item
 
@@ -407,14 +400,15 @@ def create_event_minutes_item(
     event_minutes_item: ingestion_models.EventMinutesItem,
     event_ref: db_models.Event,
     minutes_item_ref: db_models.MinutesItem,
-    default_index: int,
+    index: int,
 ) -> db_models.EventMinutesItem:
     db_event_minutes_item = create_minimal_event_minutes_item(
-        event_minutes_item=event_minutes_item,
         event_ref=event_ref,
         minutes_item_ref=minutes_item_ref,
-        default_index=default_index,
+        index=index,
     )
+
+    db_event_minutes_item.decision = event_minutes_item.decision
 
     return db_event_minutes_item
 
