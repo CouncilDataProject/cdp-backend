@@ -575,7 +575,7 @@ class Vote(Model):
         required=True,
         validator=validators.create_constant_value_validator(VoteDecision, True),
     )
-    in_majority = fields.BooleanField(required=True)
+    in_majority = fields.BooleanField()
     external_source_id = fields.TextField()
 
     class Meta:

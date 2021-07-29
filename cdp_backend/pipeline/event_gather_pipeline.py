@@ -1125,16 +1125,29 @@ def store_event_processing_results(
                         # Calc in_majority
                         # In majority overloads None (null) as
                         # "did not vote so cannot be in majority or not"
-                        if vote.decision in [
-                            db_constants.VoteDecision.APPROVE,
-                            db_constants.VoteDecision.REJECT,
-                        ]:
-                            in_majority = (
-                                vote.decision == db_constants.VoteDecision.APPROVE
-                                and event_minutes_item.decision
-                                == db_constants.EventMinutesItemDecision.PASSED
-                            )
-
+                        in_majority: Optional[bool]
+                        if (
+                            vote.decision
+                            in [
+                                db_constants.VoteDecision.APPROVE,
+                                db_constants.VoteDecision.ABSTAIN_APPROVE,
+                                db_constants.VoteDecision.ABSENT_APPROVE,
+                            ]
+                            and event_minutes_item.decision
+                            == db_constants.EventMinutesItemDecision.PASSED
+                        ):
+                            in_majority = True
+                        elif (
+                            vote.decision
+                            in [
+                                db_constants.VoteDecision.REJECT,
+                                db_constants.VoteDecision.ABSTAIN_REJECT,
+                                db_constants.VoteDecision.ABSENT_REJECT,
+                            ]
+                            and event_minutes_item.decision
+                            == db_constants.EventMinutesItemDecision.FAILED
+                        ):
+                            in_majority = True
                         else:
                             in_majority = None
 

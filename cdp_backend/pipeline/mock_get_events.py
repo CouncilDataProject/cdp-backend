@@ -39,7 +39,7 @@ RAND_MATTER_RANGE = (1, 1000)
 
 ALL_EVENT_MINUTES_ITEM_DECISIONS = get_all_class_attr_values(EventMinutesItemDecision)
 PASSING_VOTE_DECISIONS = [VoteDecision.APPROVE]
-FAILING_VOTE_DECISIONS = [VoteDecision.ABSTAIN, VoteDecision.REJECT]
+FAILING_VOTE_DECISIONS = [VoteDecision.ABSTAIN_REJECT, VoteDecision.REJECT]
 
 DUMMY_FILE_URI = (
     "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
