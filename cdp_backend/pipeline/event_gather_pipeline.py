@@ -826,6 +826,34 @@ def _process_person_ingestion(
     return person_db_model
 
 
+def _calculate_in_majority(
+    vote: ingestion_models.Vote,
+    event_minutes_item: ingestion_models.EventMinutesItem,
+) -> Optional[bool]:
+    # Voted to Approve or Approve-by-abstention-or-absense
+    if vote.decision in [
+        db_constants.VoteDecision.APPROVE,
+        db_constants.VoteDecision.ABSTAIN_APPROVE,
+        db_constants.VoteDecision.ABSENT_APPROVE,
+    ]:
+        return (
+            event_minutes_item.decision == db_constants.EventMinutesItemDecision.PASSED
+        )
+
+    # Voted to Reject or Reject-by-abstention-or-absense
+    elif vote.decision in [
+        db_constants.VoteDecision.REJECT,
+        db_constants.VoteDecision.ABSTAIN_REJECT,
+        db_constants.VoteDecision.ABSENT_REJECT,
+    ]:
+        return (
+            event_minutes_item.decision == db_constants.EventMinutesItemDecision.FAILED
+        )
+
+    # Explicit return None for "was turn absent or abstain"
+    return None
+
+
 @task
 def store_event_processing_results(
     event: EventIngestionModel,
@@ -1122,35 +1150,6 @@ def store_event_processing_results(
                             bucket=bucket,
                         )
 
-                        # Calc in_majority
-                        # In majority overloads None (null) as
-                        # "did not vote so cannot be in majority or not"
-                        in_majority: Optional[bool]
-                        if (
-                            vote.decision
-                            in [
-                                db_constants.VoteDecision.APPROVE,
-                                db_constants.VoteDecision.ABSTAIN_APPROVE,
-                                db_constants.VoteDecision.ABSENT_APPROVE,
-                            ]
-                            and event_minutes_item.decision
-                            == db_constants.EventMinutesItemDecision.PASSED
-                        ):
-                            in_majority = True
-                        elif (
-                            vote.decision
-                            in [
-                                db_constants.VoteDecision.REJECT,
-                                db_constants.VoteDecision.ABSTAIN_REJECT,
-                                db_constants.VoteDecision.ABSENT_REJECT,
-                            ]
-                            and event_minutes_item.decision
-                            == db_constants.EventMinutesItemDecision.FAILED
-                        ):
-                            in_majority = True
-                        else:
-                            in_majority = None
-
                         # Create vote
                         try:
                             vote_db_model = db_functions.create_vote(
@@ -1159,7 +1158,10 @@ def store_event_processing_results(
                                 event_minutes_item_ref=event_minutes_item_db_model,
                                 person_ref=vote_person_db_model,
                                 decision=vote.decision,
-                                in_majority=in_majority,
+                                in_majority=_calculate_in_majority(
+                                    vote=vote,
+                                    event_minutes_item=event_minutes_item,
+                                ),
                                 external_source_id=vote.external_source_id,
                             )
                             vote_db_model = db_functions.upload_db_model(

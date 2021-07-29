@@ -3,14 +3,16 @@
 
 import sys
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
 from prefect import Flow
 
+from cdp_backend.database import constants as db_constants
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
+from cdp_backend.pipeline import ingestion_models
 from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_FILLED_EVENT,
     EXAMPLE_MINIMAL_EVENT,
@@ -190,6 +192,173 @@ def test_generate_transcript(
 
     # Check state and results
     assert state.is_successful()  # type: ignore
+
+
+example_person = ingestion_models.Person(name="Bob Boberson")
+example_minutes_item = ingestion_models.MinutesItem(name="Definitely happened")
+failed_events_minutes_item = ingestion_models.EventMinutesItem(
+    minutes_item=example_minutes_item,
+    decision=db_constants.EventMinutesItemDecision.FAILED,
+)
+passed_events_minutes_item = ingestion_models.EventMinutesItem(
+    minutes_item=example_minutes_item,
+    decision=db_constants.EventMinutesItemDecision.PASSED,
+)
+
+
+@pytest.mark.parametrize(
+    "vote, event_minutes_item, expected",
+    [
+        # The minutes item passed
+        # They approved or approved-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.APPROVE,
+            ),
+            passed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_APPROVE,
+            ),
+            passed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_APPROVE,
+            ),
+            passed_events_minutes_item,
+            True,
+        ),
+        # They rejected or rejected-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.REJECT,
+            ),
+            passed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_REJECT,
+            ),
+            passed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_REJECT,
+            ),
+            passed_events_minutes_item,
+            False,
+        ),
+        # The minutes item failed
+        # They approved or approved-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.APPROVE,
+            ),
+            failed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_APPROVE,
+            ),
+            failed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_APPROVE,
+            ),
+            failed_events_minutes_item,
+            False,
+        ),
+        # They rejected or rejected-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.REJECT,
+            ),
+            failed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_REJECT,
+            ),
+            failed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_REJECT,
+            ),
+            failed_events_minutes_item,
+            True,
+        ),
+        # The minutes item passed
+        # They were a non-voting member
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_NON_VOTING,
+            ),
+            passed_events_minutes_item,
+            None,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_NON_VOTING,
+            ),
+            passed_events_minutes_item,
+            None,
+        ),
+        # The minutes item failed
+        # They were a non-voting member
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_NON_VOTING,
+            ),
+            failed_events_minutes_item,
+            None,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_NON_VOTING,
+            ),
+            failed_events_minutes_item,
+            None,
+        ),
+    ],
+)
+def test_calculate_in_majority(
+    vote: ingestion_models.Vote,
+    event_minutes_item: ingestion_models.EventMinutesItem,
+    expected: Optional[bool],
+) -> None:
+    actual = pipeline._calculate_in_majority(
+        vote=vote,
+        event_minutes_item=event_minutes_item,
+    )
+    assert actual == expected
 
 
 ###############################################################################
