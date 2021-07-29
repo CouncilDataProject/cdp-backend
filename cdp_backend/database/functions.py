@@ -165,13 +165,13 @@ def create_body(
     db_body = db_models.Body()
 
     # Required fields
-    db_body.name = body.name
+    db_body.name = body.name.strip()
     db_body.is_active = body.is_active
     db_body.start_datetime = start_datetime
 
     # Optional fields
     db_body.end_datetime = body.end_datetime
-    db_body.description = body.description
+    db_body.description = body.description.strip()
     db_body.external_source_id = body.external_source_id
 
     return db_body
@@ -195,8 +195,8 @@ def create_event(
     # Optional fields
     db_event.static_thumbnail_ref = static_thumbnail_ref
     db_event.hover_thumbnail_ref = hover_thumbnail_ref
-    db_event.agenda_uri = agenda_uri
-    db_event.minutes_uri = minutes_uri
+    db_event.agenda_uri = agenda_uri.strip()
+    db_event.minutes_uri = minutes_uri.strip()
     db_event.external_source_id = external_source_id
 
     return db_event
@@ -248,9 +248,9 @@ def create_matter(
 ) -> db_models.Matter:
     db_matter = db_models.Matter()
 
-    db_matter.name = matter.name
-    db_matter.matter_type = matter.matter_type
-    db_matter.title = matter.title
+    db_matter.name = matter.name.strip()
+    db_matter.matter_type = matter.matter_type.strip()
+    db_matter.title = matter.title.strip()
     db_matter.external_source_id = matter.external_source_id
 
     return db_matter
@@ -265,7 +265,7 @@ def create_matter_status(
     db_matter_status = db_models.MatterStatus()
 
     db_matter_status.matter_ref = matter_ref
-    db_matter_status.status = status
+    db_matter_status.status = status.strip()
     db_matter_status.update_datetime = update_datetime
     db_matter_status.external_source_id = external_source_id
 
@@ -279,8 +279,8 @@ def create_matter_file(
     db_matter_file = db_models.MatterFile()
 
     db_matter_file.matter_ref = matter_ref
-    db_matter_file.name = supporting_file.name
-    db_matter_file.uri = supporting_file.uri
+    db_matter_file.name = supporting_file.name.strip()
+    db_matter_file.uri = supporting_file.uri.strip()
     db_matter_file.external_source_id = supporting_file.external_source_id
 
     return db_matter_file
@@ -291,9 +291,11 @@ def create_minimal_person(
 ) -> db_models.Person:
     db_person = db_models.Person()
 
-    db_person.name = person.name
+    db_person.name = person.name.strip()
     db_person.is_active = person.is_active
-    db_person.router_string = db_models.Person.generate_router_string(person.name)
+    db_person.router_string = db_models.Person.generate_router_string(
+        person.name.strip()
+    )
 
     return db_person
 
@@ -320,10 +322,10 @@ def create_person(
     db_person = create_minimal_person(person=person)
 
     # Optional
-    db_person.router_string = person.router_string
-    db_person.email = person.email
-    db_person.phone = person.phone
-    db_person.website = person.website
+    db_person.router_string = person.router_string.strip()
+    db_person.email = person.email.strip()
+    db_person.phone = person.phone.strip()
+    db_person.website = person.website.strip()
     db_person.picture_ref = picture_ref
     db_person.external_source_id = person.external_source_id
 
@@ -336,9 +338,9 @@ def create_seat(
 ) -> db_models.Seat:
     db_seat = db_models.Seat()
 
-    db_seat.name = seat.name
-    db_seat.electoral_area = seat.electoral_area
-    db_seat.electoral_type = seat.electoral_type
+    db_seat.name = seat.name.strip()
+    db_seat.electoral_area = seat.electoral_area.strip()
+    db_seat.electoral_type = seat.electoral_type.strip()
     db_seat.image_ref = image_ref
     db_seat.external_source_id = seat.external_source_id
 
@@ -355,7 +357,7 @@ def create_role(
     db_role = db_models.Role()
 
     # Required
-    db_role.title = role.title
+    db_role.title = role.title.strip()
     db_role.person_ref = person_ref
     db_role.seat_ref = seat_ref
     db_role.start_datetime = start_datetime
@@ -374,8 +376,8 @@ def create_minutes_item(
 ) -> db_models.MinutesItem:
     db_minutes_item = db_models.MinutesItem()
 
-    db_minutes_item.name = minutes_item.name
-    db_minutes_item.description = minutes_item.description
+    db_minutes_item.name = minutes_item.name.strip()
+    db_minutes_item.description = minutes_item.description.strip()
     db_minutes_item.matter_ref = matter_ref
     db_minutes_item.external_source_id = minutes_item.external_source_id
 
@@ -420,8 +422,8 @@ def create_event_minutes_item_file(
     db_event_minutes_item_file = db_models.EventMinutesItemFile()
 
     db_event_minutes_item_file.event_minutes_item_ref = event_minutes_item_ref
-    db_event_minutes_item_file.name = supporting_file.name
-    db_event_minutes_item_file.uri = supporting_file.uri
+    db_event_minutes_item_file.name = supporting_file.name.strip()
+    db_event_minutes_item_file.uri = supporting_file.uri.strip()
     db_event_minutes_item_file.external_source_id = supporting_file.external_source_id
 
     return db_event_minutes_item_file
@@ -442,7 +444,7 @@ def create_vote(
     db_vote.event_ref = event_ref
     db_vote.event_minutes_item_ref = event_minutes_item_ref
     db_vote.person_ref = person_ref
-    db_vote.decision = decision
+    db_vote.decision = decision.strip()
     db_vote.in_majority = in_majority
     db_vote.external_source_id = external_source_id
 
