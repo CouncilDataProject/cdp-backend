@@ -16,6 +16,8 @@ class VoteDecision:
     APPROVE = "Approve"
     REJECT = "Reject"
     ABSTAIN = "Abstain"
+    ABSENT = "Absent"
+    LATE_ARRIVAL = "Late Arrival"
 
 
 class MatterStatusDecision:
