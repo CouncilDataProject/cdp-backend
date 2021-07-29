@@ -1123,12 +1123,20 @@ def store_event_processing_results(
                         )
 
                         # Calc in_majority
-                        # TODO: Handle abstain??
-                        in_majority = (
-                            vote.decision == db_constants.VoteDecision.APPROVE
-                            and event_minutes_item.decision
-                            == db_constants.EventMinutesItemDecision.PASSED
-                        )
+                        # In majority overloads None (null) as
+                        # "did not vote so cannot be in majority or not"
+                        if vote.decision in [
+                            db_constants.VoteDecision.APPROVE,
+                            db_constants.VoteDecision.REJECT,
+                        ]:
+                            in_majority = (
+                                vote.decision == db_constants.VoteDecision.APPROVE
+                                and event_minutes_item.decision
+                                == db_constants.EventMinutesItemDecision.PASSED
+                            )
+
+                        else:
+                            in_majority = None
 
                         # Create vote
                         try:
