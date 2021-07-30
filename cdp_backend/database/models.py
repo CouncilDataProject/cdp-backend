@@ -228,56 +228,6 @@ class Matter(Model):
     _INDEXES = ()
 
 
-class MatterStatus(Model):
-    """
-    A matter status is the status of a matter at any given time. Useful for tracking
-    the timelines of matters. I.E. Return me a timeline of matter x.
-
-    The same matter will have multiple matter statuses.
-    1. MatterStatus of submitted
-    2. MatterStatus of passed
-    3. MatterStatus of signed
-    4. etc.
-    """
-
-    matter_ref = fields.ReferenceField(Matter, required=True)
-    status = fields.TextField(
-        required=True,
-        validator=validators.create_constant_value_validator(
-            MatterStatusDecision, True
-        ),
-    )
-    update_datetime = fields.DateTime(required=True)
-    external_source_id = fields.TextField()
-
-    class Meta:
-        ignore_none_field = False
-
-    @classmethod
-    def Example(cls) -> Model:
-        matter_status = cls()
-        matter_status.matter_ref = Matter.Example()
-        matter_status.status = MatterStatusDecision.ADOPTED
-        matter_status.update_datetime = datetime.utcnow()
-        return matter_status
-
-    _PRIMARY_KEYS = ("matter_ref", "status", "update_datetime")
-    _INDEXES = (
-        IndexedFieldSet(
-            (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="update_datetime", order=Order.ASCENDING),
-            ),
-        ),
-        IndexedFieldSet(
-            (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="update_datetime", order=Order.DESCENDING),
-            ),
-        ),
-    )
-
-
 class MatterFile(Model):
     """
     A document related to a matter.
@@ -523,6 +473,59 @@ class EventMinutesItem(Model):
                 IndexedField(name="event_ref", order=Order.ASCENDING),
                 IndexedField(name="index", order=Order.DESCENDING),
             )
+        ),
+    )
+
+
+class MatterStatus(Model):
+    """
+    A matter status is the status of a matter at any given time. Useful for tracking
+    the timelines of matters. I.E. Return me a timeline of matter x.
+
+    The same matter will have multiple matter statuses.
+    1. MatterStatus of submitted
+    2. MatterStatus of passed
+    3. MatterStatus of signed
+    4. etc.
+    """
+
+    matter_ref = fields.ReferenceField(Matter, required=True)
+    # Optional because status can be updated out of event
+    # i.e. Signed by Mayor
+    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem)
+    status = fields.TextField(
+        required=True,
+        validator=validators.create_constant_value_validator(
+            MatterStatusDecision, True
+        ),
+    )
+    update_datetime = fields.DateTime(required=True)
+    external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
+
+    @classmethod
+    def Example(cls) -> Model:
+        matter_status = cls()
+        matter_status.matter_ref = Matter.Example()
+        matter_status.status = MatterStatusDecision.ADOPTED
+        matter_status.update_datetime = datetime.utcnow()
+        return matter_status
+
+    _PRIMARY_KEYS = ("matter_ref", "status", "update_datetime")
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="update_datetime", order=Order.ASCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="update_datetime", order=Order.DESCENDING),
+            ),
         ),
     )
 

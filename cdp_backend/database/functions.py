@@ -267,11 +267,13 @@ def create_matter_status(
     matter_ref: db_models.Matter,
     status: str,
     update_datetime: datetime,
+    event_minutes_item_ref: Optional[db_models.EventMinutesItem] = None,
     external_source_id: Optional[str] = None,
 ) -> db_models.Matter:
     db_matter_status = db_models.MatterStatus()
 
     db_matter_status.matter_ref = matter_ref
+    db_matter_status.event_minutes_item_ref = event_minutes_item_ref
     db_matter_status.status = _strip_field(status)
     db_matter_status.update_datetime = update_datetime
     db_matter_status.external_source_id = external_source_id

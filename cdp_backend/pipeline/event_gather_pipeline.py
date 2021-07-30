@@ -999,32 +999,6 @@ def store_event_processing_results(
                     ingestion_model=event_minutes_item.matter,
                 )
 
-                # Create matter status
-                matter_status_db_model = db_functions.create_matter_status(
-                    matter_ref=matter_db_model,
-                    status=event_minutes_item.matter.result_status,
-                    update_datetime=first_session.session_datetime,
-                )
-                try:
-                    matter_status_db_model = db_functions.upload_db_model(
-                        db_model=matter_status_db_model,
-                        credentials_file=credentials_file,
-                        exist_ok=True,
-                    )
-                except FieldValidationFailed:
-                    allowed_matter_decisions = (
-                        constants_utils.get_all_class_attr_values(
-                            db_constants.MatterStatusDecision
-                        )
-                    )
-                    log.error(
-                        f"Provided 'status' is not an approved constant. "
-                        f"Provided: '{event_minutes_item.matter.result_status}' "
-                        f"Should be one of: {allowed_matter_decisions} "
-                        f"See: cdp_backend.database.constants.MatterStatusDecision. "
-                        f"Skipping matter status database upload."
-                    )
-
                 # Add people from matter sponsors
                 if event_minutes_item.matter.sponsors is not None:
                     for sponsor_person in event_minutes_item.matter.sponsors:
@@ -1092,6 +1066,34 @@ def store_event_processing_results(
                     credentials_file=credentials_file,
                     exist_ok=True,
                 )
+
+            # Create matter status
+            if matter_db_model is not None:
+                matter_status_db_model = db_functions.create_matter_status(
+                    matter_ref=matter_db_model,
+                    event_minutes_item_ref=event_minutes_item_db_model,
+                    status=event_minutes_item.matter.result_status,
+                    update_datetime=first_session.session_datetime,
+                )
+                try:
+                    matter_status_db_model = db_functions.upload_db_model(
+                        db_model=matter_status_db_model,
+                        credentials_file=credentials_file,
+                        exist_ok=True,
+                    )
+                except FieldValidationFailed:
+                    allowed_matter_decisions = (
+                        constants_utils.get_all_class_attr_values(
+                            db_constants.MatterStatusDecision
+                        )
+                    )
+                    log.error(
+                        f"Provided 'status' is not an approved constant. "
+                        f"Provided: '{event_minutes_item.matter.result_status}' "
+                        f"Should be one of: {allowed_matter_decisions} "
+                        f"See: cdp_backend.database.constants.MatterStatusDecision. "
+                        f"Skipping matter status database upload."
+                    )
 
             # Add supporting files for matter and event minutes item
             if event_minutes_item.supporting_files is not None:
