@@ -1068,7 +1068,7 @@ def store_event_processing_results(
                 )
 
             # Create matter status
-            if matter_db_model is not None:
+            if matter_db_model is not None and event_minutes_item.matter is not None:
                 matter_status_db_model = db_functions.create_matter_status(
                     matter_ref=matter_db_model,
                     event_minutes_item_ref=event_minutes_item_db_model,
