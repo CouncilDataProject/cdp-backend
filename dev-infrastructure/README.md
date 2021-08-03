@@ -62,7 +62,11 @@ need to run these scripts in a py37 environment.
 make login
 make init project={project-name}
 make build
+make gen-key project={project-name}
 ```
+
+Rename the `key` file in `../keys` file `cdp-dev.json`. 
+
 
 ## Infrastrure Management Commands
 
@@ -156,11 +160,11 @@ base directory of this repository and running the following:
 -   To run a semi-random (large permutation) event pipeline:
 
     ```bash
-    make run-rand-event-pipeline key=.keys/{key-name.json}
+    make run-rand-event-pipeline
     ```
 
 -   To run a minimal (by definition) event pipeline:
 
     ```bash
-    make run-min-event-pipeline key=.keys/{key-name.json}
+    make run-min-event-pipeline
     ```
