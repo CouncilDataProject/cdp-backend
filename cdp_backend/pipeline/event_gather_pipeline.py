@@ -1,21 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
 from importlib import import_module
+from operator import attrgetter
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
 
+from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
 
+from ..database import constants as db_constants
 from ..database import functions as db_functions
+from ..database import models as db_models
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
-from ..utils import file_utils as file_util_functions
+from ..utils import constants_utils, file_utils
 from ..version import __version__
+from . import ingestion_models
 from .ingestion_models import EventIngestionModel, Session
 from .pipeline_config import EventGatherPipelineConfig
 from .transcript_model import Transcript
+
+###############################################################################
+
+log = logging.getLogger(__name__)
 
 ###############################################################################
 
@@ -89,6 +99,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
                 ) = get_video_and_generate_thumbnails(
                     session_content_hash=session_content_hash,
                     video_uri=session.video_uri,
+                    event=event,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
@@ -110,6 +121,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
                 event=event,
                 session_processing_results=session_processing_results,
                 credentials_file=config.google_credentials_file,
+                bucket=config.validated_gcs_bucket_name,
             )
 
     return flow
@@ -143,16 +155,14 @@ def get_video_and_split_audio(
     # TODO: Handle windows file splitting???
     # Generally this is a URI but we do have a goal of a local file processing too...
     video_filename = video_uri.split("/")[-1]
-    tmp_video_filepath = file_util_functions.resource_copy(
+    tmp_video_filepath = file_utils.resource_copy(
         uri=video_uri,
         dst=f"audio-splitting-{video_filename}",
         overwrite=True,
     )
 
     # Hash the video contents
-    session_content_hash = file_util_functions.hash_file_contents(
-        uri=tmp_video_filepath
-    )
+    session_content_hash = file_utils.hash_file_contents(uri=tmp_video_filepath)
 
     # Check for existing audio
     tmp_audio_filepath = f"{session_content_hash}-audio.wav"
@@ -169,7 +179,7 @@ def get_video_and_split_audio(
             tmp_audio_filepath,
             tmp_audio_log_out_filepath,
             tmp_audio_log_err_filepath,
-        ) = file_util_functions.split_audio(
+        ) = file_utils.split_audio(
             video_read_path=tmp_video_filepath,
             audio_save_path=tmp_audio_filepath,
             overwrite=True,
@@ -393,7 +403,7 @@ def get_captions_and_generate_transcript(
 
     # Download or copy resource to local
     caption_filename = caption_uri.split("/")[-1]
-    local_captions = file_util_functions.resource_copy(
+    local_captions = file_utils.resource_copy(
         uri=caption_uri,
         dst=f"caption-transcribing-{caption_filename}",
         overwrite=True,
@@ -626,8 +636,30 @@ def generate_transcript(
 
 @task(nout=2)
 def get_video_and_generate_thumbnails(
-    session_content_hash: str, video_uri: str, bucket: str, credentials_file: str
+    session_content_hash: str,
+    video_uri: str,
+    event: EventIngestionModel,
+    bucket: str,
+    credentials_file: str,
 ) -> Tuple[str, str]:
+    if event.static_thumbnail_uri is None:
+        # Generate new
+        pass
+
+    else:
+        # Download existing
+        pass
+
+    if event.hover_thumbnail_uri is None:
+        # Generate new
+        pass
+    else:
+        # Download existing
+        pass
+
+    # Upload generated or new static thumbnail to file store
+    # Upload generated or new hover thumbnail to file store
+
     return (
         f"{session_content_hash}-static-thumb.png",
         f"{session_content_hash}-hover-thumb.gif",
@@ -653,31 +685,262 @@ def compile_session_processing_result(
     )
 
 
+def _process_person_ingestion(
+    person: ingestion_models.Person,
+    default_session: Session,
+    credentials_file: str,
+    bucket: str,
+) -> db_models.Person:
+    # Store person picture file
+    person_picture_db_model: Optional[db_models.File]
+    if person.picture_uri is not None:
+        try:
+            tmp_person_picture_path = file_utils.resource_copy(person.picture_uri)
+            person_picture_uri = fs_functions.upload_file(
+                credentials_file=credentials_file,
+                bucket=bucket,
+                filepath=tmp_person_picture_path,
+            )
+            fs_functions.remove_local_file(tmp_person_picture_path)
+            person_picture_db_model = db_functions.create_file(person_picture_uri)
+            person_picture_db_model = db_functions.upload_db_model(
+                db_model=person_picture_db_model,
+                credentials_file=credentials_file,
+                exist_ok=True,
+            )
+        except FileNotFoundError:
+            person_picture_db_model = None
+            log.error(f"Person ('{person.name}'), picture URI could not be archived.")
+    else:
+        person_picture_db_model = None
+
+    # Create person
+    try:
+        person_db_model = db_functions.create_person(
+            person=person,
+            picture_ref=person_picture_db_model,
+        )
+        person_db_model = db_functions.upload_db_model(
+            db_model=person_db_model,
+            credentials_file=credentials_file,
+            ingestion_model=person,
+        )
+    except (FieldValidationFailed, RequiredField, InvalidFieldType):
+        person_db_model = db_functions.create_minimal_person(person=person)
+        # No ingestion model provided here so that we don't try to
+        # re-validate the already failed model upload
+        person_db_model = db_functions.upload_db_model(
+            db_model=person_db_model,
+            credentials_file=credentials_file,
+            exist_ok=True,
+        )
+
+    # Create seat
+    if person.seat is not None:
+        # Store seat picture file
+        person_seat_image_db_model: Optional[db_models.File]
+        try:
+            if person.seat.image_uri is not None:
+                tmp_person_seat_image_path = file_utils.resource_copy(
+                    uri=person.seat.image_uri,
+                )
+                person_seat_image_uri = fs_functions.upload_file(
+                    credentials_file=credentials_file,
+                    bucket=bucket,
+                    filepath=tmp_person_seat_image_path,
+                )
+                fs_functions.remove_local_file(
+                    tmp_person_seat_image_path,
+                )
+                person_seat_image_db_model = db_functions.create_file(
+                    person_seat_image_uri
+                )
+                person_seat_image_db_model = db_functions.upload_db_model(
+                    db_model=person_seat_image_db_model,
+                    credentials_file=credentials_file,
+                    exist_ok=True,
+                )
+            else:
+                person_seat_image_db_model = None
+        except FileNotFoundError:
+            person_seat_image_db_model = None
+            log.error(
+                f"Person ('{person.name}'), " f"seat image URI could not be archived."
+            )
+
+        # Actual seat creation
+        person_seat_db_model = db_functions.create_seat(
+            seat=person.seat,
+            image_ref=person_seat_image_db_model,
+        )
+        person_seat_db_model = db_functions.upload_db_model(
+            db_model=person_seat_db_model,
+            credentials_file=credentials_file,
+            exist_ok=True,
+        )
+
+    # Create roles
+    if person.roles is not None:
+        for person_role in person.roles:
+            # Create any bodies for roles
+            person_role_body_db_model: Optional[db_models.Body]
+            if person_role.body is not None:
+                # Use or default role body start_datetime
+                if person_role.body.start_datetime is None:
+                    person_role_body_start_datetime = default_session.session_datetime
+                else:
+                    person_role_body_start_datetime = person_role.body.start_datetime
+
+                person_role_body_db_model = db_functions.create_body(
+                    body=person_role.body,
+                    start_datetime=person_role_body_start_datetime,
+                )
+                person_role_body_db_model = db_functions.upload_db_model(
+                    db_model=person_role_body_db_model,
+                    credentials_file=credentials_file,
+                    ingestion_model=person_role.body,
+                )
+            else:
+                person_role_body_db_model = None
+
+            # Use or default role start_datetime
+            if person_role.start_datetime is None:
+                person_role_start_datetime = default_session.session_datetime
+            else:
+                person_role_start_datetime = person_role.start_datetime
+
+            # Actual role creation
+            person_role_db_model = db_functions.create_role(
+                role=person_role,
+                person_ref=person_db_model,
+                seat_ref=person_seat_db_model,
+                start_datetime=person_role_start_datetime,
+                body_ref=person_role_body_db_model,
+            )
+            person_role_db_model = db_functions.upload_db_model(
+                db_model=person_role_db_model,
+                credentials_file=credentials_file,
+                exist_ok=True,
+            )
+
+    return person_db_model
+
+
+def _calculate_in_majority(
+    vote: ingestion_models.Vote,
+    event_minutes_item: ingestion_models.EventMinutesItem,
+) -> Optional[bool]:
+    # Voted to Approve or Approve-by-abstention-or-absense
+    if vote.decision in [
+        db_constants.VoteDecision.APPROVE,
+        db_constants.VoteDecision.ABSTAIN_APPROVE,
+        db_constants.VoteDecision.ABSENT_APPROVE,
+    ]:
+        return (
+            event_minutes_item.decision == db_constants.EventMinutesItemDecision.PASSED
+        )
+
+    # Voted to Reject or Reject-by-abstention-or-absense
+    elif vote.decision in [
+        db_constants.VoteDecision.REJECT,
+        db_constants.VoteDecision.ABSTAIN_REJECT,
+        db_constants.VoteDecision.ABSENT_REJECT,
+    ]:
+        return (
+            event_minutes_item.decision == db_constants.EventMinutesItemDecision.FAILED
+        )
+
+    # Explicit return None for "was turn absent or abstain"
+    return None
+
+
 @task
 def store_event_processing_results(
     event: EventIngestionModel,
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
+    bucket: str,
 ) -> None:
+    # TODO: check metadata before pipeline runs to avoid the many try excepts
+
+    # Get first session
+    first_session = min(event.sessions, key=attrgetter("session_index"))
+
     # Get high level event metadata and db models
+
+    # Use or default body start_datetime
+    if event.body.start_datetime is None:
+        body_start_datetime = first_session.session_datetime
+    else:
+        body_start_datetime = event.body.start_datetime
+
     # Upload body
-    body_db_model = db_functions.create_body_from_ingestion_model(body=event.body)
+    body_db_model = db_functions.create_body(
+        body=event.body,
+        start_datetime=body_start_datetime,
+    )
     body_db_model = db_functions.upload_db_model(
         db_model=body_db_model,
         credentials_file=credentials_file,
-        ingestion_model=event.body,
+        exist_ok=True,
     )
 
+    # Create file docs for thumbnails
+    event_static_thumbnail_file_db_model = None
+    event_hover_thumbnail_file_db_model = None
+    # TODO: Uncomment this once thumbnail processing is added upstream in pipeline
+    # for session_result in session_processing_results:
+    #     # Upload static thumbnail
+    #     static_thumbnail_file_db_model = db_functions.create_file(
+    #         uri=session_result.static_thumbnail_uri,
+    #     )
+    #     static_thumbnail_file_db_model = db_functions.upload_db_model(
+    #         db_model=static_thumbnail_file_db_model,
+    #         exist_ok=True,
+    #     )
+    #     if event_static_thumbnail_file_db_model is None:
+    #         event_static_thumbnail_file_db_model = static_thumbnail_file_db_model
+
+    #     # Upload hover thumbnail
+    #     hover_thumbnail_file_db_model = db_functions.create_file(
+    #         uri=session_result.hover_thumbnail_uri,
+    #     )
+    #     hover_thumbnail_file_db_model = db_functions.upload_db_model(
+    #         db_model=hover_thumbnail_file_db_model,
+    #         exist_ok=True,
+    #     )
+    #     if event_hover_thumbnail_file_db_model is None:
+    #         event_hover_thumbnail_file_db_model = hover_thumbnail_file_db_model
+
     # Upload event
-    event_db_model = db_functions.create_event_from_ingestion_model(
-        event=event,
-        body_ref=body_db_model,
-    )
-    event_db_model = db_functions.upload_db_model(
-        db_model=event_db_model,
-        credentials_file=credentials_file,
-        ingestion_model=event,
-    )
+    try:
+        event_db_model = db_functions.create_event(
+            body_ref=body_db_model,
+            event_datetime=first_session.session_datetime,
+            static_thumbnail_ref=event_static_thumbnail_file_db_model,
+            hover_thumbnail_ref=event_hover_thumbnail_file_db_model,
+            agenda_uri=event.agenda_uri,
+            minutes_uri=event.minutes_uri,
+            external_source_id=event.external_source_id,
+        )
+        event_db_model = db_functions.upload_db_model(
+            db_model=event_db_model,
+            credentials_file=credentials_file,
+            exist_ok=True,
+        )
+    except FieldValidationFailed:
+        event_db_model = db_functions.create_event(
+            body_ref=body_db_model,
+            event_datetime=first_session.session_datetime,
+            static_thumbnail_ref=event_static_thumbnail_file_db_model,
+            hover_thumbnail_ref=event_hover_thumbnail_file_db_model,
+            external_source_id=event.external_source_id,
+        )
+        event_db_model = db_functions.upload_db_model(
+            db_model=event_db_model,
+            credentials_file=credentials_file,
+            exist_ok=True,
+        )
 
     # Iter sessions
     for session_result in session_processing_results:
@@ -699,26 +962,8 @@ def store_event_processing_results(
             exist_ok=True,
         )
 
-        # Upload static thumbnail
-        # static_thumbnail_file_db_model = db_functions.create_file(
-        #     uri=session_result.static_thumbnail_uri,
-        # )
-        # static_thumbnail_file_db_model = db_functions.upload_db_model(
-        #     db_model=static_thumbnail_file_db_model,
-        #     exist_ok=True,
-        # )
-
-        # Upload hover thumbnail
-        # hover_thumbnail_file_db_model = db_functions.create_file(
-        #     uri=session_result.hover_thumbnail_uri,
-        # )
-        # hover_thumbnail_file_db_model = db_functions.upload_db_model(
-        #     db_model=hover_thumbnail_file_db_model,
-        #     exist_ok=True,
-        # )
-
         # Create session
-        session_db_model = db_functions.create_session_from_ingestion_model(
+        session_db_model = db_functions.create_session(
             session=session_result.session,
             event_ref=event_db_model,
         )
@@ -739,3 +984,211 @@ def store_event_processing_results(
             credentials_file=credentials_file,
             exist_ok=True,
         )
+
+    # Add event metadata
+    if event.event_minutes_items is not None:
+        for emi_index, event_minutes_item in enumerate(event.event_minutes_items):
+            if event_minutes_item.matter is not None:
+                # Create matter
+                matter_db_model = db_functions.create_matter(
+                    matter=event_minutes_item.matter,
+                )
+                matter_db_model = db_functions.upload_db_model(
+                    db_model=matter_db_model,
+                    credentials_file=credentials_file,
+                    ingestion_model=event_minutes_item.matter,
+                )
+
+                # Add people from matter sponsors
+                if event_minutes_item.matter.sponsors is not None:
+                    for sponsor_person in event_minutes_item.matter.sponsors:
+                        sponsor_person_db_model = _process_person_ingestion(
+                            person=sponsor_person,
+                            default_session=first_session,
+                            credentials_file=credentials_file,
+                            bucket=bucket,
+                        )
+
+                        # Create matter sponsor association
+                        matter_sponsor_db_model = db_functions.create_matter_sponsor(
+                            matter_ref=matter_db_model,
+                            person_ref=sponsor_person_db_model,
+                        )
+                        matter_sponsor_db_model = db_functions.upload_db_model(
+                            db_model=matter_sponsor_db_model,
+                            credentials_file=credentials_file,
+                            exist_ok=True,
+                        )
+
+            else:
+                matter_db_model = None  # type: ignore
+
+            # Create minutes item
+            minutes_item_db_model = db_functions.create_minutes_item(
+                minutes_item=event_minutes_item.minutes_item,
+                matter_ref=matter_db_model,
+            )
+            minutes_item_db_model = db_functions.upload_db_model(
+                db_model=minutes_item_db_model,
+                credentials_file=credentials_file,
+                exist_ok=True,
+            )
+
+            # Handle event minutes item index
+            if event_minutes_item.index is None:
+                event_minutes_item_index = emi_index
+            else:
+                event_minutes_item_index = event_minutes_item.index
+
+            # Create event minutes item
+            try:
+                event_minutes_item_db_model = db_functions.create_event_minutes_item(
+                    event_minutes_item=event_minutes_item,
+                    event_ref=event_db_model,
+                    minutes_item_ref=minutes_item_db_model,
+                    index=event_minutes_item_index,
+                )
+                event_minutes_item_db_model = db_functions.upload_db_model(
+                    db_model=event_minutes_item_db_model,
+                    credentials_file=credentials_file,
+                    exist_ok=True,
+                )
+            except (FieldValidationFailed, InvalidFieldType):
+                event_minutes_item_db_model = (
+                    db_functions.create_minimal_event_minutes_item(
+                        event_ref=event_db_model,
+                        minutes_item_ref=minutes_item_db_model,
+                        index=event_minutes_item_index,
+                    )
+                )
+                event_minutes_item_db_model = db_functions.upload_db_model(
+                    db_model=event_minutes_item_db_model,
+                    credentials_file=credentials_file,
+                    exist_ok=True,
+                )
+
+            # Create matter status
+            if matter_db_model is not None and event_minutes_item.matter is not None:
+                matter_status_db_model = db_functions.create_matter_status(
+                    matter_ref=matter_db_model,
+                    event_minutes_item_ref=event_minutes_item_db_model,
+                    status=event_minutes_item.matter.result_status,
+                    update_datetime=first_session.session_datetime,
+                )
+                try:
+                    matter_status_db_model = db_functions.upload_db_model(
+                        db_model=matter_status_db_model,
+                        credentials_file=credentials_file,
+                        exist_ok=True,
+                    )
+                except FieldValidationFailed:
+                    allowed_matter_decisions = (
+                        constants_utils.get_all_class_attr_values(
+                            db_constants.MatterStatusDecision
+                        )
+                    )
+                    log.error(
+                        f"Provided 'status' is not an approved constant. "
+                        f"Provided: '{event_minutes_item.matter.result_status}' "
+                        f"Should be one of: {allowed_matter_decisions} "
+                        f"See: cdp_backend.database.constants.MatterStatusDecision. "
+                        f"Skipping matter status database upload."
+                    )
+
+            # Add supporting files for matter and event minutes item
+            if event_minutes_item.supporting_files is not None:
+                for supporting_file in event_minutes_item.supporting_files:
+
+                    # Archive as matter file
+                    if event_minutes_item.matter is not None:
+                        try:
+                            matter_file_db_model = db_functions.create_matter_file(
+                                matter_ref=matter_db_model,
+                                supporting_file=supporting_file,
+                            )
+                            matter_file_db_model = db_functions.upload_db_model(
+                                db_model=matter_file_db_model,
+                                credentials_file=credentials_file,
+                                exist_ok=True,
+                            )
+                        except FieldValidationFailed:
+                            log.error(
+                                f"MatterFile ('{supporting_file.uri}') "
+                                f"could not be archived."
+                            )
+
+                    # Archive as event minutes item file
+                    try:
+                        event_minutes_item_file_db_model = (
+                            db_functions.create_event_minutes_item_file(
+                                event_minutes_item_ref=event_minutes_item_db_model,
+                                supporting_file=supporting_file,
+                            )
+                        )
+                        event_minutes_item_file_db_model = db_functions.upload_db_model(
+                            db_model=event_minutes_item_file_db_model,
+                            credentials_file=credentials_file,
+                            exist_ok=True,
+                        )
+                    except FieldValidationFailed:
+                        log.error(
+                            f"EventMinutesItemFile ('{supporting_file.uri}') "
+                            f"could not be archived."
+                        )
+
+            # Add vote information
+            if event_minutes_item.votes is not None:
+                # Protect against corrupted data
+                if (
+                    event_minutes_item.decision is not None
+                    and event_minutes_item.matter is not None
+                ):
+                    for vote in event_minutes_item.votes:
+                        # Add people from voters
+                        vote_person_db_model = _process_person_ingestion(
+                            person=vote.person,
+                            default_session=first_session,
+                            credentials_file=credentials_file,
+                            bucket=bucket,
+                        )
+
+                        # Create vote
+                        try:
+                            vote_db_model = db_functions.create_vote(
+                                matter_ref=matter_db_model,
+                                event_ref=event_db_model,
+                                event_minutes_item_ref=event_minutes_item_db_model,
+                                person_ref=vote_person_db_model,
+                                decision=vote.decision,
+                                in_majority=_calculate_in_majority(
+                                    vote=vote,
+                                    event_minutes_item=event_minutes_item,
+                                ),
+                                external_source_id=vote.external_source_id,
+                            )
+                            vote_db_model = db_functions.upload_db_model(
+                                db_model=vote_db_model,
+                                credentials_file=credentials_file,
+                                exist_ok=True,
+                            )
+                        except (FieldValidationFailed, RequiredField, InvalidFieldType):
+                            allowed_vote_decisions = (
+                                constants_utils.get_all_class_attr_values(
+                                    db_constants.VoteDecision
+                                )
+                            )
+                            log.error(
+                                f"Provided 'decision' is not an approved constant. "
+                                f"Provided: '{vote.decision}' "
+                                f"Should be one of: {allowed_vote_decisions} "
+                                f"See: cdp_backend.database.constants.VoteDecision. "
+                                f"Skipping vote database upload."
+                            )
+
+                else:
+                    log.error(
+                        f"Unable to process voting information for event minutes item: "
+                        f"'{event_minutes_item.minutes_item.name}'. "
+                        f"Votes were present but overall decision for the "
+                        f"event minutes item was 'None'."
+                    )

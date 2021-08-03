@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+import unicodedata
 from datetime import datetime
 
 from fireo import fields
@@ -29,6 +31,9 @@ class File(Model):
     description = fields.TextField()
     media_type = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         uri = "gs://cdp-example/central-staff-memo.pdf"
@@ -53,11 +58,14 @@ class Person(Model):
         required=True, validator=validators.router_string_is_valid
     )
     email = fields.TextField(validator=validators.email_is_valid)
-    phone = fields.NumberField()
+    phone = fields.TextField()
     website = fields.TextField(validator=validators.resource_exists)
     picture_ref = fields.ReferenceField(File)
     is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -69,6 +77,29 @@ class Person(Model):
 
     _PRIMARY_KEYS = ("name",)
     _INDEXES = ()
+
+    @staticmethod
+    def strip_accents(name: str) -> str:
+        return "".join(
+            char
+            for char in unicodedata.normalize("NFKD", name)
+            if unicodedata.category(char) != "Mn"
+        )
+
+    @staticmethod
+    def generate_router_string(name: str) -> str:
+        non_accented = Person.strip_accents(name)
+        char_cleaner = re.compile(r"[^a-zA-Z0-9\s\-]")
+        char_cleaned = re.sub(char_cleaner, "", non_accented)
+        whitespace_cleaner = re.compile(r"[\s]+")
+        whitespace_cleaned = re.sub(whitespace_cleaner, " ", char_cleaned)
+        spaces_replaced = whitespace_cleaned.replace(" ", "-")
+        if spaces_replaced[-1] == "-":
+            fully_cleaned = spaces_replaced[:-1]
+        else:
+            fully_cleaned = spaces_replaced
+
+        return fully_cleaned.lower()
 
 
 class Body(Model):
@@ -83,6 +114,9 @@ class Body(Model):
     end_datetime = fields.DateTime()
     is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -106,6 +140,9 @@ class Seat(Model):
     electoral_type = fields.TextField()
     image_ref = fields.ReferenceField(File)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -137,6 +174,9 @@ class Role(Model):
     end_datetime = fields.DateTime()
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         role = cls()
@@ -160,6 +200,9 @@ class Matter(Model):
     matter_type = fields.TextField(required=True)
     title = fields.TextField(required=True)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -185,53 +228,6 @@ class Matter(Model):
     _INDEXES = ()
 
 
-class MatterStatus(Model):
-    """
-    A matter status is the status of a matter at any given time. Useful for tracking
-    the timelines of matters. I.E. Return me a timeline of matter x.
-
-    The same matter will have multiple matter statuses.
-    1. MatterStatus of submitted
-    2. MatterStatus of passed
-    3. MatterStatus of signed
-    4. etc.
-    """
-
-    matter_ref = fields.ReferenceField(Matter, required=True)
-    status = fields.TextField(
-        required=True,
-        validator=validators.create_constant_value_validator(
-            MatterStatusDecision, True
-        ),
-    )
-    update_datetime = fields.DateTime(required=True)
-    external_source_id = fields.TextField()
-
-    @classmethod
-    def Example(cls) -> Model:
-        matter_status = cls()
-        matter_status.matter_ref = Matter.Example()
-        matter_status.status = MatterStatusDecision.ADOPTED
-        matter_status.update_datetime = datetime.utcnow()
-        return matter_status
-
-    _PRIMARY_KEYS = ("matter_ref", "status", "update_datetime")
-    _INDEXES = (
-        IndexedFieldSet(
-            (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="update_datetime", order=Order.ASCENDING),
-            ),
-        ),
-        IndexedFieldSet(
-            (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="update_datetime", order=Order.DESCENDING),
-            ),
-        ),
-    )
-
-
 class MatterFile(Model):
     """
     A document related to a matter.
@@ -243,6 +239,9 @@ class MatterFile(Model):
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -275,6 +274,9 @@ class MatterSponsor(Model):
     person_ref = fields.ReferenceField(Person, required=True)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         matter_sponsor = cls()
@@ -296,6 +298,9 @@ class MinutesItem(Model):
     description = fields.TextField()
     matter_ref = fields.ReferenceField(Matter)  # Note optional.
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -323,6 +328,9 @@ class Event(Model):
     agenda_uri = fields.TextField(validator=validators.resource_exists)
     minutes_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -369,6 +377,9 @@ class Session(Model):
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         session = cls()
@@ -392,6 +403,9 @@ class Transcript(Model):
     file_ref = fields.ReferenceField(File, required=True)
     confidence = fields.NumberField(required=True)
     created = fields.DateTime(required=True)
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -434,6 +448,9 @@ class EventMinutesItem(Model):
     )
     external_source_id = fields.TextField()
 
+    class Meta:
+        ignore_none_field = False
+
     @classmethod
     def Example(cls) -> Model:
         emi = cls()
@@ -460,6 +477,59 @@ class EventMinutesItem(Model):
     )
 
 
+class MatterStatus(Model):
+    """
+    A matter status is the status of a matter at any given time. Useful for tracking
+    the timelines of matters. I.E. Return me a timeline of matter x.
+
+    The same matter will have multiple matter statuses.
+    1. MatterStatus of submitted
+    2. MatterStatus of passed
+    3. MatterStatus of signed
+    4. etc.
+    """
+
+    matter_ref = fields.ReferenceField(Matter, required=True)
+    # Optional because status can be updated out of event
+    # i.e. Signed by Mayor
+    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem)
+    status = fields.TextField(
+        required=True,
+        validator=validators.create_constant_value_validator(
+            MatterStatusDecision, True
+        ),
+    )
+    update_datetime = fields.DateTime(required=True)
+    external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
+
+    @classmethod
+    def Example(cls) -> Model:
+        matter_status = cls()
+        matter_status.matter_ref = Matter.Example()
+        matter_status.status = MatterStatusDecision.ADOPTED
+        matter_status.update_datetime = datetime.utcnow()
+        return matter_status
+
+    _PRIMARY_KEYS = ("matter_ref", "status", "update_datetime")
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="update_datetime", order=Order.ASCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="update_datetime", order=Order.DESCENDING),
+            ),
+        ),
+    )
+
+
 class EventMinutesItemFile(Model):
     """
     Supporting files for an event minutes item.
@@ -469,6 +539,9 @@ class EventMinutesItemFile(Model):
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
@@ -505,8 +578,11 @@ class Vote(Model):
         required=True,
         validator=validators.create_constant_value_validator(VoteDecision, True),
     )
-    in_majority = fields.BooleanField(required=True)
+    in_majority = fields.BooleanField()
     external_source_id = fields.TextField()
+
+    class Meta:
+        ignore_none_field = False
 
     @classmethod
     def Example(cls) -> Model:
