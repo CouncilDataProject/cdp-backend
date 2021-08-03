@@ -863,8 +863,8 @@ def store_event_processing_results(
 ) -> None:
     # TODO: check metadata before pipeline runs to avoid the many try excepts
 
-    # Get session with earliest datetime for any event level metadata
-    first_session = min(event.sessions, key=attrgetter("session_datetime"))
+    # Get first session
+    first_session = min(event.sessions, key=attrgetter("session_index"))
 
     # Get high level event metadata and db models
 
