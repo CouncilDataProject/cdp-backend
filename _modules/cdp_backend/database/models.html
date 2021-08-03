@@ -213,6 +213,8 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">from</span> <span class="nn">fireo</span> <span class="kn">import</span> <span class="n">fields</span>
@@ -241,6 +243,9 @@
     <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">media_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="File.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
 <div class="viewcode-block" id="File.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;gs://cdp-example/central-staff-memo.pdf&quot;</span>
@@ -265,11 +270,14 @@
         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">router_string_is_valid</span>
     <span class="p">)</span>
     <span class="n">email</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">email_is_valid</span><span class="p">)</span>
-    <span class="n">phone</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">()</span>
+    <span class="n">phone</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">website</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
     <span class="n">picture_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">)</span>
     <span class="n">is_active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Person.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Person.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -280,7 +288,30 @@
         <span class="k">return</span> <span class="n">person</span></div>
 
     <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,)</span>
-    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="Person.strip_accents"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.strip_accents">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">strip_accents</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">char</span>
+            <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKD&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">category</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;Mn&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Person.generate_router_string"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.generate_router_string">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_router_string</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">non_accented</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">strip_accents</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">char_cleaner</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9\s\-]&quot;</span><span class="p">)</span>
+        <span class="n">char_cleaned</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">char_cleaner</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">non_accented</span><span class="p">)</span>
+        <span class="n">whitespace_cleaner</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[\s]+&quot;</span><span class="p">)</span>
+        <span class="n">whitespace_cleaned</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">whitespace_cleaner</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">char_cleaned</span><span class="p">)</span>
+        <span class="n">spaces_replaced</span> <span class="o">=</span> <span class="n">whitespace_cleaned</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spaces_replaced</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="n">fully_cleaned</span> <span class="o">=</span> <span class="n">spaces_replaced</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fully_cleaned</span> <span class="o">=</span> <span class="n">spaces_replaced</span>
+
+        <span class="k">return</span> <span class="n">fully_cleaned</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Body">[docs]</a><span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
@@ -295,6 +326,9 @@
     <span class="n">end_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span>
     <span class="n">is_active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Body.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Body.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Body.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Body.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -318,6 +352,9 @@
     <span class="n">electoral_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">image_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Seat.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Seat.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Seat.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Seat.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -349,6 +386,9 @@
     <span class="n">end_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="Role.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Role.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
 <div class="viewcode-block" id="Role.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Role.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">role</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
@@ -372,6 +412,9 @@
     <span class="n">matter_type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Matter.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Matter.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Matter.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Matter.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -397,53 +440,6 @@
     <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="MatterStatus"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus">[docs]</a><span class="k">class</span> <span class="nc">MatterStatus</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A matter status is the status of a matter at any given time. Useful for tracking</span>
-<span class="sd">    the timelines of matters. I.E. Return me a timeline of matter x.</span>
-
-<span class="sd">    The same matter will have multiple matter statuses.</span>
-<span class="sd">    1. MatterStatus of submitted</span>
-<span class="sd">    2. MatterStatus of passed</span>
-<span class="sd">    3. MatterStatus of signed</span>
-<span class="sd">    4. etc.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span>
-            <span class="n">MatterStatusDecision</span><span class="p">,</span> <span class="kc">True</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">update_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-
-<div class="viewcode-block" id="MatterStatus.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus.Example">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
-        <span class="n">matter_status</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
-        <span class="n">matter_status</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
-        <span class="n">matter_status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MatterStatusDecision</span><span class="o">.</span><span class="n">ADOPTED</span>
-        <span class="n">matter_status</span><span class="o">.</span><span class="n">update_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">matter_status</span></div>
-
-    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;update_datetime&quot;</span><span class="p">)</span>
-    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">IndexedFieldSet</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
-                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;update_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
-            <span class="p">),</span>
-        <span class="p">),</span>
-        <span class="n">IndexedFieldSet</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
-                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;update_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
-            <span class="p">),</span>
-        <span class="p">),</span>
-    <span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="MatterFile"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile">[docs]</a><span class="k">class</span> <span class="nc">MatterFile</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A document related to a matter.</span>
@@ -455,6 +451,9 @@
     <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MatterFile.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="MatterFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -487,6 +486,9 @@
     <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="MatterSponsor.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterSponsor.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
 <div class="viewcode-block" id="MatterSponsor.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterSponsor.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">matter_sponsor</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
@@ -508,6 +510,9 @@
     <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">)</span>  <span class="c1"># Note optional.</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MinutesItem.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MinutesItem.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="MinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -535,6 +540,9 @@
     <span class="n">agenda_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
     <span class="n">minutes_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Event.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Event.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -581,6 +589,9 @@
     <span class="n">caption_uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="Session.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
 <div class="viewcode-block" id="Session.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">session</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
@@ -604,6 +615,9 @@
     <span class="n">file_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">confidence</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">created</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Transcript.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Transcript.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Transcript.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Transcript.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -646,6 +660,9 @@
     <span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="EventMinutesItem.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
 <div class="viewcode-block" id="EventMinutesItem.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">emi</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
@@ -672,6 +689,59 @@
     <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="MatterStatus"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus">[docs]</a><span class="k">class</span> <span class="nc">MatterStatus</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A matter status is the status of a matter at any given time. Useful for tracking</span>
+<span class="sd">    the timelines of matters. I.E. Return me a timeline of matter x.</span>
+
+<span class="sd">    The same matter will have multiple matter statuses.</span>
+<span class="sd">    1. MatterStatus of submitted</span>
+<span class="sd">    2. MatterStatus of passed</span>
+<span class="sd">    3. MatterStatus of signed</span>
+<span class="sd">    4. etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matter_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Matter</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Optional because status can be updated out of event</span>
+    <span class="c1"># i.e. Signed by Mayor</span>
+    <span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">EventMinutesItem</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span>
+            <span class="n">MatterStatusDecision</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">update_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MatterStatus.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="MatterStatus.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterStatus.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+        <span class="n">matter_status</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">matter_status</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">Matter</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">matter_status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">MatterStatusDecision</span><span class="o">.</span><span class="n">ADOPTED</span>
+        <span class="n">matter_status</span><span class="o">.</span><span class="n">update_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">matter_status</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;update_datetime&quot;</span><span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;update_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;matter_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;update_datetime&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="EventMinutesItemFile"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile">[docs]</a><span class="k">class</span> <span class="nc">EventMinutesItemFile</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Supporting files for an event minutes item.</span>
@@ -681,6 +751,9 @@
     <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EventMinutesItemFile.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="EventMinutesItemFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -717,8 +790,11 @@
         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">VoteDecision</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
     <span class="p">)</span>
-    <span class="n">in_majority</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">in_majority</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Vote.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Vote.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Vote.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Vote.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>

@@ -285,7 +285,7 @@
 
     <span class="c1"># Avoid unnecessary db interactions</span>
     <span class="k">if</span> <span class="n">needs_update</span><span class="p">:</span>
-        <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+        <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">db_model</span></div>
 
@@ -332,7 +332,7 @@
 
     <span class="n">uniqueness_validation</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
-        <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+        <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Saved new </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with document id=</span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
@@ -348,7 +348,20 @@
 
         <span class="k">return</span> <span class="n">updated_db_model</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">exist_ok</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Exist okay was selected, update existing model and return</span>
+        <span class="c1">#</span>
+        <span class="c1"># Previously this simply returned the found conflicting model</span>
+        <span class="c1"># But a prime example of where we should update is in the Role Model</span>
+        <span class="c1"># Where we can find an existing model based off primary keys</span>
+        <span class="c1"># But if we were ingesting a model that had an end_datetime</span>
+        <span class="c1"># and the current database model didn&#39;t have an end_datetime</span>
+        <span class="c1"># we wouldn&#39;t have updated the database model with the newly provided</span>
+        <span class="c1"># end_datetime</span>
+        <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">key</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+            <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UniquenessError</span><span class="p">(</span>
             <span class="n">model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">conflicting_results</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span>
@@ -357,49 +370,58 @@
     <span class="k">return</span> <span class="n">db_model</span></div>
 
 
-<div class="viewcode-block" id="create_body_from_ingestion_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_body_from_ingestion_model">[docs]</a><span class="k">def</span> <span class="nf">create_body_from_ingestion_model</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_strip_field</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">field</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">field</span>
+
+
+<div class="viewcode-block" id="create_body"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_body">[docs]</a><span class="k">def</span> <span class="nf">create_body</span><span class="p">(</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Body</span><span class="p">,</span>
+    <span class="n">start_datetime</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">:</span>
     <span class="n">db_body</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">()</span>
 
     <span class="c1"># Required fields</span>
-    <span class="n">db_body</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="n">db_body</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">is_active</span>
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">start_datetime</span>
 
     <span class="c1"># Optional fields</span>
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">end_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span>
-
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">description</span>
-
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
-        <span class="n">db_body</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">end_datetime</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">end_datetime</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">db_body</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">external_source_id</span>
 
     <span class="k">return</span> <span class="n">db_body</span></div>
 
 
-<div class="viewcode-block" id="create_event_from_ingestion_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_event_from_ingestion_model">[docs]</a><span class="k">def</span> <span class="nf">create_event_from_ingestion_model</span><span class="p">(</span>
-    <span class="n">event</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">EventIngestionModel</span><span class="p">,</span> <span class="n">body_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span>
+<div class="viewcode-block" id="create_event"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_event">[docs]</a><span class="k">def</span> <span class="nf">create_event</span><span class="p">(</span>
+    <span class="n">body_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">,</span>
+    <span class="n">event_datetime</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+    <span class="n">static_thumbnail_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">hover_thumbnail_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">agenda_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">minutes_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">:</span>
     <span class="n">db_event</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
 
     <span class="c1"># Required fields</span>
     <span class="n">db_event</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">body_ref</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">event_datetime</span> <span class="o">=</span> <span class="n">event_datetime</span>
 
-    <span class="c1"># Assume event datetime is the date of earliest session</span>
-    <span class="n">db_event</span><span class="o">.</span><span class="n">event_datetime</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span> <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">]</span>
-    <span class="p">)</span>
-
-    <span class="c1"># TODO add optional fields</span>
+    <span class="c1"># Optional fields</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">static_thumbnail_ref</span> <span class="o">=</span> <span class="n">static_thumbnail_ref</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">hover_thumbnail_ref</span> <span class="o">=</span> <span class="n">hover_thumbnail_ref</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">agenda_uri</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">agenda_uri</span><span class="p">)</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">minutes_uri</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">minutes_uri</span><span class="p">)</span>
+    <span class="n">db_event</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">external_source_id</span>
 
     <span class="k">return</span> <span class="n">db_event</span></div>
 
 
-<div class="viewcode-block" id="create_session_from_ingestion_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_session_from_ingestion_model">[docs]</a><span class="k">def</span> <span class="nf">create_session_from_ingestion_model</span><span class="p">(</span>
+<div class="viewcode-block" id="create_session"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_session">[docs]</a><span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
     <span class="n">db_session</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
@@ -411,11 +433,8 @@
     <span class="n">db_session</span><span class="o">.</span><span class="n">session_index</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_index</span>
 
     <span class="c1"># Optional fields</span>
-    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">:</span>
-        <span class="n">db_session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span>
-
-    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">:</span>
-        <span class="n">db_session</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">external_source_id</span>
 
     <span class="k">return</span> <span class="n">db_session</span></div>
 
@@ -441,6 +460,216 @@
     <span class="n">db_transcript</span><span class="o">.</span><span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">transcript</span><span class="o">.</span><span class="n">created_datetime</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">db_transcript</span></div>
+
+
+<div class="viewcode-block" id="create_matter"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_matter">[docs]</a><span class="k">def</span> <span class="nf">create_matter</span><span class="p">(</span>
+    <span class="n">matter</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">:</span>
+    <span class="n">db_matter</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">()</span>
+
+    <span class="n">db_matter</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db_matter</span><span class="o">.</span><span class="n">matter_type</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">matter_type</span><span class="p">)</span>
+    <span class="n">db_matter</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">db_matter</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_matter</span></div>
+
+
+<div class="viewcode-block" id="create_matter_status"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_matter_status">[docs]</a><span class="k">def</span> <span class="nf">create_matter_status</span><span class="p">(</span>
+    <span class="n">matter_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">,</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">update_datetime</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+    <span class="n">event_minutes_item_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">:</span>
+    <span class="n">db_matter_status</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterStatus</span><span class="p">()</span>
+
+    <span class="n">db_matter_status</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">matter_ref</span>
+    <span class="n">db_matter_status</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">event_minutes_item_ref</span>
+    <span class="n">db_matter_status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+    <span class="n">db_matter_status</span><span class="o">.</span><span class="n">update_datetime</span> <span class="o">=</span> <span class="n">update_datetime</span>
+    <span class="n">db_matter_status</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_matter_status</span></div>
+
+
+<div class="viewcode-block" id="create_matter_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_matter_file">[docs]</a><span class="k">def</span> <span class="nf">create_matter_file</span><span class="p">(</span>
+    <span class="n">matter_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">,</span>
+    <span class="n">supporting_file</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">SupportingFile</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterFile</span><span class="p">:</span>
+    <span class="n">db_matter_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterFile</span><span class="p">()</span>
+
+    <span class="n">db_matter_file</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">matter_ref</span>
+    <span class="n">db_matter_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db_matter_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+    <span class="n">db_matter_file</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">supporting_file</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_matter_file</span></div>
+
+
+<div class="viewcode-block" id="create_minimal_person"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_minimal_person">[docs]</a><span class="k">def</span> <span class="nf">create_minimal_person</span><span class="p">(</span>
+    <span class="n">person</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Person</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">:</span>
+    <span class="n">db_person</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">()</span>
+
+    <span class="n">db_person</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">is_active</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">generate_router_string</span><span class="p">(</span>
+        <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">db_person</span></div>
+
+
+<div class="viewcode-block" id="create_matter_sponsor"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_matter_sponsor">[docs]</a><span class="k">def</span> <span class="nf">create_matter_sponsor</span><span class="p">(</span>
+    <span class="n">matter_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">,</span>
+    <span class="n">person_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">,</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterSponsor</span><span class="p">:</span>
+    <span class="n">db_matter_sponsor</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterSponsor</span><span class="p">()</span>
+
+    <span class="n">db_matter_sponsor</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">matter_ref</span>
+    <span class="n">db_matter_sponsor</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">person_ref</span>
+    <span class="n">db_matter_sponsor</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_matter_sponsor</span></div>
+
+
+<div class="viewcode-block" id="create_person"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_person">[docs]</a><span class="k">def</span> <span class="nf">create_person</span><span class="p">(</span>
+    <span class="n">person</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Person</span><span class="p">,</span>
+    <span class="n">picture_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">:</span>
+    <span class="c1"># Get minimal</span>
+    <span class="n">db_person</span> <span class="o">=</span> <span class="n">create_minimal_person</span><span class="p">(</span><span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">)</span>
+
+    <span class="c1"># Optional</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">router_string</span><span class="p">)</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">phone</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">phone</span><span class="p">)</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">website</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">website</span><span class="p">)</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">picture_ref</span> <span class="o">=</span> <span class="n">picture_ref</span>
+    <span class="n">db_person</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_person</span></div>
+
+
+<div class="viewcode-block" id="create_seat"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_seat">[docs]</a><span class="k">def</span> <span class="nf">create_seat</span><span class="p">(</span>
+    <span class="n">seat</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Seat</span><span class="p">,</span>
+    <span class="n">image_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Seat</span><span class="p">:</span>
+    <span class="n">db_seat</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Seat</span><span class="p">()</span>
+
+    <span class="n">db_seat</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">seat</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db_seat</span><span class="o">.</span><span class="n">electoral_area</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">seat</span><span class="o">.</span><span class="n">electoral_area</span><span class="p">)</span>
+    <span class="n">db_seat</span><span class="o">.</span><span class="n">electoral_type</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">seat</span><span class="o">.</span><span class="n">electoral_type</span><span class="p">)</span>
+    <span class="n">db_seat</span><span class="o">.</span><span class="n">image_ref</span> <span class="o">=</span> <span class="n">image_ref</span>
+    <span class="n">db_seat</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">seat</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_seat</span></div>
+
+
+<div class="viewcode-block" id="create_role"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_role">[docs]</a><span class="k">def</span> <span class="nf">create_role</span><span class="p">(</span>
+    <span class="n">role</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Role</span><span class="p">,</span>
+    <span class="n">person_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">,</span>
+    <span class="n">seat_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Seat</span><span class="p">,</span>
+    <span class="n">start_datetime</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+    <span class="n">body_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Role</span><span class="p">:</span>
+    <span class="n">db_role</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Role</span><span class="p">()</span>
+
+    <span class="c1"># Required</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">role</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">person_ref</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">seat_ref</span> <span class="o">=</span> <span class="n">seat_ref</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">start_datetime</span> <span class="o">=</span> <span class="n">start_datetime</span>
+
+    <span class="c1"># Optional</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">body_ref</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">end_datetime</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="n">end_datetime</span>
+    <span class="n">db_role</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_role</span></div>
+
+
+<div class="viewcode-block" id="create_minutes_item"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_minutes_item">[docs]</a><span class="k">def</span> <span class="nf">create_minutes_item</span><span class="p">(</span>
+    <span class="n">minutes_item</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">MinutesItem</span><span class="p">,</span>
+    <span class="n">matter_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MinutesItem</span><span class="p">:</span>
+    <span class="n">db_minutes_item</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MinutesItem</span><span class="p">()</span>
+
+    <span class="n">db_minutes_item</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">minutes_item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db_minutes_item</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">minutes_item</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">db_minutes_item</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">matter_ref</span>
+    <span class="n">db_minutes_item</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">minutes_item</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_minutes_item</span></div>
+
+
+<div class="viewcode-block" id="create_minimal_event_minutes_item"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_minimal_event_minutes_item">[docs]</a><span class="k">def</span> <span class="nf">create_minimal_event_minutes_item</span><span class="p">(</span>
+    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span>
+    <span class="n">minutes_item_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MinutesItem</span><span class="p">,</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">:</span>
+    <span class="n">db_event_minutes_item</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">()</span>
+
+    <span class="n">db_event_minutes_item</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_ref</span>
+    <span class="n">db_event_minutes_item</span><span class="o">.</span><span class="n">minutes_item_ref</span> <span class="o">=</span> <span class="n">minutes_item_ref</span>
+    <span class="n">db_event_minutes_item</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+
+    <span class="k">return</span> <span class="n">db_event_minutes_item</span></div>
+
+
+<div class="viewcode-block" id="create_event_minutes_item"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_event_minutes_item">[docs]</a><span class="k">def</span> <span class="nf">create_event_minutes_item</span><span class="p">(</span>
+    <span class="n">event_minutes_item</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">,</span>
+    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span>
+    <span class="n">minutes_item_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MinutesItem</span><span class="p">,</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">:</span>
+    <span class="n">db_event_minutes_item</span> <span class="o">=</span> <span class="n">create_minimal_event_minutes_item</span><span class="p">(</span>
+        <span class="n">event_ref</span><span class="o">=</span><span class="n">event_ref</span><span class="p">,</span>
+        <span class="n">minutes_item_ref</span><span class="o">=</span><span class="n">minutes_item_ref</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">db_event_minutes_item</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">decision</span>
+
+    <span class="k">return</span> <span class="n">db_event_minutes_item</span></div>
+
+
+<div class="viewcode-block" id="create_event_minutes_item_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_event_minutes_item_file">[docs]</a><span class="k">def</span> <span class="nf">create_event_minutes_item_file</span><span class="p">(</span>
+    <span class="n">event_minutes_item_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">,</span>
+    <span class="n">supporting_file</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">SupportingFile</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItemFile</span><span class="p">:</span>
+    <span class="n">db_event_minutes_item_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItemFile</span><span class="p">()</span>
+
+    <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">event_minutes_item_ref</span>
+    <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+    <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">supporting_file</span><span class="o">.</span><span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_event_minutes_item_file</span></div>
+
+
+<div class="viewcode-block" id="create_vote"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_vote">[docs]</a><span class="k">def</span> <span class="nf">create_vote</span><span class="p">(</span>
+    <span class="n">matter_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">,</span>
+    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span>
+    <span class="n">event_minutes_item_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">,</span>
+    <span class="n">person_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">,</span>
+    <span class="n">decision</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">in_majority</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Vote</span><span class="p">:</span>
+    <span class="n">db_vote</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Vote</span><span class="p">()</span>
+
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">matter_ref</span>
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_ref</span>
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">event_minutes_item_ref</span>
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">person_ref</span> <span class="o">=</span> <span class="n">person_ref</span>
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">decision</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">decision</span><span class="p">)</span>
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">in_majority</span> <span class="o">=</span> <span class="n">in_majority</span>
+    <span class="n">db_vote</span><span class="o">.</span><span class="n">external_source_id</span> <span class="o">=</span> <span class="n">external_source_id</span>
+
+    <span class="k">return</span> <span class="n">db_vote</span></div>
 </pre></div>
 
            </div>

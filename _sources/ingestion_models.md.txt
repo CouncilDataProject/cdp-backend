@@ -31,7 +31,7 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2021, 8, 3, 20, 42, 6, 322402),
+ 'sessions': [{'session_datetime': datetime.datetime(2021, 8, 3, 22, 34, 1, 238901),
                'video_uri': 'https://video.seattle.gov/media/council/brief_072219_2011957V.mp4',
                'session_index': 0}]}
 ```
@@ -43,10 +43,10 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2021, 8, 3, 20, 42, 6, 322414),
+ 'sessions': [{'session_datetime': datetime.datetime(2021, 8, 3, 22, 34, 1, 238910),
                'video_uri': 'https://video.seattle.gov/media/council/council_101220_2022077V.mp4',
                'session_index': 0},
-              {'session_datetime': datetime.datetime(2021, 8, 3, 20, 42, 6, 322416),
+              {'session_datetime': datetime.datetime(2021, 8, 3, 22, 34, 1, 238911),
                'video_uri': 'https://video.seattle.gov/media/council/council_113020_2022091V.mp4',
                'session_index': 1,
                'caption_uri': 'https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt'}],
@@ -71,6 +71,7 @@ Note: while this looks like a Python `Dict`, these objects are of type:
                                                                        'is_active': True}}]},
                                                   {'name': 'Teresa Mosqueda',
                                                    'is_active': True,
+                                                   'picture_uri': 'https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg',
                                                    'seat': {'name': 'Position '
                                                                     '8'},
                                                    'roles': [{'title': 'Chair',
@@ -115,7 +116,8 @@ Note: while this looks like a Python `Dict`, these objects are of type:
                                      'decision': 'Approve'},
                                     {'person': {'name': 'Andrew Lewis',
                                                 'is_active': True,
-                                                'seat': {'name': 'District 7'},
+                                                'seat': {'name': 'District 7',
+                                                         'image_uri': 'http://www.seattle.gov/Images/Clerk/district7_50x50.jpg'},
                                                 'roles': [{'title': 'Vice '
                                                                     'Chair',
                                                            'body': {'name': 'Community '

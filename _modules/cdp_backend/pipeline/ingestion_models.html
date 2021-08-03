@@ -357,8 +357,6 @@
 <span class="sd">    If index is not provided, the index will be set to the index of the item in the</span>
 <span class="sd">    whole EventMinutesItem list on Event.</span>
 
-<span class="sd">    If matter is not provided, the supporting_files will be stored as</span>
-<span class="sd">    EventMinutesItemFile.</span>
 <span class="sd">    If matter is provided, the supporting_files will be additionally be stored as</span>
 <span class="sd">    MatterFile.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -396,7 +394,8 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    If start_datetime is not provided, and the Body did not exist prior to ingestion,</span>
-<span class="sd">    current datetime.utcnow will be used as start_datetime during storage.</span>
+<span class="sd">    the session datetime associated with this ingestion will be used as start_datetime</span>
+<span class="sd">    during storage.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
@@ -421,7 +420,8 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    If start_datetime is not provided, and the Role did not exist prior to ingestion,</span>
-<span class="sd">    current datetime.utcnow will be used as start_datetime during storage.</span>
+<span class="sd">    the session datetime associated with this ingestion will be used as start_datetime</span>
+<span class="sd">    during storage.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
@@ -532,6 +532,7 @@
                                 <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
                             <span class="p">),</span>
                         <span class="p">],</span>
+                        <span class="n">picture_uri</span><span class="o">=</span><span class="s2">&quot;https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
             <span class="p">),</span>
@@ -580,7 +581,10 @@
                 <span class="n">Vote</span><span class="p">(</span>
                     <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
                         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Andrew Lewis&quot;</span><span class="p">,</span>
-                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;District 7&quot;</span><span class="p">),</span>
+                        <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;District 7&quot;</span><span class="p">,</span>
+                            <span class="n">image_uri</span><span class="o">=</span><span class="s2">&quot;http://www.seattle.gov/Images/Clerk/district7_50x50.jpg&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
+                        <span class="p">),</span>
                         <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
                             <span class="n">Role</span><span class="p">(</span>
                                 <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>

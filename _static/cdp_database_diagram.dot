@@ -11,14 +11,14 @@ digraph {
 	Matter [label="Matter | name *\l  TextField\r|matter_type *\l  TextField\r|title *\l  TextField\r|external_source_id\l  TextField\r"]
 	MatterFile [label="MatterFile | <matter_ref> matter_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
 	MatterSponsor [label="MatterSponsor | <matter_ref> matter_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|external_source_id\l  TextField\r"]
-	MatterStatus [label="MatterStatus | <matter_ref> matter_ref *\l  ReferenceField\r|status *\l  TextField\r|update_datetime *\l  DateTime\r|external_source_id\l  TextField\r"]
+	MatterStatus [label="MatterStatus | <matter_ref> matter_ref *\l  ReferenceField\r|<event_minutes_item_ref> event_minutes_item_ref\l  ReferenceField\r|status *\l  TextField\r|update_datetime *\l  DateTime\r|external_source_id\l  TextField\r"]
 	MinutesItem [label="MinutesItem | name *\l  TextField\r|description\l  TextField\r|<matter_ref> matter_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
-	Person [label="Person | name *\l  TextField\r|router_string *\l  TextField\r|email\l  TextField\r|phone\l  NumberField\r|website\l  TextField\r|<picture_ref> picture_ref\l  ReferenceField\r|is_active *\l  BooleanField\r|external_source_id\l  TextField\r"]
+	Person [label="Person | name *\l  TextField\r|router_string *\l  TextField\r|email\l  TextField\r|phone\l  TextField\r|website\l  TextField\r|<picture_ref> picture_ref\l  ReferenceField\r|is_active *\l  BooleanField\r|external_source_id\l  TextField\r"]
 	Role [label="Role | title *\l  TextField\r|<person_ref> person_ref *\l  ReferenceField\r|<body_ref> body_ref\l  ReferenceField\r|<seat_ref> seat_ref *\l  ReferenceField\r|start_datetime *\l  DateTime\r|end_datetime\l  DateTime\r|external_source_id\l  TextField\r"]
 	Seat [label="Seat | name *\l  TextField\r|electoral_area\l  TextField\r|electoral_type\l  TextField\r|<image_ref> image_ref\l  ReferenceField\r|external_source_id\l  TextField\r"]
 	Session [label="Session | <event_ref> event_ref *\l  ReferenceField\r|session_datetime *\l  DateTime\r|session_index *\l  NumberField\r|video_uri *\l  TextField\r|caption_uri\l  TextField\r|external_source_id\l  TextField\r"]
 	Transcript [label="Transcript | <session_ref> session_ref *\l  ReferenceField\r|<file_ref> file_ref *\l  ReferenceField\r|confidence *\l  NumberField\r|created *\l  DateTime\r"]
-	Vote [label="Vote | <matter_ref> matter_ref *\l  ReferenceField\r|<event_ref> event_ref *\l  ReferenceField\r|<event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|decision *\l  TextField\r|in_majority *\l  BooleanField\r|external_source_id\l  TextField\r"]
+	Vote [label="Vote | <matter_ref> matter_ref *\l  ReferenceField\r|<event_ref> event_ref *\l  ReferenceField\r|<event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|decision *\l  TextField\r|in_majority\l  BooleanField\r|external_source_id\l  TextField\r"]
 	Event:body_ref -> Body
 	Event:static_thumbnail_ref -> File
 	Event:hover_thumbnail_ref -> File
@@ -29,6 +29,7 @@ digraph {
 	MatterSponsor:matter_ref -> Matter
 	MatterSponsor:person_ref -> Person
 	MatterStatus:matter_ref -> Matter
+	MatterStatus:event_minutes_item_ref -> EventMinutesItem
 	MinutesItem:matter_ref -> Matter
 	Person:picture_ref -> File
 	Role:person_ref -> Person

@@ -335,7 +335,8 @@ speech context phrases will be pulled from the whole event details.</p></li>
 such as election debates.</p>
 <p class="rubric">Notes</p>
 <p>If start_datetime is not provided, and the Body did not exist prior to ingestion,
-current datetime.utcnow will be used as start_datetime during storage.</p>
+the session datetime associated with this ingestion will be used as start_datetime
+during storage.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Body.description">
 <span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Body.description" title="Permalink to this definition">¶</a></dt>
@@ -478,9 +479,7 @@ it will be generated during pipeline processing.</p>
 <p class="rubric">Notes</p>
 <p>If index is not provided, the index will be set to the index of the item in the
 whole EventMinutesItem list on Event.</p>
-<p>If matter is not provided, the supporting_files will be stored as
-EventMinutesItemFile.
-If matter is provided, the supporting_files will be additionally be stored as
+<p>If matter is provided, the supporting_files will be additionally be stored as
 MatterFile.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.EventMinutesItem.decision">
@@ -758,7 +757,8 @@ spends a term on the transportation committee and then spends a term on the fina
 committee.</p>
 <p class="rubric">Notes</p>
 <p>If start_datetime is not provided, and the Role did not exist prior to ingestion,
-current datetime.utcnow will be used as start_datetime during storage.</p>
+the session datetime associated with this ingestion will be used as start_datetime
+during storage.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Role.body">
 <span class="sig-name descname"><span class="pre">body</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body" title="cdp_backend.pipeline.ingestion_models.Body"><span class="pre">cdp_backend.pipeline.ingestion_models.Body</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Role.body" title="Permalink to this definition">¶</a></dt>

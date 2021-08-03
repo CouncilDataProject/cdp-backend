@@ -225,9 +225,25 @@
 
 
 <div class="viewcode-block" id="VoteDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.VoteDecision">[docs]</a><span class="k">class</span> <span class="nc">VoteDecision</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstain and Absent can mean many things.</span>
+<span class="sd">    It depends on each municipality what each legally dictates.</span>
+
+<span class="sd">    See here:</span>
+<span class="sd">    https://mrsc.org/Home/Stay-Informed/MRSC-Insight/April-2013/How-Are-Abstentions-Handled-When-Counting-Votes.aspx</span>
+
+<span class="sd">    You may see &quot;Non-Voting&quot; reported as `(NV)` from Legistar for</span>
+<span class="sd">    example.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Approve&quot;</span>
     <span class="n">REJECT</span> <span class="o">=</span> <span class="s2">&quot;Reject&quot;</span>
-    <span class="n">ABSTAIN</span> <span class="o">=</span> <span class="s2">&quot;Abstain&quot;</span></div>
+    <span class="n">ABSTAIN_NON_VOTING</span> <span class="o">=</span> <span class="s2">&quot;Abstain (Non-Voting)&quot;</span>
+    <span class="n">ABSTAIN_APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Abstain (Approve)&quot;</span>
+    <span class="n">ABSTAIN_REJECT</span> <span class="o">=</span> <span class="s2">&quot;Abstain (Reject)&quot;</span>
+    <span class="n">ABSENT_NON_VOTING</span> <span class="o">=</span> <span class="s2">&quot;Absent (Non-Voting)&quot;</span>
+    <span class="n">ABSENT_APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Absent (Approve)&quot;</span>
+    <span class="n">ABSENT_REJECT</span> <span class="o">=</span> <span class="s2">&quot;Absent (Reject)&quot;</span></div>
 
 
 <div class="viewcode-block" id="MatterStatusDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.MatterStatusDecision">[docs]</a><span class="k">class</span> <span class="nc">MatterStatusDecision</span><span class="p">:</span>

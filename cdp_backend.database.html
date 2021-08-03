@@ -290,9 +290,40 @@
 <dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.database.constants.</span></span><span class="sig-name descname"><span class="pre">VoteDecision</span></span><a class="reference internal" href="_modules/cdp_backend/database/constants.html#VoteDecision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstain and Absent can mean many things.
+It depends on each municipality what each legally dictates.</p>
+<p>See here:
+<a class="reference external" href="https://mrsc.org/Home/Stay-Informed/MRSC-Insight/April-2013/How-Are-Abstentions-Handled-When-Counting-Votes.aspx">https://mrsc.org/Home/Stay-Informed/MRSC-Insight/April-2013/How-Are-Abstentions-Handled-When-Counting-Votes.aspx</a></p>
+<p>You may see “Non-Voting” reported as <cite>(NV)</cite> from Legistar for
+example.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSTAIN">
-<span class="sig-name descname"><span class="pre">ABSTAIN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Abstain'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSENT_APPROVE">
+<span class="sig-name descname"><span class="pre">ABSENT_APPROVE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Absent</span> <span class="pre">(Approve)'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSENT_APPROVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSENT_NON_VOTING">
+<span class="sig-name descname"><span class="pre">ABSENT_NON_VOTING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Absent</span> <span class="pre">(Non-Voting)'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSENT_NON_VOTING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSENT_REJECT">
+<span class="sig-name descname"><span class="pre">ABSENT_REJECT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Absent</span> <span class="pre">(Reject)'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSENT_REJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSTAIN_APPROVE">
+<span class="sig-name descname"><span class="pre">ABSTAIN_APPROVE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Abstain</span> <span class="pre">(Approve)'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN_APPROVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSTAIN_NON_VOTING">
+<span class="sig-name descname"><span class="pre">ABSTAIN_NON_VOTING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Abstain</span> <span class="pre">(Non-Voting)'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN_NON_VOTING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.constants.VoteDecision.ABSTAIN_REJECT">
+<span class="sig-name descname"><span class="pre">ABSTAIN_REJECT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Abstain</span> <span class="pre">(Reject)'</span></em><a class="headerlink" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN_REJECT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -330,13 +361,23 @@
 <div class="section" id="module-cdp_backend.database.functions">
 <span id="cdp-backend-database-functions-module"></span><h2>cdp_backend.database.functions module<a class="headerlink" href="#module-cdp_backend.database.functions" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.database.functions.create_body_from_ingestion_model">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_body_from_ingestion_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body" title="cdp_backend.pipeline.ingestion_models.Body"><span class="pre">cdp_backend.pipeline.ingestion_models.Body</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Body" title="cdp_backend.database.models.Body"><span class="pre">cdp_backend.database.models.Body</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_body_from_ingestion_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_body_from_ingestion_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_body">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body" title="cdp_backend.pipeline.ingestion_models.Body"><span class="pre">cdp_backend.pipeline.ingestion_models.Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_datetime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Body" title="cdp_backend.database.models.Body"><span class="pre">cdp_backend.database.models.Body</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_body"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_body" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.database.functions.create_event_from_ingestion_model">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_event_from_ingestion_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel" title="cdp_backend.pipeline.ingestion_models.EventIngestionModel"><span class="pre">cdp_backend.pipeline.ingestion_models.EventIngestionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Body" title="cdp_backend.database.models.Body"><span class="pre">cdp_backend.database.models.Body</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_event_from_ingestion_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_event_from_ingestion_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_event">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Body" title="cdp_backend.database.models.Body"><span class="pre">cdp_backend.database.models.Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_datetime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_thumbnail_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.File" title="cdp_backend.database.models.File"><span class="pre">cdp_backend.database.models.File</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hover_thumbnail_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.File" title="cdp_backend.database.models.File"><span class="pre">cdp_backend.database.models.File</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agenda_uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes_uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_source_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_event_minutes_item">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_event_minutes_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_minutes_item</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem" title="cdp_backend.pipeline.ingestion_models.EventMinutesItem"><span class="pre">cdp_backend.pipeline.ingestion_models.EventMinutesItem</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes_item_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.MinutesItem" title="cdp_backend.database.models.MinutesItem"><span class="pre">cdp_backend.database.models.MinutesItem</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem" title="cdp_backend.database.models.EventMinutesItem"><span class="pre">cdp_backend.database.models.EventMinutesItem</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_event_minutes_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_event_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_event_minutes_item_file">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_event_minutes_item_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_minutes_item_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem" title="cdp_backend.database.models.EventMinutesItem"><span class="pre">cdp_backend.database.models.EventMinutesItem</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">supporting_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile" title="cdp_backend.pipeline.ingestion_models.SupportingFile"><span class="pre">cdp_backend.pipeline.ingestion_models.SupportingFile</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile" title="cdp_backend.database.models.EventMinutesItemFile"><span class="pre">cdp_backend.database.models.EventMinutesItemFile</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_event_minutes_item_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_event_minutes_item_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -345,13 +386,68 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.database.functions.create_session_from_ingestion_model">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_session_from_ingestion_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session" title="cdp_backend.pipeline.ingestion_models.Session"><span class="pre">cdp_backend.pipeline.ingestion_models.Session</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Session" title="cdp_backend.database.models.Session"><span class="pre">cdp_backend.database.models.Session</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_session_from_ingestion_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_session_from_ingestion_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_matter">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_matter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter" title="cdp_backend.pipeline.ingestion_models.Matter"><span class="pre">cdp_backend.pipeline.ingestion_models.Matter</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_matter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_matter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_matter_file">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_matter_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matter_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">supporting_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile" title="cdp_backend.pipeline.ingestion_models.SupportingFile"><span class="pre">cdp_backend.pipeline.ingestion_models.SupportingFile</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.MatterFile" title="cdp_backend.database.models.MatterFile"><span class="pre">cdp_backend.database.models.MatterFile</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_matter_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_matter_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_matter_sponsor">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_matter_sponsor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matter_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">person_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Person" title="cdp_backend.database.models.Person"><span class="pre">cdp_backend.database.models.Person</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_source_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor" title="cdp_backend.database.models.MatterSponsor"><span class="pre">cdp_backend.database.models.MatterSponsor</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_matter_sponsor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_matter_sponsor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_matter_status">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_matter_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matter_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_datetime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_minutes_item_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem" title="cdp_backend.database.models.EventMinutesItem"><span class="pre">cdp_backend.database.models.EventMinutesItem</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_source_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_matter_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_matter_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_minimal_event_minutes_item">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_minimal_event_minutes_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes_item_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.MinutesItem" title="cdp_backend.database.models.MinutesItem"><span class="pre">cdp_backend.database.models.MinutesItem</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem" title="cdp_backend.database.models.EventMinutesItem"><span class="pre">cdp_backend.database.models.EventMinutesItem</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_minimal_event_minutes_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_minimal_event_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_minimal_person">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_minimal_person</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">person</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person" title="cdp_backend.pipeline.ingestion_models.Person"><span class="pre">cdp_backend.pipeline.ingestion_models.Person</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Person" title="cdp_backend.database.models.Person"><span class="pre">cdp_backend.database.models.Person</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_minimal_person"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_minimal_person" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_minutes_item">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_minutes_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minutes_item</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem" title="cdp_backend.pipeline.ingestion_models.MinutesItem"><span class="pre">cdp_backend.pipeline.ingestion_models.MinutesItem</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">matter_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.MinutesItem" title="cdp_backend.database.models.MinutesItem"><span class="pre">cdp_backend.database.models.MinutesItem</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_minutes_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_person">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_person</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">person</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person" title="cdp_backend.pipeline.ingestion_models.Person"><span class="pre">cdp_backend.pipeline.ingestion_models.Person</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">picture_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.File" title="cdp_backend.database.models.File"><span class="pre">cdp_backend.database.models.File</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Person" title="cdp_backend.database.models.Person"><span class="pre">cdp_backend.database.models.Person</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_person"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_person" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_role">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role" title="cdp_backend.pipeline.ingestion_models.Role"><span class="pre">cdp_backend.pipeline.ingestion_models.Role</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">person_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Person" title="cdp_backend.database.models.Person"><span class="pre">cdp_backend.database.models.Person</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">seat_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Seat" title="cdp_backend.database.models.Seat"><span class="pre">cdp_backend.database.models.Seat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_datetime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.Body" title="cdp_backend.database.models.Body"><span class="pre">cdp_backend.database.models.Body</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Role" title="cdp_backend.database.models.Role"><span class="pre">cdp_backend.database.models.Role</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_role"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_seat">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_seat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat" title="cdp_backend.pipeline.ingestion_models.Seat"><span class="pre">cdp_backend.pipeline.ingestion_models.Seat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.models.File" title="cdp_backend.database.models.File"><span class="pre">cdp_backend.database.models.File</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Seat" title="cdp_backend.database.models.Seat"><span class="pre">cdp_backend.database.models.Seat</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_seat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_seat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_session">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session" title="cdp_backend.pipeline.ingestion_models.Session"><span class="pre">cdp_backend.pipeline.ingestion_models.Session</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Session" title="cdp_backend.database.models.Session"><span class="pre">cdp_backend.database.models.Session</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_session" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.database.functions.create_transcript">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_transcript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transcript_file_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.File" title="cdp_backend.database.models.File"><span class="pre">cdp_backend.database.models.File</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Session" title="cdp_backend.database.models.Session"><span class="pre">cdp_backend.database.models.Session</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript"><span class="pre">cdp_backend.pipeline.transcript_model.Transcript</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Transcript" title="cdp_backend.database.models.Transcript"><span class="pre">cdp_backend.database.models.Transcript</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_transcript"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_transcript" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.create_vote">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">create_vote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matter_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Matter" title="cdp_backend.database.models.Matter"><span class="pre">cdp_backend.database.models.Matter</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_minutes_item_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem" title="cdp_backend.database.models.EventMinutesItem"><span class="pre">cdp_backend.database.models.EventMinutesItem</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">person_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#cdp_backend.database.models.Person" title="cdp_backend.database.models.Person"><span class="pre">cdp_backend.database.models.Person</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_majority</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_source_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.models.Vote" title="cdp_backend.database.models.Vote"><span class="pre">cdp_backend.database.models.Vote</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#create_vote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.create_vote" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -420,10 +516,16 @@ such as election debates.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Body.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Body.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Body.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Body.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Body.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Body.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Body.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Body.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Body.collection">
@@ -478,10 +580,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Event.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Event.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Event.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Event.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Event.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Event.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Event.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Event.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Event.agenda_uri">
@@ -540,10 +648,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItem.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItem.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItem.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItem.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItem.collection">
@@ -592,10 +706,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItemFile.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItemFile.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#EventMinutesItemFile.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItemFile.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItemFile.collection">
@@ -639,10 +759,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#File.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.File.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.File.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.File.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#File.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.File.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.File.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.File.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.File.collection">
@@ -686,10 +812,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Matter.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Matter.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Matter.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Matter.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Matter.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Matter.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Matter.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Matter.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Matter.collection">
@@ -734,10 +866,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterFile.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MatterFile.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterFile.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterFile.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterFile.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MatterFile.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterFile.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterFile.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterFile.collection">
@@ -781,10 +919,16 @@ conference or election debate, and, can be upcoming or historical.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterSponsor.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterSponsor.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterSponsor.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterSponsor.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterSponsor.collection">
@@ -829,10 +973,16 @@ the timelines of matters. I.E. Return me a timeline of matter x.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterStatus.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MatterStatus.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.collection">
@@ -842,6 +992,11 @@ the timelines of matters. I.E. Return me a timeline of matter x.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.collection_name">
 <span class="sig-name descname"><span class="pre">collection_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'matter_status'</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.event_minutes_item_ref">
+<span class="sig-name descname"><span class="pre">event_minutes_item_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.event_minutes_item_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -877,10 +1032,16 @@ This can be a matter but it can be a presentation or budget file, etc.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MinutesItem.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MinutesItem.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#MinutesItem.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MinutesItem.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MinutesItem.collection">
@@ -925,10 +1086,16 @@ manager, or any other “normal” presenters and attendees of meetings.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Person.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Person.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Person.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Person.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Person.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Person.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Person.collection">
@@ -948,6 +1115,11 @@ manager, or any other “normal” presenters and attendees of meetings.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Person.external_source_id">
 <span class="sig-name descname"><span class="pre">external_source_id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Person.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Person.generate_router_string">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">generate_router_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.generate_router_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Person.generate_router_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -975,6 +1147,11 @@ manager, or any other “normal” presenters and attendees of meetings.</p>
 <span class="sig-name descname"><span class="pre">router_string</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Person.router_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Person.strip_accents">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">strip_accents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.strip_accents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Person.strip_accents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Person.website">
 <span class="sig-name descname"><span class="pre">website</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Person.website" title="Permalink to this definition">¶</a></dt>
@@ -997,10 +1174,16 @@ committee.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Role.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Role.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Role.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Role.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Role.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Role.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Role.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Role.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Role.body_ref">
@@ -1059,10 +1242,16 @@ committee.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Seat.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Seat.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Seat.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Seat.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Seat.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Seat.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Seat.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Seat.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Seat.collection">
@@ -1112,10 +1301,16 @@ For example, An event could have a morning and afternoon session.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Session.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Session.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Session.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Session.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Session.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Session.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Session.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Session.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Session.caption_uri">
@@ -1169,10 +1364,16 @@ For example, An event could have a morning and afternoon session.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Transcript.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Transcript.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Transcript.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Transcript.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Transcript.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Transcript.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Transcript.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Transcript.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Transcript.collection">
@@ -1216,10 +1417,16 @@ For example, An event could have a morning and afternoon session.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Vote.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Vote.Example" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Vote.Meta">
-<span class="sig-name descname"><span class="pre">Meta</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Vote.Meta" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Vote.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Vote.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Vote.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.Vote.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Vote.collection">
