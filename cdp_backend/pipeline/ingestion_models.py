@@ -116,7 +116,7 @@ class Matter(IngestionModel):
     name: str
     matter_type: str
     title: str
-    result_status: str
+    result_status: Optional[str] = None
     sponsors: Optional[List[Person]] = None
     external_source_id: Optional[str] = None
 
