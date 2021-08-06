@@ -3,7 +3,7 @@
 
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 
 import fireo
 from fireo.models import Model
@@ -165,6 +165,13 @@ def _strip_field(field: Optional[str]) -> Optional[str]:
     return field
 
 
+def _ensure_string_or_optional(field: Optional[Any]) -> Optional[str]:
+    if field is not None:
+        return str(field)
+
+    return None
+
+
 def create_body(
     body: ingestion_models.Body,
     start_datetime: datetime,
@@ -179,7 +186,7 @@ def create_body(
     # Optional fields
     db_body.end_datetime = body.end_datetime
     db_body.description = _strip_field(body.description)
-    db_body.external_source_id = str(body.external_source_id)
+    db_body.external_source_id = _ensure_string_or_optional(body.external_source_id)
 
     return db_body
 
@@ -204,7 +211,7 @@ def create_event(
     db_event.hover_thumbnail_ref = hover_thumbnail_ref
     db_event.agenda_uri = _strip_field(agenda_uri)
     db_event.minutes_uri = _strip_field(minutes_uri)
-    db_event.external_source_id = str(external_source_id)
+    db_event.external_source_id = _ensure_string_or_optional(external_source_id)
 
     return db_event
 
@@ -222,7 +229,9 @@ def create_session(
 
     # Optional fields
     db_session.caption_uri = session.caption_uri
-    db_session.external_source_id = str(session.external_source_id)
+    db_session.external_source_id = _ensure_string_or_optional(
+        session.external_source_id
+    )
 
     return db_session
 
@@ -258,7 +267,7 @@ def create_matter(
     db_matter.name = _strip_field(matter.name)
     db_matter.matter_type = _strip_field(matter.matter_type)
     db_matter.title = _strip_field(matter.title)
-    db_matter.external_source_id = str(matter.external_source_id)
+    db_matter.external_source_id = _ensure_string_or_optional(matter.external_source_id)
 
     return db_matter
 
@@ -276,7 +285,7 @@ def create_matter_status(
     db_matter_status.event_minutes_item_ref = event_minutes_item_ref
     db_matter_status.status = _strip_field(status)
     db_matter_status.update_datetime = update_datetime
-    db_matter_status.external_source_id = str(external_source_id)
+    db_matter_status.external_source_id = _ensure_string_or_optional(external_source_id)
 
     return db_matter_status
 
@@ -290,7 +299,9 @@ def create_matter_file(
     db_matter_file.matter_ref = matter_ref
     db_matter_file.name = _strip_field(supporting_file.name)
     db_matter_file.uri = _strip_field(supporting_file.uri)
-    db_matter_file.external_source_id = str(supporting_file.external_source_id)
+    db_matter_file.external_source_id = _ensure_string_or_optional(
+        supporting_file.external_source_id
+    )
 
     return db_matter_file
 
@@ -318,7 +329,9 @@ def create_matter_sponsor(
 
     db_matter_sponsor.matter_ref = matter_ref
     db_matter_sponsor.person_ref = person_ref
-    db_matter_sponsor.external_source_id = str(external_source_id)
+    db_matter_sponsor.external_source_id = _ensure_string_or_optional(
+        external_source_id
+    )
 
     return db_matter_sponsor
 
@@ -336,7 +349,7 @@ def create_person(
     db_person.phone = _strip_field(person.phone)
     db_person.website = _strip_field(person.website)
     db_person.picture_ref = picture_ref
-    db_person.external_source_id = str(person.external_source_id)
+    db_person.external_source_id = _ensure_string_or_optional(person.external_source_id)
 
     return db_person
 
@@ -351,7 +364,7 @@ def create_seat(
     db_seat.electoral_area = _strip_field(seat.electoral_area)
     db_seat.electoral_type = _strip_field(seat.electoral_type)
     db_seat.image_ref = image_ref
-    db_seat.external_source_id = str(seat.external_source_id)
+    db_seat.external_source_id = _ensure_string_or_optional(seat.external_source_id)
 
     return db_seat
 
@@ -374,7 +387,7 @@ def create_role(
     # Optional
     db_role.body_ref = body_ref
     db_role.end_datetime = role.end_datetime
-    db_role.external_source_id = str(role.external_source_id)
+    db_role.external_source_id = _ensure_string_or_optional(role.external_source_id)
 
     return db_role
 
@@ -388,7 +401,9 @@ def create_minutes_item(
     db_minutes_item.name = _strip_field(minutes_item.name)
     db_minutes_item.description = _strip_field(minutes_item.description)
     db_minutes_item.matter_ref = matter_ref
-    db_minutes_item.external_source_id = str(minutes_item.external_source_id)
+    db_minutes_item.external_source_id = _ensure_string_or_optional(
+        minutes_item.external_source_id
+    )
 
     return db_minutes_item
 
@@ -433,7 +448,7 @@ def create_event_minutes_item_file(
     db_event_minutes_item_file.event_minutes_item_ref = event_minutes_item_ref
     db_event_minutes_item_file.name = _strip_field(supporting_file.name)
     db_event_minutes_item_file.uri = _strip_field(supporting_file.uri)
-    db_event_minutes_item_file.external_source_id = str(
+    db_event_minutes_item_file.external_source_id = _ensure_string_or_optional(
         supporting_file.external_source_id
     )
 
@@ -457,6 +472,6 @@ def create_vote(
     db_vote.person_ref = person_ref
     db_vote.decision = _strip_field(decision)
     db_vote.in_majority = in_majority
-    db_vote.external_source_id = str(external_source_id)
+    db_vote.external_source_id = _ensure_string_or_optional(external_source_id)
 
     return db_vote
