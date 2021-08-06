@@ -3,7 +3,6 @@
 
 import logging
 import math
-import shutil
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -12,6 +11,7 @@ import dask.dataframe as dd
 import ffmpeg
 import fsspec
 import imageio
+from fsspec.core import url_to_fs
 
 ###############################################################################
 
@@ -89,14 +89,21 @@ def resource_copy(
         raise FileExistsError(dst)
 
     # Open requests connection to uri as a stream
-    log.debug(f"Beginning external resource copy from: {uri}")
-    with fsspec.open(uri, "rb", block_size=0) as open_source:
-        with open(dst, "wb") as open_target:
-            shutil.copyfileobj(open_source, open_target)
-    log.debug(f"Completed external resource copy from: {uri}")
-    log.debug(f"Stored external resource copy: {dst}")
+    log.info(f"Beginning resource copy from: {uri}")
+    # Get file system
+    try:
+        fs, remote_path = url_to_fs(uri)
+        fs.get(remote_path, str(dst), timeout=None)
+        log.info(f"Completed resource copy from: {uri}")
+        log.info(f"Stored resource copy: {dst}")
 
-    return str(dst)
+        return str(dst)
+    except Exception as e:
+        log.error(
+            f"Something went wrong during resource copy. "
+            f"Attempted copy from: '{uri}', resulted in error."
+        )
+        raise e
 
 
 def split_audio(

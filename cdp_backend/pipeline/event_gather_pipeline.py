@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from datetime import timedelta
 from importlib import import_module
 from operator import attrgetter
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
+from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
@@ -67,6 +69,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
         events: List[EventIngestionModel] = get_events_func()
+        log.info(f"Processing {len(events)} events.")
 
         for event in events:
             session_processing_results: List[SessionProcessingResult] = []
@@ -77,6 +80,21 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
+
+                # Check caption uri
+                if session.caption_uri is not None:
+                    fs, caption_path = url_to_fs(session.caption_uri)
+
+                    # If the caption doesn't exist, remove the property
+                    # This will result in Speech-to-Text being used instead
+                    if not fs.exists(caption_path):
+                        log.warning(
+                            f"File not found using provided caption URI: "
+                            f"'{session.caption_uri}'. "
+                            f"Removing the referenced caption URI and will process "
+                            f"the session using Speech-to-Text."
+                        )
+                        session.caption_uri = None
 
                 # Generate transcript
                 transcript_uri, transcript = generate_transcript(
@@ -127,7 +145,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     return flow
 
 
-@task(nout=2)
+@task(nout=2, max_retries=3, retry_delay=timedelta(seconds=60))
 def get_video_and_split_audio(
     video_uri: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
@@ -150,6 +168,11 @@ def get_video_and_split_audio(
         The unique key (SHA256 hash of video content) for this session processing.
     audio_uri: str
         The URI to the uploaded audio file.
+
+    Notes
+    -----
+    We sometimes get file downloading failures when running in parallel so this has two
+    retries attached to it that will run after a failure on a 3 minute delay.
     """
     # Get just the video filename from the full uri
     # TODO: Handle windows file splitting???
@@ -723,7 +746,7 @@ def _process_person_ingestion(
         person_db_model = db_functions.upload_db_model(
             db_model=person_db_model,
             credentials_file=credentials_file,
-            ingestion_model=person,
+            exist_ok=True,
         )
     except (FieldValidationFailed, RequiredField, InvalidFieldType):
         person_db_model = db_functions.create_minimal_person(person=person)
@@ -798,7 +821,7 @@ def _process_person_ingestion(
                 person_role_body_db_model = db_functions.upload_db_model(
                     db_model=person_role_body_db_model,
                     credentials_file=credentials_file,
-                    ingestion_model=person_role.body,
+                    exist_ok=True,
                 )
             else:
                 person_role_body_db_model = None
@@ -996,7 +1019,7 @@ def store_event_processing_results(
                 matter_db_model = db_functions.upload_db_model(
                     db_model=matter_db_model,
                     credentials_file=credentials_file,
-                    ingestion_model=event_minutes_item.matter,
+                    exist_ok=True,
                 )
 
                 # Add people from matter sponsors
