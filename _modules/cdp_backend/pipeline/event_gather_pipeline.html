@@ -214,11 +214,13 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">fireo.fields.errors</span> <span class="kn">import</span> <span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">,</span> <span class="n">RequiredField</span>
+<span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
 <span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
 <span class="kn">from</span> <span class="nn">prefect.tasks.control_flow</span> <span class="kn">import</span> <span class="n">case</span><span class="p">,</span> <span class="n">merge</span>
@@ -279,6 +281,7 @@
     <span class="c1"># Create flow</span>
     <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Gather Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
         <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_events_func</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
             <span class="n">session_processing_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SessionProcessingResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -289,6 +292,21 @@
                     <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
+
+                <span class="c1"># Check caption uri</span>
+                <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">fs</span><span class="p">,</span> <span class="n">caption_path</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">)</span>
+
+                    <span class="c1"># If the caption doesn&#39;t exist, remove the property</span>
+                    <span class="c1"># This will result in Speech-to-Text being used instead</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">caption_path</span><span class="p">):</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;File not found using provided caption URI: &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Removing the referenced caption URI and will process &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;the session using Speech-to-Text.&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="o">=</span> <span class="kc">None</span>
 
                 <span class="c1"># Generate transcript</span>
                 <span class="n">transcript_uri</span><span class="p">,</span> <span class="n">transcript</span> <span class="o">=</span> <span class="n">generate_transcript</span><span class="p">(</span>
@@ -339,7 +357,7 @@
     <span class="k">return</span> <span class="n">flow</span></div>
 
 
-<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_delay</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">get_video_and_split_audio</span><span class="p">(</span>
     <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
@@ -362,6 +380,11 @@
 <span class="sd">        The unique key (SHA256 hash of video content) for this session processing.</span>
 <span class="sd">    audio_uri: str</span>
 <span class="sd">        The URI to the uploaded audio file.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    We sometimes get file downloading failures when running in parallel so this has two</span>
+<span class="sd">    retries attached to it that will run after a failure on a 3 minute delay.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get just the video filename from the full uri</span>
     <span class="c1"># TODO: Handle windows file splitting???</span>
@@ -935,7 +958,7 @@
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
-            <span class="n">ingestion_model</span><span class="o">=</span><span class="n">person</span><span class="p">,</span>
+            <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minimal_person</span><span class="p">(</span><span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">)</span>
@@ -1010,7 +1033,7 @@
                 <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
                     <span class="n">db_model</span><span class="o">=</span><span class="n">person_role_body_db_model</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
-                    <span class="n">ingestion_model</span><span class="o">=</span><span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                    <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1208,7 +1231,7 @@
                 <span class="n">matter_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
                     <span class="n">db_model</span><span class="o">=</span><span class="n">matter_db_model</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
-                    <span class="n">ingestion_model</span><span class="o">=</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span><span class="p">,</span>
+                    <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Add people from matter sponsors</span>
