@@ -38,51 +38,6 @@ class UniquenessValidation:
     conflicting_models: List[Model]
 
 
-def get_model_uniqueness(model: Model) -> UniquenessValidation:
-    """
-    Validate that the primary keys of a to-be-uploaded model are unique
-    when compared to the collection.
-
-    Parameters
-    ----------
-    model: Model
-        A to-be-uploaded model instance.
-
-    Returns
-    -------
-    uniqueness_validation: UniquenessValidation
-        An object that contains data on an objects uniqueness and conflicting models.
-
-    Examples
-    --------
-    >>> from cdp_backend.database import models
-    ... from cdp_backend.database.validators import get_model_uniqueness
-    ...
-    ... b = models.Body.Example()
-    ... b_uniqueness = get_model_uniqueness(b)
-    ... if b_uniqueness.is_unique:
-    ...     b.save()
-    """
-    # Initialize query
-    query = model.__class__.collection
-
-    # Loop and fill query for each primary key
-    for pk in model._PRIMARY_KEYS:
-        field = getattr(model, pk)
-        if issubclass(field.__class__, Model):
-            query = query.filter(pk, "==", field.key)
-        else:
-            query = query.filter(pk, "==", field)
-
-    # Fetch and assert single value
-    results = list(query.fetch())
-    if len(results) >= 1:
-        log.info(f"Found existing or conflicting results={results} for model={model}.")
-        return UniquenessValidation(is_unique=False, conflicting_models=results)
-
-    return UniquenessValidation(is_unique=True, conflicting_models=results)
-
-
 #############################################################################
 # Field Validators
 
