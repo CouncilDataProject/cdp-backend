@@ -55,7 +55,9 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
 
     # Create hasher and hash primary values
     hasher = sha256()
-    hasher.update(pickle.dumps(primary_values))
+    # Set the protocol for dumping to bytes
+    # The default protocol changes between Python versions
+    hasher.update(pickle.dumps(primary_values, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
     db_model.id = hasher.hexdigest()[:12]
