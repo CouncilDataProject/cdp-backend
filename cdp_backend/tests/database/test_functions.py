@@ -21,12 +21,12 @@ body_b.name = "Body B"
     "model, expected_id",
     [
         # General examples and testing recursive id gen
-        (db_models.Body.Example(), "3f40260338d9"),
-        (db_models.Person.Example(), "0cac8a12dc10"),
-        (db_models.MinutesItem.Example(), "d5078688a536"),
+        (db_models.Body.Example(), "4346a8351006"),
+        (db_models.Person.Example(), "e54faa3434c9"),
+        (db_models.MinutesItem.Example(), "1e575caea0b9"),
         # Testing models differ
-        (body_a, "95c6d89c1d61"),
-        (body_b, "cd0adf1fc206"),
+        (body_a, "0a8a8e139258"),
+        (body_b, "1535fef479ff"),
     ],
 )
 def test_generate_and_attach_doc_hash_as_id(model: Model, expected_id: str) -> None:

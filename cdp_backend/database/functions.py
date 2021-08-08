@@ -36,7 +36,8 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
     db_model: Model
         The updated database model with the doc key set.
     """
-    primary_values: List[Any] = []
+    # Create hasher and hash primary values
+    hasher = sha256()
     for pk in db_model._PRIMARY_KEYS:
         field = getattr(db_model, pk)
 
@@ -47,17 +48,11 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
             setattr(db_model, pk, generate_and_attach_doc_hash_as_id(field))
 
             # Now attach the generated hash document path
-            primary_values.append(field.id)
+            hasher.update(pickle.dumps(field.id, protocol=4))
 
         # Otherwise just simply add the primary key value
         else:
-            primary_values.append(field)
-
-    # Create hasher and hash primary values
-    hasher = sha256()
-    # Set the protocol for dumping to bytes
-    # The default protocol changes between Python versions
-    hasher.update(pickle.dumps(primary_values, protocol=4))
+            hasher.update(pickle.dumps(field, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
     db_model.id = hasher.hexdigest()[:12]
