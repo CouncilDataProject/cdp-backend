@@ -729,7 +729,6 @@ def _process_person_ingestion(
             person_picture_db_model = db_functions.upload_db_model(
                 db_model=person_picture_db_model,
                 credentials_file=credentials_file,
-                exist_ok=True,
             )
         except FileNotFoundError:
             person_picture_db_model = None
@@ -746,7 +745,6 @@ def _process_person_ingestion(
         person_db_model = db_functions.upload_db_model(
             db_model=person_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
     except (FieldValidationFailed, RequiredField, InvalidFieldType):
         person_db_model = db_functions.create_minimal_person(person=person)
@@ -755,7 +753,6 @@ def _process_person_ingestion(
         person_db_model = db_functions.upload_db_model(
             db_model=person_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
 
     # Create seat
@@ -781,7 +778,6 @@ def _process_person_ingestion(
                 person_seat_image_db_model = db_functions.upload_db_model(
                     db_model=person_seat_image_db_model,
                     credentials_file=credentials_file,
-                    exist_ok=True,
                 )
             else:
                 person_seat_image_db_model = None
@@ -799,7 +795,6 @@ def _process_person_ingestion(
         person_seat_db_model = db_functions.upload_db_model(
             db_model=person_seat_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
 
     # Create roles
@@ -821,7 +816,6 @@ def _process_person_ingestion(
                 person_role_body_db_model = db_functions.upload_db_model(
                     db_model=person_role_body_db_model,
                     credentials_file=credentials_file,
-                    exist_ok=True,
                 )
             else:
                 person_role_body_db_model = None
@@ -843,7 +837,6 @@ def _process_person_ingestion(
             person_role_db_model = db_functions.upload_db_model(
                 db_model=person_role_db_model,
                 credentials_file=credentials_file,
-                exist_ok=True,
             )
 
     return person_db_model
@@ -905,7 +898,6 @@ def store_event_processing_results(
     body_db_model = db_functions.upload_db_model(
         db_model=body_db_model,
         credentials_file=credentials_file,
-        exist_ok=True,
     )
 
     # Create file docs for thumbnails
@@ -919,7 +911,6 @@ def store_event_processing_results(
     #     )
     #     static_thumbnail_file_db_model = db_functions.upload_db_model(
     #         db_model=static_thumbnail_file_db_model,
-    #         exist_ok=True,
     #     )
     #     if event_static_thumbnail_file_db_model is None:
     #         event_static_thumbnail_file_db_model = static_thumbnail_file_db_model
@@ -930,7 +921,6 @@ def store_event_processing_results(
     #     )
     #     hover_thumbnail_file_db_model = db_functions.upload_db_model(
     #         db_model=hover_thumbnail_file_db_model,
-    #         exist_ok=True,
     #     )
     #     if event_hover_thumbnail_file_db_model is None:
     #         event_hover_thumbnail_file_db_model = hover_thumbnail_file_db_model
@@ -949,7 +939,6 @@ def store_event_processing_results(
         event_db_model = db_functions.upload_db_model(
             db_model=event_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
     except FieldValidationFailed:
         event_db_model = db_functions.create_event(
@@ -962,7 +951,6 @@ def store_event_processing_results(
         event_db_model = db_functions.upload_db_model(
             db_model=event_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
 
     # Iter sessions
@@ -972,7 +960,6 @@ def store_event_processing_results(
         audio_file_db_model = db_functions.upload_db_model(
             db_model=audio_file_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
 
         # Upload transcript file
@@ -982,7 +969,6 @@ def store_event_processing_results(
         transcript_file_db_model = db_functions.upload_db_model(
             db_model=transcript_file_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
 
         # Create session
@@ -993,7 +979,6 @@ def store_event_processing_results(
         session_db_model = db_functions.upload_db_model(
             db_model=session_db_model,
             credentials_file=credentials_file,
-            ingestion_model=session_result.session,
         )
 
         # Create transcript
@@ -1005,7 +990,6 @@ def store_event_processing_results(
         transcript_db_model = db_functions.upload_db_model(
             db_model=transcript_db_model,
             credentials_file=credentials_file,
-            exist_ok=True,
         )
 
     # Add event metadata
@@ -1019,7 +1003,6 @@ def store_event_processing_results(
                 matter_db_model = db_functions.upload_db_model(
                     db_model=matter_db_model,
                     credentials_file=credentials_file,
-                    exist_ok=True,
                 )
 
                 # Add people from matter sponsors
@@ -1040,7 +1023,6 @@ def store_event_processing_results(
                         matter_sponsor_db_model = db_functions.upload_db_model(
                             db_model=matter_sponsor_db_model,
                             credentials_file=credentials_file,
-                            exist_ok=True,
                         )
 
             else:
@@ -1054,7 +1036,6 @@ def store_event_processing_results(
             minutes_item_db_model = db_functions.upload_db_model(
                 db_model=minutes_item_db_model,
                 credentials_file=credentials_file,
-                exist_ok=True,
             )
 
             # Handle event minutes item index
@@ -1074,7 +1055,6 @@ def store_event_processing_results(
                 event_minutes_item_db_model = db_functions.upload_db_model(
                     db_model=event_minutes_item_db_model,
                     credentials_file=credentials_file,
-                    exist_ok=True,
                 )
             except (FieldValidationFailed, InvalidFieldType):
                 event_minutes_item_db_model = (
@@ -1087,7 +1067,6 @@ def store_event_processing_results(
                 event_minutes_item_db_model = db_functions.upload_db_model(
                     db_model=event_minutes_item_db_model,
                     credentials_file=credentials_file,
-                    exist_ok=True,
                 )
 
             # Create matter status
@@ -1103,7 +1082,6 @@ def store_event_processing_results(
                         matter_status_db_model = db_functions.upload_db_model(
                             db_model=matter_status_db_model,
                             credentials_file=credentials_file,
-                            exist_ok=True,
                         )
                     except FieldValidationFailed:
                         allowed_matter_decisions = (
@@ -1134,7 +1112,6 @@ def store_event_processing_results(
                             matter_file_db_model = db_functions.upload_db_model(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
-                                exist_ok=True,
                             )
                         except FieldValidationFailed:
                             log.error(
@@ -1153,7 +1130,6 @@ def store_event_processing_results(
                         event_minutes_item_file_db_model = db_functions.upload_db_model(
                             db_model=event_minutes_item_file_db_model,
                             credentials_file=credentials_file,
-                            exist_ok=True,
                         )
                     except FieldValidationFailed:
                         log.error(
@@ -1194,7 +1170,6 @@ def store_event_processing_results(
                             vote_db_model = db_functions.upload_db_model(
                                 db_model=vote_db_model,
                                 credentials_file=credentials_file,
-                                exist_ok=True,
                             )
                         except (FieldValidationFailed, RequiredField, InvalidFieldType):
                             allowed_vote_decisions = (

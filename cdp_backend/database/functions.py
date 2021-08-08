@@ -2,18 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import pickle
 from datetime import datetime
-from typing import Any, Optional
+from hashlib import sha256
+from typing import Any, List, Optional
 
 import fireo
 from fireo.models import Model
 from google.cloud.firestore_v1.transaction import Transaction
 
-from ..database import exceptions
 from ..database import models as db_models
-from ..database.validators import get_model_uniqueness
 from ..pipeline import ingestion_models, transcript_model
-from ..pipeline.ingestion_models import IngestionModel
 
 ###############################################################################
 
@@ -22,58 +21,44 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-def update_db_model(
-    db_model: Model,
-    ingestion_model: IngestionModel,
-    transaction: Optional[Transaction] = None,
-) -> Model:
+def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
     """
-    Compare an existing database model to an ingestion model and if the non-primary
-    fields are different, update the database model.
+    Generate a SHA256 hash to use as the document key for storage
+    using the primary keys of the database model.
 
     Parameters
     ----------
     db_model: Model
-        The existing database model to compare new data against.
-    ingestion_model: IngestionModel
-        The data to compare against and potentially use for updating.
-    transaction: Optional[Transaction]
-        The transaction to write this model during.
+        The initialized database model.
 
     Returns
     -------
     db_model: Model
-        The updated database model.
+        The updated database model with the doc key set.
     """
-    # Filter out base class attrs, unrelated class methods, primary keys
-    non_primary_db_fields = [
-        attr
-        for attr in dir(db_model)
-        if (
-            not attr.startswith("_")
-            and attr not in dir(Model)
-            and attr not in db_model._PRIMARY_KEYS
-        )
-    ]
+    primary_values: List[Any] = []
+    for pk in db_model._PRIMARY_KEYS:
+        field = getattr(db_model, pk)
 
-    needs_update = False
-    for field in non_primary_db_fields:
-        if hasattr(ingestion_model, field):
-            db_val = getattr(db_model, field)
-            ingestion_val = getattr(ingestion_model, field)
+        # Handle reference fields by using their doc path
+        if isinstance(field, Model):
+            # Ensure that the underlying model has an id
+            # In place update to db_model for this field
+            setattr(db_model, pk, generate_and_attach_doc_hash_as_id(field))
 
-            # If values are different, use the ingestion value
-            # Make sure we don't overwrite with empty values
-            if db_val != ingestion_val and ingestion_val is not None:
-                setattr(db_model, field, ingestion_val)
-                needs_update = True
-                log.debug(
-                    f"Updating {db_model.key} {field} from {db_val} to {ingestion_val}."
-                )
+            # Now attach the generated hash document path
+            primary_values.append(field.id)
 
-    # Avoid unnecessary db interactions
-    if needs_update:
-        db_model = db_model.update(db_model.key, transaction=transaction)
+        # Otherwise just simply add the primary key value
+        else:
+            primary_values.append(field)
+
+    # Create hasher and hash primary values
+    hasher = sha256()
+    hasher.update(pickle.dumps(primary_values))
+
+    # Set the id to the first twelve characters of hexdigest
+    db_model.id = hasher.hexdigest()[:12]
 
     return db_model
 
@@ -82,8 +67,6 @@ def upload_db_model(
     db_model: Model,
     credentials_file: str,
     transaction: Optional[Transaction] = None,
-    ingestion_model: Optional[IngestionModel] = None,
-    exist_ok: bool = False,
 ) -> Model:
     """
     Upload or update an existing database model.
@@ -96,65 +79,18 @@ def upload_db_model(
         Path to Google Service Account Credentials JSON file.
     transaction: Optional[Transaction]
         The transaction to write this model during.
-    ingestion_model: Optional[IngestionModel]
-        The accompanying ingestion model in the case the model already exists and needs
-        to be updated rather than inserted.
-    exist_ok: bool
-        If there is an existing database document found during upload, is it okay for
-        it to exist and simply return.
-        Default: False
 
     Returns
     -------
     db_model: Model
         The uploaded, or updated, database model.
-
-    Raises
-    ------
-    exceptions.UniquenessError
-        More than one (1) conflicting model was found in the database. This should
-        never occur and indicates that something is wrong with the database.
     """
     # Init transaction and auth
     fireo.connection(from_file=credentials_file)
 
-    uniqueness_validation = get_model_uniqueness(db_model)
-    if uniqueness_validation.is_unique:
-        db_model = db_model.save(transaction=transaction)
-        log.debug(
-            f"Saved new {db_model.__class__.__name__} with document id={db_model.id}."
-        )
-    elif (
-        len(uniqueness_validation.conflicting_models) == 1
-        and ingestion_model is not None
-    ):
-        updated_db_model = update_db_model(
-            db_model=uniqueness_validation.conflicting_models[0],
-            ingestion_model=ingestion_model,
-            transaction=transaction,
-        )
-
-        return updated_db_model
-    elif len(uniqueness_validation.conflicting_models) == 1 and exist_ok:
-        # Exist okay was selected, update existing model and return
-        #
-        # Previously this simply returned the found conflicting model
-        # But a prime example of where we should update is in the Role Model
-        # Where we can find an existing model based off primary keys
-        # But if we were ingesting a model that had an end_datetime
-        # and the current database model didn't have an end_datetime
-        # we wouldn't have updated the database model with the newly provided
-        # end_datetime
-        db_model = db_model.update(
-            key=uniqueness_validation.conflicting_models[0].key,
-            transaction=transaction,
-        )
-
-    else:
-        raise exceptions.UniquenessError(
-            model=db_model, conflicting_results=uniqueness_validation.conflicting_models
-        )
-
+    # Generate id and upsert
+    db_model = generate_and_attach_doc_hash_as_id(db_model)
+    db_model = db_model.upsert(transaction=transaction)
     return db_model
 
 
