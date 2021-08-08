@@ -5,7 +5,7 @@ import logging
 import pickle
 from datetime import datetime
 from hashlib import sha256
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import fireo
 from fireo.models import Model
