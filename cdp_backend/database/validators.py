@@ -77,7 +77,7 @@ def get_model_uniqueness(model: Model) -> UniquenessValidation:
     # Fetch and assert single value
     results = list(query.fetch())
     if len(results) >= 1:
-        log.warning(f"Found conflicting results={results} for model={model}.")
+        log.info(f"Found existing or conflicting results={results} for model={model}.")
         return UniquenessValidation(is_unique=False, conflicting_models=results)
 
     return UniquenessValidation(is_unique=True, conflicting_models=results)
@@ -108,7 +108,7 @@ def router_string_is_valid(router_string: Optional[str]) -> bool:
         return True
 
     # Check only lowercase and hyphen allowed
-    if re.match(r"^[a-z]+[\-]?[a-z]+$", router_string):
+    if re.match(r"^[a-z0-9\-]+$", router_string):
         return True
 
     return False

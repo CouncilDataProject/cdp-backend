@@ -13,67 +13,6 @@ from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
 from cdp_backend.database.validators import UniquenessValidation
 from cdp_backend.pipeline import ingestion_models
-from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT
-
-###############################################################################
-# Testing constants
-
-db_body = db_models.Body.Example()
-db_body.description = "description"
-db_body.end_datetime = datetime(2039, 1, 1)
-db_body.external_source_id = "external_source_id"
-db_body_extra = db_models.Body.Example()
-
-updated_desc = "updated description"
-db_body_updated = copy.deepcopy(db_body)
-db_body_updated.description = updated_desc
-
-db_event = db_models.Event.Example()
-db_event.body_ref = db_body
-
-db_session = db_models.Session.Example()
-db_session.event_ref = db_event
-db_session.session_index = 1
-db_session.caption_uri = "caption_uri"
-db_session.external_source_id = "external_source_id"
-
-minimal_ingestion_body = ingestion_models.Body(
-    name=db_body.name, is_active=db_body.is_active
-)
-full_ingestion_body = ingestion_models.Body(
-    name=db_body.name,
-    is_active=db_body.is_active,
-    start_datetime=db_body.start_datetime,
-    end_datetime=db_body.end_datetime,
-    description=db_body.description,
-    external_source_id=db_body.external_source_id,
-)
-updated_ingestion_body = ingestion_models.Body(
-    name=db_body_updated.name,
-    is_active=db_body_updated.is_active,
-    description=updated_desc,
-)
-
-minimal_ingestion_session = ingestion_models.Session(
-    session_datetime=db_session.session_datetime,
-    video_uri=db_session.video_uri,
-    session_index=db_session.session_index,
-)
-full_ingestion_session = ingestion_models.Session(
-    session_datetime=db_session.session_datetime,
-    video_uri=db_session.video_uri,
-    caption_uri=db_session.caption_uri,
-    external_source_id=db_session.external_source_id,
-    session_index=db_session.session_index,
-)
-
-minimal_ingestion_event = ingestion_models.EventIngestionModel(
-    body=minimal_ingestion_body, sessions=[minimal_ingestion_session]
-)
-
-example_file = db_models.File()
-example_file.name = "name.ext"
-example_file.uri = "ex://name.ext"
 
 ###############################################################################
 # Assertion functions
@@ -107,35 +46,33 @@ def assert_db_models_equality(
         assert are_not_equal
 
 
-def assert_ingestion_and_db_models_equal(
-    ingestion_model: ingestion_models.IngestionModel,
-    expected_db_model: Model,
-    actual_db_model: Model,
-) -> None:
-    # Get rid of dunderscore methods and attrs
-    fields = [attr for attr in dir(ingestion_model) if not attr.startswith("__")]
-    # Get rid of specific methods
-    fields = [
-        attr
-        for attr in fields
-        if attr
-        not in [
-            "to_dict",
-        ]
-    ]
-
-    for field in fields:
-        ingestion_value = getattr(ingestion_model, field)
-
-        # Minimal models may be missing some values
-        # Some fields like reference fields don't match between ingestion and db models
-        # Those are asserted in the more specific methods
-        if ingestion_value and hasattr(expected_db_model, field):
-            assert getattr(expected_db_model, field) == getattr(actual_db_model, field)
-
-
 ###############################################################################
 # Tests
+
+# Testing constants
+db_body = db_models.Body.Example()
+db_body.description = "description"
+db_body.end_datetime = datetime(2039, 1, 1)
+db_body.external_source_id = "external_source_id"
+db_body_extra = db_models.Body.Example()
+
+updated_desc = "updated description"
+db_body_updated = copy.deepcopy(db_body)
+db_body_updated.description = updated_desc
+
+full_ingestion_body = ingestion_models.Body(
+    name=db_body.name,
+    is_active=db_body.is_active,
+    start_datetime=db_body.start_datetime,
+    end_datetime=db_body.end_datetime,
+    description=db_body.description,
+    external_source_id=db_body.external_source_id,
+)
+updated_ingestion_body = ingestion_models.Body(
+    name=db_body_updated.name,
+    is_active=db_body_updated.is_active,
+    description=updated_desc,
+)
 
 
 @pytest.mark.parametrize(
@@ -200,7 +137,7 @@ def test_upload_db_model(
         mock_uniqueness_validator.return_value = mock_return_value
 
         with mock.patch("fireo.models.Model.save") as mock_saver:
-            mock_saver.return_value = None
+            mock_saver.return_value = db_model
 
             with mock.patch(
                 "cdp_backend.database.functions.update_db_model"
@@ -223,66 +160,29 @@ def test_upload_db_model(
                     assert_db_models_equality(expected, actual_uploaded_model, True)
 
 
-def test_create_file() -> None:
-    db_file = db_functions.create_file("ex://name.ext")
+###############################################################################
 
-    assert example_file.name == db_file.name
-    assert example_file.uri == db_file.uri
+# Only test functions that do something besides parameter unpacking and assigning
+# Mypy can type check for us so no real need to have tedious tests for every
+# db model creation function.
+
+# Attribute unpacking and setting gets tested in event pipeline tests.
 
 
 @pytest.mark.parametrize(
-    "ingestion_model, expected",
+    "uri, expected_name, expected_uri",
     [
-        (minimal_ingestion_body, db_body),
-        (full_ingestion_body, db_body),
+        ("ex://name.ext", "name.ext", "ex://name.ext"),
+        (
+            "fake://test/multi/path/file.ext",
+            "file.ext",
+            "fake://test/multi/path/file.ext",
+        ),
+        ("okay://no-file-ext", "no-file-ext", "okay://no-file-ext"),
     ],
 )
-def test_create_body_from_ingestion_model(
-    ingestion_model: ingestion_models.Body,
-    expected: db_models.Body,
-) -> None:
-    actual = db_functions.create_body_from_ingestion_model(ingestion_model)
+def test_create_file(uri: str, expected_name: str, expected_uri: str) -> None:
+    db_file = db_functions.create_file(uri)
 
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [
-        (minimal_ingestion_event, db_event),
-    ],
-)
-def test_create_event_from_ingestion_model(
-    ingestion_model: ingestion_models.EventIngestionModel,
-    expected: db_models.Event,
-) -> None:
-    actual = db_functions.create_event_from_ingestion_model(ingestion_model, db_body)
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-    assert expected.body_ref == actual.body_ref
-
-
-@pytest.mark.parametrize(
-    "ingestion_model, expected",
-    [(minimal_ingestion_session, db_session), (full_ingestion_session, db_session)],
-)
-def test_create_session_from_ingestion_model(
-    ingestion_model: ingestion_models.Session,
-    expected: db_models.Session,
-) -> None:
-    actual = db_functions.create_session_from_ingestion_model(ingestion_model, db_event)
-
-    assert_ingestion_and_db_models_equal(ingestion_model, expected, actual)
-
-    assert expected.event_ref == actual.event_ref
-
-
-def test_create_transcript() -> None:
-    db_file = db_models.File()
-    db_session = db_models.Session()
-
-    assert isinstance(
-        db_functions.create_transcript(db_file, db_session, EXAMPLE_TRANSCRIPT),
-        db_models.Transcript,
-    )
+    assert db_file.name == expected_name
+    assert db_file.uri == expected_uri

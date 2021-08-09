@@ -3,14 +3,16 @@
 
 import sys
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
 from prefect import Flow
 
+from cdp_backend.database import constants as db_constants
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
+from cdp_backend.pipeline import ingestion_models
 from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_FILLED_EVENT,
     EXAMPLE_MINIMAL_EVENT,
@@ -22,6 +24,7 @@ from cdp_backend.pipeline.mock_get_events import (
     MANY_FLOW_CONFIG,
     MINIMAL_FLOW_CONFIG,
     RANDOM_FLOW_CONFIG,
+    _get_example_event,
 )
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
@@ -191,9 +194,209 @@ def test_generate_transcript(
     assert state.is_successful()  # type: ignore
 
 
+example_person = ingestion_models.Person(name="Bob Boberson")
+example_minutes_item = ingestion_models.MinutesItem(name="Definitely happened")
+failed_events_minutes_item = ingestion_models.EventMinutesItem(
+    minutes_item=example_minutes_item,
+    decision=db_constants.EventMinutesItemDecision.FAILED,
+)
+passed_events_minutes_item = ingestion_models.EventMinutesItem(
+    minutes_item=example_minutes_item,
+    decision=db_constants.EventMinutesItemDecision.PASSED,
+)
+
+
+@pytest.mark.parametrize(
+    "vote, event_minutes_item, expected",
+    [
+        # The minutes item passed
+        # They approved or approved-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.APPROVE,
+            ),
+            passed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_APPROVE,
+            ),
+            passed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_APPROVE,
+            ),
+            passed_events_minutes_item,
+            True,
+        ),
+        # They rejected or rejected-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.REJECT,
+            ),
+            passed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_REJECT,
+            ),
+            passed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_REJECT,
+            ),
+            passed_events_minutes_item,
+            False,
+        ),
+        # The minutes item failed
+        # They approved or approved-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.APPROVE,
+            ),
+            failed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_APPROVE,
+            ),
+            failed_events_minutes_item,
+            False,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_APPROVE,
+            ),
+            failed_events_minutes_item,
+            False,
+        ),
+        # They rejected or rejected-by-abstention-or-absense
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.REJECT,
+            ),
+            failed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_REJECT,
+            ),
+            failed_events_minutes_item,
+            True,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_REJECT,
+            ),
+            failed_events_minutes_item,
+            True,
+        ),
+        # The minutes item passed
+        # They were a non-voting member
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_NON_VOTING,
+            ),
+            passed_events_minutes_item,
+            None,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_NON_VOTING,
+            ),
+            passed_events_minutes_item,
+            None,
+        ),
+        # The minutes item failed
+        # They were a non-voting member
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSTAIN_NON_VOTING,
+            ),
+            failed_events_minutes_item,
+            None,
+        ),
+        (
+            ingestion_models.Vote(
+                person=example_person,
+                decision=db_constants.VoteDecision.ABSENT_NON_VOTING,
+            ),
+            failed_events_minutes_item,
+            None,
+        ),
+    ],
+)
+def test_calculate_in_majority(
+    vote: ingestion_models.Vote,
+    event_minutes_item: ingestion_models.EventMinutesItem,
+    expected: Optional[bool],
+) -> None:
+    actual = pipeline._calculate_in_majority(
+        vote=vote,
+        event_minutes_item=event_minutes_item,
+    )
+    assert actual == expected
+
+
+###############################################################################
+# Database storage tests prep
+
+# Generate random events and construct session processing results for each
+# While we can't guarentee this will cover all cases,
+# this should cover most cases.
+
+RANDOM_EVENTS_AND_PROC_RESULTS = []
+for i in range(6):
+    rand_event = _get_example_event()
+    proc_results = []
+    for session in rand_event.sessions:
+        proc_results.append(
+            pipeline.SessionProcessingResult(
+                session=session,
+                audio_uri="fake://doesnt-matter.wav",
+                transcript=EXAMPLE_TRANSCRIPT,
+                transcript_uri="fake://doesnt-matter-transcript.json",
+                static_thumbnail_uri="fake://doesnt-matter-static-thumbnail.png",
+                hover_thumbnail_uri="fake://doesnt-matter-hover-thumbnail.gif",
+            )
+        )
+
+    # Append rand event and proce results as tuple
+    # Set fail_file_uploads to even param sets
+    RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results, i % 2 == 0))
+
+###############################################################################
+
+
+@mock.patch(f"{PIPELINE_PATH}.file_utils.resource_copy")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
 @pytest.mark.parametrize(
-    "event, session_processing_results",
+    "event, session_processing_results, fail_file_uploads",
     [
         (
             EXAMPLE_MINIMAL_EVENT,
@@ -207,6 +410,7 @@ def test_generate_transcript(
                     hover_thumbnail_uri="ex://abc123-hover-thumbnail.gif",
                 ),
             ],
+            False,
         ),
         (
             EXAMPLE_FILLED_EVENT,
@@ -228,16 +432,32 @@ def test_generate_transcript(
                     hover_thumbnail_uri="ex://def456-hover-thumbnail.gif",
                 ),
             ],
+            False,
         ),
+        *RANDOM_EVENTS_AND_PROC_RESULTS,
     ],
 )
 def test_store_event_processing_results(
     mock_upload_db_model: MagicMock,
+    mock_remove_local_file: MagicMock,
+    mock_upload_file: MagicMock,
+    mock_resource_copy: MagicMock,
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
+    fail_file_uploads: bool,
 ) -> None:
+    # All of the resource copies relate to image file uploads / archival.
+    # But we aren't actually uploading so just make sure that we aren't downloading
+    # externally either.
+    mock_resource_copy.return_value = "doesnt-matter.ext"
+
+    # Set file upload side effect
+    if fail_file_uploads:
+        mock_upload_file.side_effect = FileNotFoundError()
+
     pipeline.store_event_processing_results.run(  # type: ignore
         event=event,
         session_processing_results=session_processing_results,
         credentials_file="fake/credentials.json",
+        bucket="doesnt://matter",
     )

@@ -116,7 +116,7 @@ class Matter(IngestionModel):
     name: str
     matter_type: str
     title: str
-    result_status: str
+    result_status: Optional[str] = None
     sponsors: Optional[List[Person]] = None
     external_source_id: Optional[str] = None
 
@@ -145,8 +145,6 @@ class EventMinutesItem(IngestionModel):
     If index is not provided, the index will be set to the index of the item in the
     whole EventMinutesItem list on Event.
 
-    If matter is not provided, the supporting_files will be stored as
-    EventMinutesItemFile.
     If matter is provided, the supporting_files will be additionally be stored as
     MatterFile.
     """
@@ -184,7 +182,8 @@ class Body(IngestionModel):
     Notes
     -----
     If start_datetime is not provided, and the Body did not exist prior to ingestion,
-    current datetime.utcnow will be used as start_datetime during storage.
+    the session datetime associated with this ingestion will be used as start_datetime
+    during storage.
     """
 
     name: str
@@ -209,7 +208,8 @@ class Role(IngestionModel):
     Notes
     -----
     If start_datetime is not provided, and the Role did not exist prior to ingestion,
-    current datetime.utcnow will be used as start_datetime during storage.
+    the session datetime associated with this ingestion will be used as start_datetime
+    during storage.
     """
 
     title: str
@@ -320,6 +320,7 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                                 body=Body(name="Governance and Education"),
                             ),
                         ],
+                        picture_uri="https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg",  # noqa: E501
                     ),
                 ],
             ),
@@ -368,7 +369,10 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                 Vote(
                     person=Person(
                         name="Andrew Lewis",
-                        seat=Seat(name="District 7"),
+                        seat=Seat(
+                            name="District 7",
+                            image_uri="http://www.seattle.gov/Images/Clerk/district7_50x50.jpg",  # noqa: E501
+                        ),
                         roles=[
                             Role(
                                 title="Vice Chair",
