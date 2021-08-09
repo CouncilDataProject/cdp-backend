@@ -339,25 +339,6 @@ example.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-cdp_backend.database.exceptions">
-<span id="cdp-backend-database-exceptions-module"></span><h2>cdp_backend.database.exceptions module<a class="headerlink" href="#module-cdp_backend.database.exceptions" title="Permalink to this headline">¶</a></h2>
-<dl class="py exception">
-<dt class="sig sig-object py" id="cdp_backend.database.exceptions.UniquenessError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.database.exceptions.</span></span><span class="sig-name descname"><span class="pre">UniquenessError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conflicting_results</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fireo.models.model.Model</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/exceptions.html#UniquenessError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<dl class="py property">
-<dt class="sig sig-object py" id="cdp_backend.database.exceptions.UniquenessError.conflicting_ids">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">conflicting_ids</span></span><em class="property"><span class="pre">:</span> <span class="pre">List[str]</span></em><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError.conflicting_ids" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="cdp_backend.database.exceptions.UniquenessError.pk_values">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pk_values</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict[str,</span> <span class="pre">Any]</span></em><a class="headerlink" href="#cdp_backend.database.exceptions.UniquenessError.pk_values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="module-cdp_backend.database.functions">
 <span id="cdp-backend-database-functions-module"></span><h2>cdp_backend.database.functions module<a class="headerlink" href="#module-cdp_backend.database.functions" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
@@ -451,20 +432,16 @@ example.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.database.functions.update_db_model">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">update_db_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ingestion_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel" title="cdp_backend.pipeline.ingestion_models.IngestionModel"><span class="pre">cdp_backend.pipeline.ingestion_models.IngestionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">google.cloud.firestore_v1.transaction.Transaction</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#update_db_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.update_db_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compare an existing database model to an ingestion model and if the non-primary
-fields are different, update the database model.</p>
+<dt class="sig sig-object py" id="cdp_backend.database.functions.generate_and_attach_doc_hash_as_id">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">generate_and_attach_doc_hash_as_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#generate_and_attach_doc_hash_as_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.generate_and_attach_doc_hash_as_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a SHA256 hash to use as the document key for storage
+using the primary keys of the database model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>db_model</strong> (<em>Model</em>) – The existing database model to compare new data against.</p></li>
-<li><p><strong>ingestion_model</strong> (<em>IngestionModel</em>) – The data to compare against and potentially use for updating.</p></li>
-<li><p><strong>transaction</strong> (<em>Optional[Transaction]</em>) – The transaction to write this model during.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>db_model</strong> (<em>Model</em>) – The initialized database model.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>db_model</strong> – The updated database model.</p>
+<dd class="field-even"><p><strong>db_model</strong> – The updated database model with the doc key set.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Model</p>
@@ -474,7 +451,7 @@ fields are different, update the database model.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.database.functions.upload_db_model">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">upload_db_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">google.cloud.firestore_v1.transaction.Transaction</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ingestion_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel" title="cdp_backend.pipeline.ingestion_models.IngestionModel"><span class="pre">cdp_backend.pipeline.ingestion_models.IngestionModel</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exist_ok</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#upload_db_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.upload_db_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">upload_db_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">google.cloud.firestore_v1.transaction.Transaction</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#upload_db_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.upload_db_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload or update an existing database model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -482,11 +459,6 @@ fields are different, update the database model.</p>
 <li><p><strong>db_model</strong> (<em>Model</em>) – The database model to upload.</p></li>
 <li><p><strong>credentials_file</strong> (<em>str</em>) – Path to Google Service Account Credentials JSON file.</p></li>
 <li><p><strong>transaction</strong> (<em>Optional[Transaction]</em>) – The transaction to write this model during.</p></li>
-<li><p><strong>ingestion_model</strong> (<em>Optional[IngestionModel]</em>) – The accompanying ingestion model in the case the model already exists and needs
-to be updated rather than inserted.</p></li>
-<li><p><strong>exist_ok</strong> (<em>bool</em>) – If there is an existing database document found during upload, is it okay for
-it to exist and simply return.
-Default: False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -494,10 +466,6 @@ Default: False</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Model</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="#cdp_backend.database.exceptions.UniquenessError" title="cdp_backend.database.exceptions.UniquenessError"><strong>exceptions.UniquenessError</strong></a> – More than one (1) conflicting model was found in the database. This should
-    never occur and indicates that something is wrong with the database.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -550,6 +518,11 @@ such as election debates.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Body.external_source_id">
 <span class="sig-name descname"><span class="pre">external_source_id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Body.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Body.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Body.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -627,6 +600,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Event.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Event.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Event.minutes_uri">
 <span class="sig-name descname"><span class="pre">minutes_uri</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Event.minutes_uri" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -685,6 +663,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItem.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItem.index">
 <span class="sig-name descname"><span class="pre">index</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItem.index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -738,6 +721,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItemFile.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.EventMinutesItemFile.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.EventMinutesItemFile.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -783,6 +771,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.File.description">
 <span class="sig-name descname"><span class="pre">description</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.File.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.File.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.File.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -836,6 +829,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Matter.external_source_id">
 <span class="sig-name descname"><span class="pre">external_source_id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Matter.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Matter.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Matter.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -893,6 +891,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterFile.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterFile.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterFile.matter_ref">
 <span class="sig-name descname"><span class="pre">matter_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterFile.matter_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -943,6 +946,11 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterSponsor.external_source_id">
 <span class="sig-name descname"><span class="pre">external_source_id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterSponsor.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterSponsor.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1005,6 +1013,11 @@ the timelines of matters. I.E. Return me a timeline of matter x.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MatterStatus.matter_ref">
 <span class="sig-name descname"><span class="pre">matter_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MatterStatus.matter_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1064,6 +1077,11 @@ This can be a matter but it can be a presentation or budget file, etc.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.MinutesItem.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.MinutesItem.matter_ref">
 <span class="sig-name descname"><span class="pre">matter_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.MinutesItem.matter_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1120,6 +1138,11 @@ manager, or any other “normal” presenters and attendees of meetings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Person.generate_router_string">
 <em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">generate_router_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#Person.generate_router_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.Person.generate_router_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Person.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Person.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1211,6 +1234,11 @@ committee.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Role.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Role.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Role.person_ref">
 <span class="sig-name descname"><span class="pre">person_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Role.person_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1279,6 +1307,11 @@ committee.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Seat.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Seat.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Seat.image_ref">
 <span class="sig-name descname"><span class="pre">image_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Seat.image_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1335,6 +1368,11 @@ For example, An event could have a morning and afternoon session.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Session.external_source_id">
 <span class="sig-name descname"><span class="pre">external_source_id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Session.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Session.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Session.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1401,6 +1439,11 @@ For example, An event could have a morning and afternoon session.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Transcript.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Transcript.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Transcript.session_ref">
 <span class="sig-name descname"><span class="pre">session_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Transcript.session_ref" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1456,6 +1499,11 @@ For example, An event could have a morning and afternoon session.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.Vote.external_source_id">
 <span class="sig-name descname"><span class="pre">external_source_id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Vote.external_source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.Vote.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.Vote.id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1572,34 +1620,6 @@ in the database collection.</p></li>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.database.validators.get_model_uniqueness">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">get_model_uniqueness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cdp_backend.database.validators.UniquenessValidation" title="cdp_backend.database.validators.UniquenessValidation"><span class="pre">cdp_backend.database.validators.UniquenessValidation</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#get_model_uniqueness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.get_model_uniqueness" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate that the primary keys of a to-be-uploaded model are unique
-when compared to the collection.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>Model</em>) – A to-be-uploaded model instance.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>uniqueness_validation</strong> – An object that contains data on an objects uniqueness and conflicting models.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#cdp_backend.database.validators.UniquenessValidation" title="cdp_backend.database.validators.UniquenessValidation">UniquenessValidation</a></p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cdp_backend.database</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="gp">... </span><span class="kn">from</span> <span class="nn">cdp_backend.database.validators</span> <span class="kn">import</span> <span class="n">get_model_uniqueness</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">b</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
-<span class="gp">... </span><span class="n">b_uniqueness</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="gp">... </span><span class="k">if</span> <span class="n">b_uniqueness</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py function">

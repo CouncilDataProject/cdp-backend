@@ -250,51 +250,6 @@
     <span class="n">conflicting_models</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="get_model_uniqueness"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.get_model_uniqueness">[docs]</a><span class="k">def</span> <span class="nf">get_model_uniqueness</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UniquenessValidation</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validate that the primary keys of a to-be-uploaded model are unique</span>
-<span class="sd">    when compared to the collection.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    model: Model</span>
-<span class="sd">        A to-be-uploaded model instance.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    uniqueness_validation: UniquenessValidation</span>
-<span class="sd">        An object that contains data on an objects uniqueness and conflicting models.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; from cdp_backend.database import models</span>
-<span class="sd">    ... from cdp_backend.database.validators import get_model_uniqueness</span>
-<span class="sd">    ...</span>
-<span class="sd">    ... b = models.Body.Example()</span>
-<span class="sd">    ... b_uniqueness = get_model_uniqueness(b)</span>
-<span class="sd">    ... if b_uniqueness.is_unique:</span>
-<span class="sd">    ...     b.save()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Initialize query</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">collection</span>
-
-    <span class="c1"># Loop and fill query for each primary key</span>
-    <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_PRIMARY_KEYS</span><span class="p">:</span>
-        <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-
-    <span class="c1"># Fetch and assert single value</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">fetch</span><span class="p">())</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found existing or conflicting results=</span><span class="si">{</span><span class="n">results</span><span class="si">}</span><span class="s2"> for model=</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">UniquenessValidation</span><span class="p">(</span><span class="n">is_unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">conflicting_models</span><span class="o">=</span><span class="n">results</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">UniquenessValidation</span><span class="p">(</span><span class="n">is_unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">conflicting_models</span><span class="o">=</span><span class="n">results</span><span class="p">)</span></div>
-
-
 <span class="c1">#############################################################################</span>
 <span class="c1"># Field Validators</span>
 

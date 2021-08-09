@@ -12,14 +12,6 @@ cdp\_backend.database.constants module
    :undoc-members:
    :show-inheritance:
 
-cdp\_backend.database.exceptions module
----------------------------------------
-
-.. automodule:: cdp_backend.database.exceptions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 cdp\_backend.database.functions module
 --------------------------------------
 

@@ -214,18 +214,17 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">google.cloud.firestore_v1.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
 
-<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">exceptions</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
-<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">get_model_uniqueness</span>
 <span class="kn">from</span> <span class="nn">..pipeline</span> <span class="kn">import</span> <span class="n">ingestion_models</span><span class="p">,</span> <span class="n">transcript_model</span>
-<span class="kn">from</span> <span class="nn">..pipeline.ingestion_models</span> <span class="kn">import</span> <span class="n">IngestionModel</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -234,58 +233,41 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="update_db_model"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.update_db_model">[docs]</a><span class="k">def</span> <span class="nf">update_db_model</span><span class="p">(</span>
-    <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
-    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">IngestionModel</span><span class="p">,</span>
-    <span class="n">transaction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+<div class="viewcode-block" id="generate_and_attach_doc_hash_as_id"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.generate_and_attach_doc_hash_as_id">[docs]</a><span class="k">def</span> <span class="nf">generate_and_attach_doc_hash_as_id</span><span class="p">(</span><span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compare an existing database model to an ingestion model and if the non-primary</span>
-<span class="sd">    fields are different, update the database model.</span>
+<span class="sd">    Generate a SHA256 hash to use as the document key for storage</span>
+<span class="sd">    using the primary keys of the database model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    db_model: Model</span>
-<span class="sd">        The existing database model to compare new data against.</span>
-<span class="sd">    ingestion_model: IngestionModel</span>
-<span class="sd">        The data to compare against and potentially use for updating.</span>
-<span class="sd">    transaction: Optional[Transaction]</span>
-<span class="sd">        The transaction to write this model during.</span>
+<span class="sd">        The initialized database model.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    db_model: Model</span>
-<span class="sd">        The updated database model.</span>
+<span class="sd">        The updated database model with the doc key set.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Filter out base class attrs, unrelated class methods, primary keys</span>
-    <span class="n">non_primary_db_fields</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">attr</span>
-        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">Model</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">db_model</span><span class="o">.</span><span class="n">_PRIMARY_KEYS</span>
-        <span class="p">)</span>
-    <span class="p">]</span>
+    <span class="c1"># Create hasher and hash primary values</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">sha256</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">db_model</span><span class="o">.</span><span class="n">_PRIMARY_KEYS</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
 
-    <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">non_primary_db_fields</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
-            <span class="n">db_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-            <span class="n">ingestion_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ingestion_model</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="c1"># Handle reference fields by using their doc path</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+            <span class="c1"># Ensure that the underlying model has an id</span>
+            <span class="c1"># In place update to db_model for this field</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">generate_and_attach_doc_hash_as_id</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
 
-            <span class="c1"># If values are different, use the ingestion value</span>
-            <span class="c1"># Make sure we don&#39;t overwrite with empty values</span>
-            <span class="k">if</span> <span class="n">db_val</span> <span class="o">!=</span> <span class="n">ingestion_val</span> <span class="ow">and</span> <span class="n">ingestion_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ingestion_val</span><span class="p">)</span>
-                <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Updating </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">db_val</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">ingestion_val</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="p">)</span>
+            <span class="c1"># Now attach the generated hash document path</span>
+            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-    <span class="c1"># Avoid unnecessary db interactions</span>
-    <span class="k">if</span> <span class="n">needs_update</span><span class="p">:</span>
-        <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_model</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+        <span class="c1"># Otherwise just simply add the primary key value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="c1"># Set the id to the first twelve characters of hexdigest</span>
+    <span class="n">db_model</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">12</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">db_model</span></div>
 
@@ -294,8 +276,6 @@
     <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">transaction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">ingestion_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">exist_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Upload or update an existing database model.</span>
@@ -308,65 +288,18 @@
 <span class="sd">        Path to Google Service Account Credentials JSON file.</span>
 <span class="sd">    transaction: Optional[Transaction]</span>
 <span class="sd">        The transaction to write this model during.</span>
-<span class="sd">    ingestion_model: Optional[IngestionModel]</span>
-<span class="sd">        The accompanying ingestion model in the case the model already exists and needs</span>
-<span class="sd">        to be updated rather than inserted.</span>
-<span class="sd">    exist_ok: bool</span>
-<span class="sd">        If there is an existing database document found during upload, is it okay for</span>
-<span class="sd">        it to exist and simply return.</span>
-<span class="sd">        Default: False</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    db_model: Model</span>
 <span class="sd">        The uploaded, or updated, database model.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    exceptions.UniquenessError</span>
-<span class="sd">        More than one (1) conflicting model was found in the database. This should</span>
-<span class="sd">        never occur and indicates that something is wrong with the database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Init transaction and auth</span>
     <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
 
-    <span class="n">uniqueness_validation</span> <span class="o">=</span> <span class="n">get_model_uniqueness</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>
-        <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Saved new </span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with document id=</span><span class="si">{</span><span class="n">db_model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">.&quot;</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="ow">and</span> <span class="n">ingestion_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="p">):</span>
-        <span class="n">updated_db_model</span> <span class="o">=</span> <span class="n">update_db_model</span><span class="p">(</span>
-            <span class="n">db_model</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">ingestion_model</span><span class="o">=</span><span class="n">ingestion_model</span><span class="p">,</span>
-            <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">updated_db_model</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">exist_ok</span><span class="p">:</span>
-        <span class="c1"># Exist okay was selected, update existing model and return</span>
-        <span class="c1">#</span>
-        <span class="c1"># Previously this simply returned the found conflicting model</span>
-        <span class="c1"># But a prime example of where we should update is in the Role Model</span>
-        <span class="c1"># Where we can find an existing model based off primary keys</span>
-        <span class="c1"># But if we were ingesting a model that had an end_datetime</span>
-        <span class="c1"># and the current database model didn&#39;t have an end_datetime</span>
-        <span class="c1"># we wouldn&#39;t have updated the database model with the newly provided</span>
-        <span class="c1"># end_datetime</span>
-        <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="n">key</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
-            <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UniquenessError</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="n">db_model</span><span class="p">,</span> <span class="n">conflicting_results</span><span class="o">=</span><span class="n">uniqueness_validation</span><span class="o">.</span><span class="n">conflicting_models</span>
-        <span class="p">)</span>
-
+    <span class="c1"># Generate id and upsert</span>
+    <span class="n">db_model</span> <span class="o">=</span> <span class="n">generate_and_attach_doc_hash_as_id</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
+    <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">upsert</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">db_model</span></div>
 
 

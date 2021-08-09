@@ -411,13 +411,6 @@
 </li>
       </ul></li>
       <li>
-    cdp_backend.database.exceptions
-
-      <ul>
-        <li><a href="cdp_backend.database.html#module-cdp_backend.database.exceptions">module</a>
-</li>
-      </ul></li>
-      <li>
     cdp_backend.database.functions
 
       <ul>
@@ -660,8 +653,6 @@
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.confidence">(cdp_backend.pipeline.transcript_model.Transcript attribute)</a>
 </li>
       </ul></li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.exceptions.UniquenessError.conflicting_ids">conflicting_ids (cdp_backend.database.exceptions.UniquenessError property)</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.UniquenessValidation.conflicting_models">conflicting_models (cdp_backend.database.validators.UniquenessValidation attribute)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_body">create_body() (in module cdp_backend.database.functions)</a>
@@ -1004,6 +995,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.gcs_bucket_name">gcs_bucket_name (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
 </li>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.generate_and_attach_doc_hash_as_id">generate_and_attach_doc_hash_as_id() (in module cdp_backend.database.functions)</a>
+</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Person.generate_router_string">generate_router_string() (cdp_backend.database.models.Person static method)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.generate_transcript">generate_transcript() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
@@ -1014,17 +1007,15 @@
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.get_events">get_events() (in module cdp_backend.pipeline.mock_get_events)</a>
 </li>
-      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.get_events_function_path">get_events_function_path (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.get_events_function_path">get_events_function_path (cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig attribute)</a>
+</li>
       <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.get_file_uri">get_file_uri() (in module cdp_backend.file_store.functions)</a>
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_hover_thumbnail">get_hover_thumbnail() (in module cdp_backend.utils.file_utils)</a>
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">get_media_type() (in module cdp_backend.utils.file_utils)</a>
-</li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.validators.get_model_uniqueness">get_model_uniqueness() (in module cdp_backend.database.validators)</a>
 </li>
       <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">get_static_thumbnail() (in module cdp_backend.utils.file_utils)</a>
 </li>
@@ -1056,6 +1047,40 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.id">id (cdp_backend.database.models.Body attribute)</a>
+
+      <ul>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.id">(cdp_backend.database.models.Event attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItem.id">(cdp_backend.database.models.EventMinutesItem attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.id">(cdp_backend.database.models.EventMinutesItemFile attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.File.id">(cdp_backend.database.models.File attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Matter.id">(cdp_backend.database.models.Matter attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterFile.id">(cdp_backend.database.models.MatterFile attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterSponsor.id">(cdp_backend.database.models.MatterSponsor attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterStatus.id">(cdp_backend.database.models.MatterStatus attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.MinutesItem.id">(cdp_backend.database.models.MinutesItem attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Person.id">(cdp_backend.database.models.Person attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Role.id">(cdp_backend.database.models.Role attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Seat.id">(cdp_backend.database.models.Seat attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Session.id">(cdp_backend.database.models.Session attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.id">(cdp_backend.database.models.Transcript attribute)</a>
+</li>
+        <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.id">(cdp_backend.database.models.Vote attribute)</a>
+</li>
+      </ul></li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.Meta.ignore_none_field">ignore_none_field (cdp_backend.database.models.Body.Meta attribute)</a>
 
       <ul>
@@ -1090,10 +1115,10 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Vote.Meta.ignore_none_field">(cdp_backend.database.models.Vote.Meta attribute)</a>
 </li>
       </ul></li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.models.Seat.image_ref">image_ref (cdp_backend.database.models.Seat attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdp_backend.database.html#cdp_backend.database.models.Seat.image_ref">image_ref (cdp_backend.database.models.Seat attribute)</a>
+</li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat.image_uri">image_uri (cdp_backend.pipeline.ingestion_models.Seat attribute)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.import_get_events_func">import_get_events_func() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
@@ -1248,8 +1273,6 @@
 </li>
         <li><a href="cdp_backend.database.html#module-cdp_backend.database.constants">cdp_backend.database.constants</a>
 </li>
-        <li><a href="cdp_backend.database.html#module-cdp_backend.database.exceptions">cdp_backend.database.exceptions</a>
-</li>
         <li><a href="cdp_backend.database.html#module-cdp_backend.database.functions">cdp_backend.database.functions</a>
 </li>
         <li><a href="cdp_backend.database.html#module-cdp_backend.database.models">cdp_backend.database.models</a>
@@ -1384,8 +1407,6 @@
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.Person.picture_ref">picture_ref (cdp_backend.database.models.Person attribute)</a>
 </li>
       <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person.picture_uri">picture_uri (cdp_backend.pipeline.ingestion_models.Person attribute)</a>
-</li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.exceptions.UniquenessError.pk_values">pk_values (cdp_backend.database.exceptions.UniquenessError property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1675,20 +1696,16 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.exceptions.UniquenessError">UniquenessError</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.validators.UniquenessValidation">UniquenessValidation (class in cdp_backend.database.validators)</a>
 </li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterStatus.update_datetime">update_datetime (cdp_backend.database.models.MatterStatus attribute)</a>
 </li>
-      <li><a href="cdp_backend.database.html#cdp_backend.database.functions.update_db_model">update_db_model() (in module cdp_backend.database.functions)</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.functions.upload_db_model">upload_db_model() (in module cdp_backend.database.functions)</a>
+</li>
+      <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.upload_file">upload_file() (in module cdp_backend.file_store.functions)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.upload_file">upload_file() (in module cdp_backend.file_store.functions)</a>
-</li>
       <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.uri">uri (cdp_backend.database.models.EventMinutesItemFile attribute)</a>
 
       <ul>
