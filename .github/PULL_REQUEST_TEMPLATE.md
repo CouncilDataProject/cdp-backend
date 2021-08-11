@@ -10,7 +10,7 @@
 
   ❗️ Also: ❗️
 
-  Please name your pull request {your-development-type}/{short-description}.
+  Please name your pull request {development-type}/{short-description}.
   For example: feature/read-tiff-files
 -->
 
