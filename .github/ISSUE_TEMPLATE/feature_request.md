@@ -21,8 +21,8 @@ _Please provide a use case to help us understand your request in context._
 
 ### Solution
 
-_Please describe your ideal solution_
+_Please describe your ideal solution._
 
 ### Alternatives
 
-_Please describe any alternatives you've considered, even if you've dismissed them_
+_Please describe any alternatives you've considered, even if you've dismissed them._
