@@ -1,29 +1,31 @@
 ---
 name: Bug Report
-about: '"Something''s wrong..."'
-title: ''
-labels: ''
-assignees: ''
-
+about: Create a report to help us improve cdp-backend
+labels: bug
 ---
 
-## Description
-*A clear description of the bug*
+<!--
+  ⚠️⚠️ Do Not Delete This! ⚠️⚠️
 
+  📖 Please read our Code of Conduct.
+  🔎 Please search existing issues to avoid creating duplicates.
+-->
 
+### Description
 
+_A clear description of the bug._
 
-## Expected Behavior
-*What did you expect to happen instead?*
+### Expected Behavior
 
+_What did you expect to happen instead?_
 
+### Reproduction
 
+_A minimal example that exhibits the behavior._
 
-## Reproduction
-*A minimal example that exhibits the behavior.*
+### Environment
 
+_Any additional information about your environment_
 
-
-
-## Environment
-*Any additional information about your environment*
+-   OS Version: _[e.g. macOS 11.3.1]_
+-   CDP Backend Version: _[e.g. 0.5.0]_
