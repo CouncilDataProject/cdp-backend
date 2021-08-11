@@ -13,7 +13,7 @@ labels: bug
 
 ### Description
 
-_A clear description of the bug._
+_A clear and concise description of the bug._
 
 ### Expected Behavior
 
