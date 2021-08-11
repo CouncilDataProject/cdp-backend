@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: Bug report
 about: Create a report to help us improve cdp-backend
 labels: bug
 ---
@@ -11,11 +11,11 @@ labels: bug
   🔎 Please search existing issues to avoid creating duplicates.
 -->
 
-### Description
+### Describe the bug
 
 _A clear and concise description of the bug._
 
-### Expected Behavior
+### Expected behavior
 
 _What did you expect to happen instead?_
 

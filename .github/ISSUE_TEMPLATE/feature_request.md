@@ -1,5 +1,5 @@
 ---
-name: Feature Request
+name: Feature request
 about: Suggest a feature for cdp-backend
 labels: enhancement
 ---
