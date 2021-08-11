@@ -5,7 +5,7 @@ labels: bug
 ---
 
 <!--
-  ⚠️⚠️ Do Not Delete This! ⚠️⚠️
+  ⚠️⚠️ Important ⚠️⚠️
 
   📖 Please read our Code of Conduct.
   🔎 Please search existing issues to avoid creating duplicates.
