@@ -5,7 +5,7 @@ labels: enhancement
 ---
 
 <!--
-  ⚠️⚠️ Important ⚠️⚠️
+  ⚠️⚠️ Please do the following before submitting: ⚠️⚠️
 
   📖 Please read our Code of Conduct.
   🔎 Please search existing issues to avoid creating duplicates.
