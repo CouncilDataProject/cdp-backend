@@ -52,6 +52,14 @@ class Args(argparse.Namespace):
             help="N number of terms to act as a unique entity.",
         )
         p.add_argument(
+            "-l",
+            "--store_local",
+            action="store_true",
+            help=(
+                "Should the pipeline store the generated index to a local parquet file."
+            ),
+        )
+        p.add_argument(
             "--p",
             "--parallel",
             action="store_true",
@@ -74,7 +82,11 @@ def main() -> None:
             )
 
         # Get flow definition
-        flow = pipeline.create_event_index_pipeline(config=config, n_grams=args.n_grams)
+        flow = pipeline.create_event_index_pipeline(
+            config=config,
+            n_grams=args.n_grams,
+            store_local=args.store_local,
+        )
 
         # Determine executor
         if args.parallel:
