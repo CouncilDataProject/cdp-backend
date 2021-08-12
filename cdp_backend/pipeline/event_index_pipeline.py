@@ -14,6 +14,7 @@ from typing import Dict, List, NamedTuple, Tuple
 import fireo
 import pandas as pd
 import pytz
+import rapidfuzz
 from dataclasses_json import dataclass_json
 from gcsfs import GCSFileSystem
 from nltk import ngrams
