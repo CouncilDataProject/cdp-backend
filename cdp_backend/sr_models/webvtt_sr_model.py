@@ -56,7 +56,7 @@ class WebVTTSRModel(SRModel):
     ):
         # New speaker turn must begin with one or more new_turn_pattern str
         # This will create a regex pattern to allow for one or more of the pattern
-        self.new_turn_pattern = r"({})+\s*(.+)$".format(new_turn_pattern)
+        self.new_turn_pattern = r"({})+\s*(.+)".format(new_turn_pattern)
 
         # Confidence is tricky. We allow it to be a parameter because closed captions
         # aren't always 100% accurate. For Seattle, I would guess they are about 97%
