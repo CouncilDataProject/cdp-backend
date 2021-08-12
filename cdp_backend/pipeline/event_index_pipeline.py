@@ -378,13 +378,27 @@ def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
 
 
 @task
-def store_tfidf(df: pd.DataFrame, n_grams: int):
-    df.to_parquet(f"tfidf-{n_grams}.parquet")
+def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
+    n_grams_df.to_parquet(f"tfidf-{n_grams}.parquet")
+
+
+@task
+def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventTerm]]:
+    pass
+
+
+@task
+def store_n_gram_chunk(
+    n_gram_chunk: List[db_models.IndexedEventTerm],
+    credentials_file: str,
+) -> None:
+    pass
 
 
 def create_event_index_pipeline(
     config: EventIndexPipelineConfig,
     n_grams: int = 1,
+    store_local: bool = False,
 ) -> Flow:
     """
     Create the Prefect Flow object to preview, run, or visualize for indexing
@@ -396,6 +410,11 @@ def create_event_index_pipeline(
         Configuration options for the pipeline.
     n_grams: int
         N number of terms to act as a unique entity. Default: 1
+    store_local: bool
+        Should the generated index be stored locally to disk or uploaded to database.
+        Storing the local index is useful for testing search result rankings with the
+        `search_cdp_events` bin script.
+        Default: False (store to database)
 
     Returns
     -------
@@ -414,7 +433,7 @@ def create_event_index_pipeline(
         )
 
         # Get all transcripts for each event (multi-session events)
-        event_transcripts = get_transcripts_per_event(selected_transcripts)
+        event_transcripts = get_transcripts_per_event(transcripts=selected_transcripts)
 
         # Read all transcripts for each event and generate grams
         all_event_transcript_n_grams = read_transcripts_and_generate_grams.map(
@@ -425,12 +444,22 @@ def create_event_index_pipeline(
 
         # Convert to dataframe for tfidf calc
         all_events_n_grams = convert_all_n_grams_to_dataframe(
-            all_event_transcript_n_grams,
+            all_events_n_grams=all_event_transcript_n_grams,
         )
 
         # Weighted n grams by tfidf
-        scored_n_grams = compute_tfidf(all_events_n_grams)
+        scored_n_grams = compute_tfidf(n_grams=all_events_n_grams)
 
-        store_tfidf(scored_n_grams, n_grams=n_grams)
+        # Route to local storage task or remote bulk upload
+        if store_local:
+            store_local_index(n_grams_df=scored_n_grams, n_grams=n_grams)
+
+        # Route to remote database storage
+        else:
+            chunked_scored_n_grams = chunk_n_grams(scored_n_grams)
+            store_n_gram_chunk.map(
+                n_gram_chunk=chunked_scored_n_grams,
+                credentials_file=unmapped(config.google_credentials_file),
+            )
 
     return flow
