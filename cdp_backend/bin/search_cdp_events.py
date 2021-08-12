@@ -36,22 +36,22 @@ class Args(argparse.Namespace):
             "-q",
             "--query",
             type=str,
-            default="renter protection and eviction moratorium",
+            default="residential zoning and housing affordability",
             help="Query to search with.",
         )
         p.add_argument(
             "-s",
             "--sort_by",
             type=str,
-            default="datetime_weighted",
-            choices=["datetime_weighted", "relevance"],
+            default="datetime_weighted_relevance",
+            choices=["datetime_weighted_relevance", "relevance"],
             help="Choice between datetime weighted and pure relevance (TFIDF score).",
         )
         p.add_argument(
             "-f",
             "--first",
             type=int,
-            default=10,
+            default=5,
             help="Number of results to return.",
         )
         p.add_argument(
@@ -93,9 +93,13 @@ def run_local_search(query: str, local_index: str, sort_by: str, first: int = 10
         .agg({"datetime_weighted_tfidf": sum})
         .reset_index()
     )
+    summed_datetime_weighted_tfidf = summed_datetime_weighted_tfidf.rename(
+        {"datetime_weighted_tfidf": "summed_datetime_weighted_tfidf"}, axis=1
+    )
     summed_pure_tfidf = (
         matching_events.groupby("event_id").agg({"tfidf": sum}).reset_index()
     )
+    summed_pure_tfidf = summed_pure_tfidf.rename({"tfidf": "summed_tfidf"}, axis=1)
 
     # Merge results with original
     matching_events = matching_events.merge(
@@ -109,14 +113,14 @@ def run_local_search(query: str, local_index: str, sort_by: str, first: int = 10
         suffixes=("_stemmed_gram", "_summed"),
     )
 
-    if sort_by == "datetime_weighted":
+    if sort_by == "datetime_weighted_relevance":
         matching_events = matching_events.sort_values(
-            by="datetime_weighted_tfidf_summed",
+            by="summed_datetime_weighted_tfidf",
             ascending=False,
         )
     else:
         matching_events = matching_events.sort_values(
-            by="tfidf_summed",
+            by="summed_tfidf",
             ascending=False,
         )
 
@@ -124,15 +128,15 @@ def run_local_search(query: str, local_index: str, sort_by: str, first: int = 10
     matching_events = matching_events.groupby("event_id", sort=False)
 
     # Report results
-    log.info("Local index search results (most strictly relevant first):")
-    log.info("=" * 80)
+    print("Local index search results:")
+    print("=" * 80)
     for i, group_details in enumerate(matching_events):
         # Unpack group details
         event_id, group = group_details
 
         # Get most important context span by contribution to sum
         most_important_context_span = (
-            group[group.tfidf_summed == group.tfidf_summed.max()].iloc[0].context_span
+            group[group.tfidf == group.tfidf.max()].iloc[0].context_span
         )
 
         # Get keywords for event
@@ -142,16 +146,16 @@ def run_local_search(query: str, local_index: str, sort_by: str, first: int = 10
         match_keywords = list(event_df.unstemmed_gram)[:5]
 
         # Log results
-        log.info(f"Match {i}: {event_id} (datetime: {group.iloc[0].event_datetime})")
-        log.info(f"Match pure tf-idf relevance: {group.iloc[0].tfidf_summed}")
-        log.info(
+        print(f"Match {i}: {event_id} (datetime: {group.iloc[0].event_datetime})")
+        print(f"Match pure tf-idf relevance: {group.iloc[0].summed_tfidf}")
+        print(
             f"Match datetime weighted relevance: "
-            f"{group.iloc[0].datetime_weighted_tfidf_summed}"
+            f"{group.iloc[0].summed_datetime_weighted_tfidf}"
         )
-        log.info(f"Match contained grams: {list(group.unstemmed_gram)}")
-        log.info(f"Match keywords: {match_keywords}")
-        log.info(f"Match context: {most_important_context_span}")
-        log.info("-" * 80)
+        print(f"Match contained grams: {list(group.unstemmed_gram)}")
+        print(f"Match keywords: {match_keywords}")
+        print(f"Match context: {most_important_context_span}")
+        print("-" * 80)
 
         # Break out after first n
         if i + 1 == first:
