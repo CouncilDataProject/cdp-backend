@@ -68,6 +68,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
 
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
+        log.info("Gathering events to process.")
         events: List[EventIngestionModel] = get_events_func()
         log.info(f"Processing {len(events)} events.")
 
