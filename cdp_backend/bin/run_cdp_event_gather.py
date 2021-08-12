@@ -43,7 +43,7 @@ class Args(argparse.Namespace):
             ),
         )
         p.add_argument(
-            "--p",
+            "-p",
             "--parallel",
             action="store_true",
             dest="parallel",
