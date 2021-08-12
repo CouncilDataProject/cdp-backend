@@ -269,6 +269,36 @@ def read_transcripts_and_generate_grams(
                         [stemmer.stem(term.lower()) for term in n_gram]
                     )
 
+                    # Get context span
+                    # Because ngrams function, cleaning, and split may affect the exact
+                    # matchup of the term, use fuzzy diff to find closest
+                    closest_term = ""
+                    closest_term_score = 0.0
+                    for term in sm.original_details.text.split():
+                        similarity = rapidfuzz.fuzz.QRatio(term, n_gram[0])
+                        if similarity > closest_term_score:
+                            closest_term = term
+                            closest_term_score = similarity
+
+                    # Get surrounding terms
+                    terms = sm.original_details.text.split()
+                    target_term_index = terms.index(closest_term)
+
+                    # Get left and right indices
+                    left_i = 0 if target_term_index - 8 < 0 else target_term_index - 8
+                    right_i = (
+                        None
+                        if target_term_index + 7 >= len(terms) - 1
+                        else target_term_index + 7
+                    )
+                    context_span = " ".join(terms[left_i:right_i])
+
+                    # Append ellipsis
+                    if left_i != 0:
+                        context_span = f"... {context_span}"
+                    if right_i is not None:
+                        context_span = f"{context_span}..."
+
                     # Append to event list
                     event_n_grams.append(
                         ContextualizedGram(
@@ -276,7 +306,7 @@ def read_transcripts_and_generate_grams(
                             event_datetime=event_transcripts.event.event_datetime,
                             unstemmed_gram=unstemmed_n_gram,
                             stemmed_gram=stemmed_n_gram,
-                            context_span=sm.original_details.text[:128].strip(),
+                            context_span=context_span,
                         )
                     )
 
