@@ -660,6 +660,8 @@ class IndexedEventGram(Model):
                 IndexedField(name="event_ref", order=Order.ASCENDING),
                 IndexedField(name="value", order=Order.DESCENDING),
             ),
+        ),
+        IndexedFieldSet(
             (
                 IndexedField(name="event_ref", order=Order.ASCENDING),
                 IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
