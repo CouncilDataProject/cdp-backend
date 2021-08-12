@@ -26,6 +26,7 @@ class File(Model):
     A file from the CDP file store.
     """
 
+    id = fields.IDField()
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     name = fields.TextField(required=True)
     description = fields.TextField()
@@ -53,6 +54,7 @@ class Person(Model):
     manager, or any other "normal" presenters and attendees of meetings.
     """
 
+    id = fields.IDField()
     name = fields.TextField(required=True)
     router_string = fields.TextField(
         required=True, validator=validators.router_string_is_valid
@@ -108,6 +110,7 @@ class Body(Model):
     such as election debates.
     """
 
+    id = fields.IDField()
     name = fields.TextField(required=True)
     description = fields.TextField()
     start_datetime = fields.DateTime(required=True)
@@ -135,6 +138,7 @@ class Seat(Model):
     An electable office on the City Council. I.E. "Position 9".
     """
 
+    id = fields.IDField()
     name = fields.TextField(required=True)
     electoral_area = fields.TextField()
     electoral_type = fields.TextField()
@@ -166,6 +170,7 @@ class Role(Model):
     committee.
     """
 
+    id = fields.IDField()
     title = fields.TextField(required=True)
     person_ref = fields.ReferenceField(Person, required=True)
     body_ref = fields.ReferenceField(Body)
@@ -196,6 +201,7 @@ class Matter(Model):
     A matter is a specific legislative document. A bill, resolution, initiative, etc.
     """
 
+    id = fields.IDField()
     name = fields.TextField(required=True)
     matter_type = fields.TextField(required=True)
     title = fields.TextField(required=True)
@@ -235,6 +241,7 @@ class MatterFile(Model):
     This file is usually not stored in CDP infrastructure but a remote source.
     """
 
+    id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True)
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
@@ -270,6 +277,7 @@ class MatterSponsor(Model):
     A reference tying a specific person and a matter together.
     """
 
+    id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True)
     person_ref = fields.ReferenceField(Person, required=True)
     external_source_id = fields.TextField()
@@ -294,6 +302,7 @@ class MinutesItem(Model):
     This can be a matter but it can be a presentation or budget file, etc.
     """
 
+    id = fields.IDField()
     name = fields.TextField(required=True)
     description = fields.TextField()
     matter_ref = fields.ReferenceField(Matter)  # Note optional.
@@ -321,6 +330,7 @@ class Event(Model):
     conference or election debate, and, can be upcoming or historical.
     """
 
+    id = fields.IDField()
     body_ref = fields.ReferenceField(Body, required=True)
     event_datetime = fields.DateTime(required=True)
     static_thumbnail_ref = fields.ReferenceField(File)
@@ -370,6 +380,7 @@ class Session(Model):
     For example, An event could have a morning and afternoon session.
     """
 
+    id = fields.IDField()
     event_ref = fields.ReferenceField(Event, required=True)
     session_datetime = fields.DateTime(required=True)
     session_index = fields.NumberField(required=True)
@@ -399,6 +410,7 @@ class Transcript(Model):
     A transcript is a document per-session.
     """
 
+    id = fields.IDField()
     session_ref = fields.ReferenceField(Session, required=True)
     file_ref = fields.ReferenceField(File, required=True)
     confidence = fields.NumberField(required=True)
@@ -438,6 +450,7 @@ class EventMinutesItem(Model):
     A reference tying a specific minutes item to a specific event.
     """
 
+    id = fields.IDField()
     event_ref = fields.ReferenceField(Event, required=True)
     minutes_item_ref = fields.ReferenceField(MinutesItem, required=True)
     index = fields.NumberField(required=True)
@@ -489,6 +502,7 @@ class MatterStatus(Model):
     4. etc.
     """
 
+    id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True)
     # Optional because status can be updated out of event
     # i.e. Signed by Mayor
@@ -535,6 +549,7 @@ class EventMinutesItemFile(Model):
     Supporting files for an event minutes item.
     """
 
+    id = fields.IDField()
     event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
@@ -570,6 +585,7 @@ class Vote(Model):
     A reference tying a specific person and an event minutes item together.
     """
 
+    id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True)
     event_ref = fields.ReferenceField(Event, required=True)
     event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
