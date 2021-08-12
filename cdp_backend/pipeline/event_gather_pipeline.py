@@ -570,7 +570,8 @@ def generate_transcript(
     audio_uri: str
         The URI to the audio file to generate a transcript from.
     session: Session
-        The specific session details to be used in final transcript upload and archival.
+        The specific session details to be used in final transcript upload and
+        archival.
         Additionally, if a closed caption URI is available on the session object,
         the transcript produced from this function will have been created using WebVTT
         caption transform rather than Google Speech-to-Text.
@@ -665,27 +666,67 @@ def get_video_and_generate_thumbnails(
     bucket: str,
     credentials_file: str,
 ) -> Tuple[str, str]:
+    """
+    Creates static and hover thumbnails.
+
+    Parameters
+    ----------
+    session_content_hash: str
+        The unique key (SHA256 hash of video content) for this session processing.
+    video_uri: str
+        The URI to the video file to generate thumbnails from.
+    event: EventIngestionModel
+        The parent event of the session. If no captions are available,
+        speech context phrases will be pulled from the whole event details.
+    bucket: str
+        The name of the GCS bucket to upload the produced audio to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+
+    Returns
+    -------
+    static_thumbnail_url: str
+        The URL of the static thumbnail, stored on GCS.
+    hover_thumbnail_url: str
+        The URL of the hover thumbnail, stored on GCS.
+    """
+    tmp_video_path = file_utils.resource_copy(video_uri)
+
+    static_thumbnail_url = ""
+
     if event.static_thumbnail_uri is None:
         # Generate new
-        pass
+        static_thumbnail_file = file_utils.get_static_thumbnail(
+            tmp_video_path, session_content_hash
+        )
 
-    else:
-        # Download existing
-        pass
+        static_thumbnail_url = fs_functions.upload_file(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=static_thumbnail_file,
+        )
+        fs_functions.remove_local_file(static_thumbnail_file)
+
+    hover_thumbnail_url = ""
 
     if event.hover_thumbnail_uri is None:
         # Generate new
-        pass
-    else:
-        # Download existing
-        pass
+        hover_thumbnail_file = file_utils.get_hover_thumbnail(
+            tmp_video_path, session_content_hash
+        )
 
-    # Upload generated or new static thumbnail to file store
-    # Upload generated or new hover thumbnail to file store
+        hover_thumbnail_url = fs_functions.upload_file(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=hover_thumbnail_file,
+        )
+        fs_functions.remove_local_file(hover_thumbnail_file)
+
+    fs_functions.remove_local_file(tmp_video_path)
 
     return (
-        f"{session_content_hash}-static-thumb.png",
-        f"{session_content_hash}-hover-thumb.gif",
+        static_thumbnail_url,
+        hover_thumbnail_url,
     )
 
 
@@ -911,29 +952,30 @@ def store_event_processing_results(
     # Create file docs for thumbnails
     event_static_thumbnail_file_db_model = None
     event_hover_thumbnail_file_db_model = None
-    # TODO: Uncomment this once thumbnail processing is added upstream in pipeline
-    # for session_result in session_processing_results:
-    #     # Upload static thumbnail
-    #     static_thumbnail_file_db_model = db_functions.create_file(
-    #         uri=session_result.static_thumbnail_uri,
-    #     )
-    #     static_thumbnail_file_db_model = db_functions.upload_db_model(
-    #         db_model=static_thumbnail_file_db_model,
-    #         exist_ok=True,
-    #     )
-    #     if event_static_thumbnail_file_db_model is None:
-    #         event_static_thumbnail_file_db_model = static_thumbnail_file_db_model
+    for session_result in session_processing_results:
+        # Upload static thumbnail
+        static_thumbnail_file_db_model = db_functions.create_file(
+            uri=session_result.static_thumbnail_uri,
+        )
+        static_thumbnail_file_db_model = db_functions.upload_db_model(
+            db_model=static_thumbnail_file_db_model,
+            credentials_file=credentials_file,
+            exist_ok=True,
+        )
+        if event_static_thumbnail_file_db_model is None:
+            event_static_thumbnail_file_db_model = static_thumbnail_file_db_model
 
-    #     # Upload hover thumbnail
-    #     hover_thumbnail_file_db_model = db_functions.create_file(
-    #         uri=session_result.hover_thumbnail_uri,
-    #     )
-    #     hover_thumbnail_file_db_model = db_functions.upload_db_model(
-    #         db_model=hover_thumbnail_file_db_model,
-    #         exist_ok=True,
-    #     )
-    #     if event_hover_thumbnail_file_db_model is None:
-    #         event_hover_thumbnail_file_db_model = hover_thumbnail_file_db_model
+        # Upload hover thumbnail
+        hover_thumbnail_file_db_model = db_functions.create_file(
+            uri=session_result.hover_thumbnail_uri,
+        )
+        hover_thumbnail_file_db_model = db_functions.upload_db_model(
+            db_model=hover_thumbnail_file_db_model,
+            credentials_file=credentials_file,
+            exist_ok=True,
+        )
+        if event_hover_thumbnail_file_db_model is None:
+            event_hover_thumbnail_file_db_model = hover_thumbnail_file_db_model
 
     # Upload event
     try:
