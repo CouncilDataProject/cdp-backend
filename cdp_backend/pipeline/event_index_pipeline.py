@@ -386,6 +386,7 @@ def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
 
 @task
 def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
+    n_grams_df = n_grams_df.drop(columns=["event_ref"])
     n_grams_df.to_parquet(f"tfidf-{n_grams}.parquet")
 
 
