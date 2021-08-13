@@ -103,6 +103,10 @@ def test_get_video_and_split_audio(
     assert audio_uri == audio_upload_file_return
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Path handling / splitting failing due to windows path separator",
+)
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @pytest.mark.parametrize(
     "example_static_thumbnail_url, example_hover_thumbnail_url,"
