@@ -21,6 +21,7 @@ from nltk import ngrams
 from nltk.stem import SnowballStemmer
 from prefect import Flow, task, unmapped
 
+from ..database import functions as db_functions
 from ..database import models as db_models
 from .pipeline_config import EventIndexPipelineConfig
 from .transcript_model import Sentence, Transcript
@@ -157,6 +158,11 @@ class SentenceManager:
 @dataclass_json
 @dataclass
 class ContextualizedGram:
+    # Note: we attach both the event ref and the unpacked id and datetime
+    # We attach the event ref for later "foreign key" attachment
+    # We attach the id for simpler gram grouping
+    # We attach the datetime for simpler datetime weighting
+    event_ref: db_models.Event
     event_id: str
     event_datetime: datetime
     unstemmed_gram: str
@@ -303,6 +309,7 @@ def read_transcripts_and_generate_grams(
                     # Append to event list
                     event_n_grams.append(
                         ContextualizedGram(
+                            event_ref=event_transcripts.event,
                             event_id=event_transcripts.event.id,
                             event_datetime=event_transcripts.event.event_datetime,
                             unstemmed_gram=unstemmed_n_gram,
@@ -384,7 +391,38 @@ def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
 
 @task
 def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventGram]]:
-    pass
+    """
+    Split the large n_grams dataframe into multiple lists of IndexedEventGram models
+    for batched, mapped, upload.
+    """
+    # Split single large dataframe into many dataframes
+    chunk_size = 400
+    n_grams_dfs = [
+        n_grams_df[i : i + chunk_size]
+        for i in range(0, n_grams_df.shape[0], chunk_size)
+    ]
+
+    # Convert each dataframe into a list of indexed event gram
+    event_gram_chunks: List[List[db_models.IndexedEventGram]] = []
+    for n_gram_df_chunk in n_grams_dfs:
+        event_gram_chunk: List[db_models.IndexedEventGram] = []
+        for _, row in n_gram_df_chunk.iterrows():
+            # Convert row of df to db model
+            ieg = db_models.IndexedEventGram()
+
+            # Attach all data
+            ieg.event_ref = row.event_ref
+            ieg.unstemmed_gram = row.unstemmed_gram
+            ieg.stemmed_gram = row.stemmed_gram
+            ieg.context_span = row.context_span
+            ieg.value = row.tfidf
+            ieg.datetime_weighted_value = row.datetime_weighted_tfidf
+
+            event_gram_chunk.append(ieg)
+
+        event_gram_chunks.append(event_gram_chunk)
+
+    return event_gram_chunks
 
 
 @task
@@ -392,7 +430,24 @@ def store_n_gram_chunk(
     n_gram_chunk: List[db_models.IndexedEventGram],
     credentials_file: str,
 ) -> None:
-    pass
+    """
+    Write all IndexedEventGrams in a single batch.
+
+    This isn't about an atomic batch but reducing the total upload time.
+    """
+    # Init batch
+    batch = fireo.batch()
+
+    # Trigger upserts for all items
+    for ieg in n_gram_chunk:
+        db_functions.upload_db_model(
+            db_model=ieg,
+            credentials_file=credentials_file,
+            batch=batch,
+        )
+
+    # Commit
+    batch.commit()
 
 
 def create_event_index_pipeline(
