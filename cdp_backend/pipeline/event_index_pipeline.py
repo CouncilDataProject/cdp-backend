@@ -383,13 +383,13 @@ def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
 
 
 @task
-def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventTerm]]:
+def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventGram]]:
     pass
 
 
 @task
 def store_n_gram_chunk(
-    n_gram_chunk: List[db_models.IndexedEventTerm],
+    n_gram_chunk: List[db_models.IndexedEventGram],
     credentials_file: str,
 ) -> None:
     pass
