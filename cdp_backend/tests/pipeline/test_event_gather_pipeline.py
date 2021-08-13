@@ -106,13 +106,21 @@ def test_get_video_and_split_audio(
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @pytest.mark.parametrize(
     "example_static_thumbnail_url, example_hover_thumbnail_url,"
-    "example_session_content_hash, event",
+    "example_session_content_hash, event, is_static",
     [
         (
             f"fake://{VIDEO_CONTENT_HASH}-static-thumbnail.png",
             f"fake://{VIDEO_CONTENT_HASH}-hover-thumbnail.gif",
             VIDEO_CONTENT_HASH,
             EXAMPLE_MINIMAL_EVENT,
+            True,
+        ),
+        (
+            f"fake://{VIDEO_CONTENT_HASH}-static-thumbnail.png",
+            f"fake://{VIDEO_CONTENT_HASH}-hover-thumbnail.gif",
+            VIDEO_CONTENT_HASH,
+            EXAMPLE_MINIMAL_EVENT,
+            False,
         ),
     ],
 )
@@ -123,9 +131,17 @@ def test_get_video_and_generate_thumbnails(
     example_hover_thumbnail_url: str,
     example_session_content_hash: str,
     event: EventIngestionModel,
+    is_static: bool,
     example_video: Path,
 ) -> None:
-    mock_upload_file.return_value = example_static_thumbnail_url
+    # Since mock_upload_file only allows for one return value and since the real
+    # thumbnail generator calls upload_file twice, it is necessary to test each
+    # thumbnail generation process separately
+    if is_static:
+        mock_upload_file.return_value = example_static_thumbnail_url
+    else:
+        mock_upload_file.return_value = example_hover_thumbnail_url
+
     (
         static_thumbnail_url,
         hover_thumbnail_url,
@@ -138,8 +154,10 @@ def test_get_video_and_generate_thumbnails(
     )
 
     # Check outputs
-    assert static_thumbnail_url == example_static_thumbnail_url
-    # assert hover_thumbnail_url == example_hover_thumbnail_url
+    if is_static:
+        assert static_thumbnail_url == example_static_thumbnail_url
+    else:
+        assert hover_thumbnail_url == example_hover_thumbnail_url
 
 
 @pytest.mark.parametrize(
