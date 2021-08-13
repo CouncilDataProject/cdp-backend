@@ -243,7 +243,7 @@ def read_transcripts_and_generate_grams(
 
             # Init transcript
             with open(local_transcript_filepath, "r") as open_f:
-                transcript = Transcript.from_json(open_f.read())
+                transcript = Transcript.from_json(open_f.read())  # type: ignore
 
             # Get cleaned sentences by removing stop words
             cleaned_sentences: List[SentenceManager] = [
@@ -330,7 +330,7 @@ def convert_all_n_grams_to_dataframe(
     """
     return pd.DataFrame(
         [
-            n_gram.to_dict()
+            n_gram.to_dict()  # type: ignore
             for single_event_n_grams in all_events_n_grams
             for n_gram in single_event_n_grams
         ]

@@ -24,6 +24,8 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
+###############################################################################
+
 
 class SearchSortByField(NamedTuple):
     name: str
@@ -47,10 +49,10 @@ RELEVANCE = SearchSortByField(
 
 
 class Args(argparse.Namespace):
-    def __init__(self):
+    def __init__(self) -> None:
         self.__parse()
 
-    def __parse(self):
+    def __parse(self) -> None:
         p = argparse.ArgumentParser(
             prog="search_cdp_events", description="Search CDP events given a query."
         )
@@ -95,10 +97,10 @@ def get_stemmed_grams_from_query(query: str) -> List[str]:
     stemmer = SnowballStemmer("english")
 
     # Create stemmed grams for query
-    query = clean_text(query).split()
+    query_terms = clean_text(query).split()
     stemmed_grams = []
     for n_gram_size in range(1, 3):
-        grams = ngrams(query, n_gram_size)
+        grams = ngrams(query_terms, n_gram_size)
         for gram in grams:
             stemmed_grams.append(" ".join(stemmer.stem(term.lower()) for term in gram))
 
@@ -124,7 +126,7 @@ class EventMatch(NamedTuple):
     keywords: List[str]
 
 
-def run_remote_search(query: str, sort_by: str, first: int = 4):
+def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
     log.info("Running search against remote index...")
 
     # Get stemmed grams
@@ -218,7 +220,12 @@ def run_remote_search(query: str, sort_by: str, first: int = 4):
     log.info(f"Completed remote search in: {datetime.utcnow() - start_dt}")
 
 
-def run_local_search(query: str, local_index: str, sort_by: str, first: int = 4):
+def run_local_search(
+    query: str,
+    local_index: str,
+    sort_by: str,
+    first: int = 4,
+) -> None:
     log.info("Running search against local index...")
 
     # Get stemmed grams

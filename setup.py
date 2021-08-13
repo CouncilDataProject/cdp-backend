@@ -24,6 +24,7 @@ test_requirements = [
     "pytest>=5.4.3",
     "pytest-cov>=2.9.0",
     "pytest-raises>=0.11",
+    "types-pytz>=2021.1.2",
     "types-requests~=0.1.11",
 ]
 
