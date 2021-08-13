@@ -667,4 +667,28 @@ class IndexedEventGram(Model):
                 IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
             ),
         ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="stemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="stemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="unstemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="unstemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+            ),
+        ),
     )
