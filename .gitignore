@@ -123,6 +123,7 @@ ingestion_models.md
 transcript_model.md
 test.err
 test.out
+tfidf-*.parquet
 
 # Common credentials directories
 .keys/
