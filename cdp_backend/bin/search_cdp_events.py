@@ -235,7 +235,11 @@ def run_local_search(
     start_dt = datetime.utcnow()
 
     # Read index
-    index_df = dd.read_parquet(local_index, keep_default_na=False).compute()
+    try:
+        index_df = dd.read_parquet(local_index, keep_default_na=False).compute()
+    except IndexError:
+        log.info("No local index found.")
+        return
 
     # Check len df
     if len(index_df) == 0:
