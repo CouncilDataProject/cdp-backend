@@ -343,13 +343,6 @@ def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
     Compute term frequencies, inverse document frequencies, tfidf, and weighted tfidf
     values for each n_gram in the dataframe.
     """
-    # Get farthest back datetime and timezone localized UTC now
-    # These will be used for creating the datetime_weighted_tfidf values
-    DATETIME_BEGIN = datetime(1970, 1, 1, tzinfo=pytz.timezone("UTC"))
-    UTCNOW = datetime.utcnow()
-    UTCNOW = pytz.timezone("UTC").localize(UTCNOW)
-    TIMEDELTA_NOW = (UTCNOW - DATETIME_BEGIN).total_seconds()
-
     # Get term frequencies
     n_grams["tf"] = n_grams.groupby(
         ["event_id", "stemmed_gram"]
@@ -373,11 +366,10 @@ def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
     n_grams = n_grams[n_grams.tfidf != 0]
 
     # Add datetime weighted tfidf
+    UTCNOW = datetime.utcnow()
+    UTCNOW = pytz.timezone("UTC").localize(UTCNOW)
     n_grams["datetime_weighted_tfidf"] = n_grams.apply(
-        lambda row: row.tfidf
-        / math.log(
-            TIMEDELTA_NOW - (row.event_datetime - DATETIME_BEGIN).total_seconds()
-        ),
+        lambda row: row.tfidf / math.log(((UTCNOW - row.event_datetime).days / 30) + 2),
         axis=1,
     )
 
