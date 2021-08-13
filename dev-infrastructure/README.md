@@ -59,18 +59,18 @@ following commands to setup your local machine with credentials to both services
 need to run these scripts in a py37 environment.
 
 ```bash
-cd ~/cdp-backend/dev-infrastructure
+cd cdp-backend/dev-infrastructure
 make login
 make init project={project-name}
 make gen-key project={project-name}
 make build
 ```
 
-After generating the key, name your `key` file in `~/cdp-backend/.keys` to `cdp-dev.json`. In case you have many keys, note that by default, the random and minimal event pipelines use the key named `cdp-dev.json`.
+After generating the key, name your `key` file in `cdp-backend/.keys` to `cdp-dev.json`. In case you have many keys, note that by default, the random and minimal event pipelines use the key named `cdp-dev.json`.
 
 
 ## Infrastructure Management Commands
-All these commands should be run from `~/cdp-backend/dev-infrastructure`
+All of these commands should be run from within the `cdp-backend/dev-infrastructure` directory.
 
 -   To log in to GCloud and Pulumi:
 
@@ -162,7 +162,7 @@ parameters, please see the documentation for the
 
 Once you have a dev infrastructure set up and a key downloaded (`make gen-key`)
 you can run pipelines and store data in the infrastructure by moving up to the
-base directory of this repository and running the following from `~/cdp-backend`:
+base directory of this repository and running the following from `cdp-backend/`:
 
 -   To run a semi-random (large permutation) event pipeline:
 
@@ -175,5 +175,3 @@ base directory of this repository and running the following from `~/cdp-backend`
     ```bash
     make run-min-event-pipeline
     ```
-
-Where `~` is the directory where this repo lives.
