@@ -782,7 +782,8 @@
 <span class="sd">    audio_uri: str</span>
 <span class="sd">        The URI to the audio file to generate a transcript from.</span>
 <span class="sd">    session: Session</span>
-<span class="sd">        The specific session details to be used in final transcript upload and archival.</span>
+<span class="sd">        The specific session details to be used in final transcript upload and</span>
+<span class="sd">        archival.</span>
 <span class="sd">        Additionally, if a closed caption URI is available on the session object,</span>
 <span class="sd">        the transcript produced from this function will have been created using WebVTT</span>
 <span class="sd">        caption transform rather than Google Speech-to-Text.</span>
@@ -877,27 +878,71 @@
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates static and hover thumbnails.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    session_content_hash: str</span>
+<span class="sd">        The unique key (SHA256 hash of video content) for this session processing.</span>
+<span class="sd">    video_uri: str</span>
+<span class="sd">        The URI to the video file to generate thumbnails from.</span>
+<span class="sd">    event: EventIngestionModel</span>
+<span class="sd">        The parent event of the session. If no captions are available,</span>
+<span class="sd">        speech context phrases will be pulled from the whole event details.</span>
+<span class="sd">    bucket: str</span>
+<span class="sd">        The name of the GCS bucket to upload the produced audio to.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    static_thumbnail_url: str</span>
+<span class="sd">        The URL of the static thumbnail, stored on GCS.</span>
+<span class="sd">    hover_thumbnail_url: str</span>
+<span class="sd">        The URL of the hover thumbnail, stored on GCS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tmp_video_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span><span class="n">video_uri</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">static_thumbnail_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Generate new</span>
-        <span class="k">pass</span>
-
+        <span class="n">static_thumbnail_file</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_static_thumbnail</span><span class="p">(</span>
+            <span class="n">tmp_video_path</span><span class="p">,</span> <span class="n">session_content_hash</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Download existing</span>
-        <span class="k">pass</span>
+        <span class="n">static_thumbnail_file</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">static_thumbnail_uri</span><span class="p">,</span> <span class="n">session_content_hash</span>
+        <span class="p">)</span>
+
+    <span class="n">static_thumbnail_url</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+        <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+        <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="n">static_thumbnail_file</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">static_thumbnail_file</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">hover_thumbnail_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Generate new</span>
-        <span class="k">pass</span>
+        <span class="n">hover_thumbnail_file</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_hover_thumbnail</span><span class="p">(</span>
+            <span class="n">tmp_video_path</span><span class="p">,</span> <span class="n">session_content_hash</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Download existing</span>
-        <span class="k">pass</span>
+        <span class="n">hover_thumbnail_file</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">hover_thumbnail_uri</span><span class="p">,</span> <span class="n">session_content_hash</span>
+        <span class="p">)</span>
 
-    <span class="c1"># Upload generated or new static thumbnail to file store</span>
-    <span class="c1"># Upload generated or new hover thumbnail to file store</span>
+    <span class="n">hover_thumbnail_url</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+        <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+        <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="n">hover_thumbnail_file</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">hover_thumbnail_file</span><span class="p">)</span>
+
+    <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">tmp_video_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-static-thumb.png&quot;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-hover-thumb.gif&quot;</span><span class="p">,</span>
+        <span class="n">static_thumbnail_url</span><span class="p">,</span>
+        <span class="n">hover_thumbnail_url</span><span class="p">,</span>
     <span class="p">)</span>
 
 
@@ -1112,30 +1157,31 @@
         <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Create file docs for thumbnails</span>
     <span class="n">event_static_thumbnail_file_db_model</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">event_hover_thumbnail_file_db_model</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1"># TODO: Uncomment this once thumbnail processing is added upstream in pipeline</span>
-    <span class="c1"># for session_result in session_processing_results:</span>
-    <span class="c1">#     # Upload static thumbnail</span>
-    <span class="c1">#     static_thumbnail_file_db_model = db_functions.create_file(</span>
-    <span class="c1">#         uri=session_result.static_thumbnail_uri,</span>
-    <span class="c1">#     )</span>
-    <span class="c1">#     static_thumbnail_file_db_model = db_functions.upload_db_model(</span>
-    <span class="c1">#         db_model=static_thumbnail_file_db_model,</span>
-    <span class="c1">#     )</span>
-    <span class="c1">#     if event_static_thumbnail_file_db_model is None:</span>
-    <span class="c1">#         event_static_thumbnail_file_db_model = static_thumbnail_file_db_model</span>
 
-    <span class="c1">#     # Upload hover thumbnail</span>
-    <span class="c1">#     hover_thumbnail_file_db_model = db_functions.create_file(</span>
-    <span class="c1">#         uri=session_result.hover_thumbnail_uri,</span>
-    <span class="c1">#     )</span>
-    <span class="c1">#     hover_thumbnail_file_db_model = db_functions.upload_db_model(</span>
-    <span class="c1">#         db_model=hover_thumbnail_file_db_model,</span>
-    <span class="c1">#     )</span>
-    <span class="c1">#     if event_hover_thumbnail_file_db_model is None:</span>
-    <span class="c1">#         event_hover_thumbnail_file_db_model = hover_thumbnail_file_db_model</span>
+    <span class="k">for</span> <span class="n">session_result</span> <span class="ow">in</span> <span class="n">session_processing_results</span><span class="p">:</span>
+        <span class="c1"># Upload static thumbnail</span>
+        <span class="n">static_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">static_thumbnail_uri</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">static_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
+            <span class="n">db_model</span><span class="o">=</span><span class="n">static_thumbnail_file_db_model</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">event_static_thumbnail_file_db_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">event_static_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">static_thumbnail_file_db_model</span>
+
+        <span class="c1"># Upload hover thumbnail</span>
+        <span class="n">hover_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">hover_thumbnail_uri</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">hover_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
+            <span class="n">db_model</span><span class="o">=</span><span class="n">hover_thumbnail_file_db_model</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">event_hover_thumbnail_file_db_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">event_hover_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">hover_thumbnail_file_db_model</span>
 
     <span class="c1"># Upload event</span>
     <span class="k">try</span><span class="p">:</span>
