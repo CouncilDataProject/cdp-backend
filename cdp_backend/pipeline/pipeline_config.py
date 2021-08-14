@@ -31,6 +31,10 @@ class EventGatherPipelineConfig:
         Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
     caption_confidence: Optional[float]
         Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
+    default_event_gather_from_days_timedelta: int
+        Default number of days to subtract from current time to then pass to the
+        provided get_events function as the `from_dt` datetime.
+        Default: 2 (from_dt will be set to current datetime - 2 days)
     """
 
     google_credentials_file: str
@@ -43,6 +47,7 @@ class EventGatherPipelineConfig:
     )
     caption_new_speaker_turn_pattern: Optional[str] = None
     caption_confidence: Optional[float] = None
+    default_event_gather_from_days_timedelta: int = 2
 
     @property
     def validated_gcs_bucket_name(self) -> str:

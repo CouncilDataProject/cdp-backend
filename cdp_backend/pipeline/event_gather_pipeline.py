@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from datetime import timedelta
+from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
 from fsspec.core import url_to_fs
@@ -48,7 +48,11 @@ def import_get_events_func(func_path: str) -> Callable:
     return getattr(mod, func_name)
 
 
-def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
+def create_event_gather_flow(
+    config: EventGatherPipelineConfig,
+    from_dt: Optional[Union[str, datetime]] = None,
+    to_dt: Optional[Union[str, datetime]] = None,
+) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
     to preview, run, or visualize.
@@ -57,6 +61,14 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     ----------
     config: EventGatherPipelineConfig
         Configuration options for the pipeline.
+    from_dt: Optional[Union[str, datetime]]
+        Optional ISO formatted string or datetime object to pass to the get_events
+        function to act as the start point for event gathering.
+        Default: None (two days ago)
+    to_dt: Optional[Union[str, datetime]]
+        Optional ISO formatted string or datetime object to pass to the get_events
+        function to act as the end point for event gathering.
+        Default: None (now)
 
     Returns
     -------
@@ -66,10 +78,37 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     # Load get_events_func
     get_events_func = import_get_events_func(config.get_events_function_path)
 
+    # Handle from datetime
+    if isinstance(from_dt, str) and len(from_dt) != 0:
+        from_datetime = datetime.fromisoformat(from_dt)
+    elif isinstance(from_dt, datetime):
+        from_datetime = from_dt
+    else:
+        from_datetime = datetime.utcnow() - timedelta(
+            days=config.default_event_gather_from_days_timedelta,
+        )
+
+    # Handle to datetime
+    if isinstance(to_dt, str) and len(to_dt) != 0:
+        to_datetime = datetime.fromisoformat(to_dt)
+    elif isinstance(to_dt, datetime):
+        to_datetime = to_dt
+    else:
+        to_datetime = datetime.utcnow()
+
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
-        log.info("Gathering events to process.")
-        events: List[EventIngestionModel] = get_events_func()
+        log.info(
+            f"Gathering events to process. "
+            f"({from_datetime.isoformat()} - {to_datetime.isoformat()})"
+        )
+        events: List[EventIngestionModel] = get_events_func(
+            from_dt=from_datetime,
+            to_dt=to_datetime,
+        )
+        # Safety measure catch
+        if events is None:
+            events = []
         log.info(f"Processing {len(events)} events.")
 
         for event in events:
