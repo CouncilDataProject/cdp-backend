@@ -619,3 +619,76 @@ class Vote(Model):
         "decision",
     )
     _INDEXES = ()
+
+
+class IndexedEventGram(Model):
+    """
+    An n-gram that has already been scored to create, when taken altogether,
+    an event relevance index.
+    """
+
+    id = fields.IDField()
+    event_ref = fields.ReferenceField(Event, required=True)
+    unstemmed_gram = fields.TextField(required=True)
+    stemmed_gram = fields.TextField(required=True)
+    context_span = fields.TextField(required=True)
+    value = fields.NumberField(required=True)
+    datetime_weighted_value = fields.NumberField(required=True)
+
+    class Meta:
+        ignore_none_field = False
+
+    @classmethod
+    def Example(cls) -> Model:
+        ieg = cls()
+        ieg.event_ref = Event.Example()
+        ieg.unstemmed_gram = "housing"
+        ieg.stemmed_gram = "hous"
+        ieg.context_span = "We believe that housing should be affordable."
+        ieg.value = 12.34
+        ieg.datetime_weighted_value = 1.234
+        return ieg
+
+    _PRIMARY_KEYS = (
+        "event_ref",
+        "unstemmed_gram",
+        "stemmed_gram",
+    )
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(name="value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="stemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="stemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="unstemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="value", order=Order.DESCENDING),
+            ),
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="unstemmed_gram", order=Order.ASCENDING),
+                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+            ),
+        ),
+    )

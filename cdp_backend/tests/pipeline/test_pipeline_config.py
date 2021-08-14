@@ -2,12 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
+from typing import Union
 from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
 
-from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
+from cdp_backend.pipeline.pipeline_config import (
+    EventGatherPipelineConfig,
+    EventIndexPipelineConfig,
+)
 
 #############################################################################
 
@@ -34,6 +38,7 @@ FAKE_CREDS_PATH = str(
 @pytest.mark.parametrize(
     "bucket_exists, config, expected_bucket_name",
     [
+        # Test event gather pipeline config
         (
             True,
             EventGatherPipelineConfig(
@@ -72,13 +77,49 @@ FAKE_CREDS_PATH = str(
             None,
             marks=pytest.mark.raises(exception=ValueError),
         ),
+        #######################################################################
+        # Test event index pipeline config
+        (
+            True,
+            EventIndexPipelineConfig(
+                google_credentials_file=FAKE_CREDS_PATH,
+            ),
+            "fake-project.appspot.com",
+        ),
+        (
+            True,
+            EventIndexPipelineConfig(
+                google_credentials_file=FAKE_CREDS_PATH,
+                gcs_bucket_name="hello-world",
+            ),
+            "hello-world",
+        ),
+        # Test for corrupted creds or not setup infra
+        pytest.param(
+            False,
+            EventIndexPipelineConfig(
+                google_credentials_file=FAKE_CREDS_PATH,
+            ),
+            None,
+            marks=pytest.mark.raises(exception=ValueError),
+        ),
+        # Test for invalid _explicit_ bucket
+        pytest.param(
+            False,
+            EventIndexPipelineConfig(
+                google_credentials_file=FAKE_CREDS_PATH,
+                gcs_bucket_name="hello-world",
+            ),
+            None,
+            marks=pytest.mark.raises(exception=ValueError),
+        ),
     ],
 )
-def test_event_gather_pipeline_config(
+def test_config_construction(
     mock_gcsfs_ls: MagicMock,
     mock_google_credentials_connect: MagicMock,
     bucket_exists: bool,
-    config: EventGatherPipelineConfig,
+    config: Union[EventGatherPipelineConfig, EventIndexPipelineConfig],
     expected_bucket_name: str,
 ) -> None:
     if bucket_exists:
