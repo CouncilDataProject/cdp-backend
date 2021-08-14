@@ -216,7 +216,7 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">bisect</span> <span class="kn">import</span> <span class="n">bisect_left</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">from</span> <span class="nn">..database.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EventMinutesItemDecision</span><span class="p">,</span>
@@ -434,7 +434,7 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.get_events">[docs]</a><span class="k">def</span> <span class="nf">get_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.get_events">[docs]</a><span class="k">def</span> <span class="nf">get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A mock get_events function that will generate entirely random events</span>
 <span class="sd">    based off a set of permutation settings.</span>
@@ -454,7 +454,7 @@
 <span class="n">RANDOM_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="min_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.min_get_events">[docs]</a><span class="k">def</span> <span class="nf">min_get_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
+<div class="viewcode-block" id="min_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.min_get_events">[docs]</a><span class="k">def</span> <span class="nf">min_get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
     <span class="n">event</span> <span class="o">=</span> <span class="n">EXAMPLE_MINIMAL_EVENT</span>
     <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">session_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2019</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">event</span><span class="p">]</span></div>
@@ -468,7 +468,7 @@
 <span class="n">MINIMAL_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="filled_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.filled_get_events">[docs]</a><span class="k">def</span> <span class="nf">filled_get_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
+<div class="viewcode-block" id="filled_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.filled_get_events">[docs]</a><span class="k">def</span> <span class="nf">filled_get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
     <span class="n">event</span> <span class="o">=</span> <span class="n">EXAMPLE_FILLED_EVENT</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">event</span><span class="p">]</span></div>
 
@@ -481,7 +481,7 @@
 <span class="n">FILLED_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="many_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.many_get_events">[docs]</a><span class="k">def</span> <span class="nf">many_get_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
+<div class="viewcode-block" id="many_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.many_get_events">[docs]</a><span class="k">def</span> <span class="nf">many_get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
     <span class="n">event</span> <span class="o">=</span> <span class="n">EXAMPLE_MINIMAL_EVENT</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">event</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span></div>
 

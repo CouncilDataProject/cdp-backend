@@ -255,6 +255,28 @@
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--from&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+                <span class="s2">&quot;Optional ISO formatted string to pass to the get_event function to act&quot;</span>
+                <span class="s2">&quot;as the start point for event gathering.&quot;</span>
+            <span class="p">),</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;from_dt&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span>
+                <span class="s2">&quot;Optional ISO formatted string to pass to the get_event function to act&quot;</span>
+                <span class="s2">&quot;as the end point for event gathering.&quot;</span>
+            <span class="p">),</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;to_dt&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
             <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
             <span class="s2">&quot;--parallel&quot;</span><span class="p">,</span>
             <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
@@ -277,7 +299,11 @@
             <span class="p">)</span>
 
         <span class="c1"># Get flow definition</span>
-        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+            <span class="n">from_dt</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">from_dt</span><span class="p">,</span>
+            <span class="n">to_dt</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">to_dt</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Determine executor</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">parallel</span><span class="p">:</span>

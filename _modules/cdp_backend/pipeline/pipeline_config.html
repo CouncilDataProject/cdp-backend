@@ -243,6 +243,10 @@
 <span class="sd">        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.</span>
 <span class="sd">    caption_confidence: Optional[float]</span>
 <span class="sd">        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.</span>
+<span class="sd">    default_event_gather_from_days_timedelta: int</span>
+<span class="sd">        Default number of days to subtract from current time to then pass to the</span>
+<span class="sd">        provided get_events function as the `from_dt` datetime.</span>
+<span class="sd">        Default: 2 (from_dt will be set to current datetime - 2 days)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">google_credentials_file</span><span class="p">:</span> <span class="nb">str</span>
@@ -255,6 +259,7 @@
     <span class="p">)</span>
     <span class="n">caption_new_speaker_turn_pattern</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">caption_confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">default_event_gather_from_days_timedelta</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">validated_gcs_bucket_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

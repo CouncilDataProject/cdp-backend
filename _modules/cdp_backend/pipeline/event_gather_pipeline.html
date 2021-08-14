@@ -214,10 +214,10 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">fireo.fields.errors</span> <span class="kn">import</span> <span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">,</span> <span class="n">RequiredField</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
@@ -260,7 +260,11 @@
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_event_gather_flow"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow">[docs]</a><span class="k">def</span> <span class="nf">create_event_gather_flow</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">EventGatherPipelineConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
+<div class="viewcode-block" id="create_event_gather_flow"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow">[docs]</a><span class="k">def</span> <span class="nf">create_event_gather_flow</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">EventGatherPipelineConfig</span><span class="p">,</span>
+    <span class="n">from_dt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">to_dt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provided a function to gather new event information, create the Prefect Flow object</span>
 <span class="sd">    to preview, run, or visualize.</span>
@@ -269,6 +273,14 @@
 <span class="sd">    ----------</span>
 <span class="sd">    config: EventGatherPipelineConfig</span>
 <span class="sd">        Configuration options for the pipeline.</span>
+<span class="sd">    from_dt: Optional[Union[str, datetime]]</span>
+<span class="sd">        Optional ISO formatted string or datetime object to pass to the get_events</span>
+<span class="sd">        function to act as the start point for event gathering.</span>
+<span class="sd">        Default: None (two days ago)</span>
+<span class="sd">    to_dt: Optional[Union[str, datetime]]</span>
+<span class="sd">        Optional ISO formatted string or datetime object to pass to the get_events</span>
+<span class="sd">        function to act as the end point for event gathering.</span>
+<span class="sd">        Default: None (now)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -278,10 +290,37 @@
     <span class="c1"># Load get_events_func</span>
     <span class="n">get_events_func</span> <span class="o">=</span> <span class="n">import_get_events_func</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_events_function_path</span><span class="p">)</span>
 
+    <span class="c1"># Handle from datetime</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_dt</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">from_dt</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">from_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">from_dt</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_dt</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="n">from_datetime</span> <span class="o">=</span> <span class="n">from_dt</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">from_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span>
+            <span class="n">days</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">default_event_gather_from_days_timedelta</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Handle to datetime</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">to_dt</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_dt</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">to_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">to_dt</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">to_dt</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="n">to_datetime</span> <span class="o">=</span> <span class="n">to_dt</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">to_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+
     <span class="c1"># Create flow</span>
     <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Gather Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Gathering events to process.&quot;</span><span class="p">)</span>
-        <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_events_func</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Gathering events to process. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">from_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">to_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_events_func</span><span class="p">(</span>
+            <span class="n">from_dt</span><span class="o">=</span><span class="n">from_datetime</span><span class="p">,</span>
+            <span class="n">to_dt</span><span class="o">=</span><span class="n">to_datetime</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Safety measure catch</span>
+        <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
