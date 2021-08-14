@@ -103,6 +103,54 @@ def test_get_video_and_split_audio(
     assert audio_uri == audio_upload_file_return
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Path handling / splitting failing due to windows path separator",
+)
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
+@pytest.mark.parametrize(
+    "example_static_thumbnail_url, example_hover_thumbnail_url,"
+    "example_session_content_hash, event",
+    [
+        (
+            f"fake://{VIDEO_CONTENT_HASH}-static-thumbnail.png",
+            f"fake://{VIDEO_CONTENT_HASH}-hover-thumbnail.gif",
+            VIDEO_CONTENT_HASH,
+            EXAMPLE_MINIMAL_EVENT,
+        ),
+    ],
+)
+def test_get_video_and_generate_thumbnails(
+    mock_upload_file: MagicMock,
+    example_static_thumbnail_url: str,
+    example_hover_thumbnail_url: str,
+    example_session_content_hash: str,
+    event: EventIngestionModel,
+    example_video: Path,
+) -> None:
+    # Since mock_upload_file only allows for one return value and since the real
+    # thumbnail generator calls upload_file twice, it is necessary to test each
+    # thumbnail generation process separately
+    mock_upload_file.side_effect = [
+        example_static_thumbnail_url,
+        example_hover_thumbnail_url,
+    ]
+    (
+        static_thumbnail_url,
+        hover_thumbnail_url,
+    ) = pipeline.get_video_and_generate_thumbnails.run(  # type: ignore
+        session_content_hash=example_session_content_hash,
+        video_uri=str(example_video),
+        event=event,
+        bucket="bucket",
+        credentials_file="/fake/credentials/path",
+    )
+
+    # Check outputs
+    assert static_thumbnail_url == example_static_thumbnail_url
+    assert hover_thumbnail_url == example_hover_thumbnail_url
+
+
 @pytest.mark.parametrize(
     "event, expected_phrases",
     [
