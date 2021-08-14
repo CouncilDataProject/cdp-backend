@@ -692,6 +692,7 @@ def get_video_and_generate_thumbnails(
     """
     tmp_video_path = file_utils.resource_copy(video_uri)
 
+    static_thumbnail_file = ""
     static_thumbnail_url = ""
 
     if event.static_thumbnail_uri is None:
@@ -699,14 +700,18 @@ def get_video_and_generate_thumbnails(
         static_thumbnail_file = file_utils.get_static_thumbnail(
             tmp_video_path, session_content_hash
         )
+    else:
+        static_thumbnail_file = file_utils.resource_copy(event.static_thumbnail_uri,
+                                                         session_content_hash)
 
-        static_thumbnail_url = fs_functions.upload_file(
-            credentials_file=credentials_file,
-            bucket=bucket,
-            filepath=static_thumbnail_file,
-        )
-        fs_functions.remove_local_file(static_thumbnail_file)
+    static_thumbnail_url = fs_functions.upload_file(
+        credentials_file=credentials_file,
+        bucket=bucket,
+        filepath=static_thumbnail_file,
+    )
+    fs_functions.remove_local_file(static_thumbnail_file)
 
+    hover_thumbnail_file = ""
     hover_thumbnail_url = ""
 
     if event.hover_thumbnail_uri is None:
@@ -714,13 +719,16 @@ def get_video_and_generate_thumbnails(
         hover_thumbnail_file = file_utils.get_hover_thumbnail(
             tmp_video_path, session_content_hash
         )
+    else:
+        hover_thumbnail_file = file_utils.resource_copy(event.hover_thumbnail_uri,
+                                                        session_content_hash)
 
-        hover_thumbnail_url = fs_functions.upload_file(
-            credentials_file=credentials_file,
-            bucket=bucket,
-            filepath=hover_thumbnail_file,
-        )
-        fs_functions.remove_local_file(hover_thumbnail_file)
+    hover_thumbnail_url = fs_functions.upload_file(
+        credentials_file=credentials_file,
+        bucket=bucket,
+        filepath=hover_thumbnail_file,
+    )
+    fs_functions.remove_local_file(hover_thumbnail_file)
 
     fs_functions.remove_local_file(tmp_video_path)
 
