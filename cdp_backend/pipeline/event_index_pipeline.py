@@ -174,9 +174,12 @@ def clean_text(text: str) -> str:
     # Remove new line and tab characters
     cleaned_formatting = text.replace("\n", " ").replace("\t", " ")
 
+    # Replace common sentence structures
+    cleaned_sentence_structs = cleaned_formatting.replace("--", " ")
+
     # Remove punctuation except periods
     cleaned_punctuation = re.sub(
-        f"[{re.escape(string.punctuation)}]", "", cleaned_formatting
+        f"[{re.escape(string.punctuation)}]", "", cleaned_sentence_structs
     )
 
     # Remove stopwords
@@ -369,6 +372,8 @@ def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
     UTCNOW = datetime.utcnow()
     UTCNOW = pytz.timezone("UTC").localize(UTCNOW)
     n_grams["datetime_weighted_tfidf"] = n_grams.apply(
+        # Unit of decay is in months (`/ 30`)
+        # `+ 2` protects against divison by zero
         lambda row: row.tfidf / math.log(((UTCNOW - row.event_datetime).days / 30) + 2),
         axis=1,
     )
