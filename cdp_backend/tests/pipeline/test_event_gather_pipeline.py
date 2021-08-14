@@ -131,8 +131,10 @@ def test_get_video_and_generate_thumbnails(
     # Since mock_upload_file only allows for one return value and since the real
     # thumbnail generator calls upload_file twice, it is necessary to test each
     # thumbnail generation process separately
-    mock_upload_file.side_effect = [example_static_thumbnail_url,
-                                    example_hover_thumbnail_url]
+    mock_upload_file.side_effect = [
+        example_static_thumbnail_url,
+        example_hover_thumbnail_url,
+    ]
     (
         static_thumbnail_url,
         hover_thumbnail_url,

@@ -701,8 +701,9 @@ def get_video_and_generate_thumbnails(
             tmp_video_path, session_content_hash
         )
     else:
-        static_thumbnail_file = file_utils.resource_copy(event.static_thumbnail_uri,
-                                                         session_content_hash)
+        static_thumbnail_file = file_utils.resource_copy(
+            event.static_thumbnail_uri, session_content_hash
+        )
 
     static_thumbnail_url = fs_functions.upload_file(
         credentials_file=credentials_file,
@@ -720,8 +721,9 @@ def get_video_and_generate_thumbnails(
             tmp_video_path, session_content_hash
         )
     else:
-        hover_thumbnail_file = file_utils.resource_copy(event.hover_thumbnail_uri,
-                                                        session_content_hash)
+        hover_thumbnail_file = file_utils.resource_copy(
+            event.hover_thumbnail_uri, session_content_hash
+        )
 
     hover_thumbnail_url = fs_functions.upload_file(
         credentials_file=credentials_file,
