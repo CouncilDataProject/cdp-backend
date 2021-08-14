@@ -68,13 +68,14 @@ def get_transcripts(credentials_file: str) -> List[db_models.Transcript]:
     documents as this will additionally pull all referenced Event, Session, Body,
     and File database models.
     """
-    fireo.connection(from_file=credentials_file)
-
     # Fetch all transcripts
     # This comes with references to Session and File models
     # Session models come with reference to Event model
     # Event models come with reference to Body model
-    return list(db_models.Transcript.collection.fetch(limit=int(1e9)))
+    return db_functions.get_all_of_collection(
+        db_model=db_models.Transcript,
+        credentials_file=credentials_file,
+    )
 
 
 @task
