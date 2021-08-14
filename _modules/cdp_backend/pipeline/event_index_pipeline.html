@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>cdp_backend.pipeline.event_index_pipeline &mdash; cdp-backend 3.0.0.dev6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdp-backend
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0.dev6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdp-backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cdp_backend.pipeline.event_index_pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdp_backend.pipeline.event_index_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">fireo</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pytz</span>
+<span class="kn">import</span> <span class="nn">rapidfuzz</span>
+<span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">dataclass_json</span>
+<span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
+<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">ngrams</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">SnowballStemmer</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">unmapped</span>
+
+<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
+<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
+<span class="kn">from</span> <span class="nn">.pipeline_config</span> <span class="kn">import</span> <span class="n">EventIndexPipelineConfig</span>
+<span class="kn">from</span> <span class="nn">.transcript_model</span> <span class="kn">import</span> <span class="n">Sentence</span><span class="p">,</span> <span class="n">Transcript</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Ensure stopwords are downloaded</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+
+    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">nltk</span>
+
+    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;stopwords&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloaded nltk stopwords&quot;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+
+    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">get_transcripts</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize fireo connection and pull all Transcript models.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    transcripts: List[db_models.Transcript]</span>
+<span class="sd">        All transcript documents found in the database.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This _can_ become a dangerous operation if the database has millions of transcript</span>
+<span class="sd">    documents as this will additionally pull all referenced Event, Session, Body,</span>
+<span class="sd">    and File database models.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Fetch all transcripts</span>
+    <span class="c1"># This comes with references to Session and File models</span>
+    <span class="c1"># Session models come with reference to Event model</span>
+    <span class="c1"># Event models come with reference to Body model</span>
+    <span class="k">return</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">get_all_of_collection</span><span class="p">(</span>
+        <span class="n">db_model</span><span class="o">=</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">,</span>
+        <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">get_highest_confidence_transcript_for_each_session</span><span class="p">(</span>
+    <span class="n">transcripts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter down a list transcript documents to just a single transcript</span>
+<span class="sd">    per session taking the highest confidence transcript document.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transcripts: List[db_models.Transcript]</span>
+<span class="sd">        List of transcript database documents.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    transcripts: List[db_models.Transcript]</span>
+<span class="sd">        Filtered list of transcript database documents where only a single transcript</span>
+<span class="sd">        exists for each referenced session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We can&#39;t use pandas groupby because sessions objects can&#39;t be naively compared</span>
+    <span class="c1"># Instead we create a Dict of session id to document model</span>
+    <span class="c1"># We update as we iterate through list of all transcripts</span>
+    <span class="n">selected_transcripts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">transcripts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_transcripts</span><span class="p">:</span>
+            <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transcript</span>
+
+        <span class="c1"># Multiple transcripts for a single session</span>
+        <span class="c1"># pick the higher confidence</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">transcript</span><span class="o">.</span><span class="n">confidence</span>
+            <span class="o">&gt;</span> <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
+        <span class="p">):</span>
+            <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transcript</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">selected_transcripts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="EventTranscripts"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.EventTranscripts">[docs]</a><span class="k">class</span> <span class="nc">EventTranscripts</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
+    <span class="n">transcripts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">]</span></div>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">get_transcripts_per_event</span><span class="p">(</span>
+    <span class="n">transcripts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventTranscripts</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Group all transcripts related to a single event together into</span>
+<span class="sd">    EventTranscripts objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create event transcripts as event id mapped to EventTranscripts object</span>
+    <span class="n">event_transcripts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">EventTranscripts</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">transcripts</span><span class="p">:</span>
+        <span class="c1"># Add new event</span>
+        <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">event_transcripts</span><span class="p">:</span>
+            <span class="n">event_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">EventTranscripts</span><span class="p">(</span>
+                <span class="n">event</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="p">,</span>
+                <span class="n">transcripts</span><span class="o">=</span><span class="p">[</span><span class="n">transcript</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Update existing event_transcripts object</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">transcripts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">transcript</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="SentenceManager"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SentenceManager</span><span class="p">:</span>
+    <span class="n">original_details</span><span class="p">:</span> <span class="n">Sentence</span>
+    <span class="n">cleaned_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">n_grams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="ContextualizedGram"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ContextualizedGram</span><span class="p">:</span>
+    <span class="c1"># Note: we attach both the event ref and the unpacked id and datetime</span>
+    <span class="c1"># We attach the event ref for later &quot;foreign key&quot; attachment</span>
+    <span class="c1"># We attach the id for simpler gram grouping</span>
+    <span class="c1"># We attach the datetime for simpler datetime weighting</span>
+    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
+    <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">event_datetime</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">unstemmed_gram</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">stemmed_gram</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">context_span</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># Remove new line and tab characters</span>
+    <span class="n">cleaned_formatting</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="c1"># Replace common sentence structures</span>
+    <span class="n">cleaned_sentence_structs</span> <span class="o">=</span> <span class="n">cleaned_formatting</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="c1"># Remove punctuation except periods</span>
+    <span class="n">cleaned_punctuation</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_sentence_structs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Remove stopwords</span>
+    <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
+    <span class="n">cleaned_stopwords</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;\b(&quot;</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">cleaned_punctuation</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Remove gaps in string</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_stopwords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+            <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+            <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># IndexError occurs when the string was cleaned and it contained entirely stop</span>
+    <span class="c1"># words or punctuation for some reason</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">cleaned_doc</span></div>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">read_transcripts_and_generate_grams</span><span class="p">(</span>
+    <span class="n">event_transcripts</span><span class="p">:</span> <span class="n">EventTranscripts</span><span class="p">,</span> <span class="n">n_grams</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ContextualizedGram</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse all documents and create a list of contextualized grams for later weighting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    event_transcripts: EventTranscripts</span>
+<span class="sd">        The EventTranscripts object to parse all transcripts for.</span>
+<span class="sd">    n_grams: int</span>
+<span class="sd">        N number of terms to act as a unique entity.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    grams: List[ContextualizedGram]</span>
+<span class="sd">        All grams found in all transcripts provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
+
+    <span class="c1"># Store all n_gram results</span>
+    <span class="n">event_n_grams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ContextualizedGram</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iter over each transcript</span>
+    <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">event_transcripts</span><span class="o">.</span><span class="n">transcripts</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+            <span class="n">temp_dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+            <span class="n">local_transcript_filepath</span> <span class="o">=</span> <span class="n">temp_dir_path</span> <span class="o">/</span> <span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span><span class="o">.</span><span class="n">name</span>
+
+            <span class="c1"># Download transcript</span>
+            <span class="n">fs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">rpath</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span>
+                <span class="n">lpath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">local_transcript_filepath</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Init transcript</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">local_transcript_filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_f</span><span class="p">:</span>
+                <span class="n">transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+
+            <span class="c1"># Get cleaned sentences by removing stop words</span>
+            <span class="n">cleaned_sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SentenceManager</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">SentenceManager</span><span class="p">(</span>
+                    <span class="n">original_details</span><span class="o">=</span><span class="n">sentence</span><span class="p">,</span>
+                    <span class="n">cleaned_text</span><span class="o">=</span><span class="n">clean_text</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">text</span><span class="p">),</span>
+                    <span class="n">n_grams</span><span class="o">=</span><span class="p">[],</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">sentences</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Filter any empty sentences</span>
+            <span class="n">cleaned_sentences</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">sm</span> <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="n">cleaned_sentences</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sm</span><span class="o">.</span><span class="n">cleaned_text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Get all n_grams for each sentence</span>
+            <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="n">cleaned_sentences</span><span class="p">:</span>
+                <span class="n">sm</span><span class="o">.</span><span class="n">n_grams</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">ngrams</span><span class="p">(</span><span class="n">sm</span><span class="o">.</span><span class="n">cleaned_text</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">n_grams</span><span class="p">)]</span>
+
+            <span class="c1"># Init stemmer and stem all grams</span>
+            <span class="n">stemmer</span> <span class="o">=</span> <span class="n">SnowballStemmer</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="n">cleaned_sentences</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">n_gram</span> <span class="ow">in</span> <span class="n">sm</span><span class="o">.</span><span class="n">n_grams</span><span class="p">:</span>
+                    <span class="c1"># Join into a single n gram</span>
+                    <span class="n">unstemmed_n_gram</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">n_gram</span><span class="p">)</span>
+
+                    <span class="c1"># Join, lower, and stem the n gram</span>
+                    <span class="n">stemmed_n_gram</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">n_gram</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># Get context span</span>
+                    <span class="c1"># Because ngrams function, cleaning, and split may affect the exact</span>
+                    <span class="c1"># matchup of the term, use fuzzy diff to find closest</span>
+                    <span class="n">closest_term</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">closest_term_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">sm</span><span class="o">.</span><span class="n">original_details</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                        <span class="n">similarity</span> <span class="o">=</span> <span class="n">rapidfuzz</span><span class="o">.</span><span class="n">fuzz</span><span class="o">.</span><span class="n">QRatio</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">n_gram</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">similarity</span> <span class="o">&gt;</span> <span class="n">closest_term_score</span><span class="p">:</span>
+                            <span class="n">closest_term</span> <span class="o">=</span> <span class="n">term</span>
+                            <span class="n">closest_term_score</span> <span class="o">=</span> <span class="n">similarity</span>
+
+                    <span class="c1"># Get surrounding terms</span>
+                    <span class="n">terms</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">original_details</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="n">target_term_index</span> <span class="o">=</span> <span class="n">terms</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">closest_term</span><span class="p">)</span>
+
+                    <span class="c1"># Get left and right indices</span>
+                    <span class="n">left_i</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">target_term_index</span> <span class="o">-</span> <span class="mi">8</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">target_term_index</span> <span class="o">-</span> <span class="mi">8</span>
+                    <span class="n">right_i</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="kc">None</span>
+                        <span class="k">if</span> <span class="n">target_term_index</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="k">else</span> <span class="n">target_term_index</span> <span class="o">+</span> <span class="mi">7</span>
+                    <span class="p">)</span>
+                    <span class="n">context_span</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">left_i</span><span class="p">:</span><span class="n">right_i</span><span class="p">])</span>
+
+                    <span class="c1"># Append ellipsis</span>
+                    <span class="k">if</span> <span class="n">left_i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">context_span</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;... </span><span class="si">{</span><span class="n">context_span</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">if</span> <span class="n">right_i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">context_span</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">context_span</span><span class="si">}</span><span class="s2">...&quot;</span>
+
+                    <span class="c1"># Append to event list</span>
+                    <span class="n">event_n_grams</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">ContextualizedGram</span><span class="p">(</span>
+                            <span class="n">event_ref</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event</span><span class="p">,</span>
+                            <span class="n">event_id</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                            <span class="n">event_datetime</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">,</span>
+                            <span class="n">unstemmed_gram</span><span class="o">=</span><span class="n">unstemmed_n_gram</span><span class="p">,</span>
+                            <span class="n">stemmed_gram</span><span class="o">=</span><span class="n">stemmed_n_gram</span><span class="p">,</span>
+                            <span class="n">context_span</span><span class="o">=</span><span class="n">context_span</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">event_n_grams</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">convert_all_n_grams_to_dataframe</span><span class="p">(</span>
+    <span class="n">all_events_n_grams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ContextualizedGram</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Flatten all n grams from all events into one single dataframe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">n_gram</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+            <span class="k">for</span> <span class="n">single_event_n_grams</span> <span class="ow">in</span> <span class="n">all_events_n_grams</span>
+            <span class="k">for</span> <span class="n">n_gram</span> <span class="ow">in</span> <span class="n">single_event_n_grams</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">compute_tfidf</span><span class="p">(</span>
+    <span class="n">n_grams</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">datetime_weighting_days_decay</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute term frequencies, inverse document frequencies, tfidf, and weighted tfidf</span>
+<span class="sd">    values for each n_gram in the dataframe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get term frequencies</span>
+    <span class="n">n_grams</span><span class="p">[</span><span class="s2">&quot;tf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stemmed_gram&quot;</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">stemmed_gram</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Drop duplicates for inverse-document-frequencies</span>
+    <span class="n">n_grams</span> <span class="o">=</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stemmed_gram&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Get idf</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_grams</span><span class="o">.</span><span class="n">event_id</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">n_grams</span><span class="p">[</span><span class="s2">&quot;idf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">n_grams</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;stemmed_gram&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">event_id</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="n">df</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Store tfidf</span>
+    <span class="n">n_grams</span><span class="p">[</span><span class="s2">&quot;tfidf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">tf</span> <span class="o">*</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">idf</span>
+
+    <span class="c1"># Drop terms worth nothing</span>
+    <span class="n">n_grams</span> <span class="o">=</span> <span class="n">n_grams</span><span class="p">[</span><span class="n">n_grams</span><span class="o">.</span><span class="n">tfidf</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Add datetime weighted tfidf</span>
+    <span class="n">UTCNOW</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+    <span class="n">UTCNOW</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">UTCNOW</span><span class="p">)</span>
+    <span class="n">n_grams</span><span class="p">[</span><span class="s2">&quot;datetime_weighted_tfidf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="c1"># Unit of decay is in months (`/ 30`)</span>
+        <span class="c1"># `+ 2` protects against divison by zero</span>
+        <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">tfidf</span>
+        <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+            <span class="p">((</span><span class="n">UTCNOW</span> <span class="o">-</span> <span class="n">row</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="n">datetime_weighting_days_decay</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">n_grams</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">store_local_index</span><span class="p">(</span><span class="n">n_grams_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">n_grams</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">n_grams_df</span> <span class="o">=</span> <span class="n">n_grams_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;event_ref&quot;</span><span class="p">])</span>
+    <span class="n">n_grams_df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tfidf-</span><span class="si">{</span><span class="n">n_grams</span><span class="si">}</span><span class="s2">.parquet&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">chunk_n_grams</span><span class="p">(</span><span class="n">n_grams_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split the large n_grams dataframe into multiple lists of IndexedEventGram models</span>
+<span class="sd">    for batched, mapped, upload.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Split single large dataframe into many dataframes</span>
+    <span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="n">n_grams_dfs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">n_grams_df</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_grams_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunk_size</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Convert each dataframe into a list of indexed event gram</span>
+    <span class="n">event_gram_chunks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n_gram_df_chunk</span> <span class="ow">in</span> <span class="n">n_grams_dfs</span><span class="p">:</span>
+        <span class="n">event_gram_chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">n_gram_df_chunk</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="c1"># Convert row of df to db model</span>
+            <span class="n">ieg</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">()</span>
+
+            <span class="c1"># Attach all data</span>
+            <span class="n">ieg</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">event_ref</span>
+            <span class="n">ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">unstemmed_gram</span>
+            <span class="n">ieg</span><span class="o">.</span><span class="n">stemmed_gram</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">stemmed_gram</span>
+            <span class="n">ieg</span><span class="o">.</span><span class="n">context_span</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">context_span</span>
+            <span class="n">ieg</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">tfidf</span>
+            <span class="n">ieg</span><span class="o">.</span><span class="n">datetime_weighted_value</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">datetime_weighted_tfidf</span>
+
+            <span class="n">event_gram_chunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ieg</span><span class="p">)</span>
+
+        <span class="n">event_gram_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event_gram_chunk</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">event_gram_chunks</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">store_n_gram_chunk</span><span class="p">(</span>
+    <span class="n">n_gram_chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">],</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write all IndexedEventGrams in a single batch.</span>
+
+<span class="sd">    This isn&#39;t about an atomic batch but reducing the total upload time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Init batch</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">fireo</span><span class="o">.</span><span class="n">batch</span><span class="p">()</span>
+
+    <span class="c1"># Trigger upserts for all items</span>
+    <span class="k">for</span> <span class="n">ieg</span> <span class="ow">in</span> <span class="n">n_gram_chunk</span><span class="p">:</span>
+        <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
+            <span class="n">db_model</span><span class="o">=</span><span class="n">ieg</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Commit</span>
+    <span class="n">batch</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="create_event_index_pipeline"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.create_event_index_pipeline">[docs]</a><span class="k">def</span> <span class="nf">create_event_index_pipeline</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">EventIndexPipelineConfig</span><span class="p">,</span>
+    <span class="n">n_grams</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">store_local</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the Prefect Flow object to preview, run, or visualize for indexing</span>
+<span class="sd">    all events in the database.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config: EventIndexPipelineConfig</span>
+<span class="sd">        Configuration options for the pipeline.</span>
+<span class="sd">    n_grams: int</span>
+<span class="sd">        N number of terms to act as a unique entity. Default: 1</span>
+<span class="sd">    store_local: bool</span>
+<span class="sd">        Should the generated index be stored locally to disk or uploaded to database.</span>
+<span class="sd">        Storing the local index is useful for testing search result rankings with the</span>
+<span class="sd">        `search_cdp_events` bin script.</span>
+<span class="sd">        Default: False (store to database)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    flow: Flow</span>
+<span class="sd">        The constructed CDP Event Index Pipeline as a Prefect Flow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Index Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
+        <span class="c1"># Get all transcripts</span>
+        <span class="n">all_transcripts</span> <span class="o">=</span> <span class="n">get_transcripts</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Select highest confidence transcript for each session</span>
+        <span class="n">selected_transcripts</span> <span class="o">=</span> <span class="n">get_highest_confidence_transcript_for_each_session</span><span class="p">(</span>
+            <span class="n">transcripts</span><span class="o">=</span><span class="n">all_transcripts</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Get all transcripts for each event (multi-session events)</span>
+        <span class="n">event_transcripts</span> <span class="o">=</span> <span class="n">get_transcripts_per_event</span><span class="p">(</span><span class="n">transcripts</span><span class="o">=</span><span class="n">selected_transcripts</span><span class="p">)</span>
+
+        <span class="c1"># Read all transcripts for each event and generate grams</span>
+        <span class="n">all_event_transcript_n_grams</span> <span class="o">=</span> <span class="n">read_transcripts_and_generate_grams</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+            <span class="n">event_transcripts</span><span class="o">=</span><span class="n">event_transcripts</span><span class="p">,</span>
+            <span class="n">n_grams</span><span class="o">=</span><span class="n">unmapped</span><span class="p">(</span><span class="n">n_grams</span><span class="p">),</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">unmapped</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Convert to dataframe for tfidf calc</span>
+        <span class="n">all_events_n_grams</span> <span class="o">=</span> <span class="n">convert_all_n_grams_to_dataframe</span><span class="p">(</span>
+            <span class="n">all_events_n_grams</span><span class="o">=</span><span class="n">all_event_transcript_n_grams</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Weighted n grams by tfidf</span>
+        <span class="n">scored_n_grams</span> <span class="o">=</span> <span class="n">compute_tfidf</span><span class="p">(</span>
+            <span class="n">n_grams</span><span class="o">=</span><span class="n">all_events_n_grams</span><span class="p">,</span>
+            <span class="n">datetime_weighting_days_decay</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">datetime_weighting_days_decay</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Route to local storage task or remote bulk upload</span>
+        <span class="k">if</span> <span class="n">store_local</span><span class="p">:</span>
+            <span class="n">store_local_index</span><span class="p">(</span><span class="n">n_grams_df</span><span class="o">=</span><span class="n">scored_n_grams</span><span class="p">,</span> <span class="n">n_grams</span><span class="o">=</span><span class="n">n_grams</span><span class="p">)</span>
+
+        <span class="c1"># Route to remote database storage</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">chunked_scored_n_grams</span> <span class="o">=</span> <span class="n">chunk_n_grams</span><span class="p">(</span><span class="n">scored_n_grams</span><span class="p">)</span>
+            <span class="n">store_n_gram_chunk</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                <span class="n">n_gram_chunk</span><span class="o">=</span><span class="n">chunked_scored_n_grams</span><span class="p">,</span>
+                <span class="n">credentials_file</span><span class="o">=</span><span class="n">unmapped</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">),</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">flow</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Jackson Maxfield Brown.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

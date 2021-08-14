@@ -217,10 +217,11 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">google.cloud.firestore_v1.batch</span> <span class="kn">import</span> <span class="n">WriteBatch</span>
 <span class="kn">from</span> <span class="nn">google.cloud.firestore_v1.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
@@ -276,6 +277,7 @@
     <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">transaction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">batch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">WriteBatch</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Upload or update an existing database model.</span>
@@ -288,6 +290,8 @@
 <span class="sd">        Path to Google Service Account Credentials JSON file.</span>
 <span class="sd">    transaction: Optional[Transaction]</span>
 <span class="sd">        The transaction to write this model during.</span>
+<span class="sd">    batch: Optional[WriteBatch]</span>
+<span class="sd">        The write batch to use during uploading this model.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -299,8 +303,46 @@
 
     <span class="c1"># Generate id and upsert</span>
     <span class="n">db_model</span> <span class="o">=</span> <span class="n">generate_and_attach_doc_hash_as_id</span><span class="p">(</span><span class="n">db_model</span><span class="p">)</span>
-    <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">upsert</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+    <span class="n">db_model</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">upsert</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">db_model</span></div>
+
+
+<div class="viewcode-block" id="get_all_of_collection"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.get_all_of_collection">[docs]</a><span class="k">def</span> <span class="nf">get_all_of_collection</span><span class="p">(</span>
+    <span class="n">db_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all documents in a collection as a single list but request in batches.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db_model: Model</span>
+<span class="sd">        The CDP database model to get all documents for.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+<span class="sd">    batch_size: int</span>
+<span class="sd">        How many documents to request at a single time.</span>
+<span class="sd">        Default: 1000</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    documents: List[Model]</span>
+<span class="sd">        All documents in the model&#39;s collection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
+
+    <span class="c1"># Construct all documents list and fill as batches return</span>
+    <span class="n">all_documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">db_model</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+    <span class="n">all_documents_gathered</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">all_documents_gathered</span><span class="p">:</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">paginator</span><span class="p">)</span>
+        <span class="n">all_documents</span> <span class="o">+=</span> <span class="n">batch</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">all_documents_gathered</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">paginator</span><span class="o">.</span><span class="n">next_fetch</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">all_documents</span></div>
 
 
 <span class="k">def</span> <span class="nf">_strip_field</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>

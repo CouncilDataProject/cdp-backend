@@ -8,6 +8,7 @@ digraph {
 	EventMinutesItem [label="EventMinutesItem | <event_ref> event_ref *\l  ReferenceField\r|<minutes_item_ref> minutes_item_ref *\l  ReferenceField\r|index *\l  NumberField\r|decision\l  TextField\r|external_source_id\l  TextField\r"]
 	EventMinutesItemFile [label="EventMinutesItemFile | <event_minutes_item_ref> event_minutes_item_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
 	File [label="File | uri *\l  TextField\r|name *\l  TextField\r|description\l  TextField\r|media_type\l  TextField\r"]
+	IndexedEventGram [label="IndexedEventGram | <event_ref> event_ref *\l  ReferenceField\r|unstemmed_gram *\l  TextField\r|stemmed_gram *\l  TextField\r|context_span *\l  TextField\r|value *\l  NumberField\r|datetime_weighted_value *\l  NumberField\r"]
 	Matter [label="Matter | name *\l  TextField\r|matter_type *\l  TextField\r|title *\l  TextField\r|external_source_id\l  TextField\r"]
 	MatterFile [label="MatterFile | <matter_ref> matter_ref *\l  ReferenceField\r|name *\l  TextField\r|uri *\l  TextField\r|external_source_id\l  TextField\r"]
 	MatterSponsor [label="MatterSponsor | <matter_ref> matter_ref *\l  ReferenceField\r|<person_ref> person_ref *\l  ReferenceField\r|external_source_id\l  TextField\r"]
@@ -25,6 +26,7 @@ digraph {
 	EventMinutesItem:event_ref -> Event
 	EventMinutesItem:minutes_item_ref -> MinutesItem
 	EventMinutesItemFile:event_minutes_item_ref -> EventMinutesItem
+	IndexedEventGram:event_ref -> Event
 	MatterFile:matter_ref -> Matter
 	MatterSponsor:matter_ref -> Matter
 	MatterSponsor:person_ref -> Person

@@ -329,6 +329,108 @@
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-cdp_backend.bin.run_cdp_event_index">
+<span id="cdp-backend-bin-run-cdp-event-index-module"></span><h2>cdp_backend.bin.run_cdp_event_index module<a class="headerlink" href="#module-cdp_backend.bin.run_cdp_event_index" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.bin.run_cdp_event_index.Args">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.run_cdp_event_index.</span></span><span class="sig-name descname"><span class="pre">Args</span></span><a class="reference internal" href="_modules/cdp_backend/bin/run_cdp_event_index.html#Args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.run_cdp_event_index.Args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.bin.run_cdp_event_index.main">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.run_cdp_event_index.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cdp_backend/bin/run_cdp_event_index.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.run_cdp_event_index.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cdp_backend.bin.search_cdp_events">
+<span id="cdp-backend-bin-search-cdp-events-module"></span><h2>cdp_backend.bin.search_cdp_events module<a class="headerlink" href="#module-cdp_backend.bin.search_cdp_events" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.Args">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">Args</span></span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#Args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.Args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">EventMatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pure_relevance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datetime_weighted_relevance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contained_grams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_context_span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keywords</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#EventMatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Create new instance of EventMatch(event_ref, pure_relevance, datetime_weighted_relevance, contained_grams, selected_context_span, keywords)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch.contained_grams">
+<span class="sig-name descname"><span class="pre">contained_grams</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch.contained_grams" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch.datetime_weighted_relevance">
+<span class="sig-name descname"><span class="pre">datetime_weighted_relevance</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch.datetime_weighted_relevance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch.event_ref">
+<span class="sig-name descname"><span class="pre">event_ref</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch.event_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch.keywords">
+<span class="sig-name descname"><span class="pre">keywords</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch.keywords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch.pure_relevance">
+<span class="sig-name descname"><span class="pre">pure_relevance</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch.pure_relevance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.EventMatch.selected_context_span">
+<span class="sig-name descname"><span class="pre">selected_context_span</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.EventMatch.selected_context_span" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.SearchSortByField">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">SearchSortByField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_field</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#SearchSortByField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.SearchSortByField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Create new instance of SearchSortByField(name, local_field, remote_field)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.SearchSortByField.local_field">
+<span class="sig-name descname"><span class="pre">local_field</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.SearchSortByField.local_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.SearchSortByField.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.SearchSortByField.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.SearchSortByField.remote_field">
+<span class="sig-name descname"><span class="pre">remote_field</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.SearchSortByField.remote_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.get_stemmed_grams_from_query">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">get_stemmed_grams_from_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#get_stemmed_grams_from_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.get_stemmed_grams_from_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.main">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.run_local_search">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">run_local_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#run_local_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.run_local_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.bin.search_cdp_events.run_remote_search">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.bin.search_cdp_events.</span></span><span class="sig-name descname"><span class="pre">run_remote_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cdp_backend/bin/search_cdp_events.html#run_remote_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.bin.search_cdp_events.run_remote_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-cdp_backend.bin">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.bin" title="Permalink to this headline">¶</a></h2>
 <p>Bin scripts package for cdp_backend.</p>

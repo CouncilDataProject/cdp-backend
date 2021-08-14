@@ -280,6 +280,7 @@
 
     <span class="c1"># Create flow</span>
     <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Gather Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Gathering events to process.&quot;</span><span class="p">)</span>
         <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_events_func</span><span class="p">()</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
 

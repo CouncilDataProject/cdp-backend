@@ -831,6 +831,79 @@
         <span class="s2">&quot;decision&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="IndexedEventGram"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram">[docs]</a><span class="k">class</span> <span class="nc">IndexedEventGram</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An n-gram that has already been scored to create, when taken altogether,</span>
+<span class="sd">    an event relevance index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IDField</span><span class="p">()</span>
+    <span class="n">event_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">unstemmed_gram</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">stemmed_gram</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">context_span</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">datetime_weighted_value</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IndexedEventGram.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="IndexedEventGram.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.Example">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+        <span class="n">ieg</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">Example</span><span class="p">()</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span> <span class="o">=</span> <span class="s2">&quot;housing&quot;</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">stemmed_gram</span> <span class="o">=</span> <span class="s2">&quot;hous&quot;</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">context_span</span> <span class="o">=</span> <span class="s2">&quot;We believe that housing should be affordable.&quot;</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">12.34</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">datetime_weighted_value</span> <span class="o">=</span> <span class="mf">1.234</span>
+        <span class="k">return</span> <span class="n">ieg</span></div>
+
+    <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;event_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;unstemmed_gram&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stemmed_gram&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;datetime_weighted_value&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;stemmed_gram&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;stemmed_gram&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;datetime_weighted_value&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;unstemmed_gram&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;unstemmed_gram&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;datetime_weighted_value&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
 </pre></div>
 
            </div>

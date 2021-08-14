@@ -450,8 +450,30 @@ using the primary keys of the database model.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.functions.get_all_of_collection">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">get_all_of_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fireo.models.model.Model</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#get_all_of_collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.get_all_of_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all documents in a collection as a single list but request in batches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_model</strong> (<em>Model</em>) – The CDP database model to get all documents for.</p></li>
+<li><p><strong>credentials_file</strong> (<em>str</em>) – Path to Google Service Account Credentials JSON file.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – How many documents to request at a single time.
+Default: 1000</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>documents</strong> – All documents in the model’s collection.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Model]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.database.functions.upload_db_model">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">upload_db_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">google.cloud.firestore_v1.transaction.Transaction</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#upload_db_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.upload_db_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">upload_db_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fireo.models.model.Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">google.cloud.firestore_v1.transaction.Transaction</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">google.cloud.firestore_v1.batch.WriteBatch</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#upload_db_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.upload_db_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload or update an existing database model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -459,6 +481,7 @@ using the primary keys of the database model.</p>
 <li><p><strong>db_model</strong> (<em>Model</em>) – The database model to upload.</p></li>
 <li><p><strong>credentials_file</strong> (<em>str</em>) – Path to Google Service Account Credentials JSON file.</p></li>
 <li><p><strong>transaction</strong> (<em>Optional[Transaction]</em>) – The transaction to write this model during.</p></li>
+<li><p><strong>batch</strong> (<em>Optional[WriteBatch]</em>) – The write batch to use during uploading this model.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -791,6 +814,75 @@ conference or election debate, and, can be upcoming or historical.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.models.File.uri">
 <span class="sig-name descname"><span class="pre">uri</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.File.uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.database.models.</span></span><span class="sig-name descname"><span class="pre">IndexedEventGram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/models.html#IndexedEventGram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fireo.models.model.Model</span></code></p>
+<p>An n-gram that has already been scored to create, when taken altogether,
+an event relevance index.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.Example">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fireo.models.model.Model</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#IndexedEventGram.Example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.Example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.Meta">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/cdp_backend/database/models.html#IndexedEventGram.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.Meta.ignore_none_field">
+<span class="sig-name descname"><span class="pre">ignore_none_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.Meta.ignore_none_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.collection">
+<span class="sig-name descname"><span class="pre">collection</span></span><em class="property"><span class="pre">:</span> <span class="pre">fireo.managers.managers.Manager</span></em><em class="property"> <span class="pre">=</span> <span class="pre">&lt;fireo.managers.managers.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.collection_name">
+<span class="sig-name descname"><span class="pre">collection_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'indexed_event_gram'</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.collection_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.context_span">
+<span class="sig-name descname"><span class="pre">context_span</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.context_span" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.datetime_weighted_value">
+<span class="sig-name descname"><span class="pre">datetime_weighted_value</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.datetime_weighted_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.event_ref">
+<span class="sig-name descname"><span class="pre">event_ref</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.event_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.stemmed_gram">
+<span class="sig-name descname"><span class="pre">stemmed_gram</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.stemmed_gram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.unstemmed_gram">
+<span class="sig-name descname"><span class="pre">unstemmed_gram</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.unstemmed_gram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.database.models.IndexedEventGram.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.database.models.IndexedEventGram.value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

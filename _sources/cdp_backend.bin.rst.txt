@@ -60,6 +60,22 @@ cdp\_backend.bin.run\_cdp\_event\_gather module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.run\_cdp\_event\_index module
+----------------------------------------------
+
+.. automodule:: cdp_backend.bin.run_cdp_event_index
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdp\_backend.bin.search\_cdp\_events module
+-------------------------------------------
+
+.. automodule:: cdp_backend.bin.search_cdp_events
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
