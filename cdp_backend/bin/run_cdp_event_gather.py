@@ -43,6 +43,28 @@ class Args(argparse.Namespace):
             ),
         )
         p.add_argument(
+            "-f",
+            "--from",
+            type=str,
+            default=None,
+            help=(
+                "Optional ISO formatted string to pass to the get_event function to act"
+                "as the start point for event gathering."
+            ),
+            dest="from_dt",
+        )
+        p.add_argument(
+            "-t",
+            "--to",
+            type=str,
+            default=None,
+            help=(
+                "Optional ISO formatted string to pass to the get_event function to act"
+                "as the end point for event gathering."
+            ),
+            dest="to_dt",
+        )
+        p.add_argument(
             "-p",
             "--parallel",
             action="store_true",
@@ -65,7 +87,11 @@ def main() -> None:
             )
 
         # Get flow definition
-        flow = pipeline.create_event_gather_flow(config=config)
+        flow = pipeline.create_event_gather_flow(
+            config=config,
+            from_dt=args.from_dt,
+            to_dt=args.to_dt,
+        )
 
         # Determine executor
         if args.parallel:
