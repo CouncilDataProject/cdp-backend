@@ -342,7 +342,10 @@ def convert_all_n_grams_to_dataframe(
 
 
 @task
-def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
+def compute_tfidf(
+    n_grams: pd.DataFrame,
+    datetime_weighting_days_decay: int = 30,
+) -> pd.DataFrame:
     """
     Compute term frequencies, inverse document frequencies, tfidf, and weighted tfidf
     values for each n_gram in the dataframe.
@@ -375,7 +378,10 @@ def compute_tfidf(n_grams: pd.DataFrame) -> pd.DataFrame:
     n_grams["datetime_weighted_tfidf"] = n_grams.apply(
         # Unit of decay is in months (`/ 30`)
         # `+ 2` protects against divison by zero
-        lambda row: row.tfidf / math.log(((UTCNOW - row.event_datetime).days / 30) + 2),
+        lambda row: row.tfidf
+        / math.log(
+            ((UTCNOW - row.event_datetime).days / datetime_weighting_days_decay) + 2
+        ),
         axis=1,
     )
 
@@ -502,7 +508,10 @@ def create_event_index_pipeline(
         )
 
         # Weighted n grams by tfidf
-        scored_n_grams = compute_tfidf(n_grams=all_events_n_grams)
+        scored_n_grams = compute_tfidf(
+            n_grams=all_events_n_grams,
+            datetime_weighting_days_decay=config.datetime_weighting_days_decay,
+        )
 
         # Route to local storage task or remote bulk upload
         if store_local:

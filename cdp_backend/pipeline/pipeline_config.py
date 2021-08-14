@@ -86,6 +86,10 @@ class EventIndexPipelineConfig:
     gcs_bucket_name: Optional[str]
         The name of the Google Storage bucket for CDP generated files.
         Default: None (parse from the Google Service Account Credentials JSON file)
+    datetime_weighting_days_decay: int
+        The number of days that grams from an event should be labeled as more relevant.
+        Default: 30 (grams from events less than 30 days old will generally be valued
+        higher than their pure relevance score)
     """
 
     google_credentials_file: str
@@ -95,6 +99,7 @@ class EventIndexPipelineConfig:
         repr=False,
         default=None,
     )
+    datetime_weighting_days_decay: int = 30
 
     @property
     def validated_gcs_bucket_name(self) -> str:
