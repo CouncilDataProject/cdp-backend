@@ -138,7 +138,7 @@ def get_transcripts_per_event(
                 transcripts=[transcript],
             )
 
-        # Update existing eventtranscripts object
+        # Update existing event_transcripts object
         else:
             event_transcripts[transcript.session_ref.event_ref.id].transcripts.append(
                 transcript
