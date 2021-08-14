@@ -84,7 +84,9 @@ def create_event_gather_flow(
     elif isinstance(from_dt, datetime):
         from_datetime = from_dt
     else:
-        from_datetime = datetime.utcnow() - timedelta(days=2)
+        from_datetime = datetime.utcnow() - timedelta(
+            days=config.default_event_gather_from_days_timedelta,
+        )
 
     # Handle to datetime
     if isinstance(to_dt, str) and len(to_dt) != 0:
