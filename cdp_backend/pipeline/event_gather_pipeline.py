@@ -692,9 +692,6 @@ def get_video_and_generate_thumbnails(
     """
     tmp_video_path = file_utils.resource_copy(video_uri)
 
-    static_thumbnail_file = ""
-    static_thumbnail_url = ""
-
     if event.static_thumbnail_uri is None:
         # Generate new
         static_thumbnail_file = file_utils.get_static_thumbnail(
@@ -711,9 +708,6 @@ def get_video_and_generate_thumbnails(
         filepath=static_thumbnail_file,
     )
     fs_functions.remove_local_file(static_thumbnail_file)
-
-    hover_thumbnail_file = ""
-    hover_thumbnail_url = ""
 
     if event.hover_thumbnail_uri is None:
         # Generate new
