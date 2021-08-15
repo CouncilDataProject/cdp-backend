@@ -12,17 +12,20 @@ easily discoverable so here are some steps to find it.
 municipality uses Legistar. If it does not, your municipality does not use Legistar.
 
 3. If Legistar ID could not be found in the previous step, try an online search 
-with for a phrase such as “_municipality_ council Legistar agendas”. If your 
-municipality uses Legistar, the top search results will likely include URLs like 
+with for a phrase such as “&lt;your_municipality&gt; council Legistar agendas”. If 
+your municipality uses Legistar, the top search results will likely include URLs like 
 ".legistar.com".  
-For example, top results for “Legistar Seattle council agendas” include 
-https://seattle.legistar.com/Calendar.aspx. From this we can deduce that "seattle" is 
-the Legistar ID for the city of Seattle, Washington.
+For example, top results for “Seattle council Legistar agendas” include 
+https://seattle.legistar.com/Calendar.aspx.
 
-Once you have what you believe is the legistar municipality key / ID, feel free to try 
-it out on their test client: https://webapi.legistar.com/Help/Api/GET-v1-Client-Bodies. 
-Click on "Test API" in the lower right corner, set "{Client}" equal to what you think 
-is the Legistar key and click "Send". If you get back any error message it is likely 
-that while your municipality uses Legistar, the data isn't made publically available 
-or they use a different key. You may try contacting your municipality clerk for more 
-information.
+4. The Legistar ID is the substring before “.legistar.com.” In the example above, the 
+Legistar ID would be “seattle.”
+
+5. To verify your Legistar ID, you can test it out on the Legistar test client: 
+https://webapi.legistar.com/Help/Api/GET-v1-Client-Bodies. Click on "Test API" in the 
+lower right corner, set "{Client}" equal to what you think is the Legistar key and 
+click "Send". If you get back any error message, it is likely that while your 
+municipality uses Legistar, the data isn't made publically available or they use a 
+different key.
+
+6. For more detailed Legistar information, please contact your municipality clerk.
