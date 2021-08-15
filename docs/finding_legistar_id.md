@@ -9,7 +9,7 @@ easily discoverable so here are some steps to find it.
 1. Go to your municipality’s council page and locate the meeting agendas.
 
 2. Look at the URL of the website and if it contains “legistar”, then your 
-municipality uses Legistar. If it does not, your municipality does not use Legistar. 
+municipality uses Legistar. If it does not, your municipality does not use Legistar.  
 ![Legistar ID for Seattle](./_static/seattle_legistar_url.png)
 
 3. If Legistar ID could not be found in the previous step, try an online search for a 
