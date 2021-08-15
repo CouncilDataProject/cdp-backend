@@ -12,7 +12,7 @@ easily discoverable so here are some steps to find it.
 municipality uses Legistar. If it does not, your municipality does not use Legistar.
 
 3. If Legistar ID could not be found in the previous step, try an online search 
-with for a phrase such as “&lt;your_municipality&gt; council Legistar agendas”. If 
+with for a phrase such as “\<your_municipalit\y> council Legistar agendas”. If 
 your municipality uses Legistar, the top search results will likely include URLs like 
 ".legistar.com".  
 For example, top results for “Seattle council Legistar agendas” include 
