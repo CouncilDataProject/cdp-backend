@@ -277,9 +277,20 @@ def test_mocked_pipeline_run(
     result_values = result_values.sort_values(by="stemmed_gram").reset_index(drop=True)
 
     # Drop certain columns that change based off datetime of test run
-    expected_values = expected_values.drop(columns=["event_id", "event_datetime"])
-    result_values = result_values.drop(columns=["event_id", "event_datetime"])
-
+    expected_values = expected_values.drop(
+        columns=[
+            "event_id",
+            "event_datetime",
+            "datetime_weighted_tfidf",
+        ]
+    )
+    result_values = result_values.drop(
+        columns=[
+            "event_id",
+            "event_datetime",
+            "datetime_weighted_tfidf",
+        ]
+    )
     pd._testing.assert_frame_equal(result_values, expected_values)
 
     # Cleanup
