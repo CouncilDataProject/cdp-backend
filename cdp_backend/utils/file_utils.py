@@ -1,9 +1,9 @@
 ##!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import tempfile
 import logging
 import math
+import tempfile
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union

@@ -5,16 +5,13 @@ import argparse
 import logging
 import sys
 import traceback
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
-import fireo
-
-from cdp_backend.database import DATABASE_MODELS
 from cdp_backend.file_store.functions import upload_file
-from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
-from cdp_backend.pipeline.ingestion_models import EventIngestionModel, Session
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
+from cdp_backend.pipeline.ingestion_models import EventIngestionModel, Session
+from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 
 ###############################################################################
 
@@ -55,7 +52,7 @@ class Args(argparse.Namespace):
 
 
 def main() -> None:
-    try: 
+    try:
         args = Args()
 
         # Read pipeline config
@@ -90,8 +87,7 @@ def main() -> None:
 
         # Create event gather pipeline flow
         flow = pipeline.create_event_gather_flow(
-            config=config,
-            prefetched_events=[ingestion_model]
+            config=config, prefetched_events=[ingestion_model]
         )
 
         # Run flow
