@@ -52,6 +52,7 @@ def create_event_gather_flow(
     config: EventGatherPipelineConfig,
     from_dt: Optional[Union[str, datetime]] = None,
     to_dt: Optional[Union[str, datetime]] = None,
+    prefetched_events: Optional[List[EventIngestionModel]] = None,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -102,10 +103,18 @@ def create_event_gather_flow(
             f"Gathering events to process. "
             f"({from_datetime.isoformat()} - {to_datetime.isoformat()})"
         )
-        events: List[EventIngestionModel] = get_events_func(
-            from_dt=from_datetime,
-            to_dt=to_datetime,
-        )
+
+        # Use prefetched events instead of get_events_func if provided
+        # Or should we process in addition to function supplied events?
+        if prefetched_events is not None:
+            events = prefetched_events 
+        
+        else:
+            events: List[EventIngestionModel] = get_events_func(
+                from_dt=from_datetime,
+                to_dt=to_datetime,
+            )
+
         # Safety measure catch
         if events is None:
             events = []
