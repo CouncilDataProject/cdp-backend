@@ -85,6 +85,8 @@ def resource_copy(
     # Create tmp directory to save file in
     dirpath = tempfile.mkdtemp()
     dst = Path(dirpath) / dst
+    #with tempfile.TemporaryDirectory() as temp_dir:
+    #dst = Path(temp_dir) / dst
 
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()

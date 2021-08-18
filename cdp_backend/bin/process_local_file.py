@@ -5,12 +5,11 @@ import argparse
 import logging
 import sys
 import traceback
-from datetime import datetime
 from pathlib import Path
 
 from cdp_backend.file_store.functions import upload_file
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
-from cdp_backend.pipeline.ingestion_models import EventIngestionModel, Session
+from cdp_backend.pipeline.ingestion_models import EventIngestionModel
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 
 ###############################################################################
@@ -32,11 +31,6 @@ class Args(argparse.Namespace):
         p = argparse.ArgumentParser(
             prog="process_local_file",
             description="Process local video file into the event pipeline.",
-        )
-        p.add_argument(
-            "--local_video_file",
-            type=Path,
-            help="Path to the video file to process into the event pipeline.",
         )
         p.add_argument(
             "--event_details_file",
@@ -61,29 +55,21 @@ def main() -> None:
                 open_resource.read()
             )
 
-        # Upload video file to file store
-        video_uri = upload_file(
-            credentials_file=config.google_credentials_file,
-            bucket=config.validated_gcs_bucket_name,
-            filepath=str(args.local_video_file),
-        )
-
         # Convert event details file to EventIngestionModel
         with open(args.event_details_file, "r") as open_resource:
             ingestion_model = EventIngestionModel.from_json(  # type: ignore
                 open_resource.read()
             )
 
-            # Create session from video_uri
-            session = Session(
-                # TODO: Should we instead take in datetime as an input?
-                session_datetime=datetime.utcnow(),
-                video_uri=video_uri,
-                session_index=0,
+            # Upload video file to file store
+            video_uri = upload_file(
+                credentials_file=config.google_credentials_file,
+                bucket=config.validated_gcs_bucket_name,
+                filepath=ingestion_model.sessions[0].video_uri,
             )
 
-            # Attach session to event
-            ingestion_model.sessions = [session]
+            # Replace video_uri of session
+            ingestion_model.sessions[0].video_uri = video_uri
 
         # Create event gather pipeline flow
         flow = pipeline.create_event_gather_flow(
