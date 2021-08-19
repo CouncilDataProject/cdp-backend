@@ -53,6 +53,7 @@ def create_event_gather_flow(
     from_dt: Optional[Union[str, datetime]] = None,
     to_dt: Optional[Union[str, datetime]] = None,
     prefetched_events: Optional[List[EventIngestionModel]] = None,
+    from_local: bool = False,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -189,6 +190,7 @@ def create_event_gather_flow(
                 session_processing_results=session_processing_results,
                 credentials_file=config.google_credentials_file,
                 bucket=config.validated_gcs_bucket_name,
+                from_local=from_local,
             )
 
     return flow
@@ -970,6 +972,7 @@ def store_event_processing_results(
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
     bucket: str,
+    from_local: bool = False,
 ) -> None:
     # TODO: check metadata before pipeline runs to avoid the many try excepts
 
@@ -1065,6 +1068,12 @@ def store_event_processing_results(
             db_model=transcript_file_db_model,
             credentials_file=credentials_file,
         )
+
+        # Account for uri's from local files
+        if from_local:
+            fs = GCSFileSystem(token=credentials_file)
+            stream_url = str(fs.url(session_result.session.video_uri))
+            session_result.session.video_uri = stream_url
 
         # Create session
         session_db_model = db_functions.create_session(

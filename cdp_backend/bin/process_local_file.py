@@ -73,7 +73,7 @@ def main() -> None:
 
         # Create event gather pipeline flow
         flow = pipeline.create_event_gather_flow(
-            config=config, prefetched_events=[ingestion_model]
+            config=config, prefetched_events=[ingestion_model], from_local=True
         )
 
         # Run flow

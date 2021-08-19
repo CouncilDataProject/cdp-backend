@@ -115,7 +115,7 @@ def resource_exists(uri: Optional[str]) -> bool:
         return True
 
     # TODO Replace after finding way to pass custom fs through FireO validator
-    if uri.startswith("gs://"):
+    if uri.startswith("gs://") or uri.startswith("https://storage.googleapis"):
         return True
 
     else:
