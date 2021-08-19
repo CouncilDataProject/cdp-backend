@@ -3,7 +3,6 @@
 
 import logging
 import math
-import tempfile
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -81,12 +80,6 @@ def resource_copy(
     """
     if dst is None:
         dst = uri.split("/")[-1]
-
-    # Create tmp directory to save file in
-    dirpath = tempfile.mkdtemp()
-    dst = Path(dirpath) / dst
-    #with tempfile.TemporaryDirectory() as temp_dir:
-    #dst = Path(temp_dir) / dst
 
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
