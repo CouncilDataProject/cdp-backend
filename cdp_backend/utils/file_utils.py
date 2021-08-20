@@ -82,7 +82,7 @@ def resource_copy(
     if dst is None:
         dst = uri.split("/")[-1]
 
-   # Create tmp directory to save file in
+    # Create tmp directory to save file in
     dirpath = tempfile.mkdtemp()
     dst = Path(dirpath) / dst
 
@@ -97,6 +97,7 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
+        # TODO: Add explicit use of GCS credentials until public read is fixed
         fs, remote_path = url_to_fs(uri)
         fs.get(remote_path, str(dst), timeout=None)
         log.info(f"Completed resource copy from: {uri}")
