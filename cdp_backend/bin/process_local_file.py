@@ -61,15 +61,16 @@ def main() -> None:
                 open_resource.read()
             )
 
-            # Upload video file to file store
-            video_uri = upload_file(
-                credentials_file=config.google_credentials_file,
-                bucket=config.validated_gcs_bucket_name,
-                filepath=ingestion_model.sessions[0].video_uri,
-            )
+            for session in ingestion_model.sessions:
+                # Upload video file to file store
+                video_uri = upload_file(
+                    credentials_file=config.google_credentials_file,
+                    bucket=config.validated_gcs_bucket_name,
+                    filepath=session.video_uri,
+                )
 
-            # Replace video_uri of session
-            ingestion_model.sessions[0].video_uri = video_uri
+                # Replace video_uri of session
+                session.video_uri = video_uri
 
         # Create event gather pipeline flow
         flow = pipeline.create_event_gather_flow(

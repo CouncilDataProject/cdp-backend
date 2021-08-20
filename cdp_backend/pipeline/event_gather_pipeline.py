@@ -106,7 +106,6 @@ def create_event_gather_flow(
         )
 
         # Use prefetched events instead of get_events_func if provided
-        # Or should we process in addition to function supplied events?
         if prefetched_events is not None:
             events = prefetched_events
 
