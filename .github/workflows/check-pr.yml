@@ -17,17 +17,18 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install graphviz (Ubuntu)
+    - name: Install Packages (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt-get install graphviz
-        sudo apt-get install ffmpeg
-    - name: Install graphviz (Mac)
+        sudo apt update
+        sudo apt-get install graphviz --fix-missing
+        sudo apt-get install ffmpeg --fix-missing
+    - name: Install Packages (Mac)
       if: matrix.os == 'macOS-latest'
       run: |
         brew install graphviz
         brew install ffmpeg
-    - name: Install graphviz (Windows)
+    - name: Install Packages (Windows)
       if: matrix.os == 'windows-latest'
       run: |
         choco install graphviz
@@ -53,7 +54,8 @@ jobs:
         python-version: 3.9
     - name: Install graphviz
       run: |
-        sudo apt-get install graphviz
+        sudo apt update
+        sudo apt-get install graphviz --fix-missing
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -81,7 +83,8 @@ jobs:
         python-version: 3.9
     - name: Install graphviz
       run: |
-        sudo apt-get install graphviz
+        sudo apt update
+        sudo apt-get install graphviz --fix-missing
     - name: Install Dependencies
       run: |
         pip install --upgrade pip

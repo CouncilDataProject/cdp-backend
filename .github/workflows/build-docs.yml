@@ -16,9 +16,10 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.9
-      - name: Install graphviz
+      - name: Install Packages
         run: |
-          sudo apt-get install graphviz
+          sudo apt update
+          sudo apt-get install graphviz --fix-missing
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
