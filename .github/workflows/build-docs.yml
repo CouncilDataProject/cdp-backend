@@ -18,6 +18,7 @@ jobs:
           python-version: 3.9
       - name: Install Packages
         run: |
+          sudo apt update
           sudo apt-get install graphviz --fix-missing
       - name: Install Dependencies
         run: |

@@ -31,6 +31,7 @@ jobs:
     - name: Install Packages (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: |
+        sudo apt update
         sudo apt-get install graphviz --fix-missing
         sudo apt-get install ffmpeg --fix-missing
     - name: Install Packages (Mac)
@@ -64,6 +65,7 @@ jobs:
         python-version: 3.9
     - name: Install graphviz
       run: |
+        sudo apt update
         sudo apt-get install graphviz --fix-missing
     - name: Install Dependencies
       run: |
