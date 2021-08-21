@@ -52,6 +52,14 @@ cdp\_backend.bin.create\_cdp\_transcript\_model\_doc module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.process\_local\_file module
+--------------------------------------------
+
+.. automodule:: cdp_backend.bin.process_local_file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.run\_cdp\_event\_gather module
 -----------------------------------------------
 
