@@ -31,7 +31,8 @@ jobs:
     - name: Install graphviz (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt-get install graphviz
+        sudo apt-get update
+        sudo apt-get install graphviz --fix-missing
         sudo apt-get install ffmpeg
     - name: Install graphviz (Mac)
       if: matrix.os == 'macOS-latest'
