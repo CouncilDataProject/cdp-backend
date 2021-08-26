@@ -14,9 +14,13 @@ import pytest
 from py._path.local import LocalPath
 
 from cdp_backend.utils import file_utils
-from cdp_backend.utils.file_utils import resource_copy
+from cdp_backend.utils.file_utils import (
+    MAX_THUMBNAIL_HEIGHT,
+    MAX_THUMBNAIL_WIDTH,
+    resource_copy,
+)
 
-from ..conftest import EXAMPLE_VIDEO_FILENAME
+from ..conftest import EXAMPLE_VIDEO_FILENAME, EXAMPLE_VIDEO_HD_FILENAME
 
 #############################################################################
 
@@ -112,6 +116,7 @@ def test_split_audio(
     [
         (EXAMPLE_VIDEO_FILENAME, "example2", 45, "example2-static-thumbnail.png"),
         (EXAMPLE_VIDEO_FILENAME, "example3", 999999, "example3-static-thumbnail.png"),
+        (EXAMPLE_VIDEO_HD_FILENAME, "example4", 9, "example4-static-thumbnail.png"),
         pytest.param(
             "fake.mp4",
             "example",
@@ -144,6 +149,10 @@ def test_static_thumbnail_generator(
 
     assert Path(result).stat().st_size > 0
 
+    image = imageio.imread(result)
+    assert image.shape[0] <= MAX_THUMBNAIL_HEIGHT
+    assert image.shape[1] <= MAX_THUMBNAIL_WIDTH
+
     os.remove(result)
 
 
@@ -155,6 +164,7 @@ def test_static_thumbnail_generator(
     "video_url, session_content_hash, num_frames, expected",
     [
         (EXAMPLE_VIDEO_FILENAME, "example2", 15, "example2-hover-thumbnail.gif"),
+        (EXAMPLE_VIDEO_HD_FILENAME, "example3", 9, "example3-hover-thumbnail.gif"),
         pytest.param(
             "fake.mp4",
             "example",
@@ -187,5 +197,9 @@ def test_hover_thumbnail_generator(
 
     reader = imageio.get_reader(result)
     assert reader._length == num_frames
+
+    image = imageio.imread(result)
+    assert image.shape[0] <= MAX_THUMBNAIL_HEIGHT
+    assert image.shape[1] <= MAX_THUMBNAIL_WIDTH
 
     os.remove(result)

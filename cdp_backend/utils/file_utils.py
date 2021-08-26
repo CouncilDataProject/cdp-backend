@@ -11,13 +11,18 @@ import dask.dataframe as dd
 import ffmpeg
 import fsspec
 import imageio
+import numpy as np
 from fsspec.core import url_to_fs
+from PIL import Image
 
 ###############################################################################
 
 log = logging.getLogger(__name__)
 
 ###############################################################################
+
+MAX_THUMBNAIL_HEIGHT = 540
+MAX_THUMBNAIL_WIDTH = 960
 
 
 def get_media_type(uri: str) -> Optional[str]:
@@ -208,6 +213,23 @@ def get_static_thumbnail(
     except (ValueError, IndexError):
         reader = imageio.get_reader(video_path)
         image = reader.get_data(0)
+
+    if image.shape[0] > MAX_THUMBNAIL_HEIGHT or image.shape[1] > MAX_THUMBNAIL_WIDTH:
+        height_ratio = MAX_THUMBNAIL_HEIGHT / image.shape[0]
+        width_ratio = MAX_THUMBNAIL_WIDTH / image.shape[1]
+
+        if height_ratio > width_ratio:
+            final_ratio = height_ratio
+        else:
+            final_ratio = width_ratio
+
+        image = Image.fromarray(image).resize(
+            (
+                math.floor(image.shape[1] * final_ratio),
+                math.floor(image.shape[0] * final_ratio),
+            )
+        )
+
     imageio.imwrite(png_path, image)
 
     return png_path
@@ -243,11 +265,32 @@ def get_hover_thumbnail(
     count = 0
     for i, image in enumerate(reader):
         count += 1
-    step_length = math.floor(count / num_frames)
+    step_size = math.floor(count / num_frames)
+
+    final_ratio = 1
+    height = image.shape[0]
+    width = image.shape[1]
+
+    if height > MAX_THUMBNAIL_HEIGHT or width > MAX_THUMBNAIL_WIDTH:
+        height_ratio = MAX_THUMBNAIL_HEIGHT / height
+        width_ratio = MAX_THUMBNAIL_WIDTH / width
+
+        if height_ratio > width_ratio:
+            final_ratio = height_ratio
+        else:
+            final_ratio = width_ratio
 
     with imageio.get_writer(gif_path, mode="I") as writer:
         for i in range(0, num_frames):
-            writer.append_data(reader.get_data(i * step_length))
+            if final_ratio == 1:
+                image = Image.fromarray(reader.get_data(i * step_size))
+            else:
+                image = Image.fromarray(reader.get_data(i * step_size)).resize(
+                    (math.floor(width * final_ratio), math.floor(height * final_ratio))
+                )
+
+            final_image = np.asarray(image, dtype="int32")
+            writer.append_data(final_image)
 
     return gif_path
 
