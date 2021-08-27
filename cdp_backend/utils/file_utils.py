@@ -8,10 +8,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
-import dask.dataframe as dd
-import ffmpeg
 import fsspec
-import imageio
 from fsspec.core import url_to_fs
 
 ###############################################################################
@@ -36,6 +33,8 @@ def get_media_type(uri: str) -> Optional[str]:
     mtype: Optional[str]:
         The found matching IANA media type.
     """
+    import dask.dataframe as dd
+
     # Media types retrieved from:
     # http://www.iana.org/assignments/media-types/media-types.xhtml
     media_types = dd.read_csv(
@@ -136,6 +135,7 @@ def split_audio(
     ffmpeg stderr path: str
         Path to the ffmpeg stderr log file.
     """
+    import ffmpeg
 
     # Check paths
     resolved_video_read_path = Path(video_read_path).resolve(strict=True)
@@ -201,6 +201,7 @@ def get_static_thumbnail(
         The name of the thumbnail file:
         Always session_content_hash + "-static-thumbnail.png"
     """
+    import imageio
 
     reader = imageio.get_reader(video_path)
     png_path = ""
@@ -241,6 +242,8 @@ def get_hover_thumbnail(
         The name of the thumbnail file:
         Always session_content_hash + "-hover-thumbnail.png"
     """
+    import imageio
+
     reader = imageio.get_reader(video_path)
     gif_path = ""
     if reader.get_length() > 1:
