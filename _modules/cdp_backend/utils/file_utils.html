@@ -220,10 +220,7 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
-<span class="kn">import</span> <span class="nn">ffmpeg</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
-<span class="kn">import</span> <span class="nn">imageio</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
 
 <span class="c1">###############################################################################</span>
@@ -248,6 +245,8 @@
 <span class="sd">    mtype: Optional[str]:</span>
 <span class="sd">        The found matching IANA media type.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+
     <span class="c1"># Media types retrieved from:</span>
     <span class="c1"># http://www.iana.org/assignments/media-types/media-types.xhtml</span>
     <span class="n">media_types</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
@@ -348,6 +347,7 @@
 <span class="sd">    ffmpeg stderr path: str</span>
 <span class="sd">        Path to the ffmpeg stderr log file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">ffmpeg</span>
 
     <span class="c1"># Check paths</span>
     <span class="n">resolved_video_read_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_read_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -413,6 +413,7 @@
 <span class="sd">        The name of the thumbnail file:</span>
 <span class="sd">        Always session_content_hash + &quot;-static-thumbnail.png&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">imageio</span>
 
     <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
     <span class="n">png_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -453,6 +454,8 @@
 <span class="sd">        The name of the thumbnail file:</span>
 <span class="sd">        Always session_content_hash + &quot;-hover-thumbnail.png&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">imageio</span>
+
     <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
     <span class="n">gif_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
