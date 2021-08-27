@@ -5,10 +5,11 @@ import logging
 import pickle
 from datetime import datetime
 from hashlib import sha256
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 import fireo
 from fireo.models import Model
+from google.cloud.firestore_v1.batch import WriteBatch
 from google.cloud.firestore_v1.transaction import Transaction
 
 from ..database import models as db_models
@@ -64,6 +65,7 @@ def upload_db_model(
     db_model: Model,
     credentials_file: str,
     transaction: Optional[Transaction] = None,
+    batch: Optional[WriteBatch] = None,
 ) -> Model:
     """
     Upload or update an existing database model.
@@ -76,6 +78,8 @@ def upload_db_model(
         Path to Google Service Account Credentials JSON file.
     transaction: Optional[Transaction]
         The transaction to write this model during.
+    batch: Optional[WriteBatch]
+        The write batch to use during uploading this model.
 
     Returns
     -------
@@ -87,8 +91,46 @@ def upload_db_model(
 
     # Generate id and upsert
     db_model = generate_and_attach_doc_hash_as_id(db_model)
-    db_model = db_model.upsert(transaction=transaction)
+    db_model = db_model.upsert(transaction=transaction, batch=batch)
     return db_model
+
+
+def get_all_of_collection(
+    db_model: Model, credentials_file: str, batch_size: int = 1000
+) -> List[Model]:
+    """
+    Get all documents in a collection as a single list but request in batches.
+
+    Parameters
+    ----------
+    db_model: Model
+        The CDP database model to get all documents for.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+    batch_size: int
+        How many documents to request at a single time.
+        Default: 1000
+
+    Returns
+    -------
+    documents: List[Model]
+        All documents in the model's collection.
+    """
+    fireo.connection(from_file=credentials_file)
+
+    # Construct all documents list and fill as batches return
+    all_documents: List[Model] = []
+    paginator = db_model.collection.fetch(batch_size)
+    all_documents_gathered = False
+    while not all_documents_gathered:
+        batch = list(paginator)
+        all_documents += batch
+        if len(batch) == 0:
+            all_documents_gathered = True
+        else:
+            paginator.next_fetch()
+
+    return all_documents
 
 
 def _strip_field(field: Optional[str]) -> Optional[str]:

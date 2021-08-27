@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from datetime import timedelta
+from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
 from fsspec.core import url_to_fs
@@ -48,7 +48,13 @@ def import_get_events_func(func_path: str) -> Callable:
     return getattr(mod, func_name)
 
 
-def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
+def create_event_gather_flow(
+    config: EventGatherPipelineConfig,
+    from_dt: Optional[Union[str, datetime]] = None,
+    to_dt: Optional[Union[str, datetime]] = None,
+    prefetched_events: Optional[List[EventIngestionModel]] = None,
+    from_local: bool = False,
+) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
     to preview, run, or visualize.
@@ -57,6 +63,14 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     ----------
     config: EventGatherPipelineConfig
         Configuration options for the pipeline.
+    from_dt: Optional[Union[str, datetime]]
+        Optional ISO formatted string or datetime object to pass to the get_events
+        function to act as the start point for event gathering.
+        Default: None (two days ago)
+    to_dt: Optional[Union[str, datetime]]
+        Optional ISO formatted string or datetime object to pass to the get_events
+        function to act as the end point for event gathering.
+        Default: None (now)
 
     Returns
     -------
@@ -66,9 +80,44 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
     # Load get_events_func
     get_events_func = import_get_events_func(config.get_events_function_path)
 
+    # Handle from datetime
+    if isinstance(from_dt, str) and len(from_dt) != 0:
+        from_datetime = datetime.fromisoformat(from_dt)
+    elif isinstance(from_dt, datetime):
+        from_datetime = from_dt
+    else:
+        from_datetime = datetime.utcnow() - timedelta(
+            days=config.default_event_gather_from_days_timedelta,
+        )
+
+    # Handle to datetime
+    if isinstance(to_dt, str) and len(to_dt) != 0:
+        to_datetime = datetime.fromisoformat(to_dt)
+    elif isinstance(to_dt, datetime):
+        to_datetime = to_dt
+    else:
+        to_datetime = datetime.utcnow()
+
     # Create flow
     with Flow("CDP Event Gather Pipeline") as flow:
-        events: List[EventIngestionModel] = get_events_func()
+        log.info(
+            f"Gathering events to process. "
+            f"({from_datetime.isoformat()} - {to_datetime.isoformat()})"
+        )
+
+        # Use prefetched events instead of get_events_func if provided
+        if prefetched_events is not None:
+            events = prefetched_events
+
+        else:
+            events = get_events_func(
+                from_dt=from_datetime,
+                to_dt=to_datetime,
+            )
+
+        # Safety measure catch
+        if events is None:
+            events = []
         log.info(f"Processing {len(events)} events.")
 
         for event in events:
@@ -140,6 +189,7 @@ def create_event_gather_flow(config: EventGatherPipelineConfig) -> Flow:
                 session_processing_results=session_processing_results,
                 credentials_file=config.google_credentials_file,
                 bucket=config.validated_gcs_bucket_name,
+                from_local=from_local,
             )
 
     return flow
@@ -921,6 +971,7 @@ def store_event_processing_results(
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
     bucket: str,
+    from_local: bool = False,
 ) -> None:
     # TODO: check metadata before pipeline runs to avoid the many try excepts
 
@@ -1016,6 +1067,12 @@ def store_event_processing_results(
             db_model=transcript_file_db_model,
             credentials_file=credentials_file,
         )
+
+        # Account for uri's from local files
+        if from_local:
+            fs = GCSFileSystem(token=credentials_file)
+            stream_url = str(fs.url(session_result.session.video_uri))
+            session_result.session.video_uri = stream_url
 
         # Create session
         session_db_model = db_functions.create_session(

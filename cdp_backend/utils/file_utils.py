@@ -3,15 +3,15 @@
 
 import logging
 import math
+import tempfile
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
-import dask.dataframe as dd
-import ffmpeg
 import fsspec
 import imageio
 import numpy as np
+
 from fsspec.core import url_to_fs
 from PIL import Image
 
@@ -40,6 +40,8 @@ def get_media_type(uri: str) -> Optional[str]:
     mtype: Optional[str]:
         The found matching IANA media type.
     """
+    import dask.dataframe as dd
+
     # Media types retrieved from:
     # http://www.iana.org/assignments/media-types/media-types.xhtml
     media_types = dd.read_csv(
@@ -86,6 +88,10 @@ def resource_copy(
     if dst is None:
         dst = uri.split("/")[-1]
 
+    # Create tmp directory to save file in
+    dirpath = tempfile.mkdtemp()
+    dst = Path(dirpath) / dst
+
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
@@ -97,6 +103,7 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
+        # TODO: Add explicit use of GCS credentials until public read is fixed
         fs, remote_path = url_to_fs(uri)
         fs.get(remote_path, str(dst), timeout=None)
         log.info(f"Completed resource copy from: {uri}")
@@ -135,6 +142,7 @@ def split_audio(
     ffmpeg stderr path: str
         Path to the ffmpeg stderr log file.
     """
+    import ffmpeg
 
     # Check paths
     resolved_video_read_path = Path(video_read_path).resolve(strict=True)
@@ -200,6 +208,7 @@ def get_static_thumbnail(
         The name of the thumbnail file:
         Always session_content_hash + "-static-thumbnail.png"
     """
+    import imageio
 
     reader = imageio.get_reader(video_path)
     png_path = ""
@@ -257,6 +266,8 @@ def get_hover_thumbnail(
         The name of the thumbnail file:
         Always session_content_hash + "-hover-thumbnail.png"
     """
+    import imageio
+
     reader = imageio.get_reader(video_path)
     gif_path = ""
     if reader.get_length() > 1:

@@ -10,8 +10,8 @@ from pathlib import Path
 from distributed import LocalCluster
 from prefect import executors
 
-from cdp_backend.pipeline import event_gather_pipeline as pipeline
-from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
+from cdp_backend.pipeline import event_index_pipeline as pipeline
+from cdp_backend.pipeline.pipeline_config import EventIndexPipelineConfig
 
 ###############################################################################
 
@@ -30,39 +30,34 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="run_cdp_event_gather",
-            description="Gather, process, and store event data to CDP infrastructure.",
+            prog="run_cdp_event_index",
+            description=(
+                "Index all event (session) transcripts from a CDP infrastructure."
+            ),
         )
         p.add_argument(
             "config_file",
             type=Path,
             help=(
                 "Path to the pipeline configuration file. "
-                "See cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig "
+                "See cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig "
                 "for more details."
             ),
         )
         p.add_argument(
-            "-f",
-            "--from",
-            type=str,
-            default=None,
-            help=(
-                "Optional ISO formatted string to pass to the get_event function to act"
-                "as the start point for event gathering."
-            ),
-            dest="from_dt",
+            "-n",
+            "--n_grams",
+            type=int,
+            default=1,
+            help="N number of terms to act as a unique entity.",
         )
         p.add_argument(
-            "-t",
-            "--to",
-            type=str,
-            default=None,
+            "-l",
+            "--store_local",
+            action="store_true",
             help=(
-                "Optional ISO formatted string to pass to the get_event function to act"
-                "as the end point for event gathering."
+                "Should the pipeline store the generated index to a local parquet file."
             ),
-            dest="to_dt",
         )
         p.add_argument(
             "-p",
@@ -82,15 +77,15 @@ def main() -> None:
     try:
         args = Args()
         with open(args.config_file, "r") as open_resource:
-            config = EventGatherPipelineConfig.from_json(  # type: ignore
+            config = EventIndexPipelineConfig.from_json(  # type: ignore
                 open_resource.read()
             )
 
         # Get flow definition
-        flow = pipeline.create_event_gather_flow(
+        flow = pipeline.create_event_index_pipeline(
             config=config,
-            from_dt=args.from_dt,
-            to_dt=args.to_dt,
+            n_grams=args.n_grams,
+            store_local=args.store_local,
         )
 
         # Determine executor

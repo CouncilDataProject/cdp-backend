@@ -11,7 +11,13 @@ from cdp_backend.sr_models import WebVTTSRModel
 
 @pytest.mark.parametrize(
     "webvtt_filename, expected_filename",
-    [("fake_caption.vtt", "generated_transcript_from_webvtt.json")],
+    [
+        ("fake_caption.vtt", "generated_transcript_from_fake_captions.json"),
+        (
+            "brief_080221_2012161.vtt",
+            "generated_transcript_from_brief_080221_2012161.json",
+        ),
+    ],
 )
 def test_transcribe(
     resources_dir: Path, webvtt_filename: str, expected_filename: str
