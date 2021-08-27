@@ -139,9 +139,52 @@ class Transcript:
 # Docstrings for constants go _after_ the constant.
 
 
+@dataclass_json
+@dataclass
+class SectionAnnotation:
+    """
+    A section annotation used for discourse segmentation.
+
+    Examples
+    --------
+    Usage pattern for annotation attachment.
+
+    >>> transcript.annotations[TranscriptAnnotations.sections.name] = [
+    ...     SectionAnnotation(
+    ...         name="Public Comment",
+    ...         start_sentence_index=12,
+    ...         end_sentence_index=87,
+    ...         generator="Jackson Maxfield Brown",
+    ...     ),
+    ...     SectionAnnotation(
+    ...         name="CB 120121",
+    ...         start_sentence_index=243,
+    ...         end_sentence_index=419,
+    ...         description="AN ORDINANCE relating to land use and zoning ...",
+    ...         generator="seeded-semantic-alignment--v1.0.0",
+    ...     ),
+    ... ]
+    """
+
+    name: str
+    start_sentence_index: int
+    end_sentence_index: int
+    generator: str
+    description: Optional[str] = None
+
+
 class TranscriptAnnotations(Enum):
     """
     Annotations that can appear (but are not guaranteed) for the whole transcript.
+    """
+
+    sections = List[SectionAnnotation]
+    """
+    A list of SectionAnnotations used for discourse segmentation.
+
+    See Also
+    --------
+    cdp_backend.pipeline.transcript_model.SectionAnnotation
     """
 
 
