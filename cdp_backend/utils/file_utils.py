@@ -8,8 +8,6 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
-import dask.dataframe as dd
-import ffmpeg
 import fsspec
 import imageio
 import numpy as np
