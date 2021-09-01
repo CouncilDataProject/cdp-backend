@@ -215,8 +215,6 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -235,26 +233,13 @@
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">string_utils</span>
 <span class="kn">from</span> <span class="nn">.pipeline_config</span> <span class="kn">import</span> <span class="n">EventIndexPipelineConfig</span>
 <span class="kn">from</span> <span class="nn">.transcript_model</span> <span class="kn">import</span> <span class="n">Sentence</span><span class="p">,</span> <span class="n">Transcript</span>
 
 <span class="c1">###############################################################################</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="c1"># Ensure stopwords are downloaded</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
-
-    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">nltk</span>
-
-    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;stopwords&quot;</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloaded nltk stopwords&quot;</span><span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
-
-    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -383,42 +368,6 @@
     <span class="n">context_span</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
-<div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="c1"># Remove new line and tab characters</span>
-    <span class="n">cleaned_formatting</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-
-    <span class="c1"># Replace common sentence structures</span>
-    <span class="n">cleaned_sentence_structs</span> <span class="o">=</span> <span class="n">cleaned_formatting</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-
-    <span class="c1"># Remove punctuation except periods</span>
-    <span class="n">cleaned_punctuation</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_sentence_structs</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Remove stopwords</span>
-    <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
-    <span class="n">cleaned_stopwords</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;\b(&quot;</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">cleaned_punctuation</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Remove gaps in string</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_stopwords</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
-            <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="k">if</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
-            <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># IndexError occurs when the string was cleaned and it contained entirely stop</span>
-    <span class="c1"># words or punctuation for some reason</span>
-    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="k">return</span> <span class="n">cleaned_doc</span></div>
-
-
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">read_transcripts_and_generate_grams</span><span class="p">(</span>
     <span class="n">event_transcripts</span><span class="p">:</span> <span class="n">EventTranscripts</span><span class="p">,</span> <span class="n">n_grams</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span>
@@ -465,7 +414,10 @@
             <span class="n">cleaned_sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SentenceManager</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">SentenceManager</span><span class="p">(</span>
                     <span class="n">original_details</span><span class="o">=</span><span class="n">sentence</span><span class="p">,</span>
-                    <span class="n">cleaned_text</span><span class="o">=</span><span class="n">clean_text</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">text</span><span class="p">),</span>
+                    <span class="n">cleaned_text</span><span class="o">=</span><span class="n">string_utils</span><span class="o">.</span><span class="n">clean_text</span><span class="p">(</span>
+                        <span class="n">sentence</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                        <span class="n">clean_stop_words</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">),</span>
                     <span class="n">n_grams</span><span class="o">=</span><span class="p">[],</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">sentences</span>

@@ -226,7 +226,7 @@
 <span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">SnowballStemmer</span>
 
 <span class="kn">from</span> <span class="nn">cdp_backend.database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
-<span class="kn">from</span> <span class="nn">cdp_backend.pipeline.event_index_pipeline</span> <span class="kn">import</span> <span class="n">clean_text</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.utils.string_utils</span> <span class="kn">import</span> <span class="n">clean_text</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -309,7 +309,7 @@
     <span class="n">stemmer</span> <span class="o">=</span> <span class="n">SnowballStemmer</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 
     <span class="c1"># Create stemmed grams for query</span>
-    <span class="n">query_terms</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">query_terms</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">clean_stop_words</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">stemmed_grams</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">n_gram_size</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
         <span class="n">grams</span> <span class="o">=</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">query_terms</span><span class="p">,</span> <span class="n">n_gram_size</span><span class="p">)</span>

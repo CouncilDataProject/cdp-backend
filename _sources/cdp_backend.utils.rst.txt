@@ -28,6 +28,14 @@ cdp\_backend.utils.file\_utils module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.utils.string\_utils module
+---------------------------------------
+
+.. automodule:: cdp_backend.utils.string_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
