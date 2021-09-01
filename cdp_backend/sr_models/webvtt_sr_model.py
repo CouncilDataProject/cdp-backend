@@ -139,7 +139,6 @@ class WebVTTSRModel(SRModel):
                         + (((word_index + 1) / len(raw_words)) * caption_duration)
                     ),
                     text=WebVTTSRModel._clean_word(word),
-                    annotations=None,
                 )
             )
 
@@ -249,7 +248,6 @@ class WebVTTSRModel(SRModel):
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=sentences,
-            annotations=None,
         )
         log.info(f"Completed WebVTT transcript conversion for: {file_uri}")
 
