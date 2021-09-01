@@ -94,7 +94,7 @@ def email_is_valid(email: Optional[str]) -> bool:
     return False
 
 
-def resource_exists(uri: Optional[str]) -> bool:
+def resource_exists(uri: Optional[str], **kwargs) -> bool:
     """
     Validate that the URI provided points to an existing file.
 
@@ -110,6 +110,13 @@ def resource_exists(uri: Optional[str]) -> bool:
     status: bool
         The validation status.
     """
+
+    if uri.startswith("gs://") or uri.startswith("https://storage.googleapis"):
+        if kwargs.get("google_credentials_file"):
+            fs = GCSFileSystem(token=str(kwargs.get("google_credentials_file")))
+
+            gcs_uri = 
+
 
     if uri is None:
         return True
