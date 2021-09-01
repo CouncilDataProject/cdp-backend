@@ -57,8 +57,8 @@ class SectionAnnotation:
     Notes
     -----
     The attributes `start_sentence_index` and `stop_sentence_index` should be treated
-    as inclusive and exclusive respectively, exactly like how Python `slice` function
-    works.
+    as inclusive and exclusive respectively, exactly like how the Python `slice`
+    function works.
 
     I.e. given a transcript with ordered sentences, the sentence indices can work
     as the parameters for a slice operation:
