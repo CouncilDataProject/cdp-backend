@@ -3,10 +3,111 @@
 
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from dataclasses_json import dataclass_json
+
+###############################################################################
+# Annotation Definitions
+#
+# Developers please document any annotation you wish to add.
+# Docstrings for constants go _after_ the constant.
+
+
+@dataclass_json
+@dataclass
+class WordAnnotations:
+    """
+    Annotations that can appear on an individual word level.
+    """
+
+    pass
+
+
+@dataclass_json
+@dataclass
+class SentenceAnnotations:
+    """
+    Annotations that can appear on an individual sentence level.
+    """
+
+    pass
+
+
+@dataclass_json
+@dataclass
+class SectionAnnotation:
+    """
+    A section annotation used for topic segmentation and minutes item alignment.
+
+    Parameters
+    ----------
+    name: str
+        The name of the sections.
+    start_sentence_index: int
+        The sentence index that acts as the starting point for the section.
+    stop_sentence_index: int
+        The sentence index that acts as the stopping point for the section.
+    generator: str
+        A description of the algorithm or annotator that provided this annotation.
+    description: Optional[str]
+        An optional description of what the section is about.
+        Default: None
+
+    Notes
+    -----
+    The attributes `start_sentence_index` and `stop_sentence_index` should be treated
+    as inclusive and exclusive respectively, exactly like how Python `slice` function
+    works.
+
+    I.e. given a transcript with ordered sentences, the sentence indices can work
+    as the parameters for a slice operation:
+    `sentences[start_sentence_index:stop_sentence_index]`
+
+    Examples
+    --------
+    Usage pattern for annotation attachment.
+
+    >>> transcript.annotations.sections = [
+    ...     SectionAnnotation(
+    ...         name="Public Comment",
+    ...         start_sentence_index=12,
+    ...         stop_sentence_index=87,
+    ...         generator="Jackson Maxfield Brown",
+    ...     ),
+    ...     SectionAnnotation(
+    ...         name="CB 120121",
+    ...         start_sentence_index=243,
+    ...         stop_sentence_index=419,
+    ...         description="AN ORDINANCE relating to land use and zoning ...",
+    ...         generator="queue-cue--v1.0.0",
+    ...     ),
+    ... ]
+    """
+
+    name: str
+    start_sentence_index: int
+    stop_sentence_index: Optional[int]
+    generator: str
+    description: Optional[str] = None
+
+
+@dataclass_json
+@dataclass
+class TranscriptAnnotations:
+    """
+    Annotations that can appear (but are not guaranteed) for the whole transcript.
+    """
+
+    sections: Optional[List[SectionAnnotation]] = None
+    """
+    A list of SectionAnnotations used for segmentation of the topics / sections.
+
+    See Also
+    --------
+    cdp_backend.pipeline.transcript_model.SectionAnnotation
+    """
+
 
 ###############################################################################
 
@@ -27,7 +128,7 @@ class Word:
         Time in seconds for when this word ends.
     text: str
         The raw text of the word, lowercased and cleaned of all non-deliminating chars.
-    annotations: Optional[Dict[str, Any]]
+    annotations: Optional[WordAnnotations]
         Any annotations specific to this word.
         Default: None (no annotations)
     """
@@ -36,7 +137,7 @@ class Word:
     start_time: float
     end_time: float
     text: str
-    annotations: Optional[Dict[str, Any]]
+    annotations: Optional[WordAnnotations] = None
 
 
 @dataclass_json
@@ -59,12 +160,11 @@ class Sentence:
         The optional speaker index for the sentence.
     speaker_name: Optional[str]
         The optional speaker name for the sentence.
-    annotations: Optional[Dict[str, Any]]
+    annotations: Optional[SentenceAnnotations]
         Any annotations specific to this sentence.
         Default: None (no annotations)
     words: List[Word]
         The list of word for the sentence.
-        See Word model for more info.
     text: str
         The text of the sentence including all formatting and non-deliminating chars.
     """
@@ -77,7 +177,7 @@ class Sentence:
     text: str
     speaker_index: Optional[int] = None
     speaker_name: Optional[str] = None
-    annotations: Optional[Dict[str, Any]] = None
+    annotations: Optional[SentenceAnnotations] = None
 
 
 @dataclass_json
@@ -103,12 +203,9 @@ class Transcript:
         ISO formatted datetime for when this transcript was created.
     sentences: List[Sentence]
         A list of sentences.
-        See Sentence documentation for more information.
-    annotations: Optional[Dict[str, Any]]
+    annotations: Optional[TranscriptAnnotations]
         Any annotations that can be applied to the whole transcript.
         Default: None (no annotations)
-        See TranscriptAnnotations for list of known annotations and their dtypes.
-
 
     Examples
     --------
@@ -129,86 +226,7 @@ class Transcript:
     session_datetime: Optional[str]
     created_datetime: str
     sentences: List[Sentence]
-    annotations: Optional[Dict[str, Any]] = None
-
-
-###############################################################################
-# Annotation Definitions
-#
-# Developers please document any annotation you wish to add.
-# Docstrings for constants go _after_ the constant.
-
-
-@dataclass_json
-@dataclass
-class SectionAnnotation:
-    """
-    A section annotation used for discourse segmentation.
-
-    Examples
-    --------
-    Usage pattern for annotation attachment.
-
-    >>> transcript.annotations[TranscriptAnnotations.sections.name] = [
-    ...     SectionAnnotation(
-    ...         name="Public Comment",
-    ...         start_sentence_index=12,
-    ...         end_sentence_index=87,
-    ...         generator="Jackson Maxfield Brown",
-    ...     ),
-    ...     SectionAnnotation(
-    ...         name="CB 120121",
-    ...         start_sentence_index=243,
-    ...         end_sentence_index=419,
-    ...         description="AN ORDINANCE relating to land use and zoning ...",
-    ...         generator="seeded-semantic-alignment--v1.0.0",
-    ...     ),
-    ... ]
-    """
-
-    name: str
-    start_sentence_index: int
-    end_sentence_index: int
-    generator: str
-    description: Optional[str] = None
-
-
-class TranscriptAnnotations(Enum):
-    """
-    Annotations that can appear (but are not guaranteed) for the whole transcript.
-    """
-
-    sections = List[SectionAnnotation]
-    """
-    A list of SectionAnnotations used for discourse segmentation.
-
-    See Also
-    --------
-    cdp_backend.pipeline.transcript_model.SectionAnnotation
-    """
-
-
-class TextBlockAnnotations(Enum):
-    """
-    Annotations that can appear (but are not guaranteed) on any transcript text block.
-
-    Examples
-    --------
-    Usage pattern for annotation attachment.
-
-    >>> text_block_annotations = {}
-    ... text_block_annotations[TextBlockAnnotations.confidence.name] = 0.9421
-    """
-
-    confidence = float
-    """
-    A number between 0 and 1.
-
-    Notes
-    -----
-    Most speech-to-text models report confidence values. For more information:
-    https://cloud.google.com/speech-to-text/docs/basics#confidence-values
-    """
+    annotations: Optional[TranscriptAnnotations] = None
 
 
 ###############################################################################
@@ -234,19 +252,14 @@ EXAMPLE_TRANSCRIPT = Transcript(
                     start_time=0.0,
                     end_time=0.5,
                     text="hello",
-                    annotations=None,
                 ),
                 Word(
                     index=1,
                     start_time=0.5,
                     end_time=1.0,
                     text="everyone",
-                    annotations=None,
                 ),
             ],
-            annotations={
-                TextBlockAnnotations.confidence.name: 0.987,
-            },
         ),
         Sentence(
             index=1,
@@ -262,19 +275,24 @@ EXAMPLE_TRANSCRIPT = Transcript(
                     start_time=1.0,
                     end_time=1.5,
                     text="hi",
-                    annotations=None,
                 ),
                 Word(
                     index=1,
                     start_time=1.5,
                     end_time=2.0,
                     text="all",
-                    annotations=None,
                 ),
             ],
-            annotations={
-                TextBlockAnnotations.confidence.name: 0.987,
-            },
         ),
     ],
+    annotations=TranscriptAnnotations(
+        sections=[
+            SectionAnnotation(
+                name="Call to Order",
+                start_sentence_index=0,
+                stop_sentence_index=2,
+                generator="Jackson Maxfield Brown",
+            )
+        ],
+    ),
 )
