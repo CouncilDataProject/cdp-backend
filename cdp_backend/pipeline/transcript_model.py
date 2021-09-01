@@ -60,8 +60,8 @@ class SectionAnnotation:
     as inclusive and exclusive respectively, exactly like how the Python `slice`
     function works.
 
-    I.e. given a transcript with ordered sentences, the sentence indices can work
-    as the parameters for a slice operation:
+    I.e. given a transcript of ordered sentences, the sentence indices will work
+    as the parameters for a slice against the list of sentences:
     `sentences[start_sentence_index:stop_sentence_index]`
 
     Examples
@@ -100,13 +100,6 @@ class TranscriptAnnotations:
     """
 
     sections: Optional[List[SectionAnnotation]] = None
-    """
-    A list of SectionAnnotations used for segmentation of the topics / sections.
-
-    See Also
-    --------
-    cdp_backend.pipeline.transcript_model.SectionAnnotation
-    """
 
 
 ###############################################################################
