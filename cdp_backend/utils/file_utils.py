@@ -9,10 +9,7 @@ from pathlib import Path
 from typing import Optional, Tuple, Union
 
 import fsspec
-import imageio
-import numpy as np
 from fsspec.core import url_to_fs
-from PIL import Image
 
 ###############################################################################
 
@@ -207,6 +204,8 @@ def get_static_thumbnail(
         The name of the thumbnail file:
         Always session_content_hash + "-static-thumbnail.png"
     """
+    import imageio
+    from PIL import Image
 
     reader = imageio.get_reader(video_path)
     png_path = ""
@@ -258,6 +257,10 @@ def get_hover_thumbnail(
         The name of the thumbnail file:
         Always session_content_hash + "-hover-thumbnail.png"
     """
+    import imageio
+    import numpy as np
+    from PIL import Image
+
     reader = imageio.get_reader(video_path)
     gif_path = ""
     if reader.get_length() > 1:
