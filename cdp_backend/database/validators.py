@@ -10,6 +10,7 @@ from fireo.models import Model
 from fsspec.core import url_to_fs
 
 from ..utils.constants_utils import get_all_class_attr_values
+from ..utils.string_utils import convert_gcs_json_url_to_gsutil_form
 
 ###############################################################################
 
@@ -111,19 +112,26 @@ def resource_exists(uri: Optional[str], **kwargs) -> bool:
         The validation status.
     """
 
+    if uri is None:
+        return True
+
     if uri.startswith("gs://") or uri.startswith("https://storage.googleapis"):
         if kwargs.get("google_credentials_file"):
             fs = GCSFileSystem(token=str(kwargs.get("google_credentials_file")))
 
-            #gcs_uri = 
+            # Convert to gsutil form if necessary
+            if uri.startswith("https://storage.googleapis"):
+                uri = convert_gcs_json_url_to_gsutil_form(uri)
 
+                # If uri is not convertible to gsutil form we can't confirm
+                if uri == "":
+                    return True
 
-    if uri is None:
-        return True
+            return fs.exists(uri)
 
-    # TODO Replace after finding way to pass custom fs through FireO validator
-    if uri.startswith("gs://") or uri.startswith("https://storage.googleapis"):
-        return True
+        # Can't check GCS resources without creds file
+        else:
+            return True
 
     else:
         # Get file system

@@ -80,3 +80,33 @@ def clean_text(text: str, clean_stop_words: bool = False) -> str:
         return ""
 
     return cleaned_doc
+
+
+def convert_gcs_json_url_to_gsutil_form(url: str):
+    """
+    Convert a GCS JSON API url to its corresponding gsutil uri.
+
+    Parameters
+    ----------
+    url: str
+        The url in GCS JSON API form.
+
+    Returns
+    -------
+    gsutil_url: str
+        The url in gsutil form. Returns empty string if the input url doesn't 
+        match the form.
+    """
+
+    bucket = re.search('storage.googleapis.com/download/storage/v1/b/(.+?)/o', url)
+    if bucket:
+        bucket = bucket.group(1)
+
+    filename = re.search('/o/(.+?)\?alt=media', url) 
+    if filename: 
+        filename = filename.group(1)
+
+    if bucket and filename:
+        return f"gs://{bucket}/{filename}"
+
+    return ""
