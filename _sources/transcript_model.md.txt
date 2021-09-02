@@ -14,7 +14,7 @@ For more specific details please see the
     "confidence": 0.93325,
     "generator": "JacksonGen -- Lib Version: 0.0.0",
     "session_datetime": "2021-01-10T15:00:00",
-    "created_datetime": "2021-09-02T15:26:07.142561",
+    "created_datetime": "2021-09-02T15:34:31.010694",
     "sentences": [
         {
             "index": 0,
@@ -40,9 +40,7 @@ For more specific details please see the
             "text": "Hello everyone.",
             "speaker_index": 0,
             "speaker_name": "Jackson Maxfield Brown",
-            "annotations": {
-                "confidence": 0.987
-            }
+            "annotations": null
         },
         {
             "index": 1,
@@ -68,11 +66,19 @@ For more specific details please see the
             "text": "Hi all.",
             "speaker_index": 1,
             "speaker_name": "Isaac Na",
-            "annotations": {
-                "confidence": 0.987
-            }
+            "annotations": null
         }
     ],
-    "annotations": null
+    "annotations": {
+        "sections": [
+            {
+                "name": "Call to Order",
+                "start_sentence_index": 0,
+                "stop_sentence_index": 2,
+                "generator": "Jackson Maxfield Brown",
+                "description": null
+            }
+        ]
+    }
 }
 ```

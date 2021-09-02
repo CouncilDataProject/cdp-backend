@@ -351,7 +351,6 @@
                         <span class="o">+</span> <span class="p">(((</span><span class="n">word_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_words</span><span class="p">))</span> <span class="o">*</span> <span class="n">caption_duration</span><span class="p">)</span>
                     <span class="p">),</span>
                     <span class="n">text</span><span class="o">=</span><span class="n">WebVTTSRModel</span><span class="o">.</span><span class="n">_clean_word</span><span class="p">(</span><span class="n">word</span><span class="p">),</span>
-                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -461,7 +460,6 @@
             <span class="n">session_datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
             <span class="n">sentences</span><span class="o">=</span><span class="n">sentences</span><span class="p">,</span>
-            <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed WebVTT transcript conversion for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 

@@ -215,10 +215,104 @@
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">dataclass_json</span>
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Annotation Definitions</span>
+<span class="c1">#</span>
+<span class="c1"># Developers please document any annotation you wish to add.</span>
+<span class="c1"># Docstrings for constants go _after_ the constant.</span>
+
+
+<div class="viewcode-block" id="WordAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.WordAnnotations">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">WordAnnotations</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotations that can appear on an individual word level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="SentenceAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SentenceAnnotations">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SentenceAnnotations</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotations that can appear on an individual sentence level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="SectionAnnotation"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SectionAnnotation">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SectionAnnotation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A section annotation used for topic segmentation and minutes item alignment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name of the sections.</span>
+<span class="sd">    start_sentence_index: int</span>
+<span class="sd">        The sentence index that acts as the starting point for the section.</span>
+<span class="sd">    stop_sentence_index: int</span>
+<span class="sd">        The sentence index that acts as the stopping point for the section.</span>
+<span class="sd">    generator: str</span>
+<span class="sd">        A description of the algorithm or annotator that provided this annotation.</span>
+<span class="sd">    description: Optional[str]</span>
+<span class="sd">        An optional description of what the section is about.</span>
+<span class="sd">        Default: None</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The attributes `start_sentence_index` and `stop_sentence_index` should be treated</span>
+<span class="sd">    as inclusive and exclusive respectively, exactly like how the Python `slice`</span>
+<span class="sd">    function works.</span>
+
+<span class="sd">    I.e. given a transcript of ordered sentences, the sentence indices will work</span>
+<span class="sd">    as the parameters for a slice against the list of sentences:</span>
+<span class="sd">    `sentences[start_sentence_index:stop_sentence_index]`</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Usage pattern for annotation attachment.</span>
+
+<span class="sd">    &gt;&gt;&gt; transcript.annotations.sections = [</span>
+<span class="sd">    ...     SectionAnnotation(</span>
+<span class="sd">    ...         name=&quot;Public Comment&quot;,</span>
+<span class="sd">    ...         start_sentence_index=12,</span>
+<span class="sd">    ...         stop_sentence_index=87,</span>
+<span class="sd">    ...         generator=&quot;Jackson Maxfield Brown&quot;,</span>
+<span class="sd">    ...     ),</span>
+<span class="sd">    ...     SectionAnnotation(</span>
+<span class="sd">    ...         name=&quot;CB 120121&quot;,</span>
+<span class="sd">    ...         start_sentence_index=243,</span>
+<span class="sd">    ...         stop_sentence_index=419,</span>
+<span class="sd">    ...         description=&quot;AN ORDINANCE relating to land use and zoning ...&quot;,</span>
+<span class="sd">    ...         generator=&quot;queue-cue--v1.0.0&quot;,</span>
+<span class="sd">    ...     ),</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">start_sentence_index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">stop_sentence_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">generator</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TranscriptAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TranscriptAnnotations">[docs]</a><span class="nd">@dataclass_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TranscriptAnnotations</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotations that can appear (but are not guaranteed) for the whole transcript.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sections</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SectionAnnotation</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
 
 <span class="c1">###############################################################################</span>
 
@@ -239,7 +333,7 @@
 <span class="sd">        Time in seconds for when this word ends.</span>
 <span class="sd">    text: str</span>
 <span class="sd">        The raw text of the word, lowercased and cleaned of all non-deliminating chars.</span>
-<span class="sd">    annotations: Optional[Dict[str, Any]]</span>
+<span class="sd">    annotations: Optional[WordAnnotations]</span>
 <span class="sd">        Any annotations specific to this word.</span>
 <span class="sd">        Default: None (no annotations)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -248,7 +342,7 @@
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">WordAnnotations</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Sentence"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence">[docs]</a><span class="nd">@dataclass_json</span>
@@ -271,12 +365,11 @@
 <span class="sd">        The optional speaker index for the sentence.</span>
 <span class="sd">    speaker_name: Optional[str]</span>
 <span class="sd">        The optional speaker name for the sentence.</span>
-<span class="sd">    annotations: Optional[Dict[str, Any]]</span>
+<span class="sd">    annotations: Optional[SentenceAnnotations]</span>
 <span class="sd">        Any annotations specific to this sentence.</span>
 <span class="sd">        Default: None (no annotations)</span>
 <span class="sd">    words: List[Word]</span>
 <span class="sd">        The list of word for the sentence.</span>
-<span class="sd">        See Word model for more info.</span>
 <span class="sd">    text: str</span>
 <span class="sd">        The text of the sentence including all formatting and non-deliminating chars.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -289,7 +382,7 @@
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">speaker_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">speaker_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SentenceAnnotations</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Transcript"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript">[docs]</a><span class="nd">@dataclass_json</span>
@@ -315,12 +408,9 @@
 <span class="sd">        ISO formatted datetime for when this transcript was created.</span>
 <span class="sd">    sentences: List[Sentence]</span>
 <span class="sd">        A list of sentences.</span>
-<span class="sd">        See Sentence documentation for more information.</span>
-<span class="sd">    annotations: Optional[Dict[str, Any]]</span>
+<span class="sd">    annotations: Optional[TranscriptAnnotations]</span>
 <span class="sd">        Any annotations that can be applied to the whole transcript.</span>
 <span class="sd">        Default: None (no annotations)</span>
-<span class="sd">        See TranscriptAnnotations for list of known annotations and their dtypes.</span>
-
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -341,43 +431,7 @@
     <span class="n">session_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">created_datetime</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sentence</span><span class="p">]</span>
-    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-
-<span class="c1">###############################################################################</span>
-<span class="c1"># Annotation Definitions</span>
-<span class="c1">#</span>
-<span class="c1"># Developers please document any annotation you wish to add.</span>
-<span class="c1"># Docstrings for constants go _after_ the constant.</span>
-
-
-<div class="viewcode-block" id="TranscriptAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TranscriptAnnotations">[docs]</a><span class="k">class</span> <span class="nc">TranscriptAnnotations</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Annotations that can appear (but are not guaranteed) for the whole transcript.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="TextBlockAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TextBlockAnnotations">[docs]</a><span class="k">class</span> <span class="nc">TextBlockAnnotations</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Annotations that can appear (but are not guaranteed) on any transcript text block.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Usage pattern for annotation attachment.</span>
-
-<span class="sd">    &gt;&gt;&gt; text_block_annotations = {}</span>
-<span class="sd">    ... text_block_annotations[TextBlockAnnotations.confidence.name] = 0.9421</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">confidence</span> <span class="o">=</span> <span class="nb">float</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A number between 0 and 1.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Most speech-to-text models report confidence values. For more information:</span>
-<span class="sd">    https://cloud.google.com/speech-to-text/docs/basics#confidence-values</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TranscriptAnnotations</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <span class="c1">###############################################################################</span>
@@ -403,19 +457,14 @@
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                     <span class="n">text</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
-                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                     <span class="n">text</span><span class="o">=</span><span class="s2">&quot;everyone&quot;</span><span class="p">,</span>
-                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">],</span>
-            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
-                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.987</span><span class="p">,</span>
-            <span class="p">},</span>
         <span class="p">),</span>
         <span class="n">Sentence</span><span class="p">(</span>
             <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -431,21 +480,26 @@
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                     <span class="n">text</span><span class="o">=</span><span class="s2">&quot;hi&quot;</span><span class="p">,</span>
-                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
                     <span class="n">text</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-                    <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">],</span>
-            <span class="n">annotations</span><span class="o">=</span><span class="p">{</span>
-                <span class="n">TextBlockAnnotations</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mf">0.987</span><span class="p">,</span>
-            <span class="p">},</span>
         <span class="p">),</span>
     <span class="p">],</span>
+    <span class="n">annotations</span><span class="o">=</span><span class="n">TranscriptAnnotations</span><span class="p">(</span>
+        <span class="n">sections</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">SectionAnnotation</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Call to Order&quot;</span><span class="p">,</span>
+                <span class="n">start_sentence_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">stop_sentence_index</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 
