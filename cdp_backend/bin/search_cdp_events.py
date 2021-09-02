@@ -14,7 +14,7 @@ from nltk import ngrams
 from nltk.stem import SnowballStemmer
 
 from cdp_backend.database import models as db_models
-from cdp_backend.pipeline.event_index_pipeline import clean_text
+from cdp_backend.utils.string_utils import clean_text
 
 ###############################################################################
 
@@ -97,7 +97,7 @@ def get_stemmed_grams_from_query(query: str) -> List[str]:
     stemmer = SnowballStemmer("english")
 
     # Create stemmed grams for query
-    query_terms = clean_text(query).split()
+    query_terms = clean_text(query, clean_stop_words=True).split()
     stemmed_grams = []
     for n_gram_size in range(1, 3):
         grams = ngrams(query_terms, n_gram_size)

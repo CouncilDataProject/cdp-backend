@@ -3,8 +3,6 @@
 
 import logging
 import math
-import re
-import string
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -23,26 +21,13 @@ from prefect import Flow, task, unmapped
 
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..utils import string_utils
 from .pipeline_config import EventIndexPipelineConfig
 from .transcript_model import Sentence, Transcript
 
 ###############################################################################
 
 log = logging.getLogger(__name__)
-
-# Ensure stopwords are downloaded
-try:
-    from nltk.corpus import stopwords
-
-    STOPWORDS = stopwords.words("english")
-except LookupError:
-    import nltk
-
-    nltk.download("stopwords")
-    log.info("Downloaded nltk stopwords")
-    from nltk.corpus import stopwords
-
-    STOPWORDS = stopwords.words("english")
 
 ###############################################################################
 
@@ -171,42 +156,6 @@ class ContextualizedGram:
     context_span: str
 
 
-def clean_text(text: str) -> str:
-    # Remove new line and tab characters
-    cleaned_formatting = text.replace("\n", " ").replace("\t", " ")
-
-    # Replace common sentence structures
-    cleaned_sentence_structs = cleaned_formatting.replace("--", " ")
-
-    # Remove punctuation except periods
-    cleaned_punctuation = re.sub(
-        f"[{re.escape(string.punctuation)}]", "", cleaned_sentence_structs
-    )
-
-    # Remove stopwords
-    joined_stopwords = "|".join(STOPWORDS)
-    cleaned_stopwords = re.sub(
-        r"\b(" + joined_stopwords + r")\b",
-        "",
-        cleaned_punctuation,
-    )
-
-    # Remove gaps in string
-    try:
-        cleaned_doc = re.sub(r" {2,}", " ", cleaned_stopwords)
-        if cleaned_doc[0] == " ":
-            cleaned_doc = cleaned_doc[1:]
-        if cleaned_doc[-1] == " ":
-            cleaned_doc = cleaned_doc[:-1]
-
-    # IndexError occurs when the string was cleaned and it contained entirely stop
-    # words or punctuation for some reason
-    except IndexError:
-        return ""
-
-    return cleaned_doc
-
-
 @task
 def read_transcripts_and_generate_grams(
     event_transcripts: EventTranscripts, n_grams: int, credentials_file: str
@@ -253,7 +202,10 @@ def read_transcripts_and_generate_grams(
             cleaned_sentences: List[SentenceManager] = [
                 SentenceManager(
                     original_details=sentence,
-                    cleaned_text=clean_text(sentence.text),
+                    cleaned_text=string_utils.clean_text(
+                        sentence.text,
+                        clean_stop_words=True,
+                    ),
                     n_grams=[],
                 )
                 for sentence in transcript.sentences
