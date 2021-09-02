@@ -266,6 +266,30 @@ Intended to be used to get all constant values of a class.</p>
 <div class="section" id="module-cdp_backend.utils.file_utils">
 <span id="cdp-backend-utils-file-utils-module"></span><h2>cdp_backend.utils.file_utils module<a class="headerlink" href="#module-cdp_backend.utils.file_utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.find_proper_resize_ratio">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">find_proper_resize_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#find_proper_resize_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.find_proper_resize_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the proper ratio to resize a thumbnail greater than 960 x 540 pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>height</strong> (<em>int</em>) – The height, in pixels, of the thumbnail to be resized.</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – The width, in pixels, of the thumbnail to be resized.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>final_ratio</strong> – The ratio by which the thumbnail will be resized.
+If the ratio is less than 1, the thumbnail is too large and should be resized
+by a factor of final_ratio.
+If the ratio is greater than or equal to 1, the thumbnail is not too large and
+should not be resized.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.utils.file_utils.get_hover_thumbnail">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">get_hover_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_content_hash</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#get_hover_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.get_hover_thumbnail" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that produces a gif hover thumbnail from an mp4 video file</p>
