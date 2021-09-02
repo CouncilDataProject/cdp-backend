@@ -17,6 +17,9 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
+MAX_THUMBNAIL_HEIGHT = 540
+MAX_THUMBNAIL_WIDTH = 960
+
 
 def get_media_type(uri: str) -> Optional[str]:
     """
@@ -202,6 +205,7 @@ def get_static_thumbnail(
         Always session_content_hash + "-static-thumbnail.png"
     """
     import imageio
+    from PIL import Image
 
     reader = imageio.get_reader(video_path)
     png_path = ""
@@ -215,6 +219,17 @@ def get_static_thumbnail(
     except (ValueError, IndexError):
         reader = imageio.get_reader(video_path)
         image = reader.get_data(0)
+
+    final_ratio = find_proper_resize_ratio(image.shape[0], image.shape[1])
+
+    if final_ratio < 1:
+        image = Image.fromarray(image).resize(
+            (
+                math.floor(image.shape[1] * final_ratio),
+                math.floor(image.shape[0] * final_ratio),
+            )
+        )
+
     imageio.imwrite(png_path, image)
 
     return png_path
@@ -243,6 +258,8 @@ def get_hover_thumbnail(
         Always session_content_hash + "-hover-thumbnail.png"
     """
     import imageio
+    import numpy as np
+    from PIL import Image
 
     reader = imageio.get_reader(video_path)
     gif_path = ""
@@ -252,13 +269,59 @@ def get_hover_thumbnail(
     count = 0
     for i, image in enumerate(reader):
         count += 1
-    step_length = math.floor(count / num_frames)
+    step_size = math.floor(count / num_frames)
+
+    height = image.shape[0]
+    width = image.shape[1]
+    final_ratio = find_proper_resize_ratio(height, width)
 
     with imageio.get_writer(gif_path, mode="I") as writer:
         for i in range(0, num_frames):
-            writer.append_data(reader.get_data(i * step_length))
+            if final_ratio < 1:
+                image = Image.fromarray(reader.get_data(i * step_size)).resize(
+                    (math.floor(width * final_ratio), math.floor(height * final_ratio))
+                )
+            else:
+                image = Image.fromarray(reader.get_data(i * step_size))
+
+            final_image = np.asarray(image, dtype="int32")
+            writer.append_data(final_image)
 
     return gif_path
+
+
+def find_proper_resize_ratio(height: int, width: int) -> float:
+    """
+    Return the proper ratio to resize a thumbnail greater than 960 x 540 pixels.
+
+    Parameters
+    ----------
+    height: int
+        The height, in pixels, of the thumbnail to be resized.
+    width: int
+        The width, in pixels, of the thumbnail to be resized.
+
+    Returns
+    -------
+    final_ratio: float
+        The ratio by which the thumbnail will be resized.
+        If the ratio is less than 1, the thumbnail is too large and should be resized
+        by a factor of final_ratio.
+        If the ratio is greater than or equal to 1, the thumbnail is not too large and
+        should not be resized.
+    """
+    if height > MAX_THUMBNAIL_HEIGHT or width > MAX_THUMBNAIL_WIDTH:
+        height_ratio = MAX_THUMBNAIL_HEIGHT / height
+        width_ratio = MAX_THUMBNAIL_WIDTH / width
+
+        if height_ratio > width_ratio:
+            final_ratio = height_ratio
+        else:
+            final_ratio = width_ratio
+
+        return final_ratio
+
+    return 2
 
 
 def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
