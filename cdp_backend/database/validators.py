@@ -115,7 +115,7 @@ def resource_exists(uri: Optional[str], **kwargs) -> bool:
         if kwargs.get("google_credentials_file"):
             fs = GCSFileSystem(token=str(kwargs.get("google_credentials_file")))
 
-            gcs_uri = 
+            #gcs_uri = 
 
 
     if uri is None:

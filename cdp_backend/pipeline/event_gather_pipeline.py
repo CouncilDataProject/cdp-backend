@@ -120,6 +120,12 @@ def create_event_gather_flow(
             events = []
         log.info(f"Processing {len(events)} events.")
 
+
+        print("CONFIG")
+        fs = GCSFileSystem(token=str(config.google_credentials_file))
+        #print(fs.exists("https://storage.googleapis.com/download/storage/v1/b/stg-cdp-seattle-isaac.appspot.com/o/roe-jogan.mp4?alt=media"))
+        print(fs.exists("gs://stg-cdp-seattle-isaac.appspot.com/roe-jogan.mp4"))
+
         for event in events:
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
