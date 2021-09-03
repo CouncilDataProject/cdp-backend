@@ -17,6 +17,7 @@ from .constants import (
     VoteDecision,
 )
 from .types import IndexedField, IndexedFieldSet
+from typing import Dict
 
 ###############################################################################
 
