@@ -174,8 +174,14 @@ def create_event(
     agenda_uri: Optional[str] = None,
     minutes_uri: Optional[str] = None,
     external_source_id: Optional[str] = None,
+    credentials_file: Optional[str] = None,
 ) -> db_models.Event:
     db_event = db_models.Event()
+
+    if credentials_file:
+        db_event.set_validator_kwargs(
+            kwargs={"google_credentials_file": credentials_file}
+        ) 
 
     # Required fields
     db_event.body_ref = body_ref
@@ -192,9 +198,16 @@ def create_event(
 
 
 def create_session(
-    session: ingestion_models.Session, event_ref: db_models.Event
+    session: ingestion_models.Session, 
+    event_ref: db_models.Event,
+    credentials_file: Optional[str] = None,
 ) -> db_models.Session:
     db_session = db_models.Session()
+
+    if credentials_file:
+        db_session.set_validator_kwargs(
+            kwargs={"google_credentials_file": credentials_file}
+        ) 
 
     # Required fields
     db_session.event_ref = event_ref
@@ -211,10 +224,18 @@ def create_session(
     return db_session
 
 
-def create_file(uri: str) -> db_models.File:
+def create_file(
+    uri: str,
+    credentials_file: Optional[str] = None,
+) -> db_models.File:
     db_file = db_models.File()
     db_file.name = uri.split("/")[-1]
     db_file.uri = uri
+
+    if credentials_file:
+        db_file.set_validator_kwargs(
+            kwargs={"google_credentials_file": credentials_file}
+        ) 
 
     return db_file
 
@@ -268,8 +289,14 @@ def create_matter_status(
 def create_matter_file(
     matter_ref: db_models.Matter,
     supporting_file: ingestion_models.SupportingFile,
+    credentials_file: Optional[str] = None,
 ) -> db_models.MatterFile:
     db_matter_file = db_models.MatterFile()
+
+    if credentials_file:
+        db_matter_file.set_validator_kwargs(
+            kwargs={"google_credentials_file": credentials_file}
+        ) 
 
     db_matter_file.matter_ref = matter_ref
     db_matter_file.name = _strip_field(supporting_file.name)
@@ -314,9 +341,15 @@ def create_matter_sponsor(
 def create_person(
     person: ingestion_models.Person,
     picture_ref: Optional[db_models.File] = None,
+    credentials_file: Optional[str] = None,
 ) -> db_models.Person:
     # Get minimal
     db_person = create_minimal_person(person=person)
+
+    if credentials_file:
+        db_person.set_validator_kwargs(
+            kwargs={"google_credentials_file": credentials_file}
+        ) 
 
     # Optional
     db_person.router_string = _strip_field(person.router_string)
@@ -417,8 +450,14 @@ def create_event_minutes_item(
 def create_event_minutes_item_file(
     event_minutes_item_ref: db_models.EventMinutesItem,
     supporting_file: ingestion_models.SupportingFile,
+    credentials_file: Optional[str] = None,
 ) -> db_models.EventMinutesItemFile:
     db_event_minutes_item_file = db_models.EventMinutesItemFile()
+
+    if credentials_file:
+        db_event_minutes_item_file.set_validator_kwargs(
+            kwargs={"google_credentials_file": credentials_file}
+        ) 
 
     db_event_minutes_item_file.event_minutes_item_ref = event_minutes_item_ref
     db_event_minutes_item_file.name = _strip_field(supporting_file.name)
