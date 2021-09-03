@@ -8,6 +8,7 @@ from typing import Callable, List, Optional, Type
 
 from fireo.models import Model
 from fsspec.core import url_to_fs
+from gcsfs import GCSFileSystem
 
 from ..utils.constants_utils import get_all_class_attr_values
 from ..utils.string_utils import convert_gcs_json_url_to_gsutil_form
@@ -124,9 +125,6 @@ def resource_exists(uri: Optional[str], **kwargs) -> bool:
                 uri = convert_gcs_json_url_to_gsutil_form(uri)
 
                 # If uri is not convertible to gsutil form we can't confirm
-                print("URI")
-                print(uri)
-                print("EXISTS? " + str(fs.exists(uri)))
                 if uri == "":
                     return True
 
