@@ -265,26 +265,57 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">firestore_location</span> <span class="o">=</span> <span class="n">firestore_location</span>
 
         <span class="c1"># Enable all required services</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cloudresourcemanager</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-cloudresourcemanager-service&quot;</span><span class="p">,</span>
+            <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s2">&quot;cloudresourcemanager.googleapis.com&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">),</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">speech_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-speech-service&quot;</span><span class="p">,</span>
             <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
             <span class="n">service</span><span class="o">=</span><span class="s2">&quot;speech.googleapis.com&quot;</span><span class="p">,</span>
-            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">),</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cloudresourcemanager</span><span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firebase_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firebase-service&quot;</span><span class="p">,</span>
+            <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s2">&quot;firebase.googleapis.com&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cloudresourcemanager</span><span class="p">]</span>
+            <span class="p">),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">app_engine_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-app-engine-service&quot;</span><span class="p">,</span>
             <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
             <span class="n">service</span><span class="o">=</span><span class="s2">&quot;appengine.googleapis.com&quot;</span><span class="p">,</span>
-            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">),</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cloudresourcemanager</span><span class="p">]</span>
+            <span class="p">),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">firestore_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firestore-service&quot;</span><span class="p">,</span>
             <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
             <span class="n">service</span><span class="o">=</span><span class="s2">&quot;firestore.googleapis.com&quot;</span><span class="p">,</span>
-            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">app_engine_service</span><span class="p">),</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cloudresourcemanager</span><span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firebase_rules_service</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firebase-rules-service&quot;</span><span class="p">,</span>
+            <span class="n">disable_dependent_services</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s2">&quot;firebaserules.googleapis.com&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cloudresourcemanager</span><span class="p">]</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Create the firestore application</span>
@@ -293,7 +324,30 @@
             <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
             <span class="n">location_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_location</span><span class="p">,</span>
             <span class="n">database_type</span><span class="o">=</span><span class="s2">&quot;CLOUD_FIRESTORE&quot;</span><span class="p">,</span>
-            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_service</span><span class="p">),</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">firebase_service</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">app_engine_service</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">firestore_service</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">firebase_rules_service</span><span class="p">,</span>
+                <span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Init firebase project</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firebase_init</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">firebase</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span>
+            <span class="n">resource_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firebase-init&quot;</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">depends_on</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="p">]),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Connect app engine (firestore) + bucket</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firebase_project</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">firebase</span><span class="o">.</span><span class="n">ProjectLocation</span><span class="p">(</span>
+            <span class="n">resource_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-firebase-project&quot;</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">location_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_location</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firebase_init</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Create all firestore indexes</span>
@@ -315,13 +369,11 @@
                 <span class="c1"># Finish creating the index set name</span>
                 <span class="n">idx_set_name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">idx_set_name_parts</span><span class="p">)</span>
                 <span class="n">fq_idx_set_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">idx_set_name</span><span class="si">}</span><span class="s2">&quot;</span>
-
-                <span class="n">firestore</span><span class="o">.</span><span class="n">DatabaseCollectionGroupIndex</span><span class="p">(</span>
+                <span class="n">firestore</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span>
                     <span class="n">fq_idx_set_name</span><span class="p">,</span>
-                    <span class="n">projects_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
-                    <span class="n">databases_id</span><span class="o">=</span><span class="s2">&quot;(default)&quot;</span><span class="p">,</span>
-                    <span class="n">collection_groups_id</span><span class="o">=</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span>
-                    <span class="n">indexes_id</span><span class="o">=</span><span class="n">fq_idx_set_name</span><span class="p">,</span>
+                    <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+                    <span class="n">database_id</span><span class="o">=</span><span class="s2">&quot;(default)&quot;</span><span class="p">,</span>
+                    <span class="n">collection_group_id</span><span class="o">=</span><span class="n">model_cls</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span>
                     <span class="n">fields</span><span class="o">=</span><span class="n">idx_set_fields</span><span class="p">,</span>
                     <span class="n">query_scope</span><span class="o">=</span><span class="s2">&quot;COLLECTION&quot;</span><span class="p">,</span>
                     <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="p">),</span>
