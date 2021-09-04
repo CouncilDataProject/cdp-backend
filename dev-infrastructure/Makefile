@@ -45,9 +45,11 @@ reset: ## Run pulumi destroy and make build, must provide "project"
 destroy: ## Fully teardown Pulumi and GCloud, must provide "project"
 	pulumi stack rm ${project} --force
 	gcloud projects delete ${project}
+	rm -f ../.keys/$(project).json
 
 gen-key: ## Generate a service account JSON, must provide "project"
 	mkdir ../.keys/ -p
+	rm -rf ../.keys/$(project).json
 	gcloud iam service-accounts create $(project) \
     	--description="CDP Dev Service Account for $(USER)" \
     	--display-name="$(project)"
@@ -59,4 +61,5 @@ gen-key: ## Generate a service account JSON, must provide "project"
 	echo "----------------------------------------------------------------------------"
 	echo "Sleeping for one minute while resources set up"
 	sleep 60
-	echo "Key generation complete"
+	cp -rf ../.keys/$(project).json ../.keys/cdp-dev.json
+	echo "Key generation complete, updated ../.keys/cdp-dev.json to $(project) key. Be sure to update GOOGLE_CREDENTIALS."
