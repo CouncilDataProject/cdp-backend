@@ -53,26 +53,57 @@ class CDPStack(pulumi.ComponentResource):
         self.firestore_location = firestore_location
 
         # Enable all required services
+        self.cloudresourcemanager = gcp.projects.Service(
+            f"{self.gcp_project_id}-cloudresourcemanager-service",
+            disable_dependent_services=True,
+            project=self.gcp_project_id,
+            service="cloudresourcemanager.googleapis.com",
+            opts=pulumi.ResourceOptions(parent=self),
+        )
         self.speech_service = gcp.projects.Service(
             f"{self.gcp_project_id}-speech-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
             service="speech.googleapis.com",
-            opts=pulumi.ResourceOptions(parent=self),
+            opts=pulumi.ResourceOptions(
+                parent=self, depends_on=[self.cloudresourcemanager]
+            ),
+        )
+        self.firebase_service = gcp.projects.Service(
+            f"{self.gcp_project_id}-firebase-service",
+            disable_dependent_services=True,
+            project=self.gcp_project_id,
+            service="firebase.googleapis.com",
+            opts=pulumi.ResourceOptions(
+                parent=self, depends_on=[self.cloudresourcemanager]
+            ),
         )
         self.app_engine_service = gcp.projects.Service(
             f"{self.gcp_project_id}-app-engine-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
             service="appengine.googleapis.com",
-            opts=pulumi.ResourceOptions(parent=self),
+            opts=pulumi.ResourceOptions(
+                parent=self, depends_on=[self.cloudresourcemanager]
+            ),
         )
         self.firestore_service = gcp.projects.Service(
             f"{self.gcp_project_id}-firestore-service",
             disable_dependent_services=True,
             project=self.gcp_project_id,
             service="firestore.googleapis.com",
-            opts=pulumi.ResourceOptions(parent=self.app_engine_service),
+            opts=pulumi.ResourceOptions(
+                parent=self, depends_on=[self.cloudresourcemanager]
+            ),
+        )
+        self.firebase_rules_service = gcp.projects.Service(
+            f"{self.gcp_project_id}-firebase-rules-service",
+            disable_dependent_services=True,
+            project=self.gcp_project_id,
+            service="firebaserules.googleapis.com",
+            opts=pulumi.ResourceOptions(
+                parent=self, depends_on=[self.cloudresourcemanager]
+            ),
         )
 
         # Create the firestore application
@@ -81,7 +112,30 @@ class CDPStack(pulumi.ComponentResource):
             project=self.gcp_project_id,
             location_id=self.firestore_location,
             database_type="CLOUD_FIRESTORE",
-            opts=pulumi.ResourceOptions(parent=self.firestore_service),
+            opts=pulumi.ResourceOptions(
+                parent=self,
+                depends_on=[
+                    self.firebase_service,
+                    self.app_engine_service,
+                    self.firestore_service,
+                    self.firebase_rules_service,
+                ],
+            ),
+        )
+
+        # Init firebase project
+        self.firebase_init = gcp.firebase.Project(
+            resource_name=f"{self.gcp_project_id}-firebase-init",
+            project=self.gcp_project_id,
+            opts=pulumi.ResourceOptions(parent=self, depends_on=[self.firestore_app]),
+        )
+
+        # Connect app engine (firestore) + bucket
+        self.firebase_project = gcp.firebase.ProjectLocation(
+            resource_name=f"{self.gcp_project_id}-firebase-project",
+            project=self.gcp_project_id,
+            location_id=self.firestore_location,
+            opts=pulumi.ResourceOptions(parent=self.firebase_init),
         )
 
         # Create all firestore indexes
@@ -103,13 +157,11 @@ class CDPStack(pulumi.ComponentResource):
                 # Finish creating the index set name
                 idx_set_name = "_".join(idx_set_name_parts)
                 fq_idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
-
-                firestore.DatabaseCollectionGroupIndex(
+                firestore.Index(
                     fq_idx_set_name,
-                    projects_id=self.gcp_project_id,
-                    databases_id="(default)",
-                    collection_groups_id=model_cls.collection_name,
-                    indexes_id=fq_idx_set_name,
+                    project=self.gcp_project_id,
+                    database_id="(default)",
+                    collection_group_id=model_cls.collection_name,
                     fields=idx_set_fields,
                     query_scope="COLLECTION",
                     opts=pulumi.ResourceOptions(parent=self.firestore_app),
