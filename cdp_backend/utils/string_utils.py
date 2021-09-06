@@ -94,16 +94,16 @@ def convert_gcs_json_url_to_gsutil_form(url: str):
     Returns
     -------
     gsutil_url: str
-        The url in gsutil form. Returns empty string if the input url doesn't 
+        The url in gsutil form. Returns empty string if the input url doesn't
         match the form.
     """
 
-    bucket = re.search('storage.googleapis.com/download/storage/v1/b/(.+?)/o', url)
+    bucket = re.search("storage.googleapis.com/download/storage/v1/b/(.+?)/o", url)
     if bucket:
         bucket = bucket.group(1)
 
-    filename = re.search('/o/(.+?)\?alt=media', url) 
-    if filename: 
+    filename = re.search(r"/o/(.+?)\?alt=media", url)
+    if filename:
         filename = filename.group(1)
 
     if bucket and filename:

@@ -821,7 +821,7 @@ def _process_person_ingestion(
             )
             fs_functions.remove_local_file(tmp_person_picture_path)
             person_picture_db_model = db_functions.create_file(
-                uri=person_picture_uri, 
+                uri=person_picture_uri,
                 credentials_file=credentials_file,
             )
             person_picture_db_model = db_functions.upload_db_model(
@@ -872,8 +872,7 @@ def _process_person_ingestion(
                     tmp_person_seat_image_path,
                 )
                 person_seat_image_db_model = db_functions.create_file(
-                    uri=person_seat_image_uri,
-                    credentials_file=credentials_file
+                    uri=person_seat_image_uri, credentials_file=credentials_file
                 )
                 person_seat_image_db_model = db_functions.upload_db_model(
                     db_model=person_seat_image_db_model,

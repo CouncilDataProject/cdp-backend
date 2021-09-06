@@ -181,7 +181,7 @@ def create_event(
     if credentials_file:
         db_event.set_validator_kwargs(
             kwargs={"google_credentials_file": credentials_file}
-        ) 
+        )
 
     # Required fields
     db_event.body_ref = body_ref
@@ -198,7 +198,7 @@ def create_event(
 
 
 def create_session(
-    session: ingestion_models.Session, 
+    session: ingestion_models.Session,
     event_ref: db_models.Event,
     credentials_file: Optional[str] = None,
 ) -> db_models.Session:
@@ -207,7 +207,7 @@ def create_session(
     if credentials_file:
         db_session.set_validator_kwargs(
             kwargs={"google_credentials_file": credentials_file}
-        ) 
+        )
 
     # Required fields
     db_session.event_ref = event_ref
@@ -235,7 +235,7 @@ def create_file(
     if credentials_file:
         db_file.set_validator_kwargs(
             kwargs={"google_credentials_file": credentials_file}
-        ) 
+        )
 
     return db_file
 
@@ -296,7 +296,7 @@ def create_matter_file(
     if credentials_file:
         db_matter_file.set_validator_kwargs(
             kwargs={"google_credentials_file": credentials_file}
-        ) 
+        )
 
     db_matter_file.matter_ref = matter_ref
     db_matter_file.name = _strip_field(supporting_file.name)
@@ -349,7 +349,7 @@ def create_person(
     if credentials_file:
         db_person.set_validator_kwargs(
             kwargs={"google_credentials_file": credentials_file}
-        ) 
+        )
 
     # Optional
     db_person.router_string = _strip_field(person.router_string)
@@ -457,7 +457,7 @@ def create_event_minutes_item_file(
     if credentials_file:
         db_event_minutes_item_file.set_validator_kwargs(
             kwargs={"google_credentials_file": credentials_file}
-        ) 
+        )
 
     db_event_minutes_item_file.event_minutes_item_ref = event_minutes_item_ref
     db_event_minutes_item_file.name = _strip_field(supporting_file.name)

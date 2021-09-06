@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pytest
 from typing import Dict, Optional
 from unittest import mock
-import gcsfs
+
+import pytest
 
 from cdp_backend.database import models, validators
 from cdp_backend.database.constants import (
@@ -74,8 +74,8 @@ def test_email_is_valid(email: str, expected_result: bool) -> None:
     ],
 )
 def test_local_resource_exists(
-    uri: str, 
-    expected_result: bool, 
+    uri: str,
+    expected_result: bool,
 ) -> None:
     actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
@@ -92,14 +92,26 @@ def test_local_resource_exists(
         ("https://docs.pytest.org/en/latest/index.html", True, None, None),
         ("https://docs.pytest.org/en/latest/does-not-exist.html", False, None, None),
         ("gs://bucket/filename.txt", True, True, validator_kwargs),
-        ("https://storage.googleapis.com/download/storage/v1/b/bucket.appspot.com/o/wombo_combo.mp4?alt=media", True, True, validator_kwargs),
+        (
+            "https://storage.googleapis.com/download/storage/v1/b/"
+            + "bucket.appspot.com/o/wombo_combo.mp4?alt=media",
+            True,
+            True,
+            validator_kwargs,
+        ),
         ("gs://bucket/filename.txt", False, False, validator_kwargs),
         # Unconvertible JSON url case
-        ("https://storage.googleapis.com/download/storage/v1/xxx/bucket.appspot.com", True, None, None),
+        (
+            "https://storage.googleapis.com/download/storage/v1/xxx/"
+            + "bucket.appspot.com",
+            True,
+            None,
+            None,
+        ),
     ],
 )
 def test_remote_resource_exists(
-    uri: str, 
+    uri: str,
     expected_result: bool,
     gcsfs_exists: Optional[bool],
     kwargs: Optional[Dict],

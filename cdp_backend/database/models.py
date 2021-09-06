@@ -4,6 +4,7 @@
 import re
 import unicodedata
 from datetime import datetime
+from typing import Dict
 
 from fireo import fields
 from fireo.models import Model
@@ -17,7 +18,6 @@ from .constants import (
     VoteDecision,
 )
 from .types import IndexedField, IndexedFieldSet
-from typing import Dict
 
 ###############################################################################
 
@@ -38,9 +38,7 @@ class File(Model):
 
     def set_validator_kwargs(self, kwargs: Dict) -> None:
         field = fields.TextField(
-            required=True, 
-            validator=validators.resource_exists,
-            validator_kwargs=kwargs
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
         )
 
         field.contribute_to_model(File, "uri")
@@ -270,9 +268,7 @@ class MatterFile(Model):
 
     def set_validator_kwargs(self, kwargs: Dict) -> None:
         field = fields.TextField(
-            required=True, 
-            validator=validators.resource_exists,
-            validator_kwargs=kwargs
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
         )
 
         field.contribute_to_model(MatterFile, "uri")
@@ -371,8 +367,7 @@ class Event(Model):
 
     def set_validator_kwargs(self, kwargs: Dict) -> None:
         field = fields.TextField(
-            validator=validators.resource_exists,
-            validator_kwargs=kwargs
+            validator=validators.resource_exists, validator_kwargs=kwargs
         )
 
         field.contribute_to_model(Event, "agenda_uri")
@@ -429,9 +424,7 @@ class Session(Model):
 
     def set_validator_kwargs(self, kwargs: Dict) -> None:
         field = fields.TextField(
-            required=True, 
-            validator=validators.resource_exists,
-            validator_kwargs=kwargs
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
         )
 
         field.contribute_to_model(Session, "video_uri")
@@ -605,9 +598,7 @@ class EventMinutesItemFile(Model):
 
     def set_validator_kwargs(self, kwargs: Dict) -> None:
         field = fields.TextField(
-            required=True, 
-            validator=validators.resource_exists,
-            validator_kwargs=kwargs
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
         )
 
         field.contribute_to_model(EventMinutesItemFile, "uri")
