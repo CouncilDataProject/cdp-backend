@@ -164,8 +164,6 @@ class GoogleCloudSRModel(SRModel):
                             start_time=start_time,
                             end_time=end_time,
                             text=self._clean_word(word.word),
-                            # TODO: Add annotations
-                            annotations=None,
                         )
 
                         timestamped_sentence.words.append(timestamped_word)
@@ -197,7 +195,6 @@ class GoogleCloudSRModel(SRModel):
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,
-            annotations=None,
         )
 
         return transcript

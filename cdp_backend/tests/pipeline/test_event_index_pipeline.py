@@ -201,19 +201,6 @@ def test_get_transcripts_per_event(
         )
 
 
-@pytest.mark.parametrize(
-    "text, expected",
-    [
-        ("hello and goodbye", "hello goodbye"),
-        ("   \t\n   hello and to of a         goodbye         ", "hello goodbye"),
-        ("hell'o    and   good-bye", "hello goodbye"),
-        ("and", ""),
-    ],
-)
-def test_clean_text(text: str, expected: str) -> None:
-    assert pipeline.clean_text(text) == expected
-
-
 @mock.patch(f"{PIPELINE_PATH}.get_transcripts.run")
 @mock.patch("gcsfs.credentials.GoogleCredentials.connect")
 @mock.patch("gcsfs.GCSFileSystem.get")

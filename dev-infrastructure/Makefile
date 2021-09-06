@@ -16,6 +16,7 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 login: ## Run GCloud and Pulumi logins
+	pulumi logout
 	pulumi login
 	gcloud auth login
 	gcloud auth application-default login
@@ -42,21 +43,23 @@ reset: ## Run pulumi destroy and make build, must provide "project"
 	make build
 
 destroy: ## Fully teardown Pulumi and GCloud, must provide "project"
-	pulumi destroy -p 4
-	pulumi stack rm ${project}
+	pulumi stack rm ${project} --force
 	gcloud projects delete ${project}
+	rm -f ../.keys/$(project).json
 
 gen-key: ## Generate a service account JSON, must provide "project"
 	mkdir ../.keys/ -p
-	gcloud iam service-accounts create $(project)-sa-dev \
+	rm -rf ../.keys/$(project).json
+	gcloud iam service-accounts create $(project) \
     	--description="CDP Dev Service Account for $(USER)" \
-    	--display-name="$(project)-sa-dev"
+    	--display-name="$(project)"
 	gcloud projects add-iam-policy-binding $(project) \
-    	--member="serviceAccount:$(project)-sa-dev@$(project).iam.gserviceaccount.com" \
+    	--member="serviceAccount:$(project)@$(project).iam.gserviceaccount.com" \
 		--role="roles/owner"
-	gcloud iam service-accounts keys create ../.keys/$(project)-sa-dev.json \
-  		--iam-account "$(project)-sa-dev@$(project).iam.gserviceaccount.com"
+	gcloud iam service-accounts keys create ../.keys/$(project).json \
+  		--iam-account "$(project)@$(project).iam.gserviceaccount.com"
 	echo "----------------------------------------------------------------------------"
 	echo "Sleeping for one minute while resources set up"
 	sleep 60
-	echo "Key generation complete"
+	cp -rf ../.keys/$(project).json ../.keys/cdp-dev.json
+	echo "Key generation complete, updated ../.keys/cdp-dev.json to $(project) key. Be sure to update GOOGLE_CREDENTIALS."
