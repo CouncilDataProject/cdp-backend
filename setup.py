@@ -23,7 +23,7 @@ pipeline_requirements = [
     "pandas~=1.2",
     "prefect~=0.14.0",
     "pulumi~=3.3",
-    "pulumi-google-native~=0.1.0",
+    "pulumi-google-native~=0.7.0",
     "pulumi-gcp~=5.7",
     "rapidfuzz~=1.4",
     "spacy~=3.0",
@@ -141,6 +141,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.0.dev10",
+    version="3.0.0.dev12",
     zip_safe=False,
 )
