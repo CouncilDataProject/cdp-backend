@@ -70,7 +70,7 @@ dev_requirements = [
 
 requirements = [
     "dataclasses-json~=0.5",
-    "fireo~=1.4.5",
+    "FireO @ git+https://github.com/octabytes/FireO.git#egg=FireO",
     "fsspec",  # Version pin set by gcsfs
     "gcsfs~=2021.7.0",
 ]
@@ -98,6 +98,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
+    dependency_links=['https://github.com/octabytes/FireO/tarball/master#egg=FireO'],
     description=(
         "Data storage utilities and processing pipelines to run on CDP server "
         "deployments."
