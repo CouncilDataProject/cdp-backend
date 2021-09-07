@@ -98,7 +98,6 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
-    dependency_links=['https://github.com/octabytes/FireO/tarball/master#egg=FireO'],
     description=(
         "Data storage utilities and processing pipelines to run on CDP server "
         "deployments."
