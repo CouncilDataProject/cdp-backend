@@ -96,7 +96,7 @@ def email_is_valid(email: Optional[str]) -> bool:
     return False
 
 
-def resource_exists(uri: Optional[str], **kwargs) -> bool:
+def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
     """
     Validate that the URI provided points to an existing file.
 
