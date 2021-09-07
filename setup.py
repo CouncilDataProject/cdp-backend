@@ -70,7 +70,7 @@ dev_requirements = [
 
 requirements = [
     "dataclasses-json~=0.5",
-    "FireO @ git+https://github.com/octabytes/FireO.git#egg=FireO",
+    "FireO @ git+https://github.com/octabytes/FireO.git@d6b47f8d5c62025f786559ff68b327521acb14f2#egg=FireO",
     "fsspec",  # Version pin set by gcsfs
     "gcsfs~=2021.7.0",
 ]
