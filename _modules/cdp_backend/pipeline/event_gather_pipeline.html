@@ -604,13 +604,14 @@
             <span class="k">if</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">sponsors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">sponsor</span> <span class="ow">in</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">sponsors</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">roles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
-                                <span class="k">if</span> <span class="p">(</span>
-                                    <span class="n">_get_if_added_sum</span><span class="p">(</span><span class="n">phrases</span><span class="p">,</span> <span class="n">role</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-                                    <span class="o">&lt;</span> <span class="n">CUM_CHAR_LIMIT</span>
-                                <span class="p">):</span>
-                                    <span class="n">phrases</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">role</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">seat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">roles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="p">(</span>
+                                        <span class="n">_get_if_added_sum</span><span class="p">(</span><span class="n">phrases</span><span class="p">,</span> <span class="n">role</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                                        <span class="o">&lt;</span> <span class="n">CUM_CHAR_LIMIT</span>
+                                    <span class="p">):</span>
+                                        <span class="n">phrases</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">role</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">votes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">vote</span> <span class="ow">in</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">votes</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">vote</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">roles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1104,47 +1105,51 @@
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="c1"># Create roles</span>
-    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">roles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">person_role</span> <span class="ow">in</span> <span class="n">person</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
-            <span class="c1"># Create any bodies for roles</span>
-            <span class="n">person_role_body_db_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">person_role</span><span class="o">.</span><span class="n">body</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># Use or default role body start_datetime</span>
-                <span class="k">if</span> <span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">person_role_body_start_datetime</span> <span class="o">=</span> <span class="n">default_session</span><span class="o">.</span><span class="n">session_datetime</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">person_role_body_start_datetime</span> <span class="o">=</span> <span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span>
+        <span class="c1"># Create roles</span>
+        <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">roles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">person_role</span> <span class="ow">in</span> <span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
+                <span class="c1"># Create any bodies for roles</span>
+                <span class="n">person_role_body_db_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Body</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">person_role</span><span class="o">.</span><span class="n">body</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># Use or default role body start_datetime</span>
+                    <span class="k">if</span> <span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">person_role_body_start_datetime</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">default_session</span><span class="o">.</span><span class="n">session_datetime</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">person_role_body_start_datetime</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">start_datetime</span>
+                        <span class="p">)</span>
 
-                <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_body</span><span class="p">(</span>
-                    <span class="n">body</span><span class="o">=</span><span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
-                    <span class="n">start_datetime</span><span class="o">=</span><span class="n">person_role_body_start_datetime</span><span class="p">,</span>
+                    <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_body</span><span class="p">(</span>
+                        <span class="n">body</span><span class="o">=</span><span class="n">person_role</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                        <span class="n">start_datetime</span><span class="o">=</span><span class="n">person_role_body_start_datetime</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
+                        <span class="n">db_model</span><span class="o">=</span><span class="n">person_role_body_db_model</span><span class="p">,</span>
+                        <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="c1"># Use or default role start_datetime</span>
+                <span class="k">if</span> <span class="n">person_role</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">person_role_start_datetime</span> <span class="o">=</span> <span class="n">default_session</span><span class="o">.</span><span class="n">session_datetime</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">person_role_start_datetime</span> <span class="o">=</span> <span class="n">person_role</span><span class="o">.</span><span class="n">start_datetime</span>
+
+                <span class="c1"># Actual role creation</span>
+                <span class="n">person_role_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_role</span><span class="p">(</span>
+                    <span class="n">role</span><span class="o">=</span><span class="n">person_role</span><span class="p">,</span>
+                    <span class="n">person_ref</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
+                    <span class="n">seat_ref</span><span class="o">=</span><span class="n">person_seat_db_model</span><span class="p">,</span>
+                    <span class="n">start_datetime</span><span class="o">=</span><span class="n">person_role_start_datetime</span><span class="p">,</span>
+                    <span class="n">body_ref</span><span class="o">=</span><span class="n">person_role_body_db_model</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
-                    <span class="n">db_model</span><span class="o">=</span><span class="n">person_role_body_db_model</span><span class="p">,</span>
+                <span class="n">person_role_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
+                    <span class="n">db_model</span><span class="o">=</span><span class="n">person_role_db_model</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">person_role_body_db_model</span> <span class="o">=</span> <span class="kc">None</span>
-
-            <span class="c1"># Use or default role start_datetime</span>
-            <span class="k">if</span> <span class="n">person_role</span><span class="o">.</span><span class="n">start_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">person_role_start_datetime</span> <span class="o">=</span> <span class="n">default_session</span><span class="o">.</span><span class="n">session_datetime</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">person_role_start_datetime</span> <span class="o">=</span> <span class="n">person_role</span><span class="o">.</span><span class="n">start_datetime</span>
-
-            <span class="c1"># Actual role creation</span>
-            <span class="n">person_role_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_role</span><span class="p">(</span>
-                <span class="n">role</span><span class="o">=</span><span class="n">person_role</span><span class="p">,</span>
-                <span class="n">person_ref</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
-                <span class="n">seat_ref</span><span class="o">=</span><span class="n">person_seat_db_model</span><span class="p">,</span>
-                <span class="n">start_datetime</span><span class="o">=</span><span class="n">person_role_start_datetime</span><span class="p">,</span>
-                <span class="n">body_ref</span><span class="o">=</span><span class="n">person_role_body_db_model</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">person_role_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
-                <span class="n">db_model</span><span class="o">=</span><span class="n">person_role_db_model</span><span class="p">,</span>
-                <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
-            <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">person_db_model</span>
 
