@@ -25,25 +25,6 @@ class IngestionModel:
 
 @dataclass_json
 @dataclass
-class Seat(IngestionModel):
-    """
-    An electable office on the City Council. I.E. "Position 9".
-
-    Notes
-    -----
-    The electoral_area and electoral_type will be updated if changed from prior values.
-    The image will be uploaded or updated in the CDP file storage system.
-    """
-
-    name: str
-    electoral_area: Optional[str] = None
-    electoral_type: Optional[str] = None
-    image_uri: Optional[str] = None
-    external_source_id: Optional[str] = None
-
-
-@dataclass_json
-@dataclass
 class Person(IngestionModel):
     """
     Primarily the council members, this could technically include the mayor or city
@@ -221,6 +202,26 @@ class Role(IngestionModel):
 
 @dataclass_json
 @dataclass
+class Seat(IngestionModel):
+    """
+    An electable office on the City Council. I.E. "Position 9".
+
+    Notes
+    -----
+    The electoral_area and electoral_type will be updated if changed from prior values.
+    The image will be uploaded or updated in the CDP file storage system.
+    """
+
+    name: str
+    electoral_area: Optional[str] = None
+    electoral_type: Optional[str] = None
+    image_uri: Optional[str] = None
+    external_source_id: Optional[str] = None
+    roles: Optional[List[Role]] = None
+
+
+@dataclass_json
+@dataclass
 class EventIngestionModel(IngestionModel):
     """
     An event can be a normally scheduled meeting, a special event such as a press
@@ -298,28 +299,32 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                 sponsors=[
                     Person(
                         name="M. Lorena González",
-                        seat=Seat(name="Position 9"),
-                        roles=[
-                            Role(title="Council President"),
-                            Role(
-                                title="Chair",
-                                body=Body(name="Governance and Education"),
-                            ),
-                        ],
+                        seat=Seat(
+                            name="Position 9",
+                            roles=[
+                                Role(title="Council President"),
+                                Role(
+                                    title="Chair",
+                                    body=Body(name="Governance and Education"),
+                                ),
+                            ],
+                        ),
                     ),
                     Person(
                         name="Teresa Mosqueda",
-                        seat=Seat(name="Position 8"),
-                        roles=[
-                            Role(
-                                title="Chair",
-                                body=Body(name="Finance and Housing"),
-                            ),
-                            Role(
-                                title="Vice Chair",
-                                body=Body(name="Governance and Education"),
-                            ),
-                        ],
+                        seat=Seat(
+                            name="Position 8",
+                            roles=[
+                                Role(
+                                    title="Chair",
+                                    body=Body(name="Finance and Housing"),
+                                ),
+                                Role(
+                                    title="Vice Chair",
+                                    body=Body(name="Governance and Education"),
+                                ),
+                            ],
+                        ),
                         picture_uri="https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg",  # noqa: E501
                     ),
                 ],
@@ -338,31 +343,35 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                 Vote(
                     person=Person(
                         name="M. Lorena González",
-                        seat=Seat(name="Position 9"),
-                        roles=[
-                            Role(title="Council President"),
-                            Role(
-                                title="Chair",
-                                body=Body(name="Governance and Education"),
-                            ),
-                        ],
+                        seat=Seat(
+                            name="Position 9",
+                            roles=[
+                                Role(title="Council President"),
+                                Role(
+                                    title="Chair",
+                                    body=Body(name="Governance and Education"),
+                                ),
+                            ],
+                        ),
                     ),
                     decision="Approve",
                 ),
                 Vote(
                     person=Person(
                         name="Teresa Mosqueda",
-                        seat=Seat(name="Position 8"),
-                        roles=[
-                            Role(
-                                title="Chair",
-                                body=Body(name="Finance and Housing"),
-                            ),
-                            Role(
-                                title="Vice Chair",
-                                body=Body(name="Governance and Education"),
-                            ),
-                        ],
+                        seat=Seat(
+                            name="Position 8",
+                            roles=[
+                                Role(
+                                    title="Chair",
+                                    body=Body(name="Finance and Housing"),
+                                ),
+                                Role(
+                                    title="Vice Chair",
+                                    body=Body(name="Governance and Education"),
+                                ),
+                            ],
+                        ),
                     ),
                     decision="Approve",
                 ),
@@ -372,26 +381,28 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
                         seat=Seat(
                             name="District 7",
                             image_uri="http://www.seattle.gov/Images/Clerk/district7_50x50.jpg",  # noqa: E501
+                            roles=[
+                                Role(
+                                    title="Vice Chair",
+                                    body=Body(name="Community Economic Development"),
+                                ),
+                            ],
                         ),
-                        roles=[
-                            Role(
-                                title="Vice Chair",
-                                body=Body(name="Community Economic Development"),
-                            ),
-                        ],
                     ),
                     decision="Approve",
                 ),
                 Vote(
                     person=Person(
                         name="Alex Pedersen",
-                        seat=Seat(name="District 4"),
-                        roles=[
-                            Role(
-                                title="Chair",
-                                body=Body("Transportation and Utilities"),
-                            ),
-                        ],
+                        seat=Seat(
+                            name="District 4",
+                            roles=[
+                                Role(
+                                    title="Chair",
+                                    body=Body("Transportation and Utilities"),
+                                ),
+                            ],
+                        ),
                     ),
                     decision="Reject",
                 ),

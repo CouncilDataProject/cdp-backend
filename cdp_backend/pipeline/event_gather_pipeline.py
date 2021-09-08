@@ -392,13 +392,14 @@ def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List
             if event_minutes_item.matter is not None:
                 if event_minutes_item.matter.sponsors is not None:
                     for sponsor in event_minutes_item.matter.sponsors:
-                        if sponsor.roles is not None:
-                            for role in sponsor.roles:
-                                if (
-                                    _get_if_added_sum(phrases, role.title)
-                                    < CUM_CHAR_LIMIT
-                                ):
-                                    phrases.add(role.title)
+                        if sponsor.seat is not None:
+                            if sponsor.seat.roles is not None:
+                                for role in sponsor.seat.roles:
+                                    if (
+                                        _get_if_added_sum(phrases, role.title)
+                                        < CUM_CHAR_LIMIT
+                                    ):
+                                        phrases.add(role.title)
             if event_minutes_item.votes is not None:
                 for vote in event_minutes_item.votes:
                     if vote.person.roles is not None:
@@ -892,47 +893,51 @@ def _process_person_ingestion(
             credentials_file=credentials_file,
         )
 
-    # Create roles
-    if person.roles is not None:
-        for person_role in person.roles:
-            # Create any bodies for roles
-            person_role_body_db_model: Optional[db_models.Body]
-            if person_role.body is not None:
-                # Use or default role body start_datetime
-                if person_role.body.start_datetime is None:
-                    person_role_body_start_datetime = default_session.session_datetime
-                else:
-                    person_role_body_start_datetime = person_role.body.start_datetime
+        # Create roles
+        if person.seat.roles is not None:
+            for person_role in person.seat.roles:
+                # Create any bodies for roles
+                person_role_body_db_model: Optional[db_models.Body]
+                if person_role.body is not None:
+                    # Use or default role body start_datetime
+                    if person_role.body.start_datetime is None:
+                        person_role_body_start_datetime = (
+                            default_session.session_datetime
+                        )
+                    else:
+                        person_role_body_start_datetime = (
+                            person_role.body.start_datetime
+                        )
 
-                person_role_body_db_model = db_functions.create_body(
-                    body=person_role.body,
-                    start_datetime=person_role_body_start_datetime,
+                    person_role_body_db_model = db_functions.create_body(
+                        body=person_role.body,
+                        start_datetime=person_role_body_start_datetime,
+                    )
+                    person_role_body_db_model = db_functions.upload_db_model(
+                        db_model=person_role_body_db_model,
+                        credentials_file=credentials_file,
+                    )
+                else:
+                    person_role_body_db_model = None
+
+                # Use or default role start_datetime
+                if person_role.start_datetime is None:
+                    person_role_start_datetime = default_session.session_datetime
+                else:
+                    person_role_start_datetime = person_role.start_datetime
+
+                # Actual role creation
+                person_role_db_model = db_functions.create_role(
+                    role=person_role,
+                    person_ref=person_db_model,
+                    seat_ref=person_seat_db_model,
+                    start_datetime=person_role_start_datetime,
+                    body_ref=person_role_body_db_model,
                 )
-                person_role_body_db_model = db_functions.upload_db_model(
-                    db_model=person_role_body_db_model,
+                person_role_db_model = db_functions.upload_db_model(
+                    db_model=person_role_db_model,
                     credentials_file=credentials_file,
                 )
-            else:
-                person_role_body_db_model = None
-
-            # Use or default role start_datetime
-            if person_role.start_datetime is None:
-                person_role_start_datetime = default_session.session_datetime
-            else:
-                person_role_start_datetime = person_role.start_datetime
-
-            # Actual role creation
-            person_role_db_model = db_functions.create_role(
-                role=person_role,
-                person_ref=person_db_model,
-                seat_ref=person_seat_db_model,
-                start_datetime=person_role_start_datetime,
-                body_ref=person_role_body_db_model,
-            )
-            person_role_db_model = db_functions.upload_db_model(
-                db_model=person_role_db_model,
-                credentials_file=credentials_file,
-            )
 
     return person_db_model
 
