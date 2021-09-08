@@ -1033,7 +1033,10 @@
                 <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_person_picture_path</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">tmp_person_picture_path</span><span class="p">)</span>
-            <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span><span class="n">person_picture_uri</span><span class="p">)</span>
+            <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+                <span class="n">uri</span><span class="o">=</span><span class="n">person_picture_uri</span><span class="p">,</span>
+                <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
                 <span class="n">db_model</span><span class="o">=</span><span class="n">person_picture_db_model</span><span class="p">,</span>
                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
@@ -1049,6 +1052,7 @@
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_person</span><span class="p">(</span>
             <span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">,</span>
             <span class="n">picture_ref</span><span class="o">=</span><span class="n">person_picture_db_model</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
@@ -1081,7 +1085,7 @@
                     <span class="n">tmp_person_seat_image_path</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
-                    <span class="n">person_seat_image_uri</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="n">person_seat_image_uri</span><span class="p">,</span> <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span>
                 <span class="p">)</span>
                 <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
                     <span class="n">db_model</span><span class="o">=</span><span class="n">person_seat_image_db_model</span><span class="p">,</span>
@@ -1220,6 +1224,7 @@
         <span class="c1"># Upload static thumbnail</span>
         <span class="n">static_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">static_thumbnail_uri</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">static_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">static_thumbnail_file_db_model</span><span class="p">,</span>
@@ -1231,6 +1236,7 @@
         <span class="c1"># Upload hover thumbnail</span>
         <span class="n">hover_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">hover_thumbnail_uri</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">hover_thumbnail_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">hover_thumbnail_file_db_model</span><span class="p">,</span>
@@ -1249,6 +1255,7 @@
             <span class="n">agenda_uri</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">agenda_uri</span><span class="p">,</span>
             <span class="n">minutes_uri</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">minutes_uri</span><span class="p">,</span>
             <span class="n">external_source_id</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">event_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
@@ -1261,6 +1268,7 @@
             <span class="n">static_thumbnail_ref</span><span class="o">=</span><span class="n">event_static_thumbnail_file_db_model</span><span class="p">,</span>
             <span class="n">hover_thumbnail_ref</span><span class="o">=</span><span class="n">event_hover_thumbnail_file_db_model</span><span class="p">,</span>
             <span class="n">external_source_id</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">external_source_id</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">event_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
@@ -1270,7 +1278,10 @@
     <span class="c1"># Iter sessions</span>
     <span class="k">for</span> <span class="n">session_result</span> <span class="ow">in</span> <span class="n">session_processing_results</span><span class="p">:</span>
         <span class="c1"># Upload audio file</span>
-        <span class="n">audio_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">audio_uri</span><span class="p">)</span>
+        <span class="n">audio_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">audio_uri</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">audio_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">audio_file_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
@@ -1279,6 +1290,7 @@
         <span class="c1"># Upload transcript file</span>
         <span class="n">transcript_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">transcript_uri</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">transcript_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">transcript_file_db_model</span><span class="p">,</span>
@@ -1295,6 +1307,7 @@
         <span class="n">session_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_session</span><span class="p">(</span>
             <span class="n">session</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">event_ref</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">session_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">session_db_model</span><span class="p">,</span>
@@ -1428,6 +1441,7 @@
                             <span class="n">matter_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_matter_file</span><span class="p">(</span>
                                 <span class="n">matter_ref</span><span class="o">=</span><span class="n">matter_db_model</span><span class="p">,</span>
                                 <span class="n">supporting_file</span><span class="o">=</span><span class="n">supporting_file</span><span class="p">,</span>
+                                <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
                             <span class="n">matter_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
                                 <span class="n">db_model</span><span class="o">=</span><span class="n">matter_file_db_model</span><span class="p">,</span>
@@ -1445,6 +1459,7 @@
                             <span class="n">db_functions</span><span class="o">.</span><span class="n">create_event_minutes_item_file</span><span class="p">(</span>
                                 <span class="n">event_minutes_item_ref</span><span class="o">=</span><span class="n">event_minutes_item_db_model</span><span class="p">,</span>
                                 <span class="n">supporting_file</span><span class="o">=</span><span class="n">supporting_file</span><span class="p">,</span>
+                                <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
                         <span class="p">)</span>
                         <span class="n">event_minutes_item_file_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>

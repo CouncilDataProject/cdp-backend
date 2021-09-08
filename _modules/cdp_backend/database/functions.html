@@ -386,8 +386,14 @@
     <span class="n">agenda_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">minutes_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">:</span>
     <span class="n">db_event</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">credentials_file</span><span class="p">:</span>
+        <span class="n">db_event</span><span class="o">.</span><span class="n">set_validator_kwargs</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="c1"># Required fields</span>
     <span class="n">db_event</span><span class="o">.</span><span class="n">body_ref</span> <span class="o">=</span> <span class="n">body_ref</span>
@@ -404,9 +410,16 @@
 
 
 <div class="viewcode-block" id="create_session"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_session">[docs]</a><span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span>
-    <span class="n">session</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span> <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span>
+    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
     <span class="n">db_session</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">credentials_file</span><span class="p">:</span>
+        <span class="n">db_session</span><span class="o">.</span><span class="n">set_validator_kwargs</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="c1"># Required fields</span>
     <span class="n">db_session</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_ref</span>
@@ -423,10 +436,18 @@
     <span class="k">return</span> <span class="n">db_session</span></div>
 
 
-<div class="viewcode-block" id="create_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_file">[docs]</a><span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">:</span>
+<div class="viewcode-block" id="create_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_file">[docs]</a><span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">:</span>
     <span class="n">db_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">()</span>
     <span class="n">db_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">db_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
+
+    <span class="k">if</span> <span class="n">credentials_file</span><span class="p">:</span>
+        <span class="n">db_file</span><span class="o">.</span><span class="n">set_validator_kwargs</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">db_file</span></div>
 
@@ -480,8 +501,14 @@
 <div class="viewcode-block" id="create_matter_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_matter_file">[docs]</a><span class="k">def</span> <span class="nf">create_matter_file</span><span class="p">(</span>
     <span class="n">matter_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Matter</span><span class="p">,</span>
     <span class="n">supporting_file</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">SupportingFile</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterFile</span><span class="p">:</span>
     <span class="n">db_matter_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">MatterFile</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">credentials_file</span><span class="p">:</span>
+        <span class="n">db_matter_file</span><span class="o">.</span><span class="n">set_validator_kwargs</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="n">db_matter_file</span><span class="o">.</span><span class="n">matter_ref</span> <span class="o">=</span> <span class="n">matter_ref</span>
     <span class="n">db_matter_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -526,9 +553,15 @@
 <div class="viewcode-block" id="create_person"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_person">[docs]</a><span class="k">def</span> <span class="nf">create_person</span><span class="p">(</span>
     <span class="n">person</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Person</span><span class="p">,</span>
     <span class="n">picture_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">:</span>
     <span class="c1"># Get minimal</span>
     <span class="n">db_person</span> <span class="o">=</span> <span class="n">create_minimal_person</span><span class="p">(</span><span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">credentials_file</span><span class="p">:</span>
+        <span class="n">db_person</span><span class="o">.</span><span class="n">set_validator_kwargs</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="c1"># Optional</span>
     <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">router_string</span><span class="p">)</span>
@@ -629,8 +662,14 @@
 <div class="viewcode-block" id="create_event_minutes_item_file"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_event_minutes_item_file">[docs]</a><span class="k">def</span> <span class="nf">create_event_minutes_item_file</span><span class="p">(</span>
     <span class="n">event_minutes_item_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">,</span>
     <span class="n">supporting_file</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">SupportingFile</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItemFile</span><span class="p">:</span>
     <span class="n">db_event_minutes_item_file</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">EventMinutesItemFile</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">credentials_file</span><span class="p">:</span>
+        <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">set_validator_kwargs</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">event_minutes_item_ref</span>
     <span class="n">db_event_minutes_item_file</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>

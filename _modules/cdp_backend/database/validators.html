@@ -220,8 +220,10 @@
 
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
+<span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
 
 <span class="kn">from</span> <span class="nn">..utils.constants_utils</span> <span class="kn">import</span> <span class="n">get_all_class_attr_values</span>
+<span class="kn">from</span> <span class="nn">..utils.string_utils</span> <span class="kn">import</span> <span class="n">convert_gcs_json_url_to_gsutil_form</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -306,7 +308,7 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.resource_exists">[docs]</a><span class="k">def</span> <span class="nf">resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.resource_exists">[docs]</a><span class="k">def</span> <span class="nf">resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that the URI provided points to an existing file.</span>
 
@@ -326,9 +328,23 @@
     <span class="k">if</span> <span class="n">uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="c1"># TODO Replace after finding way to pass custom fs through FireO validator</span>
     <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;gs://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">):</span>
+            <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">)))</span>
+
+            <span class="c1"># Convert to gsutil form if necessary</span>
+            <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
+                <span class="n">uri</span> <span class="o">=</span> <span class="n">convert_gcs_json_url_to_gsutil_form</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+                <span class="c1"># If uri is not convertible to gsutil form we can&#39;t confirm</span>
+                <span class="k">if</span> <span class="n">uri</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+        <span class="c1"># Can&#39;t check GCS resources without creds file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Get file system</span>

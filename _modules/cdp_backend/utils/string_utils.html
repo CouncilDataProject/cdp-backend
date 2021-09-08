@@ -292,6 +292,38 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">cleaned_doc</span></div>
+
+
+<div class="viewcode-block" id="convert_gcs_json_url_to_gsutil_form"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.convert_gcs_json_url_to_gsutil_form">[docs]</a><span class="k">def</span> <span class="nf">convert_gcs_json_url_to_gsutil_form</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a GCS JSON API url to its corresponding gsutil uri.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url: str</span>
+<span class="sd">        The url in GCS JSON API form.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gsutil_url: str</span>
+<span class="sd">        The url in gsutil form. Returns empty string if the input url doesn&#39;t</span>
+<span class="sd">        match the form.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">found_bucket</span><span class="p">,</span> <span class="n">found_filename</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;storage.googleapis.com/download/storage/v1/b/(.+?)/o&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">bucket</span><span class="p">:</span>
+        <span class="n">found_bucket</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">bucket</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/o/(.+?)\?alt=media&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">found_filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">found_bucket</span> <span class="ow">and</span> <span class="n">found_filename</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;gs://</span><span class="si">{</span><span class="n">found_bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">found_filename</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 </pre></div>
 
            </div>

@@ -216,6 +216,7 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">unicodedata</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
 <span class="kn">from</span> <span class="nn">fireo</span> <span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
@@ -246,6 +247,13 @@
 
 <div class="viewcode-block" id="File.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="File.set_validator_kwargs"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.set_validator_kwargs">[docs]</a>    <span class="k">def</span> <span class="nf">set_validator_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">,</span> <span class="n">validator_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="File.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.File.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -280,6 +288,14 @@
 
 <div class="viewcode-block" id="Person.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Person.set_validator_kwargs"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.set_validator_kwargs">[docs]</a>    <span class="k">def</span> <span class="nf">set_validator_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+            <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">,</span>
+            <span class="n">validator_kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="s2">&quot;website&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Person.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Person.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -462,6 +478,13 @@
 <div class="viewcode-block" id="MatterFile.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+<div class="viewcode-block" id="MatterFile.set_validator_kwargs"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.set_validator_kwargs">[docs]</a>    <span class="k">def</span> <span class="nf">set_validator_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">,</span> <span class="n">validator_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">MatterFile</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="MatterFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.MatterFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">matter_file</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
@@ -554,6 +577,14 @@
 <div class="viewcode-block" id="Event.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+<div class="viewcode-block" id="Event.set_validator_kwargs"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.set_validator_kwargs">[docs]</a>    <span class="k">def</span> <span class="nf">set_validator_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+            <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">,</span> <span class="n">validator_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="s2">&quot;agenda_uri&quot;</span><span class="p">)</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">Event</span><span class="p">,</span> <span class="s2">&quot;minutes_uri&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Event.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Event.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="n">event</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
@@ -602,6 +633,13 @@
 
 <div class="viewcode-block" id="Session.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Session.set_validator_kwargs"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.set_validator_kwargs">[docs]</a>    <span class="k">def</span> <span class="nf">set_validator_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">,</span> <span class="n">validator_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="s2">&quot;video_uri&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Session.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Session.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
@@ -769,6 +807,13 @@
 
 <div class="viewcode-block" id="EventMinutesItemFile.Meta"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ignore_none_field</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="EventMinutesItemFile.set_validator_kwargs"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.set_validator_kwargs">[docs]</a>    <span class="k">def</span> <span class="nf">set_validator_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">resource_exists</span><span class="p">,</span> <span class="n">validator_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">field</span><span class="o">.</span><span class="n">contribute_to_model</span><span class="p">(</span><span class="n">EventMinutesItemFile</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EventMinutesItemFile.Example"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.Example">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
