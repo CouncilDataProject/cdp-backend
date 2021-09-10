@@ -122,7 +122,7 @@ setup(
             "run_cdp_event_gather=cdp_backend.bin.run_cdp_event_gather:main",
             "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
-            "process_local_file=cdp_backend.bin.process_local_file:main",
+            "process_special_event=cdp_backend.bin.process_special_event:main",
         ],
     },
     install_requires=requirements,
