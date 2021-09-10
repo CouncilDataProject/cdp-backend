@@ -34,7 +34,7 @@ class Args(argparse.Namespace):
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
             prog="process_special_event",
-            description="Process prefetched events (with remote or local files) " 
+            description="Process prefetched events (with remote or local files) "
             + "into the event pipeline.",
         )
         p.add_argument(
