@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>cdp_backend.bin.process_local_file &mdash; cdp-backend 3.0.0.dev13 documentation</title>
+  <title>cdp_backend.bin.process_special_event &mdash; cdp-backend 3.0.0.dev13 documentation</title>
   
 
   
@@ -194,7 +194,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>cdp_backend.bin.process_local_file</li>
+      <li>cdp_backend.bin.process_special_event</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -209,7 +209,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for cdp_backend.bin.process_local_file</h1><div class="highlight"><pre>
+  <h1>Source code for cdp_backend.bin.process_special_event</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -219,10 +219,14 @@
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
+<span class="kn">from</span> <span class="nn">fsspec.implementations.local</span> <span class="kn">import</span> <span class="n">LocalFileSystem</span>
+
 <span class="kn">from</span> <span class="nn">cdp_backend.file_store.functions</span> <span class="kn">import</span> <span class="n">upload_file</span>
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">event_gather_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline.ingestion_models</span> <span class="kn">import</span> <span class="n">EventIngestionModel</span>
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline.pipeline_config</span> <span class="kn">import</span> <span class="n">EventGatherPipelineConfig</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.utils.file_utils</span> <span class="kn">import</span> <span class="n">resource_copy</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -235,14 +239,15 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.process_local_file.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
+<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.process_special_event.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parse</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;process_local_file&quot;</span><span class="p">,</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Process local video file into the event pipeline.&quot;</span><span class="p">,</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;process_special_event&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Process prefetched events (with remote or local files) &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;into the event pipeline.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
             <span class="s2">&quot;--event_details_file&quot;</span><span class="p">,</span>
@@ -257,7 +262,7 @@
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.process_local_file.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.process_special_event.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
 
@@ -274,11 +279,18 @@
             <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">ingestion_model</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
+                <span class="c1"># Copy if remote resource, otherwise use local file uri</span>
+                <span class="n">fs</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">LocalFileSystem</span><span class="p">):</span>
+                    <span class="n">filepath</span> <span class="o">=</span> <span class="n">resource_copy</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">filepath</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
+
                 <span class="c1"># Upload video file to file store</span>
                 <span class="n">video_uri</span> <span class="o">=</span> <span class="n">upload_file</span><span class="p">(</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
                     <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
-                    <span class="n">filepath</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span>
+                    <span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Replace video_uri of session</span>
