@@ -4,6 +4,7 @@
 import re
 import unicodedata
 from datetime import datetime
+from typing import Dict
 
 from fireo import fields
 from fireo.models import Model
@@ -34,6 +35,13 @@ class File(Model):
 
     class Meta:
         ignore_none_field = False
+
+    def set_validator_kwargs(self, kwargs: Dict) -> None:
+        field = fields.TextField(
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
+        )
+
+        field.contribute_to_model(File, "uri")
 
     @classmethod
     def Example(cls) -> Model:
@@ -68,6 +76,14 @@ class Person(Model):
 
     class Meta:
         ignore_none_field = False
+
+    def set_validator_kwargs(self, kwargs: Dict) -> None:
+        field = fields.TextField(
+            validator=validators.resource_exists,
+            validator_kwargs=kwargs,
+        )
+
+        field.contribute_to_model(Person, "website")
 
     @classmethod
     def Example(cls) -> Model:
@@ -250,6 +266,13 @@ class MatterFile(Model):
     class Meta:
         ignore_none_field = False
 
+    def set_validator_kwargs(self, kwargs: Dict) -> None:
+        field = fields.TextField(
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
+        )
+
+        field.contribute_to_model(MatterFile, "uri")
+
     @classmethod
     def Example(cls) -> Model:
         matter_file = cls()
@@ -342,6 +365,14 @@ class Event(Model):
     class Meta:
         ignore_none_field = False
 
+    def set_validator_kwargs(self, kwargs: Dict) -> None:
+        field = fields.TextField(
+            validator=validators.resource_exists, validator_kwargs=kwargs
+        )
+
+        field.contribute_to_model(Event, "agenda_uri")
+        field.contribute_to_model(Event, "minutes_uri")
+
     @classmethod
     def Example(cls) -> Model:
         event = cls()
@@ -390,6 +421,13 @@ class Session(Model):
 
     class Meta:
         ignore_none_field = False
+
+    def set_validator_kwargs(self, kwargs: Dict) -> None:
+        field = fields.TextField(
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
+        )
+
+        field.contribute_to_model(Session, "video_uri")
 
     @classmethod
     def Example(cls) -> Model:
@@ -557,6 +595,13 @@ class EventMinutesItemFile(Model):
 
     class Meta:
         ignore_none_field = False
+
+    def set_validator_kwargs(self, kwargs: Dict) -> None:
+        field = fields.TextField(
+            required=True, validator=validators.resource_exists, validator_kwargs=kwargs
+        )
+
+        field.contribute_to_model(EventMinutesItemFile, "uri")
 
     @classmethod
     def Example(cls) -> Model:

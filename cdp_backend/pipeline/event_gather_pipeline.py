@@ -392,13 +392,14 @@ def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List
             if event_minutes_item.matter is not None:
                 if event_minutes_item.matter.sponsors is not None:
                     for sponsor in event_minutes_item.matter.sponsors:
-                        if sponsor.roles is not None:
-                            for role in sponsor.roles:
-                                if (
-                                    _get_if_added_sum(phrases, role.title)
-                                    < CUM_CHAR_LIMIT
-                                ):
-                                    phrases.add(role.title)
+                        if sponsor.seat is not None:
+                            if sponsor.seat.roles is not None:
+                                for role in sponsor.seat.roles:
+                                    if (
+                                        _get_if_added_sum(phrases, role.title)
+                                        < CUM_CHAR_LIMIT
+                                    ):
+                                        phrases.add(role.title)
             if event_minutes_item.votes is not None:
                 for vote in event_minutes_item.votes:
                     if vote.person.roles is not None:
@@ -820,7 +821,10 @@ def _process_person_ingestion(
                 filepath=tmp_person_picture_path,
             )
             fs_functions.remove_local_file(tmp_person_picture_path)
-            person_picture_db_model = db_functions.create_file(person_picture_uri)
+            person_picture_db_model = db_functions.create_file(
+                uri=person_picture_uri,
+                credentials_file=credentials_file,
+            )
             person_picture_db_model = db_functions.upload_db_model(
                 db_model=person_picture_db_model,
                 credentials_file=credentials_file,
@@ -836,6 +840,7 @@ def _process_person_ingestion(
         person_db_model = db_functions.create_person(
             person=person,
             picture_ref=person_picture_db_model,
+            credentials_file=credentials_file,
         )
         person_db_model = db_functions.upload_db_model(
             db_model=person_db_model,
@@ -868,7 +873,7 @@ def _process_person_ingestion(
                     tmp_person_seat_image_path,
                 )
                 person_seat_image_db_model = db_functions.create_file(
-                    person_seat_image_uri
+                    uri=person_seat_image_uri, credentials_file=credentials_file
                 )
                 person_seat_image_db_model = db_functions.upload_db_model(
                     db_model=person_seat_image_db_model,
@@ -892,47 +897,51 @@ def _process_person_ingestion(
             credentials_file=credentials_file,
         )
 
-    # Create roles
-    if person.roles is not None:
-        for person_role in person.roles:
-            # Create any bodies for roles
-            person_role_body_db_model: Optional[db_models.Body]
-            if person_role.body is not None:
-                # Use or default role body start_datetime
-                if person_role.body.start_datetime is None:
-                    person_role_body_start_datetime = default_session.session_datetime
-                else:
-                    person_role_body_start_datetime = person_role.body.start_datetime
+        # Create roles
+        if person.seat.roles is not None:
+            for person_role in person.seat.roles:
+                # Create any bodies for roles
+                person_role_body_db_model: Optional[db_models.Body]
+                if person_role.body is not None:
+                    # Use or default role body start_datetime
+                    if person_role.body.start_datetime is None:
+                        person_role_body_start_datetime = (
+                            default_session.session_datetime
+                        )
+                    else:
+                        person_role_body_start_datetime = (
+                            person_role.body.start_datetime
+                        )
 
-                person_role_body_db_model = db_functions.create_body(
-                    body=person_role.body,
-                    start_datetime=person_role_body_start_datetime,
+                    person_role_body_db_model = db_functions.create_body(
+                        body=person_role.body,
+                        start_datetime=person_role_body_start_datetime,
+                    )
+                    person_role_body_db_model = db_functions.upload_db_model(
+                        db_model=person_role_body_db_model,
+                        credentials_file=credentials_file,
+                    )
+                else:
+                    person_role_body_db_model = None
+
+                # Use or default role start_datetime
+                if person_role.start_datetime is None:
+                    person_role_start_datetime = default_session.session_datetime
+                else:
+                    person_role_start_datetime = person_role.start_datetime
+
+                # Actual role creation
+                person_role_db_model = db_functions.create_role(
+                    role=person_role,
+                    person_ref=person_db_model,
+                    seat_ref=person_seat_db_model,
+                    start_datetime=person_role_start_datetime,
+                    body_ref=person_role_body_db_model,
                 )
-                person_role_body_db_model = db_functions.upload_db_model(
-                    db_model=person_role_body_db_model,
+                person_role_db_model = db_functions.upload_db_model(
+                    db_model=person_role_db_model,
                     credentials_file=credentials_file,
                 )
-            else:
-                person_role_body_db_model = None
-
-            # Use or default role start_datetime
-            if person_role.start_datetime is None:
-                person_role_start_datetime = default_session.session_datetime
-            else:
-                person_role_start_datetime = person_role.start_datetime
-
-            # Actual role creation
-            person_role_db_model = db_functions.create_role(
-                role=person_role,
-                person_ref=person_db_model,
-                seat_ref=person_seat_db_model,
-                start_datetime=person_role_start_datetime,
-                body_ref=person_role_body_db_model,
-            )
-            person_role_db_model = db_functions.upload_db_model(
-                db_model=person_role_db_model,
-                credentials_file=credentials_file,
-            )
 
     return person_db_model
 
@@ -1003,6 +1012,7 @@ def store_event_processing_results(
         # Upload static thumbnail
         static_thumbnail_file_db_model = db_functions.create_file(
             uri=session_result.static_thumbnail_uri,
+            credentials_file=credentials_file,
         )
         static_thumbnail_file_db_model = db_functions.upload_db_model(
             db_model=static_thumbnail_file_db_model,
@@ -1014,6 +1024,7 @@ def store_event_processing_results(
         # Upload hover thumbnail
         hover_thumbnail_file_db_model = db_functions.create_file(
             uri=session_result.hover_thumbnail_uri,
+            credentials_file=credentials_file,
         )
         hover_thumbnail_file_db_model = db_functions.upload_db_model(
             db_model=hover_thumbnail_file_db_model,
@@ -1032,6 +1043,7 @@ def store_event_processing_results(
             agenda_uri=event.agenda_uri,
             minutes_uri=event.minutes_uri,
             external_source_id=event.external_source_id,
+            credentials_file=credentials_file,
         )
         event_db_model = db_functions.upload_db_model(
             db_model=event_db_model,
@@ -1044,6 +1056,7 @@ def store_event_processing_results(
             static_thumbnail_ref=event_static_thumbnail_file_db_model,
             hover_thumbnail_ref=event_hover_thumbnail_file_db_model,
             external_source_id=event.external_source_id,
+            credentials_file=credentials_file,
         )
         event_db_model = db_functions.upload_db_model(
             db_model=event_db_model,
@@ -1053,7 +1066,10 @@ def store_event_processing_results(
     # Iter sessions
     for session_result in session_processing_results:
         # Upload audio file
-        audio_file_db_model = db_functions.create_file(uri=session_result.audio_uri)
+        audio_file_db_model = db_functions.create_file(
+            uri=session_result.audio_uri,
+            credentials_file=credentials_file,
+        )
         audio_file_db_model = db_functions.upload_db_model(
             db_model=audio_file_db_model,
             credentials_file=credentials_file,
@@ -1062,6 +1078,7 @@ def store_event_processing_results(
         # Upload transcript file
         transcript_file_db_model = db_functions.create_file(
             uri=session_result.transcript_uri,
+            credentials_file=credentials_file,
         )
         transcript_file_db_model = db_functions.upload_db_model(
             db_model=transcript_file_db_model,
@@ -1078,6 +1095,7 @@ def store_event_processing_results(
         session_db_model = db_functions.create_session(
             session=session_result.session,
             event_ref=event_db_model,
+            credentials_file=credentials_file,
         )
         session_db_model = db_functions.upload_db_model(
             db_model=session_db_model,
@@ -1211,6 +1229,7 @@ def store_event_processing_results(
                             matter_file_db_model = db_functions.create_matter_file(
                                 matter_ref=matter_db_model,
                                 supporting_file=supporting_file,
+                                credentials_file=credentials_file,
                             )
                             matter_file_db_model = db_functions.upload_db_model(
                                 db_model=matter_file_db_model,
@@ -1228,6 +1247,7 @@ def store_event_processing_results(
                             db_functions.create_event_minutes_item_file(
                                 event_minutes_item_ref=event_minutes_item_db_model,
                                 supporting_file=supporting_file,
+                                credentials_file=credentials_file,
                             )
                         )
                         event_minutes_item_file_db_model = db_functions.upload_db_model(

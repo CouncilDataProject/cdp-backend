@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from typing import Dict, Optional
+from unittest import mock
+
 import pytest
 
 from cdp_backend.database import models, validators
@@ -14,6 +17,7 @@ from .. import test_utils
 
 #############################################################################
 
+validator_kwargs = {"google_credentials_file": "filepath"}
 
 """
 Uniqueness test constants 
@@ -69,7 +73,10 @@ def test_email_is_valid(email: str, expected_result: bool) -> None:
         ("file://does-not-exist.txt", False),
     ],
 )
-def test_local_resource_exists(uri: str, expected_result: bool) -> None:
+def test_local_resource_exists(
+    uri: str,
+    expected_result: bool,
+) -> None:
     actual_result = validators.resource_exists(uri)
     assert actual_result == expected_result
 
@@ -79,16 +86,45 @@ def test_local_resource_exists(uri: str, expected_result: bool) -> None:
     reason="No internet connection",
 )
 @pytest.mark.parametrize(
-    "uri, expected_result",
+    "uri, expected_result, gcsfs_exists, kwargs",
     [
-        (None, True),
-        ("https://docs.pytest.org/en/latest/index.html", True),
-        ("https://docs.pytest.org/en/latest/does-not-exist.html", False),
+        (None, True, None, None),
+        ("https://docs.pytest.org/en/latest/index.html", True, None, None),
+        ("https://docs.pytest.org/en/latest/does-not-exist.html", False, None, None),
+        ("gs://bucket/filename.txt", True, True, validator_kwargs),
+        (
+            "https://storage.googleapis.com/download/storage/v1/b/"
+            + "bucket.appspot.com/o/wombo_combo.mp4?alt=media",
+            True,
+            True,
+            validator_kwargs,
+        ),
+        ("gs://bucket/filename.txt", False, False, validator_kwargs),
+        # Unconvertible JSON url case
+        (
+            "https://storage.googleapis.com/download/storage/v1/xxx/"
+            + "bucket.appspot.com",
+            True,
+            None,
+            None,
+        ),
     ],
 )
-def test_remote_resource_exists(uri: str, expected_result: bool) -> None:
-    actual_result = validators.resource_exists(uri)
-    assert actual_result == expected_result
+def test_remote_resource_exists(
+    uri: str,
+    expected_result: bool,
+    gcsfs_exists: Optional[bool],
+    kwargs: Optional[Dict],
+) -> None:
+    with mock.patch("gcsfs.credentials.GoogleCredentials.connect"):
+        with mock.patch("gcsfs.GCSFileSystem.exists") as mock_exists:
+            mock_exists.return_value = gcsfs_exists
+            if kwargs:
+                actual_result = validators.resource_exists(uri, **kwargs)
+            else:
+                actual_result = validators.resource_exists(uri)
+
+            assert actual_result == expected_result
 
 
 @pytest.mark.parametrize(

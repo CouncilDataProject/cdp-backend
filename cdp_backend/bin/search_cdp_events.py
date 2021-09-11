@@ -99,7 +99,7 @@ def get_stemmed_grams_from_query(query: str) -> List[str]:
     # Create stemmed grams for query
     query_terms = clean_text(query, clean_stop_words=True).split()
     stemmed_grams = []
-    for n_gram_size in range(1, 3):
+    for n_gram_size in [1, 2, 3]:
         grams = ngrams(query_terms, n_gram_size)
         for gram in grams:
             stemmed_grams.append(" ".join(stemmer.stem(term.lower()) for term in gram))

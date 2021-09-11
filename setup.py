@@ -23,7 +23,7 @@ pipeline_requirements = [
     "pandas~=1.2",
     "prefect~=0.14.0",
     "pulumi~=3.3",
-    "pulumi-google-native~=0.1.0",
+    "pulumi-google-native~=0.7.0",
     "pulumi-gcp~=5.7",
     "rapidfuzz~=1.4",
     "spacy~=3.0",
@@ -70,7 +70,7 @@ dev_requirements = [
 
 requirements = [
     "dataclasses-json~=0.5",
-    "fireo~=1.4",
+    "fireo~=1.4.5",
     "fsspec",  # Version pin set by gcsfs
     "gcsfs~=2021.7.0",
 ]
@@ -122,7 +122,7 @@ setup(
             "run_cdp_event_gather=cdp_backend.bin.run_cdp_event_gather:main",
             "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
-            "process_local_file=cdp_backend.bin.process_local_file:main",
+            "process_special_event=cdp_backend.bin.process_special_event:main",
         ],
     },
     install_requires=requirements,
@@ -141,6 +141,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.0.dev10",
+    version="3.0.0.dev14",
     zip_safe=False,
 )
