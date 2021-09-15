@@ -236,7 +236,10 @@ def get_static_thumbnail(
 
 
 def get_hover_thumbnail(
-    video_path: str, session_content_hash: str, num_frames: int = 10
+    video_path: str,
+    session_content_hash: str,
+    num_frames: int = 10,
+    duration: float = 6.0,
 ) -> str:
     """
     A function that produces a gif hover thumbnail from an mp4 video file
@@ -249,7 +252,9 @@ def get_hover_thumbnail(
         The video content hash. This will be used in the produced image file's name
     num_frames: int
         Determines the number of frames in the thumbnail
-
+    duration: float
+        Runtime of the produced GIF.
+        Default: 6.0 seconds
 
     Returns
     -------
@@ -275,7 +280,7 @@ def get_hover_thumbnail(
     width = image.shape[1]
     final_ratio = find_proper_resize_ratio(height, width)
 
-    with imageio.get_writer(gif_path, mode="I") as writer:
+    with imageio.get_writer(gif_path, mode="I", fps=(num_frames / duration)) as writer:
         for i in range(0, num_frames):
             if final_ratio < 1:
                 image = Image.fromarray(reader.get_data(i * step_size)).resize(
@@ -284,7 +289,7 @@ def get_hover_thumbnail(
             else:
                 image = Image.fromarray(reader.get_data(i * step_size))
 
-            final_image = np.asarray(image, dtype="int32")
+            final_image = np.asarray(image).astype(np.uint8)
             writer.append_data(final_image)
 
     return gif_path
