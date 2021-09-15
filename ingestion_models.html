@@ -1,77 +1,37 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Ingestion Models &mdash; cdp-backend 3.0.0.dev14 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Event Gather Pipeline" href="event_gather_pipeline.html" />
     <link rel="prev" title="cdp_backend.utils.resources package" href="cdp_backend.utils.resources.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> cdp-backend
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 3.0.0.dev14
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,18 +39,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
@@ -148,82 +97,35 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">cdp-backend</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Ingestion Models</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/ingestion_models.md.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
-  </ul>
-
-  
-  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
-      
-        <a href="event_gather_pipeline.html" class="btn btn-neutral float-right" title="Event Gather Pipeline" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-      
-      
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
         <a href="cdp_backend.utils.resources.html" class="btn btn-neutral float-left" title="cdp_backend.utils.resources package" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-      
+        <a href="event_gather_pipeline.html" class="btn btn-neutral float-right" title="Event Gather Pipeline" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
   </div>
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="ingestion-models">
-<h1>Ingestion Models<a class="headerlink" href="#ingestion-models" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="ingestion-models">
+<h1>Ingestion Models<a class="headerlink" href="#ingestion-models" title="Permalink to this headline"></a></h1>
 <p>We try to make CDP infrastructure as easy as possible to set up while also allowing for
 scaling to support as much specific data as can be given and processed.</p>
 <p>To this end, our event data ingestion model can be seen below in two examples.</p>
@@ -234,8 +136,8 @@ scaling to support as much specific data as can be given and processed.</p>
 <p>The more data provided, the more data displayed and queryable from CDP services.</p>
 <p>For more information on each field available, please see the
 <a class="reference external" href="./cdp_backend.pipeline.html#module-cdp_backend.pipeline.ingestion_models">object definition documentation</a>.</p>
-<div class="section" id="updating-existing-database-documents">
-<h2>Updating Existing Database Documents<a class="headerlink" href="#updating-existing-database-documents" title="Permalink to this headline">¶</a></h2>
+<section id="updating-existing-database-documents">
+<h2>Updating Existing Database Documents<a class="headerlink" href="#updating-existing-database-documents" title="Permalink to this headline"></a></h2>
 <p>During the event gather pipeline, if an existing database document is found for an
 ingestion model, the content of the existing database document will be updated
 if there are differences between the ingestion and database data.</p>
@@ -243,27 +145,27 @@ if there are differences between the ingestion and database data.</p>
 value of the corresponding fields in the ingestion model.</p>
 <p>If the ingestion model field is not provided or <code class="docutils literal notranslate"><span class="pre">None</span></code>, the database document’s
 field will not be overwritten.</p>
-</div>
-<div class="section" id="minimal-event-data">
-<h2>Minimal Event Data<a class="headerlink" href="#minimal-event-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="minimal-event-data">
+<h2>Minimal Event Data<a class="headerlink" href="#minimal-event-data" title="Permalink to this headline"></a></h2>
 <p>Note: while this looks like a Python <code class="docutils literal notranslate"><span class="pre">Dict</span></code>, these objects are of type:
 <a class="reference external" href="./cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">IngestionModel</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full Council&#39;</span><span class="p">,</span> <span class="s1">&#39;is_active&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
- <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">45076</span><span class="p">),</span>
+ <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">581478</span><span class="p">),</span>
                <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://video.seattle.gov/media/council/brief_072219_2011957V.mp4&#39;</span><span class="p">,</span>
                <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="expanded-event-data-with-event-minutes-items">
-<h2>Expanded Event Data with Event Minutes Items<a class="headerlink" href="#expanded-event-data-with-event-minutes-items" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="expanded-event-data-with-event-minutes-items">
+<h2>Expanded Event Data with Event Minutes Items<a class="headerlink" href="#expanded-event-data-with-event-minutes-items" title="Permalink to this headline"></a></h2>
 <p>Note: while this looks like a Python <code class="docutils literal notranslate"><span class="pre">Dict</span></code>, these objects are of type:
 <a class="reference external" href="./cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">IngestionModel</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full Council&#39;</span><span class="p">,</span> <span class="s1">&#39;is_active&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
- <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">45086</span><span class="p">),</span>
+ <span class="s1">&#39;sessions&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">581488</span><span class="p">),</span>
                <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://video.seattle.gov/media/council/council_101220_2022077V.mp4&#39;</span><span class="p">,</span>
                <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-              <span class="p">{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">45087</span><span class="p">),</span>
+              <span class="p">{</span><span class="s1">&#39;session_datetime&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">581489</span><span class="p">),</span>
                <span class="s1">&#39;video_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://video.seattle.gov/media/council/council_113020_2022091V.mp4&#39;</span><span class="p">,</span>
                <span class="s1">&#39;session_index&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
                <span class="s1">&#39;caption_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&#39;</span><span class="p">}],</span>
@@ -353,51 +255,35 @@ field will not be overwritten.</p>
                                      <span class="s1">&#39;decision&#39;</span><span class="p">:</span> <span class="s1">&#39;Reject&#39;</span><span class="p">}]}]}</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Jackson Maxfield Brown.
-
-    </p>
+    <p>&#169; Copyright 2020, Jackson Maxfield Brown.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
