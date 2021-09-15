@@ -259,6 +259,15 @@
             <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firebase_init</span><span class="p">),</span>
         <span class="p">)</span>
 
+        <span class="c1"># Set full public read on bucket</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage_public_read</span> <span class="o">=</span> <span class="n">gcp</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">DefaultObjectAccessControl</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-storage-acl-public-viewer&quot;</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="o">.</span><span class="n">default_bucket</span><span class="p">,</span>
+            <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;allUsers&quot;</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">&quot;READER&quot;</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="p">),</span>
+        <span class="p">)</span>
+
         <span class="c1"># Create all firestore indexes</span>
         <span class="k">for</span> <span class="n">model_cls</span> <span class="ow">in</span> <span class="n">DATABASE_MODELS</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">idx_field_set</span> <span class="ow">in</span> <span class="n">model_cls</span><span class="o">.</span><span class="n">_INDEXES</span><span class="p">:</span>
