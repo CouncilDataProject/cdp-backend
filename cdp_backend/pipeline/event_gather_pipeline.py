@@ -821,7 +821,10 @@ def _process_person_ingestion(
                 filepath=tmp_person_picture_path,
             )
             fs_functions.remove_local_file(tmp_person_picture_path)
-            person_picture_db_model = db_functions.create_file(person_picture_uri)
+            person_picture_db_model = db_functions.create_file(
+                uri=person_picture_uri,
+                credentials_file=credentials_file,
+            )
             person_picture_db_model = db_functions.upload_db_model(
                 db_model=person_picture_db_model,
                 credentials_file=credentials_file,
@@ -837,6 +840,7 @@ def _process_person_ingestion(
         person_db_model = db_functions.create_person(
             person=person,
             picture_ref=person_picture_db_model,
+            credentials_file=credentials_file,
         )
         person_db_model = db_functions.upload_db_model(
             db_model=person_db_model,
@@ -869,7 +873,7 @@ def _process_person_ingestion(
                     tmp_person_seat_image_path,
                 )
                 person_seat_image_db_model = db_functions.create_file(
-                    person_seat_image_uri
+                    uri=person_seat_image_uri, credentials_file=credentials_file
                 )
                 person_seat_image_db_model = db_functions.upload_db_model(
                     db_model=person_seat_image_db_model,
@@ -1008,6 +1012,7 @@ def store_event_processing_results(
         # Upload static thumbnail
         static_thumbnail_file_db_model = db_functions.create_file(
             uri=session_result.static_thumbnail_uri,
+            credentials_file=credentials_file,
         )
         static_thumbnail_file_db_model = db_functions.upload_db_model(
             db_model=static_thumbnail_file_db_model,
@@ -1019,6 +1024,7 @@ def store_event_processing_results(
         # Upload hover thumbnail
         hover_thumbnail_file_db_model = db_functions.create_file(
             uri=session_result.hover_thumbnail_uri,
+            credentials_file=credentials_file,
         )
         hover_thumbnail_file_db_model = db_functions.upload_db_model(
             db_model=hover_thumbnail_file_db_model,
@@ -1037,6 +1043,7 @@ def store_event_processing_results(
             agenda_uri=event.agenda_uri,
             minutes_uri=event.minutes_uri,
             external_source_id=event.external_source_id,
+            credentials_file=credentials_file,
         )
         event_db_model = db_functions.upload_db_model(
             db_model=event_db_model,
@@ -1049,6 +1056,7 @@ def store_event_processing_results(
             static_thumbnail_ref=event_static_thumbnail_file_db_model,
             hover_thumbnail_ref=event_hover_thumbnail_file_db_model,
             external_source_id=event.external_source_id,
+            credentials_file=credentials_file,
         )
         event_db_model = db_functions.upload_db_model(
             db_model=event_db_model,
@@ -1058,7 +1066,10 @@ def store_event_processing_results(
     # Iter sessions
     for session_result in session_processing_results:
         # Upload audio file
-        audio_file_db_model = db_functions.create_file(uri=session_result.audio_uri)
+        audio_file_db_model = db_functions.create_file(
+            uri=session_result.audio_uri,
+            credentials_file=credentials_file,
+        )
         audio_file_db_model = db_functions.upload_db_model(
             db_model=audio_file_db_model,
             credentials_file=credentials_file,
@@ -1067,6 +1078,7 @@ def store_event_processing_results(
         # Upload transcript file
         transcript_file_db_model = db_functions.create_file(
             uri=session_result.transcript_uri,
+            credentials_file=credentials_file,
         )
         transcript_file_db_model = db_functions.upload_db_model(
             db_model=transcript_file_db_model,
@@ -1083,6 +1095,7 @@ def store_event_processing_results(
         session_db_model = db_functions.create_session(
             session=session_result.session,
             event_ref=event_db_model,
+            credentials_file=credentials_file,
         )
         session_db_model = db_functions.upload_db_model(
             db_model=session_db_model,
@@ -1216,6 +1229,7 @@ def store_event_processing_results(
                             matter_file_db_model = db_functions.create_matter_file(
                                 matter_ref=matter_db_model,
                                 supporting_file=supporting_file,
+                                credentials_file=credentials_file,
                             )
                             matter_file_db_model = db_functions.upload_db_model(
                                 db_model=matter_file_db_model,
@@ -1233,6 +1247,7 @@ def store_event_processing_results(
                             db_functions.create_event_minutes_item_file(
                                 event_minutes_item_ref=event_minutes_item_db_model,
                                 supporting_file=supporting_file,
+                                credentials_file=credentials_file,
                             )
                         )
                         event_minutes_item_file_db_model = db_functions.upload_db_model(

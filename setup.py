@@ -70,7 +70,7 @@ dev_requirements = [
 
 requirements = [
     "dataclasses-json~=0.5",
-    "fireo~=1.4",
+    "fireo~=1.4.5",
     "fsspec",  # Version pin set by gcsfs
     "gcsfs~=2021.7.0",
 ]
@@ -122,7 +122,7 @@ setup(
             "run_cdp_event_gather=cdp_backend.bin.run_cdp_event_gather:main",
             "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
-            "process_local_file=cdp_backend.bin.process_local_file:main",
+            "process_special_event=cdp_backend.bin.process_special_event:main",
         ],
     },
     install_requires=requirements,
@@ -141,6 +141,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.0.dev13",
+    version="3.0.0.dev14",
     zip_safe=False,
 )

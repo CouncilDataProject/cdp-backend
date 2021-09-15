@@ -7,10 +7,14 @@ import sys
 import traceback
 from pathlib import Path
 
+from fsspec.core import url_to_fs
+from fsspec.implementations.local import LocalFileSystem
+
 from cdp_backend.file_store.functions import upload_file
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline.ingestion_models import EventIngestionModel
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
+from cdp_backend.utils.file_utils import resource_copy
 
 ###############################################################################
 
@@ -29,8 +33,9 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="process_local_file",
-            description="Process local video file into the event pipeline.",
+            prog="process_special_event",
+            description="Process prefetched events (with remote or local files) "
+            + "into the event pipeline.",
         )
         p.add_argument(
             "--event_details_file",
@@ -62,11 +67,18 @@ def main() -> None:
             )
 
             for session in ingestion_model.sessions:
+                # Copy if remote resource, otherwise use local file uri
+                fs, path = url_to_fs(session.video_uri)
+                if not isinstance(fs, LocalFileSystem):
+                    filepath = resource_copy(session.video_uri)
+                else:
+                    filepath = session.video_uri
+
                 # Upload video file to file store
                 video_uri = upload_file(
                     credentials_file=config.google_credentials_file,
                     bucket=config.validated_gcs_bucket_name,
-                    filepath=session.video_uri,
+                    filepath=filepath,
                 )
 
                 # Replace video_uri of session
