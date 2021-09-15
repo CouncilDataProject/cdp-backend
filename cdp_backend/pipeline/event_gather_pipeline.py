@@ -402,14 +402,15 @@ def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List
                                         phrases.add(role.title)
             if event_minutes_item.votes is not None:
                 for vote in event_minutes_item.votes:
-                    if vote.person.roles is not None:
-                        for role in vote.person.roles:
-                            if _within_limit(phrases):
-                                if (
-                                    _get_if_added_sum(phrases, role.title)
-                                    < CUM_CHAR_LIMIT
-                                ):
-                                    phrases.add(role.title)
+                    if vote.person.seat is not None:
+                        if vote.person.seat.roles is not None:
+                            for role in vote.person.seat.roles:
+                                if _within_limit(phrases):
+                                    if (
+                                        _get_if_added_sum(phrases, role.title)
+                                        < CUM_CHAR_LIMIT
+                                    ):
+                                        phrases.add(role.title)
 
     return list(phrases)
 
