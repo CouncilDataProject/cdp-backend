@@ -99,8 +99,8 @@ def _get_example_person(seat_num: int) -> Person:
             electoral_area=f"Example Electoral Area {seat_num}",
             electoral_type=f"Example Electoral Type {seat_electoral_type}",
             image_uri=SEAT_URI,
+            roles=roles,
         ),
-        roles=roles,
     )
 
 

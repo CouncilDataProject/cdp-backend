@@ -50,7 +50,6 @@ class Person(IngestionModel):
     website: Optional[str] = None
     picture_uri: Optional[str] = None
     seat: Optional[Seat] = None
-    roles: Optional[List[Role]] = None
     external_source_id: Optional[str] = None
 
 
