@@ -138,6 +138,15 @@ class CDPStack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self.firebase_init),
         )
 
+        # Set full public read on bucket
+        self.storage_public_read = gcp.storage.DefaultObjectAccessControl(
+            f"{self.gcp_project_id}-storage-acl-public-viewer",
+            bucket=self.firestore_app.default_bucket,
+            entity="allUsers",
+            role="READER",
+            opts=pulumi.ResourceOptions(parent=self.firestore_app),
+        )
+
         # Create all firestore indexes
         for model_cls in DATABASE_MODELS:
             for idx_field_set in model_cls._INDEXES:
