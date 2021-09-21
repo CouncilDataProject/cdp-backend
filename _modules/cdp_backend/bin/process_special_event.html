@@ -125,6 +125,7 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
@@ -191,7 +192,11 @@
                 <span class="c1"># Copy if remote resource, otherwise use local file uri</span>
                 <span class="n">fs</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">LocalFileSystem</span><span class="p">):</span>
-                    <span class="n">filepath</span> <span class="o">=</span> <span class="n">resource_copy</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
+                    <span class="c1"># Create tmp directory to save file in</span>
+                    <span class="n">dirpath</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+                    <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
+
+                    <span class="n">filepath</span> <span class="o">=</span> <span class="n">resource_copy</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">filepath</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
 

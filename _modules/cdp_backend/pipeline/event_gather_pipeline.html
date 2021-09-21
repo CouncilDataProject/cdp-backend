@@ -123,9 +123,11 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">fireo.fields.errors</span> <span class="kn">import</span> <span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">,</span> <span class="n">RequiredField</span>
@@ -863,7 +865,11 @@
 <span class="sd">    hover_thumbnail_url: str</span>
 <span class="sd">        The URL of the hover thumbnail, stored on GCS.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tmp_video_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span><span class="n">video_uri</span><span class="p">)</span>
+    <span class="c1"># Create tmp directory to save file in</span>
+    <span class="n">dirpath</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+    <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
+
+    <span class="n">tmp_video_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">static_thumbnail_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Generate new</span>
