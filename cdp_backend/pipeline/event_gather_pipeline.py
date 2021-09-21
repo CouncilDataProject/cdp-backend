@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import tempfile
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
+from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
@@ -742,7 +744,11 @@ def get_video_and_generate_thumbnails(
     hover_thumbnail_url: str
         The URL of the hover thumbnail, stored on GCS.
     """
-    tmp_video_path = file_utils.resource_copy(video_uri)
+    # Create tmp directory to save file in
+    dirpath = tempfile.mkdtemp()
+    dst = Path(dirpath)
+
+    tmp_video_path = file_utils.resource_copy(uri=video_uri, dst=dst)
 
     if event.static_thumbnail_uri is None:
         # Generate new

@@ -4,6 +4,7 @@
 import argparse
 import logging
 import sys
+import tempfile
 import traceback
 from pathlib import Path
 
@@ -70,7 +71,11 @@ def main() -> None:
                 # Copy if remote resource, otherwise use local file uri
                 fs, path = url_to_fs(session.video_uri)
                 if not isinstance(fs, LocalFileSystem):
-                    filepath = resource_copy(session.video_uri)
+                    # Create tmp directory to save file in
+                    dirpath = tempfile.mkdtemp()
+                    dst = Path(dirpath)
+
+                    filepath = resource_copy(uri=session.video_uri, dst=dst)
                 else:
                     filepath = session.video_uri
 
