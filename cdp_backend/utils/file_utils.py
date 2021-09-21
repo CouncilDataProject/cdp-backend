@@ -83,10 +83,6 @@ def resource_copy(
     if dst is None:
         dst = uri.split("/")[-1]
 
-        # Create tmp directory to save file in
-        # dirpath = tempfile.mkdtemp()
-        # dst = Path(dirpath) / dst
-
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
