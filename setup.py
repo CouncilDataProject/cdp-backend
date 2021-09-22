@@ -146,6 +146,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.0.dev17",
+    version="3.0.0.dev18",
     zip_safe=False,
 )
