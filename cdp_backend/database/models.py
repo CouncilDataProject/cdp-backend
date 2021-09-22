@@ -440,7 +440,14 @@ class Session(Model):
         return session
 
     _PRIMARY_KEYS = ("event_ref", "video_uri")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(name="session_index", order=Order.ASCENDING),
+            )
+        ),
+    )
 
 
 class Transcript(Model):
@@ -663,7 +670,14 @@ class Vote(Model):
         "person_ref",
         "decision",
     )
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+            )
+        ),
+    )
 
 
 class IndexedEventGram(Model):
