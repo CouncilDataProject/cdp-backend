@@ -124,8 +124,15 @@ def create_event_gather_flow(
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
                 # Get or create audio
+                video_filename = session.video_uri.split("/")[-1]
+                tmp_video_filepath = resource_copy_task(
+                    uri=session.video_uri,
+                    dst=f"audio-splitting-{video_filename}",
+                    overwrite=True,
+                )
+
                 session_content_hash, audio_uri = get_video_and_split_audio(
-                    video_uri=session.video_uri,
+                    tmp_video_filepath=tmp_video_filepath,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
@@ -165,11 +172,13 @@ def create_event_gather_flow(
                     hover_thumbnail_uri,
                 ) = get_video_and_generate_thumbnails(
                     session_content_hash=session_content_hash,
-                    video_uri=session.video_uri,
+                    tmp_video_path=tmp_video_filepath,
                     event=event,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
+
+#                fs_functions.remove_local_file(tmp_video_filepath)
 
                 # Store all processed and provided data
                 session_processing_results.append(
@@ -195,9 +204,19 @@ def create_event_gather_flow(
     return flow
 
 
+def resource_copy_task(
+    uri: str, dst: str = None, overwrite: bool = False
+) -> str:
+    file_utils.resource_copy(
+        uri=uri,
+        dst=dst,
+        overwrite=overwrite,
+    )
+
+
 @task(nout=2, max_retries=3, retry_delay=timedelta(seconds=60))
 def get_video_and_split_audio(
-    video_uri: str, bucket: str, credentials_file: str
+    tmp_video_filepath: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
     """
     Download (or copy) a video file to temp storage, split's the audio, and uploads
@@ -227,12 +246,12 @@ def get_video_and_split_audio(
     # Get just the video filename from the full uri
     # TODO: Handle windows file splitting???
     # Generally this is a URI but we do have a goal of a local file processing too...
-    video_filename = video_uri.split("/")[-1]
-    tmp_video_filepath = file_utils.resource_copy(
-        uri=video_uri,
-        dst=f"audio-splitting-{video_filename}",
-        overwrite=True,
-    )
+    #video_filename = video_uri.split("/")[-1]
+    #tmp_video_filepath = file_utils.resource_copy(
+    #    uri=video_uri,
+    #    dst=f"audio-splitting-{video_filename}",
+    #    overwrite=True,
+    #)
 
     # Hash the video contents
     session_content_hash = file_utils.hash_file_contents(uri=tmp_video_filepath)
@@ -284,7 +303,7 @@ def get_video_and_split_audio(
             fs_functions.remove_local_file(local_path)
 
     # Always remove tmp video file
-    fs_functions.remove_local_file(tmp_video_filepath)
+    #fs_functions.remove_local_file(tmp_video_filepath)
 
     return session_content_hash, audio_uri
 
@@ -712,7 +731,7 @@ def generate_transcript(
 @task(nout=2)
 def get_video_and_generate_thumbnails(
     session_content_hash: str,
-    video_uri: str,
+    tmp_video_path: str,
     event: EventIngestionModel,
     bucket: str,
     credentials_file: str,
@@ -741,7 +760,7 @@ def get_video_and_generate_thumbnails(
     hover_thumbnail_url: str
         The URL of the hover thumbnail, stored on GCS.
     """
-    tmp_video_path = file_utils.resource_copy(video_uri)
+    #tmp_video_path = file_utils.resource_copy(video_uri)
 
     if event.static_thumbnail_uri is None:
         # Generate new
@@ -777,7 +796,7 @@ def get_video_and_generate_thumbnails(
     )
     fs_functions.remove_local_file(hover_thumbnail_file)
 
-    fs_functions.remove_local_file(tmp_video_path)
+    #fs_functions.remove_local_file(tmp_video_path)
 
     return (
         static_thumbnail_url,
