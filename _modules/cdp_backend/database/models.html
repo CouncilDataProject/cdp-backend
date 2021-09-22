@@ -561,7 +561,14 @@
         <span class="k">return</span> <span class="n">session</span></div>
 
     <span class="n">_PRIMARY_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;video_uri&quot;</span><span class="p">)</span>
-    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;session_index&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Transcript"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.Transcript">[docs]</a><span class="k">class</span> <span class="nc">Transcript</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
@@ -784,7 +791,14 @@
         <span class="s2">&quot;person_ref&quot;</span><span class="p">,</span>
         <span class="s2">&quot;decision&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">()</span></div>
+    <span class="n">_INDEXES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IndexedFieldSet</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="n">IndexedField</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;person_ref&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">Order</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="IndexedEventGram"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram">[docs]</a><span class="k">class</span> <span class="nc">IndexedEventGram</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
