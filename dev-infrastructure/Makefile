@@ -28,12 +28,18 @@ init: ## See README, must provide "project"
 	echo "Follow the link to setup billing for the created GCloud account."
 	echo "https://console.cloud.google.com/billing/linkedaccount?project=${project}"
 
+set-cors: ## Set cors for the bucket, must provide "project"
+	gsutil cors set cors.json gs://${project}.appspot.com/
+
 build: ## Run pulumi up for infra setup
 	pulumi up -p 4
 
-clean: ## Remove all database documents and filestore objects, must provide "key"
-	clean_cdp_database ${key}
-	clean_cdp_filestore ${key}
+switch-project: ## Switch active gcloud project, must provide "project"
+	gcloud config set project ${project}
+
+clean: ## Remove all database documents and filestore objects
+	clean_cdp_database ../.keys/cdp-dev.json
+	clean_cdp_filestore ../.keys/cdp-dev.json
 
 reset: ## Run pulumi destroy and make build, must provide "project"
 	pulumi destroy -p 4

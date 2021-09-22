@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import tempfile
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
+from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
@@ -402,14 +404,15 @@ def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List
                                         phrases.add(role.title)
             if event_minutes_item.votes is not None:
                 for vote in event_minutes_item.votes:
-                    if vote.person.roles is not None:
-                        for role in vote.person.roles:
-                            if _within_limit(phrases):
-                                if (
-                                    _get_if_added_sum(phrases, role.title)
-                                    < CUM_CHAR_LIMIT
-                                ):
-                                    phrases.add(role.title)
+                    if vote.person.seat is not None:
+                        if vote.person.seat.roles is not None:
+                            for role in vote.person.seat.roles:
+                                if _within_limit(phrases):
+                                    if (
+                                        _get_if_added_sum(phrases, role.title)
+                                        < CUM_CHAR_LIMIT
+                                    ):
+                                        phrases.add(role.title)
 
     return list(phrases)
 
@@ -741,7 +744,11 @@ def get_video_and_generate_thumbnails(
     hover_thumbnail_url: str
         The URL of the hover thumbnail, stored on GCS.
     """
-    tmp_video_path = file_utils.resource_copy(video_uri)
+    # Create tmp directory to save file in
+    dirpath = tempfile.mkdtemp()
+    dst = Path(dirpath)
+
+    tmp_video_path = file_utils.resource_copy(uri=video_uri, dst=dst)
 
     if event.static_thumbnail_uri is None:
         # Generate new
