@@ -12,6 +12,12 @@ setup_requirements = [
     "pytest-runner>=5.2",
 ]
 
+infrastructure_requirements = [
+    "pulumi~=3.3",
+    "pulumi-google-native~=0.7.0",
+    "pulumi-gcp~=5.7",
+]
+
 pipeline_requirements = [
     "dask[distributed]>=2021.7.0",
     "ffmpeg-python~=0.2.0",
@@ -22,9 +28,6 @@ pipeline_requirements = [
     "nltk~=3.6",
     "pandas~=1.2",
     "prefect~=0.14.0",
-    "pulumi~=3.3",
-    "pulumi-google-native~=0.7.0",
-    "pulumi-gcp~=5.7",
     "rapidfuzz~=1.4",
     "spacy~=3.0",
     "truecase~=0.0.12",
@@ -32,6 +35,7 @@ pipeline_requirements = [
 ]
 
 test_requirements = [
+    *infrastructure_requirements,
     *pipeline_requirements,
     "black>=19.10b0",
     "codecov==2.1.12",
@@ -77,6 +81,7 @@ requirements = [
 
 extra_requirements = {
     "setup": setup_requirements,
+    "infrastructure": infrastructure_requirements,
     "pipeline": pipeline_requirements,
     "test": test_requirements,
     "dev": dev_requirements,
@@ -141,6 +146,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.0.dev14",
+    version="3.0.0.dev17",
     zip_safe=False,
 )

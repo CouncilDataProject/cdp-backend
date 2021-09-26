@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import tempfile
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
+from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
@@ -124,11 +126,8 @@ def create_event_gather_flow(
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
                 # Get or create audio
-                video_filename = session.video_uri.split("/")[-1]
                 tmp_video_filepath = resource_copy_task(
-                    uri=session.video_uri,
-                    dst=f"audio-splitting-{video_filename}",
-                    overwrite=True,
+                    uri=session.video_uri
                 )
 
                 session_content_hash, audio_uri = get_video_and_split_audio(
@@ -204,14 +203,19 @@ def create_event_gather_flow(
     return flow
 
 
+@task
 def resource_copy_task(
-    uri: str, dst: str = None, overwrite: bool = False
+    uri: str
 ) -> str:
+    dirpath = tempfile.mkdtemp()
+
     file_utils.resource_copy(
         uri=uri,
-        dst=dst,
-        overwrite=overwrite,
+        dst=dirpath,
+        overwrite=True,
     )
+
+    return str(Path(dirpath) / uri.split("/")[-1])
 
 
 @task(nout=2, max_retries=3, retry_delay=timedelta(seconds=60))
@@ -421,14 +425,15 @@ def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List
                                         phrases.add(role.title)
             if event_minutes_item.votes is not None:
                 for vote in event_minutes_item.votes:
-                    if vote.person.roles is not None:
-                        for role in vote.person.roles:
-                            if _within_limit(phrases):
-                                if (
-                                    _get_if_added_sum(phrases, role.title)
-                                    < CUM_CHAR_LIMIT
-                                ):
-                                    phrases.add(role.title)
+                    if vote.person.seat is not None:
+                        if vote.person.seat.roles is not None:
+                            for role in vote.person.seat.roles:
+                                if _within_limit(phrases):
+                                    if (
+                                        _get_if_added_sum(phrases, role.title)
+                                        < CUM_CHAR_LIMIT
+                                    ):
+                                        phrases.add(role.title)
 
     return list(phrases)
 
@@ -760,7 +765,13 @@ def get_video_and_generate_thumbnails(
     hover_thumbnail_url: str
         The URL of the hover thumbnail, stored on GCS.
     """
-    #tmp_video_path = file_utils.resource_copy(video_uri)
+
+    # tmp_video_path = file_utils.resource_copy(video_uri)
+    # Create tmp directory to save file in
+    # dirpath = tempfile.mkdtemp()
+    # dst = Path(dirpath)
+
+    # tmp_video_path = file_utils.resource_copy(uri=video_uri, dst=dst)
 
     if event.static_thumbnail_uri is None:
         # Generate new
