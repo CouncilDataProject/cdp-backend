@@ -21,8 +21,6 @@ class WordAnnotations:
     Annotations that can appear on an individual word level.
     """
 
-    pass
-
 
 @dataclass_json
 @dataclass
@@ -30,8 +28,6 @@ class SentenceAnnotations:
     """
     Annotations that can appear on an individual sentence level.
     """
-
-    pass
 
 
 @dataclass_json
