@@ -237,7 +237,7 @@ def resource_copy_task(uri: str) -> str:
         overwrite=True,
     )
 
-    return str(Path(dirpath) / Path(uri).name)
+    return str(Path(dirpath) / uri.split("/")[-1])
 
 
 @task
