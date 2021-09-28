@@ -126,8 +126,10 @@ def create_event_gather_flow(
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
                 # Get or create audio
+                tmp_video_filepath = resource_copy_task(uri=session.video_uri)
+
                 session_content_hash, audio_uri = get_video_and_split_audio(
-                    video_uri=session.video_uri,
+                    tmp_video_filepath=tmp_video_filepath,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
@@ -167,10 +169,15 @@ def create_event_gather_flow(
                     hover_thumbnail_uri,
                 ) = get_video_and_generate_thumbnails(
                     session_content_hash=session_content_hash,
-                    video_uri=session.video_uri,
+                    tmp_video_path=tmp_video_filepath,
                     event=event,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
+                )
+
+                # Add audio uri and static thumbnail uri
+                resource_delete_task(
+                    tmp_video_filepath, upstream_tasks=[audio_uri, static_thumbnail_uri]
                 )
 
                 # Store all processed and provided data
@@ -197,9 +204,36 @@ def create_event_gather_flow(
     return flow
 
 
+@task
+def resource_copy_task(uri: str) -> str:
+    # Copy video file from the internet and store it locally
+    dirpath = tempfile.mkdtemp()
+
+    file_utils.resource_copy(
+        uri=uri,
+        dst=dirpath,
+        overwrite=True,
+    )
+
+    return str(Path(dirpath) / uri.split("/")[-1])
+
+
+@task
+def resource_delete_task(uri: str) -> None:
+    """
+    Remove local file
+
+    Parameters
+    ----------
+    uri: str
+        The local video file.
+    """
+    fs_functions.remove_local_file(uri)
+
+
 @task(nout=2, max_retries=3, retry_delay=timedelta(seconds=60))
 def get_video_and_split_audio(
-    video_uri: str, bucket: str, credentials_file: str
+    tmp_video_filepath: str, bucket: str, credentials_file: str
 ) -> Tuple[str, str]:
     """
     Download (or copy) a video file to temp storage, split's the audio, and uploads
@@ -207,7 +241,7 @@ def get_video_and_split_audio(
 
     Parameters
     ----------
-    video_uri: str
+    tmp_video_filepath: str
         The URI to the video file to split audio from.
     bucket: str
         The name of the GCS bucket to upload the produced audio to.
@@ -226,16 +260,6 @@ def get_video_and_split_audio(
     We sometimes get file downloading failures when running in parallel so this has two
     retries attached to it that will run after a failure on a 3 minute delay.
     """
-    # Get just the video filename from the full uri
-    # TODO: Handle windows file splitting???
-    # Generally this is a URI but we do have a goal of a local file processing too...
-    video_filename = video_uri.split("/")[-1]
-    tmp_video_filepath = file_utils.resource_copy(
-        uri=video_uri,
-        dst=f"audio-splitting-{video_filename}",
-        overwrite=True,
-    )
-
     # Hash the video contents
     session_content_hash = file_utils.hash_file_contents(uri=tmp_video_filepath)
 
@@ -284,9 +308,6 @@ def get_video_and_split_audio(
             tmp_audio_log_err_filepath,
         ]:
             fs_functions.remove_local_file(local_path)
-
-    # Always remove tmp video file
-    fs_functions.remove_local_file(tmp_video_filepath)
 
     return session_content_hash, audio_uri
 
@@ -715,7 +736,7 @@ def generate_transcript(
 @task(nout=2)
 def get_video_and_generate_thumbnails(
     session_content_hash: str,
-    video_uri: str,
+    tmp_video_path: str,
     event: EventIngestionModel,
     bucket: str,
     credentials_file: str,
@@ -727,7 +748,7 @@ def get_video_and_generate_thumbnails(
     ----------
     session_content_hash: str
         The unique key (SHA256 hash of video content) for this session processing.
-    video_uri: str
+    tmp_video_path: str
         The URI to the video file to generate thumbnails from.
     event: EventIngestionModel
         The parent event of the session. If no captions are available,
@@ -744,12 +765,6 @@ def get_video_and_generate_thumbnails(
     hover_thumbnail_url: str
         The URL of the hover thumbnail, stored on GCS.
     """
-    # Create tmp directory to save file in
-    dirpath = tempfile.mkdtemp()
-    dst = Path(dirpath)
-
-    tmp_video_path = file_utils.resource_copy(uri=video_uri, dst=dst)
-
     if event.static_thumbnail_uri is None:
         # Generate new
         static_thumbnail_file = file_utils.get_static_thumbnail(
@@ -783,8 +798,6 @@ def get_video_and_generate_thumbnails(
         filepath=hover_thumbnail_file,
     )
     fs_functions.remove_local_file(hover_thumbnail_file)
-
-    fs_functions.remove_local_file(tmp_video_path)
 
     return (
         static_thumbnail_url,

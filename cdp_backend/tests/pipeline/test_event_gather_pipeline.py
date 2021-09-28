@@ -93,7 +93,7 @@ def test_get_video_and_split_audio(
         session_content_hash,
         audio_uri,
     ) = pipeline.get_video_and_split_audio.run(  # type: ignore
-        video_uri=str(example_video),
+        tmp_video_filepath=str(example_video),
         bucket="bucket",
         credentials_file="/fake/credentials/path",
     )
@@ -140,7 +140,7 @@ def test_get_video_and_generate_thumbnails(
         hover_thumbnail_url,
     ) = pipeline.get_video_and_generate_thumbnails.run(  # type: ignore
         session_content_hash=example_session_content_hash,
-        video_uri=str(example_video),
+        tmp_video_path=str(example_video),
         event=event,
         bucket="bucket",
         credentials_file="/fake/credentials/path",
