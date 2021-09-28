@@ -125,10 +125,17 @@ def create_event_gather_flow(
         for event in events:
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
-                # Get or create audio
+                # Download video to local copy
                 tmp_video_filepath = resource_copy_task(uri=session.video_uri)
 
-                session_content_hash, audio_uri = get_video_and_split_audio(
+                # Get unique session identifier
+                session_content_hash = get_session_content_hash(
+                    tmp_video_filepath=tmp_video_filepath,
+                )
+
+                # Split audio and store
+                audio_uri = split_audio(
+                    session_content_hash=session_content_hash,
                     tmp_video_filepath=tmp_video_filepath,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
@@ -151,8 +158,8 @@ def create_event_gather_flow(
 
                 # Generate transcript
                 transcript_uri, transcript = generate_transcript(
-                    session_content_hash=session_content_hash,
-                    audio_uri=audio_uri,
+                    session_content_hash=session_content_hash,  # type: ignore
+                    audio_uri=audio_uri,  # type: ignore
                     session=session,
                     event=event,
                     bucket=config.validated_gcs_bucket_name,
@@ -164,10 +171,7 @@ def create_event_gather_flow(
                 )
 
                 # Generate thumbnails
-                (
-                    static_thumbnail_uri,
-                    hover_thumbnail_uri,
-                ) = get_video_and_generate_thumbnails(
+                (static_thumbnail_uri, hover_thumbnail_uri,) = generate_thumbnails(
                     session_content_hash=session_content_hash,
                     tmp_video_path=tmp_video_filepath,
                     event=event,
@@ -204,8 +208,26 @@ def create_event_gather_flow(
     return flow
 
 
-@task
+@task(max_retries=3, retry_delay=timedelta(seconds=120))
 def resource_copy_task(uri: str) -> str:
+    """
+    Copy a file to a temporary location for processing.
+
+    Parameters
+    ----------
+    uri: str
+        The URI to the file to copy.
+
+    Returns
+    -------
+    local_path: str
+        The local path to the copied file.
+
+    Notes
+    -----
+    We sometimes get file downloading failures when running in parallel so this has two
+    retries attached to it that will run after a failure on a 2 minute delay.
+    """
     # Copy video file from the internet and store it locally
     dirpath = tempfile.mkdtemp()
 
@@ -215,7 +237,7 @@ def resource_copy_task(uri: str) -> str:
         overwrite=True,
     )
 
-    return str(Path(dirpath) / uri.split("/")[-1])
+    return str(Path(dirpath) / Path(uri).name)
 
 
 @task
@@ -231,38 +253,53 @@ def resource_delete_task(uri: str) -> None:
     fs_functions.remove_local_file(uri)
 
 
-@task(nout=2, max_retries=3, retry_delay=timedelta(seconds=60))
-def get_video_and_split_audio(
-    tmp_video_filepath: str, bucket: str, credentials_file: str
-) -> Tuple[str, str]:
+@task
+def get_session_content_hash(
+    tmp_video_filepath: str,
+) -> str:
     """
-    Download (or copy) a video file to temp storage, split's the audio, and uploads
-    the audio to Google storage.
+    Hash the video file content to get a unique identifier for the session.
 
     Parameters
     ----------
     tmp_video_filepath: str
-        The URI to the video file to split audio from.
-    bucket: str
-        The name of the GCS bucket to upload the produced audio to.
-    credentials_file: str
-        Path to Google Service Account Credentials JSON file.
+        The local path for video file to generate a hash for.
 
     Returns
     -------
     session_content_hash: str
         The unique key (SHA256 hash of video content) for this session processing.
-    audio_uri: str
-        The URI to the uploaded audio file.
-
-    Notes
-    -----
-    We sometimes get file downloading failures when running in parallel so this has two
-    retries attached to it that will run after a failure on a 3 minute delay.
     """
     # Hash the video contents
-    session_content_hash = file_utils.hash_file_contents(uri=tmp_video_filepath)
+    return file_utils.hash_file_contents(uri=tmp_video_filepath)
 
+
+@task
+def split_audio(
+    session_content_hash: str,
+    tmp_video_filepath: str,
+    bucket: str,
+    credentials_file: str,
+) -> str:
+    """
+    Split the audio from a local video file.
+
+    Parameters
+    ----------
+    session_content_hash: str
+        The unique identifier for the session.
+    tmp_video_filepath: str
+        The local path for video file to generate a hash for.
+    bucket: str
+        The bucket to store the transcript to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+
+    Returns
+    -------
+    audio_uri: str
+        The URI to the uploaded audio file.
+    """
     # Check for existing audio
     tmp_audio_filepath = f"{session_content_hash}-audio.wav"
     audio_uri = fs_functions.get_file_uri(
@@ -309,7 +346,7 @@ def get_video_and_split_audio(
         ]:
             fs_functions.remove_local_file(local_path)
 
-    return session_content_hash, audio_uri
+    return audio_uri
 
 
 @task
@@ -734,7 +771,7 @@ def generate_transcript(
 
 
 @task(nout=2)
-def get_video_and_generate_thumbnails(
+def generate_thumbnails(
     session_content_hash: str,
     tmp_video_path: str,
     event: EventIngestionModel,
