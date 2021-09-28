@@ -177,7 +177,7 @@ def create_event_gather_flow(
 
                 # Add audio uri and static thumbnail uri
                 resource_delete_task(
-                    tmp_video_filepath, audio_uri, static_thumbnail_uri
+                    tmp_video_filepath, upstream_tasks=[audio_uri, static_thumbnail_uri]
                 )
 
                 # Store all processed and provided data
@@ -219,7 +219,7 @@ def resource_copy_task(uri: str) -> str:
 
 
 @task
-def resource_delete_task(uri: str, audio_uri: str, static_thumbnail_uri: str) -> None:
+def resource_delete_task(uri: str) -> None:
     """
     Remove local file
 
@@ -227,12 +227,6 @@ def resource_delete_task(uri: str, audio_uri: str, static_thumbnail_uri: str) ->
     ----------
     uri: str
         The local video file.
-    audio_uri: str
-        The audio URI used to ensure that Prefect would run this task after
-        running the get_video_and_split_audio task.
-    static_thumbnail_uri: str
-        The static thumbnail URI used to ensure that Prefect would run this task after
-        running the get_video_and_generate_thumbnails task.
     """
     fs_functions.remove_local_file(uri)
 
@@ -754,7 +748,7 @@ def get_video_and_generate_thumbnails(
     ----------
     session_content_hash: str
         The unique key (SHA256 hash of video content) for this session processing.
-    video_uri: str
+    tmp_video_path: str
         The URI to the video file to generate thumbnails from.
     event: EventIngestionModel
         The parent event of the session. If no captions are available,
