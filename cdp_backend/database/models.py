@@ -70,7 +70,7 @@ class Person(Model):
     email = fields.TextField(validator=validators.email_is_valid)
     phone = fields.TextField()
     website = fields.TextField(validator=validators.resource_exists)
-    picture_ref = fields.ReferenceField(File)
+    picture_ref = fields.ReferenceField(File, auto_load=False)
     is_active = fields.BooleanField(required=True)
     external_source_id = fields.TextField()
 
@@ -158,7 +158,7 @@ class Seat(Model):
     name = fields.TextField(required=True)
     electoral_area = fields.TextField()
     electoral_type = fields.TextField()
-    image_ref = fields.ReferenceField(File)
+    image_ref = fields.ReferenceField(File, auto_load=False)
     external_source_id = fields.TextField()
 
     class Meta:
@@ -188,9 +188,9 @@ class Role(Model):
 
     id = fields.IDField()
     title = fields.TextField(required=True)
-    person_ref = fields.ReferenceField(Person, required=True)
-    body_ref = fields.ReferenceField(Body)
-    seat_ref = fields.ReferenceField(Seat, required=True)
+    person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
+    body_ref = fields.ReferenceField(Body, auto_load=False)
+    seat_ref = fields.ReferenceField(Seat, required=True, auto_load=False)
     start_datetime = fields.DateTime(required=True)
     end_datetime = fields.DateTime()
     external_source_id = fields.TextField()
@@ -258,7 +258,7 @@ class MatterFile(Model):
     """
 
     id = fields.IDField()
-    matter_ref = fields.ReferenceField(Matter, required=True)
+    matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -301,8 +301,8 @@ class MatterSponsor(Model):
     """
 
     id = fields.IDField()
-    matter_ref = fields.ReferenceField(Matter, required=True)
-    person_ref = fields.ReferenceField(Person, required=True)
+    matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)
+    person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     external_source_id = fields.TextField()
 
     class Meta:
@@ -328,7 +328,7 @@ class MinutesItem(Model):
     id = fields.IDField()
     name = fields.TextField(required=True)
     description = fields.TextField()
-    matter_ref = fields.ReferenceField(Matter)  # Note optional.
+    matter_ref = fields.ReferenceField(Matter, auto_load=False)  # Note optional.
     external_source_id = fields.TextField()
 
     class Meta:
@@ -354,10 +354,10 @@ class Event(Model):
     """
 
     id = fields.IDField()
-    body_ref = fields.ReferenceField(Body, required=True)
+    body_ref = fields.ReferenceField(Body, required=True, auto_load=False)
     event_datetime = fields.DateTime(required=True)
-    static_thumbnail_ref = fields.ReferenceField(File)
-    hover_thumbnail_ref = fields.ReferenceField(File)
+    static_thumbnail_ref = fields.ReferenceField(File, auto_load=False)
+    hover_thumbnail_ref = fields.ReferenceField(File, auto_load=False)
     agenda_uri = fields.TextField(validator=validators.resource_exists)
     minutes_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -412,9 +412,9 @@ class Session(Model):
     """
 
     id = fields.IDField()
-    event_ref = fields.ReferenceField(Event, required=True)
-    session_datetime = fields.DateTime(required=True)
-    session_index = fields.NumberField(required=True)
+    event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
+    session_datetime = fields.DateTime(required=True, auto_load=False)
+    session_index = fields.NumberField(required=True, auto_load=False)
     video_uri = fields.TextField(required=True, validator=validators.resource_exists)
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -456,8 +456,8 @@ class Transcript(Model):
     """
 
     id = fields.IDField()
-    session_ref = fields.ReferenceField(Session, required=True)
-    file_ref = fields.ReferenceField(File, required=True)
+    session_ref = fields.ReferenceField(Session, required=True, auto_load=False)
+    file_ref = fields.ReferenceField(File, required=True, auto_load=False)
     confidence = fields.NumberField(required=True)
     created = fields.DateTime(required=True)
 
@@ -496,8 +496,8 @@ class EventMinutesItem(Model):
     """
 
     id = fields.IDField()
-    event_ref = fields.ReferenceField(Event, required=True)
-    minutes_item_ref = fields.ReferenceField(MinutesItem, required=True)
+    event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
+    minutes_item_ref = fields.ReferenceField(MinutesItem, required=True, auto_load=False)
     index = fields.NumberField(required=True)
     decision = fields.TextField(
         validator=validators.create_constant_value_validator(
@@ -548,10 +548,10 @@ class MatterStatus(Model):
     """
 
     id = fields.IDField()
-    matter_ref = fields.ReferenceField(Matter, required=True)
+    matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)
     # Optional because status can be updated out of event
     # i.e. Signed by Mayor
-    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem)
+    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, auto_load=False)
     status = fields.TextField(
         required=True,
         validator=validators.create_constant_value_validator(
@@ -595,7 +595,7 @@ class EventMinutesItemFile(Model):
     """
 
     id = fields.IDField()
-    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
+    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True, auto_load=False)
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -638,10 +638,10 @@ class Vote(Model):
     """
 
     id = fields.IDField()
-    matter_ref = fields.ReferenceField(Matter, required=True)
-    event_ref = fields.ReferenceField(Event, required=True)
-    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True)
-    person_ref = fields.ReferenceField(Person, required=True)
+    matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)
+    event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
+    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True, auto_load=False)
+    person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     decision = fields.TextField(
         required=True,
         validator=validators.create_constant_value_validator(VoteDecision, True),
@@ -687,7 +687,7 @@ class IndexedEventGram(Model):
     """
 
     id = fields.IDField()
-    event_ref = fields.ReferenceField(Event, required=True)
+    event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
     unstemmed_gram = fields.TextField(required=True)
     stemmed_gram = fields.TextField(required=True)
     context_span = fields.TextField(required=True)
