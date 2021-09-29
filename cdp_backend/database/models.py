@@ -458,6 +458,7 @@ class Transcript(Model):
     id = fields.IDField()
     session_ref = fields.ReferenceField(Session, required=True, auto_load=False)
     file_ref = fields.ReferenceField(File, required=True, auto_load=False)
+    generator = fields.TextField(required=True)
     confidence = fields.NumberField(required=True)
     created = fields.DateTime(required=True)
 
