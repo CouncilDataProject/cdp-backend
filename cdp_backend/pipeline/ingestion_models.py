@@ -17,8 +17,6 @@ class IngestionModel:
     Base class for IngestionModel type.
     """
 
-    pass
-
 
 ###############################################################################
 
