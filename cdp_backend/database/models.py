@@ -413,8 +413,8 @@ class Session(Model):
 
     id = fields.IDField()
     event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
-    session_datetime = fields.DateTime(required=True, auto_load=False)
-    session_index = fields.NumberField(required=True, auto_load=False)
+    session_datetime = fields.DateTime(required=True)
+    session_index = fields.NumberField(required=True)
     video_uri = fields.TextField(required=True, validator=validators.resource_exists)
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
