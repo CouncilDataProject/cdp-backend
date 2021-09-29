@@ -130,6 +130,7 @@
 
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">fireo.queries.query_wrapper</span> <span class="kn">import</span> <span class="n">ReferenceDocLoader</span>
 <span class="kn">from</span> <span class="nn">google.cloud.firestore_v1.batch</span> <span class="kn">import</span> <span class="n">WriteBatch</span>
 <span class="kn">from</span> <span class="nn">google.cloud.firestore_v1.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
 
@@ -174,7 +175,11 @@
 
         <span class="c1"># Otherwise just simply add the primary key value</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+            <span class="c1"># Load the document for reference fields and add id to hasher</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ReferenceDocLoader</span><span class="p">):</span>
+                <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
     <span class="c1"># Set the id to the first twelve characters of hexdigest</span>
     <span class="n">db_model</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">12</span><span class="p">]</span>
