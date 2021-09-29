@@ -9,6 +9,7 @@ from typing import Any, List, Optional
 
 import fireo
 from fireo.models import Model
+from fireo.queries.query_wrapper import ReferenceDocLoader
 from google.cloud.firestore_v1.batch import WriteBatch
 from google.cloud.firestore_v1.transaction import Transaction
 
@@ -53,7 +54,11 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
 
         # Otherwise just simply add the primary key value
         else:
-            hasher.update(pickle.dumps(field, protocol=4))
+            # Load the document for reference fields and add id to hasher
+            if isinstance(field, ReferenceDocLoader):
+                hasher.update(pickle.dumps(field.get().id, protocol=4))
+            else:
+                hasher.update(pickle.dumps(field, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
     db_model.id = hasher.hexdigest()[:12]
