@@ -64,42 +64,36 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_file_uri")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @pytest.mark.parametrize(
-    "get_file_uri_value, audio_upload_file_return, expected_session_content_hash",
+    "get_file_uri_value, audio_upload_file_return",
     [
         (
             None,
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            VIDEO_CONTENT_HASH,
         ),
         (
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            VIDEO_CONTENT_HASH,
         ),
     ],
 )
-def test_get_video_and_split_audio(
+def test_split_audio(
     mock_upload_file: MagicMock,
     mock_get_file_uri: MagicMock,
     get_file_uri_value: str,
     audio_upload_file_return: str,
-    expected_session_content_hash: str,
     example_video: Path,
 ) -> None:
     mock_get_file_uri.return_value = get_file_uri_value
     mock_upload_file.return_value = audio_upload_file_return
 
-    (
-        session_content_hash,
-        audio_uri,
-    ) = pipeline.get_video_and_split_audio.run(  # type: ignore
+    audio_uri = pipeline.split_audio.run(  # type: ignore
+        session_content_hash=VIDEO_CONTENT_HASH,
         tmp_video_filepath=str(example_video),
         bucket="bucket",
         credentials_file="/fake/credentials/path",
     )
 
     # Check outputs
-    assert session_content_hash == expected_session_content_hash
     assert audio_uri == audio_upload_file_return
 
 
@@ -120,7 +114,7 @@ def test_get_video_and_split_audio(
         ),
     ],
 )
-def test_get_video_and_generate_thumbnails(
+def test_generate_thumbnails(
     mock_upload_file: MagicMock,
     example_static_thumbnail_url: str,
     example_hover_thumbnail_url: str,
@@ -138,7 +132,7 @@ def test_get_video_and_generate_thumbnails(
     (
         static_thumbnail_url,
         hover_thumbnail_url,
-    ) = pipeline.get_video_and_generate_thumbnails.run(  # type: ignore
+    ) = pipeline.generate_thumbnails.run(  # type: ignore
         session_content_hash=example_session_content_hash,
         tmp_video_path=str(example_video),
         event=event,
