@@ -497,7 +497,9 @@ class EventMinutesItem(Model):
 
     id = fields.IDField()
     event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
-    minutes_item_ref = fields.ReferenceField(MinutesItem, required=True, auto_load=False)
+    minutes_item_ref = fields.ReferenceField(
+        MinutesItem, required=True, auto_load=False
+    )
     index = fields.NumberField(required=True)
     decision = fields.TextField(
         validator=validators.create_constant_value_validator(
@@ -595,7 +597,9 @@ class EventMinutesItemFile(Model):
     """
 
     id = fields.IDField()
-    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True, auto_load=False)
+    event_minutes_item_ref = fields.ReferenceField(
+        EventMinutesItem, required=True, auto_load=False
+    )
     name = fields.TextField(required=True)
     uri = fields.TextField(required=True, validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -640,7 +644,9 @@ class Vote(Model):
     id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)
     event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
-    event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, required=True, auto_load=False)
+    event_minutes_item_ref = fields.ReferenceField(
+        EventMinutesItem, required=True, auto_load=False
+    )
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     decision = fields.TextField(
         required=True,
