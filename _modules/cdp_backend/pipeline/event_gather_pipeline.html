@@ -246,10 +246,17 @@
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
             <span class="n">session_processing_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SessionProcessingResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
-                <span class="c1"># Get or create audio</span>
+                <span class="c1"># Download video to local copy</span>
                 <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
 
-                <span class="n">session_content_hash</span><span class="p">,</span> <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">get_video_and_split_audio</span><span class="p">(</span>
+                <span class="c1"># Get unique session identifier</span>
+                <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">get_session_content_hash</span><span class="p">(</span>
+                    <span class="n">tmp_video_filepath</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Split audio and store</span>
+                <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">split_audio</span><span class="p">(</span>
+                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
                     <span class="n">tmp_video_filepath</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
                     <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
@@ -272,8 +279,8 @@
 
                 <span class="c1"># Generate transcript</span>
                 <span class="n">transcript_uri</span><span class="p">,</span> <span class="n">transcript</span> <span class="o">=</span> <span class="n">generate_transcript</span><span class="p">(</span>
-                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
-                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
+                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
                     <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
                     <span class="n">event</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
                     <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
@@ -285,10 +292,7 @@
                 <span class="p">)</span>
 
                 <span class="c1"># Generate thumbnails</span>
-                <span class="p">(</span>
-                    <span class="n">static_thumbnail_uri</span><span class="p">,</span>
-                    <span class="n">hover_thumbnail_uri</span><span class="p">,</span>
-                <span class="p">)</span> <span class="o">=</span> <span class="n">get_video_and_generate_thumbnails</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">static_thumbnail_uri</span><span class="p">,</span> <span class="n">hover_thumbnail_uri</span><span class="p">,)</span> <span class="o">=</span> <span class="n">generate_thumbnails</span><span class="p">(</span>
                     <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
                     <span class="n">tmp_video_path</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
                     <span class="n">event</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
@@ -325,8 +329,26 @@
     <span class="k">return</span> <span class="n">flow</span></div>
 
 
-<span class="nd">@task</span>
+<span class="nd">@task</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_delay</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">120</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copy a file to a temporary location for processing.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    uri: str</span>
+<span class="sd">        The URI to the file to copy.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    local_path: str</span>
+<span class="sd">        The local path to the copied file.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    We sometimes get file downloading failures when running in parallel so this has two</span>
+<span class="sd">    retries attached to it that will run after a failure on a 2 minute delay.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Copy video file from the internet and store it locally</span>
     <span class="n">dirpath</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 
@@ -352,38 +374,53 @@
     <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
 
-<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_delay</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">get_video_and_split_audio</span><span class="p">(</span>
-    <span class="n">tmp_video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">get_session_content_hash</span><span class="p">(</span>
+    <span class="n">tmp_video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Download (or copy) a video file to temp storage, split&#39;s the audio, and uploads</span>
-<span class="sd">    the audio to Google storage.</span>
+<span class="sd">    Hash the video file content to get a unique identifier for the session.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    tmp_video_filepath: str</span>
-<span class="sd">        The URI to the video file to split audio from.</span>
-<span class="sd">    bucket: str</span>
-<span class="sd">        The name of the GCS bucket to upload the produced audio to.</span>
-<span class="sd">    credentials_file: str</span>
-<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+<span class="sd">        The local path for video file to generate a hash for.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    session_content_hash: str</span>
 <span class="sd">        The unique key (SHA256 hash of video content) for this session processing.</span>
-<span class="sd">    audio_uri: str</span>
-<span class="sd">        The URI to the uploaded audio file.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    We sometimes get file downloading failures when running in parallel so this has two</span>
-<span class="sd">    retries attached to it that will run after a failure on a 3 minute delay.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Hash the video contents</span>
-    <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
 
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">split_audio</span><span class="p">(</span>
+    <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tmp_video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split the audio from a local video file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    session_content_hash: str</span>
+<span class="sd">        The unique identifier for the session.</span>
+<span class="sd">    tmp_video_filepath: str</span>
+<span class="sd">        The local path for video file to generate a hash for.</span>
+<span class="sd">    bucket: str</span>
+<span class="sd">        The bucket to store the transcript to.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    audio_uri: str</span>
+<span class="sd">        The URI to the uploaded audio file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check for existing audio</span>
     <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-audio.wav&quot;</span>
     <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span>
@@ -430,7 +467,7 @@
         <span class="p">]:</span>
             <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">local_path</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">session_content_hash</span><span class="p">,</span> <span class="n">audio_uri</span>
+    <span class="k">return</span> <span class="n">audio_uri</span>
 
 
 <span class="nd">@task</span>
@@ -855,7 +892,7 @@
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_video_and_generate_thumbnails</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">generate_thumbnails</span><span class="p">(</span>
     <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">tmp_video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">event</span><span class="p">:</span> <span class="n">EventIngestionModel</span><span class="p">,</span>
