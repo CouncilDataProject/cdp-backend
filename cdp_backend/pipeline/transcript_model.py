@@ -177,15 +177,15 @@ class Transcript:
 
     Parameters
     ----------
+    generator: str
+        A descriptive name of the generative process that produced this transcript.
+        Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
     confidence: float
         A number between 0 and 1.
         If available, use the average of all confidence annotations reported for each
         text block in the transcript.
         Otherwise, make an estimation for (or manually calculate):
         `n-correct-tokens / n-total-tokens` for the whole transcript.
-    generator: str
-        A descriptive name of the generative process that produced this transcript.
-        Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
     session_datetime: Optional[str]
         ISO formatted datetime for the session that this document transcribes.
     created_datetime: str
@@ -210,8 +210,8 @@ class Transcript:
     ...     transcript = Transcript.from_json(open_resource.read())
     """
 
-    confidence: float
     generator: str
+    confidence: float
     session_datetime: Optional[str]
     created_datetime: str
     sentences: List[Sentence]
@@ -222,8 +222,8 @@ class Transcript:
 
 
 EXAMPLE_TRANSCRIPT = Transcript(
-    confidence=0.93325,
     generator="JacksonGen -- Lib Version: 0.0.0",
+    confidence=0.93325,
     session_datetime=datetime(2021, 1, 10, 15).isoformat(),
     created_datetime=datetime.utcnow().isoformat(),
     sentences=[

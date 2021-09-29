@@ -243,8 +243,8 @@ class WebVTTSRModel(SRModel):
             sentence.text = self._normalize_text(sentence.text)
 
         transcript = transcript_model.Transcript(
-            confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
             generator=f"CDP WebVTT Conversion -- CDP v{__version__}",
+            confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=sentences,

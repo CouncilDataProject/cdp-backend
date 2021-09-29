@@ -190,8 +190,8 @@ class GoogleCloudSRModel(SRModel):
 
         # Create transcript model
         transcript = transcript_model.Transcript(
-            confidence=confidence,
             generator=f"Google Speech-to-Text -- CDP v{__version__}",
+            confidence=confidence,
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,
