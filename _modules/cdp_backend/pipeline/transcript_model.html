@@ -298,15 +298,15 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    generator: str</span>
+<span class="sd">        A descriptive name of the generative process that produced this transcript.</span>
+<span class="sd">        Example: &quot;Google Speech-to-Text -- Lib Version: 2.0.1&quot;</span>
 <span class="sd">    confidence: float</span>
 <span class="sd">        A number between 0 and 1.</span>
 <span class="sd">        If available, use the average of all confidence annotations reported for each</span>
 <span class="sd">        text block in the transcript.</span>
 <span class="sd">        Otherwise, make an estimation for (or manually calculate):</span>
 <span class="sd">        `n-correct-tokens / n-total-tokens` for the whole transcript.</span>
-<span class="sd">    generator: str</span>
-<span class="sd">        A descriptive name of the generative process that produced this transcript.</span>
-<span class="sd">        Example: &quot;Google Speech-to-Text -- Lib Version: 2.0.1&quot;</span>
 <span class="sd">    session_datetime: Optional[str]</span>
 <span class="sd">        ISO formatted datetime for the session that this document transcribes.</span>
 <span class="sd">    created_datetime: str</span>
@@ -331,8 +331,8 @@
 <span class="sd">    ...     transcript = Transcript.from_json(open_resource.read())</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">generator</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">session_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">created_datetime</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">sentences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sentence</span><span class="p">]</span>
@@ -343,8 +343,8 @@
 
 
 <span class="n">EXAMPLE_TRANSCRIPT</span> <span class="o">=</span> <span class="n">Transcript</span><span class="p">(</span>
-    <span class="n">confidence</span><span class="o">=</span><span class="mf">0.93325</span><span class="p">,</span>
     <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;JacksonGen -- Lib Version: 0.0.0&quot;</span><span class="p">,</span>
+    <span class="n">confidence</span><span class="o">=</span><span class="mf">0.93325</span><span class="p">,</span>
     <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
     <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
     <span class="n">sentences</span><span class="o">=</span><span class="p">[</span>

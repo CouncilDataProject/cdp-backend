@@ -124,7 +124,6 @@
 
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -150,15 +149,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        outputs: transcript_model.Transcript</span>
 <span class="sd">            The transcript model for the supplied media file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">return</span> <span class="n">transcript_model</span><span class="o">.</span><span class="n">Transcript</span><span class="p">(</span>
-            <span class="mf">0.0</span><span class="p">,</span>
-            <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
-            <span class="p">[],</span>
-        <span class="p">)</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_clean_word</span><span class="p">(</span><span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
