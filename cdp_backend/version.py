@@ -3,4 +3,4 @@
 
 # Do not edit this string manually, always use bump2version
 # Details in CONTRIBUTING.md
-__version__ = "3.0.0.dev18"
+__version__ = "3.0.0.dev19"
