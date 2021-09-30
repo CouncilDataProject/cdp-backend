@@ -458,6 +458,7 @@ class Transcript(Model):
     id = fields.IDField()
     session_ref = fields.ReferenceField(Session, required=True, auto_load=False)
     file_ref = fields.ReferenceField(File, required=True, auto_load=False)
+    generator = fields.TextField(required=True)
     confidence = fields.NumberField(required=True)
     created = fields.DateTime(required=True)
 
@@ -469,6 +470,7 @@ class Transcript(Model):
         transcript = cls()
         transcript.session_ref = Session.Example()
         transcript.file_ref = File.Example()
+        transcript.generator = "FakeGen -- v0.1.0"
         transcript.confidence = 0.943
         transcript.created = datetime.utcnow()
         return transcript

@@ -3,7 +3,6 @@
 
 import re
 from abc import ABC, abstractmethod
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Union
 
@@ -30,14 +29,6 @@ class SRModel(ABC):
         outputs: transcript_model.Transcript
             The transcript model for the supplied media file.
         """
-
-        return transcript_model.Transcript(
-            0.0,
-            "",
-            "",
-            datetime.utcnow().isoformat(),
-            [],
-        )
 
     @staticmethod
     def _clean_word(word: str) -> str:

@@ -254,6 +254,7 @@ def create_transcript(
 
     db_transcript.session_ref = session_ref
     db_transcript.file_ref = transcript_file_ref
+    db_transcript.generator = transcript.generator
     db_transcript.confidence = transcript.confidence
     db_transcript.created = datetime.fromisoformat(transcript.created_datetime)
 
