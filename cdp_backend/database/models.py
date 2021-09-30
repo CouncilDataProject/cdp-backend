@@ -470,6 +470,7 @@ class Transcript(Model):
         transcript = cls()
         transcript.session_ref = Session.Example()
         transcript.file_ref = File.Example()
+        transcript.generator = "FakeGen -- v0.1.0"
         transcript.confidence = 0.943
         transcript.created = datetime.utcnow()
         return transcript
