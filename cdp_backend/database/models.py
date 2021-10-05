@@ -209,7 +209,60 @@ class Role(Model):
         return role
 
     _PRIMARY_KEYS = ("title", "person_ref", "body_ref", "seat_ref")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="start_datetime", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="start_datetime", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="end_datetime", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="end_datetime", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="title", order=Order.ASCENDING),
+                IndexedField(name="start_datetime", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="title", order=Order.ASCENDING),
+                IndexedField(name="start_datetime", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="title", order=Order.ASCENDING),
+                IndexedField(name="end_datetime", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="title", order=Order.ASCENDING),
+                IndexedField(name="end_datetime", order=Order.DESCENDING),
+            )
+        ),
+    )
 
 
 class Matter(Model):
