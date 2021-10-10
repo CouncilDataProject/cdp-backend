@@ -1024,7 +1024,9 @@
             <span class="n">db_model</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minimal_person</span><span class="p">(</span><span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">)</span>
         <span class="c1"># No ingestion model provided here so that we don&#39;t try to</span>
         <span class="c1"># re-validate the already failed model upload</span>
@@ -1227,7 +1229,9 @@
             <span class="n">db_model</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
         <span class="n">event_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_event</span><span class="p">(</span>
             <span class="n">body_ref</span><span class="o">=</span><span class="n">body_db_model</span><span class="p">,</span>
             <span class="n">event_datetime</span><span class="o">=</span><span class="n">first_session</span><span class="o">.</span><span class="n">session_datetime</span><span class="p">,</span>
@@ -1355,7 +1359,9 @@
                     <span class="n">db_model</span><span class="o">=</span><span class="n">event_minutes_item_db_model</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
                 <span class="n">event_minutes_item_db_model</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minimal_event_minutes_item</span><span class="p">(</span>
                         <span class="n">event_ref</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
@@ -1382,7 +1388,9 @@
                             <span class="n">db_model</span><span class="o">=</span><span class="n">matter_status_db_model</span><span class="p">,</span>
                             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                         <span class="p">)</span>
-                    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+                    <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
                         <span class="n">allowed_matter_decisions</span> <span class="o">=</span> <span class="p">(</span>
                             <span class="n">constants_utils</span><span class="o">.</span><span class="n">get_all_class_attr_values</span><span class="p">(</span>
                                 <span class="n">db_constants</span><span class="o">.</span><span class="n">MatterStatusDecision</span>
@@ -1413,7 +1421,8 @@
                                 <span class="n">db_model</span><span class="o">=</span><span class="n">matter_file_db_model</span><span class="p">,</span>
                                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
-                        <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+                        <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;MatterFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
                                 <span class="sa">f</span><span class="s2">&quot;could not be archived.&quot;</span>
@@ -1432,7 +1441,8 @@
                             <span class="n">db_model</span><span class="o">=</span><span class="n">event_minutes_item_file_db_model</span><span class="p">,</span>
                             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                         <span class="p">)</span>
-                    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+                    <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;EventMinutesItemFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
                             <span class="sa">f</span><span class="s2">&quot;could not be archived.&quot;</span>
@@ -1472,12 +1482,17 @@
                                 <span class="n">db_model</span><span class="o">=</span><span class="n">vote_db_model</span><span class="p">,</span>
                                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
-                        <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
+                        <span class="k">except</span> <span class="p">(</span>
+                            <span class="n">FieldValidationFailed</span><span class="p">,</span>
+                            <span class="n">RequiredField</span><span class="p">,</span>
+                            <span class="n">InvalidFieldType</span><span class="p">,</span>
+                        <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                             <span class="n">allowed_vote_decisions</span> <span class="o">=</span> <span class="p">(</span>
                                 <span class="n">constants_utils</span><span class="o">.</span><span class="n">get_all_class_attr_values</span><span class="p">(</span>
                                     <span class="n">db_constants</span><span class="o">.</span><span class="n">VoteDecision</span>
                                 <span class="p">)</span>
                             <span class="p">)</span>
+                            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;Provided &#39;decision&#39; is not an approved constant. &quot;</span>
                                 <span class="sa">f</span><span class="s2">&quot;Provided: &#39;</span><span class="si">{</span><span class="n">vote</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
