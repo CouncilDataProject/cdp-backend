@@ -903,7 +903,9 @@ def _process_person_ingestion(
             db_model=person_db_model,
             credentials_file=credentials_file,
         )
-    except (FieldValidationFailed, RequiredField, InvalidFieldType):
+    except (FieldValidationFailed, RequiredField, InvalidFieldType) as e:
+        log.error(e)
+
         person_db_model = db_functions.create_minimal_person(person=person)
         # No ingestion model provided here so that we don't try to
         # re-validate the already failed model upload
@@ -1106,7 +1108,9 @@ def store_event_processing_results(
             db_model=event_db_model,
             credentials_file=credentials_file,
         )
-    except FieldValidationFailed:
+    except FieldValidationFailed as e:
+        log.error(e)
+
         event_db_model = db_functions.create_event(
             body_ref=body_db_model,
             event_datetime=first_session.session_datetime,
@@ -1234,7 +1238,9 @@ def store_event_processing_results(
                     db_model=event_minutes_item_db_model,
                     credentials_file=credentials_file,
                 )
-            except (FieldValidationFailed, InvalidFieldType):
+            except (FieldValidationFailed, InvalidFieldType) as e:
+                log.error(e)
+
                 event_minutes_item_db_model = (
                     db_functions.create_minimal_event_minutes_item(
                         event_ref=event_db_model,
@@ -1261,7 +1267,9 @@ def store_event_processing_results(
                             db_model=matter_status_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed:
+                    except FieldValidationFailed as e:
+                        log.error(e)
+
                         allowed_matter_decisions = (
                             constants_utils.get_all_class_attr_values(
                                 db_constants.MatterStatusDecision
@@ -1292,7 +1300,8 @@ def store_event_processing_results(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except FieldValidationFailed:
+                        except FieldValidationFailed as e:
+                            log.error(e)
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
                                 f"could not be archived."
@@ -1311,7 +1320,8 @@ def store_event_processing_results(
                             db_model=event_minutes_item_file_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed:
+                    except FieldValidationFailed as e:
+                        log.error(e)
                         log.error(
                             f"EventMinutesItemFile ('{supporting_file.uri}') "
                             f"could not be archived."
@@ -1351,12 +1361,13 @@ def store_event_processing_results(
                                 db_model=vote_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except (FieldValidationFailed, RequiredField, InvalidFieldType):
+                        except (FieldValidationFailed, RequiredField, InvalidFieldType) as e:
                             allowed_vote_decisions = (
                                 constants_utils.get_all_class_attr_values(
                                     db_constants.VoteDecision
                                 )
                             )
+                            log.error(e)
                             log.error(
                                 f"Provided 'decision' is not an approved constant. "
                                 f"Provided: '{vote.decision}' "
