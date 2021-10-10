@@ -1361,7 +1361,11 @@ def store_event_processing_results(
                                 db_model=vote_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except (FieldValidationFailed, RequiredField, InvalidFieldType) as e:
+                        except (
+                            FieldValidationFailed,
+                            RequiredField,
+                            InvalidFieldType,
+                        ) as e:
                             allowed_vote_decisions = (
                                 constants_utils.get_all_class_attr_values(
                                     db_constants.VoteDecision
