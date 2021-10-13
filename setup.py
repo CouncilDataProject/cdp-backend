@@ -77,6 +77,7 @@ requirements = [
     "fireo~=1.4",
     "fsspec",  # Version pin set by gcsfs
     "gcsfs~=2021.7.0",
+    "requests~=2.26.0",
 ]
 
 extra_requirements = {
