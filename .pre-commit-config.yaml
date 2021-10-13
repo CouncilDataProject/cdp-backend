@@ -23,4 +23,4 @@ repos:
       rev: v0.910
       hooks:
           - id: mypy
-            additional_dependencies: ["types-pytz"]
+            additional_dependencies: ["types-pytz", "requests"]
