@@ -3,12 +3,11 @@
 
 import logging
 import re
-import requests
 from dataclasses import dataclass
 from typing import Callable, List, Optional, Type
 
+import requests
 from fireo.models import Model
-from fsspec.core import url_to_fs
 from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
 
