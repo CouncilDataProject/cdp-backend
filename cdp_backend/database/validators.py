@@ -3,11 +3,13 @@
 
 import logging
 import re
+import requests
 from dataclasses import dataclass
 from typing import Callable, List, Optional, Type
 
 from fireo.models import Model
 from fsspec.core import url_to_fs
+from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
 
 from ..utils.constants_utils import get_all_class_attr_values
@@ -134,15 +136,17 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
         else:
             return True
 
+    # Is HTTP remote resource
+    elif uri.startswith("http"):
+        # Use HEAD request to check if remote resource exists
+        r = requests.head(uri)
+
+        return r.status_code == requests.codes.ok
+
+    # Check local filesystem
     else:
-        # Get file system
-        fs, uri = url_to_fs(uri)
-
-        # Check exists
-        if fs.exists(uri):
-            return True
-
-    return False
+        fs = LocalFileSystem()
+        return fs.exists(uri)
 
 
 def create_constant_value_validator(
