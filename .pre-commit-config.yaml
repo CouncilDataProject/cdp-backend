@@ -25,4 +25,4 @@ repos:
           - id: mypy
             additional_dependencies: 
               - "types-pytz"
-              - "requests==2.26.0"
+              - "types-requests"
