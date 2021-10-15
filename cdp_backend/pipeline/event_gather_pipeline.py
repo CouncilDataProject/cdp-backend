@@ -890,7 +890,7 @@ def _process_person_ingestion(
             person_picture_db_model = None
             log.warning(
                 f"Person ('{person.name}'), picture URI could not be archived."
-                f"({person_picture_uri})"
+                f"({person.picture_uri})"
             )
     else:
         person_picture_db_model = None
@@ -949,7 +949,7 @@ def _process_person_ingestion(
             person_seat_image_db_model = None
             log.warning(
                 f"Person ('{person.name}'), seat image URI could not be archived."
-                f"({person_seat_image_uri})"
+                f"({person.seat.image_uri})"
             )
 
         # Actual seat creation
