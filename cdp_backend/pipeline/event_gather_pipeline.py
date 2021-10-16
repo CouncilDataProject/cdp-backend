@@ -888,7 +888,10 @@ def _process_person_ingestion(
             )
         except FileNotFoundError:
             person_picture_db_model = None
-            log.error(f"Person ('{person.name}'), picture URI could not be archived.")
+            log.warning(
+                f"Person ('{person.name}'), picture URI could not be archived."
+                f"({person.picture_uri})"
+            )
     else:
         person_picture_db_model = None
 
@@ -903,9 +906,11 @@ def _process_person_ingestion(
             db_model=person_db_model,
             credentials_file=credentials_file,
         )
-    except (FieldValidationFailed, RequiredField, InvalidFieldType) as e:
-        log.error(e)
-
+    except (FieldValidationFailed, RequiredField, InvalidFieldType):
+        log.warning(
+            f"Person ('{person.name}'), was missing required information. "
+            f"Generating minimum person details."
+        )
         person_db_model = db_functions.create_minimal_person(person=person)
         # No ingestion model provided here so that we don't try to
         # re-validate the already failed model upload
@@ -942,8 +947,9 @@ def _process_person_ingestion(
                 person_seat_image_db_model = None
         except FileNotFoundError:
             person_seat_image_db_model = None
-            log.error(
-                f"Person ('{person.name}'), " f"seat image URI could not be archived."
+            log.warning(
+                f"Person ('{person.name}'), seat image URI could not be archived."
+                f"({person.seat.image_uri})"
             )
 
         # Actual seat creation
@@ -1108,8 +1114,12 @@ def store_event_processing_results(
             db_model=event_db_model,
             credentials_file=credentials_file,
         )
-    except FieldValidationFailed as e:
-        log.error(e)
+    except FieldValidationFailed:
+        log.warning(
+            f"Agenda and/or minutes docs could not be found. "
+            f"Adding event without agenda and minutes URIs. "
+            f"({event.agenda_uri} AND/OR {event.minutes_uri} do not exist)"
+        )
 
         event_db_model = db_functions.create_event(
             body_ref=body_db_model,
@@ -1238,8 +1248,18 @@ def store_event_processing_results(
                     db_model=event_minutes_item_db_model,
                     credentials_file=credentials_file,
                 )
-            except (FieldValidationFailed, InvalidFieldType) as e:
-                log.error(e)
+            except (FieldValidationFailed, InvalidFieldType):
+                allowed_emi_decisions = constants_utils.get_all_class_attr_values(
+                    db_constants.EventMinutesItemDecision
+                )
+                log.warning(
+                    f"Provided 'decision' is not an approved constant. "
+                    f"Provided: '{event_minutes_item.decision}' "
+                    f"Should be one of: {allowed_emi_decisions} "
+                    f"See: "
+                    f"cdp_backend.database.constants.EventMinutesItemDecision. "
+                    f"Creating EventMinutesItem without decision value."
+                )
 
                 event_minutes_item_db_model = (
                     db_functions.create_minimal_event_minutes_item(
@@ -1267,9 +1287,7 @@ def store_event_processing_results(
                             db_model=matter_status_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed as e:
-                        log.error(e)
-
+                    except FieldValidationFailed:
                         allowed_matter_decisions = (
                             constants_utils.get_all_class_attr_values(
                                 db_constants.MatterStatusDecision
@@ -1300,11 +1318,10 @@ def store_event_processing_results(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except FieldValidationFailed as e:
-                            log.error(e)
+                        except FieldValidationFailed:
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
-                                f"could not be archived."
+                                f"could not be archived. Skipping."
                             )
 
                     # Archive as event minutes item file
@@ -1320,8 +1337,7 @@ def store_event_processing_results(
                             db_model=event_minutes_item_file_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed as e:
-                        log.error(e)
+                    except FieldValidationFailed:
                         log.error(
                             f"EventMinutesItemFile ('{supporting_file.uri}') "
                             f"could not be archived."
@@ -1365,13 +1381,12 @@ def store_event_processing_results(
                             FieldValidationFailed,
                             RequiredField,
                             InvalidFieldType,
-                        ) as e:
+                        ):
                             allowed_vote_decisions = (
                                 constants_utils.get_all_class_attr_values(
                                     db_constants.VoteDecision
                                 )
                             )
-                            log.error(e)
                             log.error(
                                 f"Provided 'decision' is not an approved constant. "
                                 f"Provided: '{vote.decision}' "
