@@ -1009,7 +1009,10 @@
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
             <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), picture URI could not be archived.&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), picture URI could not be archived.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1024,9 +1027,11 @@
             <span class="n">db_model</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-
+    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), was missing required information. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Generating minimum person details.&quot;</span>
+        <span class="p">)</span>
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minimal_person</span><span class="p">(</span><span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">)</span>
         <span class="c1"># No ingestion model provided here so that we don&#39;t try to</span>
         <span class="c1"># re-validate the already failed model upload</span>
@@ -1063,8 +1068,9 @@
                 <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
             <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), &quot;</span> <span class="sa">f</span><span class="s2">&quot;seat image URI could not be archived.&quot;</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), seat image URI could not be archived.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="si">}</span><span class="s2">)&quot;</span>
             <span class="p">)</span>
 
         <span class="c1"># Actual seat creation</span>
@@ -1229,8 +1235,12 @@
             <span class="n">db_model</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Agenda and/or minutes docs could not be found. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Adding event without agenda and minutes URIs. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">agenda_uri</span><span class="si">}</span><span class="s2"> AND/OR </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">minutes_uri</span><span class="si">}</span><span class="s2"> do not exist)&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">event_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_event</span><span class="p">(</span>
             <span class="n">body_ref</span><span class="o">=</span><span class="n">body_db_model</span><span class="p">,</span>
@@ -1359,8 +1369,18 @@
                     <span class="n">db_model</span><span class="o">=</span><span class="n">event_minutes_item_db_model</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
+                <span class="n">allowed_emi_decisions</span> <span class="o">=</span> <span class="n">constants_utils</span><span class="o">.</span><span class="n">get_all_class_attr_values</span><span class="p">(</span>
+                    <span class="n">db_constants</span><span class="o">.</span><span class="n">EventMinutesItemDecision</span>
+                <span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Provided &#39;decision&#39; is not an approved constant. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Provided: &#39;</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Should be one of: </span><span class="si">{</span><span class="n">allowed_emi_decisions</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;See: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;cdp_backend.database.constants.EventMinutesItemDecision. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Creating EventMinutesItem without decision value.&quot;</span>
+                <span class="p">)</span>
 
                 <span class="n">event_minutes_item_db_model</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minimal_event_minutes_item</span><span class="p">(</span>
@@ -1388,9 +1408,7 @@
                             <span class="n">db_model</span><span class="o">=</span><span class="n">matter_status_db_model</span><span class="p">,</span>
                             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                         <span class="p">)</span>
-                    <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-
+                    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
                         <span class="n">allowed_matter_decisions</span> <span class="o">=</span> <span class="p">(</span>
                             <span class="n">constants_utils</span><span class="o">.</span><span class="n">get_all_class_attr_values</span><span class="p">(</span>
                                 <span class="n">db_constants</span><span class="o">.</span><span class="n">MatterStatusDecision</span>
@@ -1421,11 +1439,10 @@
                                 <span class="n">db_model</span><span class="o">=</span><span class="n">matter_file_db_model</span><span class="p">,</span>
                                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
-                        <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;MatterFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;could not be archived.&quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;could not be archived. Skipping.&quot;</span>
                             <span class="p">)</span>
 
                     <span class="c1"># Archive as event minutes item file</span>
@@ -1441,8 +1458,7 @@
                             <span class="n">db_model</span><span class="o">=</span><span class="n">event_minutes_item_file_db_model</span><span class="p">,</span>
                             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                         <span class="p">)</span>
-                    <span class="k">except</span> <span class="n">FieldValidationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;EventMinutesItemFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
                             <span class="sa">f</span><span class="s2">&quot;could not be archived.&quot;</span>
@@ -1486,13 +1502,12 @@
                             <span class="n">FieldValidationFailed</span><span class="p">,</span>
                             <span class="n">RequiredField</span><span class="p">,</span>
                             <span class="n">InvalidFieldType</span><span class="p">,</span>
-                        <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="p">):</span>
                             <span class="n">allowed_vote_decisions</span> <span class="o">=</span> <span class="p">(</span>
                                 <span class="n">constants_utils</span><span class="o">.</span><span class="n">get_all_class_attr_values</span><span class="p">(</span>
                                     <span class="n">db_constants</span><span class="o">.</span><span class="n">VoteDecision</span>
                                 <span class="p">)</span>
                             <span class="p">)</span>
-                            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;Provided &#39;decision&#39; is not an approved constant. &quot;</span>
                                 <span class="sa">f</span><span class="s2">&quot;Provided: &#39;</span><span class="si">{</span><span class="n">vote</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
