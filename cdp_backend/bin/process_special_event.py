@@ -61,7 +61,7 @@ def main() -> None:
                 open_resource.read()
             )
 
-        log.info(f"Parsing event details...")
+        log.info("Parsing event details...")
         # Convert event details file to EventIngestionModel
         with open(args.event_details_file, "r") as open_resource:
             ingestion_model = EventIngestionModel.from_json(  # type: ignore
