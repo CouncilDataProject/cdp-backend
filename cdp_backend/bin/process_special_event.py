@@ -61,6 +61,7 @@ def main() -> None:
                 open_resource.read()
             )
 
+        log.info("Parsing event details...")
         # Convert event details file to EventIngestionModel
         with open(args.event_details_file, "r") as open_resource:
             ingestion_model = EventIngestionModel.from_json(  # type: ignore
@@ -80,6 +81,7 @@ def main() -> None:
                     filepath = session.video_uri
 
                 # Upload video file to file store
+                log.info(f"Uploading {session.video_uri}...")
                 video_uri = upload_file(
                     credentials_file=config.google_credentials_file,
                     bucket=config.validated_gcs_bucket_name,
@@ -90,6 +92,7 @@ def main() -> None:
                 session.video_uri = video_uri
 
         # Create event gather pipeline flow
+        log.info("Beginning processing...")
         flow = pipeline.create_event_gather_flow(
             config=config, prefetched_events=[ingestion_model], from_local=True
         )
