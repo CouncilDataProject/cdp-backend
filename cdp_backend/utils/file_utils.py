@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import aiohttp
 import math
 from hashlib import sha256
 from pathlib import Path
@@ -94,9 +95,15 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
+        kwargs = {}
+
+        # Set custom timeout for http resources
+        if uri.startswith("http"):
+            kwargs = {'timeout' :aiohttp.ClientTimeout(total=900)}
+
         # TODO: Add explicit use of GCS credentials until public read is fixed
-        fs, remote_path = url_to_fs(uri)
-        fs.get(remote_path, str(dst), timeout=None)
+        fs, remote_path = url_to_fs(uri, **kwargs)
+        fs.get(remote_path, str(dst))
         log.info(f"Completed resource copy from: {uri}")
         log.info(f"Stored resource copy: {dst}")
 
