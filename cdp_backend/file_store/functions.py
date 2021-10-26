@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import hashlib
 import logging
 from pathlib import Path
 from typing import Optional, Union
@@ -136,6 +137,6 @@ def remove_local_file(filepath: Union[str, Path]) -> None:
         The filepath of the local file to delete.
     """
     fs = LocalFileSystem()
-    fs.rm(filepath)
+    fs.rm(str(filepath))
 
     log.debug(f"Removed {filepath} from local file system.")

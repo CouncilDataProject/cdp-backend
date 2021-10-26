@@ -3,6 +3,7 @@
 
 import logging
 import math
+import uuid
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -59,7 +60,10 @@ def get_media_type(uri: str) -> Optional[str]:
 
 
 def resource_copy(
-    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    uri: str,
+    dst: Optional[Union[str, Path]] = None,
+    overwrite: bool = False,
+    addHash: bool = False,
 ) -> str:
     """
     Copy a resource (local or remote) to a local destination on the machine.
@@ -74,6 +78,8 @@ def resource_copy(
     overwrite: bool
         Boolean value indicating whether or not to overwrite a local resource with
         the same name if it already exists.
+    addHash: bool
+        Boolean value indicating whether or not to add a hash to the copied file's name
 
     Returns
     -------
@@ -82,6 +88,9 @@ def resource_copy(
     """
     if dst is None:
         dst = uri.split("/")[-1]
+        if addHash:
+            hash = str(uuid.uuid4())
+            dst = hash + "-" + uri.split("/")[-1]
 
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
