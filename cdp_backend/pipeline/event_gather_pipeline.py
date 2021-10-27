@@ -326,25 +326,20 @@ def split_audio(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=tmp_audio_filepath,
+            remove_local=True,
         )
         fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=tmp_audio_log_out_filepath,
+            remove_local=True,
         )
         fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=tmp_audio_log_err_filepath,
+            remove_local=True,
         )
-
-        # Remove tmp files after their final dependent tasks are finished
-        for local_path in [
-            tmp_audio_filepath,
-            tmp_audio_log_out_filepath,
-            tmp_audio_log_err_filepath,
-        ]:
-            fs_functions.remove_local_file(local_path)
 
     return audio_uri
 
@@ -598,10 +593,8 @@ def finalize_and_archive_transcript(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=transcript_save_path,
+        remove_local=True,
     )
-
-    # Remove local transcript
-    fs_functions.remove_local_file(transcript_save_path)
 
     return transcript_file_uri, transcript
 
@@ -816,8 +809,8 @@ def generate_thumbnails(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=static_thumbnail_file,
+        remove_local=True,
     )
-    fs_functions.remove_local_file(static_thumbnail_file)
 
     if event.hover_thumbnail_uri is None:
         # Generate new
@@ -833,8 +826,8 @@ def generate_thumbnails(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=hover_thumbnail_file,
+        remove_local=True,
     )
-    fs_functions.remove_local_file(hover_thumbnail_file)
 
     return (
         static_thumbnail_url,
@@ -871,13 +864,15 @@ def _process_person_ingestion(
     person_picture_db_model: Optional[db_models.File]
     if person.picture_uri is not None:
         try:
-            tmp_person_picture_path = file_utils.resource_copy(person.picture_uri)
+            tmp_person_picture_path = file_utils.resource_copy(
+                person.picture_uri, addHash=True
+            )
             person_picture_uri = fs_functions.upload_file(
                 credentials_file=credentials_file,
                 bucket=bucket,
                 filepath=tmp_person_picture_path,
+                remove_local=True,
             )
-            fs_functions.remove_local_file(tmp_person_picture_path)
             person_picture_db_model = db_functions.create_file(
                 uri=person_picture_uri,
                 credentials_file=credentials_file,
@@ -927,14 +922,13 @@ def _process_person_ingestion(
             if person.seat.image_uri is not None:
                 tmp_person_seat_image_path = file_utils.resource_copy(
                     uri=person.seat.image_uri,
+                    addHash=True,
                 )
                 person_seat_image_uri = fs_functions.upload_file(
                     credentials_file=credentials_file,
                     bucket=bucket,
                     filepath=tmp_person_seat_image_path,
-                )
-                fs_functions.remove_local_file(
-                    tmp_person_seat_image_path,
+                    remove_local=True,
                 )
                 person_seat_image_db_model = db_functions.create_file(
                     uri=person_seat_image_uri, credentials_file=credentials_file
