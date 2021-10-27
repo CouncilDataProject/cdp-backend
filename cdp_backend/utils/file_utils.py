@@ -99,7 +99,7 @@ def resource_copy(
 
         # Set custom timeout for http resources
         if uri.startswith("http"):
-            kwargs = {"timeout": aiohttp.ClientTimeout(total=900)}
+            kwargs = {"timeout": aiohttp.ClientTimeout(total=1800)}
 
         # TODO: Add explicit use of GCS credentials until public read is fixed
         fs, remote_path = url_to_fs(uri, **kwargs)
