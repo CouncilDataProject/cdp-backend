@@ -73,6 +73,7 @@ dev_requirements = [
 ]
 
 requirements = [
+    "aiohttp~=3.7.4.post0",
     "dataclasses-json~=0.5",
     "fireo~=1.4",
     "fsspec",  # Version pin set by gcsfs
