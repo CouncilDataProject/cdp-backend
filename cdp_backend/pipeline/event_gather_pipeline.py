@@ -865,7 +865,7 @@ def _process_person_ingestion(
     if person.picture_uri is not None:
         try:
             tmp_person_picture_path = file_utils.resource_copy(
-                person.picture_uri, addHash=True
+                person.picture_uri, add_hash=True
             )
             person_picture_uri = fs_functions.upload_file(
                 credentials_file=credentials_file,
@@ -922,7 +922,7 @@ def _process_person_ingestion(
             if person.seat.image_uri is not None:
                 tmp_person_seat_image_path = file_utils.resource_copy(
                     uri=person.seat.image_uri,
-                    addHash=True,
+                    add_hash=True,
                 )
                 person_seat_image_uri = fs_functions.upload_file(
                     credentials_file=credentials_file,
