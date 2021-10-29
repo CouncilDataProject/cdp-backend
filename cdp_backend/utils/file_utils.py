@@ -3,7 +3,6 @@
 
 import logging
 import math
-import uuid
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
