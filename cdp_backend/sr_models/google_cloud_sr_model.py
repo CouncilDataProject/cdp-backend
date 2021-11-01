@@ -72,19 +72,19 @@ class GoogleCloudSRModel(SRModel):
         client = speech.SpeechClient.from_service_account_json(self.credentials_file)
 
         # Create basic metadata
-        metadata = speech.types.RecognitionMetadata()
+        metadata = speech.RecognitionMetadata()
         metadata.interaction_type = (
-            speech.enums.RecognitionMetadata.InteractionType.DISCUSSION
+            speech.RecognitionMetadata.InteractionType.DISCUSSION
         )
 
         # Add phrases
-        speech_context = speech.types.SpeechContext(
+        speech_context = speech.SpeechContext(
             phrases=self._clean_phrases(phrases)
         )
 
         # Prepare for transcription
-        config = speech.types.RecognitionConfig(
-            encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
             language_code="en-US",
             enable_automatic_punctuation=True,
@@ -92,11 +92,11 @@ class GoogleCloudSRModel(SRModel):
             speech_contexts=[speech_context],
             metadata=metadata,
         )
-        audio = speech.types.RecognitionAudio(uri=file_uri)
+        audio = speech.RecognitionAudio(uri=file_uri)
 
         # Begin transcription
         log.debug(f"Beginning transcription for: {file_uri}")
-        operation = client.long_running_recognize(config, audio)
+        operation = client.long_running_recognize(request = {'config': config, 'audio': audio})
 
         # Wait for complete
         response = operation.result(timeout=10800)
@@ -145,10 +145,13 @@ class GoogleCloudSRModel(SRModel):
                         # Extract word from response
                         word = result.alternatives[0].words[w_ind]
 
+                        # Nanos no longer supported, use microseconds instead
+                        # https://github.com/googleapis/python-speech/issues/71
                         start_time = (
-                            word.start_time.seconds + word.start_time.nanos * 1e-9
+                            word.start_time.seconds + word.start_time.microseconds * 1e-6
                         )
-                        end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
+
+                        end_time = word.end_time.seconds + word.end_time.microseconds * 1e-6
 
                         # Add start_time to Sentence if first word
                         if w_ind - w_marker == 0:
