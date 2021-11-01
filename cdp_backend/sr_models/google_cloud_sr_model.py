@@ -69,7 +69,9 @@ class GoogleCloudSRModel(SRModel):
             The transcript model for the supplied media file.
         """
         # Create client
-        client = speech.SpeechClient.from_service_account_json(self.credentials_file)
+        client = speech.SpeechClient.from_service_account_file(
+            filename=str(self.credentials_file)
+        )
 
         # Create basic metadata
         metadata = speech.RecognitionMetadata()
@@ -78,9 +80,7 @@ class GoogleCloudSRModel(SRModel):
         )
 
         # Add phrases
-        speech_context = speech.SpeechContext(
-            phrases=self._clean_phrases(phrases)
-        )
+        speech_context = speech.SpeechContext(phrases=self._clean_phrases(phrases))
 
         # Prepare for transcription
         config = speech.RecognitionConfig(
@@ -96,7 +96,9 @@ class GoogleCloudSRModel(SRModel):
 
         # Begin transcription
         log.debug(f"Beginning transcription for: {file_uri}")
-        operation = client.long_running_recognize(request = {'config': config, 'audio': audio})
+        operation = client.long_running_recognize(
+            request={"config": config, "audio": audio}
+        )
 
         # Wait for complete
         response = operation.result(timeout=10800)
@@ -148,10 +150,13 @@ class GoogleCloudSRModel(SRModel):
                         # Nanos no longer supported, use microseconds instead
                         # https://github.com/googleapis/python-speech/issues/71
                         start_time = (
-                            word.start_time.seconds + word.start_time.microseconds * 1e-6
+                            word.start_time.seconds
+                            + word.start_time.microseconds * 1e-6
                         )
 
-                        end_time = word.end_time.seconds + word.end_time.microseconds * 1e-6
+                        end_time = (
+                            word.end_time.seconds + word.end_time.microseconds * 1e-6
+                        )
 
                         # Add start_time to Sentence if first word
                         if w_ind - w_marker == 0:
