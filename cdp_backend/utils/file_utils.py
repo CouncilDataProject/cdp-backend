@@ -63,7 +63,6 @@ def resource_copy(
     uri: str,
     dst: Optional[Union[str, Path]] = None,
     overwrite: bool = False,
-    add_hash: bool = False,
 ) -> str:
     """
     Copy a resource (local or remote) to a local destination on the machine.
@@ -78,9 +77,6 @@ def resource_copy(
     overwrite: bool
         Boolean value indicating whether or not to overwrite a local resource with
         the same name if it already exists.
-    add_hash: bool
-        Boolean value indicating if the file needs a unique hash to be added to the
-        beginning of its name.
 
     Returns
     -------
@@ -89,9 +85,6 @@ def resource_copy(
     """
     if dst is None:
         dst = uri.split("/")[-1]
-        if add_hash:
-            hash = hash_file_contents(uri)
-            dst = hash + "-" + uri.split("/")[-1]
 
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
@@ -368,3 +361,22 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+def generate_file_storage_name(local_path: str) -> str:
+    """
+    Return the name of the file as it should be on Google Cloud Storage.
+
+    Parameters
+    ----------
+    local_path: str
+        The name of the file path on the local computer.
+
+    Returns
+    -------
+    dst: str
+        The name of the file as it should be on Google Cloud Storage.
+    """
+    hash = hash_file_contents(local_path)
+    dst = hash + "-" + local_path.split("/")[-1]
+    return dst

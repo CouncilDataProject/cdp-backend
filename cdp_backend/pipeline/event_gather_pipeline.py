@@ -865,12 +865,16 @@ def _process_person_ingestion(
     if person.picture_uri is not None:
         try:
             tmp_person_picture_path = file_utils.resource_copy(
-                person.picture_uri, add_hash=True
+                person.picture_uri,
+            )
+            destination_path = file_utils.generate_file_storage_name(
+                tmp_person_picture_path
             )
             person_picture_uri = fs_functions.upload_file(
                 credentials_file=credentials_file,
                 bucket=bucket,
                 filepath=tmp_person_picture_path,
+                save_name=destination_path,
                 remove_local=True,
             )
             person_picture_db_model = db_functions.create_file(
@@ -922,12 +926,15 @@ def _process_person_ingestion(
             if person.seat.image_uri is not None:
                 tmp_person_seat_image_path = file_utils.resource_copy(
                     uri=person.seat.image_uri,
-                    add_hash=True,
+                )
+                destination_path = file_utils.generate_file_storage_name(
+                    tmp_person_seat_image_path
                 )
                 person_seat_image_uri = fs_functions.upload_file(
                     credentials_file=credentials_file,
                     bucket=bucket,
                     filepath=tmp_person_seat_image_path,
+                    save_name=destination_path,
                     remove_local=True,
                 )
                 person_seat_image_db_model = db_functions.create_file(
