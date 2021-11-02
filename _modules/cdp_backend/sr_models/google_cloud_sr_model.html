@@ -190,22 +190,22 @@
 <span class="sd">            The transcript model for the supplied media file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Create client</span>
-        <span class="n">client</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechClient</span><span class="o">.</span><span class="n">from_service_account_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials_file</span><span class="p">)</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechClient</span><span class="o">.</span><span class="n">from_service_account_file</span><span class="p">(</span>
+            <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials_file</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Create basic metadata</span>
-        <span class="n">metadata</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="p">()</span>
         <span class="n">metadata</span><span class="o">.</span><span class="n">interaction_type</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">speech</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">DISCUSSION</span>
+            <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">DISCUSSION</span>
         <span class="p">)</span>
 
         <span class="c1"># Add phrases</span>
-        <span class="n">speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span>
-            <span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span><span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">))</span>
 
         <span class="c1"># Prepare for transcription</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="p">(</span>
-            <span class="n">encoding</span><span class="o">=</span><span class="n">speech</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="o">.</span><span class="n">AudioEncoding</span><span class="o">.</span><span class="n">LINEAR16</span><span class="p">,</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="p">(</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="n">speech</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="o">.</span><span class="n">AudioEncoding</span><span class="o">.</span><span class="n">LINEAR16</span><span class="p">,</span>
             <span class="n">sample_rate_hertz</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
             <span class="n">language_code</span><span class="o">=</span><span class="s2">&quot;en-US&quot;</span><span class="p">,</span>
             <span class="n">enable_automatic_punctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -213,11 +213,13 @@
             <span class="n">speech_contexts</span><span class="o">=</span><span class="p">[</span><span class="n">speech_context</span><span class="p">],</span>
             <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">audio</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionAudio</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">file_uri</span><span class="p">)</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionAudio</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">file_uri</span><span class="p">)</span>
 
         <span class="c1"># Begin transcription</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning transcription for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">operation</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">long_running_recognize</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">audio</span><span class="p">)</span>
+        <span class="n">operation</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">long_running_recognize</span><span class="p">(</span>
+            <span class="n">request</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="n">audio</span><span class="p">}</span>
+        <span class="p">)</span>
 
         <span class="c1"># Wait for complete</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10800</span><span class="p">)</span>
@@ -266,10 +268,16 @@
                         <span class="c1"># Extract word from response</span>
                         <span class="n">word</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">w_ind</span><span class="p">]</span>
 
+                        <span class="c1"># Nanos no longer supported, use microseconds instead</span>
+                        <span class="c1"># https://github.com/googleapis/python-speech/issues/71</span>
                         <span class="n">start_time</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
+                            <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">seconds</span>
+                            <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">*</span> <span class="mf">1e-6</span>
                         <span class="p">)</span>
-                        <span class="n">end_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
+
+                        <span class="n">end_time</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">*</span> <span class="mf">1e-6</span>
+                        <span class="p">)</span>
 
                         <span class="c1"># Add start_time to Sentence if first word</span>
                         <span class="k">if</span> <span class="n">w_ind</span> <span class="o">-</span> <span class="n">w_marker</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
