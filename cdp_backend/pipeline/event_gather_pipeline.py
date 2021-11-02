@@ -868,7 +868,7 @@ def _process_person_ingestion(
                 person.picture_uri,
             )
             destination_path = file_utils.generate_file_storage_name(
-                tmp_person_picture_path
+                tmp_person_picture_path.split("/")[-1]
             )
             person_picture_uri = fs_functions.upload_file(
                 credentials_file=credentials_file,
@@ -928,7 +928,7 @@ def _process_person_ingestion(
                     uri=person.seat.image_uri,
                 )
                 destination_path = file_utils.generate_file_storage_name(
-                    tmp_person_seat_image_path
+                    tmp_person_seat_image_path.split("/")[-1]
                 )
                 person_seat_image_uri = fs_functions.upload_file(
                     credentials_file=credentials_file,

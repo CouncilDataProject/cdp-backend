@@ -363,20 +363,20 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
     return hasher.hexdigest()
 
 
-def generate_file_storage_name(local_path: str) -> str:
+def generate_file_storage_name(extension: str) -> str:
     """
     Return the name of the file as it should be on Google Cloud Storage.
 
     Parameters
     ----------
-    local_path: str
-        The name of the file path on the local computer.
+    extension: str
+        The name of the extension of the file path on the local computer.
 
     Returns
     -------
     dst: str
         The name of the file as it should be on Google Cloud Storage.
     """
-    hash = hash_file_contents(local_path)
-    dst = hash + "-" + local_path.split("/")[-1]
+    hash = hash_file_contents(extension)
+    dst = hash + "-" + extension
     return dst
