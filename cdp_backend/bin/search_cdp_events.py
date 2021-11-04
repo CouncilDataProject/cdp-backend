@@ -10,6 +10,9 @@ from datetime import datetime
 from typing import Dict, List, NamedTuple
 
 import dask.dataframe as dd
+import fireo
+from google.auth.credentials import AnonymousCredentials
+from google.cloud.firestore import Client
 from nltk import ngrams
 from nltk.stem import SnowballStemmer
 
@@ -57,6 +60,11 @@ class Args(argparse.Namespace):
             prog="search_cdp_events", description="Search CDP events given a query."
         )
 
+        p.add_argument(
+            "instance",
+            type=str,
+            help="Which instance to query.",
+        )
         p.add_argument(
             "-q",
             "--query",
@@ -118,7 +126,7 @@ def _query_event_index(
 
 
 class EventMatch(NamedTuple):
-    event_ref: db_models.Event
+    event: db_models.Event
     pure_relevance: float
     datetime_weighted_relevance: float
     contained_grams: List[str]
@@ -148,20 +156,19 @@ def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
     matching_events: Dict[str, List[db_models.IndexedEventGram]] = {}
     for query_result in all_gram_results:
         for matching_gram_result in query_result:
-            if matching_gram_result.event_ref.id not in matching_events:
-                matching_events[matching_gram_result.event_ref.id] = [
-                    matching_gram_result
-                ]
+            referenced_event_id = matching_gram_result.event_ref.ref.id
+            if referenced_event_id not in matching_events:
+                matching_events[referenced_event_id] = [matching_gram_result]
             else:
-                matching_events[matching_gram_result.event_ref.id].append(
-                    matching_gram_result
-                )
+                matching_events[referenced_event_id].append(matching_gram_result)
 
     compiled_events: List[EventMatch] = []
-    for matching_grams in matching_events.values():
+    for event_id, matching_grams in matching_events.items():
         compiled_events.append(
             EventMatch(
-                event_ref=matching_grams[0].event_ref,
+                event=db_models.Event.collection.get(
+                    f"{db_models.Event.collection_name}/{event_id}"
+                ),
                 pure_relevance=sum([ieg.value for ieg in matching_grams]),
                 datetime_weighted_relevance=sum(
                     [ieg.datetime_weighted_value for ieg in matching_grams]
@@ -173,7 +180,9 @@ def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
                 keywords=[
                     ieg.unstemmed_gram
                     for ieg in db_models.IndexedEventGram.collection.filter(
-                        "event_ref", "==", matching_grams[0].event_ref.key
+                        "event_ref",
+                        "==",
+                        f"{db_models.Event.collection_name}/{event_id}",
                     )
                     .order("-value")
                     .fetch(5)
@@ -198,8 +207,8 @@ def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
     # Log results
     for i, event_match in enumerate(compiled_events):
         print(
-            f"Match {i}: {event_match.event_ref.id} "
-            f"(datetime: {event_match.event_ref.event_datetime})"
+            f"Match {i}: {event_match.event.id} "
+            f"(datetime: {event_match.event.event_datetime})"
         )
         print(
             f"Match pure tf-idf relevance: {event_match.pure_relevance}",
@@ -343,6 +352,15 @@ def run_local_search(
 def main() -> None:
     try:
         args = Args()
+
+        # Connect to the database
+        fireo.connection(
+            client=Client(
+                project=args.instance,
+                credentials=AnonymousCredentials(),
+            )
+        )
+
         run_remote_search(args.query, args.sort_by, args.first)
         run_local_search(args.query, args.local_index_glob, args.sort_by, args.first)
     except Exception as e:
