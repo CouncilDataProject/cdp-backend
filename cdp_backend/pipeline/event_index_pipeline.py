@@ -87,23 +87,25 @@ def get_highest_confidence_transcript_for_each_session(
     # We update as we iterate through list of all transcripts
     selected_transcripts: Dict[str, pd.Series] = {}
     for transcript in transcripts:
-        if transcript.session_ref.id not in selected_transcripts:
-            selected_transcripts[transcript.session_ref.id] = transcript
+        referenced_session_id = transcript.session_ref.ref.id
+        if referenced_session_id not in selected_transcripts:
+            selected_transcripts[referenced_session_id] = transcript
 
         # Multiple transcripts for a single session
         # pick the higher confidence
         elif (
             transcript.confidence
-            > selected_transcripts[transcript.session_ref.id].confidence
+            > selected_transcripts[referenced_session_id].confidence
         ):
-            selected_transcripts[transcript.session_ref.id] = transcript
+            selected_transcripts[referenced_session_id] = transcript
 
     return list(selected_transcripts.values())
 
 
 class EventTranscripts(NamedTuple):
-    event: db_models.Event
-    transcripts: List[db_models.Transcript]
+    event_id: str
+    event_datetime: datetime
+    transcript_db_files: List[db_models.File]
 
 
 @task
@@ -118,16 +120,19 @@ def get_transcripts_per_event(
     event_transcripts: Dict[str, EventTranscripts] = {}
     for transcript in transcripts:
         # Add new event
-        if transcript.session_ref.event_ref.id not in event_transcripts:
-            event_transcripts[transcript.session_ref.event_ref.id] = EventTranscripts(
-                event=transcript.session_ref.event_ref,
-                transcripts=[transcript],
+        session = transcript.session_ref.get()
+        referenced_event_id = session.event_ref.ref.id
+        if referenced_event_id not in event_transcripts:
+            event_transcripts[referenced_event_id] = EventTranscripts(
+                event_id=referenced_event_id,
+                event_datetime=session.event_ref.get().event_datetime,
+                transcript_db_files=[transcript.file_ref.get()],
             )
 
         # Update existing event_transcripts object
         else:
-            event_transcripts[transcript.session_ref.event_ref.id].transcripts.append(
-                transcript
+            event_transcripts[referenced_event_id].transcript_db_files.append(
+                transcript.file_ref.get()
             )
 
     return list(event_transcripts.values())
@@ -144,11 +149,8 @@ class SentenceManager:
 @dataclass_json
 @dataclass
 class ContextualizedGram:
-    # Note: we attach both the event ref and the unpacked id and datetime
-    # We attach the event ref for later "foreign key" attachment
     # We attach the id for simpler gram grouping
     # We attach the datetime for simpler datetime weighting
-    event_ref: db_models.Event
     event_id: str
     event_datetime: datetime
     unstemmed_gram: str
@@ -183,14 +185,14 @@ def read_transcripts_and_generate_grams(
     event_n_grams: List[ContextualizedGram] = []
 
     # Iter over each transcript
-    for transcript in event_transcripts.transcripts:
+    for transcript_db_file in event_transcripts.transcript_db_files:
         with TemporaryDirectory() as temp_dir:
             temp_dir_path = Path(temp_dir)
-            local_transcript_filepath = temp_dir_path / transcript.file_ref.name
+            local_transcript_filepath = temp_dir_path / transcript_db_file.name
 
             # Download transcript
             fs.get(
-                rpath=transcript.file_ref.uri,
+                rpath=transcript_db_file.uri,
                 lpath=str(local_transcript_filepath),
             )
 
@@ -265,9 +267,8 @@ def read_transcripts_and_generate_grams(
                     # Append to event list
                     event_n_grams.append(
                         ContextualizedGram(
-                            event_ref=event_transcripts.event,
-                            event_id=event_transcripts.event.id,
-                            event_datetime=event_transcripts.event.event_datetime,
+                            event_id=event_transcripts.event_id,
+                            event_datetime=event_transcripts.event_datetime,
                             unstemmed_gram=unstemmed_n_gram,
                             stemmed_gram=stemmed_n_gram,
                             context_span=context_span,
@@ -342,12 +343,22 @@ def compute_tfidf(
 
 @task
 def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
-    n_grams_df = n_grams_df.drop(columns=["event_ref"])
     n_grams_df.to_parquet(f"tfidf-{n_grams}.parquet")
 
 
+class AlmostCompleteIndexedEventGram(NamedTuple):
+    event_id: str
+    unstemmed_gram: str
+    stemmed_gram: str
+    context_span: str
+    value: float
+    datetime_weighted_value: float
+
+
 @task
-def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventGram]]:
+def chunk_n_grams(
+    n_grams_df: pd.DataFrame,
+) -> List[List[AlmostCompleteIndexedEventGram]]:
     """
     Split the large n_grams dataframe into multiple lists of IndexedEventGram models
     for batched, mapped, upload.
@@ -360,22 +371,20 @@ def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventG
     ]
 
     # Convert each dataframe into a list of indexed event gram
-    event_gram_chunks: List[List[db_models.IndexedEventGram]] = []
+    event_gram_chunks: List[List[AlmostCompleteIndexedEventGram]] = []
     for n_gram_df_chunk in n_grams_dfs:
-        event_gram_chunk: List[db_models.IndexedEventGram] = []
+        event_gram_chunk: List[AlmostCompleteIndexedEventGram] = []
         for _, row in n_gram_df_chunk.iterrows():
-            # Convert row of df to db model
-            ieg = db_models.IndexedEventGram()
-
-            # Attach all data
-            ieg.event_ref = row.event_ref
-            ieg.unstemmed_gram = row.unstemmed_gram
-            ieg.stemmed_gram = row.stemmed_gram
-            ieg.context_span = row.context_span
-            ieg.value = row.tfidf
-            ieg.datetime_weighted_value = row.datetime_weighted_tfidf
-
-            event_gram_chunk.append(ieg)
+            event_gram_chunk.append(
+                AlmostCompleteIndexedEventGram(
+                    event_id=row.event_id,
+                    unstemmed_gram=row.unstemmed_gram,
+                    stemmed_gram=row.stemmed_gram,
+                    context_span=row.context_span,
+                    value=row.tfidf,
+                    datetime_weighted_value=row.datetime_weighted_tfidf,
+                )
+            )
 
         event_gram_chunks.append(event_gram_chunk)
 
@@ -384,7 +393,7 @@ def chunk_n_grams(n_grams_df: pd.DataFrame) -> List[List[db_models.IndexedEventG
 
 @task
 def store_n_gram_chunk(
-    n_gram_chunk: List[db_models.IndexedEventGram],
+    n_gram_chunk: List[AlmostCompleteIndexedEventGram],
     credentials_file: str,
 ) -> None:
     """
@@ -396,7 +405,22 @@ def store_n_gram_chunk(
     batch = fireo.batch()
 
     # Trigger upserts for all items
-    for ieg in n_gram_chunk:
+    event_lut: Dict[str, db_models.Event] = {}
+    for almost_complete_ieg in n_gram_chunk:
+        if almost_complete_ieg.event_id not in event_lut:
+            event_lut[almost_complete_ieg.event_id] = db_models.Event.collection.get(
+                f"{db_models.Event.collection_name}/{almost_complete_ieg.event_id}"
+            )
+
+        # Construct true ieg
+        ieg = db_models.IndexedEventGram()
+        ieg.event_ref = event_lut[almost_complete_ieg.event_id]
+        ieg.unstemmed_gram = almost_complete_ieg.unstemmed_gram
+        ieg.stemmed_gram = almost_complete_ieg.stemmed_gram
+        ieg.context_span = almost_complete_ieg.context_span
+        ieg.value = almost_complete_ieg.value
+        ieg.datetime_weighted_value = almost_complete_ieg.datetime_weighted_value
+
         db_functions.upload_db_model(
             db_model=ieg,
             credentials_file=credentials_file,
