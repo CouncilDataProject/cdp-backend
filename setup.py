@@ -113,6 +113,7 @@ setup(
         "console_scripts": [
             "clean_cdp_database=cdp_backend.bin.clean_cdp_database:main",
             "clean_cdp_filestore=cdp_backend.bin.clean_cdp_filestore:main",
+            "remove_event=cdp_backend.bin.remove_event:main",
             "create_cdp_database_uml=cdp_backend.bin.create_cdp_database_uml:main",
             (
                 "create_cdp_ingestion_models_doc="
