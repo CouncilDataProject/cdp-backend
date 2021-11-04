@@ -164,11 +164,10 @@ def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
 
     compiled_events: List[EventMatch] = []
     for event_id, matching_grams in matching_events.items():
+        matching_event = matching_grams[0].event_ref.get()
         compiled_events.append(
             EventMatch(
-                event=db_models.Event.collection.get(
-                    f"{db_models.Event.collection_name}/{event_id}"
-                ),
+                event=matching_event,
                 pure_relevance=sum([ieg.value for ieg in matching_grams]),
                 datetime_weighted_relevance=sum(
                     [ieg.datetime_weighted_value for ieg in matching_grams]
@@ -182,7 +181,7 @@ def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
                     for ieg in db_models.IndexedEventGram.collection.filter(
                         "event_ref",
                         "==",
-                        f"{db_models.Event.collection_name}/{event_id}",
+                        matching_event.key,
                     )
                     .order("-value")
                     .fetch(5)
