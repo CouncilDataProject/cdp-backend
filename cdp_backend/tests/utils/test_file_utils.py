@@ -20,7 +20,11 @@ from cdp_backend.utils.file_utils import (
     resource_copy,
 )
 
-from ..conftest import EXAMPLE_VIDEO_FILENAME, EXAMPLE_VIDEO_HD_FILENAME
+from ..conftest import (
+    EXAMPLE_MKV_VIDEO_FILENAME,
+    EXAMPLE_VIDEO_FILENAME,
+    EXAMPLE_VIDEO_HD_FILENAME,
+)
 
 #############################################################################
 
@@ -203,3 +207,18 @@ def test_hover_thumbnail_generator(
     assert image.shape[1] <= MAX_THUMBNAIL_WIDTH
 
     os.remove(result)
+
+
+@pytest.mark.parametrize(
+    "video_uri, expected",
+    [
+        (EXAMPLE_MKV_VIDEO_FILENAME, EXAMPLE_VIDEO_FILENAME),
+    ],
+)
+def test_convert_video_to_mp4(
+    resources_dir: Path,
+    video_uri: str,
+    expected: str,
+) -> None:
+    filepath = str(resources_dir / video_uri)
+    assert file_utils.convert_video_to_mp4(filepath) == str(resources_dir / expected)

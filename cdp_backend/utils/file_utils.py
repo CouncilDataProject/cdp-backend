@@ -379,7 +379,7 @@ def convert_video_to_mp4(video_filepath: str) -> str:
     """
     name, ext = os.path.splitext(video_filepath)
     mp4_filepath = name + ".mp4"
-    ffmpeg.input(video_filepath).output(mp4_filepath).run()
+    ffmpeg.input(video_filepath).output(mp4_filepath).overwrite_output().run()
     log.info("Finished converting {} to mp4".format(video_filepath))
 
     return mp4_filepath
