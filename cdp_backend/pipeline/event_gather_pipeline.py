@@ -130,7 +130,7 @@ def create_event_gather_flow(
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
                 # Convert to mp4 if necessary
-                tmp_video_filepath = convert_video_to_mp4_and_upload_task(
+                tmp_video_filepath = convert_video_to_mp4_and_upload(
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
@@ -284,7 +284,7 @@ def get_session_content_hash(
 
 
 @task
-def convert_video_to_mp4_and_upload_task(
+def convert_video_to_mp4_and_upload(
     video_filepath: Union[str, Path],
     session: Session,
     credentials_file: str,
