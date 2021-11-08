@@ -3,6 +3,7 @@
 
 import logging
 import tempfile
+import os
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
@@ -126,7 +127,15 @@ def create_event_gather_flow(
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
                 # Download video to local copy
-                tmp_video_filepath = resource_copy_task(uri=session.video_uri)
+                resource_copy_filepath = resource_copy_task(uri=session.video_uri)
+
+                # Convert to mp4 if necessary
+                tmp_video_filepath = convert_to_mp4_task(
+                    video_filepath=resource_copy_filepath,
+                    session=session,
+                    credentials_file=config.google_credentials_file,
+                    bucket=config.validated_gcs_bucket_name,
+                )
 
                 # Get unique session identifier
                 session_content_hash = get_session_content_hash(
@@ -272,6 +281,42 @@ def get_session_content_hash(
     """
     # Hash the video contents
     return file_utils.hash_file_contents(uri=tmp_video_filepath)
+
+
+@task
+def convert_to_mp4_task(
+    video_filepath: Union[str, Path],
+    session: Session,
+    credentials_file: str,
+    bucket: str,
+) -> str:
+    video_filepath = str(video_filepath)
+
+    # Get file extension
+    ext = os.path.splitext(video_filepath)[1]
+
+    # Convert to mp4 if necessary
+    if ext != ".mp4":
+        # Convert video to mp4
+        mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
+
+        # Remove old mkv file 
+        fs_functions.remove_local_file(video_filepath)
+
+        # Upload to gcsfs
+        mp4_uri = fs_functions.upload_file(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=mp4_filepath,
+        )
+
+        # Set session video_uri to uri in remote file store
+        session.video_uri = mp4_uri
+
+        # Return converted local mp4 filepath
+        return mp4_filepath
+    
+    return video_filepath
 
 
 @task

@@ -1,8 +1,10 @@
 ##!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import ffmpeg
 import logging
 import math
+import os
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -359,3 +361,12 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+def convert_video_to_mp4(video_filepath: str):
+    name, ext = os.path.splitext(video_filepath)
+    out_name = name + ".mp4"
+    ffmpeg.input(video_filepath).output(out_name).run()
+    log.info("Finished converting {} to mp4".format(video_filepath))
+
+    return out_name
