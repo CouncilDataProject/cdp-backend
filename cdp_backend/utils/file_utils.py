@@ -1,7 +1,6 @@
 ##!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import ffmpeg
 import logging
 import math
 import os
@@ -10,6 +9,7 @@ from pathlib import Path
 from typing import Optional, Tuple, Union
 
 import aiohttp
+import ffmpeg
 import fsspec
 from fsspec.core import url_to_fs
 
@@ -363,14 +363,14 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
     return hasher.hexdigest()
 
 
-def convert_video_to_mp4(video_filepath: str):
+def convert_video_to_mp4(video_filepath: str) -> str:
     """
     Converts a video to an equivalent MP4 file.
 
     Parameters
     ----------
     video_filepath: str
-        The filepath of the video to convert. 
+        The filepath of the video to convert.
 
     Returns
     -------

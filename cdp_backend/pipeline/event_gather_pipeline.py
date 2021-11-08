@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import tempfile
 import os
+import tempfile
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
@@ -321,7 +321,7 @@ def convert_video_to_mp4_and_upload_task(
         # Convert video to mp4
         mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
 
-        # Remove old mkv file 
+        # Remove old mkv file
         fs_functions.remove_local_file(video_filepath)
 
         # Upload to gcsfs
@@ -336,7 +336,7 @@ def convert_video_to_mp4_and_upload_task(
 
         # Return converted local mp4 filepath
         return mp4_filepath
-    
+
     return video_filepath
 
 
