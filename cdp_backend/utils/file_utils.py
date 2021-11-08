@@ -364,9 +364,22 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
 
 
 def convert_video_to_mp4(video_filepath: str):
+    """
+    Converts a video to an equivalent MP4 file.
+
+    Parameters
+    ----------
+    video_filepath: str
+        The filepath of the video to convert. 
+
+    Returns
+    -------
+    mp4_filepath: str
+        The filepath of the converted MP4 video.
+    """
     name, ext = os.path.splitext(video_filepath)
-    out_name = name + ".mp4"
-    ffmpeg.input(video_filepath).output(out_name).run()
+    mp4_filepath = name + ".mp4"
+    ffmpeg.input(video_filepath).output(mp4_filepath).run()
     log.info("Finished converting {} to mp4".format(video_filepath))
 
-    return out_name
+    return mp4_filepath

@@ -130,7 +130,7 @@ def create_event_gather_flow(
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
                 # Convert to mp4 if necessary
-                tmp_video_filepath = convert_to_mp4_task(
+                tmp_video_filepath = convert_video_to_mp4_and_upload_task(
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
@@ -284,12 +284,33 @@ def get_session_content_hash(
 
 
 @task
-def convert_to_mp4_task(
+def convert_video_to_mp4_and_upload_task(
     video_filepath: Union[str, Path],
     session: Session,
     credentials_file: str,
     bucket: str,
 ) -> str:
+    """
+    Convert a video to MP4 (if necessary), upload it to the file store, and remove
+    the original non-MP4 file that was resource copied.
+
+    Parameters
+    ----------
+    video_filepath: Union[str, Path]
+        The local path for video file to convert.
+    session: Session
+        The session to append the new MP4 video uri to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+    bucket: str
+        The GCS bucket to store the MP4 file to.
+
+    Returns
+    -------
+    mp4_filepath: str
+        The local filepath of the converted MP4 file.
+    """
+
     video_filepath = str(video_filepath)
 
     # Get file extension
