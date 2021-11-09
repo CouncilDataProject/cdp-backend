@@ -989,7 +989,8 @@
                 <span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
-                <span class="n">tmp_person_picture_path</span><span class="p">,</span> <span class="n">tmp_person_picture_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">tmp_person_picture_path</span><span class="p">,</span>
+                <span class="s2">&quot;person-picture&quot;</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">person_picture_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
@@ -1050,7 +1051,7 @@
                 <span class="p">)</span>
                 <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
                     <span class="n">tmp_person_seat_image_path</span><span class="p">,</span>
-                    <span class="n">tmp_person_seat_image_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s2">&quot;seat-image&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">person_seat_image_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>

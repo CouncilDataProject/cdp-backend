@@ -131,6 +131,9 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span>
 
 <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+<span class="kn">import</span> <span class="nn">fireo</span>
+<span class="kn">from</span> <span class="nn">google.auth.credentials</span> <span class="kn">import</span> <span class="n">AnonymousCredentials</span>
+<span class="kn">from</span> <span class="nn">google.cloud.firestore</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">ngrams</span>
 <span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">SnowballStemmer</span>
 
@@ -178,6 +181,11 @@
             <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;search_cdp_events&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Search CDP events given a query.&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;instance&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Which instance to query.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
             <span class="s2">&quot;-q&quot;</span><span class="p">,</span>
             <span class="s2">&quot;--query&quot;</span><span class="p">,</span>
@@ -239,7 +247,7 @@
 
 
 <div class="viewcode-block" id="EventMatch"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.EventMatch">[docs]</a><span class="k">class</span> <span class="nc">EventMatch</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
     <span class="n">pure_relevance</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">datetime_weighted_relevance</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">contained_grams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
@@ -269,20 +277,18 @@
     <span class="n">matching_events</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">query_result</span> <span class="ow">in</span> <span class="n">all_gram_results</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">matching_gram_result</span> <span class="ow">in</span> <span class="n">query_result</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">matching_gram_result</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">matching_events</span><span class="p">:</span>
-                <span class="n">matching_events</span><span class="p">[</span><span class="n">matching_gram_result</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">matching_gram_result</span>
-                <span class="p">]</span>
+            <span class="n">referenced_event_id</span> <span class="o">=</span> <span class="n">matching_gram_result</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">if</span> <span class="n">referenced_event_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">matching_events</span><span class="p">:</span>
+                <span class="n">matching_events</span><span class="p">[</span><span class="n">referenced_event_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">matching_gram_result</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">matching_events</span><span class="p">[</span><span class="n">matching_gram_result</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">matching_gram_result</span>
-                <span class="p">)</span>
+                <span class="n">matching_events</span><span class="p">[</span><span class="n">referenced_event_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matching_gram_result</span><span class="p">)</span>
 
     <span class="n">compiled_events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EventMatch</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">matching_grams</span> <span class="ow">in</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">event_id</span><span class="p">,</span> <span class="n">matching_grams</span> <span class="ow">in</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">matching_event</span> <span class="o">=</span> <span class="n">matching_grams</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="n">compiled_events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">EventMatch</span><span class="p">(</span>
-                <span class="n">event_ref</span><span class="o">=</span><span class="n">matching_grams</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">event_ref</span><span class="p">,</span>
+                <span class="n">event</span><span class="o">=</span><span class="n">matching_event</span><span class="p">,</span>
                 <span class="n">pure_relevance</span><span class="o">=</span><span class="nb">sum</span><span class="p">([</span><span class="n">ieg</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">ieg</span> <span class="ow">in</span> <span class="n">matching_grams</span><span class="p">]),</span>
                 <span class="n">datetime_weighted_relevance</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span>
                     <span class="p">[</span><span class="n">ieg</span><span class="o">.</span><span class="n">datetime_weighted_value</span> <span class="k">for</span> <span class="n">ieg</span> <span class="ow">in</span> <span class="n">matching_grams</span><span class="p">]</span>
@@ -294,7 +300,9 @@
                 <span class="n">keywords</span><span class="o">=</span><span class="p">[</span>
                     <span class="n">ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span>
                     <span class="k">for</span> <span class="n">ieg</span> <span class="ow">in</span> <span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-                        <span class="s2">&quot;event_ref&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">matching_grams</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">key</span>
+                        <span class="s2">&quot;event_ref&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;==&quot;</span><span class="p">,</span>
+                        <span class="n">matching_event</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s2">&quot;-value&quot;</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -319,8 +327,8 @@
     <span class="c1"># Log results</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event_match</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">compiled_events</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Match </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;(datetime: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">event_datetime</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Match </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(datetime: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span><span class="si">}</span><span class="s2">)&quot;</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Match pure tf-idf relevance: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">pure_relevance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -464,6 +472,15 @@
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
+
+        <span class="c1"># Connect to the database</span>
+        <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span>
+            <span class="n">client</span><span class="o">=</span><span class="n">Client</span><span class="p">(</span>
+                <span class="n">project</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
+                <span class="n">credentials</span><span class="o">=</span><span class="n">AnonymousCredentials</span><span class="p">(),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
         <span class="n">run_remote_search</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
         <span class="n">run_local_search</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">local_index_glob</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

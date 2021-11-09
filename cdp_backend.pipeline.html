@@ -237,8 +237,45 @@ speech context phrases will be pulled from the whole event details.</p></li>
 <section id="module-cdp_backend.pipeline.event_index_pipeline">
 <span id="cdp-backend-pipeline-event-index-pipeline-module"></span><h2>cdp_backend.pipeline.event_index_pipeline module<a class="headerlink" href="#module-cdp_backend.pipeline.event_index_pipeline" title="Permalink to this headline"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_index_pipeline.</span></span><span class="sig-name descname"><span class="pre">AlmostCompleteIndexedEventGram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unstemmed_gram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stemmed_gram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datetime_weighted_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_index_pipeline.html#AlmostCompleteIndexedEventGram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Create new instance of AlmostCompleteIndexedEventGram(event_id, unstemmed_gram, stemmed_gram, context_span, value, datetime_weighted_value)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.context_span">
+<span class="sig-name descname"><span class="pre">context_span</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.context_span" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.datetime_weighted_value">
+<span class="sig-name descname"><span class="pre">datetime_weighted_value</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.datetime_weighted_value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.event_id">
+<span class="sig-name descname"><span class="pre">event_id</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.event_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.stemmed_gram">
+<span class="sig-name descname"><span class="pre">stemmed_gram</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.stemmed_gram" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.unstemmed_gram">
+<span class="sig-name descname"><span class="pre">unstemmed_gram</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.unstemmed_gram" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.ContextualizedGram">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_index_pipeline.</span></span><span class="sig-name descname"><span class="pre">ContextualizedGram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_ref</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_datetime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unstemmed_gram</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stemmed_gram</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_span</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_index_pipeline.html#ContextualizedGram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_index_pipeline.</span></span><span class="sig-name descname"><span class="pre">ContextualizedGram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_datetime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unstemmed_gram</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stemmed_gram</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_span</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_index_pipeline.html#ContextualizedGram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.context_span">
@@ -253,11 +290,6 @@ speech context phrases will be pulled from the whole event details.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.event_id">
 <span class="sig-name descname"><span class="pre">event_id</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.event_id" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.event_ref">
-<span class="sig-name descname"><span class="pre">event_ref</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.event_ref" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -299,17 +331,22 @@ speech context phrases will be pulled from the whole event details.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.EventTranscripts">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_index_pipeline.</span></span><span class="sig-name descname"><span class="pre">EventTranscripts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcripts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_index_pipeline.html#EventTranscripts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_index_pipeline.</span></span><span class="sig-name descname"><span class="pre">EventTranscripts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript_db_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_index_pipeline.html#EventTranscripts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
-<p>Create new instance of EventTranscripts(event, transcripts)</p>
+<p>Create new instance of EventTranscripts(event_id, event_datetime, transcript_db_files)</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event">
-<span class="sig-name descname"><span class="pre">event</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Event" title="cdp_backend.database.models.Event"><span class="pre">cdp_backend.database.models.Event</span></a></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event_datetime">
+<span class="sig-name descname"><span class="pre">event_datetime</span></span><em class="property"><span class="pre">:</span> <span class="pre">datetime.datetime</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event_datetime" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.EventTranscripts.transcripts">
-<span class="sig-name descname"><span class="pre">transcripts</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Transcript" title="cdp_backend.database.models.Transcript"><span class="pre">cdp_backend.database.models.Transcript</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.transcripts" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event_id">
+<span class="sig-name descname"><span class="pre">event_id</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.event_index_pipeline.EventTranscripts.transcript_db_files">
+<span class="sig-name descname"><span class="pre">transcript_db_files</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.File" title="cdp_backend.database.models.File"><span class="pre">cdp_backend.database.models.File</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.transcript_db_files" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

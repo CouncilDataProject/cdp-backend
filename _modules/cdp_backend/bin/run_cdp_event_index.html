@@ -223,12 +223,15 @@
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># Use dask cluster</span>
-            <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
                 <span class="n">executor</span><span class="o">=</span><span class="n">executors</span><span class="o">.</span><span class="n">DaskExecutor</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">),</span>
             <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">is_failed</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Flow run failed.&quot;</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>

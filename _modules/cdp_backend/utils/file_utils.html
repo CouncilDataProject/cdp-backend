@@ -484,14 +484,16 @@
     <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="generate_file_storage_name"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.generate_file_storage_name">[docs]</a><span class="k">def</span> <span class="nf">generate_file_storage_name</span><span class="p">(</span><span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="generate_file_storage_name"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.generate_file_storage_name">[docs]</a><span class="k">def</span> <span class="nf">generate_file_storage_name</span><span class="p">(</span><span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return the name of the file as it should be on Google Cloud Storage.</span>
+<span class="sd">    Generate a filename using the hash of the file contents and some provided suffix.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    extension: str</span>
-<span class="sd">        The name of the extension of the file path on the local computer.</span>
+<span class="sd">    file_uri: str</span>
+<span class="sd">        The URI to the file to hash.</span>
+<span class="sd">    suffix: str</span>
+<span class="sd">        The suffix to append to the hash as a part of the filename.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -499,8 +501,7 @@
 <span class="sd">        The name of the file as it should be on Google Cloud Storage.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">hash</span> <span class="o">=</span> <span class="n">hash_file_contents</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
-    <span class="n">dst</span> <span class="o">=</span> <span class="nb">hash</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">extension</span>
-    <span class="k">return</span> <span class="n">dst</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">hash</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span></div>
 </pre></div>
 
            </div>

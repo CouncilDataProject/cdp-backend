@@ -208,23 +208,25 @@
     <span class="c1"># We update as we iterate through list of all transcripts</span>
     <span class="n">selected_transcripts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">transcripts</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_transcripts</span><span class="p">:</span>
-            <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transcript</span>
+        <span class="n">referenced_session_id</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">referenced_session_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_transcripts</span><span class="p">:</span>
+            <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">referenced_session_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transcript</span>
 
         <span class="c1"># Multiple transcripts for a single session</span>
         <span class="c1"># pick the higher confidence</span>
         <span class="k">elif</span> <span class="p">(</span>
             <span class="n">transcript</span><span class="o">.</span><span class="n">confidence</span>
-            <span class="o">&gt;</span> <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
+            <span class="o">&gt;</span> <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">referenced_session_id</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
         <span class="p">):</span>
-            <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transcript</span>
+            <span class="n">selected_transcripts</span><span class="p">[</span><span class="n">referenced_session_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transcript</span>
 
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">selected_transcripts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
 
 <div class="viewcode-block" id="EventTranscripts"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.EventTranscripts">[docs]</a><span class="k">class</span> <span class="nc">EventTranscripts</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">event</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
-    <span class="n">transcripts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">Transcript</span><span class="p">]</span></div>
+    <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">event_datetime</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">transcript_db_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span></div>
 
 
 <span class="nd">@task</span>
@@ -239,16 +241,19 @@
     <span class="n">event_transcripts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">EventTranscripts</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">transcripts</span><span class="p">:</span>
         <span class="c1"># Add new event</span>
-        <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">event_transcripts</span><span class="p">:</span>
-            <span class="n">event_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">EventTranscripts</span><span class="p">(</span>
-                <span class="n">event</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="p">,</span>
-                <span class="n">transcripts</span><span class="o">=</span><span class="p">[</span><span class="n">transcript</span><span class="p">],</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="n">referenced_event_id</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">referenced_event_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">event_transcripts</span><span class="p">:</span>
+            <span class="n">event_transcripts</span><span class="p">[</span><span class="n">referenced_event_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">EventTranscripts</span><span class="p">(</span>
+                <span class="n">event_id</span><span class="o">=</span><span class="n">referenced_event_id</span><span class="p">,</span>
+                <span class="n">event_datetime</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">,</span>
+                <span class="n">transcript_db_files</span><span class="o">=</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span><span class="o">.</span><span class="n">get</span><span class="p">()],</span>
             <span class="p">)</span>
 
         <span class="c1"># Update existing event_transcripts object</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">event_transcripts</span><span class="p">[</span><span class="n">transcript</span><span class="o">.</span><span class="n">session_ref</span><span class="o">.</span><span class="n">event_ref</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">transcripts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">transcript</span>
+            <span class="n">event_transcripts</span><span class="p">[</span><span class="n">referenced_event_id</span><span class="p">]</span><span class="o">.</span><span class="n">transcript_db_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
@@ -265,11 +270,8 @@
 <div class="viewcode-block" id="ContextualizedGram"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ContextualizedGram</span><span class="p">:</span>
-    <span class="c1"># Note: we attach both the event ref and the unpacked id and datetime</span>
-    <span class="c1"># We attach the event ref for later &quot;foreign key&quot; attachment</span>
     <span class="c1"># We attach the id for simpler gram grouping</span>
     <span class="c1"># We attach the datetime for simpler datetime weighting</span>
-    <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span>
     <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">event_datetime</span><span class="p">:</span> <span class="n">datetime</span>
     <span class="n">unstemmed_gram</span><span class="p">:</span> <span class="nb">str</span>
@@ -304,14 +306,14 @@
     <span class="n">event_n_grams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ContextualizedGram</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Iter over each transcript</span>
-    <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">event_transcripts</span><span class="o">.</span><span class="n">transcripts</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">transcript_db_file</span> <span class="ow">in</span> <span class="n">event_transcripts</span><span class="o">.</span><span class="n">transcript_db_files</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
             <span class="n">temp_dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
-            <span class="n">local_transcript_filepath</span> <span class="o">=</span> <span class="n">temp_dir_path</span> <span class="o">/</span> <span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">local_transcript_filepath</span> <span class="o">=</span> <span class="n">temp_dir_path</span> <span class="o">/</span> <span class="n">transcript_db_file</span><span class="o">.</span><span class="n">name</span>
 
             <span class="c1"># Download transcript</span>
             <span class="n">fs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="n">rpath</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">file_ref</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span>
+                <span class="n">rpath</span><span class="o">=</span><span class="n">transcript_db_file</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span>
                 <span class="n">lpath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">local_transcript_filepath</span><span class="p">),</span>
             <span class="p">)</span>
 
@@ -386,9 +388,8 @@
                     <span class="c1"># Append to event list</span>
                     <span class="n">event_n_grams</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">ContextualizedGram</span><span class="p">(</span>
-                            <span class="n">event_ref</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event</span><span class="p">,</span>
-                            <span class="n">event_id</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                            <span class="n">event_datetime</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">,</span>
+                            <span class="n">event_id</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event_id</span><span class="p">,</span>
+                            <span class="n">event_datetime</span><span class="o">=</span><span class="n">event_transcripts</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">,</span>
                             <span class="n">unstemmed_gram</span><span class="o">=</span><span class="n">unstemmed_n_gram</span><span class="p">,</span>
                             <span class="n">stemmed_gram</span><span class="o">=</span><span class="n">stemmed_n_gram</span><span class="p">,</span>
                             <span class="n">context_span</span><span class="o">=</span><span class="n">context_span</span><span class="p">,</span>
@@ -463,12 +464,22 @@
 
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">store_local_index</span><span class="p">(</span><span class="n">n_grams_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">n_grams</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">n_grams_df</span> <span class="o">=</span> <span class="n">n_grams_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;event_ref&quot;</span><span class="p">])</span>
     <span class="n">n_grams_df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tfidf-</span><span class="si">{</span><span class="n">n_grams</span><span class="si">}</span><span class="s2">.parquet&quot;</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="AlmostCompleteIndexedEventGram"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram">[docs]</a><span class="k">class</span> <span class="nc">AlmostCompleteIndexedEventGram</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">unstemmed_gram</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">stemmed_gram</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">context_span</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">datetime_weighted_value</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
 <span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">chunk_n_grams</span><span class="p">(</span><span class="n">n_grams_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">chunk_n_grams</span><span class="p">(</span>
+    <span class="n">n_grams_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AlmostCompleteIndexedEventGram</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split the large n_grams dataframe into multiple lists of IndexedEventGram models</span>
 <span class="sd">    for batched, mapped, upload.</span>
@@ -481,22 +492,20 @@
     <span class="p">]</span>
 
     <span class="c1"># Convert each dataframe into a list of indexed event gram</span>
-    <span class="n">event_gram_chunks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">event_gram_chunks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AlmostCompleteIndexedEventGram</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">n_gram_df_chunk</span> <span class="ow">in</span> <span class="n">n_grams_dfs</span><span class="p">:</span>
-        <span class="n">event_gram_chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">event_gram_chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlmostCompleteIndexedEventGram</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">n_gram_df_chunk</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-            <span class="c1"># Convert row of df to db model</span>
-            <span class="n">ieg</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">()</span>
-
-            <span class="c1"># Attach all data</span>
-            <span class="n">ieg</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">event_ref</span>
-            <span class="n">ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">unstemmed_gram</span>
-            <span class="n">ieg</span><span class="o">.</span><span class="n">stemmed_gram</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">stemmed_gram</span>
-            <span class="n">ieg</span><span class="o">.</span><span class="n">context_span</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">context_span</span>
-            <span class="n">ieg</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">tfidf</span>
-            <span class="n">ieg</span><span class="o">.</span><span class="n">datetime_weighted_value</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">datetime_weighted_tfidf</span>
-
-            <span class="n">event_gram_chunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ieg</span><span class="p">)</span>
+            <span class="n">event_gram_chunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">AlmostCompleteIndexedEventGram</span><span class="p">(</span>
+                    <span class="n">event_id</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">event_id</span><span class="p">,</span>
+                    <span class="n">unstemmed_gram</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">unstemmed_gram</span><span class="p">,</span>
+                    <span class="n">stemmed_gram</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">stemmed_gram</span><span class="p">,</span>
+                    <span class="n">context_span</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">context_span</span><span class="p">,</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">tfidf</span><span class="p">,</span>
+                    <span class="n">datetime_weighted_value</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">datetime_weighted_tfidf</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="n">event_gram_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event_gram_chunk</span><span class="p">)</span>
 
@@ -505,7 +514,7 @@
 
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">store_n_gram_chunk</span><span class="p">(</span>
-    <span class="n">n_gram_chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">],</span>
+    <span class="n">n_gram_chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlmostCompleteIndexedEventGram</span><span class="p">],</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -517,7 +526,22 @@
     <span class="n">batch</span> <span class="o">=</span> <span class="n">fireo</span><span class="o">.</span><span class="n">batch</span><span class="p">()</span>
 
     <span class="c1"># Trigger upserts for all items</span>
-    <span class="k">for</span> <span class="n">ieg</span> <span class="ow">in</span> <span class="n">n_gram_chunk</span><span class="p">:</span>
+    <span class="n">event_lut</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">almost_complete_ieg</span> <span class="ow">in</span> <span class="n">n_gram_chunk</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">event_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">event_lut</span><span class="p">:</span>
+            <span class="n">event_lut</span><span class="p">[</span><span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">event_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">event_id</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Construct true ieg</span>
+        <span class="n">ieg</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">()</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_lut</span><span class="p">[</span><span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">event_id</span><span class="p">]</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span> <span class="o">=</span> <span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">stemmed_gram</span> <span class="o">=</span> <span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">stemmed_gram</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">context_span</span> <span class="o">=</span> <span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">context_span</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">ieg</span><span class="o">.</span><span class="n">datetime_weighted_value</span> <span class="o">=</span> <span class="n">almost_complete_ieg</span><span class="o">.</span><span class="n">datetime_weighted_value</span>
+
         <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
             <span class="n">db_model</span><span class="o">=</span><span class="n">ieg</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
