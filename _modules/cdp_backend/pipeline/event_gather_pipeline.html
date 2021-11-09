@@ -247,7 +247,15 @@
             <span class="n">session_processing_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SessionProcessingResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
                 <span class="c1"># Download video to local copy</span>
-                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
+                <span class="n">resource_copy_filepath</span> <span class="o">=</span> <span class="n">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
+
+                <span class="c1"># Convert to mp4 if necessary</span>
+                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">convert_video_to_mp4_and_upload</span><span class="p">(</span>
+                    <span class="n">video_filepath</span><span class="o">=</span><span class="n">resource_copy_filepath</span><span class="p">,</span>
+                    <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+                    <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
+                    <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
+                <span class="p">)</span>
 
                 <span class="c1"># Get unique session identifier</span>
                 <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">get_session_content_hash</span><span class="p">(</span>
@@ -393,6 +401,61 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Hash the video contents</span>
     <span class="k">return</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">convert_video_to_mp4_and_upload</span><span class="p">(</span>
+    <span class="n">video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a video to MP4 (if necessary), upload it to the file store, and remove</span>
+<span class="sd">    the original non-MP4 file that was resource copied.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    video_filepath: Union[str, Path]</span>
+<span class="sd">        The local path for video file to convert.</span>
+<span class="sd">    session: Session</span>
+<span class="sd">        The session to append the new MP4 video uri to.</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        Path to Google Service Account Credentials JSON file.</span>
+<span class="sd">    bucket: str</span>
+<span class="sd">        The GCS bucket to store the MP4 file to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mp4_filepath: str</span>
+<span class="sd">        The local filepath of the converted MP4 file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get file extension</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+
+    <span class="c1"># Convert to mp4 if necessary</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">!=</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">:</span>
+        <span class="c1"># Convert video to mp4</span>
+        <span class="n">mp4_filepath</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">convert_video_to_mp4</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
+
+        <span class="c1"># Remove old mkv file</span>
+        <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
+
+        <span class="c1"># Upload to gcsfs</span>
+        <span class="n">mp4_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="n">mp4_filepath</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Set session video_uri to uri in remote file store</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">mp4_uri</span>
+
+        <span class="c1"># Return converted local mp4 filepath</span>
+        <span class="k">return</span> <span class="n">mp4_filepath</span>
+
+    <span class="k">return</span> <span class="n">video_filepath</span>
 
 
 <span class="nd">@task</span>
