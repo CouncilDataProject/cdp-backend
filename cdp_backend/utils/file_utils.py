@@ -61,7 +61,9 @@ def get_media_type(uri: str) -> Optional[str]:
 
 
 def resource_copy(
-    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    uri: str,
+    dst: Optional[Union[str, Path]] = None,
+    overwrite: bool = False,
 ) -> str:
     """
     Copy a resource (local or remote) to a local destination on the machine.
@@ -381,3 +383,23 @@ def convert_video_to_mp4(video_filepath: str) -> str:
     log.info("Finished converting {} to mp4".format(video_filepath))
 
     return mp4_filepath
+
+
+def generate_file_storage_name(file_uri: str, suffix: str) -> str:
+    """
+    Generate a filename using the hash of the file contents and some provided suffix.
+
+    Parameters
+    ----------
+    file_uri: str
+        The URI to the file to hash.
+    suffix: str
+        The suffix to append to the hash as a part of the filename.
+
+    Returns
+    -------
+    dst: str
+        The name of the file as it should be on Google Cloud Storage.
+    """
+    hash = hash_file_contents(file_uri)
+    return f"{hash}-{suffix}"

@@ -98,7 +98,9 @@ def main() -> None:
         )
 
         # Run flow
-        flow.run()
+        state = flow.run()
+        if state.is_failed():
+            raise ValueError("Flow run failed.")
 
     except Exception as e:
         log.error("=============================================")

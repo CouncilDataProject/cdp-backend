@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 from pathlib import Path
 from typing import List, Optional
@@ -96,6 +97,12 @@ def test_split_audio(
     # Check outputs
     assert audio_uri == audio_upload_file_return
 
+    # Cleanup
+    for suffix in ["err", "out", "wav"]:
+        gen_test_file = Path(f"{VIDEO_CONTENT_HASH}-audio.{suffix}")
+        if gen_test_file.exists():
+            os.remove(gen_test_file)
+
 
 @pytest.mark.skipif(
     sys.platform == "win32",
@@ -143,6 +150,12 @@ def test_generate_thumbnails(
     # Check outputs
     assert static_thumbnail_url == example_static_thumbnail_url
     assert hover_thumbnail_url == example_hover_thumbnail_url
+
+    # Cleanup
+    for suffix in ["hover-thumbnail.gif", "static-thumbnail.png"]:
+        gen_test_file = Path(f"{VIDEO_CONTENT_HASH}-{suffix}")
+        if gen_test_file.exists():
+            os.remove(gen_test_file)
 
 
 @pytest.mark.parametrize(
