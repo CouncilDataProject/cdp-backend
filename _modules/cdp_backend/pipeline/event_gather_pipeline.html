@@ -447,25 +447,20 @@
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
             <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span>
+            <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
             <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_out_filepath</span><span class="p">,</span>
+            <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
             <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_err_filepath</span><span class="p">,</span>
+            <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-
-        <span class="c1"># Remove tmp files after their final dependent tasks are finished</span>
-        <span class="k">for</span> <span class="n">local_path</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">tmp_audio_filepath</span><span class="p">,</span>
-            <span class="n">tmp_audio_log_out_filepath</span><span class="p">,</span>
-            <span class="n">tmp_audio_log_err_filepath</span><span class="p">,</span>
-        <span class="p">]:</span>
-            <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">local_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">audio_uri</span>
 
@@ -719,10 +714,8 @@
         <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
         <span class="n">filepath</span><span class="o">=</span><span class="n">transcript_save_path</span><span class="p">,</span>
+        <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-
-    <span class="c1"># Remove local transcript</span>
-    <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">transcript_save_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">transcript_file_uri</span><span class="p">,</span> <span class="n">transcript</span>
 
@@ -937,8 +930,8 @@
         <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
         <span class="n">filepath</span><span class="o">=</span><span class="n">static_thumbnail_file</span><span class="p">,</span>
+        <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">static_thumbnail_file</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">hover_thumbnail_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Generate new</span>
@@ -954,8 +947,8 @@
         <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
         <span class="n">filepath</span><span class="o">=</span><span class="n">hover_thumbnail_file</span><span class="p">,</span>
+        <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">hover_thumbnail_file</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">static_thumbnail_url</span><span class="p">,</span>
@@ -992,13 +985,19 @@
     <span class="n">person_picture_db_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">tmp_person_picture_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="p">)</span>
+            <span class="n">tmp_person_picture_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
+                <span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
+                <span class="n">tmp_person_picture_path</span><span class="p">,</span> <span class="n">tmp_person_picture_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="n">person_picture_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
                 <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_person_picture_path</span><span class="p">,</span>
+                <span class="n">save_name</span><span class="o">=</span><span class="n">destination_path</span><span class="p">,</span>
+                <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">tmp_person_picture_path</span><span class="p">)</span>
             <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
                 <span class="n">uri</span><span class="o">=</span><span class="n">person_picture_uri</span><span class="p">,</span>
                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
@@ -1049,13 +1048,16 @@
                 <span class="n">tmp_person_seat_image_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
                     <span class="n">uri</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="p">,</span>
                 <span class="p">)</span>
+                <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
+                    <span class="n">tmp_person_seat_image_path</span><span class="p">,</span>
+                    <span class="n">tmp_person_seat_image_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
                 <span class="n">person_seat_image_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                     <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
                     <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_person_seat_image_path</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span>
-                    <span class="n">tmp_person_seat_image_path</span><span class="p">,</span>
+                    <span class="n">save_name</span><span class="o">=</span><span class="n">destination_path</span><span class="p">,</span>
+                    <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span>
                     <span class="n">uri</span><span class="o">=</span><span class="n">person_seat_image_uri</span><span class="p">,</span> <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span>

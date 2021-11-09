@@ -257,7 +257,7 @@
 <span class="sd">        The filepath of the local file to delete.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">LocalFileSystem</span><span class="p">()</span>
-    <span class="n">fs</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
 
     <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> from local file system.&quot;</span><span class="p">)</span></div>
 </pre></div>

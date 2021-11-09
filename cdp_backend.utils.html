@@ -190,6 +190,23 @@ should not be resized.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.generate_file_storage_name">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">generate_file_storage_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#generate_file_storage_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.generate_file_storage_name" title="Permalink to this definition"></a></dt>
+<dd><p>Return the name of the file as it should be on Google Cloud Storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>extension</strong> (<em>str</em>) – The name of the extension of the file path on the local computer.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dst</strong> – The name of the file as it should be on Google Cloud Storage.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.utils.file_utils.get_hover_thumbnail">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">get_hover_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_content_hash</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">6.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#get_hover_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.get_hover_thumbnail" title="Permalink to this definition"></a></dt>
 <dd><p>A function that produces a gif hover thumbnail from an mp4 video file</p>
