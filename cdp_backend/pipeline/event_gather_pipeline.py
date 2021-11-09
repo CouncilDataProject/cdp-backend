@@ -311,10 +311,8 @@ def convert_video_to_mp4_and_upload(
         The local filepath of the converted MP4 file.
     """
 
-    video_filepath = str(video_filepath)
-
     # Get file extension
-    ext = os.path.splitext(video_filepath)[1]
+    ext = Path(video_filepath).suffix
 
     # Convert to mp4 if necessary
     if ext != ".mp4":
