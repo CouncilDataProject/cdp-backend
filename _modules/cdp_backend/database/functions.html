@@ -478,8 +478,14 @@
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
         <span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">router_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">generate_router_string</span><span class="p">(</span>
+            <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">router_string</span><span class="p">)</span>
+
     <span class="c1"># Optional</span>
-    <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">router_string</span><span class="p">)</span>
     <span class="n">db_person</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
     <span class="n">db_person</span><span class="o">.</span><span class="n">phone</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">phone</span><span class="p">)</span>
     <span class="n">db_person</span><span class="o">.</span><span class="n">website</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">website</span><span class="p">)</span>
