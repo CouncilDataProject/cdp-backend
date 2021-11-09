@@ -3,6 +3,7 @@
 
 import logging
 import math
+import random
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -276,26 +277,32 @@ def get_hover_thumbnail(
     if reader.get_length() > 1:
         gif_path = f"{session_content_hash}-hover-thumbnail.gif"
 
-    count = 0
-    for i, image in enumerate(reader):
-        count += 1
-    step_size = math.floor(count / num_frames)
-
-    height = image.shape[0]
-    width = image.shape[1]
+    # Get first frame
+    sample = reader.get_data(0)
+    height = sample.shape[0]
+    width = sample.shape[1]
     final_ratio = find_proper_resize_ratio(height, width)
 
     with imageio.get_writer(gif_path, mode="I", fps=(num_frames / duration)) as writer:
-        for i in range(0, num_frames):
-            if final_ratio < 1:
-                image = Image.fromarray(reader.get_data(i * step_size)).resize(
-                    (math.floor(width * final_ratio), math.floor(height * final_ratio))
-                )
-            else:
-                image = Image.fromarray(reader.get_data(i * step_size))
+        selected_frames = 0
+        for frame in reader:
+            # 1% chance to use the frame
+            if random.random() > 0.99:
+                image = Image.fromarray(frame)
+                if final_ratio < 1:
+                    image = image.resize(
+                        (
+                            math.floor(width * final_ratio),
+                            math.floor(height * final_ratio),
+                        )
+                    )
 
-            final_image = np.asarray(image).astype(np.uint8)
-            writer.append_data(final_image)
+                final_image = np.asarray(image).astype(np.uint8)
+                writer.append_data(final_image)
+                selected_frames += 1
+
+            if selected_frames >= num_frames:
+                break
 
     return gif_path
 
