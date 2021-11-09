@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import tempfile
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
@@ -228,16 +227,10 @@ def resource_copy_task(uri: str) -> str:
     We sometimes get file downloading failures when running in parallel so this has two
     retries attached to it that will run after a failure on a 2 minute delay.
     """
-    # Copy video file from the internet and store it locally
-    dirpath = tempfile.mkdtemp()
-
-    file_utils.resource_copy(
+    return file_utils.resource_copy(
         uri=uri,
-        dst=dirpath,
         overwrite=True,
     )
-
-    return str(Path(dirpath) / uri.split("/")[-1])
 
 
 @task
@@ -908,7 +901,7 @@ def _process_person_ingestion(
         )
     except (FieldValidationFailed, RequiredField, InvalidFieldType):
         log.warning(
-            f"Person ('{person.name}'), was missing required information. "
+            f"Person ({person_db_model.to_dict()}), was missing required information. "
             f"Generating minimum person details."
         )
         person_db_model = db_functions.create_minimal_person(person=person)
