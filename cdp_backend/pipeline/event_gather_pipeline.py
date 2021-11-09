@@ -5,7 +5,6 @@ import logging
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
-from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
