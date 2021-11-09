@@ -915,33 +915,39 @@ def _process_person_ingestion(
     default_session: Session,
     credentials_file: str,
     bucket: str,
+    file_upload_cache: Dict[str, db_models.File] = {},
 ) -> db_models.Person:
     # Store person picture file
     person_picture_db_model: Optional[db_models.File]
+    person_picture_key = f"{person.name} -- person-picture"
     if person.picture_uri is not None:
         try:
-            tmp_person_picture_path = file_utils.resource_copy(
-                person.picture_uri,
-            )
-            destination_path = file_utils.generate_file_storage_name(
-                tmp_person_picture_path,
-                "person-picture",
-            )
-            person_picture_uri = fs_functions.upload_file(
-                credentials_file=credentials_file,
-                bucket=bucket,
-                filepath=tmp_person_picture_path,
-                save_name=destination_path,
-                remove_local=True,
-            )
-            person_picture_db_model = db_functions.create_file(
-                uri=person_picture_uri,
-                credentials_file=credentials_file,
-            )
-            person_picture_db_model = db_functions.upload_db_model(
-                db_model=person_picture_db_model,
-                credentials_file=credentials_file,
-            )
+            if person_picture_key not in file_upload_cache:
+                tmp_person_picture_path = file_utils.resource_copy(
+                    person.picture_uri,
+                    overwrite=True,
+                )
+                destination_path = file_utils.generate_file_storage_name(
+                    tmp_person_picture_path,
+                    "person-picture",
+                )
+                person_picture_uri = fs_functions.upload_file(
+                    credentials_file=credentials_file,
+                    bucket=bucket,
+                    filepath=tmp_person_picture_path,
+                    save_name=destination_path,
+                    remove_local=True,
+                )
+                person_picture_db_model = db_functions.create_file(
+                    uri=person_picture_uri,
+                    credentials_file=credentials_file,
+                )
+                person_picture_db_model = db_functions.upload_db_model(
+                    db_model=person_picture_db_model,
+                    credentials_file=credentials_file,
+                )
+            else:
+                person_picture_db_model = file_upload_cache[person_picture_key]
         except FileNotFoundError:
             person_picture_db_model = None
             log.warning(
@@ -950,6 +956,9 @@ def _process_person_ingestion(
             )
     else:
         person_picture_db_model = None
+
+    # Update cache with stored or selected person picture db model
+    file_upload_cache[person_picture_key] = person_picture_db_model
 
     # Create person
     try:
@@ -979,37 +988,48 @@ def _process_person_ingestion(
     if person.seat is not None:
         # Store seat picture file
         person_seat_image_db_model: Optional[db_models.File]
+        person_seat_image_key = f"{person.seat.name} -- seat-image"
         try:
             if person.seat.image_uri is not None:
-                tmp_person_seat_image_path = file_utils.resource_copy(
-                    uri=person.seat.image_uri,
-                )
-                destination_path = file_utils.generate_file_storage_name(
-                    tmp_person_seat_image_path,
-                    "seat-image",
-                )
-                person_seat_image_uri = fs_functions.upload_file(
-                    credentials_file=credentials_file,
-                    bucket=bucket,
-                    filepath=tmp_person_seat_image_path,
-                    save_name=destination_path,
-                    remove_local=True,
-                )
-                person_seat_image_db_model = db_functions.create_file(
-                    uri=person_seat_image_uri, credentials_file=credentials_file
-                )
-                person_seat_image_db_model = db_functions.upload_db_model(
-                    db_model=person_seat_image_db_model,
-                    credentials_file=credentials_file,
-                )
+                if person_seat_image_key not in file_upload_cache:
+                    tmp_person_seat_image_path = file_utils.resource_copy(
+                        uri=person.seat.image_uri,
+                        overwrite=True,
+                    )
+                    destination_path = file_utils.generate_file_storage_name(
+                        tmp_person_seat_image_path,
+                        "seat-image",
+                    )
+                    person_seat_image_uri = fs_functions.upload_file(
+                        credentials_file=credentials_file,
+                        bucket=bucket,
+                        filepath=tmp_person_seat_image_path,
+                        save_name=destination_path,
+                        remove_local=True,
+                    )
+                    person_seat_image_db_model = db_functions.create_file(
+                        uri=person_seat_image_uri, credentials_file=credentials_file
+                    )
+                    person_seat_image_db_model = db_functions.upload_db_model(
+                        db_model=person_seat_image_db_model,
+                        credentials_file=credentials_file,
+                    )
+                else:
+                    person_seat_image_db_model = file_upload_cache[
+                        person_seat_image_key
+                    ]
             else:
                 person_seat_image_db_model = None
+
         except FileNotFoundError:
             person_seat_image_db_model = None
             log.warning(
                 f"Person ('{person.name}'), seat image URI could not be archived."
                 f"({person.seat.image_uri})"
             )
+
+        # Update cache with stored or selected seat image db model
+        file_upload_cache[person_seat_image_key] = person_seat_image_db_model
 
         # Actual seat creation
         person_seat_db_model = db_functions.create_seat(
@@ -1067,6 +1087,7 @@ def _process_person_ingestion(
                     credentials_file=credentials_file,
                 )
 
+    log.info(f"Completed metadata processing for '{person.name}'.")
     return person_db_model
 
 
@@ -1244,6 +1265,7 @@ def store_event_processing_results(
         )
 
     # Add event metadata
+    processed_file_upload_cache: Dict[str, db_models.File] = {}
     if event.event_minutes_items is not None:
         for emi_index, event_minutes_item in enumerate(event.event_minutes_items):
             if event_minutes_item.matter is not None:
@@ -1264,6 +1286,7 @@ def store_event_processing_results(
                             default_session=first_session,
                             credentials_file=credentials_file,
                             bucket=bucket,
+                            file_upload_cache=processed_file_upload_cache,
                         )
 
                         # Create matter sponsor association
@@ -1416,6 +1439,7 @@ def store_event_processing_results(
                             default_session=first_session,
                             credentials_file=credentials_file,
                             bucket=bucket,
+                            file_upload_cache=processed_file_upload_cache,
                         )
 
                         # Create vote
