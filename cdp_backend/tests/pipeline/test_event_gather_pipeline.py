@@ -510,7 +510,10 @@ def test_store_event_processing_results(
 @mock.patch(f"{PIPELINE_PATH}.file_utils.convert_video_to_mp4")
 @pytest.mark.parametrize(
     "video_filepath, session, expected_filepath",
-    [("example_video.mkv", EXAMPLE_MINIMAL_EVENT.sessions[0], "example_video.mp4")],
+    [
+        ("example_video.mkv", EXAMPLE_MINIMAL_EVENT.sessions[0], "example_video.mp4"),
+        ("example_video.mp4", EXAMPLE_MINIMAL_EVENT.sessions[0], "example_video.mp4"),
+    ],
 )
 def test_convert_video_to_mp4_and_upload(
     mock_convert_video_to_mp4: MagicMock,
@@ -530,6 +533,10 @@ def test_convert_video_to_mp4_and_upload(
         credentials_file="fake/credentials.json",
         bucket="doesnt://matter",
     )
+
+    # Make sure mp4 files don't go through conversion
+    if Path(video_filepath).suffix == ".mp4":
+        assert not mock_convert_video_to_mp4.called
 
     assert session.video_uri == mock_upload_file.return_value
     assert mp4_filepath == expected_filepath

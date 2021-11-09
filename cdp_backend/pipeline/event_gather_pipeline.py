@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import os
 import tempfile
 from datetime import datetime, timedelta
 from importlib import import_module
@@ -285,7 +284,7 @@ def get_session_content_hash(
 
 @task
 def convert_video_to_mp4_and_upload(
-    video_filepath: Union[str, Path],
+    video_filepath: str,
     session: Session,
     credentials_file: str,
     bucket: str,
