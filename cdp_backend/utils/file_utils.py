@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Optional, Tuple, Union
 
 import aiohttp
+import ffmpeg
 import fsspec
 from fsspec.core import url_to_fs
 
@@ -361,6 +362,27 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+def convert_video_to_mp4(video_filepath: str) -> str:
+    """
+    Converts a video to an equivalent MP4 file.
+
+    Parameters
+    ----------
+    video_filepath: str
+        The filepath of the video to convert.
+
+    Returns
+    -------
+    mp4_filepath: str
+        The filepath of the converted MP4 video.
+    """
+    mp4_filepath = str(Path(video_filepath).with_suffix(".mp4"))
+    ffmpeg.input(video_filepath).output(mp4_filepath).overwrite_output().run()
+    log.info("Finished converting {} to mp4".format(video_filepath))
+
+    return mp4_filepath
 
 
 def generate_file_storage_name(file_uri: str, suffix: str) -> str:
