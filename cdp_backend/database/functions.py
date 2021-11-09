@@ -357,8 +357,14 @@ def create_person(
             kwargs={"google_credentials_file": credentials_file}
         )
 
+    if person.router_string is None:
+        db_person.router_string = db_models.Person.generate_router_string(
+            _strip_field(person.name)  # type: ignore
+        )
+    else:
+        db_person.router_string = _strip_field(person.router_string)
+
     # Optional
-    db_person.router_string = _strip_field(person.router_string)
     db_person.email = _strip_field(person.email)
     db_person.phone = _strip_field(person.phone)
     db_person.website = _strip_field(person.website)
