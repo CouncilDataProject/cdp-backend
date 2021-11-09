@@ -60,7 +60,9 @@ def get_media_type(uri: str) -> Optional[str]:
 
 
 def resource_copy(
-    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    uri: str,
+    dst: Optional[Union[str, Path]] = None,
+    overwrite: bool = False,
 ) -> str:
     """
     Copy a resource (local or remote) to a local destination on the machine.
@@ -359,3 +361,22 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+def generate_file_storage_name(file_uri: str, extension: str) -> str:
+    """
+    Return the name of the file as it should be on Google Cloud Storage.
+
+    Parameters
+    ----------
+    extension: str
+        The name of the extension of the file path on the local computer.
+
+    Returns
+    -------
+    dst: str
+        The name of the file as it should be on Google Cloud Storage.
+    """
+    hash = hash_file_contents(file_uri)
+    dst = hash + "-" + extension
+    return dst
