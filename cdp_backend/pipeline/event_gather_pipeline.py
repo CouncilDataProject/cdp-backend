@@ -915,14 +915,21 @@ def _process_person_ingestion(
     default_session: Session,
     credentials_file: str,
     bucket: str,
-    file_upload_cache: Dict[str, db_models.File] = {},
+    upload_cache: Dict[str, db_models.File] = {},
 ) -> db_models.Person:
-    # Store person picture file
-    person_picture_db_model: Optional[db_models.File]
-    person_picture_key = f"{person.name} -- person-picture"
-    if person.picture_uri is not None:
-        try:
-            if person_picture_key not in file_upload_cache:
+    # The JSON string of the whole person tree turns out to be a great cache key because
+    # 1. we can hash strings (which means we can shove them into a dictionary)
+    # 2. the JSON string store all of the attached seat and role information
+    # So, if the same person is referenced multiple times in the ingestion model
+    # but most of those references have the same data and only a few have different data
+    # the produced JSON string will note the differences and run when it needs to.
+    person_cache_key = person.to_json()  # type: ignore
+
+    if person_cache_key not in upload_cache:
+        # Store person picture file
+        person_picture_db_model: Optional[db_models.File]
+        if person.picture_uri is not None:
+            try:
                 tmp_person_picture_path = file_utils.resource_copy(
                     person.picture_uri,
                     overwrite=True,
@@ -946,52 +953,48 @@ def _process_person_ingestion(
                     db_model=person_picture_db_model,
                     credentials_file=credentials_file,
                 )
-            else:
-                person_picture_db_model = file_upload_cache[person_picture_key]
-        except FileNotFoundError:
+            except FileNotFoundError:
+                person_picture_db_model = None
+                log.warning(
+                    f"Person ('{person.name}'), picture URI could not be archived."
+                    f"({person.picture_uri})"
+                )
+        else:
             person_picture_db_model = None
-            log.warning(
-                f"Person ('{person.name}'), picture URI could not be archived."
-                f"({person.picture_uri})"
-            )
-    else:
-        person_picture_db_model = None
 
-    # Update cache with stored or selected person picture db model
-    file_upload_cache[person_picture_key] = person_picture_db_model
-
-    # Create person
-    try:
-        person_db_model = db_functions.create_person(
-            person=person,
-            picture_ref=person_picture_db_model,
-            credentials_file=credentials_file,
-        )
-        person_db_model = db_functions.upload_db_model(
-            db_model=person_db_model,
-            credentials_file=credentials_file,
-        )
-    except (FieldValidationFailed, RequiredField, InvalidFieldType):
-        log.warning(
-            f"Person ({person_db_model.to_dict()}), was missing required information. "
-            f"Generating minimum person details."
-        )
-        person_db_model = db_functions.create_minimal_person(person=person)
-        # No ingestion model provided here so that we don't try to
-        # re-validate the already failed model upload
-        person_db_model = db_functions.upload_db_model(
-            db_model=person_db_model,
-            credentials_file=credentials_file,
-        )
-
-    # Create seat
-    if person.seat is not None:
-        # Store seat picture file
-        person_seat_image_db_model: Optional[db_models.File]
-        person_seat_image_key = f"{person.seat.name} -- seat-image"
+        # Create person
         try:
-            if person.seat.image_uri is not None:
-                if person_seat_image_key not in file_upload_cache:
+            person_db_model = db_functions.create_person(
+                person=person,
+                picture_ref=person_picture_db_model,
+                credentials_file=credentials_file,
+            )
+            person_db_model = db_functions.upload_db_model(
+                db_model=person_db_model,
+                credentials_file=credentials_file,
+            )
+        except (FieldValidationFailed, RequiredField, InvalidFieldType):
+            log.warning(
+                f"Person ({person_db_model.to_dict()}), "
+                f"was missing required information. Generating minimum person details."
+            )
+            person_db_model = db_functions.create_minimal_person(person=person)
+            # No ingestion model provided here so that we don't try to
+            # re-validate the already failed model upload
+            person_db_model = db_functions.upload_db_model(
+                db_model=person_db_model,
+                credentials_file=credentials_file,
+            )
+
+        # Update upload cache with person
+        upload_cache[person_cache_key] = person_db_model
+
+        # Create seat
+        if person.seat is not None:
+            # Store seat picture file
+            person_seat_image_db_model: Optional[db_models.File]
+            try:
+                if person.seat.image_uri is not None:
                     tmp_person_seat_image_path = file_utils.resource_copy(
                         uri=person.seat.image_uri,
                         overwrite=True,
@@ -1015,77 +1018,72 @@ def _process_person_ingestion(
                         credentials_file=credentials_file,
                     )
                 else:
-                    person_seat_image_db_model = file_upload_cache[
-                        person_seat_image_key
-                    ]
-            else:
-                person_seat_image_db_model = None
+                    person_seat_image_db_model = None
 
-        except FileNotFoundError:
-            person_seat_image_db_model = None
-            log.warning(
-                f"Person ('{person.name}'), seat image URI could not be archived."
-                f"({person.seat.image_uri})"
+            except FileNotFoundError:
+                person_seat_image_db_model = None
+                log.warning(
+                    f"Person ('{person.name}'), seat image URI could not be archived."
+                    f"({person.seat.image_uri})"
+                )
+
+            # Actual seat creation
+            person_seat_db_model = db_functions.create_seat(
+                seat=person.seat,
+                image_ref=person_seat_image_db_model,
+            )
+            person_seat_db_model = db_functions.upload_db_model(
+                db_model=person_seat_db_model,
+                credentials_file=credentials_file,
             )
 
-        # Update cache with stored or selected seat image db model
-        file_upload_cache[person_seat_image_key] = person_seat_image_db_model
+            # Create roles
+            if person.seat.roles is not None:
+                for person_role in person.seat.roles:
+                    # Create any bodies for roles
+                    person_role_body_db_model: Optional[db_models.Body]
+                    if person_role.body is not None:
+                        # Use or default role body start_datetime
+                        if person_role.body.start_datetime is None:
+                            person_role_body_start_datetime = (
+                                default_session.session_datetime
+                            )
+                        else:
+                            person_role_body_start_datetime = (
+                                person_role.body.start_datetime
+                            )
 
-        # Actual seat creation
-        person_seat_db_model = db_functions.create_seat(
-            seat=person.seat,
-            image_ref=person_seat_image_db_model,
-        )
-        person_seat_db_model = db_functions.upload_db_model(
-            db_model=person_seat_db_model,
-            credentials_file=credentials_file,
-        )
-
-        # Create roles
-        if person.seat.roles is not None:
-            for person_role in person.seat.roles:
-                # Create any bodies for roles
-                person_role_body_db_model: Optional[db_models.Body]
-                if person_role.body is not None:
-                    # Use or default role body start_datetime
-                    if person_role.body.start_datetime is None:
-                        person_role_body_start_datetime = (
-                            default_session.session_datetime
+                        person_role_body_db_model = db_functions.create_body(
+                            body=person_role.body,
+                            start_datetime=person_role_body_start_datetime,
+                        )
+                        person_role_body_db_model = db_functions.upload_db_model(
+                            db_model=person_role_body_db_model,
+                            credentials_file=credentials_file,
                         )
                     else:
-                        person_role_body_start_datetime = (
-                            person_role.body.start_datetime
-                        )
+                        person_role_body_db_model = None
 
-                    person_role_body_db_model = db_functions.create_body(
-                        body=person_role.body,
-                        start_datetime=person_role_body_start_datetime,
+                    # Use or default role start_datetime
+                    if person_role.start_datetime is None:
+                        person_role_start_datetime = default_session.session_datetime
+                    else:
+                        person_role_start_datetime = person_role.start_datetime
+
+                    # Actual role creation
+                    person_role_db_model = db_functions.create_role(
+                        role=person_role,
+                        person_ref=person_db_model,
+                        seat_ref=person_seat_db_model,
+                        start_datetime=person_role_start_datetime,
+                        body_ref=person_role_body_db_model,
                     )
-                    person_role_body_db_model = db_functions.upload_db_model(
-                        db_model=person_role_body_db_model,
+                    person_role_db_model = db_functions.upload_db_model(
+                        db_model=person_role_db_model,
                         credentials_file=credentials_file,
                     )
-                else:
-                    person_role_body_db_model = None
-
-                # Use or default role start_datetime
-                if person_role.start_datetime is None:
-                    person_role_start_datetime = default_session.session_datetime
-                else:
-                    person_role_start_datetime = person_role.start_datetime
-
-                # Actual role creation
-                person_role_db_model = db_functions.create_role(
-                    role=person_role,
-                    person_ref=person_db_model,
-                    seat_ref=person_seat_db_model,
-                    start_datetime=person_role_start_datetime,
-                    body_ref=person_role_body_db_model,
-                )
-                person_role_db_model = db_functions.upload_db_model(
-                    db_model=person_role_db_model,
-                    credentials_file=credentials_file,
-                )
+    else:
+        person_db_model = upload_cache[person_cache_key]
 
     log.info(f"Completed metadata processing for '{person.name}'.")
     return person_db_model
@@ -1265,7 +1263,7 @@ def store_event_processing_results(
         )
 
     # Add event metadata
-    processed_file_upload_cache: Dict[str, db_models.File] = {}
+    processed_person_upload_cache: Dict[str, db_models.Person] = {}
     if event.event_minutes_items is not None:
         for emi_index, event_minutes_item in enumerate(event.event_minutes_items):
             if event_minutes_item.matter is not None:
@@ -1286,7 +1284,7 @@ def store_event_processing_results(
                             default_session=first_session,
                             credentials_file=credentials_file,
                             bucket=bucket,
-                            file_upload_cache=processed_file_upload_cache,
+                            upload_cache=processed_person_upload_cache,
                         )
 
                         # Create matter sponsor association
@@ -1439,7 +1437,7 @@ def store_event_processing_results(
                             default_session=first_session,
                             credentials_file=credentials_file,
                             bucket=bucket,
-                            file_upload_cache=processed_file_upload_cache,
+                            upload_cache=processed_person_upload_cache,
                         )
 
                         # Create vote
