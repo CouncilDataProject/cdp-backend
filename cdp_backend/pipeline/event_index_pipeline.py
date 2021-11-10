@@ -458,6 +458,23 @@ def create_event_index_pipeline(
         The constructed CDP Event Index Pipeline as a Prefect Flow.
     """
     with Flow("CDP Event Index Pipeline") as flow:
+        # Ensure stopwords are downloaded
+        # Do this once to ensure that we don't enter a race condition
+        # with multiple workers trying to download / read overtop one another
+        # later on.
+        try:
+            from nltk.corpus import stopwords
+
+            stopwords.words("english")
+        except LookupError:
+            import nltk
+
+            nltk.download("stopwords")
+            log.info("Downloaded nltk stopwords")
+            from nltk.corpus import stopwords
+
+            stopwords.words("english")
+
         # Get all transcripts
         all_transcripts = get_transcripts(
             credentials_file=config.google_credentials_file
