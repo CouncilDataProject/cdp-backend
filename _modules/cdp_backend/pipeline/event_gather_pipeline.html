@@ -1036,7 +1036,7 @@
     <span class="n">default_session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">upload_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">db_models</span><span class="o">.</span><span class="n">File</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">upload_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="p">:</span>
     <span class="c1"># The JSON string of the whole person tree turns out to be a great cache key because</span>
     <span class="c1"># 1. we can hash strings (which means we can shove them into a dictionary)</span>
