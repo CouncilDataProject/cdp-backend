@@ -915,7 +915,7 @@ def _process_person_ingestion(
     default_session: Session,
     credentials_file: str,
     bucket: str,
-    upload_cache: Dict[str, db_models.File] = {},
+    upload_cache: Dict[str, db_models.Person] = {},
 ) -> db_models.Person:
     # The JSON string of the whole person tree turns out to be a great cache key because
     # 1. we can hash strings (which means we can shove them into a dictionary)
