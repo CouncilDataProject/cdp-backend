@@ -122,20 +122,34 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
+<span class="kn">import</span> <span class="nn">json</span>
+
 <span class="kn">import</span> <span class="nn">pulumi</span>
 <span class="kn">import</span> <span class="nn">pulumi_gcp</span> <span class="k">as</span> <span class="nn">gcp</span>
 <span class="kn">from</span> <span class="nn">pulumi_google_native.firestore</span> <span class="kn">import</span> <span class="n">v1</span> <span class="k">as</span> <span class="n">firestore</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">DATABASE_MODELS</span>
+<span class="kn">from</span> <span class="nn">..version</span> <span class="kn">import</span> <span class="n">__version__</span>
 
 <span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="GoverningBody"><a class="viewcode-back" href="../../../cdp_backend.infrastructure.html#cdp_backend.infrastructure.cdp_stack.GoverningBody">[docs]</a><span class="k">class</span> <span class="nc">GoverningBody</span><span class="p">:</span>
+    <span class="n">city_council</span> <span class="o">=</span> <span class="s2">&quot;city council&quot;</span>
+    <span class="n">county_council</span> <span class="o">=</span> <span class="s2">&quot;county council&quot;</span>
+    <span class="n">school_board</span> <span class="o">=</span> <span class="s2">&quot;school board&quot;</span>
+    <span class="n">other</span> <span class="o">=</span> <span class="s2">&quot;other&quot;</span></div>
 
 
 <div class="viewcode-block" id="CDPStack"><a class="viewcode-back" href="../../../cdp_backend.infrastructure.html#cdp_backend.infrastructure.cdp_stack.CDPStack">[docs]</a><span class="k">class</span> <span class="nc">CDPStack</span><span class="p">(</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ComponentResource</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">gcp_project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">municipality_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dev_municipality&quot;</span><span class="p">,</span>
+        <span class="n">hosting_github_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;no_github_host&quot;</span><span class="p">,</span>
+        <span class="n">hosting_web_app_address</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;no_web_app_address&quot;</span><span class="p">,</span>
         <span class="n">firestore_location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;us-west2&quot;</span><span class="p">,</span>
+        <span class="n">governing_body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">GoverningBody</span><span class="o">.</span><span class="n">other</span><span class="p">,</span>
         <span class="n">opts</span><span class="p">:</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -151,11 +165,27 @@
 <span class="sd">            I.E. `cdp-seattle` would create a Cloud Firestore instance called</span>
 <span class="sd">            `cdp-seattle`, a GCP bucket called `cdp-seattle`, etc.</span>
 
+<span class="sd">        municipality_name: str</span>
+<span class="sd">            The name of the municipality this instance will be for.</span>
+<span class="sd">            I.E. &quot;Seattle&quot;, &quot;King County&quot;, etc.</span>
+
+<span class="sd">        hosting_github_url: str</span>
+<span class="sd">            The GitHub repo this instance configuration details will be stored.</span>
+<span class="sd">            I.E. https://github.com/councildataproject/seattle-staging</span>
+
+<span class="sd">        hosting_web_app_address: str</span>
+<span class="sd">            The web address for this instances web portal.</span>
+<span class="sd">            I.E. https://councildataproject.org/seattle-staging</span>
+
 <span class="sd">        firestore_location: str</span>
 <span class="sd">            The location for the Cloud Firestore database and file storage servers</span>
 <span class="sd">            to be hosted.</span>
 <span class="sd">            List of locations: https://firebase.google.com/docs/firestore/locations</span>
 <span class="sd">            Default: &quot;us-west2&quot;</span>
+
+<span class="sd">        governing_body: str</span>
+<span class="sd">            What governing body this instance will archive.</span>
+<span class="sd">            Default: GoverningBody.other</span>
 
 <span class="sd">        opts: pulumi.ResourceOptions</span>
 <span class="sd">            Extra resource options to initialize the entire stack with.</span>
@@ -166,6 +196,11 @@
 <span class="sd">        When using this resource it is recommended to run set Pulumi parallel resource</span>
 <span class="sd">        creation to five (5) max. GCP has limits on how many resources you can create</span>
 <span class="sd">        in parallel.</span>
+
+<span class="sd">        The default values for many parameters are set to fake values as this object</span>
+<span class="sd">        should primarily be used with the cookiecutter / automated scripts. The default</span>
+<span class="sd">        values in this case are set because when using this object outside of</span>
+<span class="sd">        the cookiecutter it is likely for dev infrastructures.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;CDPStack&quot;</span><span class="p">,</span> <span class="n">gcp_project_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
 
@@ -296,6 +331,25 @@
                     <span class="n">query_scope</span><span class="o">=</span><span class="s2">&quot;COLLECTION&quot;</span><span class="p">,</span>
                     <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="p">),</span>
                 <span class="p">)</span>
+
+        <span class="c1"># Add metadata document</span>
+        <span class="n">gcp</span><span class="o">.</span><span class="n">firestore</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="si">}</span><span class="s2">-metadata-doc&quot;</span><span class="p">,</span>
+            <span class="n">collection</span><span class="o">=</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span>
+            <span class="n">document_id</span><span class="o">=</span><span class="s2">&quot;configuration&quot;</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;infrastructure_version&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;stringValue&quot;</span><span class="p">:</span> <span class="n">__version__</span><span class="p">},</span>
+                    <span class="s2">&quot;municipality_name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;stringValue&quot;</span><span class="p">:</span> <span class="n">municipality_name</span><span class="p">},</span>
+                    <span class="s2">&quot;hosting_github_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;stringValue&quot;</span><span class="p">:</span> <span class="n">hosting_github_url</span><span class="p">},</span>
+                    <span class="s2">&quot;hosting_web_app_address&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;stringValue&quot;</span><span class="p">:</span> <span class="n">hosting_web_app_address</span><span class="p">},</span>
+                    <span class="s2">&quot;firestore_location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;stringValue&quot;</span><span class="p">:</span> <span class="n">firestore_location</span><span class="p">},</span>
+                    <span class="s2">&quot;governing_body&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;stringValue&quot;</span><span class="p">:</span> <span class="n">governing_body</span><span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">),</span>
+            <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcp_project_id</span><span class="p">,</span>
+            <span class="n">opts</span><span class="o">=</span><span class="n">pulumi</span><span class="o">.</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">firestore_app</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register_outputs</span><span class="p">({})</span></div>
 </pre></div>

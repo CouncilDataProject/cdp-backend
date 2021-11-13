@@ -135,7 +135,7 @@
 <span id="cdp-backend-infrastructure-cdp-stack-module"></span><h2>cdp_backend.infrastructure.cdp_stack module<a class="headerlink" href="#module-cdp_backend.infrastructure.cdp_stack" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.CDPStack">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">CDPStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firestore_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'us-west2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pulumi.resource.ResourceOptions</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">CDPStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">municipality_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dev_municipality'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosting_github_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'no_github_host'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosting_web_app_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'no_web_app_address'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firestore_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'us-west2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">governing_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'other'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pulumi.resource.ResourceOptions</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pulumi.resource.ComponentResource</span></code></p>
 <p>Creates all required infrastructure and enables all required services for CDP
 backend stacks.</p>
@@ -147,10 +147,18 @@ names for resources created during infrastructure creation will use this id
 as a prefix.
 I.E. <cite>cdp-seattle</cite> would create a Cloud Firestore instance called
 <cite>cdp-seattle</cite>, a GCP bucket called <cite>cdp-seattle</cite>, etc.</p></li>
+<li><p><strong>municipality_name</strong> (<em>str</em>) – The name of the municipality this instance will be for.
+I.E. “Seattle”, “King County”, etc.</p></li>
+<li><p><strong>hosting_github_url</strong> (<em>str</em>) – The GitHub repo this instance configuration details will be stored.
+I.E. <a class="reference external" href="https://github.com/councildataproject/seattle-staging">https://github.com/councildataproject/seattle-staging</a></p></li>
+<li><p><strong>hosting_web_app_address</strong> (<em>str</em>) – The web address for this instances web portal.
+I.E. <a class="reference external" href="https://councildataproject.org/seattle-staging">https://councildataproject.org/seattle-staging</a></p></li>
 <li><p><strong>firestore_location</strong> (<em>str</em>) – The location for the Cloud Firestore database and file storage servers
 to be hosted.
 List of locations: <a class="reference external" href="https://firebase.google.com/docs/firestore/locations">https://firebase.google.com/docs/firestore/locations</a>
 Default: “us-west2”</p></li>
+<li><p><strong>governing_body</strong> (<em>str</em>) – What governing body this instance will archive.
+Default: GoverningBody.other</p></li>
 <li><p><strong>opts</strong> (<em>pulumi.ResourceOptions</em>) – Extra resource options to initialize the entire stack with.
 Default: None</p></li>
 </ul>
@@ -160,6 +168,36 @@ Default: None</p></li>
 <p>When using this resource it is recommended to run set Pulumi parallel resource
 creation to five (5) max. GCP has limits on how many resources you can create
 in parallel.</p>
+<p>The default values for many parameters are set to fake values as this object
+should primarily be used with the cookiecutter / automated scripts. The default
+values in this case are set because when using this object outside of
+the cookiecutter it is likely for dev infrastructures.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">GoverningBody</span></span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#GoverningBody"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.city_council">
+<span class="sig-name descname"><span class="pre">city_council</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'city</span> <span class="pre">council'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.city_council" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.county_council">
+<span class="sig-name descname"><span class="pre">county_council</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'county</span> <span class="pre">council'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.county_council" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.other">
+<span class="sig-name descname"><span class="pre">other</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'other'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.other" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.school_board">
+<span class="sig-name descname"><span class="pre">school_board</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'school</span> <span class="pre">board'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.school_board" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
