@@ -24,9 +24,9 @@ class CDPStack(pulumi.ComponentResource):
     def __init__(
         self,
         gcp_project_id: str,
-        municipality_name: str = "dev",
-        hosting_github_url: str = "dev",
-        hosting_web_app_address: str = "dev",
+        municipality_name: str = "dev_municipality",
+        hosting_github_url: str = "no_github_host",
+        hosting_web_app_address: str = "no_web_app_address",
         firestore_location: str = "us-west2",
         governing_body: str = GoverningBody.other,
         opts: pulumi.ResourceOptions = None,
@@ -78,7 +78,7 @@ class CDPStack(pulumi.ComponentResource):
 
         The default values for many parameters are set to fake values as this object
         should primarily be used with the cookiecutter / automated scripts. The default
-        values in this case are set to "dev" because when using this object outside of
+        values in this case are set because when using this object outside of
         the cookiecutter it is likely for dev infrastructures.
         """
         super().__init__("CDPStack", gcp_project_id, None, opts)
