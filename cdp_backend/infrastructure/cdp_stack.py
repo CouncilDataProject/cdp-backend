@@ -1,20 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
+
 import pulumi
 import pulumi_gcp as gcp
 from pulumi_google_native.firestore import v1 as firestore
 
 from ..database import DATABASE_MODELS
+from ..version import __version__
 
 ###############################################################################
+
+
+class GoverningBody:
+    city_council = "city council"
+    county_council = "county council"
+    school_board = "school board"
+    other = "other"
 
 
 class CDPStack(pulumi.ComponentResource):
     def __init__(
         self,
         gcp_project_id: str,
+        municipality_name: str = "dev",
+        hosting_github_url: str = "dev",
+        hosting_web_app_address: str = "dev",
         firestore_location: str = "us-west2",
+        governing_body: str = GoverningBody.other,
         opts: pulumi.ResourceOptions = None,
     ):
         """
@@ -30,11 +44,27 @@ class CDPStack(pulumi.ComponentResource):
             I.E. `cdp-seattle` would create a Cloud Firestore instance called
             `cdp-seattle`, a GCP bucket called `cdp-seattle`, etc.
 
+        municipality_name: str
+            The name of the municipality this instance will be for.
+            I.E. "Seattle", "King County", etc.
+
+        hosting_github_url: str
+            The GitHub repo this instance configuration details will be stored.
+            I.E. https://github.com/councildataproject/seattle-staging
+
+        hosting_web_app_address: str
+            The web address for this instances web portal.
+            I.E. https://councildataproject.org/seattle-staging
+
         firestore_location: str
             The location for the Cloud Firestore database and file storage servers
             to be hosted.
             List of locations: https://firebase.google.com/docs/firestore/locations
             Default: "us-west2"
+
+        governing_body: str
+            What governing body this instance will archive.
+            Default: GoverningBody.other
 
         opts: pulumi.ResourceOptions
             Extra resource options to initialize the entire stack with.
@@ -45,6 +75,11 @@ class CDPStack(pulumi.ComponentResource):
         When using this resource it is recommended to run set Pulumi parallel resource
         creation to five (5) max. GCP has limits on how many resources you can create
         in parallel.
+
+        The default values for many parameters are set to fake values as this object
+        should primarily be used with the cookiecutter / automated scripts. The default
+        values in this case are set to "dev" because when using this object outside of
+        the cookiecutter it is likely for dev infrastructures.
         """
         super().__init__("CDPStack", gcp_project_id, None, opts)
 
@@ -175,5 +210,24 @@ class CDPStack(pulumi.ComponentResource):
                     query_scope="COLLECTION",
                     opts=pulumi.ResourceOptions(parent=self.firestore_app),
                 )
+
+        # Add metadata document
+        gcp.firestore.Document(
+            f"{self.gcp_project_id}-metadata-doc",
+            collection="metadata",
+            document_id="configuration",
+            fields=json.dumps(
+                {
+                    "infrastructure_version": {"stringValue": __version__},
+                    "municipality_name": {"stringValue": municipality_name},
+                    "hosting_github_url": {"stringValue": hosting_github_url},
+                    "hosting_web_app_address": {"stringValue": hosting_web_app_address},
+                    "firestore_location": {"stringValue": firestore_location},
+                    "governing_body": {"stringValue": governing_body},
+                }
+            ),
+            project=self.gcp_project_id,
+            opts=pulumi.ResourceOptions(parent=self.firestore_app),
+        )
 
         super().register_outputs({})
