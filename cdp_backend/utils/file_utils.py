@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Optional, Tuple, Union
 
 import aiohttp
-import ffmpeg
 import fsspec
 from fsspec.core import url_to_fs
 
@@ -385,6 +384,8 @@ def convert_video_to_mp4(video_filepath: str) -> str:
     mp4_filepath: str
         The filepath of the converted MP4 video.
     """
+    import ffmpeg
+
     mp4_filepath = str(Path(video_filepath).with_suffix(".mp4"))
     ffmpeg.input(video_filepath).output(mp4_filepath).overwrite_output().run()
     log.info("Finished converting {} to mp4".format(video_filepath))
