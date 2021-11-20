@@ -41,6 +41,10 @@ clean: ## Remove all database documents and filestore objects
 	clean_cdp_database ../.keys/cdp-dev.json
 	clean_cdp_filestore ../.keys/cdp-dev.json
 
+clean-full: ## Remove all database documents and files, include indexs
+	clean_cdp_database ../.keys/cdp-dev.json --clean-index
+	clean_cdp_filestore ../.keys/cdp-dev.json
+
 reset: ## Run pulumi destroy and make build, must provide "project"
 	pulumi destroy -p 4
 	echo "----------------------------------------------------------------------------"

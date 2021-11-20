@@ -10,6 +10,7 @@ from pathlib import Path
 import fireo
 
 from cdp_backend.database import DATABASE_MODELS
+from cdp_backend.database import models as db_models
 
 ###############################################################################
 
@@ -36,15 +37,27 @@ class Args(argparse.Namespace):
             type=Path,
             help="Path to Google service account JSON key.",
         )
+        p.add_argument(
+            "--clean-index",
+            action="store_true",
+            dest="clean_index",
+        )
         p.parse_args(namespace=self)
 
 
 ###############################################################################
 
 
-def _clean_cdp_database(google_creds_path: Path) -> None:
+def _clean_cdp_database(google_creds_path: Path, clean_index: bool = False) -> None:
     # Connect to database
     fireo.connection(from_file=google_creds_path)
+
+    # Remove indexed event gram if we don't want to clean the index
+    if not clean_index:
+        for index_model in [
+            db_models.IndexedEventGram,
+        ]:
+            DATABASE_MODELS.remove(index_model)
 
     # Iter through database models and delete the whole collection
     for model in DATABASE_MODELS:
@@ -57,7 +70,10 @@ def _clean_cdp_database(google_creds_path: Path) -> None:
 def main() -> None:
     try:
         args = Args()
-        _clean_cdp_database(google_creds_path=args.google_credentials_file)
+        _clean_cdp_database(
+            google_creds_path=args.google_credentials_file,
+            clean_index=args.clean_index,
+        )
     except Exception as e:
         log.error("=============================================")
         log.error("\n\n" + traceback.format_exc())
