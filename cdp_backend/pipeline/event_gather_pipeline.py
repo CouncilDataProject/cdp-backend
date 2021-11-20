@@ -17,6 +17,7 @@ from prefect.tasks.control_flow import case, merge
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..database.validators import resource_exists
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -127,8 +128,9 @@ def create_event_gather_flow(
                 # Download video to local copy
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
-                # Convert to mp4 if necessary
-                tmp_video_filepath = convert_video_to_mp4_and_upload(
+                # Handle video conversion or non-secure resource
+                # hosting
+                tmp_video_filepath = convert_video_and_handle_host(
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
@@ -276,7 +278,7 @@ def get_session_content_hash(
 
 
 @task
-def convert_video_to_mp4_and_upload(
+def convert_video_and_handle_host(
     video_filepath: str,
     session: Session,
     credentials_file: str,
@@ -285,6 +287,8 @@ def convert_video_to_mp4_and_upload(
     """
     Convert a video to MP4 (if necessary), upload it to the file store, and remove
     the original non-MP4 file that was resource copied.
+
+    Additionally, if the video is hosted from an unsecure resource, host it ourselves.
 
     Parameters
     ----------
@@ -302,30 +306,55 @@ def convert_video_to_mp4_and_upload(
     mp4_filepath: str
         The local filepath of the converted MP4 file.
     """
-
     # Get file extension
-    ext = Path(video_filepath).suffix
+    ext = Path(video_filepath).suffix.lower()
 
-    # Convert to mp4 if necessary
-    if ext != ".mp4":
+    # Convert to mp4 if file isn't of approved web format
+    cdp_will_host = False
+    if ext not in [".mp4", ".webm"]:
+        cdp_will_host = True
+
         # Convert video to mp4
         mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
 
         # Remove old mkv file
         fs_functions.remove_local_file(video_filepath)
 
+        # Update variable name for easier downstream typing
+        video_filepath = mp4_filepath
+
+    # Store if the original host isn't https
+    elif not session.video_uri.startswith("https://"):
+        # Attempt to find secure version of resource and simply swap
+        # otherwise we will have to host
+        if session.video_uri.startswith("http://"):
+            secure_uri = session.video_uri.replace("http://", "https://")
+            if resource_exists(secure_uri):
+                log.info(
+                    f"Found secure version of {session.video_uri}, "
+                    f"updating stored video URI."
+                )
+                session.video_uri = secure_uri
+            else:
+                cdp_will_host = True
+
+        # The provided URI could still be like GCS or S3 URI, which works for download
+        # but not for streaming / hosting
+        else:
+            cdp_will_host = True
+
+    # Upload and swap if cdp is hosting
+    if cdp_will_host:
         # Upload to gcsfs
-        mp4_uri = fs_functions.upload_file(
+        log.info("Storing a copy of video to CDP filestore.")
+        hosted_video_uri = fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
-            filepath=mp4_filepath,
+            filepath=video_filepath,
         )
 
         # Set session video_uri to uri in remote file store
-        session.video_uri = mp4_uri
-
-        # Return converted local mp4 filepath
-        return mp4_filepath
+        session.video_uri = hosted_video_uri
 
     return video_filepath
 
