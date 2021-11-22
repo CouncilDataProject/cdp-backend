@@ -55,7 +55,6 @@ def create_event_gather_flow(
     from_dt: Optional[Union[str, datetime]] = None,
     to_dt: Optional[Union[str, datetime]] = None,
     prefetched_events: Optional[List[EventIngestionModel]] = None,
-    from_local: bool = False,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -128,18 +127,19 @@ def create_event_gather_flow(
                 # Download video to local copy
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
+                # Get unique session identifier
+                session_content_hash = get_session_content_hash(
+                    tmp_video_filepath=resource_copy_filepath,
+                )
+
                 # Handle video conversion or non-secure resource
                 # hosting
                 tmp_video_filepath = convert_video_and_handle_host(
+                    session_content_hash=session_content_hash,
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
                     bucket=config.validated_gcs_bucket_name,
-                )
-
-                # Get unique session identifier
-                session_content_hash = get_session_content_hash(
-                    tmp_video_filepath=tmp_video_filepath,
                 )
 
                 # Split audio and store
@@ -211,7 +211,6 @@ def create_event_gather_flow(
                 session_processing_results=session_processing_results,
                 credentials_file=config.google_credentials_file,
                 bucket=config.validated_gcs_bucket_name,
-                from_local=from_local,
             )
 
     return flow
@@ -279,6 +278,7 @@ def get_session_content_hash(
 
 @task
 def convert_video_and_handle_host(
+    session_content_hash: str,
     video_filepath: str,
     session: Session,
     credentials_file: str,
@@ -292,6 +292,8 @@ def convert_video_and_handle_host(
 
     Parameters
     ----------
+    session_content_hash: str
+        The content hash to use as the filename for the video once uploaded.
     video_filepath: Union[str, Path]
         The local path for video file to convert.
     session: Session
@@ -351,6 +353,7 @@ def convert_video_and_handle_host(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=video_filepath,
+            save_name=f"{session_content_hash}-video.mp4",
         )
 
         # Set session video_uri to uri in remote file store
@@ -1152,7 +1155,6 @@ def store_event_processing_results(
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
     bucket: str,
-    from_local: bool = False,
 ) -> None:
     # TODO: check metadata before pipeline runs to avoid the many try excepts
 
@@ -1263,8 +1265,8 @@ def store_event_processing_results(
             credentials_file=credentials_file,
         )
 
-        # Account for uri's from local files
-        if from_local:
+        # Account for URIs for videos that will be hosted by the instance
+        if not session_result.session.video_uri.startswith("https://"):
             fs = GCSFileSystem(token=credentials_file)
             stream_url = str(fs.url(session_result.session.video_uri))
             session_result.session.video_uri = stream_url
