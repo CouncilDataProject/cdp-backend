@@ -137,10 +137,13 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
 
     # Is HTTP remote resource
     elif uri.startswith("http"):
-        # Use HEAD request to check if remote resource exists
-        r = requests.head(uri)
+        try:
+            # Use HEAD request to check if remote resource exists
+            r = requests.head(uri)
 
-        return r.status_code == requests.codes.ok
+            return r.status_code == requests.codes.ok
+        except requests.exceptions.SSLError:
+            return False
 
     # Check local filesystem
     else:
