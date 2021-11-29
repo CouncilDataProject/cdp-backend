@@ -963,7 +963,8 @@ def _process_person_ingestion(
         if person.picture_uri is not None:
             try:
                 tmp_person_picture_path = file_utils.resource_copy(
-                    person.picture_uri,
+                    uri=person.picture_uri,
+                    dst=f"{person.name}--person_picture",
                     overwrite=True,
                 )
                 destination_path = file_utils.generate_file_storage_name(
@@ -1029,6 +1030,7 @@ def _process_person_ingestion(
                 if person.seat.image_uri is not None:
                     tmp_person_seat_image_path = file_utils.resource_copy(
                         uri=person.seat.image_uri,
+                        dst=f"{person.name}--{person.seat.name}--seat_image",
                         overwrite=True,
                     )
                     destination_path = file_utils.generate_file_storage_name(
@@ -1125,7 +1127,7 @@ def _calculate_in_majority(
     vote: ingestion_models.Vote,
     event_minutes_item: ingestion_models.EventMinutesItem,
 ) -> Optional[bool]:
-    # Voted to Approve or Approve-by-abstention-or-absense
+    # Voted to Approve or Approve-by-abstention-or-absence
     if vote.decision in [
         db_constants.VoteDecision.APPROVE,
         db_constants.VoteDecision.ABSTAIN_APPROVE,
@@ -1135,7 +1137,7 @@ def _calculate_in_majority(
             event_minutes_item.decision == db_constants.EventMinutesItemDecision.PASSED
         )
 
-    # Voted to Reject or Reject-by-abstention-or-absense
+    # Voted to Reject or Reject-by-abstention-or-absence
     elif vote.decision in [
         db_constants.VoteDecision.REJECT,
         db_constants.VoteDecision.ABSTAIN_REJECT,
