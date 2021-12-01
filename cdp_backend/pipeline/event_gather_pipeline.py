@@ -17,6 +17,7 @@ from prefect.tasks.control_flow import case, merge
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..database.validators import resource_exists
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -35,6 +36,7 @@ log = logging.getLogger(__name__)
 
 class SessionProcessingResult(NamedTuple):
     session: Session
+    session_video_hosted_url: str
     audio_uri: str
     transcript: Transcript
     transcript_uri: str
@@ -54,7 +56,6 @@ def create_event_gather_flow(
     from_dt: Optional[Union[str, datetime]] = None,
     to_dt: Optional[Union[str, datetime]] = None,
     prefetched_events: Optional[List[EventIngestionModel]] = None,
-    from_local: bool = False,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -127,17 +128,22 @@ def create_event_gather_flow(
                 # Download video to local copy
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
-                # Convert to mp4 if necessary
-                tmp_video_filepath = convert_video_to_mp4_and_upload(
+                # Get unique session identifier
+                session_content_hash = get_session_content_hash(
+                    tmp_video_filepath=resource_copy_filepath,
+                )
+
+                # Handle video conversion or non-secure resource
+                # hosting
+                (
+                    tmp_video_filepath,
+                    session_video_hosted_url,
+                ) = convert_video_and_handle_host(
+                    session_content_hash=session_content_hash,
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
                     bucket=config.validated_gcs_bucket_name,
-                )
-
-                # Get unique session identifier
-                session_content_hash = get_session_content_hash(
-                    tmp_video_filepath=tmp_video_filepath,
                 )
 
                 # Split audio and store
@@ -195,6 +201,7 @@ def create_event_gather_flow(
                 session_processing_results.append(
                     compile_session_processing_result(  # type: ignore
                         session=session,
+                        session_video_hosted_url=session_video_hosted_url,
                         audio_uri=audio_uri,
                         transcript=transcript,
                         transcript_uri=transcript_uri,
@@ -209,7 +216,6 @@ def create_event_gather_flow(
                 session_processing_results=session_processing_results,
                 credentials_file=config.google_credentials_file,
                 bucket=config.validated_gcs_bucket_name,
-                from_local=from_local,
             )
 
     return flow
@@ -275,19 +281,24 @@ def get_session_content_hash(
     return file_utils.hash_file_contents(uri=tmp_video_filepath)
 
 
-@task
-def convert_video_to_mp4_and_upload(
+@task(nout=2)
+def convert_video_and_handle_host(
+    session_content_hash: str,
     video_filepath: str,
     session: Session,
     credentials_file: str,
     bucket: str,
-) -> str:
+) -> Tuple[str, str]:
     """
     Convert a video to MP4 (if necessary), upload it to the file store, and remove
     the original non-MP4 file that was resource copied.
 
+    Additionally, if the video is hosted from an unsecure resource, host it ourselves.
+
     Parameters
     ----------
+    session_content_hash: str
+        The content hash to use as the filename for the video once uploaded.
     video_filepath: Union[str, Path]
         The local path for video file to convert.
     session: Session
@@ -301,33 +312,66 @@ def convert_video_to_mp4_and_upload(
     -------
     mp4_filepath: str
         The local filepath of the converted MP4 file.
+    hosted_video_uri: str
+        The URI for the CDP hosted video.
     """
-
     # Get file extension
-    ext = Path(video_filepath).suffix
+    ext = Path(video_filepath).suffix.lower()
 
-    # Convert to mp4 if necessary
-    if ext != ".mp4":
+    # Convert to mp4 if file isn't of approved web format
+    cdp_will_host = False
+    if ext not in [".mp4", ".webm"]:
+        cdp_will_host = True
+
         # Convert video to mp4
         mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
 
         # Remove old mkv file
         fs_functions.remove_local_file(video_filepath)
 
+        # Update variable name for easier downstream typing
+        video_filepath = mp4_filepath
+
+    # Store if the original host isn't https
+    elif not session.video_uri.startswith("https://"):
+        # Attempt to find secure version of resource and simply swap
+        # otherwise we will have to host
+        if session.video_uri.startswith("http://"):
+            secure_uri = session.video_uri.replace("http://", "https://")
+            if resource_exists(secure_uri):
+                log.info(
+                    f"Found secure version of {session.video_uri}, "
+                    f"updating stored video URI."
+                )
+                hosted_video_media_url = secure_uri
+            else:
+                cdp_will_host = True
+
+        # The provided URI could still be like GCS or S3 URI, which works for download
+        # but not for streaming / hosting
+        else:
+            cdp_will_host = True
+    else:
+        hosted_video_media_url = session.video_uri
+
+    # Upload and swap if cdp is hosting
+    if cdp_will_host:
         # Upload to gcsfs
-        mp4_uri = fs_functions.upload_file(
+        log.info("Storing a copy of video to CDP filestore.")
+        hosted_video_uri = fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
-            filepath=mp4_filepath,
+            filepath=video_filepath,
+            save_name=f"{session_content_hash}-video.mp4",
         )
 
-        # Set session video_uri to uri in remote file store
-        session.video_uri = mp4_uri
+        # Create fs to generate hosted media URL
+        hosted_video_media_url = fs_functions.get_open_url_for_gcs_file(
+            credentials_file=credentials_file,
+            uri=hosted_video_uri,
+        )
 
-        # Return converted local mp4 filepath
-        return mp4_filepath
-
-    return video_filepath
+    return video_filepath, hosted_video_media_url
 
 
 @task
@@ -894,6 +938,7 @@ def generate_thumbnails(
 @task
 def compile_session_processing_result(
     session: Session,
+    session_video_hosted_url: str,
     audio_uri: str,
     transcript: Transcript,
     transcript_uri: str,
@@ -902,6 +947,7 @@ def compile_session_processing_result(
 ) -> SessionProcessingResult:
     return SessionProcessingResult(
         session=session,
+        session_video_hosted_url=session_video_hosted_url,
         audio_uri=audio_uri,
         transcript=transcript,
         transcript_uri=transcript_uri,
@@ -931,7 +977,8 @@ def _process_person_ingestion(
         if person.picture_uri is not None:
             try:
                 tmp_person_picture_path = file_utils.resource_copy(
-                    person.picture_uri,
+                    uri=person.picture_uri,
+                    dst=f"{person.name}--person_picture",
                     overwrite=True,
                 )
                 destination_path = file_utils.generate_file_storage_name(
@@ -997,6 +1044,7 @@ def _process_person_ingestion(
                 if person.seat.image_uri is not None:
                     tmp_person_seat_image_path = file_utils.resource_copy(
                         uri=person.seat.image_uri,
+                        dst=f"{person.name}--{person.seat.name}--seat_image",
                         overwrite=True,
                     )
                     destination_path = file_utils.generate_file_storage_name(
@@ -1093,7 +1141,7 @@ def _calculate_in_majority(
     vote: ingestion_models.Vote,
     event_minutes_item: ingestion_models.EventMinutesItem,
 ) -> Optional[bool]:
-    # Voted to Approve or Approve-by-abstention-or-absense
+    # Voted to Approve or Approve-by-abstention-or-absence
     if vote.decision in [
         db_constants.VoteDecision.APPROVE,
         db_constants.VoteDecision.ABSTAIN_APPROVE,
@@ -1103,7 +1151,7 @@ def _calculate_in_majority(
             event_minutes_item.decision == db_constants.EventMinutesItemDecision.PASSED
         )
 
-    # Voted to Reject or Reject-by-abstention-or-absense
+    # Voted to Reject or Reject-by-abstention-or-absence
     elif vote.decision in [
         db_constants.VoteDecision.REJECT,
         db_constants.VoteDecision.ABSTAIN_REJECT,
@@ -1123,7 +1171,6 @@ def store_event_processing_results(
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
     bucket: str,
-    from_local: bool = False,
 ) -> None:
     # TODO: check metadata before pipeline runs to avoid the many try excepts
 
@@ -1234,15 +1281,10 @@ def store_event_processing_results(
             credentials_file=credentials_file,
         )
 
-        # Account for uri's from local files
-        if from_local:
-            fs = GCSFileSystem(token=credentials_file)
-            stream_url = str(fs.url(session_result.session.video_uri))
-            session_result.session.video_uri = stream_url
-
         # Create session
         session_db_model = db_functions.create_session(
             session=session_result.session,
+            session_video_hosted_url=session_result.session_video_hosted_url,
             event_ref=event_db_model,
             credentials_file=credentials_file,
         )

@@ -94,7 +94,8 @@ def main() -> None:
         # Create event gather pipeline flow
         log.info("Beginning processing...")
         flow = pipeline.create_event_gather_flow(
-            config=config, prefetched_events=[ingestion_model], from_local=True
+            config=config,
+            prefetched_events=[ingestion_model],
         )
 
         # Run flow

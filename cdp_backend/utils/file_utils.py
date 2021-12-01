@@ -91,6 +91,13 @@ def resource_copy(
     dst = Path(dst).resolve()
     if dst.is_dir():
         dst = dst / uri.split("/")[-1]
+
+    # Ensure filename is less than 255 chars
+    # Otherwise this can raise an OSError for too long of a filename
+    if len(dst.name) > 255:
+        dst = Path(str(dst)[:255])
+
+    # Ensure dest isn't a file
     if dst.is_file() and not overwrite:
         raise FileExistsError(dst)
 
