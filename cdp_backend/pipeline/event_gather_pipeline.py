@@ -36,6 +36,7 @@ log = logging.getLogger(__name__)
 
 class SessionProcessingResult(NamedTuple):
     session: Session
+    session_video_hosted_url: str
     audio_uri: str
     transcript: Transcript
     transcript_uri: str
@@ -134,7 +135,10 @@ def create_event_gather_flow(
 
                 # Handle video conversion or non-secure resource
                 # hosting
-                tmp_video_filepath = convert_video_and_handle_host(
+                (
+                    tmp_video_filepath,
+                    session_video_hosted_url,
+                ) = convert_video_and_handle_host(
                     session_content_hash=session_content_hash,
                     video_filepath=resource_copy_filepath,
                     session=session,
@@ -197,6 +201,7 @@ def create_event_gather_flow(
                 session_processing_results.append(
                     compile_session_processing_result(  # type: ignore
                         session=session,
+                        session_video_hosted_url=session_video_hosted_url,
                         audio_uri=audio_uri,
                         transcript=transcript,
                         transcript_uri=transcript_uri,
@@ -276,14 +281,14 @@ def get_session_content_hash(
     return file_utils.hash_file_contents(uri=tmp_video_filepath)
 
 
-@task
+@task(nout=2)
 def convert_video_and_handle_host(
     session_content_hash: str,
     video_filepath: str,
     session: Session,
     credentials_file: str,
     bucket: str,
-) -> str:
+) -> Tuple[str, str]:
     """
     Convert a video to MP4 (if necessary), upload it to the file store, and remove
     the original non-MP4 file that was resource copied.
@@ -307,6 +312,8 @@ def convert_video_and_handle_host(
     -------
     mp4_filepath: str
         The local filepath of the converted MP4 file.
+    hosted_video_uri: str
+        The URI for the CDP hosted video.
     """
     # Get file extension
     ext = Path(video_filepath).suffix.lower()
@@ -336,7 +343,7 @@ def convert_video_and_handle_host(
                     f"Found secure version of {session.video_uri}, "
                     f"updating stored video URI."
                 )
-                session.video_uri = secure_uri
+                hosted_video_media_url = secure_uri
             else:
                 cdp_will_host = True
 
@@ -359,7 +366,13 @@ def convert_video_and_handle_host(
         # Set session video_uri to uri in remote file store
         session.video_uri = hosted_video_uri
 
-    return video_filepath
+        # Create fs to generate hosted media URL
+        fs = GCSFileSystem(token=credentials_file)
+        hosted_video_media_url = str(fs.url(hosted_video_uri))
+    else:
+        hosted_video_media_url = session.video_uri
+
+    return video_filepath, hosted_video_media_url
 
 
 @task
@@ -926,6 +939,7 @@ def generate_thumbnails(
 @task
 def compile_session_processing_result(
     session: Session,
+    session_video_hosted_url: str,
     audio_uri: str,
     transcript: Transcript,
     transcript_uri: str,
@@ -934,6 +948,7 @@ def compile_session_processing_result(
 ) -> SessionProcessingResult:
     return SessionProcessingResult(
         session=session,
+        session_video_hosted_url=session_video_hosted_url,
         audio_uri=audio_uri,
         transcript=transcript,
         transcript_uri=transcript_uri,
@@ -1267,15 +1282,10 @@ def store_event_processing_results(
             credentials_file=credentials_file,
         )
 
-        # Account for URIs for videos that will be hosted by the instance
-        if not session_result.session.video_uri.startswith("https://"):
-            fs = GCSFileSystem(token=credentials_file)
-            stream_url = str(fs.url(session_result.session.video_uri))
-            session_result.session.video_uri = stream_url
-
         # Create session
         session_db_model = db_functions.create_session(
             session=session_result.session,
+            session_video_hosted_url=session_result.session_video_hosted_url,
             event_ref=event_db_model,
             credentials_file=credentials_file,
         )
