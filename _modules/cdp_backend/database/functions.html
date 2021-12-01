@@ -325,6 +325,7 @@
 
 <div class="viewcode-block" id="create_session"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.functions.create_session">[docs]</a><span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Session</span><span class="p">,</span>
+    <span class="n">session_video_hosted_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">event_ref</span><span class="p">:</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
@@ -338,7 +339,7 @@
     <span class="c1"># Required fields</span>
     <span class="n">db_session</span><span class="o">.</span><span class="n">event_ref</span> <span class="o">=</span> <span class="n">event_ref</span>
     <span class="n">db_session</span><span class="o">.</span><span class="n">session_datetime</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span>
-    <span class="n">db_session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
+    <span class="n">db_session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">session_video_hosted_url</span>
     <span class="n">db_session</span><span class="o">.</span><span class="n">session_index</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_index</span>
 
     <span class="c1"># Optional fields</span>

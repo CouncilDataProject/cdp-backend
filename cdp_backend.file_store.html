@@ -156,6 +156,28 @@ to initialize the file store connection.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.file_store.functions.get_open_url_for_gcs_file">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.file_store.functions.</span></span><span class="sig-name descname"><span class="pre">get_open_url_for_gcs_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/file_store/functions.html#get_open_url_for_gcs_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.file_store.functions.get_open_url_for_gcs_file" title="Permalink to this definition"></a></dt>
+<dd><p>Simple wrapper around fsspec.FileSystem.url function for creating a connection
+to the filesystem then getting the hosted / web accessible URL to the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>credentials_file</strong> (<em>str</em>) – The path to the Google Service Account credentials JSON file used
+to initialize the file store connection.</p></li>
+<li><p><strong>uri</strong> (<em>str</em>) – The URI to the file already stored to get a web accessible URL for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>url</strong> – The web accessible URL for the file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.file_store.functions.initialize_gcs_file_system">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.file_store.functions.</span></span><span class="sig-name descname"><span class="pre">initialize_gcs_file_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gcsfs.core.GCSFileSystem</span></span></span><a class="reference internal" href="_modules/cdp_backend/file_store/functions.html#initialize_gcs_file_system"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.file_store.functions.initialize_gcs_file_system" title="Permalink to this definition"></a></dt>
 <dd><p>Initializes an instance of a GCSFileSystem.</p>

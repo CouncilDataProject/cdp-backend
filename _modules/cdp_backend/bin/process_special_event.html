@@ -215,7 +215,8 @@
         <span class="c1"># Create event gather pipeline flow</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Beginning processing...&quot;</span><span class="p">)</span>
         <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_gather_flow</span><span class="p">(</span>
-            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">prefetched_events</span><span class="o">=</span><span class="p">[</span><span class="n">ingestion_model</span><span class="p">],</span> <span class="n">from_local</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+            <span class="n">prefetched_events</span><span class="o">=</span><span class="p">[</span><span class="n">ingestion_model</span><span class="p">],</span>
         <span class="p">)</span>
 
         <span class="c1"># Run flow</span>

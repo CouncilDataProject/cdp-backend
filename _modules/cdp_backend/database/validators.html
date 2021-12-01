@@ -129,7 +129,7 @@
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">fireo.models</span> <span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">fsspec.implementations.local</span> <span class="kn">import</span> <span class="n">LocalFileSystem</span>
+<span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
 <span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
 
 <span class="kn">from</span> <span class="nn">..utils.constants_utils</span> <span class="kn">import</span> <span class="n">get_all_class_attr_values</span>
@@ -239,34 +239,42 @@
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;gs://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
+        <span class="c1"># Convert to gsutil form if necessary</span>
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
+            <span class="n">uri</span> <span class="o">=</span> <span class="n">convert_gcs_json_url_to_gsutil_form</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+            <span class="c1"># If uri is not convertible to gsutil form we can&#39;t confirm</span>
+            <span class="k">if</span> <span class="n">uri</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
         <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">):</span>
-            <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">)))</span>
-
-            <span class="c1"># Convert to gsutil form if necessary</span>
-            <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
-                <span class="n">uri</span> <span class="o">=</span> <span class="n">convert_gcs_json_url_to_gsutil_form</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-
-                <span class="c1"># If uri is not convertible to gsutil form we can&#39;t confirm</span>
-                <span class="k">if</span> <span class="n">uri</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="kc">True</span>
-
+            <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">,</span> <span class="s2">&quot;anon&quot;</span><span class="p">)))</span>
             <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
         <span class="c1"># Can&#39;t check GCS resources without creds file</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">anon_fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;anon&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">anon_fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
 
     <span class="c1"># Is HTTP remote resource</span>
     <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
-        <span class="c1"># Use HEAD request to check if remote resource exists</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Use HEAD request to check if remote resource exists</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">SSLError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="c1"># Check local filesystem</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fs</span> <span class="o">=</span> <span class="n">LocalFileSystem</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span></div>
+    <span class="c1"># Get any filesystem and try</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fs</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="create_constant_value_validator"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.create_constant_value_validator">[docs]</a><span class="k">def</span> <span class="nf">create_constant_value_validator</span><span class="p">(</span>

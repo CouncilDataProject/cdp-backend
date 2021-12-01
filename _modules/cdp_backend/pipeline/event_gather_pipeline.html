@@ -138,6 +138,7 @@
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">db_constants</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
+<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">resource_exists</span>
 <span class="kn">from</span> <span class="nn">..file_store</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fs_functions</span>
 <span class="kn">from</span> <span class="nn">..sr_models</span> <span class="kn">import</span> <span class="n">GoogleCloudSRModel</span><span class="p">,</span> <span class="n">WebVTTSRModel</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">constants_utils</span><span class="p">,</span> <span class="n">file_utils</span>
@@ -156,6 +157,7 @@
 
 <div class="viewcode-block" id="SessionProcessingResult"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult">[docs]</a><span class="k">class</span> <span class="nc">SessionProcessingResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span>
+    <span class="n">session_video_hosted_url</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">audio_uri</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">transcript</span><span class="p">:</span> <span class="n">Transcript</span>
     <span class="n">transcript_uri</span><span class="p">:</span> <span class="nb">str</span>
@@ -175,7 +177,6 @@
     <span class="n">from_dt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">to_dt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">prefetched_events</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">from_local</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provided a function to gather new event information, create the Prefect Flow object</span>
@@ -248,17 +249,22 @@
                 <span class="c1"># Download video to local copy</span>
                 <span class="n">resource_copy_filepath</span> <span class="o">=</span> <span class="n">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
 
-                <span class="c1"># Convert to mp4 if necessary</span>
-                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">convert_video_to_mp4_and_upload</span><span class="p">(</span>
+                <span class="c1"># Get unique session identifier</span>
+                <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">get_session_content_hash</span><span class="p">(</span>
+                    <span class="n">tmp_video_filepath</span><span class="o">=</span><span class="n">resource_copy_filepath</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Handle video conversion or non-secure resource</span>
+                <span class="c1"># hosting</span>
+                <span class="p">(</span>
+                    <span class="n">tmp_video_filepath</span><span class="p">,</span>
+                    <span class="n">session_video_hosted_url</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">convert_video_and_handle_host</span><span class="p">(</span>
+                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
                     <span class="n">video_filepath</span><span class="o">=</span><span class="n">resource_copy_filepath</span><span class="p">,</span>
                     <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
                     <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
-                <span class="p">)</span>
-
-                <span class="c1"># Get unique session identifier</span>
-                <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">get_session_content_hash</span><span class="p">(</span>
-                    <span class="n">tmp_video_filepath</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Split audio and store</span>
@@ -316,6 +322,7 @@
                 <span class="n">session_processing_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">compile_session_processing_result</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
                         <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+                        <span class="n">session_video_hosted_url</span><span class="o">=</span><span class="n">session_video_hosted_url</span><span class="p">,</span>
                         <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
                         <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">,</span>
                         <span class="n">transcript_uri</span><span class="o">=</span><span class="n">transcript_uri</span><span class="p">,</span>
@@ -330,7 +337,6 @@
                 <span class="n">session_processing_results</span><span class="o">=</span><span class="n">session_processing_results</span><span class="p">,</span>
                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
                 <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
-                <span class="n">from_local</span><span class="o">=</span><span class="n">from_local</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">flow</span></div>
@@ -396,19 +402,24 @@
     <span class="k">return</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
 
 
-<span class="nd">@task</span>
-<span class="k">def</span> <span class="nf">convert_video_to_mp4_and_upload</span><span class="p">(</span>
+<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">convert_video_and_handle_host</span><span class="p">(</span>
+    <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a video to MP4 (if necessary), upload it to the file store, and remove</span>
 <span class="sd">    the original non-MP4 file that was resource copied.</span>
 
+<span class="sd">    Additionally, if the video is hosted from an unsecure resource, host it ourselves.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    session_content_hash: str</span>
+<span class="sd">        The content hash to use as the filename for the video once uploaded.</span>
 <span class="sd">    video_filepath: Union[str, Path]</span>
 <span class="sd">        The local path for video file to convert.</span>
 <span class="sd">    session: Session</span>
@@ -422,33 +433,66 @@
 <span class="sd">    -------</span>
 <span class="sd">    mp4_filepath: str</span>
 <span class="sd">        The local filepath of the converted MP4 file.</span>
+<span class="sd">    hosted_video_uri: str</span>
+<span class="sd">        The URI for the CDP hosted video.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># Get file extension</span>
-    <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-    <span class="c1"># Convert to mp4 if necessary</span>
-    <span class="k">if</span> <span class="n">ext</span> <span class="o">!=</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">:</span>
+    <span class="c1"># Convert to mp4 if file isn&#39;t of approved web format</span>
+    <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="s2">&quot;.webm&quot;</span><span class="p">]:</span>
+        <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
+
         <span class="c1"># Convert video to mp4</span>
         <span class="n">mp4_filepath</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">convert_video_to_mp4</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
 
         <span class="c1"># Remove old mkv file</span>
         <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
 
+        <span class="c1"># Update variable name for easier downstream typing</span>
+        <span class="n">video_filepath</span> <span class="o">=</span> <span class="n">mp4_filepath</span>
+
+    <span class="c1"># Store if the original host isn&#39;t https</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+        <span class="c1"># Attempt to find secure version of resource and simply swap</span>
+        <span class="c1"># otherwise we will have to host</span>
+        <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">):</span>
+            <span class="n">secure_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">resource_exists</span><span class="p">(</span><span class="n">secure_uri</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Found secure version of </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="si">}</span><span class="s2">, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;updating stored video URI.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">secure_uri</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># The provided URI could still be like GCS or S3 URI, which works for download</span>
+        <span class="c1"># but not for streaming / hosting</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
+
+    <span class="c1"># Upload and swap if cdp is hosting</span>
+    <span class="k">if</span> <span class="n">cdp_will_host</span><span class="p">:</span>
         <span class="c1"># Upload to gcsfs</span>
-        <span class="n">mp4_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Storing a copy of video to CDP filestore.&quot;</span><span class="p">)</span>
+        <span class="n">hosted_video_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
-            <span class="n">filepath</span><span class="o">=</span><span class="n">mp4_filepath</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="n">video_filepath</span><span class="p">,</span>
+            <span class="n">save_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-video.mp4&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># Set session video_uri to uri in remote file store</span>
-        <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">mp4_uri</span>
+        <span class="c1"># Create fs to generate hosted media URL</span>
+        <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">get_open_url_for_gcs_file</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">hosted_video_uri</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="c1"># Return converted local mp4 filepath</span>
-        <span class="k">return</span> <span class="n">mp4_filepath</span>
-
-    <span class="k">return</span> <span class="n">video_filepath</span>
+    <span class="k">return</span> <span class="n">video_filepath</span><span class="p">,</span> <span class="n">hosted_video_media_url</span>
 
 
 <span class="nd">@task</span>
@@ -1015,6 +1059,7 @@
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">compile_session_processing_result</span><span class="p">(</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
+    <span class="n">session_video_hosted_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">audio_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">transcript</span><span class="p">:</span> <span class="n">Transcript</span><span class="p">,</span>
     <span class="n">transcript_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1023,6 +1068,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SessionProcessingResult</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">SessionProcessingResult</span><span class="p">(</span>
         <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+        <span class="n">session_video_hosted_url</span><span class="o">=</span><span class="n">session_video_hosted_url</span><span class="p">,</span>
         <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
         <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">,</span>
         <span class="n">transcript_uri</span><span class="o">=</span><span class="n">transcript_uri</span><span class="p">,</span>
@@ -1052,7 +1098,8 @@
         <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">tmp_person_picture_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
-                    <span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="p">,</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="p">,</span>
+                    <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--person_picture&quot;</span><span class="p">,</span>
                     <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
@@ -1118,6 +1165,7 @@
                 <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">tmp_person_seat_image_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
                         <span class="n">uri</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="p">,</span>
+                        <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--seat_image&quot;</span><span class="p">,</span>
                         <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
@@ -1214,7 +1262,7 @@
     <span class="n">vote</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">Vote</span><span class="p">,</span>
     <span class="n">event_minutes_item</span><span class="p">:</span> <span class="n">ingestion_models</span><span class="o">.</span><span class="n">EventMinutesItem</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
-    <span class="c1"># Voted to Approve or Approve-by-abstention-or-absense</span>
+    <span class="c1"># Voted to Approve or Approve-by-abstention-or-absence</span>
     <span class="k">if</span> <span class="n">vote</span><span class="o">.</span><span class="n">decision</span> <span class="ow">in</span> <span class="p">[</span>
         <span class="n">db_constants</span><span class="o">.</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">APPROVE</span><span class="p">,</span>
         <span class="n">db_constants</span><span class="o">.</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">ABSTAIN_APPROVE</span><span class="p">,</span>
@@ -1224,7 +1272,7 @@
             <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">decision</span> <span class="o">==</span> <span class="n">db_constants</span><span class="o">.</span><span class="n">EventMinutesItemDecision</span><span class="o">.</span><span class="n">PASSED</span>
         <span class="p">)</span>
 
-    <span class="c1"># Voted to Reject or Reject-by-abstention-or-absense</span>
+    <span class="c1"># Voted to Reject or Reject-by-abstention-or-absence</span>
     <span class="k">elif</span> <span class="n">vote</span><span class="o">.</span><span class="n">decision</span> <span class="ow">in</span> <span class="p">[</span>
         <span class="n">db_constants</span><span class="o">.</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">REJECT</span><span class="p">,</span>
         <span class="n">db_constants</span><span class="o">.</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">ABSTAIN_REJECT</span><span class="p">,</span>
@@ -1244,7 +1292,6 @@
     <span class="n">session_processing_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SessionProcessingResult</span><span class="p">],</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">from_local</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># TODO: check metadata before pipeline runs to avoid the many try excepts</span>
 
@@ -1355,15 +1402,10 @@
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># Account for uri&#39;s from local files</span>
-        <span class="k">if</span> <span class="n">from_local</span><span class="p">:</span>
-            <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
-            <span class="n">stream_url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">url</span><span class="p">(</span><span class="n">session_result</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">))</span>
-            <span class="n">session_result</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span> <span class="o">=</span> <span class="n">stream_url</span>
-
         <span class="c1"># Create session</span>
         <span class="n">session_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_session</span><span class="p">(</span>
             <span class="n">session</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">session_video_hosted_url</span><span class="o">=</span><span class="n">session_result</span><span class="o">.</span><span class="n">session_video_hosted_url</span><span class="p">,</span>
             <span class="n">event_ref</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
