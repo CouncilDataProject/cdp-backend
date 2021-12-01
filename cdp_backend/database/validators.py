@@ -8,6 +8,7 @@ from typing import Callable, List, Optional, Type
 
 import requests
 from fireo.models import Model
+from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 
 from ..utils.constants_utils import get_all_class_attr_values
@@ -147,8 +148,12 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
         except requests.exceptions.SSLError:
             return False
 
-    # Check local filesystem
-    return False
+    # Get any filesystem and try
+    try:
+        fs, path = url_to_fs(uri)
+        return fs.exists(path)
+    except Exception:
+        return False
 
 
 def create_constant_value_validator(

@@ -94,17 +94,22 @@ def test_local_resource_exists(
         ("gs://bucket/filename.txt", True, True, validator_kwargs),
         (
             "https://storage.googleapis.com/download/storage/v1/b/"
-            + "bucket.appspot.com/o/wombo_combo.mp4?alt=media",
+            "bucket.appspot.com/o/wombo_combo.mp4?alt=media",
             True,
             True,
             validator_kwargs,
         ),
         ("gs://bucket/filename.txt", False, False, validator_kwargs),
         # Unconvertible JSON url case
+        # This test was updated 2021-11-30
+        # "Breaking change" in that we can now test for resource access with
+        # anonymous credentials
+        # Whatever resource is handed to us we want to check for existence.
+        # If the resource isn't reachable then from our POV, it doesn't exist.
         (
             "https://storage.googleapis.com/download/storage/v1/xxx/"
-            + "bucket.appspot.com",
-            True,
+            "bucket.appspot.com",
+            False,
             None,
             None,
         ),

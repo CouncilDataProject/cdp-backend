@@ -126,6 +126,28 @@ def upload_file(
         return save_url
 
 
+def get_open_url_for_gcs_file(credentials_file: str, uri: str) -> str:
+    """
+    Simple wrapper around fsspec.FileSystem.url function for creating a connection
+    to the filesystem then getting the hosted / web accessible URL to the file.
+
+    Parameters
+    ----------
+    credentials_file: str
+        The path to the Google Service Account credentials JSON file used
+        to initialize the file store connection.
+    uri: str
+        The URI to the file already stored to get a web accessible URL for.
+
+    Returns
+    -------
+    url: str
+        The web accessible URL for the file.
+    """
+    fs = initialize_gcs_file_system(credentials_file=credentials_file)
+    return str(fs.url(uri))
+
+
 def remove_local_file(filepath: Union[str, Path]) -> None:
     """
     Deletes a file from the local file system.

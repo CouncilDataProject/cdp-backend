@@ -351,6 +351,8 @@ def convert_video_and_handle_host(
         # but not for streaming / hosting
         else:
             cdp_will_host = True
+    else:
+        hosted_video_media_url = session.video_uri
 
     # Upload and swap if cdp is hosting
     if cdp_will_host:
@@ -367,10 +369,10 @@ def convert_video_and_handle_host(
         session.video_uri = hosted_video_uri
 
         # Create fs to generate hosted media URL
-        fs = GCSFileSystem(token=credentials_file)
-        hosted_video_media_url = str(fs.url(hosted_video_uri))
-    else:
-        hosted_video_media_url = session.video_uri
+        hosted_video_media_url = fs_functions.get_open_url_for_gcs_file(
+            credentials_file=credentials_file,
+            uri=hosted_video_uri,
+        )
 
     return video_filepath, hosted_video_media_url
 
