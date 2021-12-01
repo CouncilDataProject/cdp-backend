@@ -365,9 +365,6 @@ def convert_video_and_handle_host(
             save_name=f"{session_content_hash}-video.mp4",
         )
 
-        # Set session video_uri to uri in remote file store
-        session.video_uri = hosted_video_uri
-
         # Create fs to generate hosted media URL
         hosted_video_media_url = fs_functions.get_open_url_for_gcs_file(
             credentials_file=credentials_file,
