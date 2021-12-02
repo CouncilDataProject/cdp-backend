@@ -41,6 +41,27 @@ For full package documentation please visit [councildataproject.org/cdp-backend]
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to development of this repository.
 
+## Citation
+
+If you have found CDP software, data, or ideas useful in your own work, please consider citing us:
+
+Brown et al., (2021). Council Data Project: Software for Municipal Data Collection, Analysis, and Publication. Journal of Open Source Software, 6(68), 3904, https://doi.org/10.21105/joss.03904
+
+```bibtex
+@article{Brown2021,
+  doi = {10.21105/joss.03904},
+  url = {https://doi.org/10.21105/joss.03904},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {68},
+  pages = {3904},
+  author = {Jackson Maxfield Brown and To Huynh and Isaac Na and Brian Ledbetter and Hawk Ticehurst and Sarah Liu and Emily Gilles and Katlyn M. f. Greene and Sung Cho and Shak Ragoler and Nicholas Weber},
+  title = {{Council Data Project: Software for Municipal Data Collection, Analysis, and Publication}},
+  journal = {Journal of Open Source Software}
+}
+```
+
 ## License
 
 [MIT](./LICENSE)
