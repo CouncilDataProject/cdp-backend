@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/CouncilDataProject/cdp-backend/workflows/Build/badge.svg)](https://github.com/CouncilDataProject/cdp-backend/actions)
 [![Documentation](https://github.com/CouncilDataProject/cdp-backend/workflows/Documentation/badge.svg)](https://CouncilDataProject.github.io/cdp-backend)
 [![Code Coverage](https://codecov.io/gh/CouncilDataProject/cdp-backend/branch/main/graph/badge.svg)](https://codecov.io/gh/CouncilDataProject/cdp-backend)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03904/status.svg)](https://doi.org/10.21105/joss.03904)
 
 Data storage utilities and processing pipelines to run on Council Data Project server deployments.
 
