@@ -9,7 +9,9 @@ Full infrastructure setup for whole system / integration level testing.
 This is primarily used for developer stack creation and management.
 We have an example stack, infrastructure, pipeline, and web app available for
 demonstration and example data usage in our
-[example repo](https://github.com/CouncilDataProject/example).
+[test deployment repo](https://github.com/CouncilDataProject/test-deployment).
+The web page for the test deployment can be found 
+[here](https://councildataproject.org/test-deployment).
 
 If you are just trying to process example CDP data (or for front-end: visualize example
 CDP data) and not _upload_ data, it is recommended to simply point your requests at the
