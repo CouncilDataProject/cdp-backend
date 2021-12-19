@@ -59,11 +59,13 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
             # Now attach the generated hash document path
             hasher.update(pickle.dumps(field.id, protocol=4))
 
+        # If datetime, hash with epoch millis to avoid timezone issues
+        elif isinstance(field, datetime):
+            field = field.timestamp()
+            hasher.update(pickle.dumps(field, protocol=4))
+
         # Otherwise just simply add the primary key value
         else:
-            # If datetime, hash with epoch millis to avoid timezone issues
-            if isinstance(field, datetime):
-                field = field.timestamp()
             hasher.update(pickle.dumps(field, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
