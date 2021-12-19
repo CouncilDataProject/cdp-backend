@@ -39,7 +39,10 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
         The updated database model with the doc key set.
     """
     # Create hasher and hash primary values
+    print(db_model)
+    print("OG ID: " + str(db_model.id))
     hasher = sha256()
+    print(type(db_model))
     for pk in db_model._PRIMARY_KEYS:
         field = getattr(db_model, pk)
 
@@ -47,21 +50,37 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
         if isinstance(field, Model):
             # Ensure that the underlying model has an id
             # In place update to db_model for this field
-            setattr(db_model, pk, generate_and_attach_doc_hash_as_id(field))
+
+            print(type(field))
+            print("PRE GENERATE FIELD ID " + str(field.id))
+            new_field = generate_and_attach_doc_hash_as_id(field)
+            setattr(db_model, pk, new_field)
+            print(type(field))
+            print("GENERATED FIELD ID " + str(new_field.id))
 
             # Now attach the generated hash document path
-            hasher.update(pickle.dumps(field.id, protocol=4))
+            hasher.update(pickle.dumps(new_field.id, protocol=4))
 
         # Otherwise just simply add the primary key value
         else:
             # Load the document for reference fields and add id to hasher
             if isinstance(field, ReferenceDocLoader):
+                print("REFERENCE DOC of " + str(type(field.get())))
+                print("HASHING REFERENCE WITH ID: " + str(field.get().id))
                 hasher.update(pickle.dumps(field.get().id, protocol=4))
             else:
+                if isinstance(field, datetime):
+                    print("A DATETIME")
+                    field = field.timestamp()
+                    print("CONVERTING DATETIME TO " + str(field))
+                print("NORMAL CASE of " + str(type(field)))
+                print("HASHING " + pk + " "  + str(field))
                 hasher.update(pickle.dumps(field, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
-    db_model.id = hasher.hexdigest()[:12]
+    end_hash = hasher.hexdigest()[:12]
+    db_model.id = end_hash
+    print("FINAL HASH for " + str(db_model) + str(end_hash))
 
     return db_model
 
