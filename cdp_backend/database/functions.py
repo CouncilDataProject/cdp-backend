@@ -67,8 +67,7 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
                 hasher.update(pickle.dumps(field, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
-    end_hash = hasher.hexdigest()[:12]
-    db_model.id = end_hash
+    db_model.id = hasher.hexdigest()[:12]
 
     return db_model
 
