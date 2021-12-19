@@ -53,13 +53,15 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
 
             print(type(field))
             print("PRE GENERATE FIELD ID " + str(field.id))
-            new_field = generate_and_attach_doc_hash_as_id(field)
-            setattr(db_model, pk, new_field)
+            setattr(db_model, pk, generate_and_attach_doc_hash_as_id(field))
+
+            # Update variable after setattr
+            field = getattr(db_model, pk)
             print(type(field))
-            print("GENERATED FIELD ID " + str(new_field.id))
+            print("GENERATED FIELD ID " + str(field.id))
 
             # Now attach the generated hash document path
-            hasher.update(pickle.dumps(new_field.id, protocol=4))
+            hasher.update(pickle.dumps(field.id, protocol=4))
 
         # Otherwise just simply add the primary key value
         else:
