@@ -47,7 +47,6 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
         if isinstance(field, Model):
             # Ensure that the underlying model has an id
             # In place update to db_model for this field
-
             setattr(db_model, pk, generate_and_attach_doc_hash_as_id(field))
 
             # Update variable after setattr
