@@ -164,22 +164,30 @@
     <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">db_model</span><span class="o">.</span><span class="n">_PRIMARY_KEYS</span><span class="p">:</span>
         <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
 
+        <span class="c1"># Load the document for reference fields and add id to hasher</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ReferenceDocLoader</span><span class="p">):</span>
+            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
         <span class="c1"># Handle reference fields by using their doc path</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
             <span class="c1"># Ensure that the underlying model has an id</span>
             <span class="c1"># In place update to db_model for this field</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">generate_and_attach_doc_hash_as_id</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
 
+            <span class="c1"># Update variable after setattr</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">db_model</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
+
             <span class="c1"># Now attach the generated hash document path</span>
             <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
+        <span class="c1"># If datetime, hash with epoch millis to avoid timezone issues</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
         <span class="c1"># Otherwise just simply add the primary key value</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Load the document for reference fields and add id to hasher</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ReferenceDocLoader</span><span class="p">):</span>
-                <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+            <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
     <span class="c1"># Set the id to the first twelve characters of hexdigest</span>
     <span class="n">db_model</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">12</span><span class="p">]</span>
