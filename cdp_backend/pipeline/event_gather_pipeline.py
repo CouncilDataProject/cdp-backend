@@ -8,6 +8,7 @@ from operator import attrgetter
 from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
+from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
 from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
@@ -1000,11 +1001,11 @@ def _process_person_ingestion(
                     db_model=person_picture_db_model,
                     credentials_file=credentials_file,
                 )
-            except FileNotFoundError:
+            except (FileNotFoundError, ClientResponseError) as e:
                 person_picture_db_model = None
                 log.warning(
                     f"Person ('{person.name}'), picture URI could not be archived."
-                    f"({person.picture_uri})"
+                    f"({person.picture_uri}). Error: {e}"
                 )
         else:
             person_picture_db_model = None
@@ -1068,11 +1069,11 @@ def _process_person_ingestion(
                 else:
                     person_seat_image_db_model = None
 
-            except FileNotFoundError:
+            except (FileNotFoundError, ClientResponseError) as e:
                 person_seat_image_db_model = None
                 log.warning(
                     f"Person ('{person.name}'), seat image URI could not be archived."
-                    f"({person.seat.image_uri})"
+                    f"({person.seat.image_uri}). Error: {e}"
                 )
 
             # Actual seat creation
