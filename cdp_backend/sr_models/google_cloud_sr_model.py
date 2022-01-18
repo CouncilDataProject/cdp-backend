@@ -21,8 +21,6 @@ log = logging.getLogger(__name__)
 
 GOOGLE_SPEECH_ADAPTION_CLASSES = speech.SpeechContext(
     phrases=[
-        # Sequences
-        "$OOV_CLASS_ALPHANUMERIC_SEQUENCE",
         # Location
         "$OOV_CLASS_ORDINAL",
         "$ADDRESSNUM",
