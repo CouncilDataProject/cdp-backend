@@ -48,6 +48,17 @@ class GoogleCloudSRModel(SRModel):
 
     @staticmethod
     def _clean_phrases(phrases: Optional[List[str]] = None) -> List[str]:
+        """
+        Notes
+        -----
+        This function will always leave room for the standard class tokens
+        we use to optimize / adapt the Google Speech-to-Text model by limiting
+        the total number of phrases added to the context object to
+        500 minus the number of specific classes we use.
+
+        See more information on adaption and class tokens here:
+        https://cloud.google.com/speech-to-text/docs/speech-adaptation
+        """
         if phrases:
             # Clean and apply usage limits
             cleaned = []
