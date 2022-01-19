@@ -22,6 +22,7 @@ from ..database.validators import resource_exists
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
+from ..version import __version__
 from . import ingestion_models
 from .ingestion_models import EventIngestionModel, Session
 from .pipeline_config import EventGatherPipelineConfig
@@ -729,14 +730,11 @@ def check_for_existing_transcript(
         Boolean value for if the transcript was found or not.
         Required for downstream Prefect usage.
     """
-    import git
-
-    repo = git.Repo(Path("~/active/cdp/cdp-backend").expanduser().resolve())
-    commit = repo.head.object.hexsha
-
     # Combine to transcript filename
     tmp_transcript_filepath = (
-        f"{session_content_hash}-" f"cdp_{commit}-" f"transcript.json"
+        f"{session_content_hash}-"
+        f"cdp_{__version__.replace('.', '_')}-"
+        f"transcript.json"
     )
 
     # Check for existing transcript
