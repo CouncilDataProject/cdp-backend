@@ -140,6 +140,27 @@
 
 <span class="c1">###############################################################################</span>
 
+<span class="n">GOOGLE_SPEECH_ADAPTION_CLASSES</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span>
+    <span class="n">phrases</span><span class="o">=</span><span class="p">[</span>
+        <span class="c1"># Location</span>
+        <span class="s2">&quot;$OOV_CLASS_ORDINAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$ADDRESSNUM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$POSTALCODE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$STREET&quot;</span><span class="p">,</span>
+        <span class="c1"># Numbers</span>
+        <span class="s2">&quot;$MONEY&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$OPERAND&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$PERCENT&quot;</span><span class="p">,</span>
+        <span class="c1"># Time</span>
+        <span class="s2">&quot;$TIME&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$DAY&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$MONTH&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;$YEAR&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
 
 <div class="viewcode-block" id="GoogleCloudSRModel"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.google_cloud_sr_model.GoogleCloudSRModel">[docs]</a><span class="k">class</span> <span class="nc">GoogleCloudSRModel</span><span class="p">(</span><span class="n">SRModel</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
@@ -148,11 +169,26 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This function will always leave room for the standard class tokens</span>
+<span class="sd">        we use to optimize / adapt the Google Speech-to-Text model by limiting</span>
+<span class="sd">        the total number of phrases added to the context object to</span>
+<span class="sd">        500 minus the number of specific classes we use.</span>
+
+<span class="sd">        See more information on adaption and class tokens here:</span>
+<span class="sd">        https://cloud.google.com/speech-to-text/docs/speech-adaptation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">phrases</span><span class="p">:</span>
             <span class="c1"># Clean and apply usage limits</span>
             <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">total_character_count</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">phrases</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]:</span>
+            <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">p</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">phrases</span><span class="p">[:</span> <span class="mi">500</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">GOOGLE_SPEECH_ADAPTION_CLASSES</span><span class="o">.</span><span class="n">phrases</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+            <span class="p">]:</span>
                 <span class="k">if</span> <span class="n">total_character_count</span> <span class="o">&lt;=</span> <span class="mi">9900</span><span class="p">:</span>
                     <span class="n">cleaned_phrase</span> <span class="o">=</span> <span class="n">phrase</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
 
@@ -197,11 +233,16 @@
         <span class="c1"># Create basic metadata</span>
         <span class="n">metadata</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="p">()</span>
         <span class="n">metadata</span><span class="o">.</span><span class="n">interaction_type</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">DISCUSSION</span>
+            <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">PHONE_CALL</span>
+        <span class="p">)</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">original_media_type</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">OriginalMediaType</span><span class="o">.</span><span class="n">VIDEO</span>
         <span class="p">)</span>
 
         <span class="c1"># Add phrases</span>
-        <span class="n">speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span><span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">))</span>
+        <span class="n">event_metadata_speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span>
+            <span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Prepare for transcription</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="p">(</span>
@@ -210,8 +251,14 @@
             <span class="n">language_code</span><span class="o">=</span><span class="s2">&quot;en-US&quot;</span><span class="p">,</span>
             <span class="n">enable_automatic_punctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">enable_word_time_offsets</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">speech_contexts</span><span class="o">=</span><span class="p">[</span><span class="n">speech_context</span><span class="p">],</span>
+            <span class="n">enable_spoken_punctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">speech_contexts</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">GOOGLE_SPEECH_ADAPTION_CLASSES</span><span class="p">,</span>
+                <span class="n">event_metadata_speech_context</span><span class="p">,</span>
+            <span class="p">],</span>
             <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">use_enhanced</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">audio</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">RecognitionAudio</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">file_uri</span><span class="p">)</span>
 
