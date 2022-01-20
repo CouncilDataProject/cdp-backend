@@ -19,6 +19,27 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
+GOOGLE_SPEECH_ADAPTION_CLASSES = speech.SpeechContext(
+    phrases=[
+        # Location
+        "$OOV_CLASS_ORDINAL",
+        "$ADDRESSNUM",
+        "$POSTALCODE",
+        "$STREET",
+        # Numbers
+        "$MONEY",
+        "$OPERAND",
+        "$PERCENT",
+        # Time
+        "$TIME",
+        "$DAY",
+        "$MONTH",
+        "$YEAR",
+    ],
+)
+
+###############################################################################
+
 
 class GoogleCloudSRModel(SRModel):
     def __init__(self, credentials_file: Union[str, Path], **kwargs: Any):
@@ -27,11 +48,26 @@ class GoogleCloudSRModel(SRModel):
 
     @staticmethod
     def _clean_phrases(phrases: Optional[List[str]] = None) -> List[str]:
+        """
+        Notes
+        -----
+        This function will always leave room for the standard class tokens
+        we use to optimize / adapt the Google Speech-to-Text model by limiting
+        the total number of phrases added to the context object to
+        500 minus the number of specific classes we use.
+
+        See more information on adaption and class tokens here:
+        https://cloud.google.com/speech-to-text/docs/speech-adaptation
+        """
         if phrases:
             # Clean and apply usage limits
             cleaned = []
             total_character_count = 0
-            for phrase in [p for p in phrases[:500] if isinstance(p, str)]:
+            for phrase in [
+                p
+                for p in phrases[: 500 - len(GOOGLE_SPEECH_ADAPTION_CLASSES.phrases)]
+                if isinstance(p, str)
+            ]:
                 if total_character_count <= 9900:
                     cleaned_phrase = phrase[:100]
 
@@ -76,11 +112,16 @@ class GoogleCloudSRModel(SRModel):
         # Create basic metadata
         metadata = speech.RecognitionMetadata()
         metadata.interaction_type = (
-            speech.RecognitionMetadata.InteractionType.DISCUSSION
+            speech.RecognitionMetadata.InteractionType.PHONE_CALL
+        )
+        metadata.original_media_type = (
+            speech.RecognitionMetadata.OriginalMediaType.VIDEO
         )
 
         # Add phrases
-        speech_context = speech.SpeechContext(phrases=self._clean_phrases(phrases))
+        event_metadata_speech_context = speech.SpeechContext(
+            phrases=self._clean_phrases(phrases)
+        )
 
         # Prepare for transcription
         config = speech.RecognitionConfig(
@@ -89,8 +130,14 @@ class GoogleCloudSRModel(SRModel):
             language_code="en-US",
             enable_automatic_punctuation=True,
             enable_word_time_offsets=True,
-            speech_contexts=[speech_context],
+            enable_spoken_punctuation=True,
+            speech_contexts=[
+                GOOGLE_SPEECH_ADAPTION_CLASSES,
+                event_metadata_speech_context,
+            ],
             metadata=metadata,
+            model="video",
+            use_enhanced=True,
         )
         audio = speech.RecognitionAudio(uri=file_uri)
 

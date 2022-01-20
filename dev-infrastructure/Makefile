@@ -37,13 +37,13 @@ build: ## Run pulumi up for infra setup
 switch-project: ## Switch active gcloud project, must provide "project"
 	gcloud config set project ${project}
 
-clean: ## Remove all database documents and filestore objects
-	clean_cdp_database ../.keys/cdp-dev.json
-	clean_cdp_filestore ../.keys/cdp-dev.json
+clean: ## Remove all database documents (except search index) and filestore objects, must provide "key"
+	clean_cdp_database ${key}
+	clean_cdp_filestore ${key}
 
-clean-full: ## Remove all database documents and files, include indexs
-	clean_cdp_database ../.keys/cdp-dev.json --clean-index
-	clean_cdp_filestore ../.keys/cdp-dev.json
+clean-full: ## Remove all database documents (including search index) and filestore objects, must provide "key"
+	clean_cdp_database ${key} --clean-index
+	clean_cdp_filestore ${key}
 
 reset: ## Run pulumi destroy and make build, must provide "project"
 	pulumi destroy -p 4
