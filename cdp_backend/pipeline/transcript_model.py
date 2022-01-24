@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
@@ -216,6 +217,13 @@ class Transcript:
     created_datetime: str
     sentences: List[Sentence]
     annotations: Optional[TranscriptAnnotations] = None
+
+    def __str__(self):
+        string = repr(self)
+        cleaned = re.sub(
+            "sentences=\[.*\], annotations", "sentences=[...], annotations", string
+        )
+        return cleaned
 
 
 ###############################################################################
