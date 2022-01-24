@@ -221,7 +221,7 @@ class Transcript:
     def __str__(self):
         string = repr(self)
         cleaned = re.sub(
-            "sentences=\[.*\], annotations", "sentences=[...], annotations", string
+            r"sentences=\[.*\], annotations", "sentences=[...], annotations", string
         )
         return cleaned
 
