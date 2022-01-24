@@ -218,7 +218,7 @@ class Transcript:
     sentences: List[Sentence]
     annotations: Optional[TranscriptAnnotations] = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         string = repr(self)
         cleaned = re.sub(
             r"sentences=\[.*\], annotations", "sentences=[...], annotations", string
