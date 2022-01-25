@@ -41,9 +41,9 @@ class MatterStatusDecision:
 
 
 class RoleTitle:
-    councilmember = "Councilmember"
-    president = "President"
-    chair = "Chair"
-    vice_chair = "Vice Chair"
-    alternate = "Alternate"
-    member = "Member"
+    COUNCILMEMBER = "Councilmember"
+    PRESIDENT = "President"
+    CHAIR = "Chair"
+    VICE_CHAIR = "Vice Chair"
+    ALTERNATE = "Alternate"
+    MEMBER = "Member"
