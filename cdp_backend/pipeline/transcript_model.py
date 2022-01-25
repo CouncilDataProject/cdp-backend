@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
@@ -218,12 +217,24 @@ class Transcript:
     sentences: List[Sentence]
     annotations: Optional[TranscriptAnnotations] = None
 
-    def __str__(self) -> str:
-        string = repr(self)
-        cleaned = re.sub(
-            r"sentences=\[.*\], annotations", "sentences=[...], annotations", string
-        )
-        return cleaned
+    def __repr__(self) -> str:
+        output = "Transcript("
+
+        # Use vars to maintain subclassing
+        for k, v in vars(self).items():
+            # Truncate sentences
+            if k == "sentences":
+                output += f"{k}=[...] (n={len(v)}), "
+
+            # Add quotes for strings
+            elif type(v) == str:
+                output += f"{k}='{v}', "
+
+            else:
+                output += f"{k}={v}, "
+
+        # Remove last comma and space and close parentheses
+        return output[:-2] + ")"
 
 
 ###############################################################################
