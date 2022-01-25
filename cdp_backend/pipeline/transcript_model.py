@@ -217,6 +217,25 @@ class Transcript:
     sentences: List[Sentence]
     annotations: Optional[TranscriptAnnotations] = None
 
+    def __repr__(self) -> str:
+        output = "Transcript("
+
+        # Use vars to maintain subclassing
+        for k, v in vars(self).items():
+            # Truncate sentences
+            if k == "sentences":
+                output += f"{k}=[...] (n={len(v)}), "
+
+            # Add quotes for strings
+            elif type(v) == str:
+                output += f"{k}='{v}', "
+
+            else:
+                output += f"{k}={v}, "
+
+        # Remove last comma and space and close parentheses
+        return output[:-2] + ")"
+
 
 ###############################################################################
 
