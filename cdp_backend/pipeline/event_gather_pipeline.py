@@ -1004,7 +1004,7 @@ def _process_person_ingestion(
                 )
             except (FileNotFoundError, ClientResponseError, ConnectionError) as e:
                 person_picture_db_model = None
-                log.warning(
+                log.error(
                     f"Person ('{person.name}'), picture URI could not be archived."
                     f"({person.picture_uri}). Error: {e}"
                 )
@@ -1028,7 +1028,7 @@ def _process_person_ingestion(
             InvalidFieldType,
             ConnectionError,
         ):
-            log.warning(
+            log.error(
                 f"Person ({person_db_model.to_dict()}), "
                 f"was missing required information. Generating minimum person details."
             )
@@ -1077,7 +1077,7 @@ def _process_person_ingestion(
 
             except (FileNotFoundError, ClientResponseError, ConnectionError) as e:
                 person_seat_image_db_model = None
-                log.warning(
+                log.error(
                     f"Person ('{person.name}'), seat image URI could not be archived."
                     f"({person.seat.image_uri}). Error: {e}"
                 )
@@ -1246,8 +1246,8 @@ def store_event_processing_results(
             db_model=event_db_model,
             credentials_file=credentials_file,
         )
-    except FieldValidationFailed:
-        log.warning(
+    except (FieldValidationFailed, ConnectionError):
+        log.error(
             f"Agenda and/or minutes docs could not be found. "
             f"Adding event without agenda and minutes URIs. "
             f"({event.agenda_uri} AND/OR {event.minutes_uri} do not exist)"
@@ -1448,7 +1448,7 @@ def store_event_processing_results(
                                 credentials_file=credentials_file,
                             )
                         except (FieldValidationFailed, ConnectionError) as e:
-                            log.warning(
+                            log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
                                 f"could not be archived. Skipping. Error: {e}"
                             )
