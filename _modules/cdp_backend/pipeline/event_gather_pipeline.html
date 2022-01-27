@@ -135,6 +135,7 @@
 <span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
 <span class="kn">from</span> <span class="nn">prefect.tasks.control_flow</span> <span class="kn">import</span> <span class="n">case</span><span class="p">,</span> <span class="n">merge</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="ne">ConnectionError</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">db_constants</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
@@ -1122,9 +1123,9 @@
                     <span class="n">db_model</span><span class="o">=</span><span class="n">person_picture_db_model</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">ClientResponseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">ClientResponseError</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), picture URI could not be archived.&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="si">}</span><span class="s2">). Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
@@ -1142,8 +1143,13 @@
                 <span class="n">db_model</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">):</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="k">except</span> <span class="p">(</span>
+            <span class="n">FieldValidationFailed</span><span class="p">,</span>
+            <span class="n">RequiredField</span><span class="p">,</span>
+            <span class="n">InvalidFieldType</span><span class="p">,</span>
+            <span class="ne">ConnectionError</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Person (</span><span class="si">{</span><span class="n">person_db_model</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">), &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;was missing required information. Generating minimum person details.&quot;</span>
             <span class="p">)</span>
@@ -1190,9 +1196,9 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="kc">None</span>
 
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">ClientResponseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">ClientResponseError</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), seat image URI could not be archived.&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="si">}</span><span class="s2">). Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
@@ -1361,8 +1367,8 @@
             <span class="n">db_model</span><span class="o">=</span><span class="n">event_db_model</span><span class="p">,</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Agenda and/or minutes docs could not be found. &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Adding event without agenda and minutes URIs. &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">agenda_uri</span><span class="si">}</span><span class="s2"> AND/OR </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">minutes_uri</span><span class="si">}</span><span class="s2"> do not exist)&quot;</span>
@@ -1562,10 +1568,10 @@
                                 <span class="n">db_model</span><span class="o">=</span><span class="n">matter_file_db_model</span><span class="p">,</span>
                                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
-                        <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+                        <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;MatterFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;could not be archived. Skipping.&quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;could not be archived. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                             <span class="p">)</span>
 
                     <span class="c1"># Archive as event minutes item file</span>
@@ -1581,10 +1587,10 @@
                             <span class="n">db_model</span><span class="o">=</span><span class="n">event_minutes_item_file_db_model</span><span class="p">,</span>
                             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                         <span class="p">)</span>
-                    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;EventMinutesItemFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;could not be archived.&quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;could not be archived. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
 
             <span class="c1"># Add vote information</span>
