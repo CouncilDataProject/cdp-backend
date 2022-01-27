@@ -14,6 +14,7 @@ from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
+from requests import ConnectionError
 
 from ..database import constants as db_constants
 from ..database import functions as db_functions
@@ -1001,9 +1002,9 @@ def _process_person_ingestion(
                     db_model=person_picture_db_model,
                     credentials_file=credentials_file,
                 )
-            except (FileNotFoundError, ClientResponseError) as e:
+            except (FileNotFoundError, ClientResponseError, ConnectionError) as e:
                 person_picture_db_model = None
-                log.warning(
+                log.error(
                     f"Person ('{person.name}'), picture URI could not be archived."
                     f"({person.picture_uri}). Error: {e}"
                 )
@@ -1021,8 +1022,13 @@ def _process_person_ingestion(
                 db_model=person_db_model,
                 credentials_file=credentials_file,
             )
-        except (FieldValidationFailed, RequiredField, InvalidFieldType):
-            log.warning(
+        except (
+            FieldValidationFailed,
+            RequiredField,
+            InvalidFieldType,
+            ConnectionError,
+        ):
+            log.error(
                 f"Person ({person_db_model.to_dict()}), "
                 f"was missing required information. Generating minimum person details."
             )
@@ -1069,9 +1075,9 @@ def _process_person_ingestion(
                 else:
                     person_seat_image_db_model = None
 
-            except (FileNotFoundError, ClientResponseError) as e:
+            except (FileNotFoundError, ClientResponseError, ConnectionError) as e:
                 person_seat_image_db_model = None
-                log.warning(
+                log.error(
                     f"Person ('{person.name}'), seat image URI could not be archived."
                     f"({person.seat.image_uri}). Error: {e}"
                 )
@@ -1240,8 +1246,8 @@ def store_event_processing_results(
             db_model=event_db_model,
             credentials_file=credentials_file,
         )
-    except FieldValidationFailed:
-        log.warning(
+    except (FieldValidationFailed, ConnectionError):
+        log.error(
             f"Agenda and/or minutes docs could not be found. "
             f"Adding event without agenda and minutes URIs. "
             f"({event.agenda_uri} AND/OR {event.minutes_uri} do not exist)"
@@ -1441,10 +1447,10 @@ def store_event_processing_results(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except FieldValidationFailed:
+                        except (FieldValidationFailed, ConnectionError) as e:
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
-                                f"could not be archived. Skipping."
+                                f"could not be archived. Skipping. Error: {e}"
                             )
 
                     # Archive as event minutes item file
@@ -1460,10 +1466,10 @@ def store_event_processing_results(
                             db_model=event_minutes_item_file_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed:
+                    except (FieldValidationFailed, ConnectionError) as e:
                         log.error(
                             f"EventMinutesItemFile ('{supporting_file.uri}') "
-                            f"could not be archived."
+                            f"could not be archived. Error: {e}"
                         )
 
             # Add vote information
