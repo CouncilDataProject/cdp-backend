@@ -433,6 +433,7 @@ for i in range(6):
             pipeline.SessionProcessingResult(
                 session=session,
                 session_video_hosted_url="fake://doesnt-matter.mp4",
+                session_content_hash="fakehash123",
                 audio_uri="fake://doesnt-matter.wav",
                 transcript=EXAMPLE_TRANSCRIPT,
                 transcript_uri="fake://doesnt-matter-transcript.json",
@@ -461,6 +462,7 @@ for i in range(6):
                 pipeline.SessionProcessingResult(
                     session=EXAMPLE_MINIMAL_EVENT.sessions[0],
                     session_video_hosted_url="fake://doesnt-matter.mp4",
+                    session_content_hash="fakehash123",
                     audio_uri="ex://abc123-audio.wav",
                     transcript=EXAMPLE_TRANSCRIPT,
                     transcript_uri="ex://abc123-transcript.json",
@@ -476,6 +478,7 @@ for i in range(6):
                 pipeline.SessionProcessingResult(
                     session=EXAMPLE_FILLED_EVENT.sessions[0],
                     session_video_hosted_url="fake://doesnt-matter-1.mp4",
+                    session_content_hash="fakehash123",
                     audio_uri="ex://abc123-audio.wav",
                     transcript=EXAMPLE_TRANSCRIPT,
                     transcript_uri="ex://abc123-transcript.json",
@@ -485,6 +488,7 @@ for i in range(6):
                 pipeline.SessionProcessingResult(
                     session=EXAMPLE_FILLED_EVENT.sessions[1],
                     session_video_hosted_url="fake://doesnt-matter-2.mp4",
+                    session_content_hash="fakehash1234",
                     audio_uri="ex://def456-audio.wav",
                     transcript=EXAMPLE_TRANSCRIPT,
                     transcript_uri="ex://def456-transcript.json",

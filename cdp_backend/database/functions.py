@@ -213,6 +213,7 @@ def create_event(
 def create_session(
     session: ingestion_models.Session,
     session_video_hosted_url: str,
+    session_content_hash: str,
     event_ref: db_models.Event,
     credentials_file: Optional[str] = None,
 ) -> db_models.Session:
@@ -228,6 +229,7 @@ def create_session(
     db_session.session_datetime = session.session_datetime
     db_session.video_uri = session_video_hosted_url
     db_session.session_index = session.session_index
+    db_session.session_content_hash = session_content_hash
 
     # Optional fields
     db_session.caption_uri = session.caption_uri
