@@ -468,6 +468,7 @@ class Session(Model):
     event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
     session_datetime = fields.DateTime(required=True)
     session_index = fields.NumberField(required=True)
+    session_content_hash = fields.TextField(required=True)
     video_uri = fields.TextField(required=True, validator=validators.resource_exists)
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -490,6 +491,7 @@ class Session(Model):
         session.video_uri = (
             "https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"
         )
+        session.session_content_hash = "05bd857af7f70bf51b6aac1144046973bf3325c9101a554bc27dc9607dbbd8f5" 
         return session
 
     _PRIMARY_KEYS = ("event_ref", "video_uri")

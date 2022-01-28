@@ -39,6 +39,7 @@ log = logging.getLogger(__name__)
 class SessionProcessingResult(NamedTuple):
     session: Session
     session_video_hosted_url: str
+    session_content_hash: str
     audio_uri: str
     transcript: Transcript
     transcript_uri: str
@@ -204,6 +205,7 @@ def create_event_gather_flow(
                     compile_session_processing_result(  # type: ignore
                         session=session,
                         session_video_hosted_url=session_video_hosted_url,
+                        session_content_hash=session_content_hash,
                         audio_uri=audio_uri,
                         transcript=transcript,
                         transcript_uri=transcript_uri,
@@ -941,6 +943,7 @@ def generate_thumbnails(
 def compile_session_processing_result(
     session: Session,
     session_video_hosted_url: str,
+    session_content_hash: str,
     audio_uri: str,
     transcript: Transcript,
     transcript_uri: str,
@@ -950,6 +953,7 @@ def compile_session_processing_result(
     return SessionProcessingResult(
         session=session,
         session_video_hosted_url=session_video_hosted_url,
+        session_content_hash=session_content_hash,
         audio_uri=audio_uri,
         transcript=transcript,
         transcript_uri=transcript_uri,
@@ -1292,6 +1296,7 @@ def store_event_processing_results(
         session_db_model = db_functions.create_session(
             session=session_result.session,
             session_video_hosted_url=session_result.session_video_hosted_url,
+            session_content_hash=session_result.session_content_hash,
             event_ref=event_db_model,
             credentials_file=credentials_file,
         )
