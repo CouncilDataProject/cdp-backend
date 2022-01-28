@@ -491,7 +491,9 @@ class Session(Model):
         session.video_uri = (
             "https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"
         )
-        session.session_content_hash = "05bd857af7f70bf51b6aac1144046973bf3325c9101a554bc27dc9607dbbd8f5" 
+        session.session_content_hash = (
+            "05bd857af7f70bf51b6aac1144046973bf3325c9101a554bc27dc9607dbbd8f5"
+        )
         return session
 
     _PRIMARY_KEYS = ("event_ref", "video_uri")
