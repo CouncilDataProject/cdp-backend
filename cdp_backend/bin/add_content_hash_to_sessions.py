@@ -48,12 +48,11 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
     # Connect to database
     fireo.connection(from_file=google_creds_path)
 
-
     # Fetch all sessions
     sessions = Session.collection.fetch()
 
-    # Session set
-    unfixed_sessions = set([s.id for s in sessions])
+    # Sessions without a content hash
+    unfixed_sessions = set([s.id for s in sessions if not s.session_content_hash])
     
     # Fetch all transcripts 
     transcripts = Transcript.collection.fetch()
@@ -67,32 +66,38 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
         # Get file db ref 
         _file = transcript.file_ref.get()
 
-        # Extract hash 
-        session_content_hash = _file.name.split('-')[0]
-
-         
-        # Update session
+        # Get session
         session = transcript.session_ref.get()
-        # Need to set event reference since autoload is disabled
-        session.event_ref = session.event_ref.get()
 
+        # If no session_content_hash found 
+        if not session.session_content_hash:
+            # Extract hash  from file
+            session_content_hash = _file.name.split('-')[0]
+             
+            # Need to set event reference since autoload is disabled, 
+            # and FireO throws an error if the model has a ReferenceDocLoader 
+            # on a property during any db write action
+            session.event_ref = session.event_ref.get()
 
-        session.session_content_hash = session_content_hash
+            # Give GCSFilSystem permissions to read GCS resources
+            session.set_validator_kwargs(
+                kwargs={"google_credentials_file": str(google_creds_path)}
+            )
 
-        session.set_validator_kwargs(
-        kwargs={"google_credentials_file": str(google_creds_path)}
-        )
+            # Add content hash to session db model
+            session.session_content_hash = session_content_hash
 
+            # Upsert existing session
+            session.upsert()
 
-        # Upsert existign session
-        session.upsert()
+            log.info("Updated session " + str(session.id) + " with content hash")
 
         # Mark session as fixed
         if session.id in unfixed_sessions:
             unfixed_sessions.remove(session.id)
 
-
-
+    # Log any sessions that still don't have a content hash
+    # Could happen if there are db inconsistencies (like a session is orphaned w/o a transcript)
     if unfixed_sessions:
         log.error(f"The following sessions were not fixed with session content hash: {unfixed_sessions}")
         
