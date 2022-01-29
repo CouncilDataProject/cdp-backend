@@ -9,9 +9,8 @@ from pathlib import Path
 
 import fireo
 
-from cdp_backend.database.models import Session, Transcript
 from cdp_backend.database import models as db_models
-
+from cdp_backend.database.models import Session, Transcript
 
 ###############################################################################
 
@@ -53,29 +52,29 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
 
     # Sessions without a content hash
     unfixed_sessions = set([s.id for s in sessions if not s.session_content_hash])
-    
-    # Fetch all transcripts 
+
+    # Fetch all transcripts
     transcripts = Transcript.collection.fetch()
-    
+
     # Unfortunately firestore doesn't have built in distinct querying
     # Create list where each transcripts is for a unique session
     transcripts_unique_sessions = list({t.session_ref: t for t in transcripts}.values())
 
     # Fetch all sessions
     for transcript in transcripts_unique_sessions:
-        # Get file db ref 
+        # Get file db ref
         _file = transcript.file_ref.get()
 
         # Get session
         session = transcript.session_ref.get()
 
-        # If no session_content_hash found 
+        # If no session_content_hash found
         if not session.session_content_hash:
             # Extract hash  from file
-            session_content_hash = _file.name.split('-')[0]
-             
-            # Need to set event reference since autoload is disabled, 
-            # and FireO throws an error if the model has a ReferenceDocLoader 
+            session_content_hash = _file.name.split("-")[0]
+
+            # Need to set event reference since autoload is disabled,
+            # and FireO throws an error if the model has a ReferenceDocLoader
             # on a property during any db write action
             session.event_ref = session.event_ref.get()
 
@@ -99,8 +98,10 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
     # Log any sessions that still don't have a content hash
     # Could happen if there are db inconsistencies (like a session is orphaned w/o a transcript)
     if unfixed_sessions:
-        log.error(f"The following sessions were not fixed with session content hash: {unfixed_sessions}")
-        
+        log.error(
+            f"The following sessions were not fixed with session content hash: {unfixed_sessions}"
+        )
+
 
 def main() -> None:
     try:
