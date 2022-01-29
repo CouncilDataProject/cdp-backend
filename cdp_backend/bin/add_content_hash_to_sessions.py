@@ -99,7 +99,7 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
     # Could happen if there are db inconsistencies (like a session is orphaned w/o a transcript)
     if unfixed_sessions:
         log.error(
-            f"The following sessions were not fixed with session content hash: {unfixed_sessions}"
+            f"The following sessions were not fixed with a content hash: {unfixed_sessions}"
         )
 
 
