@@ -9,7 +9,6 @@ from pathlib import Path
 
 import fireo
 
-from cdp_backend.database import models as db_models
 from cdp_backend.database.models import Session, Transcript
 
 ###############################################################################
@@ -30,7 +29,8 @@ class Args(argparse.Namespace):
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
             prog="add_content_hash_to_sessions",
-            description="Add content hash to all existing session rows in the database.",
+            description="Add content hash to all existing session rows in "
+            + "the database.",
         )
         p.add_argument(
             "--google_credentials_file",
@@ -96,10 +96,12 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
             unfixed_sessions.remove(session.id)
 
     # Log any sessions that still don't have a content hash
-    # Could happen if there are db inconsistencies (like a session is orphaned w/o a transcript)
+    # Could happen if there are db inconsistencies
+    # (like a session is orphaned w/o a transcript)
     if unfixed_sessions:
         log.error(
-            f"The following sessions were not fixed with a content hash: {unfixed_sessions}"
+            "The following sessions were not fixed with a "
+            + f"content hash: {unfixed_sessions}"
         )
 
 
