@@ -122,25 +122,20 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
         if uri.startswith("https://storage.googleapis"):
             uri = convert_gcs_json_url_to_gsutil_form(uri)
 
-            #print("URI!!!")
-            #print(uri)
             # If uri is not convertible to gsutil form we can't confirm
             if uri == "":
                 return False
 
         if kwargs.get("google_credentials_file"):
-            #print("HERE")
             fs = GCSFileSystem(token=str(kwargs.get("google_credentials_file", "anon")))
             return fs.exists(uri)
 
         # Can't check GCS resources without creds file
         else:
             try:
-                #print("AAAAA")
                 anon_fs = GCSFileSystem(token="anon")
                 return anon_fs.exists(uri)
             except Exception:
-                #print("RIP")
                 return False
 
     # Is HTTP remote resource
