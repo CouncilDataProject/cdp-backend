@@ -89,7 +89,7 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
             # Upsert existing session
             session.upsert()
 
-            log.info("Updated session " + str(session.id) + " with content hash")
+            log.info(f"Updated session {session.id} with content hash")
 
         # Mark session as fixed
         if session.id in unfixed_sessions:
