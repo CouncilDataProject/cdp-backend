@@ -29,8 +29,10 @@ class Args(argparse.Namespace):
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
             prog="add_content_hash_to_sessions",
-            description="Add content hash to all existing session rows in "
-            + "the database.",
+            description=(
+                "Add content hash to all existing session rows "  # type: ignore
+                "in the database.",
+            ),
         )
         p.add_argument(
             "--google_credentials_file",
@@ -101,7 +103,7 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
     if unfixed_sessions:
         log.error(
             "The following sessions were not fixed with a "
-            + f"content hash: {unfixed_sessions}"
+            f"content hash: {unfixed_sessions}"
         )
 
 
