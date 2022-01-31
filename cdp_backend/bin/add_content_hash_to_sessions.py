@@ -30,8 +30,7 @@ class Args(argparse.Namespace):
         p = argparse.ArgumentParser(
             prog="add_content_hash_to_sessions",
             description=(
-                "Add content hash to all existing session rows "  # type: ignore
-                "in the database.",
+                "Add content hash to all existing session rows in the database."
             ),
         )
         p.add_argument(
