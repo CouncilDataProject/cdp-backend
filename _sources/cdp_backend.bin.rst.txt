@@ -4,6 +4,14 @@ cdp\_backend.bin package
 Submodules
 ----------
 
+cdp\_backend.bin.add\_content\_hash\_to\_sessions module
+--------------------------------------------------------
+
+.. automodule:: cdp_backend.bin.add_content_hash_to_sessions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.clean\_cdp\_database module
 --------------------------------------------
 

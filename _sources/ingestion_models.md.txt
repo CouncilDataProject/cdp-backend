@@ -31,7 +31,7 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2022, 1, 28, 3, 3, 2, 992313),
+ 'sessions': [{'session_datetime': datetime.datetime(2022, 2, 1, 1, 36, 14, 36082),
                'video_uri': 'https://video.seattle.gov/media/council/brief_072219_2011957V.mp4',
                'session_index': 0}]}
 ```
@@ -43,10 +43,10 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2022, 1, 28, 3, 3, 2, 992328),
+ 'sessions': [{'session_datetime': datetime.datetime(2022, 2, 1, 1, 36, 14, 36093),
                'video_uri': 'https://video.seattle.gov/media/council/council_101220_2022077V.mp4',
                'session_index': 0},
-              {'session_datetime': datetime.datetime(2022, 1, 28, 3, 3, 2, 992330),
+              {'session_datetime': datetime.datetime(2022, 2, 1, 1, 36, 14, 36094),
                'video_uri': 'https://video.seattle.gov/media/council/council_113020_2022091V.mp4',
                'session_index': 1,
                'caption_uri': 'https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt'}],
