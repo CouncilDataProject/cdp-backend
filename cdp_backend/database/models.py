@@ -189,9 +189,7 @@ class Role(Model):
 
     id = fields.IDField()
     title = fields.TextField(
-        validator=validators.create_constant_value_validator(
-            RoleTitle, True
-        )
+        validator=validators.create_constant_value_validator(RoleTitle, True)
     )
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     body_ref = fields.ReferenceField(Body, auto_load=False)
