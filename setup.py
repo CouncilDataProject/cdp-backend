@@ -26,10 +26,14 @@ pipeline_requirements = [
     "imageio~=2.9",
     "imageio-ffmpeg~=0.4.4",
     "nltk~=3.6",
+    "numpy~=1.22",
     "pandas~=1.2",
     "prefect~=0.14.0",
+    "pydub~=0.25.1",
     "rapidfuzz~=1.4",
     "spacy~=3.0",
+    "torch~=1.10",
+    "transformers~=4.16",
     "truecase~=0.0.12",
     "webvtt-py~=0.4.6",
 ]
@@ -69,6 +73,7 @@ dev_requirements = [
     "Sphinx>=3.4.3",
     "sphinx_rtd_theme>=0.5.1",
     "twine>=3.1.1",
+    "tqdm>=4.62",
     "wheel>=0.34.2",
 ]
 
@@ -130,7 +135,10 @@ setup(
             "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
-            "add_content_hash_to_sessions=cdp_backend.bin.add_content_hash_to_sessions:main",
+            (
+                "add_content_hash_to_sessions="
+                "cdp_backend.bin.add_content_hash_to_sessions:main"
+            ),
         ],
     },
     install_requires=requirements,
