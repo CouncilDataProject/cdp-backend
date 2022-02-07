@@ -42,7 +42,7 @@ class MatterStatusDecision:
 
 class RoleTitle:
     COUNCILMEMBER = "Councilmember"
-    PRESIDENT = "President"
+    COUNCILPRESIDENT = "Council President"
     CHAIR = "Chair"
     VICE_CHAIR = "Vice Chair"
     ALTERNATE = "Alternate"

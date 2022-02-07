@@ -204,7 +204,7 @@ class Role(Model):
     @classmethod
     def Example(cls) -> Model:
         role = cls()
-        role.title = RoleTitle.PRESIDENT
+        role.title = RoleTitle.COUNCILPRESIDENT
         role.person_ref = Person.Example()
         role.body_ref = Body.Example()
         role.seat_ref = Seat.Example()
