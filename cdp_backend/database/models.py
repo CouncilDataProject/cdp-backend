@@ -15,6 +15,7 @@ from .constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
     Order,
+    RoleTitle,
     VoteDecision,
 )
 from .types import IndexedField, IndexedFieldSet
@@ -187,7 +188,10 @@ class Role(Model):
     """
 
     id = fields.IDField()
-    title = fields.TextField(required=True)
+    title = fields.TextField(
+        required=True,
+        validator=validators.create_constant_value_validator(RoleTitle, True),
+    )
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     body_ref = fields.ReferenceField(Body, auto_load=False)
     seat_ref = fields.ReferenceField(Seat, required=True, auto_load=False)
@@ -201,7 +205,7 @@ class Role(Model):
     @classmethod
     def Example(cls) -> Model:
         role = cls()
-        role.title = "Council President"
+        role.title = RoleTitle.COUNCILPRESIDENT
         role.person_ref = Person.Example()
         role.body_ref = Body.Example()
         role.seat_ref = Seat.Example()

@@ -10,6 +10,7 @@ from cdp_backend.database import models, validators
 from cdp_backend.database.constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
+    RoleTitle,
     VoteDecision,
 )
 
@@ -177,4 +178,18 @@ def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -
         MatterStatusDecision, True
     )
     actual_result = validator_func(decision)
+    assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(
+    "title, expected_result",
+    [
+        (None, False),
+        ("Councilmember", True),
+        ("INVALID", False),
+    ],
+)
+def test_role_title_is_valid(title: str, expected_result: bool) -> None:
+    validator_func = validators.create_constant_value_validator(RoleTitle, True)
+    actual_result = validator_func(title)
     assert actual_result == expected_result
