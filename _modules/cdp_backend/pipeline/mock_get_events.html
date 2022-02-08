@@ -130,6 +130,7 @@
 <span class="kn">from</span> <span class="nn">..database.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EventMinutesItemDecision</span><span class="p">,</span>
     <span class="n">MatterStatusDecision</span><span class="p">,</span>
+    <span class="n">RoleTitle</span><span class="p">,</span>
     <span class="n">VoteDecision</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..utils.constants_utils</span> <span class="kn">import</span> <span class="n">get_all_class_attr_values</span>
@@ -197,14 +198,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Create a list of roles</span>
     <span class="n">roles</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Councilmember&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">)),</span>
-        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)),</span>
+        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILMEMBER</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">)),</span>
+        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">CHAIR</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)),</span>
     <span class="p">]</span>
 
     <span class="c1"># Add Council President role for seat position 1</span>
     <span class="k">if</span> <span class="n">seat_num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">roles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Council President&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">))</span>
+            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILPRESIDENT</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">))</span>
         <span class="p">)</span>
 
     <span class="c1"># Get the seat electoral type num</span>
