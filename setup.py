@@ -21,7 +21,7 @@ infrastructure_requirements = [
 pipeline_requirements = [
     "dask[distributed]>=2021.7.0",
     "ffmpeg-python~=0.2.0",
-    "google-cloud-speech~=1.3",
+    "google-cloud-speech~=2.11.0",
     "graphviz~=0.16",
     "imageio~=2.9",
     "imageio-ffmpeg~=0.4.4",
@@ -130,6 +130,7 @@ setup(
             "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
+            "add_content_hash_to_sessions=cdp_backend.bin.add_content_hash_to_sessions:main",
         ],
     },
     install_requires=requirements,
@@ -148,6 +149,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.0.dev22",
+    version="3.0.3",
     zip_safe=False,
 )

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import annotations
-
 import os
+import random
 import sys
 from pathlib import Path
 from typing import Optional
@@ -20,7 +19,11 @@ from cdp_backend.utils.file_utils import (
     resource_copy,
 )
 
-from ..conftest import EXAMPLE_VIDEO_FILENAME, EXAMPLE_VIDEO_HD_FILENAME
+from ..conftest import (
+    EXAMPLE_MKV_VIDEO_FILENAME,
+    EXAMPLE_VIDEO_FILENAME,
+    EXAMPLE_VIDEO_HD_FILENAME,
+)
 
 #############################################################################
 
@@ -164,7 +167,7 @@ def test_static_thumbnail_generator(
     "video_url, session_content_hash, num_frames, expected",
     [
         (EXAMPLE_VIDEO_FILENAME, "example2", 15, "example2-hover-thumbnail.gif"),
-        (EXAMPLE_VIDEO_HD_FILENAME, "example3", 9, "example3-hover-thumbnail.gif"),
+        (EXAMPLE_VIDEO_HD_FILENAME, "example3", 2, "example3-hover-thumbnail.gif"),
         pytest.param(
             "fake.mp4",
             "example",
@@ -190,6 +193,9 @@ def test_hover_thumbnail_generator(
 ) -> None:
     video_url = resources_dir / video_url
 
+    # Set random seed to get consistent result
+    random.seed(42)
+
     result = file_utils.get_hover_thumbnail(
         str(video_url), session_content_hash, num_frames
     )
@@ -203,3 +209,18 @@ def test_hover_thumbnail_generator(
     assert image.shape[1] <= MAX_THUMBNAIL_WIDTH
 
     os.remove(result)
+
+
+@pytest.mark.parametrize(
+    "video_uri, expected",
+    [
+        (EXAMPLE_MKV_VIDEO_FILENAME, EXAMPLE_VIDEO_FILENAME),
+    ],
+)
+def test_convert_video_to_mp4(
+    resources_dir: Path,
+    video_uri: str,
+    expected: str,
+) -> None:
+    filepath = str(resources_dir / video_uri)
+    assert file_utils.convert_video_to_mp4(filepath) == str(resources_dir / expected)

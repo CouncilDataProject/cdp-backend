@@ -3,6 +3,7 @@
 
 import logging
 import math
+import random
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -60,7 +61,9 @@ def get_media_type(uri: str) -> Optional[str]:
 
 
 def resource_copy(
-    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    uri: str,
+    dst: Optional[Union[str, Path]] = None,
+    overwrite: bool = False,
 ) -> str:
     """
     Copy a resource (local or remote) to a local destination on the machine.
@@ -88,6 +91,13 @@ def resource_copy(
     dst = Path(dst).resolve()
     if dst.is_dir():
         dst = dst / uri.split("/")[-1]
+
+    # Ensure filename is less than 255 chars
+    # Otherwise this can raise an OSError for too long of a filename
+    if len(dst.name) > 255:
+        dst = Path(str(dst)[:255])
+
+    # Ensure dest isn't a file
     if dst.is_file() and not overwrite:
         raise FileExistsError(dst)
 
@@ -273,26 +283,32 @@ def get_hover_thumbnail(
     if reader.get_length() > 1:
         gif_path = f"{session_content_hash}-hover-thumbnail.gif"
 
-    count = 0
-    for i, image in enumerate(reader):
-        count += 1
-    step_size = math.floor(count / num_frames)
-
-    height = image.shape[0]
-    width = image.shape[1]
+    # Get first frame
+    sample = reader.get_data(0)
+    height = sample.shape[0]
+    width = sample.shape[1]
     final_ratio = find_proper_resize_ratio(height, width)
 
     with imageio.get_writer(gif_path, mode="I", fps=(num_frames / duration)) as writer:
-        for i in range(0, num_frames):
-            if final_ratio < 1:
-                image = Image.fromarray(reader.get_data(i * step_size)).resize(
-                    (math.floor(width * final_ratio), math.floor(height * final_ratio))
-                )
-            else:
-                image = Image.fromarray(reader.get_data(i * step_size))
+        selected_frames = 0
+        for frame in reader:
+            # 1% chance to use the frame
+            if random.random() > 0.99:
+                image = Image.fromarray(frame)
+                if final_ratio < 1:
+                    image = image.resize(
+                        (
+                            math.floor(width * final_ratio),
+                            math.floor(height * final_ratio),
+                        )
+                    )
 
-            final_image = np.asarray(image).astype(np.uint8)
-            writer.append_data(final_image)
+                final_image = np.asarray(image).astype(np.uint8)
+                writer.append_data(final_image)
+                selected_frames += 1
+
+            if selected_frames >= num_frames:
+                break
 
     return gif_path
 
@@ -359,3 +375,46 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+def convert_video_to_mp4(video_filepath: str) -> str:
+    """
+    Converts a video to an equivalent MP4 file.
+
+    Parameters
+    ----------
+    video_filepath: str
+        The filepath of the video to convert.
+
+    Returns
+    -------
+    mp4_filepath: str
+        The filepath of the converted MP4 video.
+    """
+    import ffmpeg
+
+    mp4_filepath = str(Path(video_filepath).with_suffix(".mp4"))
+    ffmpeg.input(video_filepath).output(mp4_filepath).overwrite_output().run()
+    log.info("Finished converting {} to mp4".format(video_filepath))
+
+    return mp4_filepath
+
+
+def generate_file_storage_name(file_uri: str, suffix: str) -> str:
+    """
+    Generate a filename using the hash of the file contents and some provided suffix.
+
+    Parameters
+    ----------
+    file_uri: str
+        The URI to the file to hash.
+    suffix: str
+        The suffix to append to the hash as a part of the filename.
+
+    Returns
+    -------
+    dst: str
+        The name of the file as it should be on Google Cloud Storage.
+    """
+    hash = hash_file_contents(file_uri)
+    return f"{hash}-{suffix}"

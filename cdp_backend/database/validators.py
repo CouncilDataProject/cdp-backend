@@ -8,7 +8,7 @@ from typing import Callable, List, Optional, Type
 
 import requests
 from fireo.models import Model
-from fsspec.implementations.local import LocalFileSystem
+from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 
 from ..utils.constants_utils import get_all_class_attr_values
@@ -118,34 +118,42 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
         return True
 
     if uri.startswith("gs://") or uri.startswith("https://storage.googleapis"):
+        # Convert to gsutil form if necessary
+        if uri.startswith("https://storage.googleapis"):
+            uri = convert_gcs_json_url_to_gsutil_form(uri)
+
+            # If uri is not convertible to gsutil form we can't confirm
+            if uri == "":
+                return False
+
         if kwargs.get("google_credentials_file"):
-            fs = GCSFileSystem(token=str(kwargs.get("google_credentials_file")))
-
-            # Convert to gsutil form if necessary
-            if uri.startswith("https://storage.googleapis"):
-                uri = convert_gcs_json_url_to_gsutil_form(uri)
-
-                # If uri is not convertible to gsutil form we can't confirm
-                if uri == "":
-                    return True
-
+            fs = GCSFileSystem(token=str(kwargs.get("google_credentials_file", "anon")))
             return fs.exists(uri)
 
         # Can't check GCS resources without creds file
         else:
-            return True
+            try:
+                anon_fs = GCSFileSystem(token="anon")
+                return anon_fs.exists(uri)
+            except Exception:
+                return False
 
     # Is HTTP remote resource
     elif uri.startswith("http"):
-        # Use HEAD request to check if remote resource exists
-        r = requests.head(uri)
+        try:
+            # Use HEAD request to check if remote resource exists
+            r = requests.head(uri)
 
-        return r.status_code == requests.codes.ok
+            return r.status_code == requests.codes.ok
+        except requests.exceptions.SSLError:
+            return False
 
-    # Check local filesystem
-    else:
-        fs = LocalFileSystem()
-        return fs.exists(uri)
+    # Get any filesystem and try
+    try:
+        fs, path = url_to_fs(uri)
+        return fs.exists(path)
+    except Exception:
+        return False
 
 
 def create_constant_value_validator(

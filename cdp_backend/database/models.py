@@ -15,6 +15,7 @@ from .constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
     Order,
+    RoleTitle,
     VoteDecision,
 )
 from .types import IndexedField, IndexedFieldSet
@@ -187,7 +188,10 @@ class Role(Model):
     """
 
     id = fields.IDField()
-    title = fields.TextField(required=True)
+    title = fields.TextField(
+        required=True,
+        validator=validators.create_constant_value_validator(RoleTitle, True),
+    )
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     body_ref = fields.ReferenceField(Body, auto_load=False)
     seat_ref = fields.ReferenceField(Seat, required=True, auto_load=False)
@@ -201,7 +205,7 @@ class Role(Model):
     @classmethod
     def Example(cls) -> Model:
         role = cls()
-        role.title = "Council President"
+        role.title = RoleTitle.COUNCILPRESIDENT
         role.person_ref = Person.Example()
         role.body_ref = Body.Example()
         role.seat_ref = Seat.Example()
@@ -468,6 +472,7 @@ class Session(Model):
     event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
     session_datetime = fields.DateTime(required=True)
     session_index = fields.NumberField(required=True)
+    session_content_hash = fields.TextField(required=True)
     video_uri = fields.TextField(required=True, validator=validators.resource_exists)
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
@@ -489,6 +494,9 @@ class Session(Model):
         session.session_index = 0
         session.video_uri = (
             "https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"
+        )
+        session.session_content_hash = (
+            "05bd857af7f70bf51b6aac1144046973bf3325c9101a554bc27dc9607dbbd8f5"
         )
         return session
 

@@ -102,12 +102,15 @@ def main() -> None:
             log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
 
             # Use dask cluster
-            flow.run(
+            state = flow.run(
                 executor=executors.DaskExecutor(address=distributed_executor_address),
             )
 
         else:
-            flow.run()
+            state = flow.run()
+
+        if state.is_failed():
+            raise ValueError("Flow run failed.")
 
     except Exception as e:
         log.error("=============================================")

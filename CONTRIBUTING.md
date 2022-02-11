@@ -65,7 +65,7 @@ Make sure all your changes are committed.
 Then run:
 
 ```bash
-$ bump2version dev_release # possible: major / minor / patch / dev_release
+$ bump2version patch # possible: major / minor / patch
 $ git push
 $ git push --tags
 ```

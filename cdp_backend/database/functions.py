@@ -43,22 +43,30 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
     for pk in db_model._PRIMARY_KEYS:
         field = getattr(db_model, pk)
 
+        # Load the document for reference fields and add id to hasher
+        if isinstance(field, ReferenceDocLoader):
+            hasher.update(pickle.dumps(field.get().id, protocol=4))
+
         # Handle reference fields by using their doc path
-        if isinstance(field, Model):
+        elif isinstance(field, Model):
             # Ensure that the underlying model has an id
             # In place update to db_model for this field
             setattr(db_model, pk, generate_and_attach_doc_hash_as_id(field))
 
+            # Update variable after setattr
+            field = getattr(db_model, pk)
+
             # Now attach the generated hash document path
             hasher.update(pickle.dumps(field.id, protocol=4))
 
+        # If datetime, hash with epoch millis to avoid timezone issues
+        elif isinstance(field, datetime):
+            field = field.timestamp()
+            hasher.update(pickle.dumps(field, protocol=4))
+
         # Otherwise just simply add the primary key value
         else:
-            # Load the document for reference fields and add id to hasher
-            if isinstance(field, ReferenceDocLoader):
-                hasher.update(pickle.dumps(field.get().id, protocol=4))
-            else:
-                hasher.update(pickle.dumps(field, protocol=4))
+            hasher.update(pickle.dumps(field, protocol=4))
 
     # Set the id to the first twelve characters of hexdigest
     db_model.id = hasher.hexdigest()[:12]
@@ -204,6 +212,8 @@ def create_event(
 
 def create_session(
     session: ingestion_models.Session,
+    session_video_hosted_url: str,
+    session_content_hash: str,
     event_ref: db_models.Event,
     credentials_file: Optional[str] = None,
 ) -> db_models.Session:
@@ -217,8 +227,9 @@ def create_session(
     # Required fields
     db_session.event_ref = event_ref
     db_session.session_datetime = session.session_datetime
-    db_session.video_uri = session.video_uri
+    db_session.video_uri = session_video_hosted_url
     db_session.session_index = session.session_index
+    db_session.session_content_hash = session_content_hash
 
     # Optional fields
     db_session.caption_uri = session.caption_uri
@@ -357,8 +368,14 @@ def create_person(
             kwargs={"google_credentials_file": credentials_file}
         )
 
+    if person.router_string is None:
+        db_person.router_string = db_models.Person.generate_router_string(
+            _strip_field(person.name)  # type: ignore
+        )
+    else:
+        db_person.router_string = _strip_field(person.router_string)
+
     # Optional
-    db_person.router_string = _strip_field(person.router_string)
     db_person.email = _strip_field(person.email)
     db_person.phone = _strip_field(person.phone)
     db_person.website = _strip_field(person.website)

@@ -10,6 +10,7 @@ from cdp_backend.database import models, validators
 from cdp_backend.database.constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
+    RoleTitle,
     VoteDecision,
 )
 
@@ -94,17 +95,22 @@ def test_local_resource_exists(
         ("gs://bucket/filename.txt", True, True, validator_kwargs),
         (
             "https://storage.googleapis.com/download/storage/v1/b/"
-            + "bucket.appspot.com/o/wombo_combo.mp4?alt=media",
+            "bucket.appspot.com/o/wombo_combo.mp4?alt=media",
             True,
             True,
             validator_kwargs,
         ),
         ("gs://bucket/filename.txt", False, False, validator_kwargs),
         # Unconvertible JSON url case
+        # This test was updated 2021-11-30
+        # "Breaking change" in that we can now test for resource access with
+        # anonymous credentials
+        # Whatever resource is handed to us we want to check for existence.
+        # If the resource isn't reachable then from our POV, it doesn't exist.
         (
             "https://storage.googleapis.com/download/storage/v1/xxx/"
-            + "bucket.appspot.com",
-            True,
+            "bucket.appspot.com",
+            False,
             None,
             None,
         ),
@@ -172,4 +178,18 @@ def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -
         MatterStatusDecision, True
     )
     actual_result = validator_func(decision)
+    assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(
+    "title, expected_result",
+    [
+        (None, False),
+        ("Councilmember", True),
+        ("INVALID", False),
+    ],
+)
+def test_role_title_is_valid(title: str, expected_result: bool) -> None:
+    validator_func = validators.create_constant_value_validator(RoleTitle, True)
+    actual_result = validator_func(title)
     assert actual_result == expected_result
