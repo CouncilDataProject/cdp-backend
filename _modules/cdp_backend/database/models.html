@@ -311,7 +311,7 @@
     <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IDField</span><span class="p">()</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">RoleTitle</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">RoleTitle</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">body_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Body</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -686,9 +686,7 @@
     <span class="p">)</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">NumberField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
-        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span>
-            <span class="n">EventMinutesItemDecision</span><span class="p">,</span> <span class="kc">False</span>
-        <span class="p">)</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">EventMinutesItemDecision</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
@@ -740,9 +738,7 @@
     <span class="n">event_minutes_item_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">EventMinutesItem</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span>
-            <span class="n">MatterStatusDecision</span><span class="p">,</span> <span class="kc">True</span>
-        <span class="p">),</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">MatterStatusDecision</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">update_datetime</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
@@ -834,7 +830,7 @@
     <span class="n">person_ref</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ReferenceField</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">decision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">VoteDecision</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">validators</span><span class="o">.</span><span class="n">create_constant_value_validator</span><span class="p">(</span><span class="n">VoteDecision</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">in_majority</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
     <span class="n">external_source_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
