@@ -156,9 +156,7 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
         return False
 
 
-def create_constant_value_validator(
-    constant_cls: Type, is_required: bool
-) -> Callable[[str], bool]:
+def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]:
     """
     Create a validator func that validates a value is one of the valid values.
 
@@ -166,8 +164,6 @@ def create_constant_value_validator(
     ----------
     constant_cls: Type
         The constant class that contains the valid values.
-    is_required: bool
-        Whether the value is required.
 
     Returns
     -------
@@ -189,8 +185,6 @@ def create_constant_value_validator(
         status: bool
             The validation status.
         """
-        if value is None:
-            return not is_required
         return value in get_all_class_attr_values(constant_cls)
 
     return is_valid
