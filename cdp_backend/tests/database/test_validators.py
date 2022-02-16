@@ -136,12 +136,13 @@ def test_remote_resource_exists(
 @pytest.mark.parametrize(
     "decision, expected_result",
     [
+        (None, False),
         ("Approve", True),
         ("INVALID", False),
     ],
 )
 def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
-    validator_func = validators.create_constant_value_validator(VoteDecision)
+    validator_func = validators.create_constant_value_validator(VoteDecision, True)
     actual_result = validator_func(decision)
     assert actual_result == expected_result
 
@@ -149,6 +150,7 @@ def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
 @pytest.mark.parametrize(
     "decision, expected_result",
     [
+        (None, True),
         ("Passed", True),
         ("INVALID", False),
     ],
@@ -157,7 +159,7 @@ def test_event_minutes_item_decision_is_valid(
     decision: str, expected_result: bool
 ) -> None:
     validator_func = validators.create_constant_value_validator(
-        EventMinutesItemDecision
+        EventMinutesItemDecision, False
     )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
@@ -166,12 +168,15 @@ def test_event_minutes_item_decision_is_valid(
 @pytest.mark.parametrize(
     "decision, expected_result",
     [
+        (None, False),
         ("Adopted", True),
         ("INVALID", False),
     ],
 )
 def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -> None:
-    validator_func = validators.create_constant_value_validator(MatterStatusDecision)
+    validator_func = validators.create_constant_value_validator(
+        MatterStatusDecision, True
+    )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
 
@@ -179,11 +184,12 @@ def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -
 @pytest.mark.parametrize(
     "title, expected_result",
     [
+        (None, False),
         ("Councilmember", True),
         ("INVALID", False),
     ],
 )
 def test_role_title_is_valid(title: str, expected_result: bool) -> None:
-    validator_func = validators.create_constant_value_validator(RoleTitle)
+    validator_func = validators.create_constant_value_validator(RoleTitle, True)
     actual_result = validator_func(title)
     assert actual_result == expected_result
