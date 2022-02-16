@@ -142,7 +142,10 @@ def test_remote_resource_exists(
     ],
 )
 def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
-    validator_func = validators.create_constant_value_validator(VoteDecision, True)
+    validator_func = validators.create_constant_value_validator(
+        VoteDecision,
+        allow_none=False,
+    )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
 
@@ -159,7 +162,8 @@ def test_event_minutes_item_decision_is_valid(
     decision: str, expected_result: bool
 ) -> None:
     validator_func = validators.create_constant_value_validator(
-        EventMinutesItemDecision, False
+        EventMinutesItemDecision,
+        allow_none=True,
     )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
@@ -175,7 +179,8 @@ def test_event_minutes_item_decision_is_valid(
 )
 def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -> None:
     validator_func = validators.create_constant_value_validator(
-        MatterStatusDecision, True
+        MatterStatusDecision,
+        allow_none=False,
     )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
@@ -190,6 +195,9 @@ def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -
     ],
 )
 def test_role_title_is_valid(title: str, expected_result: bool) -> None:
-    validator_func = validators.create_constant_value_validator(RoleTitle, True)
+    validator_func = validators.create_constant_value_validator(
+        RoleTitle,
+        allow_none=False,
+    )
     actual_result = validator_func(title)
     assert actual_result == expected_result

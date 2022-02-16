@@ -190,7 +190,10 @@ class Role(Model):
     id = fields.IDField()
     title = fields.TextField(
         required=True,
-        validator=validators.create_constant_value_validator(RoleTitle, True),
+        validator=validators.create_constant_value_validator(
+            RoleTitle,
+            allow_none=False,
+        ),
     )
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     body_ref = fields.ReferenceField(Body, auto_load=False)
@@ -566,7 +569,8 @@ class EventMinutesItem(Model):
     index = fields.NumberField(required=True)
     decision = fields.TextField(
         validator=validators.create_constant_value_validator(
-            EventMinutesItemDecision, False
+            EventMinutesItemDecision,
+            allow_none=True,
         )
     )
     external_source_id = fields.TextField()
@@ -620,7 +624,8 @@ class MatterStatus(Model):
     status = fields.TextField(
         required=True,
         validator=validators.create_constant_value_validator(
-            MatterStatusDecision, True
+            MatterStatusDecision,
+            allow_none=False,
         ),
     )
     update_datetime = fields.DateTime(required=True)
@@ -713,7 +718,10 @@ class Vote(Model):
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     decision = fields.TextField(
         required=True,
-        validator=validators.create_constant_value_validator(VoteDecision, True),
+        validator=validators.create_constant_value_validator(
+            VoteDecision,
+            allow_none=False,
+        ),
     )
     in_majority = fields.BooleanField()
     external_source_id = fields.TextField()
