@@ -156,9 +156,7 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
         return False
 
 
-def create_constant_value_validator(
-    constant_cls: Type, allow_none: bool
-) -> Callable[[str], bool]:
+def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]:
     """
     Create a validator func that validates a value is one of the valid values.
 
@@ -166,8 +164,6 @@ def create_constant_value_validator(
     ----------
     constant_cls: Type
         The constant class that contains the valid values.
-    allow_none: bool
-        Whether to allow `None` as a valid value for this field.
 
     Returns
     -------
@@ -176,8 +172,10 @@ def create_constant_value_validator(
 
     Notes
     -----
-    If the field the created validation function is attached to is optional,
-    (i.e. required=True, is not set) `allow_none` should be set to True.
+    Will always allow `None` as a valid option.
+    To remove `None` as a viable input, set the database model field `required=True`.
+
+    See: https://github.com/CouncilDataProject/cdp-backend/pull/164
     """
 
     def is_valid(value: str) -> bool:
@@ -194,10 +192,6 @@ def create_constant_value_validator(
         status: bool
             The validation status.
         """
-        allowed_attrs = get_all_class_attr_values(constant_cls)
-        if allow_none:
-            allowed_attrs.append(None)
-
-        return value in allowed_attrs
+        return value is None or value in get_all_class_attr_values(constant_cls)
 
     return is_valid
