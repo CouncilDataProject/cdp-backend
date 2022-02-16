@@ -1421,7 +1421,7 @@ def store_event_processing_results(
                             db_model=matter_status_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed:
+                    except (FieldValidationFailed, RequiredField):
                         allowed_matter_decisions = (
                             constants_utils.get_all_class_attr_values(
                                 db_constants.MatterStatusDecision

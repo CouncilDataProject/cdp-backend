@@ -130,7 +130,10 @@ setup(
             "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
-            "add_content_hash_to_sessions=cdp_backend.bin.add_content_hash_to_sessions:main",
+            (
+                "add_content_hash_to_sessions="
+                "cdp_backend.bin.add_content_hash_to_sessions:main"
+            ),
         ],
     },
     install_requires=requirements,

@@ -136,6 +136,7 @@ def test_remote_resource_exists(
 @pytest.mark.parametrize(
     "decision, expected_result",
     [
+        (None, True),  # None always allowed in validator, rejected by model
         ("Approve", True),
         ("INVALID", False),
     ],
@@ -149,6 +150,7 @@ def test_vote_decision_is_valid(decision: str, expected_result: bool) -> None:
 @pytest.mark.parametrize(
     "decision, expected_result",
     [
+        (None, True),  # None always allowed in validator, allowed by model
         ("Passed", True),
         ("INVALID", False),
     ],
@@ -157,7 +159,7 @@ def test_event_minutes_item_decision_is_valid(
     decision: str, expected_result: bool
 ) -> None:
     validator_func = validators.create_constant_value_validator(
-        EventMinutesItemDecision
+        EventMinutesItemDecision,
     )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
@@ -166,12 +168,15 @@ def test_event_minutes_item_decision_is_valid(
 @pytest.mark.parametrize(
     "decision, expected_result",
     [
+        (None, True),  # None always allowed in validator, rejected by model
         ("Adopted", True),
         ("INVALID", False),
     ],
 )
 def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -> None:
-    validator_func = validators.create_constant_value_validator(MatterStatusDecision)
+    validator_func = validators.create_constant_value_validator(
+        MatterStatusDecision,
+    )
     actual_result = validator_func(decision)
     assert actual_result == expected_result
 
@@ -179,6 +184,7 @@ def test_matter_status_decision_is_valid(decision: str, expected_result: bool) -
 @pytest.mark.parametrize(
     "title, expected_result",
     [
+        (None, True),  # None always allowed in validator, rejected by model
         ("Councilmember", True),
         ("INVALID", False),
     ],

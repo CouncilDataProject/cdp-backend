@@ -169,6 +169,13 @@ def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]
     -------
     validator_func: Callable[[str], bool]
         The validator func.
+
+    Notes
+    -----
+    Will always allow `None` as a valid option.
+    To remove `None` as a viable input, set the database model field `required=True`.
+
+    See: https://github.com/CouncilDataProject/cdp-backend/pull/164
     """
 
     def is_valid(value: str) -> bool:
@@ -185,6 +192,6 @@ def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]
         status: bool
             The validation status.
         """
-        return value in get_all_class_attr_values(constant_cls)
+        return value is None or value in get_all_class_attr_values(constant_cls)
 
     return is_valid
