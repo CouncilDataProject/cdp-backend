@@ -1667,6 +1667,10 @@ in the database collection.</p></li>
 <dd class="field-odd"><p>Callable[[str], bool]</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Will always allow <cite>None</cite> as a valid option.
+To remove <cite>None</cite> as a viable input, set the database model field <cite>required=True</cite>.</p>
+<p>See: <a class="reference external" href="https://github.com/CouncilDataProject/cdp-backend/pull/164">https://github.com/CouncilDataProject/cdp-backend/pull/164</a></p>
 </dd></dl>
 
 <dl class="py function">

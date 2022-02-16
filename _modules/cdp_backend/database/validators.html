@@ -290,6 +290,13 @@
 <span class="sd">    -------</span>
 <span class="sd">    validator_func: Callable[[str], bool]</span>
 <span class="sd">        The validator func.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Will always allow `None` as a valid option.</span>
+<span class="sd">    To remove `None` as a viable input, set the database model field `required=True`.</span>
+
+<span class="sd">    See: https://github.com/CouncilDataProject/cdp-backend/pull/164</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -306,7 +313,7 @@
 <span class="sd">        status: bool</span>
 <span class="sd">            The validation status.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">constant_cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">constant_cls</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">is_valid</span></div>
 </pre></div>

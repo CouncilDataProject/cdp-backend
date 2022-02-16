@@ -1542,7 +1542,7 @@
                             <span class="n">db_model</span><span class="o">=</span><span class="n">matter_status_db_model</span><span class="p">,</span>
                             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                         <span class="p">)</span>
-                    <span class="k">except</span> <span class="n">FieldValidationFailed</span><span class="p">:</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">RequiredField</span><span class="p">):</span>
                         <span class="n">allowed_matter_decisions</span> <span class="o">=</span> <span class="p">(</span>
                             <span class="n">constants_utils</span><span class="o">.</span><span class="n">get_all_class_attr_values</span><span class="p">(</span>
                                 <span class="n">db_constants</span><span class="o">.</span><span class="n">MatterStatusDecision</span>
