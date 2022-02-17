@@ -12,7 +12,38 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-def clean_text(text: str, clean_stop_words: bool = False) -> str:
+def remove_emojis(text: str) -> str:
+    """
+    Minor changes made from this answer on stackoverflow:
+    https://stackoverflow.com/a/58356570
+    """
+    emoj_patterns = re.compile(
+        "["
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # symbols & pictographs
+        "\U0001F680-\U0001F6FF"  # transport & map symbols
+        "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        "\U00002702-\U000027B0"
+        "\U000024C2-\U0001F251"
+        "\U0001f926-\U0001f937"
+        "\u2600-\u2B55"
+        "\u200d"
+        "\u23cf"
+        "\u23e9"
+        "\u231a"
+        "\ufe0f"  # dingbats
+        "\u3030"
+        "]+",
+        re.UNICODE,
+    )
+    return re.sub(emoj_patterns, "", text)
+
+
+def clean_text(
+    text: str,
+    clean_stop_words: bool = False,
+    clean_emojis: bool = False,
+) -> str:
     """
     Clean text of common characters and extra formatting.
 
@@ -23,6 +54,9 @@ def clean_text(text: str, clean_stop_words: bool = False) -> str:
     clean_stop_words: bool
         Should English stop words be removed from the raw text or not.
         Default: False (do not remove stop words)
+    clean_emojis: bool
+        Should emojis, emoticons, pictograms, and other characters be removed.
+        Default: False (do not remove pictograms)
 
     Returns
     -------
@@ -57,18 +91,22 @@ def clean_text(text: str, clean_stop_words: bool = False) -> str:
             STOPWORDS = stopwords.words("english")
 
         joined_stopwords = "|".join(STOPWORDS)
-        cleaned_stopwords = re.sub(
+        cleaned_text = re.sub(
             r"\b(" + joined_stopwords + r")\b",
             "",
             cleaned_punctuation,
         )
     else:
         # Update for mypy typing
-        cleaned_stopwords = cleaned_punctuation
+        cleaned_text = cleaned_punctuation
+
+    # Remove pictograms
+    if clean_emojis:
+        cleaned_text = remove_emojis(cleaned_text)
 
     # Remove gaps in string
     try:
-        cleaned_doc = re.sub(r" {2,}", " ", cleaned_stopwords)
+        cleaned_doc = re.sub(r" {2,}", " ", cleaned_text)
         if cleaned_doc[0] == " ":
             cleaned_doc = cleaned_doc[1:]
         if cleaned_doc[-1] == " ":
