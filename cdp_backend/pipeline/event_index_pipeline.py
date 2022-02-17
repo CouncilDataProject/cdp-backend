@@ -207,6 +207,7 @@ def read_transcripts_and_generate_grams(
                     cleaned_text=string_utils.clean_text(
                         sentence.text,
                         clean_stop_words=True,
+                        clean_emojis=True,
                     ),
                     n_grams=[],
                 )
