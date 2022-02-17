@@ -133,7 +133,38 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">clean_stop_words</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="remove_emojis"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.remove_emojis">[docs]</a><span class="k">def</span> <span class="nf">remove_emojis</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Minor changes made from this answer on stackoverflow:</span>
+<span class="sd">    https://stackoverflow.com/a/58356570</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">emoj_patterns</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="s2">&quot;[&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F600</span><span class="s2">-</span><span class="se">\U0001F64F</span><span class="s2">&quot;</span>  <span class="c1"># emoticons</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F300</span><span class="s2">-</span><span class="se">\U0001F5FF</span><span class="s2">&quot;</span>  <span class="c1"># symbols &amp; pictographs</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F680</span><span class="s2">-</span><span class="se">\U0001F6FF</span><span class="s2">&quot;</span>  <span class="c1"># transport &amp; map symbols</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F1E0</span><span class="s2">-</span><span class="se">\U0001F1FF</span><span class="s2">&quot;</span>  <span class="c1"># flags (iOS)</span>
+        <span class="s2">&quot;</span><span class="se">\U00002702</span><span class="s2">-</span><span class="se">\U000027B0</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\U000024C2</span><span class="s2">-</span><span class="se">\U0001F251</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\U0001f926</span><span class="s2">-</span><span class="se">\U0001f937</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u2600</span><span class="s2">-</span><span class="se">\u2B55</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u200d</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u23cf</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u23e9</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u231a</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\ufe0f</span><span class="s2">&quot;</span>  <span class="c1"># dingbats</span>
+        <span class="s2">&quot;</span><span class="se">\u3030</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;]+&quot;</span><span class="p">,</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">emoj_patterns</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">clean_stop_words</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">clean_emojis</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clean text of common characters and extra formatting.</span>
 
@@ -144,6 +175,9 @@
 <span class="sd">    clean_stop_words: bool</span>
 <span class="sd">        Should English stop words be removed from the raw text or not.</span>
 <span class="sd">        Default: False (do not remove stop words)</span>
+<span class="sd">    clean_emojis: bool</span>
+<span class="sd">        Should emojis, emoticons, pictograms, and other characters be removed.</span>
+<span class="sd">        Default: False (do not remove pictograms)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -178,22 +212,23 @@
             <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 
         <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
-        <span class="n">cleaned_stopwords</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
             <span class="sa">r</span><span class="s2">&quot;\b(&quot;</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span>
             <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">cleaned_punctuation</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Update for mypy typing</span>
-        <span class="n">cleaned_stopwords</span> <span class="o">=</span> <span class="n">cleaned_punctuation</span>
+        <span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">cleaned_punctuation</span>
+
+    <span class="c1"># Remove pictograms</span>
+    <span class="k">if</span> <span class="n">clean_emojis</span><span class="p">:</span>
+        <span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">remove_emojis</span><span class="p">(</span><span class="n">cleaned_text</span><span class="p">)</span>
 
     <span class="c1"># Remove gaps in string</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_stopwords</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
-            <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="k">if</span> <span class="n">cleaned_doc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
-            <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_text</span><span class="p">)</span>
+        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="c1"># IndexError occurs when the string was cleaned and it contained entirely stop</span>
     <span class="c1"># words or punctuation for some reason</span>

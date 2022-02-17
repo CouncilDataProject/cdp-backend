@@ -362,7 +362,7 @@ the same name if it already exists.</p></li>
 <span id="cdp-backend-utils-string-utils-module"></span><h2>cdp_backend.utils.string_utils module<a class="headerlink" href="#module-cdp_backend.utils.string_utils" title="Permalink to this headline"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.utils.string_utils.clean_text">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.string_utils.</span></span><span class="sig-name descname"><span class="pre">clean_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_stop_words</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/string_utils.html#clean_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.string_utils.clean_text" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.string_utils.</span></span><span class="sig-name descname"><span class="pre">clean_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_stop_words</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_emojis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/string_utils.html#clean_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.string_utils.clean_text" title="Permalink to this definition"></a></dt>
 <dd><p>Clean text of common characters and extra formatting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -370,6 +370,8 @@ the same name if it already exists.</p></li>
 <li><p><strong>text</strong> (<em>str</em>) – The raw text to clean.</p></li>
 <li><p><strong>clean_stop_words</strong> (<em>bool</em>) – Should English stop words be removed from the raw text or not.
 Default: False (do not remove stop words)</p></li>
+<li><p><strong>clean_emojis</strong> (<em>bool</em>) – Should emojis, emoticons, pictograms, and other characters be removed.
+Default: False (do not remove pictograms)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -397,6 +399,13 @@ match the form.</p>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.utils.string_utils.remove_emojis">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.string_utils.</span></span><span class="sig-name descname"><span class="pre">remove_emojis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/string_utils.html#remove_emojis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.string_utils.remove_emojis" title="Permalink to this definition"></a></dt>
+<dd><p>Minor changes made from this answer on stackoverflow:
+<a class="reference external" href="https://stackoverflow.com/a/58356570">https://stackoverflow.com/a/58356570</a></p>
 </dd></dl>
 
 </section>
