@@ -107,10 +107,7 @@ def clean_text(
     # Remove gaps in string
     try:
         cleaned_doc = re.sub(r" {2,}", " ", cleaned_text)
-        if cleaned_doc[0] == " ":
-            cleaned_doc = cleaned_doc[1:]
-        if cleaned_doc[-1] == " ":
-            cleaned_doc = cleaned_doc[:-1]
+        cleaned_doc = cleaned_doc.strip()
 
     # IndexError occurs when the string was cleaned and it contained entirely stop
     # words or punctuation for some reason
