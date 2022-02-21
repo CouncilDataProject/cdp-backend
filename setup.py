@@ -32,6 +32,7 @@ pipeline_requirements = [
     "spacy~=3.0",
     "truecase~=0.0.12",
     "webvtt-py~=0.4.6",
+    "yt-dlp~=2022.2.4"
 ]
 
 test_requirements = [

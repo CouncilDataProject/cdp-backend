@@ -11,6 +11,7 @@ from typing import Optional, Tuple, Union
 import aiohttp
 import fsspec
 from fsspec.core import url_to_fs
+from yt_dlp import YoutubeDL
 
 ###############################################################################
 
@@ -105,6 +106,9 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
+        if uri.find("https://www.youtube.com/embed/") == 0:
+            return youtube_copy(uri, str(dst) + uri[len("https://www.youtube.com/embed/"):uri.find("?") - 1])
+
         kwargs = {}
 
         # Set custom timeout for http resources
@@ -124,6 +128,30 @@ def resource_copy(
             f"Attempted copy from: '{uri}', resulted in error."
         )
         raise e
+
+
+def youtube_copy(youtube_url: str, output: str) -> str:
+    """
+    Copy a video from YouTube to a local destination on the machine.
+
+    Parameters
+    ----------
+    youtube_url: str
+        The url of the YouTube video to copy.
+    output: str
+        The location of the file to download.
+
+    Returns
+    _______
+    output: str
+        The location of the downloaded file.
+    """
+    if output[len(output) - 4:len(output)] != ".mp4":
+        output = output + ".mp4"
+    ydl_opts = {"outtmpl": output, "format": "mp4"}
+    with YoutubeDL(ydl_opts) as ydl:
+        ydl.download([youtube_url])
+        return output
 
 
 def split_audio(
