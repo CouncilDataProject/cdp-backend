@@ -107,7 +107,11 @@ def resource_copy(
     # Get file system
     try:
         if uri.find("https://www.youtube.com/embed/") == 0:
-            return youtube_copy(uri, str(dst) + uri[len("https://www.youtube.com/embed/"):uri.find("?") - 1])
+            return youtube_copy(
+                uri,
+                str(dst)
+                + uri[len("https://www.youtube.com/embed/") : uri.find("?") - 1],
+            )
 
         kwargs = {}
 
@@ -146,7 +150,7 @@ def youtube_copy(youtube_url: str, output: str) -> str:
     output: str
         The location of the downloaded file.
     """
-    if output[len(output) - 4:len(output)] != ".mp4":
+    if output[len(output) - 4 : len(output)] != ".mp4":
         output = output + ".mp4"
     ydl_opts = {"outtmpl": output, "format": "mp4"}
     with YoutubeDL(ydl_opts) as ydl:
