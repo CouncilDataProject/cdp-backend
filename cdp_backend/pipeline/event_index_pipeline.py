@@ -365,7 +365,7 @@ def chunk_n_grams(
     for batched, mapped, upload.
     """
     # Split single large dataframe into many dataframes
-    chunk_size = 400
+    chunk_size = 500
     n_grams_dfs = [
         n_grams_df[i : i + chunk_size]
         for i in range(0, n_grams_df.shape[0], chunk_size)
