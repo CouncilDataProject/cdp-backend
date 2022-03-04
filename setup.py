@@ -127,7 +127,10 @@ setup(
                 "cdp_backend.bin.create_cdp_event_gather_flow_viz:main"
             ),
             "run_cdp_event_gather=cdp_backend.bin.run_cdp_event_gather:main",
-            "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
+            (
+                "run_cdp_event_index_generation="
+                "cdp_backend.bin.run_cdp_event_index_generation:main"
+            ),
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
             (
