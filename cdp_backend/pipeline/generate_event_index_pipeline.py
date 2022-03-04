@@ -3,13 +3,13 @@
 
 import logging
 import math
+import shutil
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Dict, List, NamedTuple, Tuple
 
-import fireo
 import pandas as pd
 import pytz
 import rapidfuzz
@@ -60,7 +60,7 @@ def get_transcripts(credentials_file: str) -> List[db_models.Transcript]:
     return db_functions.get_all_of_collection(
         db_model=db_models.Transcript,
         credentials_file=credentials_file,
-    )
+    )[:20]
 
 
 @task
@@ -343,99 +343,35 @@ def compute_tfidf(
 
 
 @task
-def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
-    n_grams_df.to_parquet(f"tfidf-{n_grams}.parquet")
-
-
-class AlmostCompleteIndexedEventGram(NamedTuple):
-    event_id: str
-    unstemmed_gram: str
-    stemmed_gram: str
-    context_span: str
-    value: float
-    datetime_weighted_value: float
-
-
-@task
-def chunk_n_grams(
+def chunk_index(
     n_grams_df: pd.DataFrame,
-) -> List[List[AlmostCompleteIndexedEventGram]]:
+    n_grams: int,
+    storage_dir: Path = Path("index/"),
+) -> None:
     """
     Split the large n_grams dataframe into multiple lists of IndexedEventGram models
     for batched, mapped, upload.
     """
+    # Clean the storage dir
+    storage_dir = Path(storage_dir)
+    if storage_dir.exists():
+        shutil.rmtree(storage_dir)
+
+    # Create storage dir
+    storage_dir.mkdir(parents=True)
+
     # Split single large dataframe into many dataframes
-    chunk_size = 500
-    n_grams_dfs = [
-        n_grams_df[i : i + chunk_size]
-        for i in range(0, n_grams_df.shape[0], chunk_size)
-    ]
-
-    # Convert each dataframe into a list of indexed event gram
-    event_gram_chunks: List[List[AlmostCompleteIndexedEventGram]] = []
-    for n_gram_df_chunk in n_grams_dfs:
-        event_gram_chunk: List[AlmostCompleteIndexedEventGram] = []
-        for _, row in n_gram_df_chunk.iterrows():
-            event_gram_chunk.append(
-                AlmostCompleteIndexedEventGram(
-                    event_id=row.event_id,
-                    unstemmed_gram=row.unstemmed_gram,
-                    stemmed_gram=row.stemmed_gram,
-                    context_span=row.context_span,
-                    value=row.tfidf,
-                    datetime_weighted_value=row.datetime_weighted_tfidf,
-                )
-            )
-
-        event_gram_chunks.append(event_gram_chunk)
-
-    return event_gram_chunks
-
-
-@task
-def store_n_gram_chunk(
-    n_gram_chunk: List[AlmostCompleteIndexedEventGram],
-    credentials_file: str,
-) -> None:
-    """
-    Write all IndexedEventGrams in a single batch.
-
-    This isn't about an atomic batch but reducing the total upload time.
-    """
-    # Init batch
-    batch = fireo.batch()
-
-    # Trigger upserts for all items
-    event_lut: Dict[str, db_models.Event] = {}
-    for almost_complete_ieg in n_gram_chunk:
-        if almost_complete_ieg.event_id not in event_lut:
-            event_lut[almost_complete_ieg.event_id] = db_models.Event.collection.get(
-                f"{db_models.Event.collection_name}/{almost_complete_ieg.event_id}"
-            )
-
-        # Construct true ieg
-        ieg = db_models.IndexedEventGram()
-        ieg.event_ref = event_lut[almost_complete_ieg.event_id]
-        ieg.unstemmed_gram = almost_complete_ieg.unstemmed_gram
-        ieg.stemmed_gram = almost_complete_ieg.stemmed_gram
-        ieg.context_span = almost_complete_ieg.context_span
-        ieg.value = almost_complete_ieg.value
-        ieg.datetime_weighted_value = almost_complete_ieg.datetime_weighted_value
-
-        db_functions.upload_db_model(
-            db_model=ieg,
-            credentials_file=credentials_file,
-            batch=batch,
+    chunk_size = 100_000
+    for i in range(0, n_grams_df.shape[0], chunk_size):
+        n_grams_chunk = n_grams_df[i : i + chunk_size]
+        n_grams_chunk.to_parquet(
+            storage_dir / f"n_gram-{n_grams}-index_chunk_{i}.parquet"
         )
 
-    # Commit
-    batch.commit()
 
-
-def create_event_index_pipeline(
+def create_event_index_generation_pipeline(
     config: EventIndexPipelineConfig,
     n_grams: int = 1,
-    store_local: bool = False,
 ) -> Flow:
     """
     Create the Prefect Flow object to preview, run, or visualize for indexing
@@ -447,11 +383,6 @@ def create_event_index_pipeline(
         Configuration options for the pipeline.
     n_grams: int
         N number of terms to act as a unique entity. Default: 1
-    store_local: bool
-        Should the generated index be stored locally to disk or uploaded to database.
-        Storing the local index is useful for testing search result rankings with the
-        `search_cdp_events` bin script.
-        Default: False (store to database)
 
     Returns
     -------
@@ -507,16 +438,11 @@ def create_event_index_pipeline(
             datetime_weighting_days_decay=config.datetime_weighting_days_decay,
         )
 
-        # Route to local storage task or remote bulk upload
-        if store_local:
-            store_local_index(n_grams_df=scored_n_grams, n_grams=n_grams)
-
         # Route to remote database storage
-        else:
-            chunked_scored_n_grams = chunk_n_grams(scored_n_grams)
-            store_n_gram_chunk.map(
-                n_gram_chunk=chunked_scored_n_grams,
-                credentials_file=unmapped(config.google_credentials_file),
-            )
+        chunk_index(
+            n_grams_df=scored_n_grams,
+            n_grams=n_grams,
+            storage_dir=config.local_storage_dir,
+        )
 
     return flow

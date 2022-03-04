@@ -10,7 +10,7 @@ from pathlib import Path
 from distributed import LocalCluster
 from prefect import executors
 
-from cdp_backend.pipeline import event_index_pipeline as pipeline
+from cdp_backend.pipeline import generate_event_index_pipeline as pipeline
 from cdp_backend.pipeline.pipeline_config import EventIndexPipelineConfig
 
 ###############################################################################
@@ -52,14 +52,6 @@ class Args(argparse.Namespace):
             help="N number of terms to act as a unique entity.",
         )
         p.add_argument(
-            "-l",
-            "--store_local",
-            action="store_true",
-            help=(
-                "Should the pipeline store the generated index to a local parquet file."
-            ),
-        )
-        p.add_argument(
             "-p",
             "--parallel",
             action="store_true",
@@ -82,10 +74,9 @@ def main() -> None:
             )
 
         # Get flow definition
-        flow = pipeline.create_event_index_pipeline(
+        flow = pipeline.create_event_index_generation_pipeline(
             config=config,
             n_grams=args.n_grams,
-            store_local=args.store_local,
         )
 
         # Determine executor

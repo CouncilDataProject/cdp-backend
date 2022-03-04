@@ -17,7 +17,7 @@ from prefect import Flow
 
 from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
-from cdp_backend.pipeline import event_index_pipeline as pipeline
+from cdp_backend.pipeline import generate_event_index_pipeline as pipeline
 from cdp_backend.pipeline.pipeline_config import EventIndexPipelineConfig
 from cdp_backend.utils.file_utils import resource_copy
 
@@ -34,7 +34,7 @@ from cdp_backend.utils.file_utils import resource_copy
 #
 # great system stdlib :upsidedownface:
 
-PIPELINE_PATH = "cdp_backend.pipeline.event_index_pipeline"
+PIPELINE_PATH = "cdp_backend.pipeline.generate_event_index_pipeline"
 
 #############################################################################
 
@@ -42,7 +42,7 @@ PIPELINE_PATH = "cdp_backend.pipeline.event_index_pipeline"
 @pytest.mark.parametrize("n_grams", [1, 2, 3])
 @pytest.mark.parametrize("store_local", [True, False])
 def test_create_event_index_flow(n_grams: int, store_local: bool) -> None:
-    flow = pipeline.create_event_index_pipeline(
+    flow = pipeline.create_event_index_generation_pipeline(
         config=EventIndexPipelineConfig("/fake/creds.json", "doesn't-matter"),
         n_grams=n_grams,
         store_local=store_local,
@@ -270,7 +270,7 @@ def test_mocked_pipeline_run(
     mocked_file_get.side_effect = copy_test_file
 
     # Run pipeline to local storage
-    flow = pipeline.create_event_index_pipeline(
+    flow = pipeline.create_event_index_generation_pipeline(
         config=EventIndexPipelineConfig("/fake/creds.json", "doesn't-matter"),
         n_grams=1,
         store_local=True,
