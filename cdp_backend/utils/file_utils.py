@@ -91,7 +91,10 @@ def resource_copy(
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
-        dst = dst / uri.split("/")[-1]
+        if "=" in str(uri):
+            dst = dst / uri.split("=")[-1]
+        else:
+            dst = dst / uri.split("/")[-1]
 
     # Ensure filename is less than 255 chars
     # Otherwise this can raise an OSError for too long of a filename
@@ -106,12 +109,8 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
-        if uri.find("https://www.youtube.com/embed/") == 0:
-            return youtube_copy(
-                uri,
-                str(dst)
-                + uri[len("https://www.youtube.com/embed/") : uri.find("?") - 1],
-            )
+        if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
+            return youtube_copy(uri, dst, overwrite)
 
         kwargs = {}
 
@@ -134,28 +133,35 @@ def resource_copy(
         raise e
 
 
-def youtube_copy(youtube_url: str, output: str) -> str:
+def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     """
     Copy a video from YouTube to a local destination on the machine.
 
     Parameters
     ----------
-    youtube_url: str
+    uri: str
         The url of the YouTube video to copy.
-    output: str
+    dst: str
         The location of the file to download.
+    overwrite: bool
+        Boolean value indicating whether or not to overwrite a local video with
+        the same name if it already exists.
 
     Returns
     _______
-    output: str
+    dst: str
         The location of the downloaded file.
     """
-    if output[len(output) - 4 : len(output)] != ".mp4":
-        output = output + ".mp4"
-    ydl_opts = {"outtmpl": output, "format": "mp4"}
+    dst = Path(str(dst) + ".mp4")
+
+    # Ensure dest isn't a file
+    if dst.is_file() and not overwrite:
+        raise FileExistsError(dst)
+
+    ydl_opts = {"outtmpl": str(dst), "format": "mp4"}
     with YoutubeDL(ydl_opts) as ydl:
-        ydl.download([youtube_url])
-        return output
+        ydl.download([uri])
+        return str(dst)
 
 
 def split_audio(
