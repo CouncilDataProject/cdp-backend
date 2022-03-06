@@ -154,7 +154,8 @@ def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     dst: str
         The location of the downloaded file.
     """
-    dst = Path(str(dst) + ".mp4")
+    # dst = Path(str(dst) + ".mp4")
+    dst = dst.with_suffix(".mp4")
 
     # Ensure dest isn't a file
     if dst.is_file() and not overwrite:

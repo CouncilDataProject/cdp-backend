@@ -254,5 +254,7 @@ def test_youtube_downloader(
     actual_uri = file_utils.resource_copy(youtube_uri, resources_dir, True)
     expected_uri = str(resources_dir / expected)
     assert actual_uri == expected_uri
+    assert Path(actual_uri).exists()
+    assert Path(actual_uri).is_file()
 
     os.remove(actual_uri)
