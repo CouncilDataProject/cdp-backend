@@ -132,6 +132,7 @@
 <span class="kn">import</span> <span class="nn">aiohttp</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
+<span class="kn">from</span> <span class="nn">yt_dlp</span> <span class="kn">import</span> <span class="n">YoutubeDL</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -211,7 +212,12 @@
     <span class="c1"># Ensure dst doesn&#39;t exist</span>
     <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;v=&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
+            <span class="c1"># Split by youtube video query parameter</span>
+            <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;v=&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Split by the last &quot;/&quot;</span>
+            <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Ensure filename is less than 255 chars</span>
     <span class="c1"># Otherwise this can raise an OSError for too long of a filename</span>
@@ -226,6 +232,9 @@
     <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning resource copy from: </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="c1"># Get file system</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;youtube.com&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;youtu.be&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span>
+
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># Set custom timeout for http resources</span>
@@ -245,6 +254,38 @@
             <span class="sa">f</span><span class="s2">&quot;Attempted copy from: &#39;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;, resulted in error.&quot;</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="n">e</span></div>
+
+
+<div class="viewcode-block" id="youtube_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.youtube_copy">[docs]</a><span class="k">def</span> <span class="nf">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copy a video from YouTube to a local destination on the machine.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    uri: str</span>
+<span class="sd">        The url of the YouTube video to copy.</span>
+<span class="sd">    dst: str</span>
+<span class="sd">        The location of the file to download.</span>
+<span class="sd">    overwrite: bool</span>
+<span class="sd">        Boolean value indicating whether or not to overwrite a local video with</span>
+<span class="sd">        the same name if it already exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    _______</span>
+<span class="sd">    dst: str</span>
+<span class="sd">        The location of the downloaded file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># dst = Path(str(dst) + &quot;.mp4&quot;)</span>
+    <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.mp4&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Ensure dest isn&#39;t a file</span>
+    <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
+
+    <span class="n">ydl_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;outtmpl&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;mp4&quot;</span><span class="p">}</span>
+    <span class="k">with</span> <span class="n">YoutubeDL</span><span class="p">(</span><span class="n">ydl_opts</span><span class="p">)</span> <span class="k">as</span> <span class="n">ydl</span><span class="p">:</span>
+        <span class="n">ydl</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="n">uri</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="split_audio"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.split_audio">[docs]</a><span class="k">def</span> <span class="nf">split_audio</span><span class="p">(</span>
