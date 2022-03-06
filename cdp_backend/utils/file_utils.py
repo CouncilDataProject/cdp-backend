@@ -91,9 +91,11 @@ def resource_copy(
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
-        if "=" in str(uri):
-            dst = dst / uri.split("=")[-1]
+        if "v=" in str(uri):
+            # Split by youtube video query parameter
+            dst = dst / uri.split("v=")[-1]
         else:
+            # Split by the last "/"
             dst = dst / uri.split("/")[-1]
 
     # Ensure filename is less than 255 chars
