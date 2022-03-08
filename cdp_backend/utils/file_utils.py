@@ -11,7 +11,6 @@ from typing import Optional, Tuple, Union
 import aiohttp
 import fsspec
 from fsspec.core import url_to_fs
-from yt_dlp import YoutubeDL
 
 ###############################################################################
 
@@ -154,6 +153,8 @@ def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     dst: str
         The location of the downloaded file.
     """
+    from yt_dlp import YoutubeDL
+
     # dst = Path(str(dst) + ".mp4")
     dst = dst.with_suffix(".mp4")
 
