@@ -742,6 +742,24 @@ class Vote(Model):
                 IndexedField(name="person_ref", order=Order.ASCENDING),
             )
         ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+            )
+        ),
     )
 
 
