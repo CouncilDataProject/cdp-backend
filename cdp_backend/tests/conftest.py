@@ -29,6 +29,9 @@ def resources_dir() -> Path:
 EXAMPLE_VIDEO_FILENAME = "example_video.mp4"
 EXAMPLE_MKV_VIDEO_FILENAME = "example_video.mkv"
 EXAMPLE_VIDEO_HD_FILENAME = "example_video_large.mp4"
+EXAMPLE_YOUTUBE_VIDEO_EMBEDDED = "https://www.youtube.com/embed/XALBGkjkUPQ"
+EXAMPLE_YOUTUBE_VIDEO_PARAMETER = "https://www.youtube.com/watch?v=XALBGkjkUPQ"
+EXAMPLE_YOUTUBE_VIDEO_SHORT = "https://youtu.be/watch?v=XALBGkjkUPQ"
 
 
 @pytest.fixture

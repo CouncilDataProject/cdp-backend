@@ -90,7 +90,12 @@ def resource_copy(
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
-        dst = dst / uri.split("/")[-1]
+        if "v=" in str(uri):
+            # Split by youtube video query parameter
+            dst = dst / uri.split("v=")[-1]
+        else:
+            # Split by the last "/"
+            dst = dst / uri.split("/")[-1]
 
     # Ensure filename is less than 255 chars
     # Otherwise this can raise an OSError for too long of a filename
@@ -105,6 +110,9 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
+        if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
+            return youtube_copy(uri, dst, overwrite)
+
         kwargs = {}
 
         # Set custom timeout for http resources
@@ -124,6 +132,40 @@ def resource_copy(
             f"Attempted copy from: '{uri}', resulted in error."
         )
         raise e
+
+
+def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
+    """
+    Copy a video from YouTube to a local destination on the machine.
+
+    Parameters
+    ----------
+    uri: str
+        The url of the YouTube video to copy.
+    dst: str
+        The location of the file to download.
+    overwrite: bool
+        Boolean value indicating whether or not to overwrite a local video with
+        the same name if it already exists.
+
+    Returns
+    _______
+    dst: str
+        The location of the downloaded file.
+    """
+    from yt_dlp import YoutubeDL
+
+    # dst = Path(str(dst) + ".mp4")
+    dst = dst.with_suffix(".mp4")
+
+    # Ensure dest isn't a file
+    if dst.is_file() and not overwrite:
+        raise FileExistsError(dst)
+
+    ydl_opts = {"outtmpl": str(dst), "format": "mp4"}
+    with YoutubeDL(ydl_opts) as ydl:
+        ydl.download([uri])
+        return str(dst)
 
 
 def split_audio(

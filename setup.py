@@ -32,6 +32,7 @@ pipeline_requirements = [
     "spacy~=3.0",
     "truecase~=0.0.12",
     "webvtt-py~=0.4.6",
+    "yt-dlp~=2022.2.4"
 ]
 
 test_requirements = [
@@ -155,6 +156,6 @@ setup(
     url="https://github.com/CouncilDataProject/cdp-backend",
     # Do not edit this string manually, always use bump2version
     # Details in CONTRIBUTING.rst
-    version="3.0.6",
+    version="3.0.9",
     zip_safe=False,
 )

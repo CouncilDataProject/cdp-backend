@@ -19,10 +19,14 @@ from cdp_backend.utils.file_utils import (
     resource_copy,
 )
 
+from .. import test_utils
 from ..conftest import (
     EXAMPLE_MKV_VIDEO_FILENAME,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
+    EXAMPLE_YOUTUBE_VIDEO_EMBEDDED,
+    EXAMPLE_YOUTUBE_VIDEO_PARAMETER,
+    EXAMPLE_YOUTUBE_VIDEO_SHORT,
 )
 
 #############################################################################
@@ -211,6 +215,10 @@ def test_hover_thumbnail_generator(
     os.remove(result)
 
 
+@pytest.mark.skipif(
+    not test_utils.internet_is_available(),
+    reason="No internet connection",
+)
 @pytest.mark.parametrize(
     "video_uri, expected",
     [
@@ -224,3 +232,29 @@ def test_convert_video_to_mp4(
 ) -> None:
     filepath = str(resources_dir / video_uri)
     assert file_utils.convert_video_to_mp4(filepath) == str(resources_dir / expected)
+
+
+@pytest.mark.skipif(
+    not test_utils.internet_is_available(),
+    reason="No internet connection",
+)
+@pytest.mark.parametrize(
+    "youtube_uri, expected",
+    [
+        (EXAMPLE_YOUTUBE_VIDEO_EMBEDDED, "XALBGkjkUPQ.mp4"),
+        (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
+        (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
+    ],
+)
+def test_youtube_downloader(
+    resources_dir: Path,
+    youtube_uri: str,
+    expected: str,
+) -> None:
+    actual_uri = file_utils.resource_copy(youtube_uri, resources_dir, True)
+    expected_uri = str(resources_dir / expected)
+    assert actual_uri == expected_uri
+    assert Path(actual_uri).exists()
+    assert Path(actual_uri).is_file()
+
+    os.remove(actual_uri)

@@ -373,7 +373,14 @@ class MatterSponsor(Model):
         return matter_sponsor
 
     _PRIMARY_KEYS = ("matter_ref", "person_ref")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+            )
+        ),
+    )
 
 
 class MinutesItem(Model):
@@ -740,6 +747,24 @@ class Vote(Model):
             (
                 IndexedField(name="event_ref", order=Order.ASCENDING),
                 IndexedField(name="person_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
             )
         ),
     )
