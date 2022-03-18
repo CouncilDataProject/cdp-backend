@@ -240,6 +240,12 @@ class Role(Model):
         ),
         IndexedFieldSet(
             (
+                IndexedField(name="seat_ref", order=Order.ASCENDING),
+                IndexedField(name="end_datetime", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
                 IndexedField(name="person_ref", order=Order.ASCENDING),
                 IndexedField(name="title", order=Order.ASCENDING),
                 IndexedField(name="start_datetime", order=Order.ASCENDING),
