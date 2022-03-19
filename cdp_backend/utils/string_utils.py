@@ -5,6 +5,8 @@ import logging
 import re
 import string
 
+from cdp_backend.database.validators import resource_exists
+
 ###############################################################################
 
 log = logging.getLogger(__name__)
@@ -147,3 +149,40 @@ def convert_gcs_json_url_to_gsutil_form(url: str) -> str:
         return f"gs://{found_bucket}/{found_filename}"
 
     return ""
+
+
+def try_url(url: str, resolve_func=resource_exists) -> str:
+    """
+    Given a URL, return the URL with the protocol that exists (http or https) with a preference for https.
+
+    Parameters
+    ----------
+    url: str
+        The target resource url.
+    resolve_func: func(url: str) -> bool
+        A function that takes in a str URL and determines whether it is reachable. Default is our "resource_exists" func
+
+    Returns
+    -------
+    resource_url: str
+        The url with the correct protocol based on where the resource exists. If does not exist, return empty str
+    """
+    if not url.startswith("http://") and not url.startswith("https://"):
+        raise ValueError("url must be a valid http or https url")
+
+    if url.startswith("http://"):
+        url = url.replace("http://", "https://")
+
+    if resolve_func(url):
+        return url
+
+    url = url.replace("https://", "http://")
+    if resolve_func(url):
+        return url
+
+    # raise LookupError("the resource {} does not exist with either http / https".format(url))
+    return ""  # if we got this far, the resource does not exist
+
+
+def is_secure_uri(url: str) -> bool:
+    return url.startswith("https://")

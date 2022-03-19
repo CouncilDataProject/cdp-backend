@@ -16,6 +16,8 @@ from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
 from requests import ConnectionError
 
+from cdp_backend.utils.string_utils import is_secure_uri, try_url
+
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
@@ -336,12 +338,14 @@ def convert_video_and_handle_host(
         # Update variable name for easier downstream typing
         video_filepath = mp4_filepath
 
+    resource_uri = try_url(session.video_uri)
+
     # Store if the original host isn't https
-    elif not session.video_uri.startswith("https://"):
+    if not is_secure_uri(resource_uri):
         # Attempt to find secure version of resource and simply swap
         # otherwise we will have to host
-        if session.video_uri.startswith("http://"):
-            secure_uri = session.video_uri.replace("http://", "https://")
+        if resource_uri.startswith("http://"):
+            secure_uri = resource_uri.replace("http://", "https://")
             if resource_exists(secure_uri):
                 log.info(
                     f"Found secure version of {session.video_uri}, "
@@ -356,7 +360,7 @@ def convert_video_and_handle_host(
         else:
             cdp_will_host = True
     else:
-        hosted_video_media_url = session.video_uri
+        hosted_video_media_url = resource_uri
 
     # Upload and swap if cdp is hosting
     if cdp_will_host:
