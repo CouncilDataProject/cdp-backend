@@ -110,19 +110,19 @@ def test_convert_gcs_json_url_to_gsutil_form(text: str, expected: str) -> None:
 
 
 @pytest.mark.parameterize(
-    "url, expected, exception"[
-        ("https://exists", True, None),
-        ("https://not-exists", False, None),
-        ("not a valid http url", False, ValueError),
-    ],
+    "url, expected"[("https://exists", True), ("https://not-exists", False)],
 )
-def test_try_url(url: str, expected: bool, exception: Exception) -> None:
-    with pytest.raises(exception):
-        assert string_utils.try_url(url, mock_resource_exists) == expected
+def test_try_url_no_exceptions(url: str, expected: bool) -> None:
+    assert string_utils.try_url(url, mock_resource_exists) == expected
+
+
+def test_try_url_exception() -> None:
+    with pytest.raises(ValueError):
+        string_utils.try_url("https://not-exists")
 
 
 def mock_resource_exists(url: str) -> bool:
     if url == "https://exists":
         return True
-    elif url == "https://not-exists":
-        return False
+
+    return False

@@ -4,6 +4,7 @@
 import logging
 import re
 import string
+from typing import Callable
 
 from cdp_backend.database.validators import resource_exists
 
@@ -151,7 +152,7 @@ def convert_gcs_json_url_to_gsutil_form(url: str) -> str:
     return ""
 
 
-def try_url(url: str, resolve_func=resource_exists) -> str:
+def try_url(url: str, resolve_func: Callable = resource_exists) -> str:
     """
     Given a URL, return the URL with the protocol that exists (http or https) with a preference for https.
 
