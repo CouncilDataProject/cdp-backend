@@ -213,7 +213,7 @@ def try_url(url: str, resolve_func: Callable = resource_exists) -> str:
     -------
     resource_url: str
         The url with the correct protocol based on where the resource exists.
-        If does not exist, return empty str
+        If does not exist, a LookupError is raised.
     """
     secure_url = url.replace("http://", "https://")
     if resolve_func(secure_url):
