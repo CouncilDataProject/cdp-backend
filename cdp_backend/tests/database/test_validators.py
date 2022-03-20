@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from multiprocessing.sharedctypes import Value
 from typing import Dict, Optional
 from unittest import mock
 
@@ -193,3 +194,33 @@ def test_role_title_is_valid(title: str, expected_result: bool) -> None:
     validator_func = validators.create_constant_value_validator(RoleTitle)
     actual_result = validator_func(title)
     assert actual_result == expected_result
+
+@pytest.mark.parametrize(
+    "url, expected, exception",
+    [
+        (
+            "https://exists",
+            "https://exists",
+            None,
+        ),
+        (
+            "http://exists",
+            "https://exists",
+            None,
+        ),
+        (
+            "ftp://some-ftp-url",
+            "",
+            LookupError,
+        ),
+    ],
+)
+def test_try_url_no_exceptions(url: str, expected: str, exception: Exception) -> None:
+    if exception == None:
+        assert validators.try_url(url, mock_resource_exists) == expected
+    else:
+        with pytest.raises(exception):
+            assert validators.try_url(url, mock_resource_exists) == expected
+
+def mock_resource_exists(url: str) -> bool:
+    return url == "https://exists"

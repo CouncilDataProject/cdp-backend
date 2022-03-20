@@ -16,12 +16,10 @@ from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
 from requests import ConnectionError
 
-from cdp_backend.utils.string_utils import is_secure_uri, try_url
-
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
-from ..database.validators import resource_exists
+from ..database.validators import resource_exists, try_url, is_secure_uri
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -338,29 +336,25 @@ def convert_video_and_handle_host(
         # Update variable name for easier downstream typing
         video_filepath = mp4_filepath
 
-    resource_uri = try_url(session.video_uri)
-
     # Store if the original host isn't https
-    if not is_secure_uri(resource_uri):
-        # Attempt to find secure version of resource and simply swap
-        # otherwise we will have to host
-        if resource_uri.startswith("http://"):
-            secure_uri = resource_uri.replace("http://", "https://")
-            if resource_exists(secure_uri):
+    elif not is_secure_uri(session.video_uri):
+        try:
+            resource_uri = try_url(session.video_uri)
+        except LookupError:
+            # The provided URI could still be like GCS or S3 URI, which works for download
+            # but not for streaming / hosting
+            cdp_will_host = True
+        else:
+            if is_secure_uri(resource_uri):
                 log.info(
                     f"Found secure version of {session.video_uri}, "
                     f"updating stored video URI."
                 )
-                hosted_video_media_url = secure_uri
+                hosted_video_media_url = resource_uri
             else:
                 cdp_will_host = True
-
-        # The provided URI could still be like GCS or S3 URI, which works for download
-        # but not for streaming / hosting
-        else:
-            cdp_will_host = True
     else:
-        hosted_video_media_url = resource_uri
+        hosted_video_media_url = session.video_uri
 
     # Upload and swap if cdp is hosting
     if cdp_will_host:
