@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from multiprocessing.sharedctypes import Value
 from typing import Dict, Optional
 from unittest import mock
 
@@ -195,6 +194,7 @@ def test_role_title_is_valid(title: str, expected_result: bool) -> None:
     actual_result = validator_func(title)
     assert actual_result == expected_result
 
+
 @pytest.mark.parametrize(
     "url, expected, exception",
     [
@@ -216,11 +216,12 @@ def test_role_title_is_valid(title: str, expected_result: bool) -> None:
     ],
 )
 def test_try_url_no_exceptions(url: str, expected: str, exception: Exception) -> None:
-    if exception == None:
+    if exception is None:
         assert validators.try_url(url, mock_resource_exists) == expected
     else:
         with pytest.raises(exception):
             assert validators.try_url(url, mock_resource_exists) == expected
+
 
 def mock_resource_exists(url: str) -> bool:
     return url == "https://exists"

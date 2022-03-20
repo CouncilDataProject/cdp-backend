@@ -4,7 +4,6 @@
 import logging
 import re
 import string
-from typing import Callable
 
 ###############################################################################
 

@@ -19,7 +19,7 @@ from requests import ConnectionError
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
-from ..database.validators import resource_exists, try_url, is_secure_uri
+from ..database.validators import is_secure_uri, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -341,8 +341,8 @@ def convert_video_and_handle_host(
         try:
             resource_uri = try_url(session.video_uri)
         except LookupError:
-            # The provided URI could still be like GCS or S3 URI, which works for download
-            # but not for streaming / hosting
+            # The provided URI could still be like GCS or S3 URI, which
+            # works for download but not for streaming / hosting
             cdp_will_host = True
         else:
             if is_secure_uri(resource_uri):

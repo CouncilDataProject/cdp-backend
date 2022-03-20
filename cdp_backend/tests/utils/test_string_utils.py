@@ -107,4 +107,3 @@ def test_clean_text(
 )
 def test_convert_gcs_json_url_to_gsutil_form(text: str, expected: str) -> None:
     assert string_utils.convert_gcs_json_url_to_gsutil_form(text) == expected
-

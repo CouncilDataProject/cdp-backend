@@ -196,6 +196,7 @@ def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]
 
     return is_valid
 
+
 def try_url(url: str, resolve_func: Callable = resource_exists) -> str:
     """
     Given a URL, return the URL with the protocol that exists (http or https)
@@ -222,7 +223,8 @@ def try_url(url: str, resolve_func: Callable = resource_exists) -> str:
     if resolve_func(url):
         return url
 
-    raise LookupError("the resource {} could not be found".format(url))
+    raise LookupError(f"the resource {url} could not be found")
+
 
 def is_secure_uri(url: str) -> bool:
     return url.startswith("https://")
