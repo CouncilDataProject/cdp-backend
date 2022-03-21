@@ -140,7 +140,7 @@
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">db_constants</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
-<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">resource_exists</span>
+<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">is_secure_uri</span><span class="p">,</span> <span class="n">try_url</span>
 <span class="kn">from</span> <span class="nn">..file_store</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fs_functions</span>
 <span class="kn">from</span> <span class="nn">..sr_models</span> <span class="kn">import</span> <span class="n">GoogleCloudSRModel</span><span class="p">,</span> <span class="n">WebVTTSRModel</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">constants_utils</span><span class="p">,</span> <span class="n">file_utils</span>
@@ -458,24 +458,22 @@
         <span class="n">video_filepath</span> <span class="o">=</span> <span class="n">mp4_filepath</span>
 
     <span class="c1"># Store if the original host isn&#39;t https</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
-        <span class="c1"># Attempt to find secure version of resource and simply swap</span>
-        <span class="c1"># otherwise we will have to host</span>
-        <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">):</span>
-            <span class="n">secure_uri</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">resource_exists</span><span class="p">(</span><span class="n">secure_uri</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_secure_uri</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">resource_uri</span> <span class="o">=</span> <span class="n">try_url</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+            <span class="c1"># The provided URI could still be like GCS or S3 URI, which</span>
+            <span class="c1"># works for download but not for streaming / hosting</span>
+            <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_secure_uri</span><span class="p">(</span><span class="n">resource_uri</span><span class="p">):</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Found secure version of </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="si">}</span><span class="s2">, &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;updating stored video URI.&quot;</span>
                 <span class="p">)</span>
-                <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">secure_uri</span>
+                <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">resource_uri</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="c1"># The provided URI could still be like GCS or S3 URI, which works for download</span>
-        <span class="c1"># but not for streaming / hosting</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
 

@@ -1692,6 +1692,11 @@ To remove <cite>None</cite> as a viable input, set the database model field <cit
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.validators.is_secure_uri">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">is_secure_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#is_secure_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.is_secure_uri" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.database.validators.resource_exists">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">resource_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#resource_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.resource_exists" title="Permalink to this definition"></a></dt>
 <dd><p>Validate that the URI provided points to an existing file.</p>
@@ -1724,6 +1729,29 @@ characters and optionally include a hyphen.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.database.validators.try_url">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">try_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolve_func:</span> <span class="pre">typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">resource_exists&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#try_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.try_url" title="Permalink to this definition"></a></dt>
+<dd><p>Given a URL, return the URL with the protocol that exists (http or https)
+with a preference for https.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The target resource url.</p></li>
+<li><p><strong>resolve_func</strong> (<em>func(url: str) -&gt; bool</em>) – A function that takes in a str URL and determines whether it is reachable.
+Default is our “resource_exists” func</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>resource_url</strong> – The url with the correct protocol based on where the resource exists.
+If does not exist, a LookupError is raised.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>

@@ -316,6 +316,39 @@
         <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">constant_cls</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">is_valid</span></div>
+
+
+<div class="viewcode-block" id="try_url"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.try_url">[docs]</a><span class="k">def</span> <span class="nf">try_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resolve_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">resource_exists</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a URL, return the URL with the protocol that exists (http or https)</span>
+<span class="sd">    with a preference for https.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url: str</span>
+<span class="sd">        The target resource url.</span>
+<span class="sd">    resolve_func: func(url: str) -&gt; bool</span>
+<span class="sd">        A function that takes in a str URL and determines whether it is reachable.</span>
+<span class="sd">        Default is our &quot;resource_exists&quot; func</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    resource_url: str</span>
+<span class="sd">        The url with the correct protocol based on where the resource exists.</span>
+<span class="sd">        If does not exist, a LookupError is raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">secure_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolve_func</span><span class="p">(</span><span class="n">secure_url</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">secure_url</span>
+
+    <span class="k">if</span> <span class="n">resolve_func</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">url</span>
+
+    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;the resource </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> could not be found&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_secure_uri"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.is_secure_uri">[docs]</a><span class="k">def</span> <span class="nf">is_secure_uri</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
