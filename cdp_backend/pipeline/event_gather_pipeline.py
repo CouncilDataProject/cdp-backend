@@ -19,7 +19,7 @@ from requests import ConnectionError
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
-from ..database.validators import resource_exists
+from ..database.validators import is_secure_uri, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -337,24 +337,22 @@ def convert_video_and_handle_host(
         video_filepath = mp4_filepath
 
     # Store if the original host isn't https
-    elif not session.video_uri.startswith("https://"):
-        # Attempt to find secure version of resource and simply swap
-        # otherwise we will have to host
-        if session.video_uri.startswith("http://"):
-            secure_uri = session.video_uri.replace("http://", "https://")
-            if resource_exists(secure_uri):
+    elif not is_secure_uri(session.video_uri):
+        try:
+            resource_uri = try_url(session.video_uri)
+        except LookupError:
+            # The provided URI could still be like GCS or S3 URI, which
+            # works for download but not for streaming / hosting
+            cdp_will_host = True
+        else:
+            if is_secure_uri(resource_uri):
                 log.info(
                     f"Found secure version of {session.video_uri}, "
                     f"updating stored video URI."
                 )
-                hosted_video_media_url = secure_uri
+                hosted_video_media_url = resource_uri
             else:
                 cdp_will_host = True
-
-        # The provided URI could still be like GCS or S3 URI, which works for download
-        # but not for streaming / hosting
-        else:
-            cdp_will_host = True
     else:
         hosted_video_media_url = session.video_uri
 
