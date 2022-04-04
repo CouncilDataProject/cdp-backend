@@ -228,6 +228,10 @@ LOCAL_CAPTIONS_SESSION.caption_uri = str(
         ),
     ],
 )
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="local caption path handling for windows",
+)
 def test_generate_transcript(
     mock_upload_transcript: MagicMock,
     mock_speech_to_text: MagicMock,
