@@ -389,7 +389,7 @@ def find_proper_resize_ratio(height: int, width: int) -> float:
     return 2
 
 
-def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
+def hash_file_contents(uri: str, buffer_size: int = 2**16) -> str:
     """
     Return the SHA256 hash of a file's content.
 
