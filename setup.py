@@ -32,13 +32,13 @@ pipeline_requirements = [
     "spacy~=3.0",
     "truecase~=0.0.12",
     "webvtt-py~=0.4.6",
-    "yt-dlp~=2022.2.4"
+    "yt-dlp~=2022.2.4",
 ]
 
 test_requirements = [
     *infrastructure_requirements,
     *pipeline_requirements,
-    "black>=19.10b0",
+    "black>=22.3.0",
     "codecov==2.1.12",
     "fastparquet~=0.7",
     "flake8>=3.8.3",
