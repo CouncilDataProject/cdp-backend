@@ -47,3 +47,4 @@ class RoleTitle:
     VICE_CHAIR = "Vice Chair"
     ALTERNATE = "Alternate"
     MEMBER = "Member"
+    SUPERVISOR = "Supervisor"
