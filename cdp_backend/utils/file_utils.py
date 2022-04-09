@@ -8,8 +8,8 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
-import aiohttp
 import fsspec
+import requests
 from fsspec.core import url_to_fs
 
 ###############################################################################
@@ -113,17 +113,27 @@ def resource_copy(
         if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
             return youtube_copy(uri, dst, overwrite)
 
-        kwargs = {}
-
         # Set custom timeout for http resources
         if uri.startswith("http"):
-            kwargs = {"timeout": aiohttp.ClientTimeout(total=1800)}
+            # The verify=False is passed to any http URIs
+            # It was added because it's very common for SSL certs to be bad
+            # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
+            # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
+            with open(dst, "wb") as open_dst:
+                open_dst.write(
+                    requests.get(
+                        uri,
+                        verify=False,
+                        timeout=1800,
+                    ).content
+                )
 
-        # TODO: Add explicit use of GCS credentials until public read is fixed
-        fs, remote_path = url_to_fs(uri, **kwargs)
-        fs.get(remote_path, str(dst))
-        log.info(f"Completed resource copy from: {uri}")
-        log.info(f"Stored resource copy: {dst}")
+        else:
+            # TODO: Add explicit use of GCS credentials until public read is fixed
+            fs, remote_path = url_to_fs(uri)
+            fs.get(remote_path, str(dst))
+            log.info(f"Completed resource copy from: {uri}")
+            log.info(f"Stored resource copy: {dst}")
 
         return str(dst)
     except Exception as e:
