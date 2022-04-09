@@ -10,7 +10,6 @@ from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, 
 
 from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
-from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
@@ -19,7 +18,7 @@ from requests import ConnectionError
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
-from ..database.validators import is_secure_uri, try_url
+from ..database.validators import is_secure_uri, resource_exists, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -159,11 +158,14 @@ def create_event_gather_flow(
 
                 # Check caption uri
                 if session.caption_uri is not None:
-                    fs, caption_path = url_to_fs(session.caption_uri)
-
                     # If the caption doesn't exist, remove the property
                     # This will result in Speech-to-Text being used instead
-                    if not fs.exists(caption_path):
+                    #
+                    # The verify=False is passed to any http URIs
+                    # It was added because it's very common for SSL certs to be bad
+                    # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
+                    # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
+                    if not resource_exists(session.caption_uri, verify=False):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
