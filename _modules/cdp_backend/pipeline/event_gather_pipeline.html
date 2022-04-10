@@ -131,7 +131,6 @@
 
 <span class="kn">from</span> <span class="nn">aiohttp.client_exceptions</span> <span class="kn">import</span> <span class="n">ClientResponseError</span>
 <span class="kn">from</span> <span class="nn">fireo.fields.errors</span> <span class="kn">import</span> <span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="n">InvalidFieldType</span><span class="p">,</span> <span class="n">RequiredField</span>
-<span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
 <span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
 <span class="kn">from</span> <span class="nn">prefect.tasks.control_flow</span> <span class="kn">import</span> <span class="n">case</span><span class="p">,</span> <span class="n">merge</span>
@@ -140,7 +139,7 @@
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">db_constants</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">db_functions</span>
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
-<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">is_secure_uri</span><span class="p">,</span> <span class="n">try_url</span>
+<span class="kn">from</span> <span class="nn">..database.validators</span> <span class="kn">import</span> <span class="n">is_secure_uri</span><span class="p">,</span> <span class="n">resource_exists</span><span class="p">,</span> <span class="n">try_url</span>
 <span class="kn">from</span> <span class="nn">..file_store</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fs_functions</span>
 <span class="kn">from</span> <span class="nn">..sr_models</span> <span class="kn">import</span> <span class="n">GoogleCloudSRModel</span><span class="p">,</span> <span class="n">WebVTTSRModel</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">constants_utils</span><span class="p">,</span> <span class="n">file_utils</span>
@@ -280,11 +279,14 @@
 
                 <span class="c1"># Check caption uri</span>
                 <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">fs</span><span class="p">,</span> <span class="n">caption_path</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">)</span>
-
                     <span class="c1"># If the caption doesn&#39;t exist, remove the property</span>
                     <span class="c1"># This will result in Speech-to-Text being used instead</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">caption_path</span><span class="p">):</span>
+                    <span class="c1">#</span>
+                    <span class="c1"># The verify=False is passed to any http URIs</span>
+                    <span class="c1"># It was added because it&#39;s very common for SSL certs to be bad</span>
+                    <span class="c1"># See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85</span>
+                    <span class="c1"># And: https://github.com/CouncilDataProject/seattle/runs/5957646032</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">resource_exists</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;File not found using provided caption URI: &quot;</span>
                             <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
