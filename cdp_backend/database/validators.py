@@ -142,7 +142,7 @@ def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:
     elif uri.startswith("http"):
         try:
             # Use HEAD request to check if remote resource exists
-            r = requests.head(uri, **kwargs)
+            r = requests.head(uri, verify=False)
 
             return r.status_code == requests.codes.ok
         except requests.exceptions.SSLError:
