@@ -4,7 +4,7 @@
 import logging
 import re
 from dataclasses import dataclass
-from typing import Callable, List, Optional, Type
+from typing import Any, Callable, List, Optional, Type
 
 import requests
 from fireo.models import Model
@@ -97,7 +97,7 @@ def email_is_valid(email: Optional[str]) -> bool:
     return False
 
 
-def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
+def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:
     """
     Validate that the URI provided points to an existing file.
 
@@ -142,7 +142,7 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
     elif uri.startswith("http"):
         try:
             # Use HEAD request to check if remote resource exists
-            r = requests.head(uri)
+            r = requests.head(uri, **kwargs)
 
             return r.status_code == requests.codes.ok
         except requests.exceptions.SSLError:
