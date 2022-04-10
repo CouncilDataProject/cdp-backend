@@ -281,12 +281,7 @@
                 <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="c1"># If the caption doesn&#39;t exist, remove the property</span>
                     <span class="c1"># This will result in Speech-to-Text being used instead</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># The verify=False is passed to any http URIs</span>
-                    <span class="c1"># It was added because it&#39;s very common for SSL certs to be bad</span>
-                    <span class="c1"># See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85</span>
-                    <span class="c1"># And: https://github.com/CouncilDataProject/seattle/runs/5957646032</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">resource_exists</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">resource_exists</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">):</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;File not found using provided caption URI: &quot;</span>
                             <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
