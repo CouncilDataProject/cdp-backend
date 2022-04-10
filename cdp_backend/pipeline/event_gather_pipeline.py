@@ -160,12 +160,7 @@ def create_event_gather_flow(
                 if session.caption_uri is not None:
                     # If the caption doesn't exist, remove the property
                     # This will result in Speech-to-Text being used instead
-                    #
-                    # The verify=False is passed to any http URIs
-                    # It was added because it's very common for SSL certs to be bad
-                    # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
-                    # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
-                    if not resource_exists(session.caption_uri, verify=False):
+                    if not resource_exists(session.caption_uri):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
