@@ -45,6 +45,7 @@ from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
 # great system stdlib :upsidedownface:
 
 PIPELINE_PATH = "cdp_backend.pipeline.event_gather_pipeline"
+DATABASE_PATH = "cdp_backend.database"
 VIDEO_CONTENT_HASH = "7490ea6cf56648d60a40dd334e46e5d7de0f31dde0c7ce4d85747896fdd2ab42"
 
 #############################################################################
@@ -467,6 +468,7 @@ for i in range(6):
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
+@mock.patch(f"{DATABASE_PATH}.validators.resource_exists")
 @pytest.mark.parametrize(
     "event, session_processing_results, fail_file_uploads",
     [
@@ -520,6 +522,7 @@ def test_store_event_processing_results(
     mock_remove_local_file: MagicMock,
     mock_upload_file: MagicMock,
     mock_resource_copy: MagicMock,
+    mock_resource_exists: MagicMock,
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
     fail_file_uploads: bool,
@@ -528,6 +531,8 @@ def test_store_event_processing_results(
     # But we aren't actually uploading so just make sure that we aren't downloading
     # externally either.
     mock_resource_copy.return_value = "doesnt-matter.ext"
+
+    mock_resource_exists.return_value = True
 
     # Set file upload side effect
     if fail_file_uploads:
