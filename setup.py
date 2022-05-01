@@ -19,7 +19,7 @@ infrastructure_requirements = [
 ]
 
 pipeline_requirements = [
-    "dask[distributed]>=2021.7.0",
+    "dask[distributed]>=2021.7.0,!=2022.04.2",
     "ffmpeg-python==0.2.0",
     "google-cloud-speech~=2.13",
     "graphviz~=0.16",
