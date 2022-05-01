@@ -66,7 +66,7 @@ dev_requirements = [
     "m2r2>=0.2.7",
     "prefect[viz]",
     "Sphinx>=3.4.3",
-    "sphinx_rtd_theme>=0.5.1",
+    "furo>=2022.4.7",
     "twine>=3.1.1",
     "wheel>=0.34.2",
 ]
@@ -93,7 +93,9 @@ extra_requirements = {
 }
 
 setup(
-    author="Jackson Maxfield Brown, To Huynh, Isaac Na",
+    author=(
+        "Jackson Maxfield Brown, To Huynh, Isaac Na, Council Data Project Contributors"
+    ),
     author_email="jmaxfieldbrown@gmail.com",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
