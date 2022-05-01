@@ -102,9 +102,9 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     description=(
         "Data storage utilities and processing pipelines to run on CDP server "
@@ -145,7 +145,7 @@ setup(
     keywords="civic technology, open government",
     name="cdp-backend",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     setup_requires=setup_requirements,
     test_suite="cdp_backend/tests",
     tests_require=test_requirements,
