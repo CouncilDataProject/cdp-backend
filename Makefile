@@ -56,8 +56,8 @@ gen-docs: ## Generate Sphinx HTML documentation, including API docs
 	create_cdp_database_uml \
 		-o docs/_static/cdp_database_diagram.dot
 	dot \
-		-T png \
-		-o docs/_static/cdp_database_diagram.png docs/_static/cdp_database_diagram.dot
+		-T jpg \
+		-o docs/_static/cdp_database_diagram.jpg docs/_static/cdp_database_diagram.dot
 	create_cdp_ingestion_models_doc \
 		-t docs/ingestion_models.template \
 		-o docs/ingestion_models.md
