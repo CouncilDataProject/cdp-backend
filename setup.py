@@ -13,9 +13,9 @@ setup_requirements = [
 ]
 
 infrastructure_requirements = [
-    "pulumi~=3.3",
-    "pulumi-google-native~=0.7.0",
-    "pulumi-gcp~=5.7",
+    "pulumi~=3.31",
+    "pulumi-google-native~=0.18",
+    "pulumi-gcp~=6.0",
 ]
 
 pipeline_requirements = [
