@@ -1,124 +1,216 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cdp_backend.pipeline.mock_get_events &mdash; cdp-backend 3.0.14 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-</head>
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> cdp-backend
-          </a>
-              <div class="version">
-                3.0.14
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+        <title>cdp_backend.pipeline.mock_get_events - cdp-backend 3.0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">cdp-backend 3.0.14 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">cdp-backend 3.0.14 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend.version">cdp_backend.version module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.html#module-cdp_backend">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Package Modules</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.resources.html">cdp_backend.utils.resources package</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#updating-existing-database-documents">Updating Existing Database Documents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#minimal-event-data">Minimal Event Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ingestion_models.html#expanded-event-data-with-event-minutes-items">Expanded Event Data with Event Minutes Items</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#minimal-event-processing">Minimal Event Processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#filled-event-processing">Filled Event Processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_gather_pipeline.html#pipeline-configuration">Pipeline Configuration</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../database_schema.html#implementation">Implementation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../transcript_model.html#example-transcript">Example Transcript</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#developer-installation">Developer Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">cdp-backend</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>cdp_backend.pipeline.mock_get_events</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for cdp_backend.pipeline.mock_get_events</h1><div class="highlight"><pre>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for cdp_backend.pipeline.mock_get_events</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -164,62 +256,62 @@
 <span class="n">FAILING_VOTE_DECISIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">VoteDecision</span><span class="o">.</span><span class="n">ABSTAIN_REJECT</span><span class="p">,</span> <span class="n">VoteDecision</span><span class="o">.</span><span class="n">REJECT</span><span class="p">]</span>
 
 <span class="n">DUMMY_FILE_URI</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf&quot;</span>
+    <span class="s2">"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"</span>
 <span class="p">)</span>
 <span class="n">PERSON_PICTURE_URI</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;https://councildataproject.github.io/imgs/public-speaker-light-purple.svg&quot;</span>
+    <span class="s2">"https://councildataproject.github.io/imgs/public-speaker-light-purple.svg"</span>
 <span class="p">)</span>
-<span class="n">SEAT_URI</span> <span class="o">=</span> <span class="s2">&quot;https://councildataproject.github.io/imgs/seattle.jpg&quot;</span>
+<span class="n">SEAT_URI</span> <span class="o">=</span> <span class="s2">"https://councildataproject.github.io/imgs/seattle.jpg"</span>
 
 <span class="n">SESSIONS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">(</span>
-        <span class="s2">&quot;https://video.seattle.gov/media/council/council_010421_2022101V.mp4&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2021/council_010421_2022101.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="s2">"https://video.seattle.gov/media/council/council_010421_2022101V.mp4"</span><span class="p">,</span>
+        <span class="s2">"https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2021/council_010421_2022101.vtt"</span><span class="p">,</span>  <span class="c1"># noqa</span>
     <span class="p">),</span>
     <span class="p">(</span>
-        <span class="s2">&quot;https://video.seattle.gov/media/council/council_113020_2022091V.mp4&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="s2">"https://video.seattle.gov/media/council/council_113020_2022091V.mp4"</span><span class="p">,</span>
+        <span class="s2">"https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt"</span><span class="p">,</span>  <span class="c1"># noqa</span>
     <span class="p">),</span>
     <span class="p">(</span>
-        <span class="s2">&quot;https://video.seattle.gov/media/council/council_112320_2022089V.mp4&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="s2">"https://video.seattle.gov/media/council/council_112320_2022089V.mp4"</span><span class="p">,</span>
+        <span class="s2">"https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt"</span><span class="p">,</span>  <span class="c1"># noqa</span>
     <span class="p">),</span>
     <span class="p">(</span>
-        <span class="s2">&quot;https://video.seattle.gov/media/council/council_110920_2022085V.mp4&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="s2">"https://video.seattle.gov/media/council/council_110920_2022085V.mp4"</span><span class="p">,</span>
+        <span class="s2">"https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt"</span><span class="p">,</span>  <span class="c1"># noqa</span>
     <span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;https://video.seattle.gov/media/council/council_101220_2022077V.mp4&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"https://video.seattle.gov/media/council/council_101220_2022077V.mp4"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
 <span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_get_example_person</span><span class="p">(</span><span class="n">seat_num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Person</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create a fake example person</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Create a list of roles</span>
     <span class="n">roles</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILMEMBER</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">)),</span>
-        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">CHAIR</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)),</span>
+        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILMEMBER</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Example Committee"</span><span class="p">)),</span>
+        <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">CHAIR</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Committee </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
     <span class="p">]</span>
 
     <span class="c1"># Add Council President role for seat position 1</span>
     <span class="k">if</span> <span class="n">seat_num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">roles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILPRESIDENT</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">))</span>
+            <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILPRESIDENT</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Example Committee"</span><span class="p">))</span>
         <span class="p">)</span>
 
     <span class="c1"># Get the seat electoral type num</span>
     <span class="n">seat_electoral_type</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">seat_num</span> <span class="o">&lt;=</span> <span class="n">NUM_COUNCIL_SEATS</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">2</span>
     <span class="k">return</span> <span class="n">Person</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Person </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">email</span><span class="o">=</span><span class="s2">&quot;person@example.com&quot;</span><span class="p">,</span>
-        <span class="n">phone</span><span class="o">=</span><span class="s2">&quot;123-456-7890&quot;</span><span class="p">,</span>
-        <span class="n">website</span><span class="o">=</span><span class="s2">&quot;www.example.com&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Person </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">email</span><span class="o">=</span><span class="s2">"person@example.com"</span><span class="p">,</span>
+        <span class="n">phone</span><span class="o">=</span><span class="s2">"123-456-7890"</span><span class="p">,</span>
+        <span class="n">website</span><span class="o">=</span><span class="s2">"www.example.com"</span><span class="p">,</span>
         <span class="n">picture_uri</span><span class="o">=</span><span class="n">PERSON_PICTURE_URI</span><span class="p">,</span>
         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Seat Position </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">electoral_area</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Electoral Area </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">electoral_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Electoral Type </span><span class="si">{</span><span class="n">seat_electoral_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Seat Position </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">electoral_area</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Electoral Area </span><span class="si">{</span><span class="n">seat_num</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">electoral_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Electoral Type </span><span class="si">{</span><span class="n">seat_electoral_type</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">image_uri</span><span class="o">=</span><span class="n">SEAT_URI</span><span class="p">,</span>
             <span class="n">roles</span><span class="o">=</span><span class="n">roles</span><span class="p">,</span>
         <span class="p">),</span>
@@ -227,13 +319,13 @@
 
 
 <span class="k">def</span> <span class="nf">_get_example_event</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EventIngestionModel</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create a fake example event data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Create a body for the event</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="n">RAND_BODY_RANGE</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example Description&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Committee </span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="n">RAND_BODY_RANGE</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Example Description"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Create sessions for the event</span>
@@ -296,19 +388,19 @@
     <span class="n">event_minutes_items</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">EventMinutesItem</span><span class="p">(</span>
             <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Minutes Item </span><span class="si">{</span><span class="n">matter_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example Description&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Minutes Item </span><span class="si">{</span><span class="n">matter_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s2">"Example Description"</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">matter</span><span class="o">=</span><span class="n">Matter</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Matter </span><span class="si">{</span><span class="n">matter_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">matter_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Matter Type </span><span class="si">{</span><span class="n">bin_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Example Matter Title&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Matter </span><span class="si">{</span><span class="n">matter_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">matter_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Matter Type </span><span class="si">{</span><span class="n">bin_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">"Example Matter Title"</span><span class="p">,</span>
                 <span class="n">result_status</span><span class="o">=</span><span class="n">MatterStatusDecision</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">,</span>
                 <span class="n">sponsors</span><span class="o">=</span><span class="p">[</span><span class="n">_get_example_person</span><span class="p">(</span><span class="n">bin_nums</span><span class="p">[</span><span class="n">i</span><span class="p">])],</span>
             <span class="p">),</span>
             <span class="n">supporting_files</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">SupportingFile</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Supporting File Name </span><span class="si">{</span><span class="n">file_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Example Supporting File Name </span><span class="si">{</span><span class="n">file_num</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                     <span class="n">uri</span><span class="o">=</span><span class="n">DUMMY_FILE_URI</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">file_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -330,7 +422,7 @@
         <span class="mi">0</span><span class="p">,</span>
         <span class="n">EventMinutesItem</span><span class="p">(</span>
             <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Approval of Agenda&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example Description&quot;</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">"Approval of Agenda"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Example Description"</span>
             <span class="p">)</span>
         <span class="p">),</span>
     <span class="p">)</span>
@@ -345,23 +437,23 @@
 
 
 <div class="viewcode-block" id="get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.get_events">[docs]</a><span class="k">def</span> <span class="nf">get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    A mock get_events function that will generate entirely random events</span>
 <span class="sd">    based off a set of permutation settings.</span>
 
 <span class="sd">    Useful when running a pipeline test against a dev infrastructure.</span>
 
 <span class="sd">    Also imported and used in the example repo and integration tests.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">_get_example_event</span><span class="p">()]</span></div>
 
 
 <span class="n">RANDOM_FLOW_CONFIG</span> <span class="o">=</span> <span class="n">EventGatherPipelineConfig</span><span class="p">(</span>
-    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">&quot;cdp_backend.pipeline.mock_get_events.get_events&quot;</span><span class="p">,</span>
-    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">"cdp_backend.pipeline.mock_get_events.get_events"</span><span class="p">,</span>
+    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">RANDOM_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">RANDOM_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">""</span>
 
 
 <div class="viewcode-block" id="min_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.min_get_events">[docs]</a><span class="k">def</span> <span class="nf">min_get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
@@ -371,11 +463,11 @@
 
 
 <span class="n">MINIMAL_FLOW_CONFIG</span> <span class="o">=</span> <span class="n">EventGatherPipelineConfig</span><span class="p">(</span>
-    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">&quot;cdp_backend.pipeline.mock_get_events.min_get_events&quot;</span><span class="p">,</span>
-    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">"cdp_backend.pipeline.mock_get_events.min_get_events"</span><span class="p">,</span>
+    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">MINIMAL_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">MINIMAL_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">""</span>
 
 
 <div class="viewcode-block" id="filled_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.filled_get_events">[docs]</a><span class="k">def</span> <span class="nf">filled_get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
@@ -384,11 +476,11 @@
 
 
 <span class="n">FILLED_FLOW_CONFIG</span> <span class="o">=</span> <span class="n">EventGatherPipelineConfig</span><span class="p">(</span>
-    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">&quot;cdp_backend.pipeline.mock_get_events.filled_get_events&quot;</span><span class="p">,</span>
-    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">"cdp_backend.pipeline.mock_get_events.filled_get_events"</span><span class="p">,</span>
+    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">FILLED_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">FILLED_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">""</span>
 
 
 <div class="viewcode-block" id="many_get_events"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.mock_get_events.many_get_events">[docs]</a><span class="k">def</span> <span class="nf">many_get_events</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]:</span>
@@ -397,38 +489,49 @@
 
 
 <span class="n">MANY_FLOW_CONFIG</span> <span class="o">=</span> <span class="n">EventGatherPipelineConfig</span><span class="p">(</span>
-    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">&quot;cdp_backend.pipeline.mock_get_events.many_get_events&quot;</span><span class="p">,</span>
-    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">google_credentials_file</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+    <span class="n">get_events_function_path</span><span class="o">=</span><span class="s2">"cdp_backend.pipeline.mock_get_events.many_get_events"</span><span class="p">,</span>
+    <span class="n">gcs_bucket_name</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">MANY_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">MANY_FLOW_CONFIG</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span> <span class="o">=</span> <span class="s2">""</span>
 </pre></div>
-
-           </div>
-          </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2020, Jackson Maxfield Brown.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+        </article>
       </div>
-    </section>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Council Data Project Contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
 </html>
