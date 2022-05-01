@@ -20,19 +20,19 @@ infrastructure_requirements = [
 
 pipeline_requirements = [
     "dask[distributed]>=2021.7.0",
-    "ffmpeg-python~=0.2.0",
-    "google-cloud-speech~=2.11.0",
+    "ffmpeg-python==0.2.0",
+    "google-cloud-speech~=2.13",
     "graphviz~=0.16",
-    "imageio~=2.9",
-    "imageio-ffmpeg~=0.4.4",
+    "imageio~=2.18",
+    "imageio-ffmpeg~=0.4",
     "nltk~=3.6",
-    "pandas~=1.2",
-    "prefect~=0.14.0",
-    "rapidfuzz~=1.4",
+    "pandas~=1.0",
+    "prefect~=1.2",
+    "rapidfuzz~=2.0",
     "spacy~=3.0",
-    "truecase~=0.0.12",
-    "webvtt-py~=0.4.6",
-    "yt-dlp~=2022.2.4",
+    "truecase==0.0.14",
+    "webvtt-py==0.4.6",
+    "yt-dlp>=2022.2.4",
 ]
 
 test_requirements = [
