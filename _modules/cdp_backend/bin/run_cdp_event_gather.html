@@ -324,6 +324,9 @@
                 <span class="n">executor</span><span class="o">=</span><span class="n">executors</span><span class="o">.</span><span class="n">DaskExecutor</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">),</span>
             <span class="p">)</span>
 
+            <span class="c1"># Shutdown cluster after run</span>
+            <span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
