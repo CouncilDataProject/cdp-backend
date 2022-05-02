@@ -542,7 +542,7 @@ def test_store_event_processing_results(
         "cdp_backend.database.validators.resource_exists"
     ) as mock_resource_exists:
         if fail_try_url:
-            mock_resource_exists.side_effect = LookupError
+            mock_resource_exists.side_effect = LookupError()
         else:
             mock_resource_exists.return_value = True
 
