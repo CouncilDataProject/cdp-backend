@@ -45,7 +45,6 @@ from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
 # great system stdlib :upsidedownface:
 
 PIPELINE_PATH = "cdp_backend.pipeline.event_gather_pipeline"
-DATABASE_PATH = "cdp_backend.database"
 VIDEO_CONTENT_HASH = "7490ea6cf56648d60a40dd334e46e5d7de0f31dde0c7ce4d85747896fdd2ab42"
 
 #############################################################################
