@@ -1458,7 +1458,6 @@ def store_event_processing_results(
                         except (
                             FieldValidationFailed,
                             ConnectionError,
-                            LookupError,
                         ) as e:
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
