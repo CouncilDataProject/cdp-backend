@@ -538,9 +538,7 @@ def test_store_event_processing_results(
     # externally either.
     mock_resource_copy.return_value = "doesnt-matter.ext"
 
-    with mock.patch(
-        "cdp_backend.database.validators.resource_exists"
-    ) as mock_resource_exists:
+    with mock.patch(f"{PIPELINE_PATH}.resource_exists") as mock_resource_exists:
         if fail_try_url:
             mock_resource_exists.side_effect = LookupError()
         else:
