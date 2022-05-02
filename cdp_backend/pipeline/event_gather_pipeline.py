@@ -1442,6 +1442,7 @@ def store_event_processing_results(
                             f"SupportingFile ('{supporting_file.uri}') "
                             f"uri does not exist. Skipping. Error: {e}"
                         )
+                        continue
 
                     # Archive as matter file
                     if event_minutes_item.matter is not None:
