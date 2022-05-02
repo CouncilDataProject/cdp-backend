@@ -468,9 +468,8 @@ for i in range(6):
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
-@mock.patch(f"{DATABASE_PATH}.validators.resource_exists")
 @pytest.mark.parametrize(
-    "event, session_processing_results, fail_file_uploads, fail_try_url",
+    "event, session_processing_results, fail_file_uploads",
     [
         (
             deepcopy(EXAMPLE_MINIMAL_EVENT),
@@ -486,7 +485,6 @@ for i in range(6):
                     hover_thumbnail_uri="ex://abc123-hover-thumbnail.gif",
                 ),
             ],
-            False,
             False,
         ),
         (
@@ -514,7 +512,6 @@ for i in range(6):
                 ),
             ],
             False,
-            False,
         ),
         *RANDOM_EVENTS_AND_PROC_RESULTS,
     ],
@@ -524,25 +521,23 @@ def test_store_event_processing_results(
     mock_remove_local_file: MagicMock,
     mock_upload_file: MagicMock,
     mock_resource_copy: MagicMock,
-    mock_resource_exists: MagicMock,
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
     fail_file_uploads: bool,
-    fail_try_url: bool,
 ) -> None:
     # All of the resource copies relate to image file uploads / archival.
     # But we aren't actually uploading so just make sure that we aren't downloading
     # externally either.
     mock_resource_copy.return_value = "doesnt-matter.ext"
 
+    with mock.patch(
+        "cdp_backend.database.validators.resource_exists"
+    ) as mock_resource_exists:
+        mock_resource_exists.return_value = True
+
     # Set file upload side effect
     if fail_file_uploads:
         mock_upload_file.side_effect = FileNotFoundError()
-
-    if fail_try_url:
-        mock_resource_exists.side_effect = LookupError
-    else:
-        mock_resource_exists.return_value = True
 
     pipeline.store_event_processing_results.run(  # type: ignore
         event=event,
