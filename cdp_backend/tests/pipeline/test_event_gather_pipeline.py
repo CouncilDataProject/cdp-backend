@@ -246,8 +246,6 @@ def test_generate_transcript(
     mock_upload_transcript.return_value = mock_upload_transcript_return
 
     with Flow("Test Generate Transcript") as flow:
-        print(session)
-        print(event)
         pipeline.generate_transcript(
             session_content_hash="abc123",
             audio_uri="fake://doesn't-matter.wav",
@@ -520,6 +518,12 @@ for i in range(6):
             False,
             True,
         ),
+        (
+            deepcopy(EXAMPLE_FILLED_EVENT),
+            [],
+            False,
+            False,
+        ),
         *RANDOM_EVENTS_AND_PROC_RESULTS,
     ],
 )
@@ -538,22 +542,22 @@ def test_store_event_processing_results(
     # externally either.
     mock_resource_copy.return_value = "doesnt-matter.ext"
 
-    with mock.patch(f"{PIPELINE_PATH}.resource_exists") as mock_resource_exists:
+    with mock.patch(f"{PIPELINE_PATH}.try_url") as mock_resource_exists:
         if fail_try_url:
             mock_resource_exists.side_effect = LookupError()
         else:
             mock_resource_exists.return_value = True
 
-    # Set file upload side effect
-    if fail_file_uploads:
-        mock_upload_file.side_effect = FileNotFoundError()
+        # Set file upload side effect
+        if fail_file_uploads:
+            mock_upload_file.side_effect = FileNotFoundError()
 
-    pipeline.store_event_processing_results.run(  # type: ignore
-        event=event,
-        session_processing_results=session_processing_results,
-        credentials_file="fake/credentials.json",
-        bucket="doesnt://matter",
-    )
+        pipeline.store_event_processing_results.run(  # type: ignore
+            event=event,
+            session_processing_results=session_processing_results,
+            credentials_file="fake/credentials.json",
+            bucket="doesnt://matter",
+        )
 
 
 NONSECURE_VIDEO_MINIMAL_EVENT_BUT_SECURE_FINDABLE = deepcopy(EXAMPLE_MINIMAL_EVENT)
