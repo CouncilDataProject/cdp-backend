@@ -332,7 +332,7 @@ def convert_video_and_handle_host(
 
         # Update variable name for easier downstream typing
         video_filepath = mp4_filepath
-    
+
     # Check if original session video uri is a m3u8
     # We cant follow the normal coonvert video process from above
     # because the m3u8 looks to the URI for all the chunks
