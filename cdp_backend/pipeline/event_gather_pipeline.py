@@ -1434,6 +1434,15 @@ def store_event_processing_results(
             # Add supporting files for matter and event minutes item
             if event_minutes_item.supporting_files is not None:
                 for supporting_file in event_minutes_item.supporting_files:
+                    try:
+                        file_uri = try_url(supporting_file.uri)
+                        supporting_file.uri = file_uri
+                    except LookupError as e:
+                        log.error(
+                            f"SupportingFile ('{supporting_file.uri}') "
+                            f"uri does not exist. Skipping. Error: {e}"
+                        )
+                        continue
 
                     # Archive as matter file
                     if event_minutes_item.matter is not None:
@@ -1447,7 +1456,10 @@ def store_event_processing_results(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except (FieldValidationFailed, ConnectionError) as e:
+                        except (
+                            FieldValidationFailed,
+                            ConnectionError,
+                        ) as e:
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
                                 f"could not be archived. Skipping. Error: {e}"
