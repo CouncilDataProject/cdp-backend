@@ -245,23 +245,19 @@ def test_convert_video_to_mp4(
         (EXAMPLE_YOUTUBE_VIDEO_EMBEDDED, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
-        (
-            EXAMPLE_M3U8_PLAYLIST_URI,
-            (
-                "9a9f4274874b62103bb93309fba58fef2dd34ef0b97409dc4ce5e365bf8bb13f-"
-                "playlist.mp4",
-            ),
-        ),
+        (EXAMPLE_M3U8_PLAYLIST_URI, None),
     ],
 )
 def test_remote_resource_copy(
     resources_dir: Path,
     uri: str,
-    expected: str,
+    expected: Optional[str],
 ) -> None:
     actual_uri = file_utils.resource_copy(uri, resources_dir, True)
-    expected_uri = str(resources_dir / expected)
-    assert actual_uri == expected_uri
+    if expected:
+        expected_uri = str(resources_dir / expected)
+        assert actual_uri == expected_uri
+    
     assert Path(actual_uri).exists()
     assert Path(actual_uri).is_file()
 

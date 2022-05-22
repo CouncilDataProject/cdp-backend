@@ -30,6 +30,7 @@ from cdp_backend.pipeline.mock_get_events import (
 )
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
+from ..conftest import EXAMPLE_M3U8_PLAYLIST_URI
 
 #############################################################################
 
@@ -555,6 +556,9 @@ NON_EXISTENT_REMOTE_MINIMAL_EVENT.sessions[
     0
 ].video_uri = "s3://bucket/does-not-exist.txt"
 
+EXISTING_REMOTE_M3U8_MINIMAL_EVENT = deepcopy(EXAMPLE_MINIMAL_EVENT)
+EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST_URI
+
 
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_open_url_for_gcs_file")
@@ -587,6 +591,12 @@ NON_EXISTENT_REMOTE_MINIMAL_EVENT.sessions[
             "example_video.mp4",
             "hosted-video.mp4",
         ),
+        (
+            "example_video.mp4",
+            deepcopy(EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0]),
+            "example_video.mp4",
+            "hosted-video.mp4",
+        ),
     ],
 )
 def test_convert_video_and_handle_host(
@@ -599,7 +609,6 @@ def test_convert_video_and_handle_host(
     expected_filepath: str,
     expected_hosted_video_url: str,
 ) -> None:
-
     mock_upload_file.return_value = "file_store_uri"
     mock_generate_url.return_value = "hosted-video.mp4"
     mock_convert_video_to_mp4.return_value = expected_filepath

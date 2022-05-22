@@ -7,6 +7,7 @@ import random
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
+from uuid import uuid4
 
 import fsspec
 import requests
@@ -116,12 +117,11 @@ def resource_copy(
         if uri.endswith(".m3u8"):
             import m3u8_To_MP4
 
-            # We add a hash of the uri to the front of the filename because m3u8 files
+            # We add a uuid4 to the front of the filename because m3u8 files
             # are usually simply called playlist.m3u8 -- the result will be
-            # f"{hash}-{name}"
-            uri_hash = sha256(uri.encode("utf-8")).hexdigest()
+            # f"{uuid}-{name}"
             mp4_name = dst.with_suffix(".mp4").name
-            save_name = f"{uri_hash}-{mp4_name}"
+            save_name = f"{uuid4()}-{mp4_name}"
 
             # Reset dst
             dst = dst.parent / save_name
