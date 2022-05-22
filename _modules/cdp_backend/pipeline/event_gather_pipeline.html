@@ -1647,6 +1647,15 @@
             <span class="c1"># Add supporting files for matter and event minutes item</span>
             <span class="k">if</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">supporting_files</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">supporting_file</span> <span class="ow">in</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">supporting_files</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">file_uri</span> <span class="o">=</span> <span class="n">try_url</span><span class="p">(</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+                        <span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">file_uri</span>
+                    <span class="k">except</span> <span class="ne">LookupError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">"SupportingFile ('</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">') "</span>
+                            <span class="sa">f</span><span class="s2">"uri does not exist. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                        <span class="p">)</span>
+                        <span class="k">continue</span>
 
                     <span class="c1"># Archive as matter file</span>
                     <span class="k">if</span> <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1660,7 +1669,10 @@
                                 <span class="n">db_model</span><span class="o">=</span><span class="n">matter_file_db_model</span><span class="p">,</span>
                                 <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
                             <span class="p">)</span>
-                        <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">except</span> <span class="p">(</span>
+                            <span class="n">FieldValidationFailed</span><span class="p">,</span>
+                            <span class="ne">ConnectionError</span><span class="p">,</span>
+                        <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">"MatterFile ('</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">') "</span>
                                 <span class="sa">f</span><span class="s2">"could not be archived. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
