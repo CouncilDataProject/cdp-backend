@@ -257,7 +257,7 @@ def test_remote_resource_copy(
     if expected:
         expected_uri = str(resources_dir / expected)
         assert actual_uri == expected_uri
-    
+
     assert Path(actual_uri).exists()
     assert Path(actual_uri).is_file()
 

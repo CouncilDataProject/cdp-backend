@@ -30,6 +30,7 @@ from cdp_backend.pipeline.mock_get_events import (
 )
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
+
 from ..conftest import EXAMPLE_M3U8_PLAYLIST_URI
 
 #############################################################################
