@@ -32,6 +32,10 @@ EXAMPLE_VIDEO_HD_FILENAME = "example_video_large.mp4"
 EXAMPLE_YOUTUBE_VIDEO_EMBEDDED = "https://www.youtube.com/embed/XALBGkjkUPQ"
 EXAMPLE_YOUTUBE_VIDEO_PARAMETER = "https://www.youtube.com/watch?v=XALBGkjkUPQ"
 EXAMPLE_YOUTUBE_VIDEO_SHORT = "https://youtu.be/watch?v=XALBGkjkUPQ"
+EXAMPLE_M3U8_PLAYLIST_URI = (
+    "https://archive-stream.granicus.com/OnDemand/_definst_/mp4:oakland/"
+    "oakland_fa356edd-b6a3-4532-8118-3ce4881783f4.mp4/playlist.m3u8"
+)
 
 
 @pytest.fixture
