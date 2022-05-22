@@ -546,6 +546,12 @@
         <span class="c1"># Update variable name for easier downstream typing</span>
         <span class="n">video_filepath</span> <span class="o">=</span> <span class="n">mp4_filepath</span>
 
+    <span class="c1"># Check if original session video uri is a m3u8</span>
+    <span class="c1"># We cant follow the normal coonvert video process from above</span>
+    <span class="c1"># because the m3u8 looks to the URI for all the chunks</span>
+    <span class="k">elif</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".m3u8"</span><span class="p">):</span>
+        <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
+
     <span class="c1"># Store if the original host isn't https</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_secure_uri</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
