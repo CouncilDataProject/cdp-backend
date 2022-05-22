@@ -332,6 +332,12 @@ def convert_video_and_handle_host(
 
         # Update variable name for easier downstream typing
         video_filepath = mp4_filepath
+    
+    # Check if original session video uri is a m3u8
+    # We cant follow the normal coonvert video process from above
+    # because the m3u8 looks to the URI for all the chunks
+    elif session.video_uri.endswith(".m3u8"):
+        cdp_will_host = True
 
     # Store if the original host isn't https
     elif not is_secure_uri(session.video_uri):
