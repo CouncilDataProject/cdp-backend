@@ -25,6 +25,7 @@ pipeline_requirements = [
     "graphviz~=0.16",
     "imageio~=2.18",
     "imageio-ffmpeg~=0.4",
+    "m3u8-To-MP4~=0.1",
     "nltk~=3.6",
     "pandas~=1.0",
     "prefect~=1.2",

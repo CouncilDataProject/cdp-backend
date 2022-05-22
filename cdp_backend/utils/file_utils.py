@@ -7,6 +7,7 @@ import random
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
+from uuid import uuid4
 
 import fsspec
 import requests
@@ -112,6 +113,26 @@ def resource_copy(
     try:
         if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
             return youtube_copy(uri, dst, overwrite)
+
+        if uri.endswith(".m3u8"):
+            import m3u8_To_MP4
+
+            # We add a uuid4 to the front of the filename because m3u8 files
+            # are usually simply called playlist.m3u8 -- the result will be
+            # f"{uuid}-{name}"
+            mp4_name = dst.with_suffix(".mp4").name
+            save_name = f"{uuid4()}-{mp4_name}"
+
+            # Reset dst
+            dst = dst.parent / save_name
+
+            # Download and convert
+            m3u8_To_MP4.download(
+                uri,
+                mp4_file_dir=dst.parent,
+                mp4_file_name=save_name,
+            )
+            return str(dst)
 
         # Set custom timeout for http resources
         if uri.startswith("http"):
