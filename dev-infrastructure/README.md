@@ -57,9 +57,6 @@ restart your terminal after installation._
 After `pulumi` and `gcloud` have both been installed and terminal restarted, run the
 following commands to setup your local machine with credentials to both services.
 
-**Note:** Pulumi only supports Python 3.7, when creating dev infrastructures you
-need to run these scripts in a py37 environment.
-
 ```bash
 cd cdp-backend/dev-infrastructure
 make login

@@ -21,6 +21,7 @@ from cdp_backend.utils.file_utils import (
 
 from .. import test_utils
 from ..conftest import (
+    EXAMPLE_M3U8_PLAYLIST_URI,
     EXAMPLE_MKV_VIDEO_FILENAME,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
@@ -239,21 +240,24 @@ def test_convert_video_to_mp4(
     reason="No internet connection",
 )
 @pytest.mark.parametrize(
-    "youtube_uri, expected",
+    "uri, expected",
     [
         (EXAMPLE_YOUTUBE_VIDEO_EMBEDDED, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
+        (EXAMPLE_M3U8_PLAYLIST_URI, None),
     ],
 )
-def test_youtube_downloader(
+def test_remote_resource_copy(
     resources_dir: Path,
-    youtube_uri: str,
-    expected: str,
+    uri: str,
+    expected: Optional[str],
 ) -> None:
-    actual_uri = file_utils.resource_copy(youtube_uri, resources_dir, True)
-    expected_uri = str(resources_dir / expected)
-    assert actual_uri == expected_uri
+    actual_uri = file_utils.resource_copy(uri, resources_dir, True)
+    if expected:
+        expected_uri = str(resources_dir / expected)
+        assert actual_uri == expected_uri
+
     assert Path(actual_uri).exists()
     assert Path(actual_uri).is_file()
 

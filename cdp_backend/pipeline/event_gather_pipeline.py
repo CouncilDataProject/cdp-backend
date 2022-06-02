@@ -10,7 +10,6 @@ from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, 
 
 from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
-from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
@@ -19,7 +18,7 @@ from requests import ConnectionError
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
-from ..database.validators import resource_exists
+from ..database.validators import is_secure_uri, resource_exists, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -159,11 +158,9 @@ def create_event_gather_flow(
 
                 # Check caption uri
                 if session.caption_uri is not None:
-                    fs, caption_path = url_to_fs(session.caption_uri)
-
                     # If the caption doesn't exist, remove the property
                     # This will result in Speech-to-Text being used instead
-                    if not fs.exists(caption_path):
+                    if not resource_exists(session.caption_uri):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
@@ -336,25 +333,29 @@ def convert_video_and_handle_host(
         # Update variable name for easier downstream typing
         video_filepath = mp4_filepath
 
+    # Check if original session video uri is a m3u8
+    # We cant follow the normal coonvert video process from above
+    # because the m3u8 looks to the URI for all the chunks
+    elif session.video_uri.endswith(".m3u8"):
+        cdp_will_host = True
+
     # Store if the original host isn't https
-    elif not session.video_uri.startswith("https://"):
-        # Attempt to find secure version of resource and simply swap
-        # otherwise we will have to host
-        if session.video_uri.startswith("http://"):
-            secure_uri = session.video_uri.replace("http://", "https://")
-            if resource_exists(secure_uri):
+    elif not is_secure_uri(session.video_uri):
+        try:
+            resource_uri = try_url(session.video_uri)
+        except LookupError:
+            # The provided URI could still be like GCS or S3 URI, which
+            # works for download but not for streaming / hosting
+            cdp_will_host = True
+        else:
+            if is_secure_uri(resource_uri):
                 log.info(
                     f"Found secure version of {session.video_uri}, "
                     f"updating stored video URI."
                 )
-                hosted_video_media_url = secure_uri
+                hosted_video_media_url = resource_uri
             else:
                 cdp_will_host = True
-
-        # The provided URI could still be like GCS or S3 URI, which works for download
-        # but not for streaming / hosting
-        else:
-            cdp_will_host = True
     else:
         hosted_video_media_url = session.video_uri
 
@@ -1439,6 +1440,15 @@ def store_event_processing_results(
             # Add supporting files for matter and event minutes item
             if event_minutes_item.supporting_files is not None:
                 for supporting_file in event_minutes_item.supporting_files:
+                    try:
+                        file_uri = try_url(supporting_file.uri)
+                        supporting_file.uri = file_uri
+                    except LookupError as e:
+                        log.error(
+                            f"SupportingFile ('{supporting_file.uri}') "
+                            f"uri does not exist. Skipping. Error: {e}"
+                        )
+                        continue
 
                     # Archive as matter file
                     if event_minutes_item.matter is not None:
@@ -1452,7 +1462,10 @@ def store_event_processing_results(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except (FieldValidationFailed, ConnectionError) as e:
+                        except (
+                            FieldValidationFailed,
+                            ConnectionError,
+                        ) as e:
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
                                 f"could not be archived. Skipping. Error: {e}"

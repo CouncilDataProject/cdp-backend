@@ -4,7 +4,7 @@
 import logging
 import re
 from dataclasses import dataclass
-from typing import Callable, List, Optional, Type
+from typing import Any, Callable, List, Optional, Type
 
 import requests
 from fireo.models import Model
@@ -97,7 +97,7 @@ def email_is_valid(email: Optional[str]) -> bool:
     return False
 
 
-def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
+def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:
     """
     Validate that the URI provided points to an existing file.
 
@@ -142,7 +142,7 @@ def resource_exists(uri: Optional[str], **kwargs: str) -> bool:
     elif uri.startswith("http"):
         try:
             # Use HEAD request to check if remote resource exists
-            r = requests.head(uri)
+            r = requests.head(uri, verify=False)
 
             return r.status_code == requests.codes.ok
         except requests.exceptions.SSLError:
@@ -195,3 +195,36 @@ def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]
         return value is None or value in get_all_class_attr_values(constant_cls)
 
     return is_valid
+
+
+def try_url(url: str, resolve_func: Callable = resource_exists) -> str:
+    """
+    Given a URL, return the URL with the protocol that exists (http or https)
+    with a preference for https.
+
+    Parameters
+    ----------
+    url: str
+        The target resource url.
+    resolve_func: func(url: str) -> bool
+        A function that takes in a str URL and determines whether it is reachable.
+        Default is our "resource_exists" func
+
+    Returns
+    -------
+    resource_url: str
+        The url with the correct protocol based on where the resource exists.
+        If does not exist, a LookupError is raised.
+    """
+    secure_url = url.replace("http://", "https://")
+    if resolve_func(secure_url):
+        return secure_url
+
+    if resolve_func(url):
+        return url
+
+    raise LookupError(f"the resource {url} could not be found")
+
+
+def is_secure_uri(url: str) -> bool:
+    return url.startswith("https://")

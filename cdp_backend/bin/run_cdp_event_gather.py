@@ -111,6 +111,9 @@ def main() -> None:
                 executor=executors.DaskExecutor(address=distributed_executor_address),
             )
 
+            # Shutdown cluster after run
+            cluster.close()
+
         else:
             state = flow.run()
 

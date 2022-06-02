@@ -7,9 +7,10 @@ import random
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
+from uuid import uuid4
 
-import aiohttp
 import fsspec
+import requests
 from fsspec.core import url_to_fs
 
 ###############################################################################
@@ -113,17 +114,47 @@ def resource_copy(
         if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
             return youtube_copy(uri, dst, overwrite)
 
-        kwargs = {}
+        if uri.endswith(".m3u8"):
+            import m3u8_To_MP4
+
+            # We add a uuid4 to the front of the filename because m3u8 files
+            # are usually simply called playlist.m3u8 -- the result will be
+            # f"{uuid}-{name}"
+            mp4_name = dst.with_suffix(".mp4").name
+            save_name = f"{uuid4()}-{mp4_name}"
+
+            # Reset dst
+            dst = dst.parent / save_name
+
+            # Download and convert
+            m3u8_To_MP4.download(
+                uri,
+                mp4_file_dir=dst.parent,
+                mp4_file_name=save_name,
+            )
+            return str(dst)
 
         # Set custom timeout for http resources
         if uri.startswith("http"):
-            kwargs = {"timeout": aiohttp.ClientTimeout(total=1800)}
+            # The verify=False is passed to any http URIs
+            # It was added because it's very common for SSL certs to be bad
+            # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
+            # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
+            with open(dst, "wb") as open_dst:
+                open_dst.write(
+                    requests.get(
+                        uri,
+                        verify=False,
+                        timeout=1800,
+                    ).content
+                )
 
-        # TODO: Add explicit use of GCS credentials until public read is fixed
-        fs, remote_path = url_to_fs(uri, **kwargs)
-        fs.get(remote_path, str(dst))
-        log.info(f"Completed resource copy from: {uri}")
-        log.info(f"Stored resource copy: {dst}")
+        else:
+            # TODO: Add explicit use of GCS credentials until public read is fixed
+            fs, remote_path = url_to_fs(uri)
+            fs.get(remote_path, str(dst))
+            log.info(f"Completed resource copy from: {uri}")
+            log.info(f"Stored resource copy: {dst}")
 
         return str(dst)
     except Exception as e:
@@ -389,7 +420,7 @@ def find_proper_resize_ratio(height: int, width: int) -> float:
     return 2
 
 
-def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
+def hash_file_contents(uri: str, buffer_size: int = 2**16) -> str:
     """
     Return the SHA256 hash of a file's content.
 
