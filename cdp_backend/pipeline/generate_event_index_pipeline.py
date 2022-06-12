@@ -60,7 +60,7 @@ def get_transcripts(credentials_file: str) -> List[db_models.Transcript]:
     return db_functions.get_all_of_collection(
         db_model=db_models.Transcript,
         credentials_file=credentials_file,
-    )[:20]
+    )
 
 
 @task
@@ -361,11 +361,13 @@ def chunk_index(
     storage_dir.mkdir(parents=True)
 
     # Split single large dataframe into many dataframes
-    chunk_size = 100_000
-    for i in range(0, n_grams_df.shape[0], chunk_size):
-        n_grams_chunk = n_grams_df[i : i + chunk_size]
+    chunk_size = 50_000
+    for chunk_index, chunk_offset in enumerate(
+        range(0, n_grams_df.shape[0], chunk_size)
+    ):
+        n_grams_chunk = n_grams_df[chunk_offset : chunk_offset + chunk_size]
         n_grams_chunk.to_parquet(
-            storage_dir / f"n_gram-{n_grams}-index_chunk_{i}.parquet"
+            storage_dir / f"n_gram-{n_grams}-index_chunk-{chunk_index}.parquet"
         )
 
 

@@ -133,6 +133,10 @@ setup(
                 "run_cdp_event_index_generation="
                 "cdp_backend.bin.run_cdp_event_index_generation:main"
             ),
+            (
+                "upload_cdp_event_index_chunk="
+                "cdp_backend.bin.upload_cdp_event_index_chunk:main"
+            ),
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
             (
