@@ -31,9 +31,7 @@ class Args(argparse.Namespace):
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
             prog="upload_cdp_event_index_chunk",
-            description=(
-                "Upload a single index chunk to a CDP database."
-            ),
+            description=("Upload a single index chunk to a CDP database."),
         )
         p.add_argument(
             "config_file",
