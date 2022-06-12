@@ -277,7 +277,7 @@ def test_mocked_pipeline_run(
 
     # Compare produced index
     expected_values = pd.read_parquet(resources_dir / "expected_1_gram_index.parquet")
-    result_values = pd.read_parquet("index/n_gram-1-index_chunk_0.parquet")
+    result_values = pd.read_parquet("index/n_gram-1--index_chunk-0.parquet")
 
     # Sort dataframes and reset indices to ensure consistency
     expected_values = expected_values.sort_values(by="stemmed_gram").reset_index(
@@ -303,4 +303,4 @@ def test_mocked_pipeline_run(
     pd._testing.assert_frame_equal(result_values, expected_values)
 
     # Cleanup
-    os.remove("index/n_gram-1-index_chunk_0.parquet")
+    os.remove("index/n_gram-1--index_chunk-0.parquet")

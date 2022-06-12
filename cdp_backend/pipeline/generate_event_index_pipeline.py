@@ -367,7 +367,7 @@ def chunk_index(
     ):
         n_grams_chunk = n_grams_df[chunk_offset : chunk_offset + chunk_size]
         n_grams_chunk.to_parquet(
-            storage_dir / f"n_gram-{n_grams}-index_chunk-{chunk_index}.parquet"
+            storage_dir / f"n_gram-{n_grams}--index_chunk-{chunk_index}.parquet"
         )
 
 
