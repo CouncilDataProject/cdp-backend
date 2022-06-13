@@ -29,7 +29,7 @@ pipeline_requirements = [
     "nltk~=3.6",
     "pandas~=1.0",
     "prefect~=1.2",
-    "pyarrow~=5.0",
+    "pyarrow~=8.0",
     "rapidfuzz~=2.0",
     "spacy~=3.0",
     "truecase==0.0.14",
@@ -134,8 +134,8 @@ setup(
                 "cdp_backend.bin.run_cdp_event_index_generation:main"
             ),
             (
-                "upload_cdp_event_index_chunk="
-                "cdp_backend.bin.upload_cdp_event_index_chunk:main"
+                "process_cdp_event_index_chunk="
+                "cdp_backend.bin.process_cdp_event_index_chunk:main"
             ),
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
