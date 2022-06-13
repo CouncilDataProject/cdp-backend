@@ -39,8 +39,14 @@ PIPELINE_PATH = "cdp_backend.pipeline.generate_event_index_pipeline"
 #############################################################################
 
 
+@mock.patch("gcsfs.credentials.GoogleCredentials.connect")
+@mock.patch(f"{PIPELINE_PATH}.EventIndexPipelineConfig.validated_gcs_bucket_name")
 @pytest.mark.parametrize("n_grams", [1, 2, 3])
-def test_create_event_index_flow(n_grams: int) -> None:
+def test_create_event_index_flow(
+    mocked_validated_bucket_name: MagicMock,
+    mocked_gcs_connect: MagicMock,
+    n_grams: int,
+) -> None:
     flow = pipeline.create_event_index_generation_pipeline(
         config=EventIndexPipelineConfig("/fake/creds.json", "doesn't-matter"),
         n_grams=n_grams,
@@ -225,9 +231,11 @@ def test_get_transcripts_per_event(
 
 @mock.patch(f"{PIPELINE_PATH}.get_transcripts.run")
 @mock.patch("gcsfs.credentials.GoogleCredentials.connect")
+@mock.patch(f"{PIPELINE_PATH}.EventIndexPipelineConfig.validated_gcs_bucket_name")
 @mock.patch("gcsfs.GCSFileSystem.get")
 def test_mocked_pipeline_run(
     mocked_file_get: MagicMock,
+    mocked_validated_bucket_name: MagicMock,
     mocked_gcs_connect: MagicMock,
     mocked_get_transcript_models: MagicMock,
     resources_dir: Path,
@@ -247,6 +255,8 @@ def test_mocked_pipeline_run(
         session_one_transcript_one,
         session_three_transcript_one,
     ]
+
+    mocked_validated_bucket_name.return_value = "doesn't-matter"
 
     def copy_test_file(rpath: str, lpath: str) -> None:
         if "fake_captions.json" in rpath:
