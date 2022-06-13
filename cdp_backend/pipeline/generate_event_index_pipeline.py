@@ -383,7 +383,7 @@ def chunk_index(
             fs_functions.upload_file(
                 credentials_file=credentials_file,
                 bucket=bucket_name,
-                filepath=local_chunk_path,
+                filepath=str(local_chunk_path),
                 save_name=f"{REMOTE_INDEX_CHUNK_DIR}/{save_filename}",
             )
 

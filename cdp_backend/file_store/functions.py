@@ -131,10 +131,8 @@ def download_file(
     bucket: str,
     remote_filepath: str,
     save_path: str,
-) -> Path:
+) -> str:
     fs = initialize_gcs_file_system(credentials_file)
-    print(remote_filepath)
-    print(save_path)
     fs.get(f"{bucket}/{remote_filepath}", save_path)
     return save_path
 

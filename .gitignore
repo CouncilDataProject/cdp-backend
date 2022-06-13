@@ -125,6 +125,7 @@ test.err
 test.out
 tfidf-*.parquet
 index/
+index-chunks/
 7490ea6cf56648d60a40dd334e46e5d7de0f31dde0c7ce4d85747896fdd2ab42-*
 abc123-cdp*
 *-person-picture
