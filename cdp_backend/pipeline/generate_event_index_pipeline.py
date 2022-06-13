@@ -24,6 +24,7 @@ from ..database import models as db_models
 from ..utils import string_utils
 from .pipeline_config import EventIndexPipelineConfig
 from .transcript_model import Sentence, Transcript
+from ..file_store import functions as fs_functions
 
 ###############################################################################
 
@@ -346,11 +347,16 @@ def compute_tfidf(
 def chunk_index(
     n_grams_df: pd.DataFrame,
     n_grams: int,
+    credentials_file: str,
+    bucket_name: str,
     storage_dir: Path = Path("index/"),
+    store_remote: bool = False,
 ) -> None:
     """
     Split the large n_grams dataframe into multiple lists of IndexedEventGram models
     for batched, mapped, upload.
+
+    Optionally store to cloud firestore.
     """
     # Clean the storage dir
     storage_dir = Path(storage_dir)
@@ -366,14 +372,24 @@ def chunk_index(
         range(0, n_grams_df.shape[0], chunk_size)
     ):
         n_grams_chunk = n_grams_df[chunk_offset : chunk_offset + chunk_size]
-        n_grams_chunk.to_parquet(
-            storage_dir / f"n_gram-{n_grams}--index_chunk-{chunk_index}.parquet"
-        )
+        save_filename = f"n_gram-{n_grams}--index_chunk-{chunk_index}.parquet"
+        local_chunk_path = storage_dir / save_filename
+        n_grams_chunk.to_parquet(local_chunk_path)
+
+        # Optional remote storage
+        if store_remote:
+           fs_functions.upload_file(
+               credentials_file=credentials_file,
+               bucket=bucket_name,
+               filepath=local_chunk_path,
+               save_name=f"index-chunks/{save_filename}"
+           )
 
 
 def create_event_index_generation_pipeline(
     config: EventIndexPipelineConfig,
     n_grams: int = 1,
+    store_remote: bool = False,
 ) -> Flow:
     """
     Create the Prefect Flow object to preview, run, or visualize for indexing
@@ -385,6 +401,9 @@ def create_event_index_generation_pipeline(
         Configuration options for the pipeline.
     n_grams: int
         N number of terms to act as a unique entity. Default: 1
+    store_remote: bool
+        Should the generated index chunks be sent to cloud storage.
+        Default: False (only store locally)
 
     Returns
     -------
@@ -440,11 +459,14 @@ def create_event_index_generation_pipeline(
             datetime_weighting_days_decay=config.datetime_weighting_days_decay,
         )
 
-        # Route to remote database storage
+        # Create index chunks and store local and optional remote
         chunk_index(
             n_grams_df=scored_n_grams,
             n_grams=n_grams,
+            credentials_file=config.google_credentials_file,
+            bucket_name=config.validated_gcs_bucket_name,
             storage_dir=config.local_storage_dir,
+            store_remote=store_remote,
         )
 
     return flow
