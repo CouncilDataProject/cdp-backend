@@ -10,7 +10,7 @@ from pathlib import Path
 from distributed import LocalCluster
 from prefect import executors
 
-from cdp_backend.pipeline import upload_event_index_pipeline as pipeline
+from cdp_backend.pipeline import process_event_index_chunk_pipeline as pipeline
 from cdp_backend.pipeline.pipeline_config import EventIndexPipelineConfig
 
 ###############################################################################
@@ -30,8 +30,11 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="upload_cdp_event_index_chunk",
-            description=("Upload a single index chunk to a CDP database."),
+            prog="process_cdp_event_index_chunk",
+            description=(
+                "Download a single event index chunk from remote storage, "
+                "then process it and upload ngrams to a CDP database."
+            ),
         )
         p.add_argument(
             "config_file",
@@ -45,7 +48,7 @@ class Args(argparse.Namespace):
         p.add_argument(
             "chunk",
             type=Path,
-            help="Filepath to the parquet index chunk to upload.",
+            help="Filename for the parquet index chunk to process and upload.",
         )
         p.add_argument(
             "-p",

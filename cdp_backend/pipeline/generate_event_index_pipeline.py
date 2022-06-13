@@ -21,10 +21,12 @@ from prefect import Flow, task, unmapped
 
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..file_store import functions as fs_functions
 from ..utils import string_utils
 from .pipeline_config import EventIndexPipelineConfig
 from .transcript_model import Sentence, Transcript
-from ..file_store import functions as fs_functions
+
+REMOTE_INDEX_CHUNK_DIR = "index-chunks"
 
 ###############################################################################
 
@@ -378,12 +380,12 @@ def chunk_index(
 
         # Optional remote storage
         if store_remote:
-           fs_functions.upload_file(
-               credentials_file=credentials_file,
-               bucket=bucket_name,
-               filepath=local_chunk_path,
-               save_name=f"index-chunks/{save_filename}"
-           )
+            fs_functions.upload_file(
+                credentials_file=credentials_file,
+                bucket=bucket_name,
+                filepath=local_chunk_path,
+                save_name=f"{REMOTE_INDEX_CHUNK_DIR}/{save_filename}",
+            )
 
 
 def create_event_index_generation_pipeline(

@@ -30,7 +30,7 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="run_cdp_event_index",
+            prog="run_cdp_event_index_generation",
             description=(
                 "Index all event (session) transcripts from a CDP infrastructure."
             ),
@@ -50,6 +50,16 @@ class Args(argparse.Namespace):
             type=int,
             default=1,
             help="N number of terms to act as a unique entity.",
+        )
+        p.add_argument(
+            "-s",
+            "--store_remote",
+            action="store_true",
+            dest="store_remote",
+            help=(
+                "Store chunks to remote cloud storage. "
+                "Required to add a search index."
+            ),
         )
         p.add_argument(
             "-p",
@@ -77,6 +87,7 @@ def main() -> None:
         flow = pipeline.create_event_index_generation_pipeline(
             config=config,
             n_grams=args.n_grams,
+            store_remote=args.store_remote,
         )
 
         # Determine executor
