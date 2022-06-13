@@ -164,7 +164,15 @@ class WebVTTSRModel(SRModel):
         # List of text, representing a sentence
         lines: List[str] = []
         start_time: Optional[float] = None
+
         for caption in speaker_turn_captions:
+
+            # Clean text of line breaks
+            caption.text = caption.text.replace('\n', ' ')
+
+            # Remove any double spaces as result of line break removal
+            caption.text = caption.text.replace('  ', ' ')
+
             if start_time is None:
                 start_time = caption.start_in_seconds
             lines.append(caption.text)
