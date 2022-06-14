@@ -17,6 +17,7 @@ from cdp_backend.sr_models import WebVTTSRModel
             "brief_080221_2012161.vtt",
             "generated_transcript_from_brief_080221_2012161.json",
         ),
+        ("boston_captions.vtt", "boston_transcript.json"),
     ],
 )
 def test_transcribe(
