@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.database.constants - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -216,51 +217,51 @@
 
 
 <div class="viewcode-block" id="Order"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.Order">[docs]</a><span class="k">class</span> <span class="nc">Order</span><span class="p">:</span>
-    <span class="n">ASCENDING</span> <span class="o">=</span> <span class="s2">"ASCENDING"</span>
-    <span class="n">DESCENDING</span> <span class="o">=</span> <span class="s2">"DESCENDING"</span></div>
+    <span class="n">ASCENDING</span> <span class="o">=</span> <span class="s2">&quot;ASCENDING&quot;</span>
+    <span class="n">DESCENDING</span> <span class="o">=</span> <span class="s2">&quot;DESCENDING&quot;</span></div>
 
 
 <div class="viewcode-block" id="EventMinutesItemDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.EventMinutesItemDecision">[docs]</a><span class="k">class</span> <span class="nc">EventMinutesItemDecision</span><span class="p">:</span>
-    <span class="n">PASSED</span> <span class="o">=</span> <span class="s2">"Passed"</span>
-    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">"Failed"</span></div>
+    <span class="n">PASSED</span> <span class="o">=</span> <span class="s2">&quot;Passed&quot;</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span></div>
 
 
 <div class="viewcode-block" id="VoteDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.VoteDecision">[docs]</a><span class="k">class</span> <span class="nc">VoteDecision</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstain and Absent can mean many things.</span>
 <span class="sd">    It depends on each municipality what each legally dictates.</span>
 
 <span class="sd">    See here:</span>
 <span class="sd">    https://mrsc.org/Home/Stay-Informed/MRSC-Insight/April-2013/How-Are-Abstentions-Handled-When-Counting-Votes.aspx</span>
 
-<span class="sd">    You may see "Non-Voting" reported as `(NV)` from Legistar for</span>
+<span class="sd">    You may see &quot;Non-Voting&quot; reported as `(NV)` from Legistar for</span>
 <span class="sd">    example.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">APPROVE</span> <span class="o">=</span> <span class="s2">"Approve"</span>
-    <span class="n">REJECT</span> <span class="o">=</span> <span class="s2">"Reject"</span>
-    <span class="n">ABSTAIN_NON_VOTING</span> <span class="o">=</span> <span class="s2">"Abstain (Non-Voting)"</span>
-    <span class="n">ABSTAIN_APPROVE</span> <span class="o">=</span> <span class="s2">"Abstain (Approve)"</span>
-    <span class="n">ABSTAIN_REJECT</span> <span class="o">=</span> <span class="s2">"Abstain (Reject)"</span>
-    <span class="n">ABSENT_NON_VOTING</span> <span class="o">=</span> <span class="s2">"Absent (Non-Voting)"</span>
-    <span class="n">ABSENT_APPROVE</span> <span class="o">=</span> <span class="s2">"Absent (Approve)"</span>
-    <span class="n">ABSENT_REJECT</span> <span class="o">=</span> <span class="s2">"Absent (Reject)"</span></div>
+    <span class="n">APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Approve&quot;</span>
+    <span class="n">REJECT</span> <span class="o">=</span> <span class="s2">&quot;Reject&quot;</span>
+    <span class="n">ABSTAIN_NON_VOTING</span> <span class="o">=</span> <span class="s2">&quot;Abstain (Non-Voting)&quot;</span>
+    <span class="n">ABSTAIN_APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Abstain (Approve)&quot;</span>
+    <span class="n">ABSTAIN_REJECT</span> <span class="o">=</span> <span class="s2">&quot;Abstain (Reject)&quot;</span>
+    <span class="n">ABSENT_NON_VOTING</span> <span class="o">=</span> <span class="s2">&quot;Absent (Non-Voting)&quot;</span>
+    <span class="n">ABSENT_APPROVE</span> <span class="o">=</span> <span class="s2">&quot;Absent (Approve)&quot;</span>
+    <span class="n">ABSENT_REJECT</span> <span class="o">=</span> <span class="s2">&quot;Absent (Reject)&quot;</span></div>
 
 
 <div class="viewcode-block" id="MatterStatusDecision"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.MatterStatusDecision">[docs]</a><span class="k">class</span> <span class="nc">MatterStatusDecision</span><span class="p">:</span>
-    <span class="n">ADOPTED</span> <span class="o">=</span> <span class="s2">"Adopted"</span>
-    <span class="n">REJECTED</span> <span class="o">=</span> <span class="s2">"Rejected"</span>
-    <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">"In Progress"</span></div>
+    <span class="n">ADOPTED</span> <span class="o">=</span> <span class="s2">&quot;Adopted&quot;</span>
+    <span class="n">REJECTED</span> <span class="o">=</span> <span class="s2">&quot;Rejected&quot;</span>
+    <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">&quot;In Progress&quot;</span></div>
 
 
 <div class="viewcode-block" id="RoleTitle"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.constants.RoleTitle">[docs]</a><span class="k">class</span> <span class="nc">RoleTitle</span><span class="p">:</span>
-    <span class="n">COUNCILMEMBER</span> <span class="o">=</span> <span class="s2">"Councilmember"</span>
-    <span class="n">COUNCILPRESIDENT</span> <span class="o">=</span> <span class="s2">"Council President"</span>
-    <span class="n">CHAIR</span> <span class="o">=</span> <span class="s2">"Chair"</span>
-    <span class="n">VICE_CHAIR</span> <span class="o">=</span> <span class="s2">"Vice Chair"</span>
-    <span class="n">ALTERNATE</span> <span class="o">=</span> <span class="s2">"Alternate"</span>
-    <span class="n">MEMBER</span> <span class="o">=</span> <span class="s2">"Member"</span>
-    <span class="n">SUPERVISOR</span> <span class="o">=</span> <span class="s2">"Supervisor"</span></div>
+    <span class="n">COUNCILMEMBER</span> <span class="o">=</span> <span class="s2">&quot;Councilmember&quot;</span>
+    <span class="n">COUNCILPRESIDENT</span> <span class="o">=</span> <span class="s2">&quot;Council President&quot;</span>
+    <span class="n">CHAIR</span> <span class="o">=</span> <span class="s2">&quot;Chair&quot;</span>
+    <span class="n">VICE_CHAIR</span> <span class="o">=</span> <span class="s2">&quot;Vice Chair&quot;</span>
+    <span class="n">ALTERNATE</span> <span class="o">=</span> <span class="s2">&quot;Alternate&quot;</span>
+    <span class="n">MEMBER</span> <span class="o">=</span> <span class="s2">&quot;Member&quot;</span>
+    <span class="n">SUPERVISOR</span> <span class="o">=</span> <span class="s2">&quot;Supervisor&quot;</span></div>
 </pre></div>
         </article>
       </div>
@@ -298,6 +299,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

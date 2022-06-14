@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.utils.string_utils - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -226,30 +227,30 @@
 
 
 <div class="viewcode-block" id="remove_emojis"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.remove_emojis">[docs]</a><span class="k">def</span> <span class="nf">remove_emojis</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Minor changes made from this answer on stackoverflow:</span>
 <span class="sd">    https://stackoverflow.com/a/58356570</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">emoj_patterns</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-        <span class="s2">"["</span>
-        <span class="s2">"</span><span class="se">\U0001F600</span><span class="s2">-</span><span class="se">\U0001F64F</span><span class="s2">"</span>  <span class="c1"># emoticons</span>
-        <span class="s2">"</span><span class="se">\U0001F300</span><span class="s2">-</span><span class="se">\U0001F5FF</span><span class="s2">"</span>  <span class="c1"># symbols &amp; pictographs</span>
-        <span class="s2">"</span><span class="se">\U0001F680</span><span class="s2">-</span><span class="se">\U0001F6FF</span><span class="s2">"</span>  <span class="c1"># transport &amp; map symbols</span>
-        <span class="s2">"</span><span class="se">\U0001F1E0</span><span class="s2">-</span><span class="se">\U0001F1FF</span><span class="s2">"</span>  <span class="c1"># flags (iOS)</span>
-        <span class="s2">"</span><span class="se">\U00002702</span><span class="s2">-</span><span class="se">\U000027B0</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\U000024C2</span><span class="s2">-</span><span class="se">\U0001F251</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\U0001f926</span><span class="s2">-</span><span class="se">\U0001f937</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\u2600</span><span class="s2">-</span><span class="se">\u2B55</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\u200d</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\u23cf</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\u23e9</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\u231a</span><span class="s2">"</span>
-        <span class="s2">"</span><span class="se">\ufe0f</span><span class="s2">"</span>  <span class="c1"># dingbats</span>
-        <span class="s2">"</span><span class="se">\u3030</span><span class="s2">"</span>
-        <span class="s2">"]+"</span><span class="p">,</span>
+        <span class="s2">&quot;[&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F600</span><span class="s2">-</span><span class="se">\U0001F64F</span><span class="s2">&quot;</span>  <span class="c1"># emoticons</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F300</span><span class="s2">-</span><span class="se">\U0001F5FF</span><span class="s2">&quot;</span>  <span class="c1"># symbols &amp; pictographs</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F680</span><span class="s2">-</span><span class="se">\U0001F6FF</span><span class="s2">&quot;</span>  <span class="c1"># transport &amp; map symbols</span>
+        <span class="s2">&quot;</span><span class="se">\U0001F1E0</span><span class="s2">-</span><span class="se">\U0001F1FF</span><span class="s2">&quot;</span>  <span class="c1"># flags (iOS)</span>
+        <span class="s2">&quot;</span><span class="se">\U00002702</span><span class="s2">-</span><span class="se">\U000027B0</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\U000024C2</span><span class="s2">-</span><span class="se">\U0001F251</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\U0001f926</span><span class="s2">-</span><span class="se">\U0001f937</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u2600</span><span class="s2">-</span><span class="se">\u2B55</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u200d</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u23cf</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u23e9</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\u231a</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\ufe0f</span><span class="s2">&quot;</span>  <span class="c1"># dingbats</span>
+        <span class="s2">&quot;</span><span class="se">\u3030</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;]+&quot;</span><span class="p">,</span>
         <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">emoj_patterns</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">emoj_patterns</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span>
@@ -257,7 +258,7 @@
     <span class="n">clean_stop_words</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">clean_emojis</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clean text of common characters and extra formatting.</span>
 
 <span class="sd">    Parameters</span>
@@ -275,16 +276,16 @@
 <span class="sd">    -------</span>
 <span class="sd">    cleaned_text: str</span>
 <span class="sd">        The cleaned text.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Remove new line and tab characters</span>
-    <span class="n">cleaned_formatting</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">)</span>
+    <span class="n">cleaned_formatting</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
     <span class="c1"># Replace common sentence structures</span>
-    <span class="n">cleaned_sentence_structs</span> <span class="o">=</span> <span class="n">cleaned_formatting</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"--"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">)</span>
+    <span class="n">cleaned_sentence_structs</span> <span class="o">=</span> <span class="n">cleaned_formatting</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
     <span class="c1"># Remove punctuation except periods</span>
     <span class="n">cleaned_punctuation</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">cleaned_sentence_structs</span>
+        <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_sentence_structs</span>
     <span class="p">)</span>
 
     <span class="c1"># Remove stopwords</span>
@@ -293,20 +294,20 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 
-            <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">"english"</span><span class="p">)</span>
+            <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">nltk</span>
 
-            <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">"stopwords"</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Downloaded nltk stopwords"</span><span class="p">)</span>
+            <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;stopwords&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloaded nltk stopwords&quot;</span><span class="p">)</span>
             <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 
-            <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">"english"</span><span class="p">)</span>
+            <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 
-        <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">"|"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
+        <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
         <span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">"\b("</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">")\b"</span><span class="p">,</span>
-            <span class="s2">""</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\b(&quot;</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">cleaned_punctuation</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -319,19 +320,19 @@
 
     <span class="c1"># Remove gaps in string</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">" {2,}"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">,</span> <span class="n">cleaned_text</span><span class="p">)</span>
+        <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_text</span><span class="p">)</span>
         <span class="n">cleaned_doc</span> <span class="o">=</span> <span class="n">cleaned_doc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="c1"># IndexError occurs when the string was cleaned and it contained entirely stop</span>
     <span class="c1"># words or punctuation for some reason</span>
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">""</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">cleaned_doc</span></div>
 
 
 <div class="viewcode-block" id="convert_gcs_json_url_to_gsutil_form"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.string_utils.convert_gcs_json_url_to_gsutil_form">[docs]</a><span class="k">def</span> <span class="nf">convert_gcs_json_url_to_gsutil_form</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a GCS JSON API url to its corresponding gsutil uri.</span>
 
 <span class="sd">    Parameters</span>
@@ -342,24 +343,24 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    gsutil_url: str</span>
-<span class="sd">        The url in gsutil form. Returns empty string if the input url doesn't</span>
+<span class="sd">        The url in gsutil form. Returns empty string if the input url doesn&#39;t</span>
 <span class="sd">        match the form.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">found_bucket</span><span class="p">,</span> <span class="n">found_filename</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="n">bucket</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"storage.googleapis.com/download/storage/v1/b/(.+?)/o"</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;storage.googleapis.com/download/storage/v1/b/(.+?)/o&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">bucket</span><span class="p">:</span>
         <span class="n">found_bucket</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">bucket</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"/o/(.+?)\?alt=media"</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/o/(.+?)\?alt=media&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
         <span class="n">found_filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">found_bucket</span> <span class="ow">and</span> <span class="n">found_filename</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"gs://</span><span class="si">{</span><span class="n">found_bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">found_filename</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;gs://</span><span class="si">{</span><span class="n">found_bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">found_filename</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">return</span> <span class="s2">""</span></div>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 </pre></div>
         </article>
       </div>
@@ -397,6 +398,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

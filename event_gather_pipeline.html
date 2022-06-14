@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="CDP Database Schema" href="database_schema.html" /><link rel="prev" title="Ingestion Models" href="ingestion_models.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>Event Gather Pipeline - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -197,7 +197,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -212,20 +213,20 @@
         </div>
         <article role="main">
           <section id="event-gather-pipeline">
-<h1>Event Gather Pipeline<a class="headerlink" href="#event-gather-pipeline" title="Permalink to this headline">#</a></h1>
+<h1>Event Gather Pipeline<a class="headerlink" href="#event-gather-pipeline" title="Permalink to this heading">#</a></h1>
 <p>Council Data Project documentation generally shortens the steps that the
 event gather pipeline takes into three short and easy to remember key points.</p>
 <ol class="arabic simple">
-<li><p><strong>Gather Events</strong><span class="raw-html-m2r"><br/></span>
+<li><p><strong>Gather Events</strong><span class="raw-html-m2r"><br></span>
 This function is created by each instance maintainer and
 generally scrapes or requests data from an API and
 returns a list of events to process and store.
 <a class="reference external" href="./ingestion_models.html">Learn more about our ingestion models</a>.</p></li>
-<li><p><strong>Transcribe</strong><span class="raw-html-m2r"><br/></span>
+<li><p><strong>Transcribe</strong><span class="raw-html-m2r"><br></span>
 If the event was provided with a closed caption file we clean the file up
 into the CDP format, if not, CDP tools generate a transcription.
 <a class="reference external" href="./transcript_model.html">Learn more about the produced transcript model</a>.</p></li>
-<li><p><strong>Index</strong><span class="raw-html-m2r"><br/></span>
+<li><p><strong>Index</strong><span class="raw-html-m2r"><br></span>
 An entirely different pipeline from the event gather pipeline but in
 the context of the short and sweet version, this makes sense to include.
 This is the pipeline that runs to generate and index using all the event
@@ -238,19 +239,19 @@ how the event gather pipeline works step-by-step.</p>
 pipeline takes, starting immediately after the maintainer provided function
 returns the <code class="docutils literal notranslate"><span class="pre">List[EventIngestionModel]</span></code>.</p>
 <section id="minimal-event-processing">
-<h2>Minimal Event Processing<a class="headerlink" href="#minimal-event-processing" title="Permalink to this headline">#</a></h2>
+<h2>Minimal Event Processing<a class="headerlink" href="#minimal-event-processing" title="Permalink to this heading">#</a></h2>
 <p>If any event is provided back with only a URI to a video and nothing else, the
 processing is incredibly simple.</p>
-<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_minimal.png"><img alt="minimal cdp event gather flow viz" src="_images/cdp_event_gather_flow_minimal.png"/></a>
+<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_minimal.png"><img alt="minimal cdp event gather flow viz" src="_images/cdp_event_gather_flow_minimal.png" /></a>
 </section>
 <section id="filled-event-processing">
-<h2>Filled Event Processing<a class="headerlink" href="#filled-event-processing" title="Permalink to this headline">#</a></h2>
+<h2>Filled Event Processing<a class="headerlink" href="#filled-event-processing" title="Permalink to this heading">#</a></h2>
 <p>The major difference from the minimal event processing workflow is that the
 pipeline will process, prepare, and upload all of the attachments.</p>
-<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_filled.png"><img alt="filled cdp event gather flow viz" src="_images/cdp_event_gather_flow_filled.png"/></a>
+<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_filled.png"><img alt="filled cdp event gather flow viz" src="_images/cdp_event_gather_flow_filled.png" /></a>
 </section>
 <section id="workflow-management-and-parallel-processing">
-<h2>Workflow Management and Parallel Processing<a class="headerlink" href="#workflow-management-and-parallel-processing" title="Permalink to this headline">#</a></h2>
+<h2>Workflow Management and Parallel Processing<a class="headerlink" href="#workflow-management-and-parallel-processing" title="Permalink to this heading">#</a></h2>
 <p>We utilize <a class="reference external" href="https://github.com/prefecthq/prefect">Prefect Core</a> to generate and
 run the workflow. In general, and by default in our cookiecutter-cdp-deployment,
 we do not run any part of the workflow in parallel. But, this is simply because we
@@ -265,12 +266,12 @@ to the flow for parallel event processing.
 <p>I.E.
 If the result of the <code class="docutils literal notranslate"><span class="pre">get_events</span></code> function was a list of four
 <code class="docutils literal notranslate"><span class="pre">EventIngestionModel</span></code> objects, the resulting flow would look like the following:</p>
-<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_many.png"><img alt="parallel four wide equal minimal event flows" src="_images/cdp_event_gather_flow_many.png"/></a>
+<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_many.png"><img alt="parallel four wide equal minimal event flows" src="_images/cdp_event_gather_flow_many.png" /></a>
 <p>And, if a <code class="docutils literal notranslate"><span class="pre">DaskExecutor</span></code> is also provided, all single event processing workflows
 would process in parallel (provided enough compute resources).</p>
 </section>
 <section id="pipeline-configuration">
-<h2>Pipeline Configuration<a class="headerlink" href="#pipeline-configuration" title="Permalink to this headline">#</a></h2>
+<h2>Pipeline Configuration<a class="headerlink" href="#pipeline-configuration" title="Permalink to this heading">#</a></h2>
 <p>Pipeline configuration is generally quite simple but can be quite complex if you
 need to parametrize specific tasks in the workflow. While generally you will only
 need to provide credential details and the <code class="docutils literal notranslate"><span class="pre">get_events_function</span></code> path, full pipeline
@@ -355,6 +356,7 @@ configuration can be done with the options found in our
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
     </body>

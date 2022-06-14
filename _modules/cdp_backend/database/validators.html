@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.database.validators - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -237,7 +238,7 @@
 
 <div class="viewcode-block" id="UniquenessValidation"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.UniquenessValidation">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">UniquenessValidation</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An object containing uniqueness data of a database model object.</span>
 
 <span class="sd">    Parameters</span>
@@ -248,7 +249,7 @@
 
 <span class="sd">    conflicting_models: List[Model]</span>
 <span class="sd">        All existing models that share the same primary keys as the input model.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">is_unique</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">conflicting_models</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span></div>
@@ -259,7 +260,7 @@
 
 
 <div class="viewcode-block" id="router_string_is_valid"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.router_string_is_valid">[docs]</a><span class="k">def</span> <span class="nf">router_string_is_valid</span><span class="p">(</span><span class="n">router_string</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that the provided router string contains only lowercase alphabetic</span>
 <span class="sd">    characters and optionally include a hyphen.</span>
 
@@ -274,19 +275,19 @@
 <span class="sd">    -------</span>
 <span class="sd">    status: bool</span>
 <span class="sd">        The validation status.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">router_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="c1"># Check only lowercase and hyphen allowed</span>
-    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^[a-z0-9\-]+$"</span><span class="p">,</span> <span class="n">router_string</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-z0-9\-]+$&quot;</span><span class="p">,</span> <span class="n">router_string</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="email_is_valid"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.email_is_valid">[docs]</a><span class="k">def</span> <span class="nf">email_is_valid</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that a valid email was provided.</span>
 
 <span class="sd">    None is a valid option.</span>
@@ -300,18 +301,18 @@
 <span class="sd">    -------</span>
 <span class="sd">    status: bool</span>
 <span class="sd">        The validation status.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">email</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^[a-zA-Z0-9]+[\.]?[a-zA-Z0-9]+[@]\w+[.]\w{2,3}$"</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-zA-Z0-9]+[\.]?[a-zA-Z0-9]+[@]\w+[.]\w{2,3}$&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.resource_exists">[docs]</a><span class="k">def</span> <span class="nf">resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that the URI provided points to an existing file.</span>
 
 <span class="sd">    None is a valid option.</span>
@@ -325,34 +326,34 @@
 <span class="sd">    -------</span>
 <span class="sd">    status: bool</span>
 <span class="sd">        The validation status.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"gs://"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"https://storage.googleapis"</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;gs://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
         <span class="c1"># Convert to gsutil form if necessary</span>
-        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"https://storage.googleapis"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://storage.googleapis&quot;</span><span class="p">):</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">convert_gcs_json_url_to_gsutil_form</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
-            <span class="c1"># If uri is not convertible to gsutil form we can't confirm</span>
-            <span class="k">if</span> <span class="n">uri</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+            <span class="c1"># If uri is not convertible to gsutil form we can&#39;t confirm</span>
+            <span class="k">if</span> <span class="n">uri</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"google_credentials_file"</span><span class="p">):</span>
-            <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"google_credentials_file"</span><span class="p">,</span> <span class="s2">"anon"</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">):</span>
+            <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">,</span> <span class="s2">&quot;anon&quot;</span><span class="p">)))</span>
             <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
-        <span class="c1"># Can't check GCS resources without creds file</span>
+        <span class="c1"># Can&#39;t check GCS resources without creds file</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">anon_fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">"anon"</span><span class="p">)</span>
+                <span class="n">anon_fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;anon&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">anon_fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>
 
     <span class="c1"># Is HTTP remote resource</span>
-    <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"http"</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Use HEAD request to check if remote resource exists</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -370,7 +371,7 @@
 
 
 <div class="viewcode-block" id="create_constant_value_validator"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.create_constant_value_validator">[docs]</a><span class="k">def</span> <span class="nf">create_constant_value_validator</span><span class="p">(</span><span class="n">constant_cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a validator func that validates a value is one of the valid values.</span>
 
 <span class="sd">    Parameters</span>
@@ -389,10 +390,10 @@
 <span class="sd">    To remove `None` as a viable input, set the database model field `required=True`.</span>
 
 <span class="sd">    See: https://github.com/CouncilDataProject/cdp-backend/pull/164</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">"""</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validate that value is valid.</span>
 
 <span class="sd">        Parameters</span>
@@ -404,14 +405,14 @@
 <span class="sd">        -------</span>
 <span class="sd">        status: bool</span>
 <span class="sd">            The validation status.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">get_all_class_attr_values</span><span class="p">(</span><span class="n">constant_cls</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">is_valid</span></div>
 
 
 <div class="viewcode-block" id="try_url"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.try_url">[docs]</a><span class="k">def</span> <span class="nf">try_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resolve_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">resource_exists</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a URL, return the URL with the protocol that exists (http or https)</span>
 <span class="sd">    with a preference for https.</span>
 
@@ -421,26 +422,26 @@
 <span class="sd">        The target resource url.</span>
 <span class="sd">    resolve_func: func(url: str) -&gt; bool</span>
 <span class="sd">        A function that takes in a str URL and determines whether it is reachable.</span>
-<span class="sd">        Default is our "resource_exists" func</span>
+<span class="sd">        Default is our &quot;resource_exists&quot; func</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    resource_url: str</span>
 <span class="sd">        The url with the correct protocol based on where the resource exists.</span>
 <span class="sd">        If does not exist, a LookupError is raised.</span>
-<span class="sd">    """</span>
-    <span class="n">secure_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"http://"</span><span class="p">,</span> <span class="s2">"https://"</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">secure_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolve_func</span><span class="p">(</span><span class="n">secure_url</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">secure_url</span>
 
     <span class="k">if</span> <span class="n">resolve_func</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">url</span>
 
-    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"the resource </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> could not be found"</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;the resource </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> could not be found&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="is_secure_uri"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.is_secure_uri">[docs]</a><span class="k">def</span> <span class="nf">is_secure_uri</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"https://"</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span></div>
 </pre></div>
         </article>
       </div>
@@ -478,6 +479,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

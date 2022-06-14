@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.file_store.functions - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -225,13 +226,13 @@
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">GCS_URI</span> <span class="o">=</span> <span class="s2">"gs://</span><span class="si">{bucket}</span><span class="s2">/</span><span class="si">{filename}</span><span class="s2">"</span>
+<span class="n">GCS_URI</span> <span class="o">=</span> <span class="s2">&quot;gs://</span><span class="si">{bucket}</span><span class="s2">/</span><span class="si">{filename}</span><span class="s2">&quot;</span>
 
 <span class="c1">###############################################################################</span>
 
 
 <div class="viewcode-block" id="initialize_gcs_file_system"><a class="viewcode-back" href="../../../cdp_backend.file_store.html#cdp_backend.file_store.functions.initialize_gcs_file_system">[docs]</a><span class="k">def</span> <span class="nf">initialize_gcs_file_system</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GCSFileSystem</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes an instance of a GCSFileSystem.</span>
 
 <span class="sd">    Parameters</span>
@@ -243,12 +244,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    file_system: GCSFileSystem</span>
 <span class="sd">        An initialized GCSFileSystem.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="get_file_uri"><a class="viewcode-back" href="../../../cdp_backend.file_store.html#cdp_backend.file_store.functions.get_file_uri">[docs]</a><span class="k">def</span> <span class="nf">get_file_uri</span><span class="p">(</span><span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the file uri of a filename and bucket for a given Google Cloud file store.</span>
 
 <span class="sd">    Parameters</span>
@@ -265,10 +266,10 @@
 <span class="sd">    -------</span>
 <span class="sd">    file_uri: Optional[str]</span>
 <span class="sd">        The file uri if the file exists, otherwise returns None.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">initialize_gcs_file_system</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GCS_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">None</span></div>
@@ -281,10 +282,10 @@
     <span class="n">save_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">remove_local</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Uploads a file to a Google Cloud file store bucket.</span>
-<span class="sd">    If save_name is provided, that will be used as the file's save name</span>
-<span class="sd">    instead of the file's local name.</span>
+<span class="sd">    If save_name is provided, that will be used as the file&#39;s save name</span>
+<span class="sd">    instead of the file&#39;s local name.</span>
 <span class="sd">    If remove_local is provided, the local file will be removed upon</span>
 <span class="sd">    successful upload.</span>
 
@@ -306,7 +307,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    uri: str</span>
 <span class="sd">        The uri of the uploaded file in the file store.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">initialize_gcs_file_system</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">)</span>
 
     <span class="c1"># Resolve the path to enforce path complete</span>
@@ -329,18 +330,18 @@
     <span class="c1"># If no existing file, upload and remove local copy if desired</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">save_url</span> <span class="o">=</span> <span class="n">GCS_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">save_name</span><span class="p">)</span>
-        <span class="n">remote_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">remote_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">fs</span><span class="o">.</span><span class="n">put_file</span><span class="p">(</span><span class="n">resolved_filepath</span><span class="p">,</span> <span class="n">remote_uri</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">remove_local</span><span class="p">:</span>
             <span class="n">remove_local_file</span><span class="p">(</span><span class="n">resolved_filepath</span><span class="p">)</span>
 
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Uploaded local file: </span><span class="si">{</span><span class="n">resolved_filepath</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">remote_uri</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uploaded local file: </span><span class="si">{</span><span class="n">resolved_filepath</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">remote_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">save_url</span></div>
 
 
 <div class="viewcode-block" id="get_open_url_for_gcs_file"><a class="viewcode-back" href="../../../cdp_backend.file_store.html#cdp_backend.file_store.functions.get_open_url_for_gcs_file">[docs]</a><span class="k">def</span> <span class="nf">get_open_url_for_gcs_file</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simple wrapper around fsspec.FileSystem.url function for creating a connection</span>
 <span class="sd">    to the filesystem then getting the hosted / web accessible URL to the file.</span>
 
@@ -356,24 +357,24 @@
 <span class="sd">    -------</span>
 <span class="sd">    url: str</span>
 <span class="sd">        The web accessible URL for the file.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">initialize_gcs_file_system</span><span class="p">(</span><span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">url</span><span class="p">(</span><span class="n">uri</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="remove_local_file"><a class="viewcode-back" href="../../../cdp_backend.file_store.html#cdp_backend.file_store.functions.remove_local_file">[docs]</a><span class="k">def</span> <span class="nf">remove_local_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Deletes a file from the local file system.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filepath: str</span>
 <span class="sd">        The filepath of the local file to delete.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">LocalFileSystem</span><span class="p">()</span>
     <span class="n">fs</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> from local file system."</span><span class="p">)</span></div>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> from local file system.&quot;</span><span class="p">)</span></div>
 </pre></div>
         </article>
       </div>
@@ -411,6 +412,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.bin.search_cdp_events - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -236,7 +237,7 @@
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s2">"[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -250,15 +251,15 @@
 
 
 <span class="n">DATETIME_WEIGHTED_RELEVANCE</span> <span class="o">=</span> <span class="n">SearchSortByField</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"datetime_weighted_relevance"</span><span class="p">,</span>
-    <span class="n">local_field</span><span class="o">=</span><span class="s2">"datetime_weighted_tfidf"</span><span class="p">,</span>
-    <span class="n">remote_field</span><span class="o">=</span><span class="s2">"datetime_weighted_value"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;datetime_weighted_relevance&quot;</span><span class="p">,</span>
+    <span class="n">local_field</span><span class="o">=</span><span class="s2">&quot;datetime_weighted_tfidf&quot;</span><span class="p">,</span>
+    <span class="n">remote_field</span><span class="o">=</span><span class="s2">&quot;datetime_weighted_value&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">RELEVANCE</span> <span class="o">=</span> <span class="n">SearchSortByField</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"relevance"</span><span class="p">,</span>
-    <span class="n">local_field</span><span class="o">=</span><span class="s2">"tfidf"</span><span class="p">,</span>
-    <span class="n">remote_field</span><span class="o">=</span><span class="s2">"value"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;relevance&quot;</span><span class="p">,</span>
+    <span class="n">local_field</span><span class="o">=</span><span class="s2">&quot;tfidf&quot;</span><span class="p">,</span>
+    <span class="n">remote_field</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
@@ -270,42 +271,42 @@
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">prog</span><span class="o">=</span><span class="s2">"search_cdp_events"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Search CDP events given a query."</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;search_cdp_events&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Search CDP events given a query.&quot;</span>
         <span class="p">)</span>
 
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"instance"</span><span class="p">,</span>
+            <span class="s2">&quot;instance&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">"Which instance to query."</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Which instance to query.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-q"</span><span class="p">,</span>
-            <span class="s2">"--query"</span><span class="p">,</span>
+            <span class="s2">&quot;-q&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--query&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">default</span><span class="o">=</span><span class="s2">"residential zoning and housing affordability"</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">"Query to search with."</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;residential zoning and housing affordability&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Query to search with.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-s"</span><span class="p">,</span>
-            <span class="s2">"--sort_by"</span><span class="p">,</span>
+            <span class="s2">&quot;-s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--sort_by&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
             <span class="n">default</span><span class="o">=</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">RELEVANCE</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">"Choice between datetime weighted and pure relevance (TFIDF score)."</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Choice between datetime weighted and pure relevance (TFIDF score).&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-f"</span><span class="p">,</span>
-            <span class="s2">"--first"</span><span class="p">,</span>
+            <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--first&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
             <span class="n">default</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">"Number of results to return."</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of results to return.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-l"</span><span class="p">,</span>
-            <span class="s2">"--local_index_glob"</span><span class="p">,</span>
+            <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--local_index_glob&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">default</span><span class="o">=</span><span class="s2">"tfidf-*.parquet"</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">"The file glob for which files to use for reading a planned index."</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;tfidf-*.parquet&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The file glob for which files to use for reading a planned index.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
@@ -315,7 +316,7 @@
 
 <div class="viewcode-block" id="get_stemmed_grams_from_query"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.get_stemmed_grams_from_query">[docs]</a><span class="k">def</span> <span class="nf">get_stemmed_grams_from_query</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="c1"># Spawn stemmer</span>
-    <span class="n">stemmer</span> <span class="o">=</span> <span class="n">SnowballStemmer</span><span class="p">(</span><span class="s2">"english"</span><span class="p">)</span>
+    <span class="n">stemmer</span> <span class="o">=</span> <span class="n">SnowballStemmer</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 
     <span class="c1"># Create stemmed grams for query</span>
     <span class="n">query_terms</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">clean_stop_words</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -323,7 +324,7 @@
     <span class="k">for</span> <span class="n">n_gram_size</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
         <span class="n">grams</span> <span class="o">=</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">query_terms</span><span class="p">,</span> <span class="n">n_gram_size</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">gram</span> <span class="ow">in</span> <span class="n">grams</span><span class="p">:</span>
-            <span class="n">stemmed_grams</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">gram</span><span class="p">))</span>
+            <span class="n">stemmed_grams</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">gram</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">stemmed_grams</span></div>
 
@@ -333,7 +334,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="p">]:</span>
     <span class="c1"># Filter for stemmed gram</span>
     <span class="n">filtered_set</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-        <span class="s2">"stemmed_gram"</span><span class="p">,</span> <span class="s2">"=="</span><span class="p">,</span> <span class="n">stemmed_gram</span>
+        <span class="s2">&quot;stemmed_gram&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">stemmed_gram</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_set</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)))</span>
 
@@ -348,7 +349,7 @@
 
 
 <div class="viewcode-block" id="run_remote_search"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.run_remote_search">[docs]</a><span class="k">def</span> <span class="nf">run_remote_search</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sort_by</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Running search against remote index..."</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running search against remote index...&quot;</span><span class="p">)</span>
 
     <span class="c1"># Get stemmed grams</span>
     <span class="n">stemmed_grams</span> <span class="o">=</span> <span class="n">get_stemmed_grams_from_query</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
@@ -392,11 +393,11 @@
                 <span class="n">keywords</span><span class="o">=</span><span class="p">[</span>
                     <span class="n">ieg</span><span class="o">.</span><span class="n">unstemmed_gram</span>
                     <span class="k">for</span> <span class="n">ieg</span> <span class="ow">in</span> <span class="n">db_models</span><span class="o">.</span><span class="n">IndexedEventGram</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-                        <span class="s2">"event_ref"</span><span class="p">,</span>
-                        <span class="s2">"=="</span><span class="p">,</span>
+                        <span class="s2">&quot;event_ref&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;==&quot;</span><span class="p">,</span>
                         <span class="n">matching_event</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
                     <span class="p">)</span>
-                    <span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s2">"-value"</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s2">&quot;-value&quot;</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
                 <span class="p">],</span>
             <span class="p">)</span>
@@ -419,26 +420,26 @@
     <span class="c1"># Log results</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event_match</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">compiled_events</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Match </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> "</span>
-            <span class="sa">f</span><span class="s2">"(datetime: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span><span class="si">}</span><span class="s2">)"</span>
+            <span class="sa">f</span><span class="s2">&quot;Match </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(datetime: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">event_datetime</span><span class="si">}</span><span class="s2">)&quot;</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Match pure tf-idf relevance: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">pure_relevance</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Match pure tf-idf relevance: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">pure_relevance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Match datetime weighted relevance: "</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">datetime_weighted_relevance</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Match datetime weighted relevance: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">datetime_weighted_relevance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match contained grams: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">contained_grams</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match keywords: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">keywords</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match context: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">selected_context_span</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match contained grams: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">contained_grams</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match keywords: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">keywords</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match context: </span><span class="si">{</span><span class="n">event_match</span><span class="o">.</span><span class="n">selected_context_span</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
         <span class="c1"># Break out after first n</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">first</span><span class="p">:</span>
             <span class="k">break</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completed remote search in: </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_dt</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed remote search in: </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_dt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="run_local_search"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.run_local_search">[docs]</a><span class="k">def</span> <span class="nf">run_local_search</span><span class="p">(</span>
@@ -447,7 +448,7 @@
     <span class="n">sort_by</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">first</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Running search against local index..."</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running search against local index...&quot;</span><span class="p">)</span>
 
     <span class="c1"># Get stemmed grams</span>
     <span class="n">stemmed_grams</span> <span class="o">=</span> <span class="n">get_stemmed_grams_from_query</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
@@ -459,12 +460,12 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">index_df</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">local_index</span><span class="p">,</span> <span class="n">keep_default_na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"No local index found."</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No local index found.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="c1"># Check len df</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">index_df</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"No local index found."</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No local index found.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="c1"># For each stemmed gram find matching_events</span>
@@ -472,56 +473,56 @@
 
     <span class="c1"># Group by event id, sum by tfidf, and sort</span>
     <span class="n">summed_datetime_weighted_tfidf</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">matching_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"event_id"</span><span class="p">)</span>
+        <span class="n">matching_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;event_id&quot;</span><span class="p">)</span>
         <span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="p">:</span> <span class="nb">sum</span><span class="p">})</span>
         <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">summed_datetime_weighted_tfidf</span> <span class="o">=</span> <span class="n">summed_datetime_weighted_tfidf</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="p">:</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"summed_</span><span class="si">{</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">&quot;summed_</span><span class="si">{</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="p">},</span>
         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">summed_pure_tfidf</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">matching_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"event_id"</span><span class="p">)</span>
+        <span class="n">matching_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;event_id&quot;</span><span class="p">)</span>
         <span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="p">:</span> <span class="nb">sum</span><span class="p">})</span>
         <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">summed_pure_tfidf</span> <span class="o">=</span> <span class="n">summed_pure_tfidf</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="p">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"summed_</span><span class="si">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;summed_</span><span class="si">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
     <span class="p">)</span>
 
     <span class="c1"># Merge results with original</span>
     <span class="n">matching_events</span> <span class="o">=</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
         <span class="n">summed_datetime_weighted_tfidf</span><span class="p">,</span>
-        <span class="n">on</span><span class="o">=</span><span class="s2">"event_id"</span><span class="p">,</span>
-        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">"_stemmed_gram"</span><span class="p">,</span> <span class="s2">"_summed"</span><span class="p">),</span>
+        <span class="n">on</span><span class="o">=</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span>
+        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_stemmed_gram&quot;</span><span class="p">,</span> <span class="s2">&quot;_summed&quot;</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">matching_events</span> <span class="o">=</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
         <span class="n">summed_pure_tfidf</span><span class="p">,</span>
-        <span class="n">on</span><span class="o">=</span><span class="s2">"event_id"</span><span class="p">,</span>
-        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">"_stemmed_gram"</span><span class="p">,</span> <span class="s2">"_summed"</span><span class="p">),</span>
+        <span class="n">on</span><span class="o">=</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span>
+        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_stemmed_gram&quot;</span><span class="p">,</span> <span class="s2">&quot;_summed&quot;</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">sort_by</span> <span class="o">==</span> <span class="s2">"datetime_weighted_relevance"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">sort_by</span> <span class="o">==</span> <span class="s2">&quot;datetime_weighted_relevance&quot;</span><span class="p">:</span>
         <span class="n">matching_events</span> <span class="o">=</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
-            <span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s2">"summed_</span><span class="si">{</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;summed_</span><span class="si">{</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">matching_events</span> <span class="o">=</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
-            <span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s2">"summed_</span><span class="si">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;summed_</span><span class="si">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># Group events and sort</span>
-    <span class="n">matching_events</span> <span class="o">=</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"event_id"</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">matching_events</span> <span class="o">=</span> <span class="n">matching_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># Report results</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"Local index search results:"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Local index search results:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">group_details</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matching_events</span><span class="p">):</span>
         <span class="c1"># Unpack group details</span>
         <span class="n">event_id</span><span class="p">,</span> <span class="n">group</span> <span class="o">=</span> <span class="n">group_details</span>
@@ -535,30 +536,30 @@
 
         <span class="c1"># Get keywords for event</span>
         <span class="n">event_df</span> <span class="o">=</span> <span class="n">index_df</span><span class="p">[</span><span class="n">index_df</span><span class="o">.</span><span class="n">event_id</span> <span class="o">==</span> <span class="n">event_id</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
-            <span class="s2">"tfidf"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
+            <span class="s2">&quot;tfidf&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="n">match_keywords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">event_df</span><span class="o">.</span><span class="n">unstemmed_gram</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
 
         <span class="c1"># Log results</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event_id</span><span class="si">}</span><span class="s2"> (datetime: </span><span class="si">{</span><span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">event_datetime</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event_id</span><span class="si">}</span><span class="s2"> (datetime: </span><span class="si">{</span><span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">event_datetime</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">"Match pure tf-idf relevance: "</span><span class="p">,</span>
-            <span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="sa">f</span><span class="s2">"summed_</span><span class="si">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span>
+            <span class="s2">&quot;Match pure tf-idf relevance: &quot;</span><span class="p">,</span>
+            <span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;summed_</span><span class="si">{</span><span class="n">RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">"Match datetime weighted relevance: "</span><span class="p">,</span>
-            <span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="sa">f</span><span class="s2">"summed_</span><span class="si">{</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span>
+            <span class="s2">&quot;Match datetime weighted relevance: &quot;</span><span class="p">,</span>
+            <span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;summed_</span><span class="si">{</span><span class="n">DATETIME_WEIGHTED_RELEVANCE</span><span class="o">.</span><span class="n">local_field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match contained grams: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">unstemmed_gram</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match keywords: </span><span class="si">{</span><span class="n">match_keywords</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Match context: </span><span class="si">{</span><span class="n">most_important_context_span</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match contained grams: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">unstemmed_gram</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match keywords: </span><span class="si">{</span><span class="n">match_keywords</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match context: </span><span class="si">{</span><span class="n">most_important_context_span</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
         <span class="c1"># Break out after first n</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">first</span><span class="p">:</span>
             <span class="k">break</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completed local search in: </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_dt</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed local search in: </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_dt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -576,18 +577,18 @@
         <span class="n">run_remote_search</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
         <span class="n">run_local_search</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">local_index_glob</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"============================================="</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"============================================="</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"============================================="</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 <span class="c1">###############################################################################</span>
 <span class="c1"># Allow caller to directly run this module (usually in development scenarios)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
         </article>
@@ -626,6 +627,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

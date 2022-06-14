@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.sr_models.webvtt_sr_model - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -243,36 +244,36 @@
 
 
 <div class="viewcode-block" id="WebVTTSRModel"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel">[docs]</a><span class="k">class</span> <span class="nc">WebVTTSRModel</span><span class="p">(</span><span class="n">SRModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize a WebVTT Conversion Model.</span>
 
-<span class="sd">    This doesn't do any actual speaker recognition, but rather will simply convert</span>
+<span class="sd">    This doesn&#39;t do any actual speaker recognition, but rather will simply convert</span>
 <span class="sd">    from WebVTT format into a CDP transcript object.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    new_turn_pattern: str</span>
 <span class="sd">        The character(s) to look for that indicate a new speaker turn.</span>
-<span class="sd">        Default: "&amp;gt;"</span>
+<span class="sd">        Default: &quot;&amp;gt;&quot;</span>
 <span class="sd">    confidence: float</span>
 <span class="sd">        The confidence value to assign to the produced Transcript object.</span>
 <span class="sd">        Default: 0.97</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">END_OF_SENTENCE_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"^.+[.?!]\s*$"</span>
+    <span class="n">END_OF_SENTENCE_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^.+[.?!]\s*$&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">new_turn_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"&amp;gt;"</span><span class="p">,</span>
+        <span class="n">new_turn_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&amp;gt;&quot;</span><span class="p">,</span>
         <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.97</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="c1"># New speaker turn must begin with one or more new_turn_pattern str</span>
         <span class="c1"># This will create a regex pattern to allow for one or more of the pattern</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"(</span><span class="si">{}</span><span class="s2">)+\s*(.+)"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_turn_pattern</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)+\s*(.+)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_turn_pattern</span><span class="p">)</span>
 
         <span class="c1"># Confidence is tricky. We allow it to be a parameter because closed captions</span>
-        <span class="c1"># aren't always 100% accurate. For Seattle, I would guess they are about 97%</span>
+        <span class="c1"># aren&#39;t always 100% accurate. For Seattle, I would guess they are about 97%</span>
         <span class="c1"># accurate.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence</span>
 
@@ -281,8 +282,8 @@
 
         <span class="c1"># Fix some punctuation issues, e.g. `roughly$ 19` becomes `roughly $19`</span>
         <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">"([#$(&lt;[{]) "</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;([#$(&lt;[{]) &quot;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">normalized_text</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">normalized_text</span>
@@ -297,7 +298,7 @@
 
             <span class="c1"># Caption block is start of a new speaker turn</span>
             <span class="k">if</span> <span class="n">new_turn_search</span><span class="p">:</span>
-                <span class="c1"># Remove the new speaker turn pattern from caption's text</span>
+                <span class="c1"># Remove the new speaker turn pattern from caption&#39;s text</span>
                 <span class="n">caption</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">new_turn_search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
                 <span class="c1"># Append speaker turn to list of speaker turns</span>
                 <span class="k">if</span> <span class="n">speaker_turn_captions</span><span class="p">:</span>
@@ -326,7 +327,7 @@
         <span class="n">speaker_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transcript_model</span><span class="o">.</span><span class="n">Sentence</span><span class="p">:</span>
         <span class="c1"># Construct sentence and raw words for Word and sentence processing</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
         <span class="n">raw_words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
         <span class="c1"># Calc caption duration</span>
@@ -377,7 +378,15 @@
         <span class="c1"># List of text, representing a sentence</span>
         <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">start_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">speaker_turn_captions</span><span class="p">:</span>
+
+            <span class="c1"># Clean text of line breaks</span>
+            <span class="n">caption</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+            <span class="c1"># Remove any double spaces as result of line break removal</span>
+            <span class="n">caption</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">start_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">start_time</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
@@ -419,7 +428,7 @@
 <div class="viewcode-block" id="WebVTTSRModel.transcribe"><a class="viewcode-back" href="../../../cdp_backend.sr_models.html#cdp_backend.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">[docs]</a>    <span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">file_uri</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transcript_model</span><span class="o">.</span><span class="n">Transcript</span><span class="p">:</span>
-        <span class="sd">"""</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a WebVTT closed caption file into the CDP Transcript Model.</span>
 
 <span class="sd">        Parameters</span>
@@ -431,12 +440,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        transcript: transcript_model.Transcript</span>
 <span class="sd">            The contents of the VTT file as a CDP Transcript.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Download punkt for truecase module</span>
-        <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">"punkt"</span><span class="p">)</span>
+        <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;punkt&quot;</span><span class="p">)</span>
 
         <span class="c1"># Read the caption file</span>
-        <span class="k">with</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_uri</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_uri</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
             <span class="n">captions</span> <span class="o">=</span> <span class="n">webvtt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">open_resource</span><span class="p">)</span>
 
         <span class="c1"># Get speaker turns</span>
@@ -456,13 +465,13 @@
             <span class="n">sentence</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
         <span class="n">transcript</span> <span class="o">=</span> <span class="n">transcript_model</span><span class="o">.</span><span class="n">Transcript</span><span class="p">(</span>
-            <span class="n">generator</span><span class="o">=</span><span class="sa">f</span><span class="s2">"CDP WebVTT Conversion -- CDP v</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">generator</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;CDP WebVTT Conversion -- CDP v</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">confidence</span><span class="o">=</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">confidence</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">)),</span>
             <span class="n">session_datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
             <span class="n">sentences</span><span class="o">=</span><span class="n">sentences</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completed WebVTT transcript conversion for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed WebVTT transcript conversion for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">transcript</span></div></div>
 </pre></div>
@@ -502,6 +511,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

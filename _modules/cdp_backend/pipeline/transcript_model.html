@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.pipeline.transcript_model - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -230,23 +231,23 @@
 <div class="viewcode-block" id="WordAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.WordAnnotations">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">WordAnnotations</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Annotations that can appear on an individual word level.</span>
-<span class="sd">    """</span></div>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="SentenceAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SentenceAnnotations">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SentenceAnnotations</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Annotations that can appear on an individual sentence level.</span>
-<span class="sd">    """</span></div>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="SectionAnnotation"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SectionAnnotation">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SectionAnnotation</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A section annotation used for topic segmentation and minutes item alignment.</span>
 
 <span class="sd">    Parameters</span>
@@ -279,20 +280,20 @@
 
 <span class="sd">    &gt;&gt;&gt; transcript.annotations.sections = [</span>
 <span class="sd">    ...     SectionAnnotation(</span>
-<span class="sd">    ...         name="Public Comment",</span>
+<span class="sd">    ...         name=&quot;Public Comment&quot;,</span>
 <span class="sd">    ...         start_sentence_index=12,</span>
 <span class="sd">    ...         stop_sentence_index=87,</span>
-<span class="sd">    ...         generator="Jackson Maxfield Brown",</span>
+<span class="sd">    ...         generator=&quot;Jackson Maxfield Brown&quot;,</span>
 <span class="sd">    ...     ),</span>
 <span class="sd">    ...     SectionAnnotation(</span>
-<span class="sd">    ...         name="CB 120121",</span>
+<span class="sd">    ...         name=&quot;CB 120121&quot;,</span>
 <span class="sd">    ...         start_sentence_index=243,</span>
 <span class="sd">    ...         stop_sentence_index=419,</span>
-<span class="sd">    ...         description="AN ORDINANCE relating to land use and zoning ...",</span>
-<span class="sd">    ...         generator="queue-cue--v1.0.0",</span>
+<span class="sd">    ...         description=&quot;AN ORDINANCE relating to land use and zoning ...&quot;,</span>
+<span class="sd">    ...         generator=&quot;queue-cue--v1.0.0&quot;,</span>
 <span class="sd">    ...     ),</span>
 <span class="sd">    ... ]</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">start_sentence_index</span><span class="p">:</span> <span class="nb">int</span>
@@ -304,9 +305,9 @@
 <div class="viewcode-block" id="TranscriptAnnotations"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.TranscriptAnnotations">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TranscriptAnnotations</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Annotations that can appear (but are not guaranteed) for the whole transcript.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">sections</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SectionAnnotation</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
@@ -317,13 +318,13 @@
 <div class="viewcode-block" id="Word"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Word">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Word</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data for a word in a transcript.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    index: int</span>
-<span class="sd">        The index of the word in it's respective sentence.</span>
+<span class="sd">        The index of the word in it&#39;s respective sentence.</span>
 <span class="sd">    start_time: float</span>
 <span class="sd">        Time in seconds for when this word begins.</span>
 <span class="sd">    end_time: float</span>
@@ -333,7 +334,7 @@
 <span class="sd">    annotations: Optional[WordAnnotations]</span>
 <span class="sd">        Any annotations specific to this word.</span>
 <span class="sd">        Default: None (no annotations)</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
@@ -345,13 +346,13 @@
 <div class="viewcode-block" id="Sentence"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Sentence">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Sentence</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data for a sentence in a transcript.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    index: int</span>
-<span class="sd">        The index of the sentence in it's respective transcript.</span>
+<span class="sd">        The index of the sentence in it&#39;s respective transcript.</span>
 <span class="sd">    confidence: float</span>
 <span class="sd">        A number between 0 and 1 for the confidence of the sentence accuracy.</span>
 <span class="sd">    start_time: float</span>
@@ -369,7 +370,7 @@
 <span class="sd">        The list of word for the sentence.</span>
 <span class="sd">    text: str</span>
 <span class="sd">        The text of the sentence including all formatting and non-deliminating chars.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
@@ -385,14 +386,14 @@
 <div class="viewcode-block" id="Transcript"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Transcript</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transcript model for all transcripts in CDP databases / filestores.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    generator: str</span>
 <span class="sd">        A descriptive name of the generative process that produced this transcript.</span>
-<span class="sd">        Example: "Google Speech-to-Text -- Lib Version: 2.0.1"</span>
+<span class="sd">        Example: &quot;Google Speech-to-Text -- Lib Version: 2.0.1&quot;</span>
 <span class="sd">    confidence: float</span>
 <span class="sd">        A number between 0 and 1.</span>
 <span class="sd">        If available, use the average of all confidence annotations reported for each</span>
@@ -414,14 +415,14 @@
 <span class="sd">    Dumping transcript to JSON file.</span>
 
 <span class="sd">    &gt;&gt;&gt; # transcript = Transcript(...)</span>
-<span class="sd">    ... with open("transcript.json", "w") as open_resource:</span>
+<span class="sd">    ... with open(&quot;transcript.json&quot;, &quot;w&quot;) as open_resource:</span>
 <span class="sd">    ...     open_resource.write(transcript.to_json())</span>
 
 <span class="sd">    Reading transcript from JSON file.</span>
 
-<span class="sd">    &gt;&gt;&gt; with open("transcript.json", "r") as open_resource:</span>
+<span class="sd">    &gt;&gt;&gt; with open(&quot;transcript.json&quot;, &quot;r&quot;) as open_resource:</span>
 <span class="sd">    ...     transcript = Transcript.from_json(open_resource.read())</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">generator</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
@@ -431,77 +432,77 @@
     <span class="n">annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TranscriptAnnotations</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="s2">"Transcript("</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;Transcript(&quot;</span>
 
         <span class="c1"># Use vars to maintain subclassing</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># Truncate sentences</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">"sentences"</span><span class="p">:</span>
-                <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=[...] (n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">), "</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;sentences&quot;</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=[...] (n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">), &quot;</span>
 
             <span class="c1"># Add quotes for strings</span>
             <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
-                <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">='</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">', "</span>
+                <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=&#39;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&#39;, &quot;</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">, &quot;</span>
 
         <span class="c1"># Remove last comma and space and close parentheses</span>
-        <span class="k">return</span> <span class="n">output</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">")"</span></div>
+        <span class="k">return</span> <span class="n">output</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span></div>
 
 
 <span class="c1">###############################################################################</span>
 
 
 <span class="n">EXAMPLE_TRANSCRIPT</span> <span class="o">=</span> <span class="n">Transcript</span><span class="p">(</span>
-    <span class="n">generator</span><span class="o">=</span><span class="s2">"JacksonGen -- Lib Version: 0.0.0"</span><span class="p">,</span>
+    <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;JacksonGen -- Lib Version: 0.0.0&quot;</span><span class="p">,</span>
     <span class="n">confidence</span><span class="o">=</span><span class="mf">0.93325</span><span class="p">,</span>
     <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
     <span class="n">created_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
     <span class="n">sentences</span><span class="o">=</span><span class="p">[</span>
         <span class="n">Sentence</span><span class="p">(</span>
             <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">"Hello everyone."</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello everyone.&quot;</span><span class="p">,</span>
             <span class="n">confidence</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
             <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">speaker_name</span><span class="o">=</span><span class="s2">"Jackson Maxfield Brown"</span><span class="p">,</span>
+            <span class="n">speaker_name</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
             <span class="n">speaker_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">words</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                    <span class="n">text</span><span class="o">=</span><span class="s2">"hello"</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                    <span class="n">text</span><span class="o">=</span><span class="s2">"everyone"</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;everyone&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">],</span>
         <span class="p">),</span>
         <span class="n">Sentence</span><span class="p">(</span>
             <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">"Hi all."</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hi all.&quot;</span><span class="p">,</span>
             <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
             <span class="n">start_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
             <span class="n">end_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-            <span class="n">speaker_name</span><span class="o">=</span><span class="s2">"Isaac Na"</span><span class="p">,</span>
+            <span class="n">speaker_name</span><span class="o">=</span><span class="s2">&quot;Isaac Na&quot;</span><span class="p">,</span>
             <span class="n">speaker_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">words</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-                    <span class="n">text</span><span class="o">=</span><span class="s2">"hi"</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;hi&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Word</span><span class="p">(</span>
                     <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-                    <span class="n">text</span><span class="o">=</span><span class="s2">"all"</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">],</span>
         <span class="p">),</span>
@@ -509,10 +510,10 @@
     <span class="n">annotations</span><span class="o">=</span><span class="n">TranscriptAnnotations</span><span class="p">(</span>
         <span class="n">sections</span><span class="o">=</span><span class="p">[</span>
             <span class="n">SectionAnnotation</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">"Call to Order"</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Call to Order&quot;</span><span class="p">,</span>
                 <span class="n">start_sentence_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">stop_sentence_index</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">generator</span><span class="o">=</span><span class="s2">"Jackson Maxfield Brown"</span><span class="p">,</span>
+                <span class="n">generator</span><span class="o">=</span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">],</span>
     <span class="p">),</span>
@@ -554,6 +555,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

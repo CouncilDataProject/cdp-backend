@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.pipeline.ingestion_models - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -226,9 +227,9 @@
 
 
 <div class="viewcode-block" id="IngestionModel"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">[docs]</a><span class="k">class</span> <span class="nc">IngestionModel</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for IngestionModel type.</span>
-<span class="sd">    """</span></div>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <span class="c1">###############################################################################</span>
@@ -237,9 +238,9 @@
 <div class="viewcode-block" id="Person"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Primarily the council members, this could technically include the mayor or city</span>
-<span class="sd">    manager, or any other "normal" presenters and attendees of meetings.</span>
+<span class="sd">    manager, or any other &quot;normal&quot; presenters and attendees of meetings.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -251,7 +252,7 @@
 
 <span class="sd">    If person is operating under new roles or new seat, new Role and Seat documents will</span>
 <span class="sd">    be stored.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -267,14 +268,14 @@
 <div class="viewcode-block" id="Vote"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Vote</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A reference tying a specific person and an event minutes item together.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    The in_majority field stored in the database will be calculated from the provided</span>
 <span class="sd">    list of votes.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">person</span><span class="p">:</span> <span class="n">Person</span>
     <span class="n">decision</span><span class="p">:</span> <span class="nb">str</span>
@@ -284,13 +285,13 @@
 <div class="viewcode-block" id="SupportingFile"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SupportingFile</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A file related tied to a matter or minutes item.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    This file is not stored in the CDP file storage system.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>
@@ -300,9 +301,9 @@
 <div class="viewcode-block" id="Matter"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Matter</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A matter is a specific legislative document. A bill, resolution, initiative, etc.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">matter_type</span><span class="p">:</span> <span class="nb">str</span>
@@ -315,10 +316,10 @@
 <div class="viewcode-block" id="MinutesItem"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">MinutesItem</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An item referenced during a meeting.</span>
 <span class="sd">    This can be a matter but it can be a presentation or budget file, etc.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -328,7 +329,7 @@
 <div class="viewcode-block" id="EventMinutesItem"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EventMinutesItem</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Details about a specific item during an event.</span>
 
 <span class="sd">    Notes</span>
@@ -338,7 +339,7 @@
 
 <span class="sd">    If matter is provided, the supporting_files will be additionally be stored as</span>
 <span class="sd">    MatterFile.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">minutes_item</span><span class="p">:</span> <span class="n">MinutesItem</span>
     <span class="n">index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -351,10 +352,10 @@
 <div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A session is a working period for an event.</span>
 <span class="sd">    For example, an event could have a morning and afternoon session.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">session_datetime</span><span class="p">:</span> <span class="n">datetime</span>
     <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span>
@@ -366,8 +367,8 @@
 <div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    A meeting body. This can be full council, a subcommittee, or "off-council" matters</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A meeting body. This can be full council, a subcommittee, or &quot;off-council&quot; matters</span>
 <span class="sd">    such as election debates.</span>
 
 <span class="sd">    Notes</span>
@@ -375,7 +376,7 @@
 <span class="sd">    If start_datetime is not provided, and the Body did not exist prior to ingestion,</span>
 <span class="sd">    the session datetime associated with this ingestion will be used as start_datetime</span>
 <span class="sd">    during storage.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -388,8 +389,8 @@
 <div class="viewcode-block" id="Role"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Role</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    A role is a person's job for a period of time in the city council. A person can</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A role is a person&#39;s job for a period of time in the city council. A person can</span>
 <span class="sd">    (and should) have multiple roles. For example: a person has two terms as city</span>
 <span class="sd">    council member for district four then a term as city council member for a citywide</span>
 <span class="sd">    seat. Roles can also be tied to committee chairs. For example: a council member</span>
@@ -401,7 +402,7 @@
 <span class="sd">    If start_datetime is not provided, and the Role did not exist prior to ingestion,</span>
 <span class="sd">    the session datetime associated with this ingestion will be used as start_datetime</span>
 <span class="sd">    during storage.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Body</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -413,14 +414,14 @@
 <div class="viewcode-block" id="Seat"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Seat</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    An electable office on the City Council. I.E. "Position 9".</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An electable office on the City Council. I.E. &quot;Position 9&quot;.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    The electoral_area and electoral_type will be updated if changed from prior values.</span>
 <span class="sd">    The image will be uploaded or updated in the CDP file storage system.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">electoral_area</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -433,7 +434,7 @@
 <div class="viewcode-block" id="EventIngestionModel"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EventIngestionModel</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An event can be a normally scheduled meeting, a special event such as a press</span>
 <span class="sd">    conference or election debate, and, can be upcoming or historical.</span>
 
@@ -443,7 +444,7 @@
 <span class="sd">    it will be generated during pipeline processing.</span>
 
 <span class="sd">    The earliest session_datetime will be used for the overall event_datetime.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">body</span><span class="p">:</span> <span class="n">Body</span>
     <span class="n">sessions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Session</span><span class="p">]</span>
@@ -459,12 +460,12 @@
 
 
 <span class="n">EXAMPLE_MINIMAL_EVENT</span> <span class="o">=</span> <span class="n">EventIngestionModel</span><span class="p">(</span>
-    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Full Council"</span><span class="p">),</span>
+    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Full Council&quot;</span><span class="p">),</span>
     <span class="n">sessions</span><span class="o">=</span><span class="p">[</span>
         <span class="n">Session</span><span class="p">(</span>
             <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
             <span class="n">video_uri</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"</span>
+                <span class="s2">&quot;https://video.seattle.gov/media/council/brief_072219_2011957V.mp4&quot;</span>
             <span class="p">),</span>
             <span class="n">session_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">),</span>
@@ -473,148 +474,148 @@
 
 
 <span class="n">EXAMPLE_FILLED_EVENT</span> <span class="o">=</span> <span class="n">EventIngestionModel</span><span class="p">(</span>
-    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Full Council"</span><span class="p">),</span>
+    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Full Council&quot;</span><span class="p">),</span>
     <span class="n">sessions</span><span class="o">=</span><span class="p">[</span>
         <span class="n">Session</span><span class="p">(</span>
             <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
             <span class="n">video_uri</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"https://video.seattle.gov/media/council/council_101220_2022077V.mp4"</span>
+                <span class="s2">&quot;https://video.seattle.gov/media/council/council_101220_2022077V.mp4&quot;</span>
             <span class="p">),</span>
             <span class="n">session_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">Session</span><span class="p">(</span>
             <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
             <span class="n">video_uri</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"https://video.seattle.gov/media/council/council_113020_2022091V.mp4"</span>
+                <span class="s2">&quot;https://video.seattle.gov/media/council/council_113020_2022091V.mp4&quot;</span>
             <span class="p">),</span>
             <span class="n">caption_uri</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt"</span>  <span class="c1"># noqa: E501</span>
+                <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&quot;</span>  <span class="c1"># noqa: E501</span>
             <span class="p">),</span>
             <span class="n">session_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">],</span>
     <span class="n">event_minutes_items</span><span class="o">=</span><span class="p">[</span>
         <span class="n">EventMinutesItem</span><span class="p">(</span>
-            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Inf 1656"</span><span class="p">),</span>
+            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Inf 1656&quot;</span><span class="p">),</span>
         <span class="p">),</span>
         <span class="n">EventMinutesItem</span><span class="p">(</span>
-            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"CB 119858"</span><span class="p">),</span>
+            <span class="n">minutes_item</span><span class="o">=</span><span class="n">MinutesItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;CB 119858&quot;</span><span class="p">),</span>
             <span class="n">matter</span><span class="o">=</span><span class="n">Matter</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">"CB 119858"</span><span class="p">,</span>
-                <span class="n">matter_type</span><span class="o">=</span><span class="s2">"Council Bill"</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;CB 119858&quot;</span><span class="p">,</span>
+                <span class="n">matter_type</span><span class="o">=</span><span class="s2">&quot;Council Bill&quot;</span><span class="p">,</span>
                 <span class="n">title</span><span class="o">=</span><span class="p">(</span>
-                    <span class="s2">"AN ORDINANCE relating to the financing of the West Seattle Bridge"</span>
+                    <span class="s2">&quot;AN ORDINANCE relating to the financing of the West Seattle Bridge&quot;</span>
                 <span class="p">),</span>
-                <span class="n">result_status</span><span class="o">=</span><span class="s2">"Adopted"</span><span class="p">,</span>
+                <span class="n">result_status</span><span class="o">=</span><span class="s2">&quot;Adopted&quot;</span><span class="p">,</span>
                 <span class="n">sponsors</span><span class="o">=</span><span class="p">[</span>
                     <span class="n">Person</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">"M. Lorena González"</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;M. Lorena González&quot;</span><span class="p">,</span>
                         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">"Position 9"</span><span class="p">,</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 9&quot;</span><span class="p">,</span>
                             <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
-                                <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Council President"</span><span class="p">),</span>
+                                <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Council President&quot;</span><span class="p">),</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Governance and Education"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                         <span class="p">),</span>
                     <span class="p">),</span>
                     <span class="n">Person</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">"Teresa Mosqueda"</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Teresa Mosqueda&quot;</span><span class="p">,</span>
                         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">"Position 8"</span><span class="p">,</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 8&quot;</span><span class="p">,</span>
                             <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Finance and Housing"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Finance and Housing&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Vice Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Governance and Education"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                         <span class="p">),</span>
-                        <span class="n">picture_uri</span><span class="o">=</span><span class="s2">"https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg"</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
+                        <span class="n">picture_uri</span><span class="o">=</span><span class="s2">&quot;https://www.seattle.gov/Images/Council/Members/Mosqueda/Mosqueda_225x225.jpg&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
             <span class="p">),</span>
             <span class="n">supporting_files</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">SupportingFile</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="s2">"Amendment 3"</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Amendment 3&quot;</span><span class="p">,</span>
                     <span class="n">uri</span><span class="o">=</span><span class="p">(</span>
-                        <span class="s2">"http://legistar2.granicus.com/seattle/attachments/"</span>
-                        <span class="s2">"789a0c9f-dd9c-401b-aaf5-6c67c2a897b0.pdf"</span>
+                        <span class="s2">&quot;http://legistar2.granicus.com/seattle/attachments/&quot;</span>
+                        <span class="s2">&quot;789a0c9f-dd9c-401b-aaf5-6c67c2a897b0.pdf&quot;</span>
                     <span class="p">),</span>
                 <span class="p">),</span>
             <span class="p">],</span>
-            <span class="n">decision</span><span class="o">=</span><span class="s2">"Passed"</span><span class="p">,</span>
+            <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Passed&quot;</span><span class="p">,</span>
             <span class="n">votes</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">Vote</span><span class="p">(</span>
                     <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">"M. Lorena González"</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;M. Lorena González&quot;</span><span class="p">,</span>
                         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">"Position 9"</span><span class="p">,</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 9&quot;</span><span class="p">,</span>
                             <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
-                                <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Council President"</span><span class="p">),</span>
+                                <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Council President&quot;</span><span class="p">),</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Governance and Education"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                         <span class="p">),</span>
                     <span class="p">),</span>
-                    <span class="n">decision</span><span class="o">=</span><span class="s2">"Approve"</span><span class="p">,</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Approve&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Vote</span><span class="p">(</span>
                     <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">"Teresa Mosqueda"</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Teresa Mosqueda&quot;</span><span class="p">,</span>
                         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">"Position 8"</span><span class="p">,</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Position 8&quot;</span><span class="p">,</span>
                             <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Finance and Housing"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Finance and Housing&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Vice Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Governance and Education"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Governance and Education&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                         <span class="p">),</span>
                     <span class="p">),</span>
-                    <span class="n">decision</span><span class="o">=</span><span class="s2">"Approve"</span><span class="p">,</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Approve&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Vote</span><span class="p">(</span>
                     <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">"Andrew Lewis"</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Andrew Lewis&quot;</span><span class="p">,</span>
                         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">"District 7"</span><span class="p">,</span>
-                            <span class="n">image_uri</span><span class="o">=</span><span class="s2">"http://www.seattle.gov/Images/Clerk/district7_50x50.jpg"</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;District 7&quot;</span><span class="p">,</span>
+                            <span class="n">image_uri</span><span class="o">=</span><span class="s2">&quot;http://www.seattle.gov/Images/Clerk/district7_50x50.jpg&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
                             <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Vice Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Community Economic Development"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vice Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Community Economic Development&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                         <span class="p">),</span>
                     <span class="p">),</span>
-                    <span class="n">decision</span><span class="o">=</span><span class="s2">"Approve"</span><span class="p">,</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Approve&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
                 <span class="n">Vote</span><span class="p">(</span>
                     <span class="n">person</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">"Alex Pedersen"</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Alex Pedersen&quot;</span><span class="p">,</span>
                         <span class="n">seat</span><span class="o">=</span><span class="n">Seat</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">"District 4"</span><span class="p">,</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;District 4&quot;</span><span class="p">,</span>
                             <span class="n">roles</span><span class="o">=</span><span class="p">[</span>
                                 <span class="n">Role</span><span class="p">(</span>
-                                    <span class="n">title</span><span class="o">=</span><span class="s2">"Chair"</span><span class="p">,</span>
-                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="s2">"Transportation and Utilities"</span><span class="p">),</span>
+                                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Chair&quot;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="s2">&quot;Transportation and Utilities&quot;</span><span class="p">),</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                         <span class="p">),</span>
                     <span class="p">),</span>
-                    <span class="n">decision</span><span class="o">=</span><span class="s2">"Reject"</span><span class="p">,</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="s2">&quot;Reject&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">],</span>
         <span class="p">),</span>
@@ -657,6 +658,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

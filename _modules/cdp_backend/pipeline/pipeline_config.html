@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.pipeline.pipeline_config - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -227,7 +228,7 @@
 <div class="viewcode-block" id="EventGatherPipelineConfig"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EventGatherPipelineConfig</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Configuration options for the CDP event gather pipeline.</span>
 
 <span class="sd">    Parameters</span>
@@ -248,7 +249,7 @@
 <span class="sd">        Default number of days to subtract from current time to then pass to the</span>
 <span class="sd">        provided get_events function as the `from_dt` datetime.</span>
 <span class="sd">        Default: 2 (from_dt will be set to current datetime - 2 days)</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">google_credentials_file</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">get_events_function_path</span><span class="p">:</span> <span class="nb">str</span>
@@ -270,12 +271,12 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Open the key to get the project id</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
                     <span class="n">creds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_resource</span><span class="p">)</span>
-                    <span class="n">project_id</span> <span class="o">=</span> <span class="n">creds</span><span class="p">[</span><span class="s2">"project_id"</span><span class="p">]</span>
+                    <span class="n">project_id</span> <span class="o">=</span> <span class="n">creds</span><span class="p">[</span><span class="s2">&quot;project_id&quot;</span><span class="p">]</span>
 
                 <span class="c1"># Remove all files in bucket</span>
-                <span class="n">bucket</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.appspot.com"</span>
+                <span class="n">bucket</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.appspot.com&quot;</span>
 
             <span class="c1"># Validate</span>
             <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">)</span>
@@ -285,7 +286,7 @@
 
             <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Provided or infered GCS bucket name does not exist. ('</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">')"</span>
+                    <span class="sa">f</span><span class="s2">&quot;Provided or infered GCS bucket name does not exist. (&#39;</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
                 <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span></div>
@@ -294,7 +295,7 @@
 <div class="viewcode-block" id="EventIndexPipelineConfig"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig">[docs]</a><span class="nd">@dataclass_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EventIndexPipelineConfig</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Configuration options for the CDP event index pipeline.</span>
 
 <span class="sd">    Parameters</span>
@@ -308,7 +309,7 @@
 <span class="sd">        The number of days that grams from an event should be labeled as more relevant.</span>
 <span class="sd">        Default: 30 (grams from events less than 30 days old will generally be valued</span>
 <span class="sd">        higher than their pure relevance score)</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">google_credentials_file</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">gcs_bucket_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -327,12 +328,12 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Open the key to get the project id</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
                     <span class="n">creds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_resource</span><span class="p">)</span>
-                    <span class="n">project_id</span> <span class="o">=</span> <span class="n">creds</span><span class="p">[</span><span class="s2">"project_id"</span><span class="p">]</span>
+                    <span class="n">project_id</span> <span class="o">=</span> <span class="n">creds</span><span class="p">[</span><span class="s2">&quot;project_id&quot;</span><span class="p">]</span>
 
                 <span class="c1"># Remove all files in bucket</span>
-                <span class="n">bucket</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.appspot.com"</span>
+                <span class="n">bucket</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.appspot.com&quot;</span>
 
             <span class="c1"># Validate</span>
             <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">)</span>
@@ -342,7 +343,7 @@
 
             <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Provided or infered GCS bucket name does not exist. ('</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">')"</span>
+                    <span class="sa">f</span><span class="s2">&quot;Provided or infered GCS bucket name does not exist. (&#39;</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
                 <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validated_gcs_bucket_name</span></div>
@@ -383,6 +384,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

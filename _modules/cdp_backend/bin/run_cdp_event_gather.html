@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.bin.run_cdp_event_gather - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -230,7 +231,7 @@
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s2">"[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -243,48 +244,48 @@
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">prog</span><span class="o">=</span><span class="s2">"run_cdp_event_gather"</span><span class="p">,</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">"Gather, process, and store event data to CDP infrastructure."</span><span class="p">,</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;run_cdp_event_gather&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gather, process, and store event data to CDP infrastructure.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"config_file"</span><span class="p">,</span>
+            <span class="s2">&quot;config_file&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"Path to the pipeline configuration file. "</span>
-                <span class="s2">"See cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig "</span>
-                <span class="s2">"for more details."</span>
+                <span class="s2">&quot;Path to the pipeline configuration file. &quot;</span>
+                <span class="s2">&quot;See cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig &quot;</span>
+                <span class="s2">&quot;for more details.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-f"</span><span class="p">,</span>
-            <span class="s2">"--from"</span><span class="p">,</span>
+            <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--from&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
             <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"Optional ISO formatted string to pass to the get_event function to act"</span>
-                <span class="s2">"as the start point for event gathering."</span>
+                <span class="s2">&quot;Optional ISO formatted string to pass to the get_event function to act&quot;</span>
+                <span class="s2">&quot;as the start point for event gathering.&quot;</span>
             <span class="p">),</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">"from_dt"</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;from_dt&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-t"</span><span class="p">,</span>
-            <span class="s2">"--to"</span><span class="p">,</span>
+            <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
             <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"Optional ISO formatted string to pass to the get_event function to act"</span>
-                <span class="s2">"as the end point for event gathering."</span>
+                <span class="s2">&quot;Optional ISO formatted string to pass to the get_event function to act&quot;</span>
+                <span class="s2">&quot;as the end point for event gathering.&quot;</span>
             <span class="p">),</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">"to_dt"</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;to_dt&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">"-p"</span><span class="p">,</span>
-            <span class="s2">"--parallel"</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">"parallel"</span><span class="p">,</span>
+            <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--parallel&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">"Boolean option to spin up a local multi-threaded "</span>
-                <span class="s2">"Dask Distributed cluster for event processing."</span>
+                <span class="s2">&quot;Boolean option to spin up a local multi-threaded &quot;</span>
+                <span class="s2">&quot;Dask Distributed cluster for event processing.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
@@ -294,7 +295,7 @@
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config_file</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">EventGatherPipelineConfig</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
                 <span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="p">)</span>
@@ -309,15 +310,15 @@
         <span class="c1"># Determine executor</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">parallel</span><span class="p">:</span>
             <span class="c1"># Create local cluster</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Creating LocalCluster"</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating LocalCluster&quot;</span><span class="p">)</span>
             <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Created LocalCluster"</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created LocalCluster&quot;</span><span class="p">)</span>
 
             <span class="c1"># Set distributed_executor_address</span>
             <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
 
             <span class="c1"># Log dashboard URI</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># Use dask cluster</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
@@ -331,21 +332,21 @@
             <span class="n">state</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">is_failed</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Flow run failed."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Flow run failed.&quot;</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"============================================="</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"============================================="</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"============================================="</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 <span class="c1">###############################################################################</span>
 <span class="c1"># Allow caller to directly run this module (usually in development scenarios)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
         </article>
@@ -384,6 +385,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

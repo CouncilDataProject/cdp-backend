@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.utils.file_utils - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -237,7 +238,7 @@
 
 
 <div class="viewcode-block" id="get_media_type"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">[docs]</a><span class="k">def</span> <span class="nf">get_media_type</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the IANA media type for the provided URI.</span>
 <span class="sd">    If one could not be found, return None.</span>
 
@@ -250,25 +251,25 @@
 <span class="sd">    -------</span>
 <span class="sd">    mtype: Optional[str]:</span>
 <span class="sd">        The found matching IANA media type.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
 
     <span class="c1"># Media types retrieved from:</span>
     <span class="c1"># http://www.iana.org/assignments/media-types/media-types.xhtml</span>
     <span class="n">media_types</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"resources"</span> <span class="o">/</span> <span class="s2">"content-types-*.csv"</span><span class="p">)</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;resources&quot;</span> <span class="o">/</span> <span class="s2">&quot;content-types-*.csv&quot;</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="c1"># Get suffix from URI</span>
-    <span class="n">splits</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
+    <span class="n">splits</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
     <span class="n">suffix</span> <span class="o">=</span> <span class="n">splits</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Find content type</span>
-    <span class="n">matching</span> <span class="o">=</span> <span class="n">media_types</span><span class="p">[</span><span class="n">media_types</span><span class="p">[</span><span class="s2">"Name"</span><span class="p">]</span> <span class="o">==</span> <span class="n">suffix</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+    <span class="n">matching</span> <span class="o">=</span> <span class="n">media_types</span><span class="p">[</span><span class="n">media_types</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">suffix</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 
     <span class="c1"># If there is exactly one matching type, return it</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matching</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">matching</span><span class="p">[</span><span class="s2">"Template"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">matching</span><span class="p">[</span><span class="s2">&quot;Template&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Otherwise, return none</span>
     <span class="k">return</span> <span class="kc">None</span></div>
@@ -279,7 +280,7 @@
     <span class="n">dst</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a resource (local or remote) to a local destination on the machine.</span>
 
 <span class="sd">    Parameters</span>
@@ -297,44 +298,44 @@
 <span class="sd">    -------</span>
 <span class="sd">    saved_path: str</span>
 <span class="sd">        The path of where the resource ended up getting copied to.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="c1"># Ensure dst doesn't exist</span>
+    <span class="c1"># Ensure dst doesn&#39;t exist</span>
     <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="k">if</span> <span class="s2">"v="</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;v=&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
             <span class="c1"># Split by youtube video query parameter</span>
-            <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"v="</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;v=&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Split by the last "/"</span>
-            <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Split by the last &quot;/&quot;</span>
+            <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Ensure filename is less than 255 chars</span>
     <span class="c1"># Otherwise this can raise an OSError for too long of a filename</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="p">:</span>
         <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)[:</span><span class="mi">255</span><span class="p">])</span>
 
-    <span class="c1"># Ensure dest isn't a file</span>
+    <span class="c1"># Ensure dest isn&#39;t a file</span>
     <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
 
     <span class="c1"># Open requests connection to uri as a stream</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Beginning resource copy from: </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning resource copy from: </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="c1"># Get file system</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"youtube.com"</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"youtu.be"</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;youtube.com&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;youtu.be&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".m3u8"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.m3u8&quot;</span><span class="p">):</span>
             <span class="kn">import</span> <span class="nn">m3u8_To_MP4</span>
 
             <span class="c1"># We add a uuid4 to the front of the filename because m3u8 files</span>
             <span class="c1"># are usually simply called playlist.m3u8 -- the result will be</span>
-            <span class="c1"># f"{uuid}-{name}"</span>
-            <span class="n">mp4_name</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".mp4"</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-            <span class="n">save_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">mp4_name</span><span class="si">}</span><span class="s2">"</span>
+            <span class="c1"># f&quot;{uuid}-{name}&quot;</span>
+            <span class="n">mp4_name</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.mp4&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">save_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">mp4_name</span><span class="si">}</span><span class="s2">&quot;</span>
 
             <span class="c1"># Reset dst</span>
             <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">save_name</span>
@@ -348,12 +349,12 @@
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
 
         <span class="c1"># Set custom timeout for http resources</span>
-        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"http"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
             <span class="c1"># The verify=False is passed to any http URIs</span>
-            <span class="c1"># It was added because it's very common for SSL certs to be bad</span>
+            <span class="c1"># It was added because it&#39;s very common for SSL certs to be bad</span>
             <span class="c1"># See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85</span>
             <span class="c1"># And: https://github.com/CouncilDataProject/seattle/runs/5957646032</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_dst</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_dst</span><span class="p">:</span>
                 <span class="n">open_dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                     <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                         <span class="n">uri</span><span class="p">,</span>
@@ -366,20 +367,20 @@
             <span class="c1"># TODO: Add explicit use of GCS credentials until public read is fixed</span>
             <span class="n">fs</span><span class="p">,</span> <span class="n">remote_path</span> <span class="o">=</span> <span class="n">url_to_fs</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
             <span class="n">fs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">remote_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completed resource copy from: </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stored resource copy: </span><span class="si">{</span><span class="n">dst</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed resource copy from: </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored resource copy: </span><span class="si">{</span><span class="n">dst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Something went wrong during resource copy. "</span>
-            <span class="sa">f</span><span class="s2">"Attempted copy from: '</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">', resulted in error."</span>
+            <span class="sa">f</span><span class="s2">&quot;Something went wrong during resource copy. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Attempted copy from: &#39;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;, resulted in error.&quot;</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="n">e</span></div>
 
 
 <div class="viewcode-block" id="youtube_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.youtube_copy">[docs]</a><span class="k">def</span> <span class="nf">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a video from YouTube to a local destination on the machine.</span>
 
 <span class="sd">    Parameters</span>
@@ -396,17 +397,17 @@
 <span class="sd">    _______</span>
 <span class="sd">    dst: str</span>
 <span class="sd">        The location of the downloaded file.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">yt_dlp</span> <span class="kn">import</span> <span class="n">YoutubeDL</span>
 
-    <span class="c1"># dst = Path(str(dst) + ".mp4")</span>
-    <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".mp4"</span><span class="p">)</span>
+    <span class="c1"># dst = Path(str(dst) + &quot;.mp4&quot;)</span>
+    <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.mp4&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Ensure dest isn't a file</span>
+    <span class="c1"># Ensure dest isn&#39;t a file</span>
     <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
 
-    <span class="n">ydl_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"outtmpl"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span> <span class="s2">"format"</span><span class="p">:</span> <span class="s2">"mp4"</span><span class="p">}</span>
+    <span class="n">ydl_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;outtmpl&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;mp4&quot;</span><span class="p">}</span>
     <span class="k">with</span> <span class="n">YoutubeDL</span><span class="p">(</span><span class="n">ydl_opts</span><span class="p">)</span> <span class="k">as</span> <span class="n">ydl</span><span class="p">:</span>
         <span class="n">ydl</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="n">uri</span><span class="p">])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span></div>
@@ -417,7 +418,7 @@
     <span class="n">audio_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split and store the audio from a video file using ffmpeg.</span>
 
 <span class="sd">    Parameters</span>
@@ -435,7 +436,7 @@
 <span class="sd">        Path to the ffmpeg stdout log file.</span>
 <span class="sd">    ffmpeg stderr path: str</span>
 <span class="sd">        Path to the ffmpeg stderr log file.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">ffmpeg</span>
 
     <span class="c1"># Check paths</span>
@@ -451,25 +452,25 @@
     <span class="n">stream</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
         <span class="n">stream</span><span class="p">,</span>
         <span class="n">filename</span><span class="o">=</span><span class="n">resolved_audio_save_path</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">"wav"</span><span class="p">,</span>
-        <span class="n">acodec</span><span class="o">=</span><span class="s2">"pcm_s16le"</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">,</span>
+        <span class="n">acodec</span><span class="o">=</span><span class="s2">&quot;pcm_s16le&quot;</span><span class="p">,</span>
         <span class="n">ac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">ar</span><span class="o">=</span><span class="s2">"16k"</span><span class="p">,</span>
+        <span class="n">ar</span><span class="o">=</span><span class="s2">&quot;16k&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Run dag</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Beginning audio separation for: </span><span class="si">{</span><span class="n">video_read_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning audio separation for: </span><span class="si">{</span><span class="n">video_read_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">capture_stdout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_stderr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completed audio separation for: </span><span class="si">{</span><span class="n">video_read_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stored audio: </span><span class="si">{</span><span class="n">audio_save_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed audio separation for: </span><span class="si">{</span><span class="n">video_read_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored audio: </span><span class="si">{</span><span class="n">audio_save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># Store logs</span>
-    <span class="n">ffmpeg_stdout_path</span> <span class="o">=</span> <span class="n">resolved_audio_save_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".out"</span><span class="p">)</span>
-    <span class="n">ffmpeg_stderr_path</span> <span class="o">=</span> <span class="n">resolved_audio_save_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".err"</span><span class="p">)</span>
+    <span class="n">ffmpeg_stdout_path</span> <span class="o">=</span> <span class="n">resolved_audio_save_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.out&quot;</span><span class="p">)</span>
+    <span class="n">ffmpeg_stderr_path</span> <span class="o">=</span> <span class="n">resolved_audio_save_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.err&quot;</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ffmpeg_stdout_path</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">write_out</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ffmpeg_stdout_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">write_out</span><span class="p">:</span>
         <span class="n">write_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ffmpeg_stderr_path</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">write_err</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ffmpeg_stderr_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">write_err</span><span class="p">:</span>
         <span class="n">write_err</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
@@ -482,7 +483,7 @@
 <div class="viewcode-block" id="get_static_thumbnail"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">[docs]</a><span class="k">def</span> <span class="nf">get_static_thumbnail</span><span class="p">(</span>
     <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function that produces a png thumbnail image from a video file</span>
 
 <span class="sd">    Parameters</span>
@@ -490,7 +491,7 @@
 <span class="sd">    video_path: str</span>
 <span class="sd">        The URL of the video from which the thumbnail will be produced</span>
 <span class="sd">    session_content_hash: str</span>
-<span class="sd">        The video content hash. This will be used in the produced image file's name</span>
+<span class="sd">        The video content hash. This will be used in the produced image file&#39;s name</span>
 <span class="sd">    seconds: int</span>
 <span class="sd">        Determines after how many seconds a frame will be selected to produce the</span>
 <span class="sd">        thumbnail. The default is 30 seconds</span>
@@ -500,19 +501,19 @@
 <span class="sd">    -------</span>
 <span class="sd">    str: cover_name</span>
 <span class="sd">        The name of the thumbnail file:</span>
-<span class="sd">        Always session_content_hash + "-static-thumbnail.png"</span>
-<span class="sd">    """</span>
+<span class="sd">        Always session_content_hash + &quot;-static-thumbnail.png&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">imageio</span>
     <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 
     <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
-    <span class="n">png_path</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">png_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">png_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-static-thumbnail.png"</span>
+        <span class="n">png_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-static-thumbnail.png&quot;</span>
 
     <span class="n">image</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">frame_to_take</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get_meta_data</span><span class="p">()[</span><span class="s2">"fps"</span><span class="p">]</span> <span class="o">*</span> <span class="n">seconds</span><span class="p">)</span>
+        <span class="n">frame_to_take</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get_meta_data</span><span class="p">()[</span><span class="s2">&quot;fps&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">seconds</span><span class="p">)</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">frame_to_take</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
@@ -539,7 +540,7 @@
     <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function that produces a gif hover thumbnail from an mp4 video file</span>
 
 <span class="sd">    Parameters</span>
@@ -547,7 +548,7 @@
 <span class="sd">    video_path: str</span>
 <span class="sd">        The URL of the video from which the thumbnail will be produced</span>
 <span class="sd">    session_content_hash: str</span>
-<span class="sd">        The video content hash. This will be used in the produced image file's name</span>
+<span class="sd">        The video content hash. This will be used in the produced image file&#39;s name</span>
 <span class="sd">    num_frames: int</span>
 <span class="sd">        Determines the number of frames in the thumbnail</span>
 <span class="sd">    duration: float</span>
@@ -558,16 +559,16 @@
 <span class="sd">    -------</span>
 <span class="sd">    str: cover_name</span>
 <span class="sd">        The name of the thumbnail file:</span>
-<span class="sd">        Always session_content_hash + "-hover-thumbnail.png"</span>
-<span class="sd">    """</span>
+<span class="sd">        Always session_content_hash + &quot;-hover-thumbnail.png&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">imageio</span>
     <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
     <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 
     <span class="n">reader</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_reader</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
-    <span class="n">gif_path</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">gif_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">gif_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-hover-thumbnail.gif"</span>
+        <span class="n">gif_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-hover-thumbnail.gif&quot;</span>
 
     <span class="c1"># Get first frame</span>
     <span class="n">sample</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -575,7 +576,7 @@
     <span class="n">width</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">final_ratio</span> <span class="o">=</span> <span class="n">find_proper_resize_ratio</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">gif_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"I"</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="p">(</span><span class="n">num_frames</span> <span class="o">/</span> <span class="n">duration</span><span class="p">))</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">gif_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="p">(</span><span class="n">num_frames</span> <span class="o">/</span> <span class="n">duration</span><span class="p">))</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
         <span class="n">selected_frames</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
             <span class="c1"># 1% chance to use the frame</span>
@@ -600,7 +601,7 @@
 
 
 <div class="viewcode-block" id="find_proper_resize_ratio"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.find_proper_resize_ratio">[docs]</a><span class="k">def</span> <span class="nf">find_proper_resize_ratio</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the proper ratio to resize a thumbnail greater than 960 x 540 pixels.</span>
 
 <span class="sd">    Parameters</span>
@@ -618,7 +619,7 @@
 <span class="sd">        by a factor of final_ratio.</span>
 <span class="sd">        If the ratio is greater than or equal to 1, the thumbnail is not too large and</span>
 <span class="sd">        should not be resized.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="n">MAX_THUMBNAIL_HEIGHT</span> <span class="ow">or</span> <span class="n">width</span> <span class="o">&gt;</span> <span class="n">MAX_THUMBNAIL_WIDTH</span><span class="p">:</span>
         <span class="n">height_ratio</span> <span class="o">=</span> <span class="n">MAX_THUMBNAIL_HEIGHT</span> <span class="o">/</span> <span class="n">height</span>
         <span class="n">width_ratio</span> <span class="o">=</span> <span class="n">MAX_THUMBNAIL_WIDTH</span> <span class="o">/</span> <span class="n">width</span>
@@ -634,8 +635,8 @@
 
 
 <div class="viewcode-block" id="hash_file_contents"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.hash_file_contents">[docs]</a><span class="k">def</span> <span class="nf">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Return the SHA256 hash of a file's content.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the SHA256 hash of a file&#39;s content.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -649,10 +650,10 @@
 <span class="sd">    -------</span>
 <span class="sd">    hash: str</span>
 <span class="sd">        The SHA256 hash for the file contents.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">hasher</span> <span class="o">=</span> <span class="n">sha256</span><span class="p">()</span>
 
-    <span class="k">with</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">block</span> <span class="o">=</span> <span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">block</span><span class="p">:</span>
@@ -664,7 +665,7 @@
 
 
 <div class="viewcode-block" id="convert_video_to_mp4"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.convert_video_to_mp4">[docs]</a><span class="k">def</span> <span class="nf">convert_video_to_mp4</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a video to an equivalent MP4 file.</span>
 
 <span class="sd">    Parameters</span>
@@ -676,18 +677,18 @@
 <span class="sd">    -------</span>
 <span class="sd">    mp4_filepath: str</span>
 <span class="sd">        The filepath of the converted MP4 video.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">ffmpeg</span>
 
-    <span class="n">mp4_filepath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".mp4"</span><span class="p">))</span>
+    <span class="n">mp4_filepath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.mp4&quot;</span><span class="p">))</span>
     <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">mp4_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">overwrite_output</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Finished converting </span><span class="si">{}</span><span class="s2"> to mp4"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">))</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished converting </span><span class="si">{}</span><span class="s2"> to mp4&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">mp4_filepath</span></div>
 
 
 <div class="viewcode-block" id="generate_file_storage_name"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.generate_file_storage_name">[docs]</a><span class="k">def</span> <span class="nf">generate_file_storage_name</span><span class="p">(</span><span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a filename using the hash of the file contents and some provided suffix.</span>
 
 <span class="sd">    Parameters</span>
@@ -701,9 +702,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    dst: str</span>
 <span class="sd">        The name of the file as it should be on Google Cloud Storage.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">hash</span> <span class="o">=</span> <span class="n">hash_file_contents</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">hash</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">"</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">hash</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span></div>
 </pre></div>
         </article>
       </div>
@@ -741,6 +742,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

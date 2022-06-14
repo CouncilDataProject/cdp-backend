@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.pipeline package" href="cdp_backend.pipeline.html" /><link rel="prev" title="cdp_backend.file_store package" href="cdp_backend.file_store.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.infrastructure package - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -197,7 +197,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -212,20 +213,20 @@
         </div>
         <article role="main">
           <section id="cdp-backend-infrastructure-package">
-<h1>cdp_backend.infrastructure package<a class="headerlink" href="#cdp-backend-infrastructure-package" title="Permalink to this headline">#</a></h1>
+<h1>cdp_backend.infrastructure package<a class="headerlink" href="#cdp-backend-infrastructure-package" title="Permalink to this heading">#</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="module-cdp_backend.infrastructure.cdp_stack">
-<span id="cdp-backend-infrastructure-cdp-stack-module"></span><h2>cdp_backend.infrastructure.cdp_stack module<a class="headerlink" href="#module-cdp_backend.infrastructure.cdp_stack" title="Permalink to this headline">#</a></h2>
+<span id="cdp-backend-infrastructure-cdp-stack-module"></span><h2>cdp_backend.infrastructure.cdp_stack module<a class="headerlink" href="#module-cdp_backend.infrastructure.cdp_stack" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.CDPStack">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">CDPStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">municipality_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dev_municipality'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosting_github_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'no_github_host'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosting_web_app_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'no_web_app_address'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firestore_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'us-west2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">governing_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'other'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pulumi.resource.ResourceOptions</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pulumi.resource.ComponentResource</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">CDPStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">municipality_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dev_municipality'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosting_github_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'no_github_host'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosting_web_app_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'no_web_app_address'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firestore_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'us-west2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">governing_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'other'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ResourceOptions</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#CDPStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.CDPStack" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentResource</span></code></p>
 <p>Creates all required infrastructure and enables all required services for CDP
 backend stacks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gcp_project_id</strong> (<em>str</em>) – The id of the gcp_project, the Pulumi stack, and any other required
 names for resources created during infrastructure creation will use this id
@@ -258,6 +259,7 @@ should primarily be used with the cookiecutter / automated scripts. The default
 values in this case are set because when using this object outside of
 the cookiecutter it is likely for dev infrastructures.</p>
 </dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.infrastructure.cdp_stack.</span></span><span class="sig-name descname"><span class="pre">GoverningBody</span></span><a class="reference internal" href="_modules/cdp_backend/infrastructure/cdp_stack.html#GoverningBody"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody" title="Permalink to this definition">#</a></dt>
@@ -266,22 +268,27 @@ the cookiecutter it is likely for dev infrastructures.</p>
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.city_council">
 <span class="sig-name descname"><span class="pre">city_council</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'city</span> <span class="pre">council'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.city_council" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.county_council">
 <span class="sig-name descname"><span class="pre">county_council</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'county</span> <span class="pre">council'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.county_council" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.other">
 <span class="sig-name descname"><span class="pre">other</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'other'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.other" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.infrastructure.cdp_stack.GoverningBody.school_board">
 <span class="sig-name descname"><span class="pre">school_board</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'school</span> <span class="pre">board'</span></em><a class="headerlink" href="#cdp_backend.infrastructure.cdp_stack.GoverningBody.school_board" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </dd></dl>
+
 </section>
 <section id="module-cdp_backend.infrastructure">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.infrastructure" title="Permalink to this headline">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.infrastructure" title="Permalink to this heading">#</a></h2>
 <p>Infrastructure package for cdp_backend.</p>
 </section>
 </section>
@@ -361,6 +368,7 @@ the cookiecutter it is likely for dev infrastructures.</p>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
     </body>

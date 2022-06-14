@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -196,7 +196,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -260,7 +261,7 @@
 
 
 <div class="viewcode-block" id="import_get_events_func"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.import_get_events_func">[docs]</a><span class="k">def</span> <span class="nf">import_get_events_func</span><span class="p">(</span><span class="n">func_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-    <span class="n">path</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">func_path</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">func_path</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">mod</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span></div>
@@ -272,7 +273,7 @@
     <span class="n">to_dt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">prefetched_events</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provided a function to gather new event information, create the Prefect Flow object</span>
 <span class="sd">    to preview, run, or visualize.</span>
 
@@ -293,7 +294,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    flow: Flow</span>
 <span class="sd">        The constructed CDP Event Gather Pipeline as a Prefect Flow.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Load get_events_func</span>
     <span class="n">get_events_func</span> <span class="o">=</span> <span class="n">import_get_events_func</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_events_function_path</span><span class="p">)</span>
 
@@ -316,10 +317,10 @@
         <span class="n">to_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 
     <span class="c1"># Create flow</span>
-    <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">"CDP Event Gather Pipeline"</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Gather Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Gathering events to process. "</span>
-            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">from_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">to_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">)"</span>
+            <span class="sa">f</span><span class="s2">&quot;Gathering events to process. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">from_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">to_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># Use prefetched events instead of get_events_func if provided</span>
@@ -335,7 +336,7 @@
         <span class="c1"># Safety measure catch</span>
         <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events."</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
             <span class="n">session_processing_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SessionProcessingResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -371,14 +372,14 @@
 
                 <span class="c1"># Check caption uri</span>
                 <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="c1"># If the caption doesn't exist, remove the property</span>
+                    <span class="c1"># If the caption doesn&#39;t exist, remove the property</span>
                     <span class="c1"># This will result in Speech-to-Text being used instead</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">resource_exists</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="p">):</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"File not found using provided caption URI: "</span>
-                            <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="si">}</span><span class="s2">'. "</span>
-                            <span class="sa">f</span><span class="s2">"Removing the referenced caption URI and will process "</span>
-                            <span class="sa">f</span><span class="s2">"the session using Speech-to-Text."</span>
+                            <span class="sa">f</span><span class="s2">&quot;File not found using provided caption URI: &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Removing the referenced caption URI and will process &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;the session using Speech-to-Text.&quot;</span>
                         <span class="p">)</span>
                         <span class="n">session</span><span class="o">.</span><span class="n">caption_uri</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -437,7 +438,7 @@
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_delay</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">120</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a file to a temporary location for processing.</span>
 
 <span class="sd">    Parameters</span>
@@ -454,7 +455,7 @@
 <span class="sd">    -----</span>
 <span class="sd">    We sometimes get file downloading failures when running in parallel so this has two</span>
 <span class="sd">    retries attached to it that will run after a failure on a 2 minute delay.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
         <span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -463,14 +464,14 @@
 
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">resource_delete_task</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove local file</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    uri: str</span>
 <span class="sd">        The local video file.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
 
@@ -478,7 +479,7 @@
 <span class="k">def</span> <span class="nf">get_session_content_hash</span><span class="p">(</span>
     <span class="n">tmp_video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Hash the video file content to get a unique identifier for the session.</span>
 
 <span class="sd">    Parameters</span>
@@ -490,7 +491,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    session_content_hash: str</span>
 <span class="sd">        The unique key (SHA256 hash of video content) for this session processing.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Hash the video contents</span>
     <span class="k">return</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
 
@@ -503,7 +504,7 @@
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a video to MP4 (if necessary), upload it to the file store, and remove</span>
 <span class="sd">    the original non-MP4 file that was resource copied.</span>
 
@@ -528,13 +529,13 @@
 <span class="sd">        The local filepath of the converted MP4 file.</span>
 <span class="sd">    hosted_video_uri: str</span>
 <span class="sd">        The URI for the CDP hosted video.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get file extension</span>
     <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-    <span class="c1"># Convert to mp4 if file isn't of approved web format</span>
+    <span class="c1"># Convert to mp4 if file isn&#39;t of approved web format</span>
     <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">".mp4"</span><span class="p">,</span> <span class="s2">".webm"</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="s2">&quot;.webm&quot;</span><span class="p">]:</span>
         <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Convert video to mp4</span>
@@ -549,10 +550,10 @@
     <span class="c1"># Check if original session video uri is a m3u8</span>
     <span class="c1"># We cant follow the normal coonvert video process from above</span>
     <span class="c1"># because the m3u8 looks to the URI for all the chunks</span>
-    <span class="k">elif</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".m3u8"</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.m3u8&quot;</span><span class="p">):</span>
         <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="c1"># Store if the original host isn't https</span>
+    <span class="c1"># Store if the original host isn&#39;t https</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_secure_uri</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">resource_uri</span> <span class="o">=</span> <span class="n">try_url</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
@@ -563,8 +564,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">is_secure_uri</span><span class="p">(</span><span class="n">resource_uri</span><span class="p">):</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Found secure version of </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="si">}</span><span class="s2">, "</span>
-                    <span class="sa">f</span><span class="s2">"updating stored video URI."</span>
+                    <span class="sa">f</span><span class="s2">&quot;Found secure version of </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="si">}</span><span class="s2">, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;updating stored video URI.&quot;</span>
                 <span class="p">)</span>
                 <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">resource_uri</span>
             <span class="k">else</span><span class="p">:</span>
@@ -575,12 +576,12 @@
     <span class="c1"># Upload and swap if cdp is hosting</span>
     <span class="k">if</span> <span class="n">cdp_will_host</span><span class="p">:</span>
         <span class="c1"># Upload to gcsfs</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Storing a copy of video to CDP filestore."</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Storing a copy of video to CDP filestore.&quot;</span><span class="p">)</span>
         <span class="n">hosted_video_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
             <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
             <span class="n">filepath</span><span class="o">=</span><span class="n">video_filepath</span><span class="p">,</span>
-            <span class="n">save_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-video.mp4"</span><span class="p">,</span>
+            <span class="n">save_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-video.mp4&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Create fs to generate hosted media URL</span>
@@ -599,7 +600,7 @@
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split the audio from a local video file.</span>
 
 <span class="sd">    Parameters</span>
@@ -617,9 +618,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    audio_uri: str</span>
 <span class="sd">        The URI to the uploaded audio file.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check for existing audio</span>
-    <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-audio.wav"</span>
+    <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-audio.wav&quot;</span>
     <span class="n">audio_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
         <span class="n">filename</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span>
@@ -664,7 +665,7 @@
 
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">construct_speech_to_text_phrases_context</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">EventIngestionModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct a list of phrases to use for Google Speech-to-Text speech adaption.</span>
 
 <span class="sd">    See: https://cloud.google.com/speech-to-text/docs/speech-adaptation</span>
@@ -688,7 +689,7 @@
 <span class="sd">    3. councilmember names</span>
 <span class="sd">    4. matter titles</span>
 <span class="sd">    5. councilmember role titles</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Note: Google Speech-to-Text allows max 500 phrases</span>
     <span class="n">phrases</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
@@ -794,7 +795,7 @@
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transcript</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Pass the audio URI through to Google Speech-to-Text.</span>
 
 <span class="sd">    Parameters</span>
@@ -810,7 +811,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    transcript: Transcript</span>
 <span class="sd">        The generated Transcript object.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Init model</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">GoogleCloudSRModel</span><span class="p">(</span><span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">file_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span> <span class="n">phrases</span><span class="o">=</span><span class="n">phrases</span><span class="p">)</span>
@@ -822,7 +823,7 @@
     <span class="n">new_turn_pattern</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transcript</span><span class="p">:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download (or copy) a WebVTT closed caption file and convert to CDP Transcript model.</span>
 
 <span class="sd">    Parameters</span>
@@ -838,22 +839,22 @@
 <span class="sd">    -------</span>
 <span class="sd">    transcript: Transcript</span>
 <span class="sd">        The produced transcript.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># If value provided, passthrough, otherwise ignore</span>
     <span class="n">model_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">new_turn_pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">model_kwargs</span><span class="p">[</span><span class="s2">"new_turn_pattern"</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_turn_pattern</span>
+        <span class="n">model_kwargs</span><span class="p">[</span><span class="s2">&quot;new_turn_pattern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_turn_pattern</span>
     <span class="k">if</span> <span class="n">confidence</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">model_kwargs</span><span class="p">[</span><span class="s2">"confidence"</span><span class="p">]</span> <span class="o">=</span> <span class="n">confidence</span>
+        <span class="n">model_kwargs</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">confidence</span>
 
     <span class="c1"># Init model</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">WebVTTSRModel</span><span class="p">(</span><span class="o">**</span><span class="n">model_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Download or copy resource to local</span>
-    <span class="n">caption_filename</span> <span class="o">=</span> <span class="n">caption_uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">caption_filename</span> <span class="o">=</span> <span class="n">caption_uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">local_captions</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
         <span class="n">uri</span><span class="o">=</span><span class="n">caption_uri</span><span class="p">,</span>
-        <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">"caption-transcribing-</span><span class="si">{</span><span class="n">caption_filename</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;caption-transcribing-</span><span class="si">{</span><span class="n">caption_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -875,7 +876,7 @@
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finalizes metadata for a Transcript object, stores the transcript as JSON to object</span>
 <span class="sd">    storage and finally adds transcript and file objects to database.</span>
 
@@ -898,12 +899,12 @@
 <span class="sd">        The URI of the stored transcript JSON.</span>
 <span class="sd">    transcript: Transcript</span>
 <span class="sd">        The finalized in memory Transcript object.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Add session datetime to transcript</span>
     <span class="n">transcript</span><span class="o">.</span><span class="n">session_datetime</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">session_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
 
     <span class="c1"># Dump to JSON</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcript_save_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcript_save_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
         <span class="n">open_resource</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">transcript</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
 
     <span class="c1"># Store to file store</span>
@@ -923,7 +924,7 @@
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transcript</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check and load any existing transcript object.</span>
 
 <span class="sd">    Parameters</span>
@@ -946,12 +947,12 @@
 <span class="sd">    transcript_exists: bool</span>
 <span class="sd">        Boolean value for if the transcript was found or not.</span>
 <span class="sd">        Required for downstream Prefect usage.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Combine to transcript filename</span>
     <span class="n">tmp_transcript_filepath</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-"</span>
-        <span class="sa">f</span><span class="s2">"cdp_</span><span class="si">{</span><span class="n">__version__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'.'</span><span class="p">,</span> <span class="s1">'_'</span><span class="p">)</span><span class="si">}</span><span class="s2">-"</span>
-        <span class="sa">f</span><span class="s2">"transcript.json"</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">session_content_hash</span><span class="si">}</span><span class="s2">-&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;cdp_</span><span class="si">{</span><span class="n">__version__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">-&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;transcript.json&quot;</span>
     <span class="p">)</span>
 
     <span class="c1"># Check for existing transcript</span>
@@ -965,7 +966,7 @@
     <span class="c1"># Load transcript if exists</span>
     <span class="k">if</span> <span class="n">transcript_exists</span><span class="p">:</span>
         <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">transcript_uri</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">transcript_uri</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
             <span class="n">transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">transcript</span> <span class="o">=</span> <span class="kc">None</span>
@@ -983,7 +984,7 @@
     <span class="n">caption_new_speaker_turn_pattern</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">caption_confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Route transcript generation to the correct processing.</span>
 
 <span class="sd">    Parameters</span>
@@ -1016,7 +1017,7 @@
 <span class="sd">        The URI to the uploaded transcript file.</span>
 <span class="sd">    transcript: Transcript</span>
 <span class="sd">        The in-memory Transcript object.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get unique transcript name from parameters and current lib version</span>
     <span class="p">(</span>
         <span class="n">tmp_transcript_filepath</span><span class="p">,</span>
@@ -1071,12 +1072,12 @@
         <span class="n">generated_transcript_uri</span><span class="p">,</span>
         <span class="n">found_transcript_uri</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">result_transcript_uri</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"merge_transcript_uri"</span>
+    <span class="n">result_transcript_uri</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;merge_transcript_uri&quot;</span>
     <span class="n">result_transcript</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span>
         <span class="n">generated_transcript</span><span class="p">,</span>
         <span class="n">found_transcript</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">result_transcript</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"merge_in_memory_transcript"</span>
+    <span class="n">result_transcript</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;merge_in_memory_transcript&quot;</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">result_transcript_uri</span><span class="p">,</span> <span class="n">result_transcript</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
@@ -1089,7 +1090,7 @@
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates static and hover thumbnails.</span>
 
 <span class="sd">    Parameters</span>
@@ -1112,7 +1113,7 @@
 <span class="sd">        The URL of the static thumbnail, stored on GCS.</span>
 <span class="sd">    hover_thumbnail_url: str</span>
 <span class="sd">        The URL of the hover thumbnail, stored on GCS.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">static_thumbnail_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Generate new</span>
         <span class="n">static_thumbnail_file</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_static_thumbnail</span><span class="p">(</span>
@@ -1198,12 +1199,12 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">tmp_person_picture_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
                     <span class="n">uri</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="p">,</span>
-                    <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--person_picture"</span><span class="p">,</span>
+                    <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--person_picture&quot;</span><span class="p">,</span>
                     <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
                     <span class="n">tmp_person_picture_path</span><span class="p">,</span>
-                    <span class="s2">"person-picture"</span><span class="p">,</span>
+                    <span class="s2">&quot;person-picture&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">person_picture_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
@@ -1223,8 +1224,8 @@
             <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">ClientResponseError</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Person ('</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">'), picture URI could not be archived."</span>
-                    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="si">}</span><span class="s2">). Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), picture URI could not be archived.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">picture_uri</span><span class="si">}</span><span class="s2">). Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">person_picture_db_model</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1247,11 +1248,11 @@
             <span class="ne">ConnectionError</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"Person (</span><span class="si">{</span><span class="n">person_db_model</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">), "</span>
-                <span class="sa">f</span><span class="s2">"was missing required information. Generating minimum person details."</span>
+                <span class="sa">f</span><span class="s2">&quot;Person (</span><span class="si">{</span><span class="n">person_db_model</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">), &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;was missing required information. Generating minimum person details.&quot;</span>
             <span class="p">)</span>
             <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minimal_person</span><span class="p">(</span><span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="p">)</span>
-            <span class="c1"># No ingestion model provided here so that we don't try to</span>
+            <span class="c1"># No ingestion model provided here so that we don&#39;t try to</span>
             <span class="c1"># re-validate the already failed model upload</span>
             <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">upload_db_model</span><span class="p">(</span>
                 <span class="n">db_model</span><span class="o">=</span><span class="n">person_db_model</span><span class="p">,</span>
@@ -1269,12 +1270,12 @@
                 <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">tmp_person_seat_image_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">resource_copy</span><span class="p">(</span>
                         <span class="n">uri</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="p">,</span>
-                        <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--seat_image"</span><span class="p">,</span>
+                        <span class="n">dst</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">--seat_image&quot;</span><span class="p">,</span>
                         <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">destination_path</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">generate_file_storage_name</span><span class="p">(</span>
                         <span class="n">tmp_person_seat_image_path</span><span class="p">,</span>
-                        <span class="s2">"seat-image"</span><span class="p">,</span>
+                        <span class="s2">&quot;seat-image&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">person_seat_image_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                         <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
@@ -1296,8 +1297,8 @@
             <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">ClientResponseError</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">person_seat_image_db_model</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Person ('</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">'), seat image URI could not be archived."</span>
-                    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="si">}</span><span class="s2">). Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="sa">f</span><span class="s2">&quot;Person (&#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;), seat image URI could not be archived.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">seat</span><span class="o">.</span><span class="n">image_uri</span><span class="si">}</span><span class="s2">). Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
 
             <span class="c1"># Actual seat creation</span>
@@ -1358,7 +1359,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">person_db_model</span> <span class="o">=</span> <span class="n">upload_cache</span><span class="p">[</span><span class="n">person_cache_key</span><span class="p">]</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completed metadata processing for '</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed metadata processing for &#39;</span><span class="si">{</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">person_db_model</span>
 
 
@@ -1386,7 +1387,7 @@
             <span class="n">event_minutes_item</span><span class="o">.</span><span class="n">decision</span> <span class="o">==</span> <span class="n">db_constants</span><span class="o">.</span><span class="n">EventMinutesItemDecision</span><span class="o">.</span><span class="n">FAILED</span>
         <span class="p">)</span>
 
-    <span class="c1"># Explicit return None for "was turn absent or abstain"</span>
+    <span class="c1"># Explicit return None for &quot;was turn absent or abstain&quot;</span>
     <span class="k">return</span> <span class="kc">None</span>
 
 
@@ -1400,7 +1401,7 @@
     <span class="c1"># TODO: check metadata before pipeline runs to avoid the many try excepts</span>
 
     <span class="c1"># Get first session</span>
-    <span class="n">first_session</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s2">"session_index"</span><span class="p">))</span>
+    <span class="n">first_session</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s2">&quot;session_index&quot;</span><span class="p">))</span>
 
     <span class="c1"># Get high level event metadata and db models</span>
 
@@ -1466,9 +1467,9 @@
         <span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Agenda and/or minutes docs could not be found. "</span>
-            <span class="sa">f</span><span class="s2">"Adding event without agenda and minutes URIs. "</span>
-            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">agenda_uri</span><span class="si">}</span><span class="s2"> AND/OR </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">minutes_uri</span><span class="si">}</span><span class="s2"> do not exist)"</span>
+            <span class="sa">f</span><span class="s2">&quot;Agenda and/or minutes docs could not be found. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Adding event without agenda and minutes URIs. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">agenda_uri</span><span class="si">}</span><span class="s2"> AND/OR </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">minutes_uri</span><span class="si">}</span><span class="s2"> do not exist)&quot;</span>
         <span class="p">)</span>
 
         <span class="n">event_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_event</span><span class="p">(</span>
@@ -1601,12 +1602,12 @@
                     <span class="n">db_constants</span><span class="o">.</span><span class="n">EventMinutesItemDecision</span>
                 <span class="p">)</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Provided 'decision' is not an approved constant. "</span>
-                    <span class="sa">f</span><span class="s2">"Provided: '</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">' "</span>
-                    <span class="sa">f</span><span class="s2">"Should be one of: </span><span class="si">{</span><span class="n">allowed_emi_decisions</span><span class="si">}</span><span class="s2"> "</span>
-                    <span class="sa">f</span><span class="s2">"See: "</span>
-                    <span class="sa">f</span><span class="s2">"cdp_backend.database.constants.EventMinutesItemDecision. "</span>
-                    <span class="sa">f</span><span class="s2">"Creating EventMinutesItem without decision value."</span>
+                    <span class="sa">f</span><span class="s2">&quot;Provided &#39;decision&#39; is not an approved constant. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Provided: &#39;</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Should be one of: </span><span class="si">{</span><span class="n">allowed_emi_decisions</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;See: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;cdp_backend.database.constants.EventMinutesItemDecision. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Creating EventMinutesItem without decision value.&quot;</span>
                 <span class="p">)</span>
 
                 <span class="n">event_minutes_item_db_model</span> <span class="o">=</span> <span class="p">(</span>
@@ -1642,12 +1643,12 @@
                             <span class="p">)</span>
                         <span class="p">)</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"Provided 'status' is not an approved constant. "</span>
-                            <span class="sa">f</span><span class="s2">"Provided: '</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">result_status</span><span class="si">}</span><span class="s2">' "</span>
-                            <span class="sa">f</span><span class="s2">"Should be one of: </span><span class="si">{</span><span class="n">allowed_matter_decisions</span><span class="si">}</span><span class="s2"> "</span>
-                            <span class="sa">f</span><span class="s2">"See: "</span>
-                            <span class="sa">f</span><span class="s2">"cdp_backend.database.constants.MatterStatusDecision. "</span>
-                            <span class="sa">f</span><span class="s2">"Skipping matter status database upload."</span>
+                            <span class="sa">f</span><span class="s2">&quot;Provided &#39;status&#39; is not an approved constant. &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Provided: &#39;</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">result_status</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Should be one of: </span><span class="si">{</span><span class="n">allowed_matter_decisions</span><span class="si">}</span><span class="s2"> &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;See: &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;cdp_backend.database.constants.MatterStatusDecision. &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Skipping matter status database upload.&quot;</span>
                         <span class="p">)</span>
 
             <span class="c1"># Add supporting files for matter and event minutes item</span>
@@ -1658,8 +1659,8 @@
                         <span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">file_uri</span>
                     <span class="k">except</span> <span class="ne">LookupError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"SupportingFile ('</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">') "</span>
-                            <span class="sa">f</span><span class="s2">"uri does not exist. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                            <span class="sa">f</span><span class="s2">&quot;SupportingFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;uri does not exist. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
                         <span class="k">continue</span>
 
@@ -1680,8 +1681,8 @@
                             <span class="ne">ConnectionError</span><span class="p">,</span>
                         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">"MatterFile ('</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">') "</span>
-                                <span class="sa">f</span><span class="s2">"could not be archived. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                                <span class="sa">f</span><span class="s2">&quot;MatterFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;could not be archived. Skipping. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                             <span class="p">)</span>
 
                     <span class="c1"># Archive as event minutes item file</span>
@@ -1699,8 +1700,8 @@
                         <span class="p">)</span>
                     <span class="k">except</span> <span class="p">(</span><span class="n">FieldValidationFailed</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"EventMinutesItemFile ('</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">') "</span>
-                            <span class="sa">f</span><span class="s2">"could not be archived. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                            <span class="sa">f</span><span class="s2">&quot;EventMinutesItemFile (&#39;</span><span class="si">{</span><span class="n">supporting_file</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&#39;) &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;could not be archived. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
 
             <span class="c1"># Add vote information</span>
@@ -1749,19 +1750,19 @@
                                 <span class="p">)</span>
                             <span class="p">)</span>
                             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">"Provided 'decision' is not an approved constant. "</span>
-                                <span class="sa">f</span><span class="s2">"Provided: '</span><span class="si">{</span><span class="n">vote</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">' "</span>
-                                <span class="sa">f</span><span class="s2">"Should be one of: </span><span class="si">{</span><span class="n">allowed_vote_decisions</span><span class="si">}</span><span class="s2"> "</span>
-                                <span class="sa">f</span><span class="s2">"See: cdp_backend.database.constants.VoteDecision. "</span>
-                                <span class="sa">f</span><span class="s2">"Skipping vote database upload."</span>
+                                <span class="sa">f</span><span class="s2">&quot;Provided &#39;decision&#39; is not an approved constant. &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;Provided: &#39;</span><span class="si">{</span><span class="n">vote</span><span class="o">.</span><span class="n">decision</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;Should be one of: </span><span class="si">{</span><span class="n">allowed_vote_decisions</span><span class="si">}</span><span class="s2"> &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;See: cdp_backend.database.constants.VoteDecision. &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;Skipping vote database upload.&quot;</span>
                             <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">"Unable to process voting information for event minutes item: "</span>
-                        <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">minutes_item</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">'. "</span>
-                        <span class="sa">f</span><span class="s2">"Votes were present but overall decision for the "</span>
-                        <span class="sa">f</span><span class="s2">"event minutes item was 'None'."</span>
+                        <span class="sa">f</span><span class="s2">&quot;Unable to process voting information for event minutes item: &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">event_minutes_item</span><span class="o">.</span><span class="n">minutes_item</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Votes were present but overall decision for the &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;event minutes item was &#39;None&#39;.&quot;</span>
                     <span class="p">)</span>
 </pre></div>
         </article>
@@ -1800,6 +1801,7 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>

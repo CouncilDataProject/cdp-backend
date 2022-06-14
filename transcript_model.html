@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Contributing" href="contributing.html" /><link rel="prev" title="CDP Database Schema" href="database_schema.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
         <title>Transcript Model - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -197,7 +197,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -212,82 +213,82 @@
         </div>
         <article role="main">
           <section id="transcript-model">
-<h1>Transcript Model<a class="headerlink" href="#transcript-model" title="Permalink to this headline">#</a></h1>
+<h1>Transcript Model<a class="headerlink" href="#transcript-model" title="Permalink to this heading">#</a></h1>
 <p>While most users will end up browsing and searching transcripts using the CDP frontend
 tooling, we also need a standardized method for storing the transcript data for both
 pipeline processing and enabling a stable API for research and archival purposes.</p>
-<p>Below you will find an example transcript.<span class="raw-html-m2r"><br/></span>
+<p>Below you will find an example transcript.<span class="raw-html-m2r"><br></span>
 For more specific details please see the
 <a class="reference external" href="./cdp_backend.pipeline.html#module-cdp_backend.pipeline.transcript_model">object definition documentation</a>.</p>
 <section id="example-transcript">
-<h2>Example Transcript<a class="headerlink" href="#example-transcript" title="Permalink to this headline">#</a></h2>
+<h2>Example Transcript<a class="headerlink" href="#example-transcript" title="Permalink to this heading">#</a></h2>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"generator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JacksonGen -- Lib Version: 0.0.0"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.93325</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"session_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-10T15:00:00"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"created_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-05-24T18:04:53.624387"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"sentences"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;generator&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;JacksonGen -- Lib Version: 0.0.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.93325</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;session_datetime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-01-10T15:00:00&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;created_datetime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2022-06-14T23:57:41.413024&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;sentences&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.9</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"words"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.9</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;words&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">                </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hello"</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">                </span><span class="p">},</span><span class="w"></span>
 <span class="w">                </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"everyone"</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;everyone&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">                </span><span class="p">}</span><span class="w"></span>
 <span class="w">            </span><span class="p">],</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hello everyone."</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"speaker_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"speaker_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jackson Maxfield Brown"</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hello everyone.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;speaker_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;speaker_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">        </span><span class="p">},</span><span class="w"></span>
 <span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"words"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;words&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">                </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hi"</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hi&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">                </span><span class="p">},</span><span class="w"></span>
 <span class="w">                </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"all"</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">                </span><span class="p">}</span><span class="w"></span>
 <span class="w">            </span><span class="p">],</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hi all."</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"speaker_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"speaker_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isaac Na"</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hi all.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;speaker_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;speaker_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Isaac Na&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">        </span><span class="p">}</span><span class="w"></span>
 <span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">"sections"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;annotations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;sections&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">            </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Call to Order"</span><span class="p">,</span><span class="w"></span>
-<span class="w">                </span><span class="nt">"start_sentence_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">                </span><span class="nt">"stop_sentence_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
-<span class="w">                </span><span class="nt">"generator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jackson Maxfield Brown"</span><span class="p">,</span><span class="w"></span>
-<span class="w">                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Call to Order&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;start_sentence_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;stop_sentence_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;generator&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jackson Maxfield Brown&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">        </span><span class="p">]</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
@@ -370,6 +371,7 @@ For more specific details please see the
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
     </body>
