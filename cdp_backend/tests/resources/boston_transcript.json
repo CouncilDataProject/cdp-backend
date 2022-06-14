@@ -1,0 +1,535 @@
+{
+    "generator": "CDP WebVTT Conversion -- CDP v3.0.16",
+    "confidence": 0.9700000000000001,
+    "session_datetime": null,
+    "created_datetime": "2022-06-14T23:00:22.649248",
+    "sentences": [
+        {
+            "index": 0,
+            "confidence": 0.97,
+            "start_time": 0.0,
+            "end_time": 46.909,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 44.975,
+                    "end_time": 45.076789473684215,
+                    "text": "uh",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 45.076789473684215,
+                    "end_time": 45.17857894736842,
+                    "text": "uh",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 45.17857894736842,
+                    "end_time": 45.280368421052636,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 45.280368421052636,
+                    "end_time": 45.38215789473684,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 45.38215789473684,
+                    "end_time": 45.483947368421056,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 45.483947368421056,
+                    "end_time": 45.58573684210526,
+                    "text": "councilor",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 45.58573684210526,
+                    "end_time": 45.687526315789476,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 45.687526315789476,
+                    "end_time": 45.78931578947368,
+                    "text": "district",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 45.78931578947368,
+                    "end_time": 45.8911052631579,
+                    "text": "five",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 45.8911052631579,
+                    "end_time": 45.9928947368421,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 45.9928947368421,
+                    "end_time": 46.09468421052632,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 46.09468421052632,
+                    "end_time": 46.196473684210524,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 46.196473684210524,
+                    "end_time": 46.29826315789474,
+                    "text": "vice",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 46.29826315789474,
+                    "end_time": 46.400052631578944,
+                    "text": "president",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 46.400052631578944,
+                    "end_time": 46.50184210526316,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 46.50184210526316,
+                    "end_time": 46.603631578947365,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 46.603631578947365,
+                    "end_time": 46.70542105263158,
+                    "text": "boston",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 46.70542105263158,
+                    "end_time": 46.807210526315785,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 46.807210526315785,
+                    "end_time": 46.909,
+                    "text": "council",
+                    "annotations": null
+                }
+            ],
+            "text": "Uh Uh, I'm the city Councilor for district five and I'm the Vice President of the Boston city council.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 1,
+            "confidence": 0.97,
+            "start_time": 47.578,
+            "end_time": 57.653,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 54.985,
+                    "end_time": 55.06122857142857,
+                    "text": "viewers",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 55.06122857142857,
+                    "end_time": 55.137457142857144,
+                    "text": "can",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 55.137457142857144,
+                    "end_time": 55.21368571428572,
+                    "text": "watch",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 55.21368571428572,
+                    "end_time": 55.28991428571428,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 55.28991428571428,
+                    "end_time": 55.366142857142854,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 55.366142857142854,
+                    "end_time": 55.44237142857143,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 55.44237142857143,
+                    "end_time": 55.5186,
+                    "text": "live",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 55.5186,
+                    "end_time": 55.59482857142857,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 55.59482857142857,
+                    "end_time": 55.671057142857144,
+                    "text": "youtube",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 55.671057142857144,
+                    "end_time": 55.74728571428572,
+                    "text": "by",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 55.74728571428572,
+                    "end_time": 55.82351428571428,
+                    "text": "visiting",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 55.82351428571428,
+                    "end_time": 55.899742857142854,
+                    "text": "boston",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 55.899742857142854,
+                    "end_time": 55.97597142857143,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 55.97597142857143,
+                    "end_time": 56.0522,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 56.0522,
+                    "end_time": 56.12842857142857,
+                    "text": "tv",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 56.12842857142857,
+                    "end_time": 56.204657142857144,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 56.204657142857144,
+                    "end_time": 56.280885714285716,
+                    "text": "would",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 56.280885714285716,
+                    "end_time": 56.35711428571428,
+                    "text": "like",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 56.35711428571428,
+                    "end_time": 56.433342857142854,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 56.433342857142854,
+                    "end_time": 56.50957142857143,
+                    "text": "ask",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 56.50957142857143,
+                    "end_time": 56.5858,
+                    "text": "my",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 56.5858,
+                    "end_time": 56.66202857142857,
+                    "text": "colleagues",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 56.66202857142857,
+                    "end_time": 56.738257142857144,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 56.738257142857144,
+                    "end_time": 56.814485714285716,
+                    "text": "those",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 56.814485714285716,
+                    "end_time": 56.89071428571428,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 56.89071428571428,
+                    "end_time": 56.966942857142854,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 56.966942857142854,
+                    "end_time": 57.043171428571426,
+                    "text": "audience",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 57.043171428571426,
+                    "end_time": 57.1194,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 57.1194,
+                    "end_time": 57.19562857142857,
+                    "text": "please",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 57.19562857142857,
+                    "end_time": 57.271857142857144,
+                    "text": "silence",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 57.271857142857144,
+                    "end_time": 57.348085714285716,
+                    "text": "their",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 57.348085714285716,
+                    "end_time": 57.42431428571428,
+                    "text": "phones",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 57.42431428571428,
+                    "end_time": 57.500542857142854,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 33,
+                    "start_time": 57.500542857142854,
+                    "end_time": 57.576771428571426,
+                    "text": "electronic",
+                    "annotations": null
+                },
+                {
+                    "index": 34,
+                    "start_time": 57.576771428571426,
+                    "end_time": 57.653,
+                    "text": "devices",
+                    "annotations": null
+                }
+            ],
+            "text": "Viewers can watch the Council meeting live on Youtube by visiting Boston city council TV . I would like to ask my colleagues and those in the audience to please silence their phones and electronic devices.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 2,
+            "confidence": 0.97,
+            "start_time": 58.522,
+            "end_time": 62.59,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 60.59,
+                    "end_time": 60.715,
+                    "text": "thank",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 60.715,
+                    "end_time": 60.84,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 60.84,
+                    "end_time": 60.965,
+                    "text": "please",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 60.965,
+                    "end_time": 61.09,
+                    "text": "also",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 61.09,
+                    "end_time": 61.215,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 61.215,
+                    "end_time": 61.34,
+                    "text": "respectful",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 61.34,
+                    "end_time": 61.465,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 61.465,
+                    "end_time": 61.59,
+                    "text": "do",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 61.59,
+                    "end_time": 61.715,
+                    "text": "not",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 61.715,
+                    "end_time": 61.84,
+                    "text": "disrupt",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 61.84,
+                    "end_time": 61.965,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 61.965,
+                    "end_time": 62.09,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 62.09,
+                    "end_time": 62.215,
+                    "text": "while",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 62.215,
+                    "end_time": 62.34,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 62.34,
+                    "end_time": 62.465,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 62.465,
+                    "end_time": 62.59,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Thank you . please also be respectful and do not disrupt the meeting while you are here.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        }
+    ],
+    "annotations": null
+}
