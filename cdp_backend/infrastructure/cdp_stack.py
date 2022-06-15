@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+from typing import List
 
 import pulumi
 import pulumi_gcp as gcp
@@ -206,7 +207,7 @@ class CDPStack(pulumi.ComponentResource):
                 # Create depends on list
                 # We don't want to create a ton of indexes in parallel
                 if prior_index is None:
-                    depends_on = []
+                    depends_on: List[pulumi.Resource] = []
                 else:
                     depends_on = [prior_index]
 
