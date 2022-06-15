@@ -351,6 +351,7 @@ def chunk_index(
     n_grams: int,
     credentials_file: str,
     bucket_name: str,
+    ngrams_per_chunk: int = 50_000,
     storage_dir: Path = Path("index/"),
     store_remote: bool = False,
 ) -> None:
@@ -369,11 +370,10 @@ def chunk_index(
     storage_dir.mkdir(parents=True)
 
     # Split single large dataframe into many dataframes
-    chunk_size = 50_000
     for chunk_index, chunk_offset in enumerate(
-        range(0, n_grams_df.shape[0], chunk_size)
+        range(0, n_grams_df.shape[0], ngrams_per_chunk)
     ):
-        n_grams_chunk = n_grams_df[chunk_offset : chunk_offset + chunk_size]
+        n_grams_chunk = n_grams_df[chunk_offset : chunk_offset + ngrams_per_chunk]
         save_filename = f"n_gram-{n_grams}--index_chunk-{chunk_index}.parquet"
         local_chunk_path = storage_dir / save_filename
         n_grams_chunk.to_parquet(local_chunk_path)
@@ -391,6 +391,7 @@ def chunk_index(
 def create_event_index_generation_pipeline(
     config: EventIndexPipelineConfig,
     n_grams: int = 1,
+    ngrams_per_chunk: int = 50_000,
     store_remote: bool = False,
 ) -> Flow:
     """
@@ -403,6 +404,9 @@ def create_event_index_generation_pipeline(
         Configuration options for the pipeline.
     n_grams: int
         N number of terms to act as a unique entity. Default: 1
+    ngrams_per_chunks: int
+        The number of ngrams to store in a single chunk file.
+        Default: 50_000
     store_remote: bool
         Should the generated index chunks be sent to cloud storage.
         Default: False (only store locally)
@@ -467,6 +471,7 @@ def create_event_index_generation_pipeline(
             n_grams=n_grams,
             credentials_file=config.google_credentials_file,
             bucket_name=config.validated_gcs_bucket_name,
+            ngrams_per_chunk=ngrams_per_chunk,
             storage_dir=config.local_storage_dir,
             store_remote=store_remote,
         )

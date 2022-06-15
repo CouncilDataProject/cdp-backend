@@ -43,6 +43,7 @@ def pull_chunk(
 @task
 def chunk_n_grams(
     chunk_path: str,
+    upload_batch_size: int = 500,
 ) -> List[List[AlmostCompleteIndexedEventGram]]:
     """
     Split the large n_grams dataframe into multiple lists of IndexedEventGram models
@@ -52,10 +53,9 @@ def chunk_n_grams(
     n_grams_df = pd.read_parquet(chunk_path)
 
     # Split single large dataframe into many dataframes
-    chunk_size = 500
     n_grams_dfs = [
-        n_grams_df[i : i + chunk_size]
-        for i in range(0, n_grams_df.shape[0], chunk_size)
+        n_grams_df[i : i + upload_batch_size]
+        for i in range(0, n_grams_df.shape[0], upload_batch_size)
     ]
 
     # Convert each dataframe into a list of indexed event gram
@@ -122,6 +122,7 @@ def store_n_gram_chunk(
 def create_event_index_upload_pipeline(
     config: EventIndexPipelineConfig,
     index_chunk: Union[str, Path],
+    upload_batch_size: int = 500,
 ) -> Flow:
     """
     Create the Prefect Flow object to preview, run, or visualize for uploading a
@@ -133,6 +134,9 @@ def create_event_index_upload_pipeline(
         Configuration options for the pipeline.
     n_grams: int
         N number of terms to act as a unique entity. Default: 1
+    upload_batch_size: int
+        Number of ngrams to upload to database in a single batch.
+        Default: 500 (max)
 
     Returns
     -------
@@ -148,7 +152,10 @@ def create_event_index_upload_pipeline(
         )
 
         # Route to remote database storage
-        chunked_scored_n_grams = chunk_n_grams(index_chunk_local)
+        chunked_scored_n_grams = chunk_n_grams(
+            index_chunk_local,
+            upload_batch_size=upload_batch_size,
+        )
         store_n_gram_chunk.map(
             n_gram_chunk=chunked_scored_n_grams,
             credentials_file=unmapped(config.google_credentials_file),

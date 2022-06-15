@@ -51,6 +51,12 @@ class Args(argparse.Namespace):
             help="Filename for the parquet index chunk to process and upload.",
         )
         p.add_argument(
+            "--upload_batch_size",
+            type=int,
+            default=500,
+            help="Number of ngrams to upload to database in a single batch.",
+        )
+        p.add_argument(
             "-p",
             "--parallel",
             action="store_true",
@@ -76,6 +82,7 @@ def main() -> None:
         flow = pipeline.create_event_index_upload_pipeline(
             config=config,
             index_chunk=args.chunk,
+            upload_batch_size=args.upload_batch_size,
         )
 
         # Determine executor

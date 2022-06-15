@@ -52,6 +52,12 @@ class Args(argparse.Namespace):
             help="N number of terms to act as a unique entity.",
         )
         p.add_argument(
+            "--ngrams_per_chunk",
+            type=int,
+            default=50_000,
+            help="Number of ngrams to store in a single chunk file.",
+        )
+        p.add_argument(
             "-s",
             "--store_remote",
             action="store_true",
@@ -87,6 +93,7 @@ def main() -> None:
         flow = pipeline.create_event_index_generation_pipeline(
             config=config,
             n_grams=args.n_grams,
+            ngrams_per_chunk=args.ngrams_per_chunk,
             store_remote=args.store_remote,
         )
 
