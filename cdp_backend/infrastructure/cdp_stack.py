@@ -211,7 +211,7 @@ class CDPStack(pulumi.ComponentResource):
                     depends_on = [prior_index]
 
                 # Create
-                firestore.Index(
+                prior_index = firestore.Index(
                     fq_idx_set_name,
                     project=self.gcp_project_id,
                     database_id="(default)",
