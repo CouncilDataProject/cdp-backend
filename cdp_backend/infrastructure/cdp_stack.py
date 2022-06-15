@@ -183,6 +183,7 @@ class CDPStack(pulumi.ComponentResource):
         )
 
         # Create all firestore indexes
+        prior_index = None
         for model_cls in DATABASE_MODELS:
             for idx_field_set in model_cls._INDEXES:
 
@@ -201,6 +202,15 @@ class CDPStack(pulumi.ComponentResource):
                 # Finish creating the index set name
                 idx_set_name = "_".join(idx_set_name_parts)
                 fq_idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
+
+                # Create depends on list
+                # We don't want to create a ton of indexes in parallel
+                if prior_index is None:
+                    depends_on = []
+                else:
+                    depends_on = [prior_index]
+
+                # Create
                 firestore.Index(
                     fq_idx_set_name,
                     project=self.gcp_project_id,
@@ -208,7 +218,10 @@ class CDPStack(pulumi.ComponentResource):
                     collection_group_id=model_cls.collection_name,
                     fields=idx_set_fields,
                     query_scope="COLLECTION",
-                    opts=pulumi.ResourceOptions(parent=self.firestore_app),
+                    opts=pulumi.ResourceOptions(
+                        parent=self.firestore_app,
+                        depends_on=depends_on,
+                    ),
                 )
 
         # Add metadata document
