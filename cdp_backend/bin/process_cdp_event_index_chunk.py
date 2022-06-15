@@ -10,7 +10,7 @@ from pathlib import Path
 from distributed import LocalCluster
 from prefect import executors
 
-from cdp_backend.pipeline import event_index_pipeline as pipeline
+from cdp_backend.pipeline import process_event_index_chunk_pipeline as pipeline
 from cdp_backend.pipeline.pipeline_config import EventIndexPipelineConfig
 
 ###############################################################################
@@ -30,9 +30,10 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="run_cdp_event_index",
+            prog="process_cdp_event_index_chunk",
             description=(
-                "Index all event (session) transcripts from a CDP infrastructure."
+                "Download a single event index chunk from remote storage, "
+                "then process it and upload ngrams to a CDP database."
             ),
         )
         p.add_argument(
@@ -45,19 +46,15 @@ class Args(argparse.Namespace):
             ),
         )
         p.add_argument(
-            "-n",
-            "--n_grams",
-            type=int,
-            default=1,
-            help="N number of terms to act as a unique entity.",
+            "chunk",
+            type=Path,
+            help="Filename for the parquet index chunk to process and upload.",
         )
         p.add_argument(
-            "-l",
-            "--store_local",
-            action="store_true",
-            help=(
-                "Should the pipeline store the generated index to a local parquet file."
-            ),
+            "--upload_batch_size",
+            type=int,
+            default=500,
+            help="Number of ngrams to upload to database in a single batch.",
         )
         p.add_argument(
             "-p",
@@ -82,10 +79,10 @@ def main() -> None:
             )
 
         # Get flow definition
-        flow = pipeline.create_event_index_pipeline(
+        flow = pipeline.create_event_index_upload_pipeline(
             config=config,
-            n_grams=args.n_grams,
-            store_local=args.store_local,
+            index_chunk=args.chunk,
+            upload_batch_size=args.upload_batch_size,
         )
 
         # Determine executor

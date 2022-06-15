@@ -3,13 +3,13 @@
 
 import logging
 import math
+import shutil
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Dict, List, NamedTuple, Tuple
 
-import fireo
 import pandas as pd
 import pytz
 import rapidfuzz
@@ -21,9 +21,12 @@ from prefect import Flow, task, unmapped
 
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..file_store import functions as fs_functions
 from ..utils import string_utils
 from .pipeline_config import EventIndexPipelineConfig
 from .transcript_model import Sentence, Transcript
+
+REMOTE_INDEX_CHUNK_DIR = "index-chunks"
 
 ###############################################################################
 
@@ -343,99 +346,53 @@ def compute_tfidf(
 
 
 @task
-def store_local_index(n_grams_df: pd.DataFrame, n_grams: int) -> None:
-    n_grams_df.to_parquet(f"tfidf-{n_grams}.parquet")
-
-
-class AlmostCompleteIndexedEventGram(NamedTuple):
-    event_id: str
-    unstemmed_gram: str
-    stemmed_gram: str
-    context_span: str
-    value: float
-    datetime_weighted_value: float
-
-
-@task
-def chunk_n_grams(
+def chunk_index(
     n_grams_df: pd.DataFrame,
-) -> List[List[AlmostCompleteIndexedEventGram]]:
+    n_grams: int,
+    credentials_file: str,
+    bucket_name: str,
+    ngrams_per_chunk: int = 50_000,
+    storage_dir: Path = Path("index/"),
+    store_remote: bool = False,
+) -> None:
     """
     Split the large n_grams dataframe into multiple lists of IndexedEventGram models
     for batched, mapped, upload.
+
+    Optionally store to cloud firestore.
     """
+    # Clean the storage dir
+    storage_dir = Path(storage_dir)
+    if storage_dir.exists():
+        shutil.rmtree(storage_dir)
+
+    # Create storage dir
+    storage_dir.mkdir(parents=True)
+
     # Split single large dataframe into many dataframes
-    chunk_size = 400
-    n_grams_dfs = [
-        n_grams_df[i : i + chunk_size]
-        for i in range(0, n_grams_df.shape[0], chunk_size)
-    ]
+    for chunk_index, chunk_offset in enumerate(
+        range(0, n_grams_df.shape[0], ngrams_per_chunk)
+    ):
+        n_grams_chunk = n_grams_df[chunk_offset : chunk_offset + ngrams_per_chunk]
+        save_filename = f"n_gram-{n_grams}--index_chunk-{chunk_index}.parquet"
+        local_chunk_path = storage_dir / save_filename
+        n_grams_chunk.to_parquet(local_chunk_path)
 
-    # Convert each dataframe into a list of indexed event gram
-    event_gram_chunks: List[List[AlmostCompleteIndexedEventGram]] = []
-    for n_gram_df_chunk in n_grams_dfs:
-        event_gram_chunk: List[AlmostCompleteIndexedEventGram] = []
-        for _, row in n_gram_df_chunk.iterrows():
-            event_gram_chunk.append(
-                AlmostCompleteIndexedEventGram(
-                    event_id=row.event_id,
-                    unstemmed_gram=row.unstemmed_gram,
-                    stemmed_gram=row.stemmed_gram,
-                    context_span=row.context_span,
-                    value=row.tfidf,
-                    datetime_weighted_value=row.datetime_weighted_tfidf,
-                )
+        # Optional remote storage
+        if store_remote:
+            fs_functions.upload_file(
+                credentials_file=credentials_file,
+                bucket=bucket_name,
+                filepath=str(local_chunk_path),
+                save_name=f"{REMOTE_INDEX_CHUNK_DIR}/{save_filename}",
             )
 
-        event_gram_chunks.append(event_gram_chunk)
 
-    return event_gram_chunks
-
-
-@task
-def store_n_gram_chunk(
-    n_gram_chunk: List[AlmostCompleteIndexedEventGram],
-    credentials_file: str,
-) -> None:
-    """
-    Write all IndexedEventGrams in a single batch.
-
-    This isn't about an atomic batch but reducing the total upload time.
-    """
-    # Init batch
-    batch = fireo.batch()
-
-    # Trigger upserts for all items
-    event_lut: Dict[str, db_models.Event] = {}
-    for almost_complete_ieg in n_gram_chunk:
-        if almost_complete_ieg.event_id not in event_lut:
-            event_lut[almost_complete_ieg.event_id] = db_models.Event.collection.get(
-                f"{db_models.Event.collection_name}/{almost_complete_ieg.event_id}"
-            )
-
-        # Construct true ieg
-        ieg = db_models.IndexedEventGram()
-        ieg.event_ref = event_lut[almost_complete_ieg.event_id]
-        ieg.unstemmed_gram = almost_complete_ieg.unstemmed_gram
-        ieg.stemmed_gram = almost_complete_ieg.stemmed_gram
-        ieg.context_span = almost_complete_ieg.context_span
-        ieg.value = almost_complete_ieg.value
-        ieg.datetime_weighted_value = almost_complete_ieg.datetime_weighted_value
-
-        db_functions.upload_db_model(
-            db_model=ieg,
-            credentials_file=credentials_file,
-            batch=batch,
-        )
-
-    # Commit
-    batch.commit()
-
-
-def create_event_index_pipeline(
+def create_event_index_generation_pipeline(
     config: EventIndexPipelineConfig,
     n_grams: int = 1,
-    store_local: bool = False,
+    ngrams_per_chunk: int = 50_000,
+    store_remote: bool = False,
 ) -> Flow:
     """
     Create the Prefect Flow object to preview, run, or visualize for indexing
@@ -447,11 +404,12 @@ def create_event_index_pipeline(
         Configuration options for the pipeline.
     n_grams: int
         N number of terms to act as a unique entity. Default: 1
-    store_local: bool
-        Should the generated index be stored locally to disk or uploaded to database.
-        Storing the local index is useful for testing search result rankings with the
-        `search_cdp_events` bin script.
-        Default: False (store to database)
+    ngrams_per_chunks: int
+        The number of ngrams to store in a single chunk file.
+        Default: 50_000
+    store_remote: bool
+        Should the generated index chunks be sent to cloud storage.
+        Default: False (only store locally)
 
     Returns
     -------
@@ -507,16 +465,15 @@ def create_event_index_pipeline(
             datetime_weighting_days_decay=config.datetime_weighting_days_decay,
         )
 
-        # Route to local storage task or remote bulk upload
-        if store_local:
-            store_local_index(n_grams_df=scored_n_grams, n_grams=n_grams)
-
-        # Route to remote database storage
-        else:
-            chunked_scored_n_grams = chunk_n_grams(scored_n_grams)
-            store_n_gram_chunk.map(
-                n_gram_chunk=chunked_scored_n_grams,
-                credentials_file=unmapped(config.google_credentials_file),
-            )
+        # Create index chunks and store local and optional remote
+        chunk_index(
+            n_grams_df=scored_n_grams,
+            n_grams=n_grams,
+            credentials_file=config.google_credentials_file,
+            bucket_name=config.validated_gcs_bucket_name,
+            ngrams_per_chunk=ngrams_per_chunk,
+            storage_dir=config.local_storage_dir,
+            store_remote=store_remote,
+        )
 
     return flow

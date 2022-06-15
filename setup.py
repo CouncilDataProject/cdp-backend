@@ -29,6 +29,7 @@ pipeline_requirements = [
     "nltk~=3.6",
     "pandas~=1.0",
     "prefect~=1.2",
+    "pyarrow~=8.0",
     "rapidfuzz~=2.0",
     "spacy~=3.0",
     "truecase==0.0.14",
@@ -46,7 +47,6 @@ test_requirements = [
     "isort>=5.7.0",
     "mypy>=0.790",
     "networkx>=2.5",
-    "pyarrow>=5.0",
     "pydot>=1.4",
     "pytest>=5.4.3",
     "pytest-cov>=2.9.0",
@@ -129,7 +129,14 @@ setup(
                 "cdp_backend.bin.create_cdp_event_gather_flow_viz:main"
             ),
             "run_cdp_event_gather=cdp_backend.bin.run_cdp_event_gather:main",
-            "run_cdp_event_index=cdp_backend.bin.run_cdp_event_index:main",
+            (
+                "run_cdp_event_index_generation="
+                "cdp_backend.bin.run_cdp_event_index_generation:main"
+            ),
+            (
+                "process_cdp_event_index_chunk="
+                "cdp_backend.bin.process_cdp_event_index_chunk:main"
+            ),
             "search_cdp_events=cdp_backend.bin.search_cdp_events:main",
             "process_special_event=cdp_backend.bin.process_special_event:main",
             (

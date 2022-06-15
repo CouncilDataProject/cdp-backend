@@ -3,7 +3,8 @@
 
 import json
 from dataclasses import dataclass, field
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
 from dataclasses_json import dataclass_json
 from gcsfs import GCSFileSystem
@@ -95,6 +96,9 @@ class EventIndexPipelineConfig:
         The number of days that grams from an event should be labeled as more relevant.
         Default: 30 (grams from events less than 30 days old will generally be valued
         higher than their pure relevance score)
+    local_storage_dir: Union[str, Path]
+        The local storage directory to store the chunked index prior to upload.
+        Default: "index/" (current working directory / index)
     """
 
     google_credentials_file: str
@@ -105,6 +109,7 @@ class EventIndexPipelineConfig:
         default=None,
     )
     datetime_weighting_days_decay: int = 30
+    local_storage_dir: Union[str, Path] = "index/"
 
     @property
     def validated_gcs_bucket_name(self) -> str:

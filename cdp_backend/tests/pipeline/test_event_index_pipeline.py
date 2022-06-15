@@ -17,7 +17,7 @@ from prefect import Flow
 
 from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
-from cdp_backend.pipeline import event_index_pipeline as pipeline
+from cdp_backend.pipeline import generate_event_index_pipeline as pipeline
 from cdp_backend.pipeline.pipeline_config import EventIndexPipelineConfig
 from cdp_backend.utils.file_utils import resource_copy
 
@@ -34,18 +34,22 @@ from cdp_backend.utils.file_utils import resource_copy
 #
 # great system stdlib :upsidedownface:
 
-PIPELINE_PATH = "cdp_backend.pipeline.event_index_pipeline"
+PIPELINE_PATH = "cdp_backend.pipeline.generate_event_index_pipeline"
 
 #############################################################################
 
 
+@mock.patch("gcsfs.credentials.GoogleCredentials.connect")
+@mock.patch(f"{PIPELINE_PATH}.EventIndexPipelineConfig.validated_gcs_bucket_name")
 @pytest.mark.parametrize("n_grams", [1, 2, 3])
-@pytest.mark.parametrize("store_local", [True, False])
-def test_create_event_index_flow(n_grams: int, store_local: bool) -> None:
-    flow = pipeline.create_event_index_pipeline(
+def test_create_event_index_flow(
+    mocked_validated_bucket_name: MagicMock,
+    mocked_gcs_connect: MagicMock,
+    n_grams: int,
+) -> None:
+    flow = pipeline.create_event_index_generation_pipeline(
         config=EventIndexPipelineConfig("/fake/creds.json", "doesn't-matter"),
         n_grams=n_grams,
-        store_local=store_local,
     )
     assert isinstance(flow, Flow)
 
@@ -227,9 +231,11 @@ def test_get_transcripts_per_event(
 
 @mock.patch(f"{PIPELINE_PATH}.get_transcripts.run")
 @mock.patch("gcsfs.credentials.GoogleCredentials.connect")
+@mock.patch(f"{PIPELINE_PATH}.EventIndexPipelineConfig.validated_gcs_bucket_name")
 @mock.patch("gcsfs.GCSFileSystem.get")
 def test_mocked_pipeline_run(
     mocked_file_get: MagicMock,
+    mocked_validated_bucket_name: MagicMock,
     mocked_gcs_connect: MagicMock,
     mocked_get_transcript_models: MagicMock,
     resources_dir: Path,
@@ -249,6 +255,8 @@ def test_mocked_pipeline_run(
         session_one_transcript_one,
         session_three_transcript_one,
     ]
+
+    mocked_validated_bucket_name.return_value = "doesn't-matter"
 
     def copy_test_file(rpath: str, lpath: str) -> None:
         if "fake_captions.json" in rpath:
@@ -270,17 +278,16 @@ def test_mocked_pipeline_run(
     mocked_file_get.side_effect = copy_test_file
 
     # Run pipeline to local storage
-    flow = pipeline.create_event_index_pipeline(
+    flow = pipeline.create_event_index_generation_pipeline(
         config=EventIndexPipelineConfig("/fake/creds.json", "doesn't-matter"),
         n_grams=1,
-        store_local=True,
     )
     state = flow.run()
     assert state.is_successful()
 
     # Compare produced index
     expected_values = pd.read_parquet(resources_dir / "expected_1_gram_index.parquet")
-    result_values = pd.read_parquet("tfidf-1.parquet")
+    result_values = pd.read_parquet("index/n_gram-1--index_chunk-0.parquet")
 
     # Sort dataframes and reset indices to ensure consistency
     expected_values = expected_values.sort_values(by="stemmed_gram").reset_index(
@@ -306,4 +313,4 @@ def test_mocked_pipeline_run(
     pd._testing.assert_frame_equal(result_values, expected_values)
 
     # Cleanup
-    os.remove("tfidf-1.parquet")
+    os.remove("index/n_gram-1--index_chunk-0.parquet")
