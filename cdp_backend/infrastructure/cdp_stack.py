@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+from typing import List
 
 import pulumi
 import pulumi_gcp as gcp
@@ -183,6 +184,7 @@ class CDPStack(pulumi.ComponentResource):
         )
 
         # Create all firestore indexes
+        prior_index = None
         for model_cls in DATABASE_MODELS:
             for idx_field_set in model_cls._INDEXES:
 
@@ -201,14 +203,26 @@ class CDPStack(pulumi.ComponentResource):
                 # Finish creating the index set name
                 idx_set_name = "_".join(idx_set_name_parts)
                 fq_idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
-                firestore.Index(
+
+                # Create depends on list
+                # We don't want to create a ton of indexes in parallel
+                if prior_index is None:
+                    depends_on: List[pulumi.Resource] = []
+                else:
+                    depends_on = [prior_index]
+
+                # Create
+                prior_index = firestore.Index(
                     fq_idx_set_name,
                     project=self.gcp_project_id,
                     database_id="(default)",
                     collection_group_id=model_cls.collection_name,
                     fields=idx_set_fields,
                     query_scope="COLLECTION",
-                    opts=pulumi.ResourceOptions(parent=self.firestore_app),
+                    opts=pulumi.ResourceOptions(
+                        parent=self.firestore_app,
+                        depends_on=depends_on,
+                    ),
                 )
 
         # Add metadata document
