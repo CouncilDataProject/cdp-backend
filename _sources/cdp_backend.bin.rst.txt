@@ -60,6 +60,14 @@ cdp\_backend.bin.create\_cdp\_transcript\_model\_doc module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.process\_cdp\_event\_index\_chunk module
+---------------------------------------------------------
+
+.. automodule:: cdp_backend.bin.process_cdp_event_index_chunk
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.process\_special\_event module
 -----------------------------------------------
 
@@ -76,10 +84,10 @@ cdp\_backend.bin.run\_cdp\_event\_gather module
    :undoc-members:
    :show-inheritance:
 
-cdp\_backend.bin.run\_cdp\_event\_index module
-----------------------------------------------
+cdp\_backend.bin.run\_cdp\_event\_index\_generation module
+----------------------------------------------------------
 
-.. automodule:: cdp_backend.bin.run_cdp_event_index
+.. automodule:: cdp_backend.bin.run_cdp_event_index_generation
    :members:
    :undoc-members:
    :show-inheritance:

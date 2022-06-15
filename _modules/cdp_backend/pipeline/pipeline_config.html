@@ -217,7 +217,8 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">dataclass_json</span>
 <span class="kn">from</span> <span class="nn">gcsfs</span> <span class="kn">import</span> <span class="n">GCSFileSystem</span>
@@ -309,6 +310,9 @@
 <span class="sd">        The number of days that grams from an event should be labeled as more relevant.</span>
 <span class="sd">        Default: 30 (grams from events less than 30 days old will generally be valued</span>
 <span class="sd">        higher than their pure relevance score)</span>
+<span class="sd">    local_storage_dir: Union[str, Path]</span>
+<span class="sd">        The local storage directory to store the chunked index prior to upload.</span>
+<span class="sd">        Default: &quot;index/&quot; (current working directory / index)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">google_credentials_file</span><span class="p">:</span> <span class="nb">str</span>
@@ -319,6 +323,7 @@
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">datetime_weighting_days_decay</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">local_storage_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;index/&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">validated_gcs_bucket_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

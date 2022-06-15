@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.0.1, furo 2022.06.04.1"/>
-        <title>cdp_backend.bin.run_cdp_event_index - cdp-backend 3.0.16 documentation</title>
+        <title>cdp_backend.bin.run_cdp_event_index_generation - cdp-backend 3.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -211,7 +211,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for cdp_backend.bin.run_cdp_event_index</h1><div class="highlight"><pre>
+          <h1>Source code for cdp_backend.bin.run_cdp_event_index_generation</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -224,7 +224,7 @@
 <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">executors</span>
 
-<span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">event_index_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">cdp_backend.pipeline</span> <span class="kn">import</span> <span class="n">generate_event_index_pipeline</span> <span class="k">as</span> <span class="n">pipeline</span>
 <span class="kn">from</span> <span class="nn">cdp_backend.pipeline.pipeline_config</span> <span class="kn">import</span> <span class="n">EventIndexPipelineConfig</span>
 
 <span class="c1">###############################################################################</span>
@@ -238,13 +238,13 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
+<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index_generation.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parse</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;run_cdp_event_index&quot;</span><span class="p">,</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;run_cdp_event_index_generation&quot;</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="p">(</span>
                 <span class="s2">&quot;Index all event (session) transcripts from a CDP infrastructure.&quot;</span>
             <span class="p">),</span>
@@ -266,11 +266,19 @@
             <span class="n">help</span><span class="o">=</span><span class="s2">&quot;N number of terms to act as a unique entity.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--store_local&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--ngrams_per_chunk&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="mi">50_000</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of ngrams to store in a single chunk file.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--store_remote&quot;</span><span class="p">,</span>
             <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;store_remote&quot;</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-                <span class="s2">&quot;Should the pipeline store the generated index to a local parquet file.&quot;</span>
+                <span class="s2">&quot;Store chunks to remote cloud storage. &quot;</span>
+                <span class="s2">&quot;Required to add a search index.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -287,7 +295,7 @@
         <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index_generation.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
@@ -296,10 +304,11 @@
             <span class="p">)</span>
 
         <span class="c1"># Get flow definition</span>
-        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_index_pipeline</span><span class="p">(</span>
+        <span class="n">flow</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">create_event_index_generation_pipeline</span><span class="p">(</span>
             <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
             <span class="n">n_grams</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">n_grams</span><span class="p">,</span>
-            <span class="n">store_local</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">store_local</span><span class="p">,</span>
+            <span class="n">ngrams_per_chunk</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ngrams_per_chunk</span><span class="p">,</span>
+            <span class="n">store_remote</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">store_remote</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Determine executor</span>

@@ -241,7 +241,7 @@
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel.agenda_uri">(cdp_backend.pipeline.ingestion_models.EventIngestionModel attribute)</a>
 </li>
         </ul></li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram">AlmostCompleteIndexedEventGram (class in cdp_backend.pipeline.event_index_pipeline)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram">AlmostCompleteIndexedEventGram (class in cdp_backend.pipeline.process_event_index_chunk_pipeline)</a>
 </li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.constants.RoleTitle.ALTERNATE">ALTERNATE (cdp_backend.database.constants.RoleTitle attribute)</a>
 </li>
@@ -272,11 +272,13 @@
 </li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_transcript_model_doc.Args">(class in cdp_backend.bin.create_cdp_transcript_model_doc)</a>
 </li>
+          <li><a href="cdp_backend.bin.html#cdp_backend.bin.process_cdp_event_index_chunk.Args">(class in cdp_backend.bin.process_cdp_event_index_chunk)</a>
+</li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.process_special_event.Args">(class in cdp_backend.bin.process_special_event)</a>
 </li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.Args">(class in cdp_backend.bin.run_cdp_event_gather)</a>
 </li>
-          <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index.Args">(class in cdp_backend.bin.run_cdp_event_index)</a>
+          <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index_generation.Args">(class in cdp_backend.bin.run_cdp_event_index_generation)</a>
 </li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.Args">(class in cdp_backend.bin.search_cdp_events)</a>
 </li>
@@ -397,6 +399,13 @@
 </li>
         </ul></li>
         <li>
+    cdp_backend.bin.process_cdp_event_index_chunk
+
+        <ul>
+          <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.process_cdp_event_index_chunk">module</a>
+</li>
+        </ul></li>
+        <li>
     cdp_backend.bin.process_special_event
 
         <ul>
@@ -411,10 +420,10 @@
 </li>
         </ul></li>
         <li>
-    cdp_backend.bin.run_cdp_event_index
+    cdp_backend.bin.run_cdp_event_index_generation
 
         <ul>
-          <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.run_cdp_event_index">module</a>
+          <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.run_cdp_event_index_generation">module</a>
 </li>
         </ul></li>
         <li>
@@ -509,10 +518,10 @@
 </li>
         </ul></li>
         <li>
-    cdp_backend.pipeline.event_index_pipeline
+    cdp_backend.pipeline.generate_event_index_pipeline
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.event_index_pipeline">module</a>
+          <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.generate_event_index_pipeline">module</a>
 </li>
         </ul></li>
         <li>
@@ -534,6 +543,13 @@
 
         <ul>
           <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.pipeline_config">module</a>
+</li>
+        </ul></li>
+        <li>
+    cdp_backend.pipeline.process_event_index_chunk_pipeline
+
+        <ul>
+          <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.process_event_index_chunk_pipeline">module</a>
 </li>
         </ul></li>
         <li>
@@ -592,6 +608,8 @@
           <li><a href="cdp_backend.utils.html#module-cdp_backend.utils.file_utils">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     cdp_backend.utils.resources
 
@@ -599,8 +617,6 @@
           <li><a href="cdp_backend.utils.resources.html#module-cdp_backend.utils.resources">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     cdp_backend.utils.string_utils
 
@@ -623,7 +639,7 @@
 </li>
         <li><a href="cdp_backend.utils.html#cdp_backend.utils.string_utils.clean_text">clean_text() (in module cdp_backend.utils.string_utils)</a>
 </li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.cleaned_text">cleaned_text (cdp_backend.pipeline.event_index_pipeline.SentenceManager attribute)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.cleaned_text">cleaned_text (cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager attribute)</a>
 </li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.collection">collection (cdp_backend.database.models.Body attribute)</a>
 
@@ -712,12 +728,12 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.context_span">context_span (cdp_backend.database.models.IndexedEventGram attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.context_span">(cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.context_span">(cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram attribute)</a>
 </li>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.context_span">(cdp_backend.pipeline.event_index_pipeline.ContextualizedGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.context_span">(cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
 </li>
         </ul></li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram">ContextualizedGram (class in cdp_backend.pipeline.event_index_pipeline)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram">ContextualizedGram (class in cdp_backend.pipeline.generate_event_index_pipeline)</a>
 </li>
         <li><a href="cdp_backend.utils.html#cdp_backend.utils.string_utils.convert_gcs_json_url_to_gsutil_form">convert_gcs_json_url_to_gsutil_form() (in module cdp_backend.utils.string_utils)</a>
 </li>
@@ -737,7 +753,9 @@
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow">create_event_gather_flow() (in module cdp_backend.pipeline.event_gather_pipeline)</a>
 </li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.create_event_index_pipeline">create_event_index_pipeline() (in module cdp_backend.pipeline.event_index_pipeline)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.create_event_index_generation_pipeline">create_event_index_generation_pipeline() (in module cdp_backend.pipeline.generate_event_index_pipeline)</a>
+</li>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.create_event_index_upload_pipeline">create_event_index_upload_pipeline() (in module cdp_backend.pipeline.process_event_index_chunk_pipeline)</a>
 </li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.functions.create_event_minutes_item">create_event_minutes_item() (in module cdp_backend.database.functions)</a>
 </li>
@@ -788,7 +806,7 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.datetime_weighted_value">datetime_weighted_value (cdp_backend.database.models.IndexedEventGram attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.datetime_weighted_value">(cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.datetime_weighted_value">(cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
 </li>
         </ul></li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.datetime_weighting_days_decay">datetime_weighting_days_decay (cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig attribute)</a>
@@ -823,6 +841,8 @@
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SectionAnnotation.description">(cdp_backend.pipeline.transcript_model.SectionAnnotation attribute)</a>
 </li>
         </ul></li>
+        <li><a href="cdp_backend.file_store.html#cdp_backend.file_store.functions.download_file">download_file() (in module cdp_backend.file_store.functions)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -878,17 +898,17 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Event.event_datetime">event_datetime (cdp_backend.database.models.Event attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.event_datetime">(cdp_backend.pipeline.event_index_pipeline.ContextualizedGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.event_datetime">(cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram attribute)</a>
 </li>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event_datetime">(cdp_backend.pipeline.event_index_pipeline.EventTranscripts attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts.event_datetime">(cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts attribute)</a>
 </li>
         </ul></li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.event_id">event_id (cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.event_id">event_id (cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.event_id">(cdp_backend.pipeline.event_index_pipeline.ContextualizedGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts.event_id">(cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts attribute)</a>
 </li>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.event_id">(cdp_backend.pipeline.event_index_pipeline.EventTranscripts attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.event_id">(cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
 </li>
         </ul></li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.EventMinutesItemFile.event_minutes_item_ref">event_minutes_item_ref (cdp_backend.database.models.EventMinutesItemFile attribute)</a>
@@ -935,7 +955,7 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.EventTranscripts">EventTranscripts (class in cdp_backend.pipeline.event_index_pipeline)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts">EventTranscripts (class in cdp_backend.pipeline.generate_event_index_pipeline)</a>
 </li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Body.Example">Example() (cdp_backend.database.models.Body class method)</a>
 
@@ -1045,10 +1065,10 @@
 </li>
         <li><a href="cdp_backend.utils.html#cdp_backend.utils.file_utils.find_proper_resize_ratio">find_proper_resize_ratio() (in module cdp_backend.utils.file_utils)</a>
 </li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.from_dict">from_dict() (cdp_backend.pipeline.event_index_pipeline.ContextualizedGram class method)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.from_dict">from_dict() (cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram class method)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.from_dict">(cdp_backend.pipeline.event_index_pipeline.SentenceManager class method)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.from_dict">(cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager class method)</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.from_dict">(cdp_backend.pipeline.ingestion_models.Body class method)</a>
 </li>
@@ -1093,10 +1113,10 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.from_json">from_json() (cdp_backend.pipeline.event_index_pipeline.ContextualizedGram class method)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.from_json">from_json() (cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram class method)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.from_json">(cdp_backend.pipeline.event_index_pipeline.SentenceManager class method)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.from_json">(cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager class method)</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.from_json">(cdp_backend.pipeline.ingestion_models.Body class method)</a>
 </li>
@@ -1370,6 +1390,10 @@
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.SearchSortByField.local_field">local_field (cdp_backend.bin.search_cdp_events.SearchSortByField attribute)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.local_storage_dir">local_storage_dir (cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig attribute)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -1392,11 +1416,13 @@
 </li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.create_cdp_transcript_model_doc.main">(in module cdp_backend.bin.create_cdp_transcript_model_doc)</a>
 </li>
+          <li><a href="cdp_backend.bin.html#cdp_backend.bin.process_cdp_event_index_chunk.main">(in module cdp_backend.bin.process_cdp_event_index_chunk)</a>
+</li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.process_special_event.main">(in module cdp_backend.bin.process_special_event)</a>
 </li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_gather.main">(in module cdp_backend.bin.run_cdp_event_gather)</a>
 </li>
-          <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index.main">(in module cdp_backend.bin.run_cdp_event_index)</a>
+          <li><a href="cdp_backend.bin.html#cdp_backend.bin.run_cdp_event_index_generation.main">(in module cdp_backend.bin.run_cdp_event_index_generation)</a>
 </li>
           <li><a href="cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.main">(in module cdp_backend.bin.search_cdp_events)</a>
 </li>
@@ -1469,8 +1495,6 @@
         </ul></li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.MinutesItem.Meta">MinutesItem.Meta (class in cdp_backend.database.models)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     module
 
@@ -1493,11 +1517,13 @@
 </li>
           <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.create_cdp_transcript_model_doc">cdp_backend.bin.create_cdp_transcript_model_doc</a>
 </li>
+          <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.process_cdp_event_index_chunk">cdp_backend.bin.process_cdp_event_index_chunk</a>
+</li>
           <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.process_special_event">cdp_backend.bin.process_special_event</a>
 </li>
           <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.run_cdp_event_gather">cdp_backend.bin.run_cdp_event_gather</a>
 </li>
-          <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.run_cdp_event_index">cdp_backend.bin.run_cdp_event_index</a>
+          <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.run_cdp_event_index_generation">cdp_backend.bin.run_cdp_event_index_generation</a>
 </li>
           <li><a href="cdp_backend.bin.html#module-cdp_backend.bin.search_cdp_events">cdp_backend.bin.search_cdp_events</a>
 </li>
@@ -1525,13 +1551,15 @@
 </li>
           <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.event_gather_pipeline">cdp_backend.pipeline.event_gather_pipeline</a>
 </li>
-          <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.event_index_pipeline">cdp_backend.pipeline.event_index_pipeline</a>
+          <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.generate_event_index_pipeline">cdp_backend.pipeline.generate_event_index_pipeline</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.ingestion_models">cdp_backend.pipeline.ingestion_models</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.mock_get_events">cdp_backend.pipeline.mock_get_events</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.pipeline_config">cdp_backend.pipeline.pipeline_config</a>
+</li>
+          <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.process_event_index_chunk_pipeline">cdp_backend.pipeline.process_event_index_chunk_pipeline</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#module-cdp_backend.pipeline.transcript_model">cdp_backend.pipeline.transcript_model</a>
 </li>
@@ -1564,7 +1592,7 @@
   <h2>N</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.n_grams">n_grams (cdp_backend.pipeline.event_index_pipeline.SentenceManager attribute)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.n_grams">n_grams (cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager attribute)</a>
 </li>
         <li><a href="cdp_backend.bin.html#cdp_backend.bin.search_cdp_events.SearchSortByField.name">name (cdp_backend.bin.search_cdp_events.SearchSortByField attribute)</a>
 
@@ -1616,7 +1644,7 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.original_details">original_details (cdp_backend.pipeline.event_index_pipeline.SentenceManager attribute)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.original_details">original_details (cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager attribute)</a>
 </li>
         <li><a href="cdp_backend.infrastructure.html#cdp_backend.infrastructure.cdp_stack.GoverningBody.other">other (cdp_backend.infrastructure.cdp_stack.GoverningBody attribute)</a>
 </li>
@@ -1722,10 +1750,10 @@
   <h2>S</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.schema">schema() (cdp_backend.pipeline.event_index_pipeline.ContextualizedGram class method)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.schema">schema() (cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram class method)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.schema">(cdp_backend.pipeline.event_index_pipeline.SentenceManager class method)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.schema">(cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager class method)</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.schema">(cdp_backend.pipeline.ingestion_models.Body class method)</a>
 </li>
@@ -1794,7 +1822,7 @@
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SentenceAnnotations">SentenceAnnotations (class in cdp_backend.pipeline.transcript_model)</a>
 </li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager">SentenceManager (class in cdp_backend.pipeline.event_index_pipeline)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager">SentenceManager (class in cdp_backend.pipeline.generate_event_index_pipeline)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript.sentences">sentences (cdp_backend.pipeline.transcript_model.Transcript attribute)</a>
 </li>
@@ -1895,9 +1923,9 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.stemmed_gram">stemmed_gram (cdp_backend.database.models.IndexedEventGram attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.stemmed_gram">(cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.stemmed_gram">(cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram attribute)</a>
 </li>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.stemmed_gram">(cdp_backend.pipeline.event_index_pipeline.ContextualizedGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.stemmed_gram">(cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
 </li>
         </ul></li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.SectionAnnotation.stop_sentence_index">stop_sentence_index (cdp_backend.pipeline.transcript_model.SectionAnnotation attribute)</a>
@@ -1934,10 +1962,10 @@
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role.title">(cdp_backend.pipeline.ingestion_models.Role attribute)</a>
 </li>
         </ul></li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.to_dict">to_dict() (cdp_backend.pipeline.event_index_pipeline.ContextualizedGram method)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.to_dict">to_dict() (cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram method)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.to_dict">(cdp_backend.pipeline.event_index_pipeline.SentenceManager method)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.to_dict">(cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager method)</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.to_dict">(cdp_backend.pipeline.ingestion_models.Body method)</a>
 </li>
@@ -1980,10 +2008,10 @@
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.WordAnnotations.to_dict">(cdp_backend.pipeline.transcript_model.WordAnnotations method)</a>
 </li>
         </ul></li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.to_json">to_json() (cdp_backend.pipeline.event_index_pipeline.ContextualizedGram method)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.to_json">to_json() (cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram method)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.SentenceManager.to_json">(cdp_backend.pipeline.event_index_pipeline.SentenceManager method)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.to_json">(cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager method)</a>
 </li>
           <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body.to_json">(cdp_backend.pipeline.ingestion_models.Body method)</a>
 </li>
@@ -2046,7 +2074,7 @@
         </ul></li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.Transcript.Meta">Transcript.Meta (class in cdp_backend.database.models)</a>
 </li>
-        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.EventTranscripts.transcript_db_files">transcript_db_files (cdp_backend.pipeline.event_index_pipeline.EventTranscripts attribute)</a>
+        <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts.transcript_db_files">transcript_db_files (cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts attribute)</a>
 </li>
         <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript_uri">transcript_uri (cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult attribute)</a>
 </li>
@@ -2067,9 +2095,9 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.unstemmed_gram">unstemmed_gram (cdp_backend.database.models.IndexedEventGram attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.unstemmed_gram">(cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.unstemmed_gram">(cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram attribute)</a>
 </li>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.ContextualizedGram.unstemmed_gram">(cdp_backend.pipeline.event_index_pipeline.ContextualizedGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.unstemmed_gram">(cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
 </li>
         </ul></li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.MatterStatus.update_datetime">update_datetime (cdp_backend.database.models.MatterStatus attribute)</a>
@@ -2107,7 +2135,7 @@
         <li><a href="cdp_backend.database.html#cdp_backend.database.models.IndexedEventGram.value">value (cdp_backend.database.models.IndexedEventGram attribute)</a>
 
         <ul>
-          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram.value">(cdp_backend.pipeline.event_index_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
+          <li><a href="cdp_backend.pipeline.html#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.value">(cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram attribute)</a>
 </li>
         </ul></li>
         <li><a href="cdp_backend.database.html#cdp_backend.database.constants.RoleTitle.VICE_CHAIR">VICE_CHAIR (cdp_backend.database.constants.RoleTitle attribute)</a>

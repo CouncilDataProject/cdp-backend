@@ -12,10 +12,10 @@ cdp\_backend.pipeline.event\_gather\_pipeline module
    :undoc-members:
    :show-inheritance:
 
-cdp\_backend.pipeline.event\_index\_pipeline module
----------------------------------------------------
+cdp\_backend.pipeline.generate\_event\_index\_pipeline module
+-------------------------------------------------------------
 
-.. automodule:: cdp_backend.pipeline.event_index_pipeline
+.. automodule:: cdp_backend.pipeline.generate_event_index_pipeline
    :members:
    :undoc-members:
    :show-inheritance:
@@ -40,6 +40,14 @@ cdp\_backend.pipeline.pipeline\_config module
 ---------------------------------------------
 
 .. automodule:: cdp_backend.pipeline.pipeline_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdp\_backend.pipeline.process\_event\_index\_chunk\_pipeline module
+-------------------------------------------------------------------
+
+.. automodule:: cdp_backend.pipeline.process_event_index_chunk_pipeline
    :members:
    :undoc-members:
    :show-inheritance:

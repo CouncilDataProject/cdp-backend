@@ -340,6 +340,17 @@
         <span class="k">return</span> <span class="n">save_url</span></div>
 
 
+<div class="viewcode-block" id="download_file"><a class="viewcode-back" href="../../../cdp_backend.file_store.html#cdp_backend.file_store.functions.download_file">[docs]</a><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">remote_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">initialize_gcs_file_system</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">)</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">remote_filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">save_path</span></div>
+
+
 <div class="viewcode-block" id="get_open_url_for_gcs_file"><a class="viewcode-back" href="../../../cdp_backend.file_store.html#cdp_backend.file_store.functions.get_open_url_for_gcs_file">[docs]</a><span class="k">def</span> <span class="nf">get_open_url_for_gcs_file</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simple wrapper around fsspec.FileSystem.url function for creating a connection</span>
