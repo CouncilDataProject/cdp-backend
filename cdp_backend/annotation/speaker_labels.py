@@ -50,7 +50,9 @@ def annotate(
     # Iter transcript, get sentence audio, chunk into sections
     # of two seconds or less, classify each, and take most common,
     # with thresholding confidence * segments
-    for sentence in tqdm(transcript.sentences):
+    met_threshold = 0
+    missed_threshold = 0
+    for i, sentence in tqdm(enumerate(transcript.sentences)):
         # Keep track of each sentence chunk classification and score
         chunk_scores: Dict[str, List[float]] = {}
 
@@ -105,11 +107,23 @@ def annotate(
             # Threshold holdout
             if highest_mean_score >= min_sentence_mean_confidence:
                 sentence_speaker = highest_mean_speaker
+                met_threshold += 1
+            else:
+                print(
+                    f"missed threshold for sentence {i} "
+                    f"-- highest mean confidence: {highest_mean_score}"
+                )
+                missed_threshold += 1
 
         # Store to transcript
         sentence.speaker_name = sentence_speaker
 
     # Remove last made chunk file
     Path(TMP_AUDIO_CHUNK_SAVE_PATH).unlink()
+    print(
+        f"Total sentences: {len(transcript.sentences)}, "
+        f"Sentences Annotated: {met_threshold}, "
+        f"Missed Threshold: {missed_threshold}"
+    )
 
     return transcript
