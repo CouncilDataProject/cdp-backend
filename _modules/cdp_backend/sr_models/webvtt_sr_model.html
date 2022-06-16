@@ -260,7 +260,8 @@
 <span class="sd">        Default: 0.97</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">END_OF_SENTENCE_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^.+[.?!]\s*$&quot;</span>
+    <span class="n">END_OF_SENTENCE_PATTERN_RAW</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^.+[.?!]\s*$&quot;</span>
+    <span class="n">END_OF_SENTENCE_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">END_OF_SENTENCE_PATTERN_RAW</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -380,36 +381,37 @@
         <span class="n">start_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">speaker_turn_captions</span><span class="p">:</span>
+            <span class="n">caption_lines</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">caption_line_i</span><span class="p">,</span> <span class="n">caption_line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">caption_lines</span><span class="p">):</span>
+                <span class="c1"># Clean text of line breaks</span>
+                <span class="n">caption_line</span> <span class="o">=</span> <span class="n">caption_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
-            <span class="c1"># Clean text of line breaks</span>
-            <span class="n">caption</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="c1"># Remove any double spaces as result of line break removal</span>
+                <span class="n">caption_line</span> <span class="o">=</span> <span class="n">caption_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
-            <span class="c1"># Remove any double spaces as result of line break removal</span>
-            <span class="n">caption</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">start_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">start_time</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caption_line</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">start_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">start_time</span> <span class="o">=</span> <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-
-            <span class="c1"># Check for sentence end</span>
-            <span class="n">end_sentence_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-                <span class="n">WebVTTSRModel</span><span class="o">.</span><span class="n">END_OF_SENTENCE_PATTERN</span><span class="p">,</span>
-                <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">end_sentence_search</span><span class="p">:</span>
-                <span class="n">sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_construct_sentence</span><span class="p">(</span>
-                        <span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span>
-                        <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
-                        <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
-                        <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
-                        <span class="n">speaker_index</span><span class="o">=</span><span class="n">speaker_index</span><span class="p">,</span>
-                    <span class="p">)</span>
+                <span class="c1"># Check for sentence end</span>
+                <span class="n">end_sentence_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="n">WebVTTSRModel</span><span class="o">.</span><span class="n">END_OF_SENTENCE_PATTERN</span><span class="p">,</span>
+                    <span class="n">caption_line</span><span class="p">,</span>
                 <span class="p">)</span>
+                <span class="k">if</span> <span class="n">end_sentence_search</span><span class="p">:</span>
+                    <span class="n">sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_construct_sentence</span><span class="p">(</span>
+                            <span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span>
+                            <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
+                            <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+                            <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                            <span class="n">speaker_index</span><span class="o">=</span><span class="n">speaker_index</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
 
-                <span class="c1"># Reset lines and start_time, for start of new sentence</span>
-                <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="c1"># Reset lines and start_time, for start of new sentence</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># If any leftovers in lines, add a sentence for that.</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">start_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
