@@ -126,6 +126,17 @@ def upload_file(
         return save_url
 
 
+def download_file(
+    credentials_file: str,
+    bucket: str,
+    remote_filepath: str,
+    save_path: str,
+) -> str:
+    fs = initialize_gcs_file_system(credentials_file)
+    fs.get(f"{bucket}/{remote_filepath}", save_path)
+    return save_path
+
+
 def get_open_url_for_gcs_file(credentials_file: str, uri: str) -> str:
     """
     Simple wrapper around fsspec.FileSystem.url function for creating a connection

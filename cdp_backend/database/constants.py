@@ -38,3 +38,13 @@ class MatterStatusDecision:
     ADOPTED = "Adopted"
     REJECTED = "Rejected"
     IN_PROGRESS = "In Progress"
+
+
+class RoleTitle:
+    COUNCILMEMBER = "Councilmember"
+    COUNCILPRESIDENT = "Council President"
+    CHAIR = "Chair"
+    VICE_CHAIR = "Vice Chair"
+    ALTERNATE = "Alternate"
+    MEMBER = "Member"
+    SUPERVISOR = "Supervisor"

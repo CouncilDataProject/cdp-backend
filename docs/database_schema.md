@@ -5,7 +5,7 @@ While CDP utilizes a
 called [Cloud Firestore](https://firebase.google.com/docs/firestore), it is still
 useful to view the database schema as a UML diagram.
 
-![cdp-database-schema](./_static/cdp_database_diagram.png)
+![cdp-database-schema](./_static/cdp_database_diagram.jpg)
 
 ### Notes
 * `*` denotes that the field is required

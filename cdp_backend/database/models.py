@@ -15,6 +15,7 @@ from .constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
     Order,
+    RoleTitle,
     VoteDecision,
 )
 from .types import IndexedField, IndexedFieldSet
@@ -187,7 +188,10 @@ class Role(Model):
     """
 
     id = fields.IDField()
-    title = fields.TextField(required=True)
+    title = fields.TextField(
+        required=True,
+        validator=validators.create_constant_value_validator(RoleTitle),
+    )
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     body_ref = fields.ReferenceField(Body, auto_load=False)
     seat_ref = fields.ReferenceField(Seat, required=True, auto_load=False)
@@ -201,7 +205,7 @@ class Role(Model):
     @classmethod
     def Example(cls) -> Model:
         role = cls()
-        role.title = "Council President"
+        role.title = RoleTitle.COUNCILPRESIDENT
         role.person_ref = Person.Example()
         role.body_ref = Body.Example()
         role.seat_ref = Seat.Example()
@@ -236,6 +240,12 @@ class Role(Model):
         ),
         IndexedFieldSet(
             (
+                IndexedField(name="seat_ref", order=Order.ASCENDING),
+                IndexedField(name="end_datetime", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
                 IndexedField(name="person_ref", order=Order.ASCENDING),
                 IndexedField(name="title", order=Order.ASCENDING),
                 IndexedField(name="start_datetime", order=Order.ASCENDING),
@@ -260,6 +270,13 @@ class Role(Model):
                 IndexedField(name="person_ref", order=Order.ASCENDING),
                 IndexedField(name="title", order=Order.ASCENDING),
                 IndexedField(name="end_datetime", order=Order.DESCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="end_datetime", order=Order.ASCENDING),
+                IndexedField(name="seat_ref", order=Order.ASCENDING),
+                IndexedField(name="start_datetime", order=Order.DESCENDING),
             )
         ),
     )
@@ -369,7 +386,14 @@ class MatterSponsor(Model):
         return matter_sponsor
 
     _PRIMARY_KEYS = ("matter_ref", "person_ref")
-    _INDEXES = ()
+    _INDEXES = (
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+            )
+        ),
+    )
 
 
 class MinutesItem(Model):
@@ -561,9 +585,7 @@ class EventMinutesItem(Model):
     )
     index = fields.NumberField(required=True)
     decision = fields.TextField(
-        validator=validators.create_constant_value_validator(
-            EventMinutesItemDecision, False
-        )
+        validator=validators.create_constant_value_validator(EventMinutesItemDecision)
     )
     external_source_id = fields.TextField()
 
@@ -615,9 +637,7 @@ class MatterStatus(Model):
     event_minutes_item_ref = fields.ReferenceField(EventMinutesItem, auto_load=False)
     status = fields.TextField(
         required=True,
-        validator=validators.create_constant_value_validator(
-            MatterStatusDecision, True
-        ),
+        validator=validators.create_constant_value_validator(MatterStatusDecision),
     )
     update_datetime = fields.DateTime(required=True)
     external_source_id = fields.TextField()
@@ -709,7 +729,7 @@ class Vote(Model):
     person_ref = fields.ReferenceField(Person, required=True, auto_load=False)
     decision = fields.TextField(
         required=True,
-        validator=validators.create_constant_value_validator(VoteDecision, True),
+        validator=validators.create_constant_value_validator(VoteDecision),
     )
     in_majority = fields.BooleanField()
     external_source_id = fields.TextField()
@@ -740,6 +760,24 @@ class Vote(Model):
             (
                 IndexedField(name="event_ref", order=Order.ASCENDING),
                 IndexedField(name="person_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="event_ref", order=Order.ASCENDING),
+            )
+        ),
+        IndexedFieldSet(
+            (
+                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(name="matter_ref", order=Order.ASCENDING),
             )
         ),
     )

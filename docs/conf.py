@@ -21,8 +21,6 @@
 import os
 import sys
 
-import sphinx_rtd_theme  # noqa: F401
-
 import cdp_backend
 
 sys.path.insert(0, os.path.abspath(".."))
@@ -70,8 +68,8 @@ master_doc = "index"
 
 # General information about the project.
 project = u"cdp-backend"
-copyright = u"2020, Jackson Maxfield Brown"
-author = u"Jackson Maxfield Brown"
+copyright = u"2022, Council Data Project Contributors"
+author = u"Council Data Project Contributors"
 
 # The version info for the project you"re documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -106,16 +104,13 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {
-    "collapse_navigation": False,
-    "prev_next_buttons_location": "top",
-}
+html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -154,7 +149,7 @@ latex_documents = [
         master_doc,
         "cdp_backend.tex",
         u"cdp-backend Documentation",
-        u"Jackson Maxfield Brown",
+        u"Council Data Project Contributors",
         "manual",
     ),
 ]

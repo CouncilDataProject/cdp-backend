@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import unittest
 from typing import Any, Dict, List, Optional, Tuple
 
 import pulumi
-import pytest
 
 ###############################################################################
 
@@ -32,7 +30,6 @@ from cdp_backend.infrastructure import CDPStack
 
 
 class InfrastructureTests(unittest.TestCase):
-    @pytest.mark.skipif(sys.version_info >= (3, 8), reason="Pulumi runs on Py37")
     @pulumi.runtime.test
     def test_basic_run(self) -> None:
         gcp_project_id = "mocked-testing-stack"

@@ -9,6 +9,7 @@ from typing import Any, List
 from ..database.constants import (
     EventMinutesItemDecision,
     MatterStatusDecision,
+    RoleTitle,
     VoteDecision,
 )
 from ..utils.constants_utils import get_all_class_attr_values
@@ -76,14 +77,14 @@ def _get_example_person(seat_num: int) -> Person:
     """
     # Create a list of roles
     roles = [
-        Role(title="Councilmember", body=Body(name="Example Committee")),
-        Role(title="Chair", body=Body(name=f"Example Committee {seat_num}")),
+        Role(title=RoleTitle.COUNCILMEMBER, body=Body(name="Example Committee")),
+        Role(title=RoleTitle.CHAIR, body=Body(name=f"Example Committee {seat_num}")),
     ]
 
     # Add Council President role for seat position 1
     if seat_num == 1:
         roles.append(
-            Role(title="Council President", body=Body(name="Example Committee"))
+            Role(title=RoleTitle.COUNCILPRESIDENT, body=Body(name="Example Committee"))
         )
 
     # Get the seat electoral type num
