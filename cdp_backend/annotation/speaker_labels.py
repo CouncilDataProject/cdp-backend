@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
 from pathlib import Path
 from typing import Dict, List, Union
+from uuid import uuid4
 
 import numpy as np
 from pydub import AudioSegment
@@ -13,8 +15,11 @@ from ..pipeline.transcript_model import Transcript
 
 ###############################################################################
 
+log = logging.getLogger(__name__)
+
+###############################################################################
+
 DEFAULT_MODEL = "trained-speakerbox"
-TMP_AUDIO_CHUNK_SAVE_PATH = "tmp-audio-prediction-chunk.wav"
 
 ###############################################################################
 
@@ -30,6 +35,9 @@ def annotate(
     """
     Annotate a transcript using a pre-trained speaker identification model.
     """
+    # Generate random uuid filename for storing temp audio chunks
+    TMP_AUDIO_CHUNK_SAVE_PATH = f"tmp-audio-chunk--{str(uuid4())}.wav"
+
     # Load transcript
     if isinstance(transcript, (str, Path)):
         with open(transcript, "r") as open_f:
@@ -109,7 +117,7 @@ def annotate(
                 sentence_speaker = highest_mean_speaker
                 met_threshold += 1
             else:
-                print(
+                log.debug(
                     f"missed threshold for sentence {i} "
                     f"-- highest mean confidence: {highest_mean_score}"
                 )
@@ -120,7 +128,7 @@ def annotate(
 
     # Remove last made chunk file
     Path(TMP_AUDIO_CHUNK_SAVE_PATH).unlink()
-    print(
+    log.info(
         f"Total sentences: {len(transcript.sentences)}, "
         f"Sentences Annotated: {met_threshold}, "
         f"Missed Threshold: {missed_threshold}"
