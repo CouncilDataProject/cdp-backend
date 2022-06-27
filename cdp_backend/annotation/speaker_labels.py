@@ -8,7 +8,6 @@ from uuid import uuid4
 
 import numpy as np
 from pydub import AudioSegment
-from tqdm import tqdm
 from transformers import pipeline
 
 from ..pipeline.transcript_model import Transcript
@@ -60,7 +59,7 @@ def annotate(
     # with thresholding confidence * segments
     met_threshold = 0
     missed_threshold = 0
-    for i, sentence in tqdm(enumerate(transcript.sentences)):
+    for i, sentence in enumerate(transcript.sentences):
         # Keep track of each sentence chunk classification and score
         chunk_scores: Dict[str, List[float]] = {}
 
