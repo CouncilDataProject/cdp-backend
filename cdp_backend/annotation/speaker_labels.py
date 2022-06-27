@@ -118,8 +118,8 @@ def annotate(
                 met_threshold += 1
             else:
                 log.debug(
-                    f"missed threshold for sentence {i} "
-                    f"-- highest mean confidence: {highest_mean_score}"
+                    f"Missed speaker annotation confidence threshold for sentence {i} "
+                    f"-- Highest Mean Confidence: {highest_mean_score}"
                 )
                 missed_threshold += 1
 
