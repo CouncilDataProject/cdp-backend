@@ -127,7 +127,7 @@ def annotate(
 
     # Remove last made chunk file
     Path(TMP_AUDIO_CHUNK_SAVE_PATH).unlink()
-    log.info(
+    log.debug(
         f"Total sentences: {len(transcript.sentences)}, "
         f"Sentences Annotated: {met_threshold}, "
         f"Missed Threshold: {missed_threshold}"
