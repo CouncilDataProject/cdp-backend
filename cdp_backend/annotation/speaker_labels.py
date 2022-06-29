@@ -34,6 +34,64 @@ def annotate(
 ) -> Transcript:
     """
     Annotate a transcript using a pre-trained speaker identification model.
+
+    Parameters
+    ----------
+    transcript: Union[str, Path, Transcript]
+        The path to or an already in-memory Transcript object to fill with speaker
+        name annotations.
+    audio: Union[str, Path, AudioSegment]
+        The path to the matching audio for the associated transcript.
+    model: str
+        The path to the trained Speakerbox audio classification model.
+        Default: "trained-speakerbox"
+    min_intra_sentence_chunk_duration: float
+        The minimum duration of a sentence to annotate. Anything less than this
+        will be ignored from annotation.
+        Default: 0.5 seconds
+    max_intra_sentence_chunk_duration: float
+        The maximum duration for a sentences audio to split to. This should match
+        whatever was used during model training
+        (i.e. trained on 2 second audio chunks, apply on 2 second audio chunks)
+        Default: 2 seconds
+    min_sentence_mean_confidence: float
+        The minimum allowable mean confidence of all predicted chunk confidences
+        to determine if the predicted label should be commited as an annotation
+        or not.
+        Default: 0.985
+
+    Returns
+    -------
+    Transcript
+        The annotated transcript. Note this updates in place, this does not return a new
+        Transcript object.
+    
+    Notes
+    -----
+    A plain text walkthrough of this function is as follows:
+
+    For each sentence in the provided transcript, the matching audio portion is
+    retrived, for example if the sentence start time is 12.05 seconds and end time is
+    20.47 seconds, that exact portion of audio is pulled from the full audio file.
+    
+    If the audio duration for the chunk is less than the
+    `min_intra_sentence_chunk_duration`, we ignore the sentence.
+
+    If the audio duration for the chunk is greater than
+    `max_intra_sentence_chunk_duration`, the audio is split into chunks of length
+    `max_intra_sentence_chunk_duration` (i.e. from 12.05 to 14.05, from 14.05 to 16.05,
+    etc. if the last chunk is less than the `min_intra_sentence_chunk_duration`, it is
+    ignored).
+
+    Each audio chunk is ran through the audio classification model and predicts every
+    known person to the model. Each prediction has a confidence attached to it.
+    The confidence values are used to create a dictionary of:
+    `label -> list of confidence values`. Once all chunks for a single sentence is
+    predicted, the mean confidence is computed for each.
+
+    The label with the highest mean confidence is used as the sentence speaker name.
+    If the highest mean confidence is less than the `min_sentence_mean_confidence`,
+    no label is stored in the `speaker_name` sentence property (thresholded out).
     """
     # Generate random uuid filename for storing temp audio chunks
     TMP_AUDIO_CHUNK_SAVE_PATH = f"tmp-audio-chunk--{str(uuid4())}.wav"
@@ -60,6 +118,7 @@ def annotate(
     # with thresholding confidence * segments
     met_threshold = 0
     missed_threshold = 0
+    log.info("Annotating sentences with speaker names")
     for i, sentence in tqdm(
         enumerate(transcript.sentences),
         desc="Sentences annotated",
