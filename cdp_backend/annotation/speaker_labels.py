@@ -116,7 +116,7 @@ def annotate(
                 sentence_speaker = highest_mean_speaker
                 met_threshold += 1
             else:
-                log.debug(
+                log.info(
                     f"Missed speaker annotation confidence threshold for sentence {i} "
                     f"-- Highest Mean Confidence: {highest_mean_score}"
                 )
@@ -127,7 +127,7 @@ def annotate(
 
     # Remove last made chunk file
     Path(TMP_AUDIO_CHUNK_SAVE_PATH).unlink()
-    log.debug(
+    log.info(
         f"Total sentences: {len(transcript.sentences)}, "
         f"Sentences Annotated: {met_threshold}, "
         f"Missed Threshold: {missed_threshold}"
