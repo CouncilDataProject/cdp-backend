@@ -7,6 +7,7 @@ from typing import Dict, List, Union
 from uuid import uuid4
 
 import numpy as np
+from tqdm import tqdm
 from pydub import AudioSegment
 from transformers import pipeline
 
@@ -59,7 +60,10 @@ def annotate(
     # with thresholding confidence * segments
     met_threshold = 0
     missed_threshold = 0
-    for i, sentence in enumerate(transcript.sentences):
+    for i, sentence in tqdm(
+        enumerate(transcript.sentences),
+        desc="Sentences annotated",
+    ):
         # Keep track of each sentence chunk classification and score
         chunk_scores: Dict[str, List[float]] = {}
 
@@ -116,7 +120,7 @@ def annotate(
                 sentence_speaker = highest_mean_speaker
                 met_threshold += 1
             else:
-                log.info(
+                log.debug(
                     f"Missed speaker annotation confidence threshold for sentence {i} "
                     f"-- Highest Mean Confidence: {highest_mean_score}"
                 )
