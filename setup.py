@@ -35,6 +35,7 @@ pipeline_requirements = [
     "rapidfuzz~=2.0",
     "spacy~=3.0",
     "torch~=1.10",
+    "tqdm>=4.62",
     "transformers~=4.16",
     "truecase~=0.0.14",
     "webvtt-py~=0.4.6",
@@ -73,7 +74,6 @@ dev_requirements = [
     "Sphinx>=3.4.3",
     "furo>=2022.4.7",
     "twine>=3.1.1",
-    "tqdm>=4.62",
     "wheel>=0.34.2",
 ]
 

@@ -7,8 +7,8 @@ from typing import Dict, List, Union
 from uuid import uuid4
 
 import numpy as np
-from tqdm import tqdm
 from pydub import AudioSegment
+from tqdm import tqdm
 from transformers import pipeline
 
 from ..pipeline.transcript_model import Transcript
@@ -65,7 +65,7 @@ def annotate(
     Transcript
         The annotated transcript. Note this updates in place, this does not return a new
         Transcript object.
-    
+
     Notes
     -----
     A plain text walkthrough of this function is as follows:
@@ -73,7 +73,7 @@ def annotate(
     For each sentence in the provided transcript, the matching audio portion is
     retrived, for example if the sentence start time is 12.05 seconds and end time is
     20.47 seconds, that exact portion of audio is pulled from the full audio file.
-    
+
     If the audio duration for the chunk is less than the
     `min_intra_sentence_chunk_duration`, we ignore the sentence.
 
@@ -99,7 +99,9 @@ def annotate(
     # Load transcript
     if isinstance(transcript, (str, Path)):
         with open(transcript, "r") as open_f:
-            transcript = Transcript.from_json(open_f.read())
+            loaded_transcript = Transcript.from_json(open_f.read())  # type: ignore
+    else:
+        loaded_transcript = transcript
 
     # Load audio
     if isinstance(audio, (str, Path)):
@@ -120,7 +122,7 @@ def annotate(
     missed_threshold = 0
     log.info("Annotating sentences with speaker names")
     for i, sentence in tqdm(
-        enumerate(transcript.sentences),
+        enumerate(loaded_transcript.sentences),
         desc="Sentences annotated",
     ):
         # Keep track of each sentence chunk classification and score
@@ -171,7 +173,7 @@ def annotate(
                 mean_scores[speaker] = sum(scores) / len(scores)
 
             # Get highest score speaker
-            highest_mean_speaker = max(mean_scores, key=mean_scores.get)
+            highest_mean_speaker = max(mean_scores, key=mean_scores.get)  # type: ignore
             highest_mean_score = mean_scores[highest_mean_speaker]
 
             # Threshold holdout
@@ -191,9 +193,9 @@ def annotate(
     # Remove last made chunk file
     Path(TMP_AUDIO_CHUNK_SAVE_PATH).unlink()
     log.info(
-        f"Total sentences: {len(transcript.sentences)}, "
+        f"Total sentences: {len(loaded_transcript.sentences)}, "
         f"Sentences Annotated: {met_threshold}, "
         f"Missed Threshold: {missed_threshold}"
     )
 
-    return transcript
+    return loaded_transcript
