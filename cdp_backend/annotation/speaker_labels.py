@@ -10,6 +10,7 @@ import numpy as np
 from pydub import AudioSegment
 from tqdm import tqdm
 from transformers import pipeline
+from transformers.pipelines.base import Pipeline
 
 from ..pipeline.transcript_model import Transcript
 
@@ -27,7 +28,7 @@ DEFAULT_MODEL = "trained-speakerbox"
 def annotate(
     transcript: Union[str, Path, Transcript],
     audio: Union[str, Path, AudioSegment],
-    model: str = DEFAULT_MODEL,
+    model: Union[str, Pipeline] = DEFAULT_MODEL,
     min_intra_sentence_chunk_duration: float = 0.5,
     max_intra_sentence_chunk_duration: float = 2.0,
     min_sentence_mean_confidence: float = 0.985,
@@ -42,8 +43,9 @@ def annotate(
         name annotations.
     audio: Union[str, Path, AudioSegment]
         The path to the matching audio for the associated transcript.
-    model: str
-        The path to the trained Speakerbox audio classification model.
+    model: Union[str, Pipeline]
+        The path to the trained Speakerbox audio classification model or a preloaded
+        audio classification Pipeline.
         Default: "trained-speakerbox"
     min_intra_sentence_chunk_duration: float
         The minimum duration of a sentence to annotate. Anything less than this
@@ -71,7 +73,7 @@ def annotate(
     A plain text walkthrough of this function is as follows:
 
     For each sentence in the provided transcript, the matching audio portion is
-    retrived, for example if the sentence start time is 12.05 seconds and end time is
+    retrieved, for example if the sentence start time is 12.05 seconds and end time is
     20.47 seconds, that exact portion of audio is pulled from the full audio file.
 
     If the audio duration for the chunk is less than the
@@ -108,7 +110,10 @@ def annotate(
         audio = AudioSegment.from_file(audio)
 
     # Load model
-    classifier = pipeline("audio-classification", model=model)
+    if isinstance(model, str):
+        classifier = pipeline("audio-classification", model=model)
+    else:
+        classifier = model
     n_speakers = len(classifier.model.config.id2label)
 
     # Convert to millis
