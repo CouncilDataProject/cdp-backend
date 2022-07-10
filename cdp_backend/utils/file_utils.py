@@ -3,12 +3,14 @@
 
 import logging
 import math
-import tempfile
+import random
 from hashlib import sha256
 from pathlib import Path
 from typing import Optional, Tuple, Union
+from uuid import uuid4
 
 import fsspec
+import requests
 from fsspec.core import url_to_fs
 
 ###############################################################################
@@ -60,7 +62,9 @@ def get_media_type(uri: str) -> Optional[str]:
 
 
 def resource_copy(
-    uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    uri: str,
+    dst: Optional[Union[str, Path]] = None,
+    overwrite: bool = False,
 ) -> str:
     """
     Copy a resource (local or remote) to a local destination on the machine.
@@ -84,14 +88,22 @@ def resource_copy(
     if dst is None:
         dst = uri.split("/")[-1]
 
-    # Create tmp directory to save file in
-    dirpath = tempfile.mkdtemp()
-    dst = Path(dirpath) / dst
-
     # Ensure dst doesn't exist
     dst = Path(dst).resolve()
     if dst.is_dir():
-        dst = dst / uri.split("/")[-1]
+        if "v=" in str(uri):
+            # Split by youtube video query parameter
+            dst = dst / uri.split("v=")[-1]
+        else:
+            # Split by the last "/"
+            dst = dst / uri.split("/")[-1]
+
+    # Ensure filename is less than 255 chars
+    # Otherwise this can raise an OSError for too long of a filename
+    if len(dst.name) > 255:
+        dst = Path(str(dst)[:255])
+
+    # Ensure dest isn't a file
     if dst.is_file() and not overwrite:
         raise FileExistsError(dst)
 
@@ -99,11 +111,50 @@ def resource_copy(
     log.info(f"Beginning resource copy from: {uri}")
     # Get file system
     try:
-        # TODO: Add explicit use of GCS credentials until public read is fixed
-        fs, remote_path = url_to_fs(uri)
-        fs.get(remote_path, str(dst), timeout=None)
-        log.info(f"Completed resource copy from: {uri}")
-        log.info(f"Stored resource copy: {dst}")
+        if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
+            return youtube_copy(uri, dst, overwrite)
+
+        if uri.endswith(".m3u8"):
+            import m3u8_To_MP4
+
+            # We add a uuid4 to the front of the filename because m3u8 files
+            # are usually simply called playlist.m3u8 -- the result will be
+            # f"{uuid}-{name}"
+            mp4_name = dst.with_suffix(".mp4").name
+            save_name = f"{uuid4()}-{mp4_name}"
+
+            # Reset dst
+            dst = dst.parent / save_name
+
+            # Download and convert
+            m3u8_To_MP4.download(
+                uri,
+                mp4_file_dir=dst.parent,
+                mp4_file_name=save_name,
+            )
+            return str(dst)
+
+        # Set custom timeout for http resources
+        if uri.startswith("http"):
+            # The verify=False is passed to any http URIs
+            # It was added because it's very common for SSL certs to be bad
+            # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
+            # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
+            with open(dst, "wb") as open_dst:
+                open_dst.write(
+                    requests.get(
+                        uri,
+                        verify=False,
+                        timeout=1800,
+                    ).content
+                )
+
+        else:
+            # TODO: Add explicit use of GCS credentials until public read is fixed
+            fs, remote_path = url_to_fs(uri)
+            fs.get(remote_path, str(dst))
+            log.info(f"Completed resource copy from: {uri}")
+            log.info(f"Stored resource copy: {dst}")
 
         return str(dst)
     except Exception as e:
@@ -112,6 +163,40 @@ def resource_copy(
             f"Attempted copy from: '{uri}', resulted in error."
         )
         raise e
+
+
+def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
+    """
+    Copy a video from YouTube to a local destination on the machine.
+
+    Parameters
+    ----------
+    uri: str
+        The url of the YouTube video to copy.
+    dst: str
+        The location of the file to download.
+    overwrite: bool
+        Boolean value indicating whether or not to overwrite a local video with
+        the same name if it already exists.
+
+    Returns
+    _______
+    dst: str
+        The location of the downloaded file.
+    """
+    from yt_dlp import YoutubeDL
+
+    # dst = Path(str(dst) + ".mp4")
+    dst = dst.with_suffix(".mp4")
+
+    # Ensure dest isn't a file
+    if dst.is_file() and not overwrite:
+        raise FileExistsError(dst)
+
+    ydl_opts = {"outtmpl": str(dst), "format": "mp4"}
+    with YoutubeDL(ydl_opts) as ydl:
+        ydl.download([uri])
+        return str(dst)
 
 
 def split_audio(
@@ -236,7 +321,10 @@ def get_static_thumbnail(
 
 
 def get_hover_thumbnail(
-    video_path: str, session_content_hash: str, num_frames: int = 10
+    video_path: str,
+    session_content_hash: str,
+    num_frames: int = 10,
+    duration: float = 6.0,
 ) -> str:
     """
     A function that produces a gif hover thumbnail from an mp4 video file
@@ -249,7 +337,9 @@ def get_hover_thumbnail(
         The video content hash. This will be used in the produced image file's name
     num_frames: int
         Determines the number of frames in the thumbnail
-
+    duration: float
+        Runtime of the produced GIF.
+        Default: 6.0 seconds
 
     Returns
     -------
@@ -266,26 +356,32 @@ def get_hover_thumbnail(
     if reader.get_length() > 1:
         gif_path = f"{session_content_hash}-hover-thumbnail.gif"
 
-    count = 0
-    for i, image in enumerate(reader):
-        count += 1
-    step_size = math.floor(count / num_frames)
-
-    height = image.shape[0]
-    width = image.shape[1]
+    # Get first frame
+    sample = reader.get_data(0)
+    height = sample.shape[0]
+    width = sample.shape[1]
     final_ratio = find_proper_resize_ratio(height, width)
 
-    with imageio.get_writer(gif_path, mode="I") as writer:
-        for i in range(0, num_frames):
-            if final_ratio < 1:
-                image = Image.fromarray(reader.get_data(i * step_size)).resize(
-                    (math.floor(width * final_ratio), math.floor(height * final_ratio))
-                )
-            else:
-                image = Image.fromarray(reader.get_data(i * step_size))
+    with imageio.get_writer(gif_path, mode="I", fps=(num_frames / duration)) as writer:
+        selected_frames = 0
+        for frame in reader:
+            # 1% chance to use the frame
+            if random.random() > 0.99:
+                image = Image.fromarray(frame)
+                if final_ratio < 1:
+                    image = image.resize(
+                        (
+                            math.floor(width * final_ratio),
+                            math.floor(height * final_ratio),
+                        )
+                    )
 
-            final_image = np.asarray(image, dtype="int32")
-            writer.append_data(final_image)
+                final_image = np.asarray(image).astype(np.uint8)
+                writer.append_data(final_image)
+                selected_frames += 1
+
+            if selected_frames >= num_frames:
+                break
 
     return gif_path
 
@@ -324,7 +420,7 @@ def find_proper_resize_ratio(height: int, width: int) -> float:
     return 2
 
 
-def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
+def hash_file_contents(uri: str, buffer_size: int = 2**16) -> str:
     """
     Return the SHA256 hash of a file's content.
 
@@ -352,3 +448,46 @@ def hash_file_contents(uri: str, buffer_size: int = 2 ** 16) -> str:
             hasher.update(block)
 
     return hasher.hexdigest()
+
+
+def convert_video_to_mp4(video_filepath: str) -> str:
+    """
+    Converts a video to an equivalent MP4 file.
+
+    Parameters
+    ----------
+    video_filepath: str
+        The filepath of the video to convert.
+
+    Returns
+    -------
+    mp4_filepath: str
+        The filepath of the converted MP4 video.
+    """
+    import ffmpeg
+
+    mp4_filepath = str(Path(video_filepath).with_suffix(".mp4"))
+    ffmpeg.input(video_filepath).output(mp4_filepath).overwrite_output().run()
+    log.info("Finished converting {} to mp4".format(video_filepath))
+
+    return mp4_filepath
+
+
+def generate_file_storage_name(file_uri: str, suffix: str) -> str:
+    """
+    Generate a filename using the hash of the file contents and some provided suffix.
+
+    Parameters
+    ----------
+    file_uri: str
+        The URI to the file to hash.
+    suffix: str
+        The suffix to append to the hash as a part of the filename.
+
+    Returns
+    -------
+    dst: str
+        The name of the file as it should be on Google Cloud Storage.
+    """
+    hash = hash_file_contents(file_uri)
+    return f"{hash}-{suffix}"

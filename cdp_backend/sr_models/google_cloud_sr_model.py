@@ -19,6 +19,27 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
+GOOGLE_SPEECH_ADAPTION_CLASSES = speech.SpeechContext(
+    phrases=[
+        # Location
+        "$OOV_CLASS_ORDINAL",
+        "$ADDRESSNUM",
+        "$POSTALCODE",
+        "$STREET",
+        # Numbers
+        "$MONEY",
+        "$OPERAND",
+        "$PERCENT",
+        # Time
+        "$TIME",
+        "$DAY",
+        "$MONTH",
+        "$YEAR",
+    ],
+)
+
+###############################################################################
+
 
 class GoogleCloudSRModel(SRModel):
     def __init__(self, credentials_file: Union[str, Path], **kwargs: Any):
@@ -27,11 +48,26 @@ class GoogleCloudSRModel(SRModel):
 
     @staticmethod
     def _clean_phrases(phrases: Optional[List[str]] = None) -> List[str]:
+        """
+        Notes
+        -----
+        This function will always leave room for the standard class tokens
+        we use to optimize / adapt the Google Speech-to-Text model by limiting
+        the total number of phrases added to the context object to
+        500 minus the number of specific classes we use.
+
+        See more information on adaption and class tokens here:
+        https://cloud.google.com/speech-to-text/docs/speech-adaptation
+        """
         if phrases:
             # Clean and apply usage limits
             cleaned = []
             total_character_count = 0
-            for phrase in [p for p in phrases[:500] if isinstance(p, str)]:
+            for phrase in [
+                p
+                for p in phrases[: 500 - len(GOOGLE_SPEECH_ADAPTION_CLASSES.phrases)]
+                if isinstance(p, str)
+            ]:
                 if total_character_count <= 9900:
                     cleaned_phrase = phrase[:100]
 
@@ -69,34 +105,47 @@ class GoogleCloudSRModel(SRModel):
             The transcript model for the supplied media file.
         """
         # Create client
-        client = speech.SpeechClient.from_service_account_json(self.credentials_file)
+        client = speech.SpeechClient.from_service_account_file(
+            filename=str(self.credentials_file)
+        )
 
         # Create basic metadata
-        metadata = speech.types.RecognitionMetadata()
+        metadata = speech.RecognitionMetadata()
         metadata.interaction_type = (
-            speech.enums.RecognitionMetadata.InteractionType.DISCUSSION
+            speech.RecognitionMetadata.InteractionType.PHONE_CALL
+        )
+        metadata.original_media_type = (
+            speech.RecognitionMetadata.OriginalMediaType.VIDEO
         )
 
         # Add phrases
-        speech_context = speech.types.SpeechContext(
+        event_metadata_speech_context = speech.SpeechContext(
             phrases=self._clean_phrases(phrases)
         )
 
         # Prepare for transcription
-        config = speech.types.RecognitionConfig(
-            encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
             language_code="en-US",
             enable_automatic_punctuation=True,
             enable_word_time_offsets=True,
-            speech_contexts=[speech_context],
+            enable_spoken_punctuation=True,
+            speech_contexts=[
+                GOOGLE_SPEECH_ADAPTION_CLASSES,
+                event_metadata_speech_context,
+            ],
             metadata=metadata,
+            model="video",
+            use_enhanced=True,
         )
-        audio = speech.types.RecognitionAudio(uri=file_uri)
+        audio = speech.RecognitionAudio(uri=file_uri)
 
         # Begin transcription
         log.debug(f"Beginning transcription for: {file_uri}")
-        operation = client.long_running_recognize(config, audio)
+        operation = client.long_running_recognize(
+            request={"config": config, "audio": audio}
+        )
 
         # Wait for complete
         response = operation.result(timeout=10800)
@@ -145,10 +194,16 @@ class GoogleCloudSRModel(SRModel):
                         # Extract word from response
                         word = result.alternatives[0].words[w_ind]
 
+                        # Nanos no longer supported, use microseconds instead
+                        # https://github.com/googleapis/python-speech/issues/71
                         start_time = (
-                            word.start_time.seconds + word.start_time.nanos * 1e-9
+                            word.start_time.seconds
+                            + word.start_time.microseconds * 1e-6
                         )
-                        end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
+
+                        end_time = (
+                            word.end_time.seconds + word.end_time.microseconds * 1e-6
+                        )
 
                         # Add start_time to Sentence if first word
                         if w_ind - w_marker == 0:
@@ -190,8 +245,8 @@ class GoogleCloudSRModel(SRModel):
 
         # Create transcript model
         transcript = transcript_model.Transcript(
-            confidence=confidence,
             generator=f"Google Speech-to-Text -- CDP v{__version__}",
+            confidence=confidence,
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=timestamped_sentences,

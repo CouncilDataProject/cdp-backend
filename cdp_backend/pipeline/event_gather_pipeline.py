@@ -5,17 +5,20 @@ import logging
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
+from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
+from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
-from fsspec.core import url_to_fs
 from gcsfs import GCSFileSystem
 from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
+from requests import ConnectionError
 
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
+from ..database.validators import is_secure_uri, resource_exists, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
@@ -34,6 +37,8 @@ log = logging.getLogger(__name__)
 
 class SessionProcessingResult(NamedTuple):
     session: Session
+    session_video_hosted_url: str
+    session_content_hash: str
     audio_uri: str
     transcript: Transcript
     transcript_uri: str
@@ -53,7 +58,6 @@ def create_event_gather_flow(
     from_dt: Optional[Union[str, datetime]] = None,
     to_dt: Optional[Union[str, datetime]] = None,
     prefetched_events: Optional[List[EventIngestionModel]] = None,
-    from_local: bool = False,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -123,20 +127,40 @@ def create_event_gather_flow(
         for event in events:
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
-                # Get or create audio
-                session_content_hash, audio_uri = get_video_and_split_audio(
-                    video_uri=session.video_uri,
+                # Download video to local copy
+                resource_copy_filepath = resource_copy_task(uri=session.video_uri)
+
+                # Get unique session identifier
+                session_content_hash = get_session_content_hash(
+                    tmp_video_filepath=resource_copy_filepath,
+                )
+
+                # Handle video conversion or non-secure resource
+                # hosting
+                (
+                    tmp_video_filepath,
+                    session_video_hosted_url,
+                ) = convert_video_and_handle_host(
+                    session_content_hash=session_content_hash,
+                    video_filepath=resource_copy_filepath,
+                    session=session,
+                    credentials_file=config.google_credentials_file,
+                    bucket=config.validated_gcs_bucket_name,
+                )
+
+                # Split audio and store
+                audio_uri = split_audio(
+                    session_content_hash=session_content_hash,
+                    tmp_video_filepath=tmp_video_filepath,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
 
                 # Check caption uri
                 if session.caption_uri is not None:
-                    fs, caption_path = url_to_fs(session.caption_uri)
-
                     # If the caption doesn't exist, remove the property
                     # This will result in Speech-to-Text being used instead
-                    if not fs.exists(caption_path):
+                    if not resource_exists(session.caption_uri):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
@@ -147,8 +171,8 @@ def create_event_gather_flow(
 
                 # Generate transcript
                 transcript_uri, transcript = generate_transcript(
-                    session_content_hash=session_content_hash,
-                    audio_uri=audio_uri,
+                    session_content_hash=session_content_hash,  # type: ignore
+                    audio_uri=audio_uri,  # type: ignore
                     session=session,
                     event=event,
                     bucket=config.validated_gcs_bucket_name,
@@ -160,21 +184,25 @@ def create_event_gather_flow(
                 )
 
                 # Generate thumbnails
-                (
-                    static_thumbnail_uri,
-                    hover_thumbnail_uri,
-                ) = get_video_and_generate_thumbnails(
+                (static_thumbnail_uri, hover_thumbnail_uri,) = generate_thumbnails(
                     session_content_hash=session_content_hash,
-                    video_uri=session.video_uri,
+                    tmp_video_path=tmp_video_filepath,
                     event=event,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
+                )
+
+                # Add audio uri and static thumbnail uri
+                resource_delete_task(
+                    tmp_video_filepath, upstream_tasks=[audio_uri, static_thumbnail_uri]
                 )
 
                 # Store all processed and provided data
                 session_processing_results.append(
                     compile_session_processing_result(  # type: ignore
                         session=session,
+                        session_video_hosted_url=session_video_hosted_url,
+                        session_content_hash=session_content_hash,
                         audio_uri=audio_uri,
                         transcript=transcript,
                         transcript_uri=transcript_uri,
@@ -189,54 +217,194 @@ def create_event_gather_flow(
                 session_processing_results=session_processing_results,
                 credentials_file=config.google_credentials_file,
                 bucket=config.validated_gcs_bucket_name,
-                from_local=from_local,
             )
 
     return flow
 
 
-@task(nout=2, max_retries=3, retry_delay=timedelta(seconds=60))
-def get_video_and_split_audio(
-    video_uri: str, bucket: str, credentials_file: str
-) -> Tuple[str, str]:
+@task(max_retries=3, retry_delay=timedelta(seconds=120))
+def resource_copy_task(uri: str) -> str:
     """
-    Download (or copy) a video file to temp storage, split's the audio, and uploads
-    the audio to Google storage.
+    Copy a file to a temporary location for processing.
 
     Parameters
     ----------
-    video_uri: str
-        The URI to the video file to split audio from.
-    bucket: str
-        The name of the GCS bucket to upload the produced audio to.
-    credentials_file: str
-        Path to Google Service Account Credentials JSON file.
+    uri: str
+        The URI to the file to copy.
+
+    Returns
+    -------
+    local_path: str
+        The local path to the copied file.
+
+    Notes
+    -----
+    We sometimes get file downloading failures when running in parallel so this has two
+    retries attached to it that will run after a failure on a 2 minute delay.
+    """
+    return file_utils.resource_copy(
+        uri=uri,
+        overwrite=True,
+    )
+
+
+@task
+def resource_delete_task(uri: str) -> None:
+    """
+    Remove local file
+
+    Parameters
+    ----------
+    uri: str
+        The local video file.
+    """
+    fs_functions.remove_local_file(uri)
+
+
+@task
+def get_session_content_hash(
+    tmp_video_filepath: str,
+) -> str:
+    """
+    Hash the video file content to get a unique identifier for the session.
+
+    Parameters
+    ----------
+    tmp_video_filepath: str
+        The local path for video file to generate a hash for.
 
     Returns
     -------
     session_content_hash: str
         The unique key (SHA256 hash of video content) for this session processing.
+    """
+    # Hash the video contents
+    return file_utils.hash_file_contents(uri=tmp_video_filepath)
+
+
+@task(nout=2)
+def convert_video_and_handle_host(
+    session_content_hash: str,
+    video_filepath: str,
+    session: Session,
+    credentials_file: str,
+    bucket: str,
+) -> Tuple[str, str]:
+    """
+    Convert a video to MP4 (if necessary), upload it to the file store, and remove
+    the original non-MP4 file that was resource copied.
+
+    Additionally, if the video is hosted from an unsecure resource, host it ourselves.
+
+    Parameters
+    ----------
+    session_content_hash: str
+        The content hash to use as the filename for the video once uploaded.
+    video_filepath: Union[str, Path]
+        The local path for video file to convert.
+    session: Session
+        The session to append the new MP4 video uri to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+    bucket: str
+        The GCS bucket to store the MP4 file to.
+
+    Returns
+    -------
+    mp4_filepath: str
+        The local filepath of the converted MP4 file.
+    hosted_video_uri: str
+        The URI for the CDP hosted video.
+    """
+    # Get file extension
+    ext = Path(video_filepath).suffix.lower()
+
+    # Convert to mp4 if file isn't of approved web format
+    cdp_will_host = False
+    if ext not in [".mp4", ".webm"]:
+        cdp_will_host = True
+
+        # Convert video to mp4
+        mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
+
+        # Remove old mkv file
+        fs_functions.remove_local_file(video_filepath)
+
+        # Update variable name for easier downstream typing
+        video_filepath = mp4_filepath
+
+    # Check if original session video uri is a m3u8
+    # We cant follow the normal coonvert video process from above
+    # because the m3u8 looks to the URI for all the chunks
+    elif session.video_uri.endswith(".m3u8"):
+        cdp_will_host = True
+
+    # Store if the original host isn't https
+    elif not is_secure_uri(session.video_uri):
+        try:
+            resource_uri = try_url(session.video_uri)
+        except LookupError:
+            # The provided URI could still be like GCS or S3 URI, which
+            # works for download but not for streaming / hosting
+            cdp_will_host = True
+        else:
+            if is_secure_uri(resource_uri):
+                log.info(
+                    f"Found secure version of {session.video_uri}, "
+                    f"updating stored video URI."
+                )
+                hosted_video_media_url = resource_uri
+            else:
+                cdp_will_host = True
+    else:
+        hosted_video_media_url = session.video_uri
+
+    # Upload and swap if cdp is hosting
+    if cdp_will_host:
+        # Upload to gcsfs
+        log.info("Storing a copy of video to CDP filestore.")
+        hosted_video_uri = fs_functions.upload_file(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            filepath=video_filepath,
+            save_name=f"{session_content_hash}-video.mp4",
+        )
+
+        # Create fs to generate hosted media URL
+        hosted_video_media_url = fs_functions.get_open_url_for_gcs_file(
+            credentials_file=credentials_file,
+            uri=hosted_video_uri,
+        )
+
+    return video_filepath, hosted_video_media_url
+
+
+@task
+def split_audio(
+    session_content_hash: str,
+    tmp_video_filepath: str,
+    bucket: str,
+    credentials_file: str,
+) -> str:
+    """
+    Split the audio from a local video file.
+
+    Parameters
+    ----------
+    session_content_hash: str
+        The unique identifier for the session.
+    tmp_video_filepath: str
+        The local path for video file to generate a hash for.
+    bucket: str
+        The bucket to store the transcript to.
+    credentials_file: str
+        Path to Google Service Account Credentials JSON file.
+
+    Returns
+    -------
     audio_uri: str
         The URI to the uploaded audio file.
-
-    Notes
-    -----
-    We sometimes get file downloading failures when running in parallel so this has two
-    retries attached to it that will run after a failure on a 3 minute delay.
     """
-    # Get just the video filename from the full uri
-    # TODO: Handle windows file splitting???
-    # Generally this is a URI but we do have a goal of a local file processing too...
-    video_filename = video_uri.split("/")[-1]
-    tmp_video_filepath = file_utils.resource_copy(
-        uri=video_uri,
-        dst=f"audio-splitting-{video_filename}",
-        overwrite=True,
-    )
-
-    # Hash the video contents
-    session_content_hash = file_utils.hash_file_contents(uri=tmp_video_filepath)
-
     # Check for existing audio
     tmp_audio_filepath = f"{session_content_hash}-audio.wav"
     audio_uri = fs_functions.get_file_uri(
@@ -263,30 +431,22 @@ def get_video_and_split_audio(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=tmp_audio_filepath,
+            remove_local=True,
         )
         fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=tmp_audio_log_out_filepath,
+            remove_local=True,
         )
         fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
             filepath=tmp_audio_log_err_filepath,
+            remove_local=True,
         )
 
-        # Remove tmp files after their final dependent tasks are finished
-        for local_path in [
-            tmp_audio_filepath,
-            tmp_audio_log_out_filepath,
-            tmp_audio_log_err_filepath,
-        ]:
-            fs_functions.remove_local_file(local_path)
-
-    # Always remove tmp video file
-    fs_functions.remove_local_file(tmp_video_filepath)
-
-    return session_content_hash, audio_uri
+    return audio_uri
 
 
 @task
@@ -402,14 +562,15 @@ def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List
                                         phrases.add(role.title)
             if event_minutes_item.votes is not None:
                 for vote in event_minutes_item.votes:
-                    if vote.person.roles is not None:
-                        for role in vote.person.roles:
-                            if _within_limit(phrases):
-                                if (
-                                    _get_if_added_sum(phrases, role.title)
-                                    < CUM_CHAR_LIMIT
-                                ):
-                                    phrases.add(role.title)
+                    if vote.person.seat is not None:
+                        if vote.person.seat.roles is not None:
+                            for role in vote.person.seat.roles:
+                                if _within_limit(phrases):
+                                    if (
+                                        _get_if_added_sum(phrases, role.title)
+                                        < CUM_CHAR_LIMIT
+                                    ):
+                                        phrases.add(role.title)
 
     return list(phrases)
 
@@ -537,10 +698,8 @@ def finalize_and_archive_transcript(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=transcript_save_path,
+        remove_local=True,
     )
-
-    # Remove local transcript
-    fs_functions.remove_local_file(transcript_save_path)
 
     return transcript_file_uri, transcript
 
@@ -710,9 +869,9 @@ def generate_transcript(
 
 
 @task(nout=2)
-def get_video_and_generate_thumbnails(
+def generate_thumbnails(
     session_content_hash: str,
-    video_uri: str,
+    tmp_video_path: str,
     event: EventIngestionModel,
     bucket: str,
     credentials_file: str,
@@ -724,7 +883,7 @@ def get_video_and_generate_thumbnails(
     ----------
     session_content_hash: str
         The unique key (SHA256 hash of video content) for this session processing.
-    video_uri: str
+    tmp_video_path: str
         The URI to the video file to generate thumbnails from.
     event: EventIngestionModel
         The parent event of the session. If no captions are available,
@@ -741,8 +900,6 @@ def get_video_and_generate_thumbnails(
     hover_thumbnail_url: str
         The URL of the hover thumbnail, stored on GCS.
     """
-    tmp_video_path = file_utils.resource_copy(video_uri)
-
     if event.static_thumbnail_uri is None:
         # Generate new
         static_thumbnail_file = file_utils.get_static_thumbnail(
@@ -757,8 +914,8 @@ def get_video_and_generate_thumbnails(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=static_thumbnail_file,
+        remove_local=True,
     )
-    fs_functions.remove_local_file(static_thumbnail_file)
 
     if event.hover_thumbnail_uri is None:
         # Generate new
@@ -774,10 +931,8 @@ def get_video_and_generate_thumbnails(
         credentials_file=credentials_file,
         bucket=bucket,
         filepath=hover_thumbnail_file,
+        remove_local=True,
     )
-    fs_functions.remove_local_file(hover_thumbnail_file)
-
-    fs_functions.remove_local_file(tmp_video_path)
 
     return (
         static_thumbnail_url,
@@ -788,6 +943,8 @@ def get_video_and_generate_thumbnails(
 @task
 def compile_session_processing_result(
     session: Session,
+    session_video_hosted_url: str,
+    session_content_hash: str,
     audio_uri: str,
     transcript: Transcript,
     transcript_uri: str,
@@ -796,6 +953,8 @@ def compile_session_processing_result(
 ) -> SessionProcessingResult:
     return SessionProcessingResult(
         session=session,
+        session_video_hosted_url=session_video_hosted_url,
+        session_content_hash=session_content_hash,
         audio_uri=audio_uri,
         transcript=transcript,
         transcript_uri=transcript_uri,
@@ -809,140 +968,184 @@ def _process_person_ingestion(
     default_session: Session,
     credentials_file: str,
     bucket: str,
+    upload_cache: Dict[str, db_models.Person] = {},
 ) -> db_models.Person:
-    # Store person picture file
-    person_picture_db_model: Optional[db_models.File]
-    if person.picture_uri is not None:
-        try:
-            tmp_person_picture_path = file_utils.resource_copy(person.picture_uri)
-            person_picture_uri = fs_functions.upload_file(
-                credentials_file=credentials_file,
-                bucket=bucket,
-                filepath=tmp_person_picture_path,
-            )
-            fs_functions.remove_local_file(tmp_person_picture_path)
-            person_picture_db_model = db_functions.create_file(
-                uri=person_picture_uri,
-                credentials_file=credentials_file,
-            )
-            person_picture_db_model = db_functions.upload_db_model(
-                db_model=person_picture_db_model,
-                credentials_file=credentials_file,
-            )
-        except FileNotFoundError:
-            person_picture_db_model = None
-            log.error(f"Person ('{person.name}'), picture URI could not be archived.")
-    else:
-        person_picture_db_model = None
+    # The JSON string of the whole person tree turns out to be a great cache key because
+    # 1. we can hash strings (which means we can shove them into a dictionary)
+    # 2. the JSON string store all of the attached seat and role information
+    # So, if the same person is referenced multiple times in the ingestion model
+    # but most of those references have the same data and only a few have different data
+    # the produced JSON string will note the differences and run when it needs to.
+    person_cache_key = person.to_json()  # type: ignore
 
-    # Create person
-    try:
-        person_db_model = db_functions.create_person(
-            person=person,
-            picture_ref=person_picture_db_model,
-            credentials_file=credentials_file,
-        )
-        person_db_model = db_functions.upload_db_model(
-            db_model=person_db_model,
-            credentials_file=credentials_file,
-        )
-    except (FieldValidationFailed, RequiredField, InvalidFieldType):
-        person_db_model = db_functions.create_minimal_person(person=person)
-        # No ingestion model provided here so that we don't try to
-        # re-validate the already failed model upload
-        person_db_model = db_functions.upload_db_model(
-            db_model=person_db_model,
-            credentials_file=credentials_file,
-        )
-
-    # Create seat
-    if person.seat is not None:
-        # Store seat picture file
-        person_seat_image_db_model: Optional[db_models.File]
-        try:
-            if person.seat.image_uri is not None:
-                tmp_person_seat_image_path = file_utils.resource_copy(
-                    uri=person.seat.image_uri,
+    if person_cache_key not in upload_cache:
+        # Store person picture file
+        person_picture_db_model: Optional[db_models.File]
+        if person.picture_uri is not None:
+            try:
+                tmp_person_picture_path = file_utils.resource_copy(
+                    uri=person.picture_uri,
+                    dst=f"{person.name}--person_picture",
+                    overwrite=True,
                 )
-                person_seat_image_uri = fs_functions.upload_file(
+                destination_path = file_utils.generate_file_storage_name(
+                    tmp_person_picture_path,
+                    "person-picture",
+                )
+                person_picture_uri = fs_functions.upload_file(
                     credentials_file=credentials_file,
                     bucket=bucket,
-                    filepath=tmp_person_seat_image_path,
+                    filepath=tmp_person_picture_path,
+                    save_name=destination_path,
+                    remove_local=True,
                 )
-                fs_functions.remove_local_file(
-                    tmp_person_seat_image_path,
-                )
-                person_seat_image_db_model = db_functions.create_file(
-                    uri=person_seat_image_uri, credentials_file=credentials_file
-                )
-                person_seat_image_db_model = db_functions.upload_db_model(
-                    db_model=person_seat_image_db_model,
+                person_picture_db_model = db_functions.create_file(
+                    uri=person_picture_uri,
                     credentials_file=credentials_file,
                 )
-            else:
-                person_seat_image_db_model = None
-        except FileNotFoundError:
-            person_seat_image_db_model = None
+                person_picture_db_model = db_functions.upload_db_model(
+                    db_model=person_picture_db_model,
+                    credentials_file=credentials_file,
+                )
+            except (FileNotFoundError, ClientResponseError, ConnectionError) as e:
+                person_picture_db_model = None
+                log.error(
+                    f"Person ('{person.name}'), picture URI could not be archived."
+                    f"({person.picture_uri}). Error: {e}"
+                )
+        else:
+            person_picture_db_model = None
+
+        # Create person
+        try:
+            person_db_model = db_functions.create_person(
+                person=person,
+                picture_ref=person_picture_db_model,
+                credentials_file=credentials_file,
+            )
+            person_db_model = db_functions.upload_db_model(
+                db_model=person_db_model,
+                credentials_file=credentials_file,
+            )
+        except (
+            FieldValidationFailed,
+            RequiredField,
+            InvalidFieldType,
+            ConnectionError,
+        ):
             log.error(
-                f"Person ('{person.name}'), " f"seat image URI could not be archived."
+                f"Person ({person_db_model.to_dict()}), "
+                f"was missing required information. Generating minimum person details."
+            )
+            person_db_model = db_functions.create_minimal_person(person=person)
+            # No ingestion model provided here so that we don't try to
+            # re-validate the already failed model upload
+            person_db_model = db_functions.upload_db_model(
+                db_model=person_db_model,
+                credentials_file=credentials_file,
             )
 
-        # Actual seat creation
-        person_seat_db_model = db_functions.create_seat(
-            seat=person.seat,
-            image_ref=person_seat_image_db_model,
-        )
-        person_seat_db_model = db_functions.upload_db_model(
-            db_model=person_seat_db_model,
-            credentials_file=credentials_file,
-        )
+        # Update upload cache with person
+        upload_cache[person_cache_key] = person_db_model
 
-        # Create roles
-        if person.seat.roles is not None:
-            for person_role in person.seat.roles:
-                # Create any bodies for roles
-                person_role_body_db_model: Optional[db_models.Body]
-                if person_role.body is not None:
-                    # Use or default role body start_datetime
-                    if person_role.body.start_datetime is None:
-                        person_role_body_start_datetime = (
-                            default_session.session_datetime
-                        )
-                    else:
-                        person_role_body_start_datetime = (
-                            person_role.body.start_datetime
-                        )
-
-                    person_role_body_db_model = db_functions.create_body(
-                        body=person_role.body,
-                        start_datetime=person_role_body_start_datetime,
+        # Create seat
+        if person.seat is not None:
+            # Store seat picture file
+            person_seat_image_db_model: Optional[db_models.File]
+            try:
+                if person.seat.image_uri is not None:
+                    tmp_person_seat_image_path = file_utils.resource_copy(
+                        uri=person.seat.image_uri,
+                        dst=f"{person.name}--{person.seat.name}--seat_image",
+                        overwrite=True,
                     )
-                    person_role_body_db_model = db_functions.upload_db_model(
-                        db_model=person_role_body_db_model,
+                    destination_path = file_utils.generate_file_storage_name(
+                        tmp_person_seat_image_path,
+                        "seat-image",
+                    )
+                    person_seat_image_uri = fs_functions.upload_file(
+                        credentials_file=credentials_file,
+                        bucket=bucket,
+                        filepath=tmp_person_seat_image_path,
+                        save_name=destination_path,
+                        remove_local=True,
+                    )
+                    person_seat_image_db_model = db_functions.create_file(
+                        uri=person_seat_image_uri, credentials_file=credentials_file
+                    )
+                    person_seat_image_db_model = db_functions.upload_db_model(
+                        db_model=person_seat_image_db_model,
                         credentials_file=credentials_file,
                     )
                 else:
-                    person_role_body_db_model = None
+                    person_seat_image_db_model = None
 
-                # Use or default role start_datetime
-                if person_role.start_datetime is None:
-                    person_role_start_datetime = default_session.session_datetime
-                else:
-                    person_role_start_datetime = person_role.start_datetime
-
-                # Actual role creation
-                person_role_db_model = db_functions.create_role(
-                    role=person_role,
-                    person_ref=person_db_model,
-                    seat_ref=person_seat_db_model,
-                    start_datetime=person_role_start_datetime,
-                    body_ref=person_role_body_db_model,
-                )
-                person_role_db_model = db_functions.upload_db_model(
-                    db_model=person_role_db_model,
-                    credentials_file=credentials_file,
+            except (FileNotFoundError, ClientResponseError, ConnectionError) as e:
+                person_seat_image_db_model = None
+                log.error(
+                    f"Person ('{person.name}'), seat image URI could not be archived."
+                    f"({person.seat.image_uri}). Error: {e}"
                 )
 
+            # Actual seat creation
+            person_seat_db_model = db_functions.create_seat(
+                seat=person.seat,
+                image_ref=person_seat_image_db_model,
+            )
+            person_seat_db_model = db_functions.upload_db_model(
+                db_model=person_seat_db_model,
+                credentials_file=credentials_file,
+            )
+
+            # Create roles
+            if person.seat.roles is not None:
+                for person_role in person.seat.roles:
+                    # Create any bodies for roles
+                    person_role_body_db_model: Optional[db_models.Body]
+                    if person_role.body is not None:
+                        # Use or default role body start_datetime
+                        if person_role.body.start_datetime is None:
+                            person_role_body_start_datetime = (
+                                default_session.session_datetime
+                            )
+                        else:
+                            person_role_body_start_datetime = (
+                                person_role.body.start_datetime
+                            )
+
+                        person_role_body_db_model = db_functions.create_body(
+                            body=person_role.body,
+                            start_datetime=person_role_body_start_datetime,
+                        )
+                        person_role_body_db_model = db_functions.upload_db_model(
+                            db_model=person_role_body_db_model,
+                            credentials_file=credentials_file,
+                        )
+                    else:
+                        person_role_body_db_model = None
+
+                    # Use or default role start_datetime
+                    if person_role.start_datetime is None:
+                        person_role_start_datetime = default_session.session_datetime
+                    else:
+                        person_role_start_datetime = person_role.start_datetime
+
+                    # Actual role creation
+                    person_role_db_model = db_functions.create_role(
+                        role=person_role,
+                        person_ref=person_db_model,
+                        seat_ref=person_seat_db_model,
+                        start_datetime=person_role_start_datetime,
+                        body_ref=person_role_body_db_model,
+                    )
+                    person_role_db_model = db_functions.upload_db_model(
+                        db_model=person_role_db_model,
+                        credentials_file=credentials_file,
+                    )
+    else:
+        person_db_model = upload_cache[person_cache_key]
+
+    log.info(f"Completed metadata processing for '{person.name}'.")
     return person_db_model
 
 
@@ -950,7 +1153,7 @@ def _calculate_in_majority(
     vote: ingestion_models.Vote,
     event_minutes_item: ingestion_models.EventMinutesItem,
 ) -> Optional[bool]:
-    # Voted to Approve or Approve-by-abstention-or-absense
+    # Voted to Approve or Approve-by-abstention-or-absence
     if vote.decision in [
         db_constants.VoteDecision.APPROVE,
         db_constants.VoteDecision.ABSTAIN_APPROVE,
@@ -960,7 +1163,7 @@ def _calculate_in_majority(
             event_minutes_item.decision == db_constants.EventMinutesItemDecision.PASSED
         )
 
-    # Voted to Reject or Reject-by-abstention-or-absense
+    # Voted to Reject or Reject-by-abstention-or-absence
     elif vote.decision in [
         db_constants.VoteDecision.REJECT,
         db_constants.VoteDecision.ABSTAIN_REJECT,
@@ -980,7 +1183,6 @@ def store_event_processing_results(
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,
     bucket: str,
-    from_local: bool = False,
 ) -> None:
     # TODO: check metadata before pipeline runs to avoid the many try excepts
 
@@ -1049,7 +1251,13 @@ def store_event_processing_results(
             db_model=event_db_model,
             credentials_file=credentials_file,
         )
-    except FieldValidationFailed:
+    except (FieldValidationFailed, ConnectionError):
+        log.error(
+            f"Agenda and/or minutes docs could not be found. "
+            f"Adding event without agenda and minutes URIs. "
+            f"({event.agenda_uri} AND/OR {event.minutes_uri} do not exist)"
+        )
+
         event_db_model = db_functions.create_event(
             body_ref=body_db_model,
             event_datetime=first_session.session_datetime,
@@ -1085,15 +1293,11 @@ def store_event_processing_results(
             credentials_file=credentials_file,
         )
 
-        # Account for uri's from local files
-        if from_local:
-            fs = GCSFileSystem(token=credentials_file)
-            stream_url = str(fs.url(session_result.session.video_uri))
-            session_result.session.video_uri = stream_url
-
         # Create session
         session_db_model = db_functions.create_session(
             session=session_result.session,
+            session_video_hosted_url=session_result.session_video_hosted_url,
+            session_content_hash=session_result.session_content_hash,
             event_ref=event_db_model,
             credentials_file=credentials_file,
         )
@@ -1114,6 +1318,7 @@ def store_event_processing_results(
         )
 
     # Add event metadata
+    processed_person_upload_cache: Dict[str, db_models.Person] = {}
     if event.event_minutes_items is not None:
         for emi_index, event_minutes_item in enumerate(event.event_minutes_items):
             if event_minutes_item.matter is not None:
@@ -1134,6 +1339,7 @@ def store_event_processing_results(
                             default_session=first_session,
                             credentials_file=credentials_file,
                             bucket=bucket,
+                            upload_cache=processed_person_upload_cache,
                         )
 
                         # Create matter sponsor association
@@ -1178,6 +1384,18 @@ def store_event_processing_results(
                     credentials_file=credentials_file,
                 )
             except (FieldValidationFailed, InvalidFieldType):
+                allowed_emi_decisions = constants_utils.get_all_class_attr_values(
+                    db_constants.EventMinutesItemDecision
+                )
+                log.warning(
+                    f"Provided 'decision' is not an approved constant. "
+                    f"Provided: '{event_minutes_item.decision}' "
+                    f"Should be one of: {allowed_emi_decisions} "
+                    f"See: "
+                    f"cdp_backend.database.constants.EventMinutesItemDecision. "
+                    f"Creating EventMinutesItem without decision value."
+                )
+
                 event_minutes_item_db_model = (
                     db_functions.create_minimal_event_minutes_item(
                         event_ref=event_db_model,
@@ -1204,7 +1422,7 @@ def store_event_processing_results(
                             db_model=matter_status_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed:
+                    except (FieldValidationFailed, RequiredField):
                         allowed_matter_decisions = (
                             constants_utils.get_all_class_attr_values(
                                 db_constants.MatterStatusDecision
@@ -1222,6 +1440,15 @@ def store_event_processing_results(
             # Add supporting files for matter and event minutes item
             if event_minutes_item.supporting_files is not None:
                 for supporting_file in event_minutes_item.supporting_files:
+                    try:
+                        file_uri = try_url(supporting_file.uri)
+                        supporting_file.uri = file_uri
+                    except LookupError as e:
+                        log.error(
+                            f"SupportingFile ('{supporting_file.uri}') "
+                            f"uri does not exist. Skipping. Error: {e}"
+                        )
+                        continue
 
                     # Archive as matter file
                     if event_minutes_item.matter is not None:
@@ -1235,10 +1462,13 @@ def store_event_processing_results(
                                 db_model=matter_file_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except FieldValidationFailed:
+                        except (
+                            FieldValidationFailed,
+                            ConnectionError,
+                        ) as e:
                             log.error(
                                 f"MatterFile ('{supporting_file.uri}') "
-                                f"could not be archived."
+                                f"could not be archived. Skipping. Error: {e}"
                             )
 
                     # Archive as event minutes item file
@@ -1254,10 +1484,10 @@ def store_event_processing_results(
                             db_model=event_minutes_item_file_db_model,
                             credentials_file=credentials_file,
                         )
-                    except FieldValidationFailed:
+                    except (FieldValidationFailed, ConnectionError) as e:
                         log.error(
                             f"EventMinutesItemFile ('{supporting_file.uri}') "
-                            f"could not be archived."
+                            f"could not be archived. Error: {e}"
                         )
 
             # Add vote information
@@ -1274,6 +1504,7 @@ def store_event_processing_results(
                             default_session=first_session,
                             credentials_file=credentials_file,
                             bucket=bucket,
+                            upload_cache=processed_person_upload_cache,
                         )
 
                         # Create vote
@@ -1294,7 +1525,11 @@ def store_event_processing_results(
                                 db_model=vote_db_model,
                                 credentials_file=credentials_file,
                             )
-                        except (FieldValidationFailed, RequiredField, InvalidFieldType):
+                        except (
+                            FieldValidationFailed,
+                            RequiredField,
+                            InvalidFieldType,
+                        ):
                             allowed_vote_decisions = (
                                 constants_utils.get_all_class_attr_values(
                                     db_constants.VoteDecision

@@ -12,4 +12,4 @@ class IndexedField(NamedTuple):
 
 
 class IndexedFieldSet(NamedTuple):
-    fields: Tuple[IndexedField, IndexedField]
+    fields: Tuple[IndexedField, ...]

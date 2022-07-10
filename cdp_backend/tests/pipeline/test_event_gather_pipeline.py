@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
+from copy import deepcopy
 from pathlib import Path
 from typing import List, Optional
 from unittest import mock
@@ -28,6 +30,8 @@ from cdp_backend.pipeline.mock_get_events import (
 )
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
+
+from ..conftest import EXAMPLE_M3U8_PLAYLIST_URI
 
 #############################################################################
 
@@ -64,43 +68,43 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_file_uri")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @pytest.mark.parametrize(
-    "get_file_uri_value, audio_upload_file_return, expected_session_content_hash",
+    "get_file_uri_value, audio_upload_file_return",
     [
         (
             None,
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            VIDEO_CONTENT_HASH,
         ),
         (
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            VIDEO_CONTENT_HASH,
         ),
     ],
 )
-def test_get_video_and_split_audio(
+def test_split_audio(
     mock_upload_file: MagicMock,
     mock_get_file_uri: MagicMock,
     get_file_uri_value: str,
     audio_upload_file_return: str,
-    expected_session_content_hash: str,
     example_video: Path,
 ) -> None:
     mock_get_file_uri.return_value = get_file_uri_value
     mock_upload_file.return_value = audio_upload_file_return
 
-    (
-        session_content_hash,
-        audio_uri,
-    ) = pipeline.get_video_and_split_audio.run(  # type: ignore
-        video_uri=str(example_video),
+    audio_uri = pipeline.split_audio.run(  # type: ignore
+        session_content_hash=VIDEO_CONTENT_HASH,
+        tmp_video_filepath=str(example_video),
         bucket="bucket",
         credentials_file="/fake/credentials/path",
     )
 
     # Check outputs
-    assert session_content_hash == expected_session_content_hash
     assert audio_uri == audio_upload_file_return
+
+    # Cleanup
+    for suffix in ["err", "out", "wav"]:
+        gen_test_file = Path(f"{VIDEO_CONTENT_HASH}-audio.{suffix}")
+        if gen_test_file.exists():
+            os.remove(gen_test_file)
 
 
 @pytest.mark.skipif(
@@ -116,11 +120,11 @@ def test_get_video_and_split_audio(
             f"fake://{VIDEO_CONTENT_HASH}-static-thumbnail.png",
             f"fake://{VIDEO_CONTENT_HASH}-hover-thumbnail.gif",
             VIDEO_CONTENT_HASH,
-            EXAMPLE_MINIMAL_EVENT,
+            deepcopy(EXAMPLE_MINIMAL_EVENT),
         ),
     ],
 )
-def test_get_video_and_generate_thumbnails(
+def test_generate_thumbnails(
     mock_upload_file: MagicMock,
     example_static_thumbnail_url: str,
     example_hover_thumbnail_url: str,
@@ -138,9 +142,9 @@ def test_get_video_and_generate_thumbnails(
     (
         static_thumbnail_url,
         hover_thumbnail_url,
-    ) = pipeline.get_video_and_generate_thumbnails.run(  # type: ignore
+    ) = pipeline.generate_thumbnails.run(  # type: ignore
         session_content_hash=example_session_content_hash,
-        video_uri=str(example_video),
+        tmp_video_path=str(example_video),
         event=event,
         bucket="bucket",
         credentials_file="/fake/credentials/path",
@@ -150,13 +154,19 @@ def test_get_video_and_generate_thumbnails(
     assert static_thumbnail_url == example_static_thumbnail_url
     assert hover_thumbnail_url == example_hover_thumbnail_url
 
+    # Cleanup
+    for suffix in ["hover-thumbnail.gif", "static-thumbnail.png"]:
+        gen_test_file = Path(f"{VIDEO_CONTENT_HASH}-{suffix}")
+        if gen_test_file.exists():
+            os.remove(gen_test_file)
+
 
 @pytest.mark.parametrize(
     "event, expected_phrases",
     [
-        (EXAMPLE_MINIMAL_EVENT, ["Full Council"]),
+        (deepcopy(EXAMPLE_MINIMAL_EVENT), ["Full Council"]),
         (
-            EXAMPLE_FILLED_EVENT,
+            deepcopy(EXAMPLE_FILLED_EVENT),
             # Note: the order here is because under the hood, we are using a set and
             # casting to a list.
             # It's the item addition order that matters, not the order of the phrases
@@ -187,6 +197,14 @@ def test_construct_speech_to_text_phrases_context(
     assert set(phrases) == set(expected_phrases)
 
 
+# Set up a session with the local captions file instead of a remote captions file
+# to ensure that no random errors happen to due remote service interruption
+LOCAL_CAPTIONS_SESSION = deepcopy(EXAMPLE_FILLED_EVENT.sessions[1])
+LOCAL_CAPTIONS_SESSION.caption_uri = str(
+    (Path(__file__).parent.parent / "resources" / "fake_caption.vtt").absolute()
+)
+
+
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_file_uri")
 @mock.patch(f"{PIPELINE_PATH}.use_speech_to_text_and_generate_transcript.run")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
@@ -200,17 +218,21 @@ def test_construct_speech_to_text_phrases_context(
         (
             EXAMPLE_TRANSCRIPT,
             "ex://abc123-transcript.json",
-            EXAMPLE_MINIMAL_EVENT.sessions[0],
-            EXAMPLE_MINIMAL_EVENT,
+            deepcopy(EXAMPLE_MINIMAL_EVENT.sessions[0]),
+            deepcopy(EXAMPLE_MINIMAL_EVENT),
         ),
         # Testing captions case
         (
             None,
             "ex://abc123-transcript.json",
-            EXAMPLE_FILLED_EVENT.sessions[1],
-            EXAMPLE_FILLED_EVENT,
+            deepcopy(LOCAL_CAPTIONS_SESSION),
+            deepcopy(EXAMPLE_FILLED_EVENT),
         ),
     ],
+)
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="local caption path handling for windows",
 )
 def test_generate_transcript(
     mock_upload_transcript: MagicMock,
@@ -424,6 +446,8 @@ for i in range(6):
         proc_results.append(
             pipeline.SessionProcessingResult(
                 session=session,
+                session_video_hosted_url="fake://doesnt-matter.mp4",
+                session_content_hash="fakehash123",
                 audio_uri="fake://doesnt-matter.wav",
                 transcript=EXAMPLE_TRANSCRIPT,
                 transcript_uri="fake://doesnt-matter-transcript.json",
@@ -434,7 +458,7 @@ for i in range(6):
 
     # Append rand event and proce results as tuple
     # Set fail_file_uploads to even param sets
-    RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results, i % 2 == 0))
+    RANDOM_EVENTS_AND_PROC_RESULTS.append((rand_event, proc_results, i % 2 == 0, False))
 
 ###############################################################################
 
@@ -444,13 +468,15 @@ for i in range(6):
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
 @mock.patch(f"{PIPELINE_PATH}.db_functions.upload_db_model")
 @pytest.mark.parametrize(
-    "event, session_processing_results, fail_file_uploads",
+    "event, session_processing_results, fail_file_uploads, fail_try_url",
     [
         (
-            EXAMPLE_MINIMAL_EVENT,
+            deepcopy(EXAMPLE_MINIMAL_EVENT),
             [
                 pipeline.SessionProcessingResult(
-                    session=EXAMPLE_MINIMAL_EVENT.sessions[0],
+                    session=deepcopy(EXAMPLE_MINIMAL_EVENT.sessions[0]),
+                    session_video_hosted_url="fake://doesnt-matter.mp4",
+                    session_content_hash="fakehash123",
                     audio_uri="ex://abc123-audio.wav",
                     transcript=EXAMPLE_TRANSCRIPT,
                     transcript_uri="ex://abc123-transcript.json",
@@ -459,12 +485,15 @@ for i in range(6):
                 ),
             ],
             False,
+            False,
         ),
         (
-            EXAMPLE_FILLED_EVENT,
+            deepcopy(EXAMPLE_FILLED_EVENT),
             [
                 pipeline.SessionProcessingResult(
-                    session=EXAMPLE_FILLED_EVENT.sessions[0],
+                    session=deepcopy(EXAMPLE_FILLED_EVENT.sessions[0]),
+                    session_video_hosted_url="fake://doesnt-matter-1.mp4",
+                    session_content_hash="fakehash123",
                     audio_uri="ex://abc123-audio.wav",
                     transcript=EXAMPLE_TRANSCRIPT,
                     transcript_uri="ex://abc123-transcript.json",
@@ -472,7 +501,9 @@ for i in range(6):
                     hover_thumbnail_uri="ex://abc123-hover-thumbnail.gif",
                 ),
                 pipeline.SessionProcessingResult(
-                    session=EXAMPLE_FILLED_EVENT.sessions[1],
+                    session=deepcopy(EXAMPLE_FILLED_EVENT.sessions[1]),
+                    session_video_hosted_url="fake://doesnt-matter-2.mp4",
+                    session_content_hash="fakehash1234",
                     audio_uri="ex://def456-audio.wav",
                     transcript=EXAMPLE_TRANSCRIPT,
                     transcript_uri="ex://def456-transcript.json",
@@ -480,6 +511,19 @@ for i in range(6):
                     hover_thumbnail_uri="ex://def456-hover-thumbnail.gif",
                 ),
             ],
+            False,
+            False,
+        ),
+        (
+            deepcopy(EXAMPLE_FILLED_EVENT),
+            [],
+            False,
+            True,
+        ),
+        (
+            deepcopy(EXAMPLE_FILLED_EVENT),
+            [],
+            False,
             False,
         ),
         *RANDOM_EVENTS_AND_PROC_RESULTS,
@@ -493,19 +537,116 @@ def test_store_event_processing_results(
     event: EventIngestionModel,
     session_processing_results: List[pipeline.SessionProcessingResult],
     fail_file_uploads: bool,
+    fail_try_url: bool,
 ) -> None:
     # All of the resource copies relate to image file uploads / archival.
     # But we aren't actually uploading so just make sure that we aren't downloading
     # externally either.
     mock_resource_copy.return_value = "doesnt-matter.ext"
 
-    # Set file upload side effect
-    if fail_file_uploads:
-        mock_upload_file.side_effect = FileNotFoundError()
+    with mock.patch(f"{PIPELINE_PATH}.try_url") as mock_resource_exists:
+        if fail_try_url:
+            mock_resource_exists.side_effect = LookupError()
+        else:
+            mock_resource_exists.return_value = True
 
-    pipeline.store_event_processing_results.run(  # type: ignore
-        event=event,
-        session_processing_results=session_processing_results,
+        # Set file upload side effect
+        if fail_file_uploads:
+            mock_upload_file.side_effect = FileNotFoundError()
+
+        pipeline.store_event_processing_results.run(  # type: ignore
+            event=event,
+            session_processing_results=session_processing_results,
+            credentials_file="fake/credentials.json",
+            bucket="doesnt://matter",
+        )
+
+
+NONSECURE_VIDEO_MINIMAL_EVENT_BUT_SECURE_FINDABLE = deepcopy(EXAMPLE_MINIMAL_EVENT)
+NONSECURE_VIDEO_MINIMAL_EVENT_BUT_SECURE_FINDABLE.sessions[
+    0
+].video_uri = NONSECURE_VIDEO_MINIMAL_EVENT_BUT_SECURE_FINDABLE.sessions[
+    0
+].video_uri.replace(
+    "https://", "http://"
+)
+
+NON_EXISTENT_REMOTE_MINIMAL_EVENT = deepcopy(EXAMPLE_MINIMAL_EVENT)
+NON_EXISTENT_REMOTE_MINIMAL_EVENT.sessions[
+    0
+].video_uri = "s3://bucket/does-not-exist.txt"
+
+EXISTING_REMOTE_M3U8_MINIMAL_EVENT = deepcopy(EXAMPLE_MINIMAL_EVENT)
+EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST_URI
+
+
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.get_open_url_for_gcs_file")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
+@mock.patch(f"{PIPELINE_PATH}.file_utils.convert_video_to_mp4")
+@pytest.mark.parametrize(
+    "video_filepath, session, expected_filepath, expected_hosted_video_url",
+    [
+        (
+            "example_video.mkv",
+            deepcopy(EXAMPLE_MINIMAL_EVENT.sessions[0]),
+            "example_video.mp4",
+            "hosted-video.mp4",
+        ),
+        (
+            "example_video.mp4",
+            deepcopy(EXAMPLE_MINIMAL_EVENT.sessions[0]),
+            "example_video.mp4",
+            EXAMPLE_MINIMAL_EVENT.sessions[0].video_uri,
+        ),
+        (
+            "example_video.mp4",
+            deepcopy(NONSECURE_VIDEO_MINIMAL_EVENT_BUT_SECURE_FINDABLE.sessions[0]),
+            "example_video.mp4",
+            EXAMPLE_MINIMAL_EVENT.sessions[0].video_uri,
+        ),
+        (
+            "example_video.mp4",
+            deepcopy(NON_EXISTENT_REMOTE_MINIMAL_EVENT.sessions[0]),
+            "example_video.mp4",
+            "hosted-video.mp4",
+        ),
+        (
+            "example_video.mp4",
+            deepcopy(EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0]),
+            "example_video.mp4",
+            "hosted-video.mp4",
+        ),
+    ],
+)
+def test_convert_video_and_handle_host(
+    mock_convert_video_to_mp4: MagicMock,
+    mock_remove_local_file: MagicMock,
+    mock_generate_url: MagicMock,
+    mock_upload_file: MagicMock,
+    video_filepath: str,
+    session: Session,
+    expected_filepath: str,
+    expected_hosted_video_url: str,
+) -> None:
+    mock_upload_file.return_value = "file_store_uri"
+    mock_generate_url.return_value = "hosted-video.mp4"
+    mock_convert_video_to_mp4.return_value = expected_filepath
+
+    (
+        mp4_filepath,
+        session_video_hosted_url,
+    ) = pipeline.convert_video_and_handle_host.run(  # type: ignore
+        session_content_hash="abc123",
+        video_filepath=video_filepath,
+        session=session,
         credentials_file="fake/credentials.json",
         bucket="doesnt://matter",
     )
+
+    # Make sure mp4 files don't go through conversion
+    if Path(video_filepath).suffix == ".mp4":
+        assert not mock_convert_video_to_mp4.called
+
+    assert mp4_filepath == expected_filepath
+    assert session_video_hosted_url == expected_hosted_video_url

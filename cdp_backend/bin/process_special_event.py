@@ -4,6 +4,7 @@
 import argparse
 import logging
 import sys
+import tempfile
 import traceback
 from pathlib import Path
 
@@ -60,6 +61,7 @@ def main() -> None:
                 open_resource.read()
             )
 
+        log.info("Parsing event details...")
         # Convert event details file to EventIngestionModel
         with open(args.event_details_file, "r") as open_resource:
             ingestion_model = EventIngestionModel.from_json(  # type: ignore
@@ -70,11 +72,16 @@ def main() -> None:
                 # Copy if remote resource, otherwise use local file uri
                 fs, path = url_to_fs(session.video_uri)
                 if not isinstance(fs, LocalFileSystem):
-                    filepath = resource_copy(session.video_uri)
+                    # Create tmp directory to save file in
+                    dirpath = tempfile.mkdtemp()
+                    dst = Path(dirpath)
+
+                    filepath = resource_copy(uri=session.video_uri, dst=dst)
                 else:
                     filepath = session.video_uri
 
                 # Upload video file to file store
+                log.info(f"Uploading {session.video_uri}...")
                 video_uri = upload_file(
                     credentials_file=config.google_credentials_file,
                     bucket=config.validated_gcs_bucket_name,
@@ -85,12 +92,16 @@ def main() -> None:
                 session.video_uri = video_uri
 
         # Create event gather pipeline flow
+        log.info("Beginning processing...")
         flow = pipeline.create_event_gather_flow(
-            config=config, prefetched_events=[ingestion_model], from_local=True
+            config=config,
+            prefetched_events=[ingestion_model],
         )
 
         # Run flow
-        flow.run()
+        state = flow.run()
+        if state.is_failed():
+            raise ValueError("Flow run failed.")
 
     except Exception as e:
         log.error("=============================================")

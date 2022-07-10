@@ -46,7 +46,8 @@ class WebVTTSRModel(SRModel):
         Default: 0.97
     """
 
-    END_OF_SENTENCE_PATTERN = r"^.+[.?!]\s*$"
+    END_OF_SENTENCE_PATTERN_RAW = r"^.+[.?!]\s*$"
+    END_OF_SENTENCE_PATTERN = re.compile(END_OF_SENTENCE_PATTERN_RAW, re.MULTILINE)
 
     def __init__(
         self,
@@ -164,30 +165,39 @@ class WebVTTSRModel(SRModel):
         # List of text, representing a sentence
         lines: List[str] = []
         start_time: Optional[float] = None
+
         for caption in speaker_turn_captions:
-            if start_time is None:
-                start_time = caption.start_in_seconds
-            lines.append(caption.text)
+            caption_lines = caption.text.split("\n")
+            for caption_line_i, caption_line in enumerate(caption_lines):
+                # Clean text of line breaks
+                caption_line = caption_line.replace("\n", " ")
 
-            # Check for sentence end
-            end_sentence_search = re.search(
-                WebVTTSRModel.END_OF_SENTENCE_PATTERN,
-                caption.text,
-            )
-            if end_sentence_search:
-                sentences.append(
-                    self._construct_sentence(
-                        lines=lines,
-                        caption=caption,
-                        start_time=start_time,
-                        confidence=self.confidence,
-                        speaker_index=speaker_index,
-                    )
+                # Remove any double spaces as result of line break removal
+                caption_line = caption_line.replace("  ", " ")
+
+                if start_time is None:
+                    start_time = caption.start_in_seconds
+                lines.append(caption_line)
+
+                # Check for sentence end
+                end_sentence_search = re.search(
+                    WebVTTSRModel.END_OF_SENTENCE_PATTERN,
+                    caption_line,
                 )
+                if end_sentence_search:
+                    sentences.append(
+                        self._construct_sentence(
+                            lines=lines,
+                            caption=caption,
+                            start_time=start_time,
+                            confidence=self.confidence,
+                            speaker_index=speaker_index,
+                        )
+                    )
 
-                # Reset lines and start_time, for start of new sentence
-                lines = []
-                start_time = None
+                    # Reset lines and start_time, for start of new sentence
+                    lines = []
+                    start_time = None
 
         # If any leftovers in lines, add a sentence for that.
         if len(lines) > 0 and start_time is not None:
@@ -243,8 +253,8 @@ class WebVTTSRModel(SRModel):
             sentence.text = self._normalize_text(sentence.text)
 
         transcript = transcript_model.Transcript(
-            confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
             generator=f"CDP WebVTT Conversion -- CDP v{__version__}",
+            confidence=(sum([s.confidence for s in sentences]) / len(sentences)),
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
             sentences=sentences,

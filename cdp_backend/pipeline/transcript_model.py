@@ -21,8 +21,6 @@ class WordAnnotations:
     Annotations that can appear on an individual word level.
     """
 
-    pass
-
 
 @dataclass_json
 @dataclass
@@ -30,8 +28,6 @@ class SentenceAnnotations:
     """
     Annotations that can appear on an individual sentence level.
     """
-
-    pass
 
 
 @dataclass_json
@@ -181,15 +177,15 @@ class Transcript:
 
     Parameters
     ----------
+    generator: str
+        A descriptive name of the generative process that produced this transcript.
+        Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
     confidence: float
         A number between 0 and 1.
         If available, use the average of all confidence annotations reported for each
         text block in the transcript.
         Otherwise, make an estimation for (or manually calculate):
         `n-correct-tokens / n-total-tokens` for the whole transcript.
-    generator: str
-        A descriptive name of the generative process that produced this transcript.
-        Example: "Google Speech-to-Text -- Lib Version: 2.0.1"
     session_datetime: Optional[str]
         ISO formatted datetime for the session that this document transcribes.
     created_datetime: str
@@ -214,20 +210,39 @@ class Transcript:
     ...     transcript = Transcript.from_json(open_resource.read())
     """
 
-    confidence: float
     generator: str
+    confidence: float
     session_datetime: Optional[str]
     created_datetime: str
     sentences: List[Sentence]
     annotations: Optional[TranscriptAnnotations] = None
+
+    def __repr__(self) -> str:
+        output = "Transcript("
+
+        # Use vars to maintain subclassing
+        for k, v in vars(self).items():
+            # Truncate sentences
+            if k == "sentences":
+                output += f"{k}=[...] (n={len(v)}), "
+
+            # Add quotes for strings
+            elif type(v) == str:
+                output += f"{k}='{v}', "
+
+            else:
+                output += f"{k}={v}, "
+
+        # Remove last comma and space and close parentheses
+        return output[:-2] + ")"
 
 
 ###############################################################################
 
 
 EXAMPLE_TRANSCRIPT = Transcript(
-    confidence=0.93325,
     generator="JacksonGen -- Lib Version: 0.0.0",
+    confidence=0.93325,
     session_datetime=datetime(2021, 1, 10, 15).isoformat(),
     created_datetime=datetime.utcnow().isoformat(),
     sentences=[

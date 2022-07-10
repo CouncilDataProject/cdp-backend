@@ -9,7 +9,9 @@ Full infrastructure setup for whole system / integration level testing.
 This is primarily used for developer stack creation and management.
 We have an example stack, infrastructure, pipeline, and web app available for
 demonstration and example data usage in our
-[example repo](https://github.com/CouncilDataProject/example).
+[Seattle staging repo](https://github.com/CouncilDataProject/seattle-staging).
+The web page for the Seattle staging instance can be found
+[here](https://councildataproject.org/seattle-staging).
 
 If you are just trying to process example CDP data (or for front-end: visualize example
 CDP data) and not _upload_ data, it is recommended to simply point your requests at the
@@ -55,9 +57,6 @@ restart your terminal after installation._
 After `pulumi` and `gcloud` have both been installed and terminal restarted, run the
 following commands to setup your local machine with credentials to both services.
 
-**Note:** Pulumi only supports Python 3.7, when creating dev infrastructures you
-need to run these scripts in a py37 environment.
-
 ```bash
 cd cdp-backend/dev-infrastructure
 make login
@@ -68,8 +67,8 @@ make build
 
 After generating the key, name your `key` file in `cdp-backend/.keys` to `cdp-dev.json`. In case you have many keys, note that by default, the random and minimal event pipelines use the key named `cdp-dev.json`.
 
-
 ## Infrastructure Management Commands
+
 All of these commands should be run from within the `cdp-backend/dev-infrastructure` directory.
 
 -   To log in to GCloud and Pulumi:
@@ -110,6 +109,7 @@ All of these commands should be run from within the `cdp-backend/dev-infrastruct
     and replacing `{project-name}` with your project name.
 
     or if you have already renamed your key:
+
     ```bash
     export GOOGLE_CREDENTIALS=$(cat ../.keys/cdp-dev.json)
     ```

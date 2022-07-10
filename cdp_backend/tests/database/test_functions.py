@@ -1,20 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timezone
+
 import pytest
+import pytz
 from fireo.models import Model
 
 from cdp_backend.database import functions as db_functions
 from cdp_backend.database import models as db_models
 
 ###############################################################################
-# Tests
+# Test constants
 
 body_a = db_models.Body()
 body_a.name = "Body A"
 
 body_b = db_models.Body()
 body_b.name = "Body B"
+
+a_datetime = datetime.fromisoformat("2021-08-16 07:42:10.318957+00:00")
+event_a = db_models.Event.Example()
+event_a.event_datetime = a_datetime
+
+event_b = db_models.Event.Example()
+local_tz = pytz.timezone("Europe/Moscow")
+modified_dt = event_a.event_datetime.replace(tzinfo=timezone.utc).astimezone(
+    tz=local_tz
+)
+event_b.event_datetime = local_tz.normalize(modified_dt)
 
 
 @pytest.mark.parametrize(
@@ -27,6 +41,9 @@ body_b.name = "Body B"
         # Testing models differ
         (body_a, "0a8a8e139258"),
         (body_b, "1535fef479ff"),
+        # Testing timezone difference
+        (event_a, "6291946d4094"),
+        (event_b, "6291946d4094"),
     ],
 )
 def test_generate_and_attach_doc_hash_as_id(model: Model, expected_id: str) -> None:

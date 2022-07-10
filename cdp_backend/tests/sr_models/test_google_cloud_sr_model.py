@@ -10,7 +10,10 @@ from unittest import mock
 import pytest
 from google.cloud import speech_v1p1beta1 as speech
 
-from cdp_backend.sr_models import GoogleCloudSRModel
+from cdp_backend.sr_models.google_cloud_sr_model import (
+    GOOGLE_SPEECH_ADAPTION_CLASSES,
+    GoogleCloudSRModel,
+)
 
 expected_sentence_1 = "Hello everyone, and thank you for coming."
 expected_sentence_2 = "Will the clerk begin by taking roll."
@@ -29,7 +32,7 @@ def fake_creds_path(resources_dir: Path) -> Path:
 class FakeRecognizeTime:
     def __init__(self, seconds: float):
         self.seconds = seconds
-        self.nanos = 0
+        self.microseconds = 0
 
 
 class FakeRecognizeWord:
@@ -105,7 +108,10 @@ def test_google_cloud_sr_model_init(fake_creds_path: str) -> None:
     [
         (None, []),
         ([], []),
-        ([str(i) for i in range(600)], [str(i) for i in range(500)]),
+        (
+            [str(i) for i in range(600)],
+            [str(i) for i in range(500 - len(GOOGLE_SPEECH_ADAPTION_CLASSES.phrases))],
+        ),
         (
             [
                 "this will be chunked to less than one hundred characters because that "
@@ -129,7 +135,7 @@ def has_only_non_deliminating_chars(word: str) -> bool:
 
 def test_google_cloud_transcribe(fake_creds_path: str, example_audio: str) -> None:
     with mock.patch(
-        "google.cloud.speech_v1p1beta1.SpeechClient.from_service_account_json"
+        "google.cloud.speech_v1p1beta1.SpeechClient.from_service_account_file"
     ) as mocked_client_init:
         mocked_client = mock.Mock(spec=speech.SpeechClient)
         mocked_client.long_running_recognize.return_value = FakeRecognizeOperation()
