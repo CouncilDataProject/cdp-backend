@@ -229,6 +229,7 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
         raise FileExistsError(dst)
 
     v = Vimeo(uri)
+
     if len(v.streams) == 0:
         raise Exception("File {} contains no downloadable streams", uri)
     best_stream = v.streams[-1]
