@@ -38,7 +38,7 @@ EXAMPLE_M3U8_PLAYLIST_URI = (
 )
 
 # City of Versailles, Kentucky
-EXAMPLE_VIMEO = "https://vimeo.com/723814841"
+EXAMPLE_VIMEO = "https://vimeo.com/503166067"
 
 
 @pytest.fixture

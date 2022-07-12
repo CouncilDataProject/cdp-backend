@@ -222,8 +222,6 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     """
     from vimeo_downloader import Vimeo
 
-    dst = dst.with_suffix(".mp4")
-
     # Ensure dest isn't a file
     if dst.is_file() and not overwrite:
         raise FileExistsError(dst)
@@ -233,7 +231,8 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     if len(v.streams) == 0:
         raise Exception("File {} contains no downloadable streams", uri)
     best_stream = v.streams[-1]
-    best_stream.download(download_directory=str(Path), filename="sample_video.mp4")
+    best_stream.download(download_directory=str(dst), filename=dst.name + ".mp4")
+    return str(dst) + "/" + dst.name + ".mp4"
 
 
 def split_audio(
