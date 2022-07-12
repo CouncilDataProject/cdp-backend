@@ -246,7 +246,7 @@ def test_convert_video_to_mp4(
         (EXAMPLE_YOUTUBE_VIDEO_EMBEDDED, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
-        (EXAMPLE_VIMEO, "503166067/503166067.mp4"),
+        (EXAMPLE_VIMEO, Path("503166067") / "503166067.mp4"),
         (EXAMPLE_M3U8_PLAYLIST_URI, None),
     ],
 )
