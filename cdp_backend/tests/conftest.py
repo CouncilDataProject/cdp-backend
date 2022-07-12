@@ -37,6 +37,9 @@ EXAMPLE_M3U8_PLAYLIST_URI = (
     "oakland_fa356edd-b6a3-4532-8118-3ce4881783f4.mp4/playlist.m3u8"
 )
 
+# City of Versailles, Kentucky
+EXAMPLE_VIMEO = "https://vimeo.com/723814841"
+
 
 @pytest.fixture
 def example_video(resources_dir: Path) -> Path:
