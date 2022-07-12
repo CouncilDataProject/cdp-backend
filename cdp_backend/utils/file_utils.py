@@ -203,7 +203,7 @@ def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
 
 def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     """
-    Copy a video from Vimeo to a local destination on the machine.
+    Copy a video from Vimeo to a local destination on the machine for analysis.
 
     Parameters
     ----------
