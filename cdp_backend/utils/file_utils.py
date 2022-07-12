@@ -232,7 +232,7 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
         raise Exception("File {} contains no downloadable streams", uri)
     best_stream = v.streams[-1]
     best_stream.download(download_directory=str(dst), filename=dst.name + ".mp4")
-    return str(dst) + "/" + dst.name + ".mp4"
+    return str(dst / (dst.name + ".mp4"))
 
 
 def split_audio(
