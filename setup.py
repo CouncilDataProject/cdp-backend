@@ -35,7 +35,7 @@ pipeline_requirements = [
     "truecase==0.0.14",
     "webvtt-py==0.4.6",
     "yt-dlp>=2022.2.4",
-    "vimeo_downloader>=0.4.1"
+    "vimeo_downloader~0.4"
 ]
 
 test_requirements = [
