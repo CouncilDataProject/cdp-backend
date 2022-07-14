@@ -328,6 +328,9 @@
         <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;youtube.com&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;youtu.be&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;vimeo.com&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vimeo_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.m3u8&quot;</span><span class="p">):</span>
             <span class="kn">import</span> <span class="nn">m3u8_To_MP4</span>
 
@@ -400,7 +403,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">yt_dlp</span> <span class="kn">import</span> <span class="n">YoutubeDL</span>
 
-    <span class="c1"># dst = Path(str(dst) + &quot;.mp4&quot;)</span>
     <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.mp4&quot;</span><span class="p">)</span>
 
     <span class="c1"># Ensure dest isn&#39;t a file</span>
@@ -411,6 +413,40 @@
     <span class="k">with</span> <span class="n">YoutubeDL</span><span class="p">(</span><span class="n">ydl_opts</span><span class="p">)</span> <span class="k">as</span> <span class="n">ydl</span><span class="p">:</span>
         <span class="n">ydl</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="n">uri</span><span class="p">])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="vimeo_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.vimeo_copy">[docs]</a><span class="k">def</span> <span class="nf">vimeo_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copy a video from Vimeo to a local destination on the machine for analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    uri: str</span>
+<span class="sd">        The url of the Vimeo video to copy.</span>
+<span class="sd">    dst: str</span>
+<span class="sd">        The location of the file to download.</span>
+<span class="sd">    overwrite: bool</span>
+<span class="sd">        Boolean value indicating whether or not to overwrite a local video with</span>
+<span class="sd">        the same name if it already exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    _______</span>
+<span class="sd">    dst: str</span>
+<span class="sd">        The location of the downloaded file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">vimeo_downloader</span> <span class="kn">import</span> <span class="n">Vimeo</span>
+
+    <span class="c1"># Ensure dest isn&#39;t a file</span>
+    <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
+
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vimeo</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">streams</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{}</span><span class="s2"> contains no downloadable streams&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
+    <span class="n">best_stream</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">streams</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">best_stream</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">download_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="n">dst</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.mp4&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="split_audio"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.split_audio">[docs]</a><span class="k">def</span> <span class="nf">split_audio</span><span class="p">(</span>
