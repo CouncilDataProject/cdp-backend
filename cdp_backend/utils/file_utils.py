@@ -114,6 +114,9 @@ def resource_copy(
         if uri.find("youtube.com") >= 0 or uri.find("youtu.be") >= 0:
             return youtube_copy(uri, dst, overwrite)
 
+        if uri.find("vimeo.com") >= 0:
+            return vimeo_copy(uri, dst, overwrite)
+
         if uri.endswith(".m3u8"):
             import m3u8_To_MP4
 
@@ -186,7 +189,6 @@ def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     """
     from yt_dlp import YoutubeDL
 
-    # dst = Path(str(dst) + ".mp4")
     dst = dst.with_suffix(".mp4")
 
     # Ensure dest isn't a file
@@ -197,6 +199,40 @@ def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     with YoutubeDL(ydl_opts) as ydl:
         ydl.download([uri])
         return str(dst)
+
+
+def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
+    """
+    Copy a video from Vimeo to a local destination on the machine for analysis.
+
+    Parameters
+    ----------
+    uri: str
+        The url of the Vimeo video to copy.
+    dst: str
+        The location of the file to download.
+    overwrite: bool
+        Boolean value indicating whether or not to overwrite a local video with
+        the same name if it already exists.
+
+    Returns
+    _______
+    dst: str
+        The location of the downloaded file.
+    """
+    from vimeo_downloader import Vimeo
+
+    # Ensure dest isn't a file
+    if dst.is_file() and not overwrite:
+        raise FileExistsError(dst)
+
+    v = Vimeo(uri)
+
+    if len(v.streams) == 0:
+        raise ValueError("File {} contains no downloadable streams", uri)
+    best_stream = v.streams[-1]
+    best_stream.download(download_directory=str(dst), filename=dst.name + ".mp4")
+    return str(dst / f"{dst.name}.mp4")
 
 
 def split_audio(
