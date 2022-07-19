@@ -1,0 +1,463 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>cdp_backend.annotation.speaker_labels - cdp-backend 3.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">cdp-backend 3.1.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">cdp-backend 3.1.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Package Modules</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cdp_backend.html">cdp_backend package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.annotation.html">cdp_backend.annotation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.bin.html">cdp_backend.bin package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.database.html">cdp_backend.database package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.infrastructure.html">cdp_backend.infrastructure package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.pipeline.html">cdp_backend.pipeline package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdp_backend.sr_models.html">cdp_backend.sr_models package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../cdp_backend.utils.html">cdp_backend.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdp_backend.utils.resources.html">cdp_backend.utils.resources package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ingestion_models.html">Ingestion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_gather_pipeline.html">Event Gather Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../database_schema.html">Database Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_model.html">Transcript Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for cdp_backend.annotation.speaker_labels</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">transformers.pipelines.base</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="kn">from</span> <span class="nn">..pipeline.transcript_model</span> <span class="kn">import</span> <span class="n">Transcript</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">DEFAULT_MODEL</span> <span class="o">=</span> <span class="s2">&quot;trained-speakerbox&quot;</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="annotate"><a class="viewcode-back" href="../../../cdp_backend.annotation.html#cdp_backend.annotation.speaker_labels.annotate">[docs]</a><span class="k">def</span> <span class="nf">annotate</span><span class="p">(</span>
+    <span class="n">transcript</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">],</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">AudioSegment</span><span class="p">],</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Pipeline</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_MODEL</span><span class="p">,</span>
+    <span class="n">min_intra_sentence_chunk_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">max_intra_sentence_chunk_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">min_sentence_mean_confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.985</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transcript</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotate a transcript using a pre-trained speaker identification model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transcript: Union[str, Path, Transcript]</span>
+<span class="sd">        The path to or an already in-memory Transcript object to fill with speaker</span>
+<span class="sd">        name annotations.</span>
+<span class="sd">    audio: Union[str, Path, AudioSegment]</span>
+<span class="sd">        The path to the matching audio for the associated transcript.</span>
+<span class="sd">    model: Union[str, Pipeline]</span>
+<span class="sd">        The path to the trained Speakerbox audio classification model or a preloaded</span>
+<span class="sd">        audio classification Pipeline.</span>
+<span class="sd">        Default: &quot;trained-speakerbox&quot;</span>
+<span class="sd">    min_intra_sentence_chunk_duration: float</span>
+<span class="sd">        The minimum duration of a sentence to annotate. Anything less than this</span>
+<span class="sd">        will be ignored from annotation.</span>
+<span class="sd">        Default: 0.5 seconds</span>
+<span class="sd">    max_intra_sentence_chunk_duration: float</span>
+<span class="sd">        The maximum duration for a sentences audio to split to. This should match</span>
+<span class="sd">        whatever was used during model training</span>
+<span class="sd">        (i.e. trained on 2 second audio chunks, apply on 2 second audio chunks)</span>
+<span class="sd">        Default: 2 seconds</span>
+<span class="sd">    min_sentence_mean_confidence: float</span>
+<span class="sd">        The minimum allowable mean confidence of all predicted chunk confidences</span>
+<span class="sd">        to determine if the predicted label should be commited as an annotation</span>
+<span class="sd">        or not.</span>
+<span class="sd">        Default: 0.985</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Transcript</span>
+<span class="sd">        The annotated transcript. Note this updates in place, this does not return a new</span>
+<span class="sd">        Transcript object.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    A plain text walkthrough of this function is as follows:</span>
+
+<span class="sd">    For each sentence in the provided transcript, the matching audio portion is</span>
+<span class="sd">    retrieved, for example if the sentence start time is 12.05 seconds and end time is</span>
+<span class="sd">    20.47 seconds, that exact portion of audio is pulled from the full audio file.</span>
+
+<span class="sd">    If the audio duration for the chunk is less than the</span>
+<span class="sd">    `min_intra_sentence_chunk_duration`, we ignore the sentence.</span>
+
+<span class="sd">    If the audio duration for the chunk is greater than</span>
+<span class="sd">    `max_intra_sentence_chunk_duration`, the audio is split into chunks of length</span>
+<span class="sd">    `max_intra_sentence_chunk_duration` (i.e. from 12.05 to 14.05, from 14.05 to 16.05,</span>
+<span class="sd">    etc. if the last chunk is less than the `min_intra_sentence_chunk_duration`, it is</span>
+<span class="sd">    ignored).</span>
+
+<span class="sd">    Each audio chunk is ran through the audio classification model and predicts every</span>
+<span class="sd">    known person to the model. Each prediction has a confidence attached to it.</span>
+<span class="sd">    The confidence values are used to create a dictionary of:</span>
+<span class="sd">    `label -&gt; list of confidence values`. Once all chunks for a single sentence is</span>
+<span class="sd">    predicted, the mean confidence is computed for each.</span>
+
+<span class="sd">    The label with the highest mean confidence is used as the sentence speaker name.</span>
+<span class="sd">    If the highest mean confidence is less than the `min_sentence_mean_confidence`,</span>
+<span class="sd">    no label is stored in the `speaker_name` sentence property (thresholded out).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Generate random uuid filename for storing temp audio chunks</span>
+    <span class="n">TMP_AUDIO_CHUNK_SAVE_PATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;tmp-audio-chunk--</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span><span class="si">}</span><span class="s2">.wav&quot;</span>
+
+    <span class="c1"># Load transcript</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_f</span><span class="p">:</span>
+            <span class="n">loaded_transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">loaded_transcript</span> <span class="o">=</span> <span class="n">transcript</span>
+
+    <span class="c1"># Load audio</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+
+    <span class="c1"># Load model</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;audio-classification&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">model</span>
+    <span class="n">n_speakers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">classifier</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">id2label</span><span class="p">)</span>
+
+    <span class="c1"># Convert to millis</span>
+    <span class="n">min_intra_sentence_chunk_duration_millis</span> <span class="o">=</span> <span class="n">min_intra_sentence_chunk_duration</span> <span class="o">*</span> <span class="mi">1000</span>
+    <span class="n">max_intra_sentence_chunk_duration_millis</span> <span class="o">=</span> <span class="n">max_intra_sentence_chunk_duration</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="c1"># Iter transcript, get sentence audio, chunk into sections</span>
+    <span class="c1"># of two seconds or less, classify each, and take most common,</span>
+    <span class="c1"># with thresholding confidence * segments</span>
+    <span class="n">met_threshold</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">missed_threshold</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Annotating sentences with speaker names&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+        <span class="nb">enumerate</span><span class="p">(</span><span class="n">loaded_transcript</span><span class="o">.</span><span class="n">sentences</span><span class="p">),</span>
+        <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Sentences annotated&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># Keep track of each sentence chunk classification and score</span>
+        <span class="n">chunk_scores</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Get audio slice for sentence</span>
+        <span class="n">sentence_start_millis</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">start_time</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="n">sentence_end_millis</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">end_time</span> <span class="o">*</span> <span class="mi">1000</span>
+
+        <span class="c1"># Split into smaller chunks</span>
+        <span class="k">for</span> <span class="n">chunk_start_millis</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+            <span class="n">sentence_start_millis</span><span class="p">,</span>
+            <span class="n">sentence_end_millis</span><span class="p">,</span>
+            <span class="n">max_intra_sentence_chunk_duration_millis</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="c1"># Tentative chunk end</span>
+            <span class="n">chunk_end_millis</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">chunk_start_millis</span> <span class="o">+</span> <span class="n">max_intra_sentence_chunk_duration_millis</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Determine chunk end time</span>
+            <span class="c1"># If start + chunk duration is longer than sentence</span>
+            <span class="c1"># Chunk needs to be cut at sentence end</span>
+            <span class="k">if</span> <span class="n">sentence_end_millis</span> <span class="o">&lt;</span> <span class="n">chunk_end_millis</span><span class="p">:</span>
+                <span class="n">chunk_end_millis</span> <span class="o">=</span> <span class="n">sentence_end_millis</span>
+
+            <span class="c1"># Only allow if duration is greater than min intra sentence chunk duration</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="n">chunk_end_millis</span> <span class="o">-</span> <span class="n">chunk_start_millis</span>
+            <span class="k">if</span> <span class="n">duration</span> <span class="o">&gt;=</span> <span class="n">min_intra_sentence_chunk_duration_millis</span><span class="p">:</span>
+                <span class="c1"># Get chunk</span>
+                <span class="n">chunk</span> <span class="o">=</span> <span class="n">audio</span><span class="p">[</span><span class="n">chunk_start_millis</span><span class="p">:</span><span class="n">chunk_end_millis</span><span class="p">]</span>
+
+                <span class="c1"># Write to temp</span>
+                <span class="n">chunk</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">TMP_AUDIO_CHUNK_SAVE_PATH</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Predict and store scores for sentence</span>
+                <span class="n">preds</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span><span class="n">TMP_AUDIO_CHUNK_SAVE_PATH</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="n">n_speakers</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">pred</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pred</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">chunk_scores</span><span class="p">:</span>
+                        <span class="n">chunk_scores</span><span class="p">[</span><span class="n">pred</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">chunk_scores</span><span class="p">[</span><span class="n">pred</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Create mean score</span>
+        <span class="n">sentence_speaker</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk_scores</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">mean_scores</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">speaker</span><span class="p">,</span> <span class="n">scores</span> <span class="ow">in</span> <span class="n">chunk_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">mean_scores</span><span class="p">[</span><span class="n">speaker</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+            <span class="c1"># Get highest score speaker</span>
+            <span class="n">highest_mean_speaker</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">mean_scores</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">mean_scores</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="n">highest_mean_score</span> <span class="o">=</span> <span class="n">mean_scores</span><span class="p">[</span><span class="n">highest_mean_speaker</span><span class="p">]</span>
+
+            <span class="c1"># Threshold holdout</span>
+            <span class="k">if</span> <span class="n">highest_mean_score</span> <span class="o">&gt;=</span> <span class="n">min_sentence_mean_confidence</span><span class="p">:</span>
+                <span class="n">sentence_speaker</span> <span class="o">=</span> <span class="n">highest_mean_speaker</span>
+                <span class="n">met_threshold</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Missed speaker annotation confidence threshold for sentence </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;-- Highest Mean Confidence: </span><span class="si">{</span><span class="n">highest_mean_score</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="n">missed_threshold</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Store to transcript</span>
+        <span class="n">sentence</span><span class="o">.</span><span class="n">speaker_name</span> <span class="o">=</span> <span class="n">sentence_speaker</span>
+
+    <span class="c1"># Remove last made chunk file</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">TMP_AUDIO_CHUNK_SAVE_PATH</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Total sentences: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">loaded_transcript</span><span class="o">.</span><span class="n">sentences</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Sentences Annotated: </span><span class="si">{</span><span class="n">met_threshold</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Missed Threshold: </span><span class="si">{</span><span class="n">missed_threshold</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">loaded_transcript</span></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Council Data Project Contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

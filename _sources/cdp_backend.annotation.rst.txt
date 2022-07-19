@@ -1,0 +1,21 @@
+cdp\_backend.annotation package
+===============================
+
+Submodules
+----------
+
+cdp\_backend.annotation.speaker\_labels module
+----------------------------------------------
+
+.. automodule:: cdp_backend.annotation.speaker_labels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cdp_backend.annotation
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Transcript Model" href="transcript_model.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.bin package" href="cdp_backend.bin.html" /><link rel="prev" title="cdp_backend package" href="cdp_backend.html" />
 
     <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
-        <title>Contributing - cdp-backend 3.1.2 documentation</title>
+        <title>cdp_backend.annotation package - cdp-backend 3.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -158,9 +158,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Package Modules</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="cdp_backend.annotation.html">cdp_backend.annotation package</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Package Modules</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="cdp_backend.html">cdp_backend package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">cdp_backend.annotation package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.bin.html">cdp_backend.bin package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.database.html">cdp_backend.database package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cdp_backend.file_store.html">cdp_backend.file_store package</a></li>
@@ -179,7 +179,7 @@
 <li class="toctree-l1"><a class="reference internal" href="event_gather_pipeline.html">Event Gather Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database_schema.html">Database Schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transcript_model.html">Transcript Model</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
 
 </div>
@@ -213,69 +213,73 @@
           </label>
         </div>
         <article role="main">
-          <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">#</a></h1>
-<p>Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.</p>
-<section id="developer-installation">
-<h2>Developer Installation<a class="headerlink" href="#developer-installation" title="Permalink to this heading">#</a></h2>
-<p>If something goes wrong at any point during installing the library please see how
-<a class="reference external" href=".github/workflows/build-main.yml">our CI/CD on GitHub Actions</a> installs and builds the
-project as it will always be the most up-to-date.</p>
+          <section id="cdp-backend-annotation-package">
+<h1>cdp_backend.annotation package<a class="headerlink" href="#cdp-backend-annotation-package" title="Permalink to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="get-started">
-<h2>Get Started!<a class="headerlink" href="#get-started" title="Permalink to this heading">#</a></h2>
-<p>Ready to contribute? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">cdp-backend</span></code> for local development.</p>
-<ol class="arabic">
-<li><p>Fork the <code class="docutils literal notranslate"><span class="pre">cdp-backend</span></code> repo on GitHub.</p></li>
-<li><p>Clone your fork locally:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:<span class="o">{</span>your_name_here<span class="o">}</span>/cdp-backend.git
-</pre></div>
-</div>
-</li>
-<li><p>Install <a class="reference external" href="https://graphviz.org/download/">graphviz</a></p></li>
-<li><p>Install <a class="reference external" href="https://ffmpeg.org/download.html">ffmpeg</a></p></li>
-<li><p>Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> cdp-backend/
-pip install -e .<span class="o">[</span>dev<span class="o">]</span>
-</pre></div>
-</div>
-</li>
-<li><p>Create a branch for local development:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>   git checkout -b <span class="o">{</span>your_development_type<span class="o">}</span>/short-description
+<section id="module-cdp_backend.annotation.speaker_labels">
+<span id="cdp-backend-annotation-speaker-labels-module"></span><h2>cdp_backend.annotation.speaker_labels module<a class="headerlink" href="#module-cdp_backend.annotation.speaker_labels" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.annotation.speaker_labels.annotate">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.annotation.speaker_labels.</span></span><span class="sig-name descname"><span class="pre">annotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transcript</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript"><span class="pre">Transcript</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">AudioSegment</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Pipeline</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'trained-speakerbox'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_intra_sentence_chunk_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_intra_sentence_chunk_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sentence_mean_confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.985</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="cdp_backend.pipeline.html#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript"><span class="pre">Transcript</span></a></span></span><a class="reference internal" href="_modules/cdp_backend/annotation/speaker_labels.html#annotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.annotation.speaker_labels.annotate" title="Permalink to this definition">#</a></dt>
+<dd><p>Annotate a transcript using a pre-trained speaker identification model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transcript</strong> (<em>Union[str, Path, Transcript]</em>) – The path to or an already in-memory Transcript object to fill with speaker
+name annotations.</p></li>
+<li><p><strong>audio</strong> (<em>Union[str, Path, AudioSegment]</em>) – The path to the matching audio for the associated transcript.</p></li>
+<li><p><strong>model</strong> (<em>Union[str, Pipeline]</em>) – The path to the trained Speakerbox audio classification model or a preloaded
+audio classification Pipeline.
+Default: “trained-speakerbox”</p></li>
+<li><p><strong>min_intra_sentence_chunk_duration</strong> (<em>float</em>) – The minimum duration of a sentence to annotate. Anything less than this
+will be ignored from annotation.
+Default: 0.5 seconds</p></li>
+<li><p><strong>max_intra_sentence_chunk_duration</strong> (<em>float</em>) – The maximum duration for a sentences audio to split to. This should match
+whatever was used during model training
+(i.e. trained on 2 second audio chunks, apply on 2 second audio chunks)
+Default: 2 seconds</p></li>
+<li><p><strong>min_sentence_mean_confidence</strong> (<em>float</em>) – The minimum allowable mean confidence of all predicted chunk confidences
+to determine if the predicted label should be commited as an annotation
+or not.
+Default: 0.985</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The annotated transcript. Note this updates in place, this does not return a new
+Transcript object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="cdp_backend.database.html#cdp_backend.database.models.Transcript" title="cdp_backend.database.models.Transcript">Transcript</a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>A plain text walkthrough of this function is as follows:</p>
+<p>For each sentence in the provided transcript, the matching audio portion is
+retrieved, for example if the sentence start time is 12.05 seconds and end time is
+20.47 seconds, that exact portion of audio is pulled from the full audio file.</p>
+<p>If the audio duration for the chunk is less than the
+<cite>min_intra_sentence_chunk_duration</cite>, we ignore the sentence.</p>
+<p>If the audio duration for the chunk is greater than
+<cite>max_intra_sentence_chunk_duration</cite>, the audio is split into chunks of length
+<cite>max_intra_sentence_chunk_duration</cite> (i.e. from 12.05 to 14.05, from 14.05 to 16.05,
+etc. if the last chunk is less than the <cite>min_intra_sentence_chunk_duration</cite>, it is
+ignored).</p>
+<p>Each audio chunk is ran through the audio classification model and predicts every
+known person to the model. Each prediction has a confidence attached to it.
+The confidence values are used to create a dictionary of:
+<cite>label -&gt; list of confidence values</cite>. Once all chunks for a single sentence is
+predicted, the mean confidence is computed for each.</p>
+<p>The label with the highest mean confidence is used as the sentence speaker name.
+If the highest mean confidence is less than the <cite>min_sentence_mean_confidence</cite>,
+no label is stored in the <cite>speaker_name</cite> sentence property (thresholded out).</p>
+</dd></dl>
 
-Ex: feature/read-tiff-files or bugfix/handle-file-not-found<span class="se">\ </span>:raw-html-m2r:<span class="sb">`</span>&lt;br&gt;<span class="sb">`</span>
-Now you can make your changes locally.
-</pre></div>
-</div>
-</li>
-<li><p>When you’re done making changes, check that your changes pass linting and
-tests, including testing other Python versions with make:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make build
-</pre></div>
-</div>
-</li>
-<li><p>Commit your changes and push your branch to GitHub:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git add .
-git commit -m <span class="s2">&quot;Resolves gh-###. Your detailed description of your changes.&quot;</span>
-git push origin <span class="o">{</span>your_development_type<span class="o">}</span>/short-description
-</pre></div>
-</div>
-</li>
-<li><p>Submit a pull request through the GitHub website.</p></li>
-</ol>
 </section>
-<section id="deploying">
-<h2>Deploying<a class="headerlink" href="#deploying" title="Permalink to this heading">#</a></h2>
-<p>A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed.
-Then run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bump2version patch <span class="c1"># possible: major / minor / patch</span>
-$ git push
-$ git push --tags
-</pre></div>
-</div>
-<p>This will release a new package version on Git + GitHub and publish to PyPI.</p>
+<section id="module-cdp_backend.annotation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdp_backend.annotation" title="Permalink to this heading">#</a></h2>
+<p>Transcript annotation package for cdp_backend.</p>
 </section>
 </section>
 
@@ -284,15 +288,23 @@ $ git push --tags
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="transcript_model.html">
+          <a class="next-page" href="cdp_backend.bin.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">cdp_backend.bin package</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="cdp_backend.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Transcript Model</div>
+                <div class="title">cdp_backend package</div>
                 
               </div>
             </a>
@@ -328,10 +340,10 @@ $ git push --tags
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Contributing</a><ul>
-<li><a class="reference internal" href="#developer-installation">Developer Installation</a></li>
-<li><a class="reference internal" href="#get-started">Get Started!</a></li>
-<li><a class="reference internal" href="#deploying">Deploying</a></li>
+<li><a class="reference internal" href="#">cdp_backend.annotation package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cdp_backend.annotation.speaker_labels">cdp_backend.annotation.speaker_labels module</a></li>
+<li><a class="reference internal" href="#module-cdp_backend.annotation">Module contents</a></li>
 </ul>
 </li>
 </ul>
