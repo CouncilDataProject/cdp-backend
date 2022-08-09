@@ -11,10 +11,10 @@ For more specific details please see the
 ## Example Transcript
 ```json
 {
-    "generator": "JacksonGen -- Lib Version: 0.0.0",
+    "generator": "EvaGen -- Lib Version: 0.0.0",
     "confidence": 0.93325,
     "session_datetime": "2021-01-10T15:00:00",
-    "created_datetime": "2022-07-19T17:54:20.068829",
+    "created_datetime": "2022-08-09T21:00:39.946529",
     "sentences": [
         {
             "index": 0,
@@ -39,7 +39,7 @@ For more specific details please see the
             ],
             "text": "Hello everyone.",
             "speaker_index": 0,
-            "speaker_name": "Jackson Maxfield Brown",
+            "speaker_name": "Eva Maxfield Brown",
             "annotations": null
         },
         {
@@ -75,7 +75,7 @@ For more specific details please see the
                 "name": "Call to Order",
                 "start_sentence_index": 0,
                 "stop_sentence_index": 2,
-                "generator": "Jackson Maxfield Brown",
+                "generator": "Eva Maxfield Brown",
                 "description": null
             }
         ]
