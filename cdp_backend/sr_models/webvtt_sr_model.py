@@ -7,7 +7,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, List, NamedTuple, Optional, Union
 
-import fsspec
 import nltk
 import truecase
 import webvtt

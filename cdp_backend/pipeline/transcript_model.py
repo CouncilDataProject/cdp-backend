@@ -69,7 +69,7 @@ class SectionAnnotation:
     ...         name="Public Comment",
     ...         start_sentence_index=12,
     ...         stop_sentence_index=87,
-    ...         generator="Jackson Maxfield Brown",
+    ...         generator="Eva Maxfield Brown",
     ...     ),
     ...     SectionAnnotation(
     ...         name="CB 120121",
@@ -241,7 +241,7 @@ class Transcript:
 
 
 EXAMPLE_TRANSCRIPT = Transcript(
-    generator="JacksonGen -- Lib Version: 0.0.0",
+    generator="EvaGen -- Lib Version: 0.0.0",
     confidence=0.93325,
     session_datetime=datetime(2021, 1, 10, 15).isoformat(),
     created_datetime=datetime.utcnow().isoformat(),
@@ -252,7 +252,7 @@ EXAMPLE_TRANSCRIPT = Transcript(
             confidence=0.9,
             start_time=0.0,
             end_time=1.0,
-            speaker_name="Jackson Maxfield Brown",
+            speaker_name="Eva Maxfield Brown",
             speaker_index=0,
             words=[
                 Word(
@@ -299,7 +299,7 @@ EXAMPLE_TRANSCRIPT = Transcript(
                 name="Call to Order",
                 start_sentence_index=0,
                 stop_sentence_index=2,
-                generator="Jackson Maxfield Brown",
+                generator="Eva Maxfield Brown",
             )
         ],
     ),

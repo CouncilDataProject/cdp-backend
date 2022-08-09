@@ -57,7 +57,7 @@ Brown et al., (2021). Council Data Project: Software for Municipal Data Collecti
   volume = {6},
   number = {68},
   pages = {3904},
-  author = {Jackson Maxfield Brown and To Huynh and Isaac Na and Brian Ledbetter and Hawk Ticehurst and Sarah Liu and Emily Gilles and Katlyn M. f. Greene and Sung Cho and Shak Ragoler and Nicholas Weber},
+  author = {Eva Maxfield Brown and To Huynh and Isaac Na and Brian Ledbetter and Hawk Ticehurst and Sarah Liu and Emily Gilles and Katlyn M. f. Greene and Sung Cho and Shak Ragoler and Nicholas Weber},
   title = {{Council Data Project: Software for Municipal Data Collection, Analysis, and Publication}},
   journal = {Journal of Open Source Software}
 }
