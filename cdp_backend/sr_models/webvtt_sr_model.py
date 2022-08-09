@@ -233,8 +233,7 @@ class WebVTTSRModel(SRModel):
         nltk.download("punkt")
 
         # Read the caption file
-        with fsspec.open(file_uri, "rb") as open_resource:
-            captions = webvtt.read(open_resource)
+        captions = webvtt.read(file_uri)
 
         # Get speaker turns
         speaker_turns = self._get_speaker_turns(captions=captions)
