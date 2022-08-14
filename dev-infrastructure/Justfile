@@ -1,0 +1,75 @@
+# list all available commands
+default:
+  just --list
+
+# get and store user
+USER := env_var("USER")
+
+# run gcloud and pulumi logins
+login:
+  pulumi logout
+  pulumi login
+  gcloud auth login
+  gcloud auth application-default login
+
+# create a new gcloud project and pulumi stack
+init project:
+	gcloud projects create {{project}} --set-as-default
+	pulumi stack init {{project}}
+	echo "----------------------------------------------------------------------------"
+	echo "Follow the link to setup billing for the created GCloud account."
+	echo "https://console.cloud.google.com/billing/linkedaccount?project={{project}}"
+
+# set a CORS policy for the bucket
+set-cors project:
+	gsutil cors set cors.json gs://{{project}}.appspot.com/
+
+# run pulumi up for infra deploy
+build:
+  pulumi up -p 4
+
+# switch active gcloud project
+switch-project project:
+	gcloud config set project {{project}}
+
+# remove all database documents (except search index) and filestore objects
+clean key:
+	clean_cdp_database {{key}}
+	clean_cdp_filestore {{key}}
+
+# remove all database documents (including search index) and filestore objects
+clean-full key:
+	clean_cdp_database {{key}} --clean-index
+	clean_cdp_filestore {{key}}
+
+# destroy just the stack (not the gcloud project) and rebuild
+reset:
+	pulumi destroy -p 4
+	echo "----------------------------------------------------------------------------"
+	echo "Sleeping for three minutes while resources clean up"
+	sleep 180
+	make build
+
+# fully teardown project
+destroy project:
+	pulumi stack rm {{project}} --force
+	gcloud projects delete {{project}}
+	rm -f ../.keys/{{project}}.json
+
+# generate a service account JSON
+gen-key project:
+	mkdir ../.keys/ -p
+	rm -rf ../.keys/{{project}}.json
+	gcloud iam service-accounts create {{project}} \
+		--description="CDP Dev Service Account for {{USER}}" \
+		--display-name="{{project}}"
+	gcloud projects add-iam-policy-binding {{project}} \
+		--member="serviceAccount:{{project}}@{{project}}.iam.gserviceaccount.com" \
+		--role="roles/owner"
+	gcloud iam service-accounts keys create ../.keys/{{project}}.json \
+		--iam-account "{{project}}@{{project}}.iam.gserviceaccount.com"
+	echo "----------------------------------------------------------------------------"
+	echo "Sleeping for one minute while resources set up"
+	sleep 60
+	cp -rf ../.keys/{{project}}.json ../.keys/cdp-dev.json
+	echo "Key generation complete, updated ../.keys/cdp-dev.json to {{project}} key. Be sure to update GOOGLE_CREDENTIALS."

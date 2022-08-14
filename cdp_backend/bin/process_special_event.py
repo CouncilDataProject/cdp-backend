@@ -57,16 +57,12 @@ def main() -> None:
 
         # Read pipeline config
         with open(args.event_gather_config_file, "r") as open_resource:
-            config = EventGatherPipelineConfig.from_json(  # type: ignore
-                open_resource.read()
-            )
+            config = EventGatherPipelineConfig.from_json(open_resource.read())
 
         log.info("Parsing event details...")
         # Convert event details file to EventIngestionModel
         with open(args.event_details_file, "r") as open_resource:
-            ingestion_model = EventIngestionModel.from_json(  # type: ignore
-                open_resource.read()
-            )
+            ingestion_model = EventIngestionModel.from_json(open_resource.read())
 
             for session in ingestion_model.sessions:
                 # Copy if remote resource, otherwise use local file uri

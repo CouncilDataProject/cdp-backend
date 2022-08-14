@@ -6,15 +6,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional, Union
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import DataClassJsonMixin
 from gcsfs import GCSFileSystem
 
 ###############################################################################
 
 
-@dataclass_json
 @dataclass
-class EventGatherPipelineConfig:
+class EventGatherPipelineConfig(DataClassJsonMixin):
     """
     Configuration options for the CDP event gather pipeline.
 
@@ -79,9 +78,8 @@ class EventGatherPipelineConfig:
         return self._validated_gcs_bucket_name
 
 
-@dataclass_json
 @dataclass
-class EventIndexPipelineConfig:
+class EventIndexPipelineConfig(DataClassJsonMixin):
     """
     Configuration options for the CDP event index pipeline.
 

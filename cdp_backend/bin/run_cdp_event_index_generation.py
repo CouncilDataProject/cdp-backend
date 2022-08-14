@@ -85,9 +85,7 @@ def main() -> None:
     try:
         args = Args()
         with open(args.config_file, "r") as open_resource:
-            config = EventIndexPipelineConfig.from_json(  # type: ignore
-                open_resource.read()
-            )
+            config = EventIndexPipelineConfig.from_json(open_resource.read())
 
         # Get flow definition
         flow = pipeline.create_event_index_generation_pipeline(

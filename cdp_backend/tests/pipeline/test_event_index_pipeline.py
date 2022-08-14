@@ -157,10 +157,8 @@ def test_get_highest_confidence_transcript_for_each_session(
     """
     All we are really testing here is that we are reducing the set properly.
     """
-    result_selections = (
-        pipeline.get_highest_confidence_transcript_for_each_session.run(  # type: ignore
-            transcripts
-        )
+    result_selections = pipeline.get_highest_confidence_transcript_for_each_session.run(
+        transcripts
     )
     assert set(result_selections) == set(expected_selections)
 
@@ -211,9 +209,7 @@ def test_get_transcripts_per_event(
     transcripts: List[db_models.Transcript],
     expected_selections: List[pipeline.EventTranscripts],
 ) -> None:
-    result_selections = pipeline.get_transcripts_per_event.run(  # type: ignore
-        transcripts
-    )
+    result_selections = pipeline.get_transcripts_per_event.run(transcripts)
     for result_et, expected_et in zip(result_selections, expected_selections):
         assert result_et.event_id == expected_et.event_id
         assert set(

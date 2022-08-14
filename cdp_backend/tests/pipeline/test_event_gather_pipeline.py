@@ -90,7 +90,7 @@ def test_split_audio(
     mock_get_file_uri.return_value = get_file_uri_value
     mock_upload_file.return_value = audio_upload_file_return
 
-    audio_uri = pipeline.split_audio.run(  # type: ignore
+    audio_uri = pipeline.split_audio.run(
         session_content_hash=VIDEO_CONTENT_HASH,
         tmp_video_filepath=str(example_video),
         bucket="bucket",
@@ -139,10 +139,7 @@ def test_generate_thumbnails(
         example_static_thumbnail_url,
         example_hover_thumbnail_url,
     ]
-    (
-        static_thumbnail_url,
-        hover_thumbnail_url,
-    ) = pipeline.generate_thumbnails.run(  # type: ignore
+    (static_thumbnail_url, hover_thumbnail_url,) = pipeline.generate_thumbnails.run(
         session_content_hash=example_session_content_hash,
         tmp_video_path=str(example_video),
         event=event,
@@ -190,7 +187,7 @@ def test_generate_thumbnails(
 def test_construct_speech_to_text_phrases_context(
     event: EventIngestionModel, expected_phrases: List[str]
 ) -> None:
-    phrases = pipeline.construct_speech_to_text_phrases_context.run(  # type: ignore
+    phrases = pipeline.construct_speech_to_text_phrases_context.run(
         event,
     )
 
@@ -261,7 +258,7 @@ def test_generate_transcript(
     state = flow.run()
 
     # Check state and results
-    assert state.is_successful()  # type: ignore
+    assert state.is_successful()
 
 
 example_person = ingestion_models.Person(name="Bob Boberson")
@@ -554,7 +551,7 @@ def test_store_event_processing_results(
         if fail_file_uploads:
             mock_upload_file.side_effect = FileNotFoundError()
 
-        pipeline.store_event_processing_results.run(  # type: ignore
+        pipeline.store_event_processing_results.run(
             event=event,
             session_processing_results=session_processing_results,
             credentials_file="fake/credentials.json",
@@ -636,7 +633,7 @@ def test_convert_video_and_handle_host(
     (
         mp4_filepath,
         session_video_hosted_url,
-    ) = pipeline.convert_video_and_handle_host.run(  # type: ignore
+    ) = pipeline.convert_video_and_handle_host.run(
         session_content_hash="abc123",
         video_filepath=video_filepath,
         session=session,
