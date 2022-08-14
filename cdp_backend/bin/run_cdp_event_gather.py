@@ -82,9 +82,7 @@ def main() -> None:
     try:
         args = Args()
         with open(args.config_file, "r") as open_resource:
-            config = EventGatherPipelineConfig.from_json(  # type: ignore
-                open_resource.read()
-            )
+            config = EventGatherPipelineConfig.from_json(open_resource.read())
 
         # Get flow definition
         flow = pipeline.create_event_gather_flow(

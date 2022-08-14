@@ -171,8 +171,8 @@ def create_event_gather_flow(
 
                 # Generate transcript
                 transcript_uri, transcript = generate_transcript(
-                    session_content_hash=session_content_hash,  # type: ignore
-                    audio_uri=audio_uri,  # type: ignore
+                    session_content_hash=session_content_hash,
+                    audio_uri=audio_uri,
                     session=session,
                     event=event,
                     bucket=config.validated_gcs_bucket_name,
@@ -199,7 +199,7 @@ def create_event_gather_flow(
 
                 # Store all processed and provided data
                 session_processing_results.append(
-                    compile_session_processing_result(  # type: ignore
+                    compile_session_processing_result(
                         session=session,
                         session_video_hosted_url=session_video_hosted_url,
                         session_content_hash=session_content_hash,
@@ -691,7 +691,7 @@ def finalize_and_archive_transcript(
 
     # Dump to JSON
     with open(transcript_save_path, "w") as open_resource:
-        open_resource.write(transcript.to_json())  # type: ignore
+        open_resource.write(transcript.to_json())
 
     # Store to file store
     transcript_file_uri = fs_functions.upload_file(
@@ -753,7 +753,7 @@ def check_for_existing_transcript(
     if transcript_exists:
         fs = GCSFileSystem(token=credentials_file)
         with fs.open(transcript_uri, "r") as open_resource:
-            transcript = Transcript.from_json(open_resource.read())  # type: ignore
+            transcript = Transcript.from_json(open_resource.read())
     else:
         transcript = None
 
@@ -865,7 +865,7 @@ def generate_transcript(
     )
     result_transcript.name = "merge_in_memory_transcript"
 
-    return (result_transcript_uri, result_transcript)  # type: ignore
+    return (result_transcript_uri, result_transcript)
 
 
 @task(nout=2)
@@ -976,7 +976,7 @@ def _process_person_ingestion(
     # So, if the same person is referenced multiple times in the ingestion model
     # but most of those references have the same data and only a few have different data
     # the produced JSON string will note the differences and run when it needs to.
-    person_cache_key = person.to_json()  # type: ignore
+    person_cache_key = person.to_json()
 
     if person_cache_key not in upload_cache:
         # Store person picture file
@@ -1353,7 +1353,7 @@ def store_event_processing_results(
                         )
 
             else:
-                matter_db_model = None  # type: ignore
+                matter_db_model = None
 
             # Create minutes item
             minutes_item_db_model = db_functions.create_minutes_item(

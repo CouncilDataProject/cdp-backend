@@ -332,9 +332,13 @@ def create_minimal_person(
 
     db_person.name = _strip_field(person.name)
     db_person.is_active = person.is_active
-    db_person.router_string = db_models.Person.generate_router_string(
-        _strip_field(person.name)  # type: ignore
-    )
+    stripped_name = _strip_field(person.name)
+    if stripped_name:
+        db_person.router_string = db_models.Person.generate_router_string(stripped_name)
+    else:
+        raise ValueError(
+            f"Something went very wrong. Person doesn't have a name: {person}"
+        )
 
     return db_person
 
@@ -368,11 +372,7 @@ def create_person(
             kwargs={"google_credentials_file": credentials_file}
         )
 
-    if person.router_string is None:
-        db_person.router_string = db_models.Person.generate_router_string(
-            _strip_field(person.name)  # type: ignore
-        )
-    else:
+    if person.router_string is not None:
         db_person.router_string = _strip_field(person.router_string)
 
     # Optional

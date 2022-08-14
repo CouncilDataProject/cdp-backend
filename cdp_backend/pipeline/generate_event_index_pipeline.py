@@ -13,7 +13,7 @@ from typing import Dict, List, NamedTuple, Tuple
 import pandas as pd
 import pytz
 import rapidfuzz
-from dataclasses_json import dataclass_json
+from dataclasses_json import DataClassJsonMixin
 from gcsfs import GCSFileSystem
 from nltk import ngrams
 from nltk.stem import SnowballStemmer
@@ -141,17 +141,15 @@ def get_transcripts_per_event(
     return list(event_transcripts.values())
 
 
-@dataclass_json
 @dataclass
-class SentenceManager:
+class SentenceManager(DataClassJsonMixin):
     original_details: Sentence
     cleaned_text: str
     n_grams: List[Tuple[str]]
 
 
-@dataclass_json
 @dataclass
-class ContextualizedGram:
+class ContextualizedGram(DataClassJsonMixin):
     # We attach the id for simpler gram grouping
     # We attach the datetime for simpler datetime weighting
     event_id: str
@@ -201,7 +199,7 @@ def read_transcripts_and_generate_grams(
 
             # Init transcript
             with open(local_transcript_filepath, "r") as open_f:
-                transcript = Transcript.from_json(open_f.read())  # type: ignore
+                transcript = Transcript.from_json(open_f.read())
 
             # Get cleaned sentences by removing stop words
             cleaned_sentences: List[SentenceManager] = [
@@ -291,7 +289,7 @@ def convert_all_n_grams_to_dataframe(
     """
     return pd.DataFrame(
         [
-            n_gram.to_dict()  # type: ignore
+            n_gram.to_dict()
             for single_event_n_grams in all_events_n_grams
             for n_gram in single_event_n_grams
         ]

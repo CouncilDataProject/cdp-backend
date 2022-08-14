@@ -26,7 +26,7 @@ def test_transcribe(
     # Get URIs and read
     file_uri = str((resources_dir / webvtt_filename).absolute())
     with open(resources_dir / expected_filename) as open_resource:
-        expected = Transcript.from_json(open_resource.read())  # type: ignore
+        expected = Transcript.from_json(open_resource.read())
 
     # Generate transcript
     model = WebVTTSRModel()

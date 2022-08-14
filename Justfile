@@ -14,12 +14,15 @@ clean:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
-	rm -fr .coverage
+	rm -fr .coverage*
 	rm -fr coverage.xml
 	rm -fr htmlcov
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
 	rm -fr index
+	rm -fr abc123-cdp_*-transcript.json
+	rm -fr test.err
+	rm -fr test.out
 	
 
 # install with all deps

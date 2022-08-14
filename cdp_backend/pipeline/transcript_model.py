@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import DataClassJsonMixin
 
 ###############################################################################
 # Annotation Definitions
@@ -14,25 +14,22 @@ from dataclasses_json import dataclass_json
 # Docstrings for constants go _after_ the constant.
 
 
-@dataclass_json
 @dataclass
-class WordAnnotations:
+class WordAnnotations(DataClassJsonMixin):
     """
     Annotations that can appear on an individual word level.
     """
 
 
-@dataclass_json
 @dataclass
-class SentenceAnnotations:
+class SentenceAnnotations(DataClassJsonMixin):
     """
     Annotations that can appear on an individual sentence level.
     """
 
 
-@dataclass_json
 @dataclass
-class SectionAnnotation:
+class SectionAnnotation(DataClassJsonMixin):
     """
     A section annotation used for topic segmentation and minutes item alignment.
 
@@ -88,9 +85,8 @@ class SectionAnnotation:
     description: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class TranscriptAnnotations:
+class TranscriptAnnotations(DataClassJsonMixin):
     """
     Annotations that can appear (but are not guaranteed) for the whole transcript.
     """
@@ -101,9 +97,8 @@ class TranscriptAnnotations:
 ###############################################################################
 
 
-@dataclass_json
 @dataclass
-class Word:
+class Word(DataClassJsonMixin):
     """
     Data for a word in a transcript.
 
@@ -129,9 +124,8 @@ class Word:
     annotations: Optional[WordAnnotations] = None
 
 
-@dataclass_json
 @dataclass
-class Sentence:
+class Sentence(DataClassJsonMixin):
     """
     Data for a sentence in a transcript.
 
@@ -169,9 +163,8 @@ class Sentence:
     annotations: Optional[SentenceAnnotations] = None
 
 
-@dataclass_json
 @dataclass
-class Transcript:
+class Transcript(DataClassJsonMixin):
     """
     Transcript model for all transcripts in CDP databases / filestores.
 

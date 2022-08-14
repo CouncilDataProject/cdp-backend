@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import DataClassJsonMixin
 
 ###############################################################################
 
@@ -21,9 +21,8 @@ class IngestionModel:
 ###############################################################################
 
 
-@dataclass_json
 @dataclass
-class Person(IngestionModel):
+class Person(IngestionModel, DataClassJsonMixin):
     """
     Primarily the council members, this could technically include the mayor or city
     manager, or any other "normal" presenters and attendees of meetings.
@@ -51,9 +50,8 @@ class Person(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class Vote(IngestionModel):
+class Vote(IngestionModel, DataClassJsonMixin):
     """
     A reference tying a specific person and an event minutes item together.
 
@@ -68,9 +66,8 @@ class Vote(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class SupportingFile(IngestionModel):
+class SupportingFile(IngestionModel, DataClassJsonMixin):
     """
     A file related tied to a matter or minutes item.
 
@@ -84,9 +81,8 @@ class SupportingFile(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class Matter(IngestionModel):
+class Matter(IngestionModel, DataClassJsonMixin):
     """
     A matter is a specific legislative document. A bill, resolution, initiative, etc.
     """
@@ -99,9 +95,8 @@ class Matter(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class MinutesItem(IngestionModel):
+class MinutesItem(IngestionModel, DataClassJsonMixin):
     """
     An item referenced during a meeting.
     This can be a matter but it can be a presentation or budget file, etc.
@@ -112,9 +107,8 @@ class MinutesItem(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class EventMinutesItem(IngestionModel):
+class EventMinutesItem(IngestionModel, DataClassJsonMixin):
     """
     Details about a specific item during an event.
 
@@ -135,9 +129,8 @@ class EventMinutesItem(IngestionModel):
     votes: Optional[List[Vote]] = None
 
 
-@dataclass_json
 @dataclass
-class Session(IngestionModel):
+class Session(IngestionModel, DataClassJsonMixin):
     """
     A session is a working period for an event.
     For example, an event could have a morning and afternoon session.
@@ -150,9 +143,8 @@ class Session(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class Body(IngestionModel):
+class Body(IngestionModel, DataClassJsonMixin):
     """
     A meeting body. This can be full council, a subcommittee, or "off-council" matters
     such as election debates.
@@ -172,9 +164,8 @@ class Body(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class Role(IngestionModel):
+class Role(IngestionModel, DataClassJsonMixin):
     """
     A role is a person's job for a period of time in the city council. A person can
     (and should) have multiple roles. For example: a person has two terms as city
@@ -197,9 +188,8 @@ class Role(IngestionModel):
     external_source_id: Optional[str] = None
 
 
-@dataclass_json
 @dataclass
-class Seat(IngestionModel):
+class Seat(IngestionModel, DataClassJsonMixin):
     """
     An electable office on the City Council. I.E. "Position 9".
 
@@ -217,9 +207,8 @@ class Seat(IngestionModel):
     roles: Optional[List[Role]] = None
 
 
-@dataclass_json
 @dataclass
-class EventIngestionModel(IngestionModel):
+class EventIngestionModel(IngestionModel, DataClassJsonMixin):
     """
     An event can be a normally scheduled meeting, a special event such as a press
     conference or election debate, and, can be upcoming or historical.

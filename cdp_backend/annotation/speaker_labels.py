@@ -101,7 +101,7 @@ def annotate(
     # Load transcript
     if isinstance(transcript, (str, Path)):
         with open(transcript, "r") as open_f:
-            loaded_transcript = Transcript.from_json(open_f.read())  # type: ignore
+            loaded_transcript = Transcript.from_json(open_f.read())
     else:
         loaded_transcript = transcript
 
@@ -177,9 +177,13 @@ def annotate(
             for speaker, scores in chunk_scores.items():
                 mean_scores[speaker] = sum(scores) / len(scores)
 
-            # Get highest score speaker
-            highest_mean_speaker = max(mean_scores, key=mean_scores.get)  # type: ignore
-            highest_mean_score = mean_scores[highest_mean_speaker]
+            # Get highest scoring speaker and their score
+            highest_mean_speaker = ""
+            highest_mean_score = 0.0
+            for speaker, score in mean_scores.items():
+                if score > highest_mean_score:
+                    highest_mean_speaker = speaker
+                    highest_mean_score = score
 
             # Threshold holdout
             if highest_mean_score >= min_sentence_mean_confidence:
