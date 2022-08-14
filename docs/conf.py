@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# cdp_backend documentation build configuration file, created by
+# cdp-backend documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -26,6 +26,7 @@ import cdp_backend
 sys.path.insert(0, os.path.abspath(".."))
 
 
+
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -35,18 +36,24 @@ sys.path.insert(0, os.path.abspath(".."))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named "sphinx.ext.*") or your custom ones.
 extensions = [
+    # Sphinx lib ext
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.mathjax",
+    # Installed Sphinx ext
+    "sphinx_copybutton",
+    # Doc installs
     "m2r2",
+    "numpydoc", 
 ]
 
-# Control napoleon
-napoleon_google_docstring = False
-napolean_include_init_with_doc = True
-napoleon_use_ivar = True
-napoleon_use_param = False
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
+
+numpydoc_show_class_members = False
+
+sphinx_tabs_disable_tab_closing = True
 
 # Control autodoc
 autoclass_content = "both"  # include init doc with class
@@ -63,13 +70,13 @@ source_suffix = {
     ".md": "markdown",
 }
 
-# The master toctree document.
-master_doc = "index"
+# The main toctree document.
+main_doc = "index"
 
 # General information about the project.
-project = u"cdp-backend"
-copyright = u"2022, Council Data Project Contributors"
-author = u"Council Data Project Contributors"
+project = "cdp-backend"
+copyright = "2022"
+author = "Eva Maxfield Brown, To Huynh, Isaac Na, Council Data Project Contributors"
 
 # The version info for the project you"re documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -90,7 +97,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".template"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -146,10 +153,10 @@ latex_elements = {
 # [howto, manual, or own class]).
 latex_documents = [
     (
-        master_doc,
+        main_doc,
         "cdp_backend.tex",
-        u"cdp-backend Documentation",
-        u"Council Data Project Contributors",
+        "cdp-backend Documentation",
+        "Eva Maxfield Brown, To Huynh, Isaac Na, Council Data Project Contributors",
         "manual",
     ),
 ]
@@ -159,7 +166,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "cdp_backend", u"cdp-backend Documentation", [author], 1)]
+man_pages = [(main_doc, "cdp_backend", "cdp-backend Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------
@@ -169,16 +176,13 @@ man_pages = [(master_doc, "cdp_backend", u"cdp-backend Documentation", [author],
 #  dir menu entry, description, category)
 texinfo_documents = [
     (
-        master_doc,
+        main_doc,
         "cdp_backend",
-        u"cdp-backend Documentation",
+        "cdp-backend Documentation",
         author,
         "cdp_backend",
-        "One line description of project.",
-        "Miscellaneous",
     ),
 ]
-
 
 # -- Extra docstring configurations ------------------------------------
 def no_namedtuple_attrib_docstring(app, what, name, obj, options, lines):

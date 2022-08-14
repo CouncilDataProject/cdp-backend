@@ -1,0 +1,193 @@
+# package build
+# https://peps.python.org/pep-0517/
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+# package basics
+# https://peps.python.org/pep-0621/
+[project]
+name = "cdp-backend"
+description = "Data storage utilities and processing pipelines used by CDP instances."
+keywords = [
+  "civic technology",
+  "open government",
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT License" }
+authors = [
+  { name = "Eva Maxfield Brown", email = "evamaxfieldbrown@gmail.com" },
+  { name = "To Huynh" },
+  { name = "Isaac Na" },
+  { name = "Council Data Project Contributors" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dynamic = ["version"]
+dependencies = [
+  "aiohttp>=3.8.1",
+  "dataclasses-json>=0.5",
+  "fireo>=1.5",
+  "fsspec",  # Version pin set by gcsfs
+  "gcsfs>=2022.7.1",
+  "requests>=2.26.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/CouncilDataProject/cdp-backend"
+"Bug Tracker" = "https://github.com/CouncilDataProject/cdp-backend/issues"
+Documentation = "https://CouncilDataProject.github.io/cdp-backend"
+"User Support" = "https://github.com/CouncilDataProject/cdp-backend/issues"
+
+# extra dependencies
+# https://peps.python.org/pep-0621/#dependencies-optional-dependencies
+[project.optional-dependencies]
+infrastructure = [
+  "pulumi~=3.31",
+  "pulumi-google-native~=0.18",
+  "pulumi-gcp~=6.0",
+]
+pipeline = [
+  "dask[distributed]>=2021.7.0",
+  "ffmpeg-python==0.2.0",
+  "google-cloud-speech~=2.13",
+  "graphviz~=0.16",
+  "imageio~=2.18",
+  "imageio-ffmpeg~=0.4",
+  "m3u8-To-MP4==0.1.10",
+  "nltk~=3.6",
+  "numpy~=1.0",
+  "pandas~=1.2",
+  "prefect~=1.2",
+  "pyarrow~=8.0",
+  "pydub~=0.25.1",
+  "rapidfuzz~=2.0",
+  "spacy~=3.0",
+  "torch~=1.10",
+  "tqdm~=4.62",
+  "transformers~=4.16",
+  "truecase~=0.0.14",
+  "webvtt-py~=0.4.6",
+  "yt-dlp>=2022.2.4",
+  "vimeo_downloader~=0.4"
+]
+lint = [
+  "black>=22.3.0",
+  "check-manifest>=0.48",
+  "flake8>=3.8.3",
+  "flake8-debugger>=3.2.1",
+  "flake8-pyprojecttoml",
+  "flake8-typing-imports>=1.9.0",
+  "isort>=5.7.0",
+  "mypy>=0.790",
+  "pre-commit>=2.20.0",
+  "types-pytz>=2022.1.2",
+  "types-requests>=2.28.5",
+]
+test = [
+  # Pytest
+  "coverage>=5.1",
+  "pytest>=5.4.3",
+  "pytest-cov>=2.9.0",
+  "pytest-raises>=0.11",
+  # Extras
+  "networkx>=2.5",
+  "pydot>=1.4",
+]
+docs = [
+  # Sphinx + Doc Gen + Styling
+  "m2r2>=0.2.7",
+  "Sphinx>=4.0.0",
+  "furo>=2022.4.7",
+  # Extensions
+  "numpydoc",
+  "sphinx-copybutton",
+  # TODO: Pins
+  "docutils>=0.18,<0.19",
+  # Pipeline viz
+  "prefect[viz]",
+]
+dev = [
+  "bokeh>=2.3.2",
+  "ipython>=8.4.0",
+]
+
+# entry points
+# https://peps.python.org/pep-0621/#entry-points
+[project.entry-points."console_scripts"]
+clean_cdp_database = "cdp_backend.bin.clean_cdp_database:main"
+clean_cdp_filestore = "cdp_backend.bin.clean_cdp_filestore:main"
+create_cdp_database_uml = "cdp_backend.bin.create_cdp_database_uml:main"
+create_cdp_ingestion_models_doc = "cdp_backend.bin.create_cdp_ingestion_models_doc:main"
+create_cdp_transcript_model_doc = "cdp_backend.bin.create_cdp_transcript_model_doc:main"
+create_cdp_event_gather_flow_viz = "cdp_backend.bin.create_cdp_event_gather_flow_viz:main"
+run_cdp_event_gather = "cdp_backend.bin.run_cdp_event_gather:main"
+run_cdp_event_index_generation = "cdp_backend.bin.run_cdp_event_index_generation:main"
+process_cdp_event_index_chunk = "cdp_backend.bin.process_cdp_event_index_chunk:main"
+search_cdp_events = "cdp_backend.bin.search_cdp_events:main"
+process_special_event = "cdp_backend.bin.process_special_event:main"
+add_content_hash_to_sessions = "cdp_backend.bin.add_content_hash_to_sessions:main"
+
+# build settings
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+exclude = ["*docs/*", "*tests/*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "py.typed"]
+
+# tools
+[tool.black]
+line-length = 88
+
+[tool.isort]
+ensure_newline_before_comments = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+profile = "black"
+use_parentheses = true
+
+# https://github.com/mgedmin/check-manifest#configuration
+[tool.check-manifest]
+ignore = [
+  ".editorconfig",
+  ".pre-commit-config.yaml",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "Justfile",
+  ".cookiecutter.yaml",
+  "*docs/*",
+]
+
+[tool.mypy]
+files = "cdp_backend/*.py"
+ignore_missing_imports = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+show_error_codes = true
+
+# https://flake8.pycqa.org/en/latest/user/options.html
+# https://gitlab.com/durko/flake8-pyprojecttoml
+[tool.flake8]
+max-line-length = 88
+ignore = "E203,E402,W291,W503"
+min-python-version = "3.8.0"
+per-file-ignores = [
+  "__init__.py:F401",
+]
