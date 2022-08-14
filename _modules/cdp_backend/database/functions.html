@@ -5,9 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.database.functions - cdp-backend 3.1.3 documentation</title>
+        <title>cdp_backend.database.functions - cdp-backend 0.1.dev1+g2095b24 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -122,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 3.1.3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g2095b24 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 3.1.3 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2095b24 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -547,9 +548,13 @@
 
     <span class="n">db_person</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="n">db_person</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">is_active</span>
-    <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">generate_router_string</span><span class="p">(</span>
-        <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-    <span class="p">)</span>
+    <span class="n">stripped_name</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stripped_name</span><span class="p">:</span>
+        <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">generate_router_string</span><span class="p">(</span><span class="n">stripped_name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Something went very wrong. Person doesn&#39;t have a name: </span><span class="si">{</span><span class="n">person</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">db_person</span></div>
 
@@ -583,11 +588,7 @@
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;google_credentials_file&quot;</span><span class="p">:</span> <span class="n">credentials_file</span><span class="p">}</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">router_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">generate_router_string</span><span class="p">(</span>
-            <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">router_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">db_person</span><span class="o">.</span><span class="n">router_string</span> <span class="o">=</span> <span class="n">_strip_field</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">router_string</span><span class="p">)</span>
 
     <span class="c1"># Optional</span>
@@ -739,7 +740,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, Council Data Project Contributors
+                Copyright &#169; 2022
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -767,5 +768,7 @@
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
     </body>
 </html>

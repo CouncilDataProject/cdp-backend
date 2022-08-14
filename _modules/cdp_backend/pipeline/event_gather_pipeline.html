@@ -5,9 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 3.1.3 documentation</title>
+        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+g2095b24 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -122,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 3.1.3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g2095b24 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 3.1.3 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2095b24 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -386,8 +387,8 @@
 
                 <span class="c1"># Generate transcript</span>
                 <span class="n">transcript_uri</span><span class="p">,</span> <span class="n">transcript</span> <span class="o">=</span> <span class="n">generate_transcript</span><span class="p">(</span>
-                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
-                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
+                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
                     <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
                     <span class="n">event</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
                     <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
@@ -414,7 +415,7 @@
 
                 <span class="c1"># Store all processed and provided data</span>
                 <span class="n">session_processing_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">compile_session_processing_result</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                    <span class="n">compile_session_processing_result</span><span class="p">(</span>
                         <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
                         <span class="n">session_video_hosted_url</span><span class="o">=</span><span class="n">session_video_hosted_url</span><span class="p">,</span>
                         <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
@@ -906,7 +907,7 @@
 
     <span class="c1"># Dump to JSON</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcript_save_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
-        <span class="n">open_resource</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">transcript</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+        <span class="n">open_resource</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">transcript</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
 
     <span class="c1"># Store to file store</span>
     <span class="n">transcript_file_uri</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
@@ -968,7 +969,7 @@
     <span class="k">if</span> <span class="n">transcript_exists</span><span class="p">:</span>
         <span class="n">fs</span> <span class="o">=</span> <span class="n">GCSFileSystem</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">transcript_uri</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_resource</span><span class="p">:</span>
-            <span class="n">transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+            <span class="n">transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_resource</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">transcript</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1080,7 +1081,7 @@
     <span class="p">)</span>
     <span class="n">result_transcript</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;merge_in_memory_transcript&quot;</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">result_transcript_uri</span><span class="p">,</span> <span class="n">result_transcript</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">result_transcript_uri</span><span class="p">,</span> <span class="n">result_transcript</span><span class="p">)</span></div>
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1191,7 +1192,7 @@
     <span class="c1"># So, if the same person is referenced multiple times in the ingestion model</span>
     <span class="c1"># but most of those references have the same data and only a few have different data</span>
     <span class="c1"># the produced JSON string will note the differences and run when it needs to.</span>
-    <span class="n">person_cache_key</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+    <span class="n">person_cache_key</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">person_cache_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">upload_cache</span><span class="p">:</span>
         <span class="c1"># Store person picture file</span>
@@ -1568,7 +1569,7 @@
                         <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">matter_db_model</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
+                <span class="n">matter_db_model</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="c1"># Create minutes item</span>
             <span class="n">minutes_item_db_model</span> <span class="o">=</span> <span class="n">db_functions</span><span class="o">.</span><span class="n">create_minutes_item</span><span class="p">(</span>
@@ -1777,7 +1778,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, Council Data Project Contributors
+                Copyright &#169; 2022
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -1805,5 +1806,7 @@
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
     </body>
 </html>

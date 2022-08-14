@@ -6,9 +6,10 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.pipeline package" href="cdp_backend.pipeline.html" /><link rel="prev" title="cdp_backend.file_store package" href="cdp_backend.file_store.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.infrastructure package - cdp-backend 3.1.3 documentation</title>
+        <title>cdp_backend.infrastructure package - cdp-backend 0.1.dev1+g2095b24 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -123,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 3.1.3 documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g2095b24 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 3.1.3 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2095b24 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -228,27 +229,34 @@
 backend stacks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gcp_project_id</strong> (<em>str</em>) – The id of the gcp_project, the Pulumi stack, and any other required
+<dd class="field-odd"><dl class="simple">
+<dt><strong>gcp_project_id: str</strong></dt><dd><p>The id of the gcp_project, the Pulumi stack, and any other required
 names for resources created during infrastructure creation will use this id
 as a prefix.
 I.E. <cite>cdp-seattle</cite> would create a Cloud Firestore instance called
-<cite>cdp-seattle</cite>, a GCP bucket called <cite>cdp-seattle</cite>, etc.</p></li>
-<li><p><strong>municipality_name</strong> (<em>str</em>) – The name of the municipality this instance will be for.
-I.E. “Seattle”, “King County”, etc.</p></li>
-<li><p><strong>hosting_github_url</strong> (<em>str</em>) – The GitHub repo this instance configuration details will be stored.
-I.E. <a class="reference external" href="https://github.com/councildataproject/seattle-staging">https://github.com/councildataproject/seattle-staging</a></p></li>
-<li><p><strong>hosting_web_app_address</strong> (<em>str</em>) – The web address for this instances web portal.
-I.E. <a class="reference external" href="https://councildataproject.org/seattle-staging">https://councildataproject.org/seattle-staging</a></p></li>
-<li><p><strong>firestore_location</strong> (<em>str</em>) – The location for the Cloud Firestore database and file storage servers
+<cite>cdp-seattle</cite>, a GCP bucket called <cite>cdp-seattle</cite>, etc.</p>
+</dd>
+<dt><strong>municipality_name: str</strong></dt><dd><p>The name of the municipality this instance will be for.
+I.E. “Seattle”, “King County”, etc.</p>
+</dd>
+<dt><strong>hosting_github_url: str</strong></dt><dd><p>The GitHub repo this instance configuration details will be stored.
+I.E. <a class="reference external" href="https://github.com/councildataproject/seattle-staging">https://github.com/councildataproject/seattle-staging</a></p>
+</dd>
+<dt><strong>hosting_web_app_address: str</strong></dt><dd><p>The web address for this instances web portal.
+I.E. <a class="reference external" href="https://councildataproject.org/seattle-staging">https://councildataproject.org/seattle-staging</a></p>
+</dd>
+<dt><strong>firestore_location: str</strong></dt><dd><p>The location for the Cloud Firestore database and file storage servers
 to be hosted.
 List of locations: <a class="reference external" href="https://firebase.google.com/docs/firestore/locations">https://firebase.google.com/docs/firestore/locations</a>
-Default: “us-west2”</p></li>
-<li><p><strong>governing_body</strong> (<em>str</em>) – What governing body this instance will archive.
-Default: GoverningBody.other</p></li>
-<li><p><strong>opts</strong> (<em>pulumi.ResourceOptions</em>) – Extra resource options to initialize the entire stack with.
-Default: None</p></li>
-</ul>
+Default: “us-west2”</p>
+</dd>
+<dt><strong>governing_body: str</strong></dt><dd><p>What governing body this instance will archive.
+Default: GoverningBody.other</p>
+</dd>
+<dt><strong>opts: pulumi.ResourceOptions</strong></dt><dd><p>Extra resource options to initialize the entire stack with.
+Default: None</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -323,7 +331,7 @@ the cookiecutter it is likely for dev infrastructures.</p>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, Council Data Project Contributors
+                Copyright &#169; 2022
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -372,5 +380,7 @@ the cookiecutter it is likely for dev infrastructures.</p>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
     </body>
 </html>

@@ -5,9 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.annotation.speaker_labels - cdp-backend 3.1.3 documentation</title>
+        <title>cdp_backend.annotation.speaker_labels - cdp-backend 0.1.dev1+g2095b24 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -122,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 3.1.3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g2095b24 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 3.1.3 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2095b24 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -316,7 +317,7 @@
     <span class="c1"># Load transcript</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_f</span><span class="p">:</span>
-            <span class="n">loaded_transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># type: ignore</span>
+            <span class="n">loaded_transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">loaded_transcript</span> <span class="o">=</span> <span class="n">transcript</span>
 
@@ -392,9 +393,13 @@
             <span class="k">for</span> <span class="n">speaker</span><span class="p">,</span> <span class="n">scores</span> <span class="ow">in</span> <span class="n">chunk_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">mean_scores</span><span class="p">[</span><span class="n">speaker</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 
-            <span class="c1"># Get highest score speaker</span>
-            <span class="n">highest_mean_speaker</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">mean_scores</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">mean_scores</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-            <span class="n">highest_mean_score</span> <span class="o">=</span> <span class="n">mean_scores</span><span class="p">[</span><span class="n">highest_mean_speaker</span><span class="p">]</span>
+            <span class="c1"># Get highest scoring speaker and their score</span>
+            <span class="n">highest_mean_speaker</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">highest_mean_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">speaker</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">mean_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">highest_mean_score</span><span class="p">:</span>
+                    <span class="n">highest_mean_speaker</span> <span class="o">=</span> <span class="n">speaker</span>
+                    <span class="n">highest_mean_score</span> <span class="o">=</span> <span class="n">score</span>
 
             <span class="c1"># Threshold holdout</span>
             <span class="k">if</span> <span class="n">highest_mean_score</span> <span class="o">&gt;=</span> <span class="n">min_sentence_mean_confidence</span><span class="p">:</span>
@@ -431,7 +436,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, Council Data Project Contributors
+                Copyright &#169; 2022
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -459,5 +464,7 @@
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
     </body>
 </html>

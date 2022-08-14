@@ -6,9 +6,10 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.file_store package" href="cdp_backend.file_store.html" /><link rel="prev" title="cdp_backend.bin package" href="cdp_backend.bin.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.database package - cdp-backend 3.1.3 documentation</title>
+        <title>cdp_backend.database package - cdp-backend 0.1.dev1+g2095b24 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -123,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 3.1.3 documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g2095b24 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 3.1.3 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2095b24 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -466,13 +467,16 @@ example.</p>
 using the primary keys of the database model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>db_model</strong> (<em>Model</em>) – The initialized database model.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>db_model: Model</strong></dt><dd><p>The initialized database model.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>db_model</strong> – The updated database model with the doc key set.</p>
+<dd class="field-even"><dl class="simple">
+<dt>db_model: Model</dt><dd><p>The updated database model with the doc key set.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Model</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -483,18 +487,21 @@ using the primary keys of the database model.</p>
 <dd><p>Get all documents in a collection as a single list but request in batches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>db_model</strong> (<em>Model</em>) – The CDP database model to get all documents for.</p></li>
-<li><p><strong>credentials_file</strong> (<em>str</em>) – Path to Google Service Account Credentials JSON file.</p></li>
-<li><p><strong>batch_size</strong> (<em>int</em>) – How many documents to request at a single time.
-Default: 1000</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>db_model: Model</strong></dt><dd><p>The CDP database model to get all documents for.</p>
+</dd>
+<dt><strong>credentials_file: str</strong></dt><dd><p>Path to Google Service Account Credentials JSON file.</p>
+</dd>
+<dt><strong>batch_size: int</strong></dt><dd><p>How many documents to request at a single time.
+Default: 1000</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>documents</strong> – All documents in the model’s collection.</p>
+<dd class="field-even"><dl class="simple">
+<dt>documents: List[Model]</dt><dd><p>All documents in the model’s collection.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Model]</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -505,18 +512,22 @@ Default: 1000</p></li>
 <dd><p>Upload or update an existing database model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>db_model</strong> (<em>Model</em>) – The database model to upload.</p></li>
-<li><p><strong>credentials_file</strong> (<em>str</em>) – Path to Google Service Account Credentials JSON file.</p></li>
-<li><p><strong>transaction</strong> (<em>Optional[Transaction]</em>) – The transaction to write this model during.</p></li>
-<li><p><strong>batch</strong> (<em>Optional[WriteBatch]</em>) – The write batch to use during uploading this model.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>db_model: Model</strong></dt><dd><p>The database model to upload.</p>
+</dd>
+<dt><strong>credentials_file: str</strong></dt><dd><p>Path to Google Service Account Credentials JSON file.</p>
+</dd>
+<dt><strong>transaction: Optional[Transaction]</strong></dt><dd><p>The transaction to write this model during.</p>
+</dd>
+<dt><strong>batch: Optional[WriteBatch]</strong></dt><dd><p>The write batch to use during uploading this model.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>db_model</strong> – The uploaded, or updated, database model.</p>
+<dd class="field-even"><dl class="simple">
+<dt>db_model: Model</dt><dd><p>The uploaded, or updated, database model.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Model</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1694,12 +1705,14 @@ For example, An event could have a morning and afternoon session.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.types.IndexedField.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.database.types.IndexedField.name" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.types.IndexedField.order">
 <span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.database.types.IndexedField.order" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1711,7 +1724,8 @@ For example, An event could have a morning and afternoon session.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.types.IndexedFieldSet.fields">
 <span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.database.types.IndexedField" title="cdp_backend.database.types.IndexedField"><span class="pre">IndexedField</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.database.types.IndexedFieldSet.fields" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1725,11 +1739,13 @@ For example, An event could have a morning and afternoon session.</p>
 <p>An object containing uniqueness data of a database model object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>is_unique</strong> (<em>bool</em>) – A boolean on whether the model is unique by primary key
-in the database collection.</p></li>
-<li><p><strong>conflicting_models</strong> (<em>List[Model]</em>) – All existing models that share the same primary keys as the input model.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>is_unique: bool</strong></dt><dd><p>A boolean on whether the model is unique by primary key
+in the database collection.</p>
+</dd>
+<dt><strong>conflicting_models: List[Model]</strong></dt><dd><p>All existing models that share the same primary keys as the input model.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <dl class="py attribute">
@@ -1750,13 +1766,16 @@ in the database collection.</p></li>
 <dd><p>Create a validator func that validates a value is one of the valid values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>constant_cls</strong> (<em>Type</em>) – The constant class that contains the valid values.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>constant_cls: Type</strong></dt><dd><p>The constant class that contains the valid values.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>validator_func</strong> – The validator func.</p>
+<dd class="field-even"><dl class="simple">
+<dt>validator_func: Callable[[str], bool]</dt><dd><p>The validator func.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Callable[[str], bool]</p>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1772,13 +1791,16 @@ To remove <cite>None</cite> as a viable input, set the database model field <cit
 <p>None is a valid option.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>email</strong> (<em>Optional[str]</em>) – The email to validate.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>email: Optional[str]</strong></dt><dd><p>The email to validate.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
+<dd class="field-even"><dl class="simple">
+<dt>status: bool</dt><dd><p>The validation status.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1795,13 +1817,16 @@ To remove <cite>None</cite> as a viable input, set the database model field <cit
 <p>None is a valid option.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>uri</strong> (<em>Optional[str]</em>) – The URI to validate resource existance for.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>uri: Optional[str]</strong></dt><dd><p>The URI to validate resource existance for.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
+<dd class="field-even"><dl class="simple">
+<dt>status: bool</dt><dd><p>The validation status.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1814,13 +1839,16 @@ characters and optionally include a hyphen.</p>
 <p>None is a valid option.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>router_string</strong> (<em>Optional[str]</em>) – The router string to validate.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>router_string: Optional[str]</strong></dt><dd><p>The router string to validate.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>status</strong> – The validation status.</p>
+<dd class="field-even"><dl class="simple">
+<dt>status: bool</dt><dd><p>The validation status.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1832,18 +1860,20 @@ characters and optionally include a hyphen.</p>
 with a preference for https.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – The target resource url.</p></li>
-<li><p><strong>resolve_func</strong> (<em>func(url: str) -&gt; bool</em>) – A function that takes in a str URL and determines whether it is reachable.
-Default is our “resource_exists” func</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>url: str</strong></dt><dd><p>The target resource url.</p>
+</dd>
+<dt><strong>resolve_func: func(url: str) -&gt; bool</strong></dt><dd><p>A function that takes in a str URL and determines whether it is reachable.
+Default is our “resource_exists” func</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>resource_url</strong> – The url with the correct protocol based on where the resource exists.
+<dd class="field-even"><dl class="simple">
+<dt>resource_url: str</dt><dd><p>The url with the correct protocol based on where the resource exists.
 If does not exist, a LookupError is raised.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1884,7 +1914,7 @@ If does not exist, a LookupError is raised.</p>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, Council Data Project Contributors
+                Copyright &#169; 2022
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -1937,5 +1967,7 @@ If does not exist, a LookupError is raised.</p>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
     </body>
 </html>
