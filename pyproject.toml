@@ -148,7 +148,7 @@ include-package-data = true
 exclude = ["*docs/*", "*tests/*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.yaml", "py.typed"]
+"*" = ["*.yaml", "py.typed", "*.csv"]
 
 # tools
 [tool.black]
@@ -173,6 +173,17 @@ ignore = [
   "Justfile",
   ".cookiecutter.yaml",
   "*docs/*",
+  "codecov.yml",
+  "dev-infrastructure/*",
+  "example-configs/*",
+  "*_captions.vtt",
+  "*_transcript.json",
+  "*.vtt",
+  "*example_*.mp4",
+  "*example_*.mkv",
+  "*.parquet",
+  "*fake_*",
+  "*generated_*",
 ]
 
 [tool.mypy]
