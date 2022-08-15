@@ -59,10 +59,10 @@ following commands to setup your local machine with credentials to both services
 
 ```bash
 cd cdp-backend/dev-infrastructure
-make login
-make init project={project-name}
-make gen-key project={project-name}
-make build
+just login
+just init project={project-name}
+just gen-key project={project-name}
+just build
 ```
 
 After generating the key, name your `key` file in `cdp-backend/.keys` to `cdp-dev.json`. In case you have many keys, note that by default, the random and minimal event pipelines use the key named `cdp-dev.json`.
@@ -74,19 +74,19 @@ All of these commands should be run from within the `cdp-backend/dev-infrastruct
 -   To log in to GCloud and Pulumi:
 
     ```bash
-    make login
+    just login
     ```
 
 -   To create a new service account JSON key:
 
     ```bash
-    make gen-key project={project-name}
+    just gen-key project={project-name}
     ```
 
 -   To create a new dev infrastructure:
 
     ```bash
-    make init project={project-name}
+    just init project={project-name}
     ```
 
     And follow the link logged to link a billing account to the created project.
@@ -96,10 +96,10 @@ All of these commands should be run from within the `cdp-backend/dev-infrastruct
 -   To set up infrastructure:
 
     ```bash
-    make build
+    just build
     ```
 
-    **Note:** You should run `make gen-key` prior to build and ensure you have
+    **Note:** You should run `just gen-key` prior to build and ensure you have
     `GOOGLE_CREDENTIALS` set in your environment variables using:
 
     ```bash
@@ -117,7 +117,7 @@ All of these commands should be run from within the `cdp-backend/dev-infrastruct
 -   To clean and remove all database documents and file store objects:
 
     ```bash
-    make clean key={path-to-key}
+    just clean key={path-to-key}
     ```
 
     **Note:** Cleaning infrastructure is best practice when comparing pipeline
@@ -126,18 +126,18 @@ All of these commands should be run from within the `cdp-backend/dev-infrastruct
 -   To reset infrastructure but reuse the same Google project:
 
     ```bash
-    make reset
+    just reset
     ```
 
     **Note:** Reseting infrastructure is likely required when iterating on
     database models (specifically database indices). Cleaning infrastructure
-    should always be attempted first before reset or destroy as `make clean`
+    should always be attempted first before reset or destroy as `just clean`
     will not use any extra Google Cloud (or Firebase) projects and applications.
 
 -   To delete all Pulumi and GCloud resources entirely:
 
     ```bash
-    make destroy project={project-name}
+    just destroy project={project-name}
     ```
 
     **Note:** This will delete the GCP project.
@@ -147,8 +147,8 @@ limits for how many projects and Firestore applications a single user can have.
 
 ### All Commands
 
--   See Makefile commands with `make help`.
-    Or simply open the Makefile. All the commands are decently easy to follow.
+-   See Justfile commands with `just`.
+    Or simply open the Justfile. All the commands are decently easy to follow.
 -   See Pulumi [CLI documentation](https://www.pulumi.com/docs/reference/cli/)
     for all Pulumi commands.
 
@@ -160,18 +160,18 @@ parameters, please see the documentation for the
 
 ## Running Pipelines Against Dev Infra
 
-Once you have a dev infrastructure set up and a key downloaded (`make gen-key`)
+Once you have a dev infrastructure set up and a key downloaded (`just gen-key`)
 you can run pipelines and store data in the infrastructure by moving up to the
 base directory of this repository and running the following from `cdp-backend/`:
 
 -   To run a semi-random (large permutation) event pipeline:
 
     ```bash
-    make run-rand-event-pipeline
+    just run-rand-event-pipeline
     ```
 
 -   To run a minimal (by definition) event pipeline:
 
     ```bash
-    make run-min-event-pipeline
+    just run-min-event-pipeline
     ```
