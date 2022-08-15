@@ -163,7 +163,7 @@ class CDPStack(pulumi.ComponentResource):
         self.firebase_init = gcp.firebase.Project(
             resource_name=f"{self.gcp_project_id}-firebase-init",
             project=self.gcp_project_id,
-            opts=pulumi.ResourceOptions(parent=self, depends_on=[self.firestore_app]),
+            opts=pulumi.ResourceOptions(parent=self.firestore_app),
         )
 
         # Connect app engine (firestore) + bucket
@@ -180,7 +180,7 @@ class CDPStack(pulumi.ComponentResource):
             bucket=self.firestore_app.default_bucket,
             entity="allUsers",
             role="READER",
-            opts=pulumi.ResourceOptions(parent=self.firestore_app),
+            opts=pulumi.ResourceOptions(parent=self.firebase_project),
         )
 
         # Create all firestore indexes
@@ -204,7 +204,7 @@ class CDPStack(pulumi.ComponentResource):
                 idx_set_name = "_".join(idx_set_name_parts)
                 fq_idx_set_name = f"{model_cls.collection_name}-{idx_set_name}"
 
-                # Create depends on list
+                # Create depends on list    
                 # We don't want to create a ton of indexes in parallel
                 if prior_index is None:
                     depends_on: List[pulumi.Resource] = []
@@ -220,7 +220,7 @@ class CDPStack(pulumi.ComponentResource):
                     fields=idx_set_fields,
                     query_scope="COLLECTION",
                     opts=pulumi.ResourceOptions(
-                        parent=self.firestore_app,
+                        parent=self.firebase_project,
                         depends_on=depends_on,
                     ),
                 )
@@ -241,7 +241,7 @@ class CDPStack(pulumi.ComponentResource):
                 }
             ),
             project=self.gcp_project_id,
-            opts=pulumi.ResourceOptions(parent=self.firestore_app),
+            opts=pulumi.ResourceOptions(parent=self.firebase_project),
         )
 
         super().register_outputs({})

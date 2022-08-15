@@ -53,9 +53,9 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
 infrastructure = [
-  "pulumi~=3.31",
-  "pulumi-google-native~=0.18",
-  "pulumi-gcp~=6.0",
+  "pulumi==3.33.2",
+  "pulumi-google-native==0.20",
+  "pulumi-gcp==6.26.0",
 ]
 pipeline = [
   "dask[distributed]>=2021.7.0",

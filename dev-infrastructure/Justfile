@@ -58,7 +58,7 @@ destroy project:
 
 # generate a service account JSON
 gen-key project:
-	mkdir ../.keys/ -p
+	mkdir -p ../.keys/
 	rm -rf ../.keys/{{project}}.json
 	gcloud iam service-accounts create {{project}} \
 		--description="CDP Dev Service Account for {{USER}}" \
