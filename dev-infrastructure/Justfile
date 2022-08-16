@@ -67,9 +67,14 @@ deploy project:
 	just enable-services
 	-firebase projects:addfirebase {{project}}
 	firebase use --add {{project}}
+	create_cdp_firestore_indexes_json \
+		{{join(justfile_directory(), "firestore.indexes.json")}}
 	firebase deploy --only firestore:rules
 	firebase deploy --only firestore:indexes
 	firebase deploy --only storage
+	store_cdp_metadata_document \
+		{{default_key}} \
+		{{join(justfile_directory(), "dev-cookiecutter-metadata.yaml")}}
 	gsutil cors set cors.json gs://{{project}}.appspot.com/
 
 # run both setup and deploy

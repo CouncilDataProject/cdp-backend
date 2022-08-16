@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import NamedTuple, Tuple
+from dataclasses import dataclass
+from typing import List
+
+from dataclasses_json import DataClassJsonMixin
 
 ###############################################################################
 
 
-class IndexedField(NamedTuple):
-    name: str
+@dataclass
+class IndexedField(DataClassJsonMixin):
+    fieldPath: str
     order: str
 
 
-class IndexedFieldSet(NamedTuple):
-    fields: Tuple[IndexedField, ...]
+@dataclass
+class IndexedFieldSet(DataClassJsonMixin):
+    fields: List[IndexedField]

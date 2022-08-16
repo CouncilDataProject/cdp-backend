@@ -1,0 +1,473 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "event",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "body_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "event_datetime",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "event",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "body_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "event_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "event_minutes_item",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "index",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "event_minutes_item",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "index",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "event_minutes_item_file",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_minutes_item_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "indexed_event_gram",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "value",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "indexed_event_gram",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "datetime_weighted_value",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "indexed_event_gram",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "stemmed_gram",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "value",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "indexed_event_gram",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "stemmed_gram",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "datetime_weighted_value",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "indexed_event_gram",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "unstemmed_gram",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "value",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "indexed_event_gram",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "unstemmed_gram",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "datetime_weighted_value",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "matter_file",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "matter_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "matter_sponsor",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "matter_ref",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "matter_status",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "matter_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "update_datetime",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "matter_status",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "matter_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "update_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_datetime",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "end_datetime",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "end_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "seat_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "end_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "title",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_datetime",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "title",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "title",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "end_datetime",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "title",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "end_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "role",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "end_datetime",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "seat_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_datetime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "session",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "session_index",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "transcript",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "session_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "transcript",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "session_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "confidence",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "vote",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "vote",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "matter_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "vote",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "event_ref",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "vote",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "person_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "matter_ref",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

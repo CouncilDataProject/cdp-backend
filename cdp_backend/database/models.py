@@ -216,67 +216,67 @@ class Role(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="start_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="start_datetime", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="start_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="start_datetime", order=Order.DESCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="end_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="end_datetime", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="end_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="end_datetime", order=Order.DESCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="seat_ref", order=Order.ASCENDING),
-                IndexedField(name="end_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="seat_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="end_datetime", order=Order.DESCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="title", order=Order.ASCENDING),
-                IndexedField(name="start_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="title", order=Order.ASCENDING),
+                IndexedField(fieldPath="start_datetime", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="title", order=Order.ASCENDING),
-                IndexedField(name="start_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="title", order=Order.ASCENDING),
+                IndexedField(fieldPath="start_datetime", order=Order.DESCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="title", order=Order.ASCENDING),
-                IndexedField(name="end_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="title", order=Order.ASCENDING),
+                IndexedField(fieldPath="end_datetime", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="title", order=Order.ASCENDING),
-                IndexedField(name="end_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="title", order=Order.ASCENDING),
+                IndexedField(fieldPath="end_datetime", order=Order.DESCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="end_datetime", order=Order.ASCENDING),
-                IndexedField(name="seat_ref", order=Order.ASCENDING),
-                IndexedField(name="start_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="end_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="seat_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="start_datetime", order=Order.DESCENDING),
             )
         ),
     )
@@ -358,8 +358,8 @@ class MatterFile(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="name", order=Order.ASCENDING),
+                IndexedField(fieldPath="matter_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="name", order=Order.ASCENDING),
             )
         ),
     )
@@ -389,8 +389,8 @@ class MatterSponsor(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="matter_ref", order=Order.ASCENDING),
             )
         ),
     )
@@ -469,14 +469,14 @@ class Event(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="body_ref", order=Order.ASCENDING),
-                IndexedField(name="event_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="body_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_datetime", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="body_ref", order=Order.ASCENDING),
-                IndexedField(name="event_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="body_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_datetime", order=Order.DESCENDING),
             )
         ),
     )
@@ -524,8 +524,8 @@ class Session(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="event_ref", order=Order.ASCENDING),
-                IndexedField(name="session_index", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="session_index", order=Order.ASCENDING),
             )
         ),
     )
@@ -560,14 +560,14 @@ class Transcript(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="session_ref", order=Order.ASCENDING),
-                IndexedField(name="created", order=Order.DESCENDING),
+                IndexedField(fieldPath="session_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="created", order=Order.DESCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="session_ref", order=Order.ASCENDING),
-                IndexedField(name="confidence", order=Order.DESCENDING),
+                IndexedField(fieldPath="session_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="confidence", order=Order.DESCENDING),
             )
         ),
     )
@@ -605,14 +605,14 @@ class EventMinutesItem(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="event_ref", order=Order.ASCENDING),
-                IndexedField(name="index", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="index", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="event_ref", order=Order.ASCENDING),
-                IndexedField(name="index", order=Order.DESCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="index", order=Order.DESCENDING),
             )
         ),
     )
@@ -657,14 +657,14 @@ class MatterStatus(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="update_datetime", order=Order.ASCENDING),
+                IndexedField(fieldPath="matter_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="update_datetime", order=Order.ASCENDING),
             ),
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="update_datetime", order=Order.DESCENDING),
+                IndexedField(fieldPath="matter_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="update_datetime", order=Order.DESCENDING),
             ),
         ),
     )
@@ -708,8 +708,8 @@ class EventMinutesItemFile(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="event_minutes_item_ref", order=Order.ASCENDING),
-                IndexedField(name="name", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_minutes_item_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="name", order=Order.ASCENDING),
             )
         ),
     )
@@ -758,26 +758,26 @@ class Vote(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="event_ref", order=Order.ASCENDING),
-                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
-                IndexedField(name="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="matter_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="event_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
             )
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="person_ref", order=Order.ASCENDING),
-                IndexedField(name="matter_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="person_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="matter_ref", order=Order.ASCENDING),
             )
         ),
     )
@@ -819,38 +819,44 @@ class IndexedEventGram(Model):
     _INDEXES = (
         IndexedFieldSet(
             (
-                IndexedField(name="event_ref", order=Order.ASCENDING),
-                IndexedField(name="value", order=Order.DESCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
+                IndexedField(fieldPath="value", order=Order.DESCENDING),
             ),
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="event_ref", order=Order.ASCENDING),
-                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+                IndexedField(fieldPath="event_ref", order=Order.ASCENDING),
+                IndexedField(
+                    fieldPath="datetime_weighted_value", order=Order.DESCENDING
+                ),
             ),
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="stemmed_gram", order=Order.ASCENDING),
-                IndexedField(name="value", order=Order.DESCENDING),
+                IndexedField(fieldPath="stemmed_gram", order=Order.ASCENDING),
+                IndexedField(fieldPath="value", order=Order.DESCENDING),
             ),
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="stemmed_gram", order=Order.ASCENDING),
-                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+                IndexedField(fieldPath="stemmed_gram", order=Order.ASCENDING),
+                IndexedField(
+                    fieldPath="datetime_weighted_value", order=Order.DESCENDING
+                ),
             ),
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="unstemmed_gram", order=Order.ASCENDING),
-                IndexedField(name="value", order=Order.DESCENDING),
+                IndexedField(fieldPath="unstemmed_gram", order=Order.ASCENDING),
+                IndexedField(fieldPath="value", order=Order.DESCENDING),
             ),
         ),
         IndexedFieldSet(
             (
-                IndexedField(name="unstemmed_gram", order=Order.ASCENDING),
-                IndexedField(name="datetime_weighted_value", order=Order.DESCENDING),
+                IndexedField(fieldPath="unstemmed_gram", order=Order.ASCENDING),
+                IndexedField(
+                    fieldPath="datetime_weighted_value", order=Order.DESCENDING
+                ),
             ),
         ),
     )
