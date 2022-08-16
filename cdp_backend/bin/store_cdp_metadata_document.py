@@ -7,8 +7,8 @@ import sys
 import traceback
 from pathlib import Path
 
-from google.cloud.firestore import Client
 import yaml
+from google.cloud.firestore import Client
 
 from .. import __version__
 
@@ -48,11 +48,14 @@ class Args(argparse.Namespace):
 ###############################################################################
 
 
-def _store_cdp_metadata_document(google_credentials_file: Path, cookiecutter_yaml: Path,) -> None:
+def _store_cdp_metadata_document(
+    google_credentials_file: Path,
+    cookiecutter_yaml: Path,
+) -> None:
     # Read the cookiecutter file
     with open(cookiecutter_yaml, "r") as open_f:
         cookiecutter_meta = yaml.load(open_f, Loader=yaml.FullLoader)["default_context"]
-    
+
     # Open client and write doc
     client = Client.from_service_account_json(google_credentials_file)
     collection = client.collection("metadata")
@@ -71,7 +74,10 @@ def _store_cdp_metadata_document(google_credentials_file: Path, cookiecutter_yam
 def main() -> None:
     try:
         args = Args()
-        _store_cdp_metadata_document(google_credentials_file=args.google_credentials_file, cookiecutter_yaml=args.cookiecutter_yaml,)
+        _store_cdp_metadata_document(
+            google_credentials_file=args.google_credentials_file,
+            cookiecutter_yaml=args.cookiecutter_yaml,
+        )
     except Exception as e:
         log.error("=============================================")
         log.error("\n\n" + traceback.format_exc())

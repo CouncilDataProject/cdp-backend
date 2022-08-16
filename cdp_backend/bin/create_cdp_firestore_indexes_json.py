@@ -33,7 +33,7 @@ class Args(argparse.Namespace):
         p.add_argument(
             "outfile",
             type=Path,
-            help="Path to where the indexes JSON file should be stored."
+            help="Path to where the indexes JSON file should be stored.",
         )
         p.parse_args(namespace=self)
 
@@ -61,7 +61,7 @@ def _generate_indexes_json(outfile: Path) -> None:
         "indexes": indexes,
         "fieldOverrides": [],
     }
-    
+
     # Write out the file
     outfile = outfile.resolve()
     with open(outfile, "w") as open_f:
