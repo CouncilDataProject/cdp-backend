@@ -27,7 +27,7 @@ clean:
 
 # install with all deps
 install:
-	pip install -e .[pipeline,infrastructure,lint,test,docs,dev]
+	pip install -e .[pipeline,lint,test,docs,dev]
 
 # lint, format, and check all files
 lint:
