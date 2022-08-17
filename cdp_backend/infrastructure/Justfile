@@ -8,9 +8,8 @@ USER := env_var("USER")
 # Default region for infrastructures
 default_region := "us-central1"
 default_key := clean(join(justfile_directory(), "../.keys/cdp-dev.json"))
-export GOOGLE_APPLICATION_CREDENTIALS := default_key
 
-# run gcloud and pulumi logins
+# run gcloud login
 login:
   gcloud auth login
   gcloud auth application-default login
@@ -36,8 +35,11 @@ gen-key project:
 	echo "----------------------------------------------------------------------------"
 	sleep 60
 	cp -rf ../.keys/{{project}}.json ../.keys/cdp-dev.json
+	echo "----------------------------------------------------------------------------"
+	echo "Be sure to update the GOOGLE_APPLICATION_CREDENTIALS environment variable."
+	echo "----------------------------------------------------------------------------"
 
-# create a new gcloud project and pulumi stack
+# create a new gcloud project and generate a key
 init project:
 	gcloud projects create {{project}} --set-as-default
 	echo "----------------------------------------------------------------------------"
