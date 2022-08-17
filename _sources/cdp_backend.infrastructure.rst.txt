@@ -1,17 +1,6 @@
 cdp\_backend.infrastructure package
 ===================================
 
-Submodules
-----------
-
-cdp\_backend.infrastructure.cdp\_stack module
----------------------------------------------
-
-.. automodule:: cdp_backend.infrastructure.cdp_stack
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

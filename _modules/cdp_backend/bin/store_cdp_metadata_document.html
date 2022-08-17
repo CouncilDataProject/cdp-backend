@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.database.types - cdp-backend 0.1.dev1+g79fee97 documentation</title>
+        <title>cdp_backend.bin.store_cdp_metadata_document - cdp-backend 0.1.dev1+g79fee97 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -213,27 +213,94 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for cdp_backend.database.types</h1><div class="highlight"><pre>
+          <h1>Source code for cdp_backend.bin.store_cdp_metadata_document</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">DataClassJsonMixin</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">google.cloud.firestore</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">__version__</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(levelname)4s</span><span class="s2">: </span><span class="si">%(module)s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="IndexedField"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.types.IndexedField">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">IndexedField</span><span class="p">(</span><span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="n">fieldPath</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">order</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.store_cdp_metadata_document.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parse</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+            <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;store_cdp_metadata_document&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Store the CDP metadata document to a firestore instance.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;cookiecutter_yaml&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the CDP Cookiecutter YAML file to lookup metadata details.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="IndexedFieldSet"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.types.IndexedFieldSet">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">IndexedFieldSet</span><span class="p">(</span><span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="n">fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">IndexedField</span><span class="p">]</span></div>
+<span class="c1">###############################################################################</span>
+
+
+<span class="k">def</span> <span class="nf">_store_cdp_metadata_document</span><span class="p">(</span>
+    <span class="n">cookiecutter_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Read the cookiecutter file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cookiecutter_yaml</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_f</span><span class="p">:</span>
+        <span class="n">cookiecutter_meta</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)[</span><span class="s2">&quot;default_context&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Open client and write doc</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+    <span class="n">collection</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">collection</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">collection</span><span class="o">.</span><span class="n">document</span><span class="p">(</span><span class="s2">&quot;configuration&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;infrastructure_version&quot;</span><span class="p">:</span> <span class="n">__version__</span><span class="p">,</span>
+            <span class="s2">&quot;municipality_name&quot;</span><span class="p">:</span> <span class="n">cookiecutter_meta</span><span class="p">[</span><span class="s2">&quot;municipality&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;hosting_github_url&quot;</span><span class="p">:</span> <span class="n">cookiecutter_meta</span><span class="p">[</span><span class="s2">&quot;hosting_github_url&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;hosting_web_app_address&quot;</span><span class="p">:</span> <span class="n">cookiecutter_meta</span><span class="p">[</span><span class="s2">&quot;hosting_web_app_address&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;firestore_location&quot;</span><span class="p">:</span> <span class="n">cookiecutter_meta</span><span class="p">[</span><span class="s2">&quot;firestore_region&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;governing_body&quot;</span><span class="p">:</span> <span class="n">cookiecutter_meta</span><span class="p">[</span><span class="s2">&quot;governing_body_type&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../cdp_backend.bin.html#cdp_backend.bin.store_cdp_metadata_document.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Args</span><span class="p">()</span>
+        <span class="n">_store_cdp_metadata_document</span><span class="p">(</span>
+            <span class="n">cookiecutter_yaml</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cookiecutter_yaml</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;=============================================&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Allow caller to directly run this module (usually in development scenarios)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
         </article>
       </div>

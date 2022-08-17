@@ -60,6 +60,14 @@ cdp\_backend.bin.create\_cdp\_transcript\_model\_doc module
    :undoc-members:
    :show-inheritance:
 
+cdp\_backend.bin.get\_cdp\_infrastructure\_stack module
+-------------------------------------------------------
+
+.. automodule:: cdp_backend.bin.get_cdp_infrastructure_stack
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdp\_backend.bin.process\_cdp\_event\_index\_chunk module
 ---------------------------------------------------------
 
@@ -96,6 +104,14 @@ cdp\_backend.bin.search\_cdp\_events module
 -------------------------------------------
 
 .. automodule:: cdp_backend.bin.search_cdp_events
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdp\_backend.bin.store\_cdp\_metadata\_document module
+------------------------------------------------------
+
+.. automodule:: cdp_backend.bin.store_cdp_metadata_document
    :members:
    :undoc-members:
    :show-inheritance:
