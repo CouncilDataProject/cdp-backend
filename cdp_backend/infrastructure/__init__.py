@@ -12,6 +12,7 @@ from pathlib import Path
 
 INFRA_DIR = Path(__file__).parent
 
+
 class GoverningBody:
     city_council = "city council"
     county_council = "county council"
