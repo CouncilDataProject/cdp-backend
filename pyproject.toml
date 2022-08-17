@@ -41,6 +41,7 @@ dependencies = [
   "fsspec",  # Version pin set by gcsfs
   "gcsfs>=2022.7.1",
   "google-cloud-firestore",  # Version pin set by fireo
+  "PyYAML>=5.4.1",
   "requests>=2.26.0",
 ]
 
