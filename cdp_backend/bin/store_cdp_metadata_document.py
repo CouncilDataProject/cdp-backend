@@ -33,11 +33,6 @@ class Args(argparse.Namespace):
             description="Store the CDP metadata document to a firestore instance.",
         )
         p.add_argument(
-            "google_credentials_file",
-            type=Path,
-            help="Path to Google service account JSON key.",
-        )
-        p.add_argument(
             "cookiecutter_yaml",
             type=Path,
             help="Path to the CDP Cookiecutter YAML file to lookup metadata details.",
@@ -49,7 +44,6 @@ class Args(argparse.Namespace):
 
 
 def _store_cdp_metadata_document(
-    google_credentials_file: Path,
     cookiecutter_yaml: Path,
 ) -> None:
     # Read the cookiecutter file
@@ -57,7 +51,7 @@ def _store_cdp_metadata_document(
         cookiecutter_meta = yaml.load(open_f, Loader=yaml.FullLoader)["default_context"]
 
     # Open client and write doc
-    client = Client.from_service_account_json(google_credentials_file)
+    client = Client()
     collection = client.collection("metadata")
     collection.document("configuration").set(
         {
@@ -75,7 +69,6 @@ def main() -> None:
     try:
         args = Args()
         _store_cdp_metadata_document(
-            google_credentials_file=args.google_credentials_file,
             cookiecutter_yaml=args.cookiecutter_yaml,
         )
     except Exception as e:
