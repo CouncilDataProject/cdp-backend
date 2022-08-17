@@ -70,8 +70,6 @@ deploy project:
 	just enable-services
 	-firebase projects:addfirebase {{project}}
 	firebase use --add {{project}}
-	create_cdp_firestore_indexes_json \
-		{{join(justfile_directory(), "firestore.indexes.json")}}
 	firebase deploy --only firestore:rules
 	firebase deploy --only firestore:indexes
 	firebase deploy --only storage

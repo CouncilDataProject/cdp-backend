@@ -11,3 +11,9 @@ create dev-infrastructures for development.
 from pathlib import Path
 
 INFRA_DIR = Path(__file__).parent
+
+class GoverningBody:
+    city_council = "city council"
+    county_council = "county council"
+    school_board = "school board"
+    other = "other"
