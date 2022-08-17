@@ -130,6 +130,12 @@ index-chunks/
 abc123-cdp*
 *-person-picture
 *-seat-image
+dev-infrastructure/cors.json
+dev-infrastructure/firebase.json
+dev-infrastructure/firestore.indexes.json
+dev-infrastructure/firestore.rules
+dev-infrastructure/storage.rules
+dev-infrastructure/Justfile
 
 # Common credentials directories
 .keys/

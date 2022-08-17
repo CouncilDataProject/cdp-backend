@@ -32,3 +32,4 @@ repos:
         additional_dependencies:
               - "types-pytz"
               - "types-requests"
+              - "types-PyYAML"

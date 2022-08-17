@@ -1,0 +1,98 @@
+# list all available commands
+default:
+  just --list
+
+# get and store user
+USER := env_var("USER")
+
+# Default region for infrastructures
+default_region := "us-central1"
+default_key := clean(join(justfile_directory(), "../.keys/cdp-dev.json"))
+default_cookiecutter_yaml := join(justfile_directory(), "dev-cookiecutter-metadata.yaml")
+
+# run gcloud login
+login:
+  gcloud auth login
+  gcloud auth application-default login
+
+# switch active gcloud project
+switch-project project:
+	gcloud config set project {{project}}
+
+# generate a service account JSON
+gen-key project:
+	mkdir -p ../.keys/
+	rm -rf ../.keys/{{project}}.json
+	gcloud iam service-accounts create {{project}} \
+		--description="CDP Dev Service Account for {{USER}}" \
+		--display-name="{{project}}"
+	gcloud projects add-iam-policy-binding {{project}} \
+		--member="serviceAccount:{{project}}@{{project}}.iam.gserviceaccount.com" \
+		--role="roles/owner"
+	gcloud iam service-accounts keys create ../.keys/{{project}}.json \
+		--iam-account "{{project}}@{{project}}.iam.gserviceaccount.com"
+	echo "----------------------------------------------------------------------------"
+	echo "Sleeping for one minute while resources set up"
+	echo "----------------------------------------------------------------------------"
+	sleep 60
+	cp -rf ../.keys/{{project}}.json ../.keys/cdp-dev.json
+	echo "----------------------------------------------------------------------------"
+	echo "Be sure to update the GOOGLE_APPLICATION_CREDENTIALS environment variable."
+	echo "----------------------------------------------------------------------------"
+
+# create a new gcloud project and generate a key
+init project:
+	gcloud projects create {{project}} --set-as-default
+	echo "----------------------------------------------------------------------------"
+	echo "Follow the link to setup billing for the created GCloud account."
+	echo "https://console.cloud.google.com/billing/linkedaccount?project={{project}}"
+	echo "----------------------------------------------------------------------------"
+	just gen-key {{project}}
+
+# enable gcloud services
+enable-services:
+	gcloud services enable cloudresourcemanager.googleapis.com
+	gcloud services enable speech.googleapis.com \
+		appengine.googleapis.com \
+		storage.googleapis.com \
+		firebase.googleapis.com \
+		firestore.googleapis.com \
+		firebaserules.googleapis.com \
+		firebasestorage.googleapis.com
+
+# setup the basic gcloud app and firestore connection
+setup region=default_region:
+	just enable-services
+	gcloud app create --region={{replace(region, "us-central1", "us-central")}}
+	gcloud alpha firestore databases create --region={{replace(region, "us-central1", "us-central")}}
+
+# deploy the CDP specific firestore and storage requirements
+deploy project cookiecutter_yaml=default_cookiecutter_yaml:
+	just enable-services
+	-firebase projects:addfirebase {{project}}
+	firebase use --add {{project}}
+	firebase deploy --only firestore:rules
+	firebase deploy --only firestore:indexes
+	firebase deploy --only storage
+	store_cdp_metadata_document {{cookiecutter_yaml}}
+	gsutil cors set cors.json gs://{{project}}.appspot.com/
+
+# run both setup and deploy
+setup-and-deploy project region=default_region:
+	just setup {{region}}
+	just deploy {{project}}
+
+# fully teardown project
+destroy project:
+	gcloud projects delete {{project}}
+	rm -f ../.keys/{{project}}.json
+
+# remove all database documents (except search index) and filestore objects
+clean key=default_key:
+	clean_cdp_database {{key}}
+	clean_cdp_filestore {{key}}
+
+# remove all database documents (including search index) and filestore objects
+clean-full key=default_key:
+	clean_cdp_database {{key}} --clean-index
+	clean_cdp_filestore {{key}}

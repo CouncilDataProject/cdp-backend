@@ -40,6 +40,8 @@ dependencies = [
   "fireo>=1.5",
   "fsspec",  # Version pin set by gcsfs
   "gcsfs>=2022.7.1",
+  "google-cloud-firestore",  # Version pin set by fireo
+  "PyYAML>=5.4.1",
   "requests>=2.26.0",
 ]
 
@@ -52,11 +54,6 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 # extra dependencies
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
-infrastructure = [
-  "pulumi~=3.31",
-  "pulumi-google-native~=0.18",
-  "pulumi-gcp~=6.0",
-]
 pipeline = [
   "dask[distributed]>=2021.7.0",
   "ffmpeg-python==0.2.0",
@@ -91,8 +88,9 @@ lint = [
   "isort>=5.7.0",
   "mypy>=0.790",
   "pre-commit>=2.20.0",
-  "types-pytz>=2022.1.2",
   "types-requests>=2.28.5",
+  "types-pytz>=2022.1.2",
+  "types-PyYAML>=6.0.11",
 ]
 test = [
   # Pytest
@@ -137,6 +135,8 @@ process_cdp_event_index_chunk = "cdp_backend.bin.process_cdp_event_index_chunk:m
 search_cdp_events = "cdp_backend.bin.search_cdp_events:main"
 process_special_event = "cdp_backend.bin.process_special_event:main"
 add_content_hash_to_sessions = "cdp_backend.bin.add_content_hash_to_sessions:main"
+store_cdp_metadata_document = "cdp_backend.bin.store_cdp_metadata_document:main"
+get_cdp_infrastructure_stack = "cdp_backend.bin.get_cdp_infrastructure_stack:main"
 
 # build settings
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
@@ -148,7 +148,14 @@ include-package-data = true
 exclude = ["*docs/*", "*tests/*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.yaml", "py.typed", "*.csv"]
+"*" = [
+  "*.yaml",
+  "py.typed",
+  "*.csv",
+  "*infrastructure/*.rules",
+  "*infrastructure/Justfile",
+  "*infrastructure/*.json",
+]
 
 # tools
 [tool.black]

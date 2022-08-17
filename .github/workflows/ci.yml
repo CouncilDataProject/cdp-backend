@@ -68,7 +68,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .[infrastructure,pipeline,test]
+        pip install .[pipeline,test]
     - name: Run Tests
       run: just test
     - name: Upload Codecov
