@@ -23,6 +23,7 @@ clean:
 	rm -fr abc123-cdp_*-transcript.json
 	rm -fr test.err
 	rm -fr test.out
+	rm -fr *-thumbnail.*
 	
 
 # install with all deps
