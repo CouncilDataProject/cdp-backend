@@ -67,14 +67,14 @@ setup region=default_region:
 	gcloud alpha firestore databases create --region={{replace(region, "us-central1", "us-central")}}
 
 # deploy the CDP specific firestore and storage requirements
-deploy project cookiecutter_yaml=default_cookiecutter_yaml:
+deploy project json_key=default_key cookiecutter_yaml=default_cookiecutter_yaml:
 	just enable-services
 	-firebase projects:addfirebase {{project}}
 	firebase use --add {{project}}
 	firebase deploy --only firestore:rules
 	firebase deploy --only firestore:indexes
 	firebase deploy --only storage
-	store_cdp_metadata_document {{default_key}} {{cookiecutter_yaml}}
+	store_cdp_metadata_document {{json_key}} {{cookiecutter_yaml}}
 	gsutil cors set cors.json gs://{{project}}.appspot.com/
 
 # run both setup and deploy
