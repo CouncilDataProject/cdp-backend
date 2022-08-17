@@ -51,13 +51,17 @@ following commands to log in to gcloud: `just login`
 ## Create a New Project and Deploy the Infrastructure
 
 ```bash
+get_cdp_infrastructure_stack {OPTIONAL: dir path to store to}
 just init {project-name}
 just setup-and-deploy {project-name} {OPTIONAL: region}
 ```
 
 Example:
 
+_Assuming user is within the `dev-infrastructure` dir._
+
 ```bash
+get_cdp_infrastructure_stack .
 just init cdp-eva-dev-001
 just setup-and-deploy cdp-eva-dev-001
 ```
@@ -77,3 +81,13 @@ just deploy cdp-eva-dev-001
 ### All Commands
 
 -   See Justfile commands with `just` or open the Justfile.
+
+
+### Changing the Stack
+
+The actual infrastructure files live in the `cdp_backend/infrastructure` module.
+To make changes to the infrastructure stack, change the files in that module and then
+rerun `get-cdp-infrastructure-stack`.
+
+Note: the database indexes are store in the `cdp_backend/database/models.py` module
+with each collection model.

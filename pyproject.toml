@@ -134,8 +134,8 @@ process_cdp_event_index_chunk = "cdp_backend.bin.process_cdp_event_index_chunk:m
 search_cdp_events = "cdp_backend.bin.search_cdp_events:main"
 process_special_event = "cdp_backend.bin.process_special_event:main"
 add_content_hash_to_sessions = "cdp_backend.bin.add_content_hash_to_sessions:main"
-create_cdp_firestore_indexes_json = "cdp_backend.bin.create_cdp_firestore_indexes_json:main"
 store_cdp_metadata_document = "cdp_backend.bin.store_cdp_metadata_document:main"
+get_cdp_infrastructure_stack = "cdp_backend.bin.get_cdp_infrastructure_stack:main"
 
 # build settings
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
@@ -147,7 +147,14 @@ include-package-data = true
 exclude = ["*docs/*", "*tests/*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.yaml", "py.typed", "*.csv"]
+"*" = [
+  "*.yaml",
+  "py.typed",
+  "*.csv",
+  "*infrastructure/*.rules",
+  "*infrastructure/Justfile",
+  "*infrastructure/*.json",
+]
 
 # tools
 [tool.black]

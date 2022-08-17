@@ -4,11 +4,13 @@
 import argparse
 import json
 import logging
+import shutil
 import sys
 import traceback
 from pathlib import Path
 
 from cdp_backend.database import DATABASE_MODELS
+from cdp_backend.infrastructure import INFRA_DIR
 
 ###############################################################################
 
@@ -27,13 +29,18 @@ class Args(argparse.Namespace):
 
     def __parse(self) -> None:
         p = argparse.ArgumentParser(
-            prog="create_cdp_firestore_indexes_json",
-            description="Create the CDP Firestore indexes JSON file.",
+            prog="get_cdp_infrastructure_stack",
+            description=(
+                "Generate or copy all the files needed for a new CDP infrastructure."
+            ),
         )
         p.add_argument(
-            "outfile",
+            "output_dir",
             type=Path,
-            help="Path to where the indexes JSON file should be stored.",
+            help=(
+                "Path to where the infrastructure files should be copied "
+                "or generated."
+            ),
         )
         p.parse_args(namespace=self)
 
@@ -69,10 +76,23 @@ def _generate_indexes_json(outfile: Path) -> None:
     log.info(f"Wrote out CDP firestore.indexes.json to: '{outfile}'")
 
 
+def _copy_infra_files(output_dir: Path) -> None:
+    # Copy each file in the infra dir to the output dir
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for f in INFRA_DIR.iterdir():
+        if f.name not in [
+            "__pycache__",
+            "__init__.py",
+        ]:
+            shutil.copy(f, output_dir / f.name)
+
+
 def main() -> None:
     try:
         args = Args()
-        _generate_indexes_json(outfile=args.outfile)
+        output_dir = args.output_dir.expanduser().resolve()
+        _copy_infra_files(output_dir=output_dir)
+        _generate_indexes_json(outfile=output_dir / "firestore.indexes.json")
     except Exception as e:
         log.error("=============================================")
         log.error("\n\n" + traceback.format_exc())

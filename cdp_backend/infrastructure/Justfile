@@ -33,6 +33,7 @@ gen-key project:
 		--iam-account "{{project}}@{{project}}.iam.gserviceaccount.com"
 	echo "----------------------------------------------------------------------------"
 	echo "Sleeping for one minute while resources set up"
+	echo "----------------------------------------------------------------------------"
 	sleep 60
 	cp -rf ../.keys/{{project}}.json ../.keys/cdp-dev.json
 
