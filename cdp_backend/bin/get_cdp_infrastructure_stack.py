@@ -85,6 +85,7 @@ def _copy_infra_files(output_dir: Path) -> None:
             "__init__.py",
         ]:
             shutil.copy(f, output_dir / f.name)
+            log.info(f"Copied {f.name} to {output_dir}")
 
 
 def main() -> None:
