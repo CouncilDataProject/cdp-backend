@@ -22,7 +22,7 @@ from ..database.validators import is_secure_uri, resource_exists, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
-from ..version import __version__
+from .. import __version__
 from . import ingestion_models
 from .ingestion_models import EventIngestionModel, Session
 from .pipeline_config import EventGatherPipelineConfig

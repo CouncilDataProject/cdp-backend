@@ -10,7 +10,7 @@ from google.cloud import speech_v1p1beta1 as speech
 from spacy.lang.en import English
 
 from ..pipeline import transcript_model
-from ..version import __version__
+from .. import __version__
 from .sr_model import SRModel
 
 ###############################################################################
