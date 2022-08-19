@@ -16,17 +16,6 @@ Subpackages
    cdp_backend.sr_models
    cdp_backend.utils
 
-Submodules
-----------
-
-cdp\_backend.version module
----------------------------
-
-.. automodule:: cdp_backend.version
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
