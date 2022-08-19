@@ -15,6 +15,7 @@ from prefect import Flow, task
 from prefect.tasks.control_flow import case, merge
 from requests import ConnectionError
 
+from .. import __version__
 from ..database import constants as db_constants
 from ..database import functions as db_functions
 from ..database import models as db_models
@@ -22,7 +23,6 @@ from ..database.validators import is_secure_uri, resource_exists, try_url
 from ..file_store import functions as fs_functions
 from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
 from ..utils import constants_utils, file_utils
-from .. import __version__
 from . import ingestion_models
 from .ingestion_models import EventIngestionModel, Session
 from .pipeline_config import EventGatherPipelineConfig

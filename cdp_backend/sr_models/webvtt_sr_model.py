@@ -12,8 +12,8 @@ import truecase
 import webvtt
 from webvtt.structures import Caption
 
-from ..pipeline import transcript_model
 from .. import __version__
+from ..pipeline import transcript_model
 from .sr_model import SRModel
 
 ###############################################################################
