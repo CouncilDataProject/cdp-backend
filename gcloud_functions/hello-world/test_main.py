@@ -2,19 +2,17 @@
 # -*- coding: utf-8 -*-f
 
 import flask
+import main
 import pytest
 
-import main
-
 from cdp_backend import __version__
-
 
 ###############################################################################
 
 
 # Create a fake "app" for generating test request contexts.
 @pytest.fixture(scope="module")
-def app():
+def app() -> flask.Flask:
     return flask.Flask(__name__)
 
 
