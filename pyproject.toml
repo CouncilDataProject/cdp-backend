@@ -195,6 +195,7 @@ ignore = [
   "*.parquet",
   "*fake_*",
   "*generated_*",
+  "*gcloud_functions/**",
 ]
 
 [tool.mypy]
