@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-f
 
-from flask import escape
 import functions_framework
+from flask import Request, escape
+
 from cdp_backend import __version__
 
 ###############################################################################
 
 
 @functions_framework.http
-def hello_http(request):
+def hello_http(request: Request) -> str:
     """HTTP Cloud Function.
     Args:
         request (flask.Request): The request object.
@@ -22,10 +23,13 @@ def hello_http(request):
     request_json = request.get_json(silent=True)
     request_args = request.args
 
-    if request_json and 'name' in request_json:
-        name = request_json['name']
-    elif request_args and 'name' in request_args:
-        name = request_args['name']
+    if request_json and "name" in request_json:
+        name = request_json["name"]
+    elif request_args and "name" in request_args:
+        name = request_args["name"]
     else:
-        name = 'World'
-    return f'Hello {escape(name)} -- using CDP version: {__version__}!'
+        name = "World"
+    return (
+        f"Hello {escape(name)} -- using CDP version: {__version__}! "
+        f"Caller: {request.remote_addr}"
+    )
