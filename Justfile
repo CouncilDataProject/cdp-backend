@@ -35,7 +35,7 @@ lint:
 	pre-commit run --all-files
 
 # run library tests
-test:
+test-library:
 	pytest --cov-report xml --cov-report html --cov=cdp_backend cdp_backend/tests
 
 # run functions tests
@@ -45,7 +45,7 @@ test-functions:
 # run lint and then run tests
 build:
 	just lint
-	just test
+	just test-library
 	just test-functions
 
 # generate Sphinx HTML documentation
