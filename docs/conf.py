@@ -25,6 +25,11 @@ import cdp_backend
 
 sys.path.insert(0, os.path.abspath(".."))
 
+from typing import TYPE_CHECKING, List
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
+    from sphinx.ext.autodoc import Options
 
 
 # -- General configuration ---------------------------------------------
@@ -45,7 +50,7 @@ extensions = [
     "sphinx_copybutton",
     # Doc installs
     "m2r2",
-    "numpydoc", 
+    "numpydoc",
 ]
 
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
@@ -92,7 +97,7 @@ release = cdp_backend.__version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -117,7 +122,7 @@ html_theme = "furo"
 # theme further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {}
+# html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -133,20 +138,20 @@ htmlhelp_basename = "cdp_backenddoc"
 
 # -- Options for LaTeX output ------------------------------------------
 
-latex_elements = {
-    # The paper size ("letterpaper" or "a4paper").
-    #
-    # "papersize": "letterpaper",
-    # The font size ("10pt", "11pt" or "12pt").
-    #
-    # "pointsize": "10pt",
-    # Additional stuff for the LaTeX preamble.
-    #
-    # "preamble": "",
-    # Latex figure (float) alignment
-    #
-    # "figure_align": "htbp",
-}
+# latex_elements = {
+#     The paper size ("letterpaper" or "a4paper").
+
+#     "papersize": "letterpaper",
+#     The font size ("10pt", "11pt" or "12pt").
+
+#     "pointsize": "10pt",
+#     Additional stuff for the LaTeX preamble.
+
+#     "preamble": "",
+#     Latex figure (float) alignment
+
+#     "figure_align": "htbp",
+# }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass
@@ -185,7 +190,16 @@ texinfo_documents = [
 ]
 
 # -- Extra docstring configurations ------------------------------------
-def no_namedtuple_attrib_docstring(app, what, name, obj, options, lines):
+
+
+def no_namedtuple_attrib_docstring(
+    app: "Sphinx",
+    what: str,
+    name: str,
+    obj: object,
+    options: "Options",
+    lines: List[str],
+) -> None:
     is_namedtuple_docstring = len(lines) == 1 and lines[0].startswith(
         "Alias for field number"
     )
@@ -194,7 +208,7 @@ def no_namedtuple_attrib_docstring(app, what, name, obj, options, lines):
         del lines[:]
 
 
-def setup(app):
+def setup(app: "Sphinx") -> None:
     app.connect(
         "autodoc-process-docstring",
         no_namedtuple_attrib_docstring,
