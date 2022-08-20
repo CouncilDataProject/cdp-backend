@@ -28,14 +28,14 @@ clean:
 
 # install with all deps
 install:
-	pip install -e .[pipeline,lint,test,docs,dev]
+	pip install -e .[pipeline,functions,lint,test,docs,dev]
 
 # lint, format, and check all files
 lint:
 	pre-commit run --all-files
 
 # run library tests
-test-library:
+test:
 	pytest --cov-report xml --cov-report html --cov=cdp_backend cdp_backend/tests
 
 # run functions tests
@@ -45,7 +45,7 @@ test-functions:
 # run lint and then run tests
 build:
 	just lint
-	just test-library
+	just test
 	just test-functions
 
 # generate Sphinx HTML documentation
