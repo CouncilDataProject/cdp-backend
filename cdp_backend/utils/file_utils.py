@@ -227,13 +227,11 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     if dst.is_file() and not overwrite:
         raise FileExistsError(dst)
 
-    
     # 9 is the length of the video id; no other
     # string of numbers in the URL has length 9 (thankfully)
-    match = re.findall(r'\d{9}',uri)
+    match = re.findall(r"\d{9}", uri)
     vid = match[0]
-    v = Vimeo.from_video_id(video_id = vid)
-
+    v = Vimeo.from_video_id(video_id=vid)
 
     if len(v.streams) == 0:
         raise ValueError("File {} contains no downloadable streams", uri)

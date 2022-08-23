@@ -43,6 +43,7 @@ EXAMPLE_VIMEO = "https://vimeo.com/503166067"
 # City of Chicago, Illinois
 EXAMPLE_VIMEO_SHOWCASE = "https://vimeo.com/showcase/6277394/video/722690793"
 
+
 @pytest.fixture
 def example_video(resources_dir: Path) -> Path:
     return resources_dir / EXAMPLE_VIDEO_FILENAME
