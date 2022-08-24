@@ -230,6 +230,9 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
     # 9 is the length of the video id; no other
     # string of numbers in the URL has length 9 (thankfully)
     match = re.findall(r"\d{9}", uri)
+    if len(match) == 0:
+        raise ValueError(f"Could not extract video id from uri: '{uri}'")
+
     vid = match[0]
     v = Vimeo.from_video_id(video_id=vid)
 

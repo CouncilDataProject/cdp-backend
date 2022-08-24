@@ -266,3 +266,13 @@ def test_remote_resource_copy(
     assert Path(actual_uri).is_file()
 
     os.remove(actual_uri)
+
+
+def test_invalid_uri() -> None:
+    with pytest.raises(Exception) as e:
+        file_utils.resource_copy("https://vimeo.com/fakeuri")
+    assert e.type == ValueError
+    assert (
+        str(e.value)
+        == "Could not extract video id from uri: 'https://vimeo.com/fakeuri'"
+    )
