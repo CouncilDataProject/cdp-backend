@@ -26,6 +26,7 @@ from ..conftest import (
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
     EXAMPLE_VIMEO,
+    EXAMPLE_VIMEO_SHOWCASE,
     EXAMPLE_YOUTUBE_VIDEO_EMBEDDED,
     EXAMPLE_YOUTUBE_VIDEO_PARAMETER,
     EXAMPLE_YOUTUBE_VIDEO_SHORT,
@@ -247,6 +248,7 @@ def test_convert_video_to_mp4(
         (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_VIMEO, Path("503166067") / "503166067.mp4"),
+        (EXAMPLE_VIMEO_SHOWCASE, Path("722690793") / "722690793.mp4"),
         (EXAMPLE_M3U8_PLAYLIST_URI, None),
     ],
 )
@@ -264,3 +266,13 @@ def test_remote_resource_copy(
     assert Path(actual_uri).is_file()
 
     os.remove(actual_uri)
+
+
+def test_invalid_uri() -> None:
+    with pytest.raises(Exception) as e:
+        file_utils.resource_copy("https://vimeo.com/fakeuri")
+    assert e.type == ValueError
+    assert (
+        str(e.value)
+        == "Could not extract video id from uri: 'https://vimeo.com/fakeuri'"
+    )
