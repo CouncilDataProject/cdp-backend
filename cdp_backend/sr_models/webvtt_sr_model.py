@@ -72,6 +72,7 @@ class WebVTTSRModel(SRModel):
             lambda x: f" {x.group(1)}",
             normalized_text,
         )
+        normalized_text.replace(">>", "")
         return normalized_text
 
     def _get_speaker_turns(self, captions: List[Caption]) -> List[List[Caption]]:
