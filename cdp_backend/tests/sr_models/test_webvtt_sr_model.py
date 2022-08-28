@@ -12,16 +12,16 @@ from cdp_backend.sr_models import WebVTTSRModel
 @pytest.mark.parametrize(
     "webvtt_filename, expected_filename",
     [
-        (
-            "oakland_captions.vtt",
-            "oakland_transcript.json",
-        ),  # added Oakland because it had '>>' in the transcript
         ("fake_caption.vtt", "generated_transcript_from_fake_captions.json"),
         (
             "brief_080221_2012161.vtt",
             "generated_transcript_from_brief_080221_2012161.json",
         ),
         ("boston_captions.vtt", "boston_transcript.json"),
+        (
+            "oakland_captions.vtt",
+            "oakland_transcript.json",
+        ),  # added Oakland because it had '>>' in the transcript
     ],
 )
 def test_transcribe(
