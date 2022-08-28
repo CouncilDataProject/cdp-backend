@@ -44,4 +44,4 @@ def test_transcribe(
                 word.text == expected.sentences[sentence_index].words[word_index].text
             )
 
-        assert sentence.text == expected.sentences[sentence_index].text
+        assert sentence.text.lower() == expected.sentences[sentence_index].text.lower()
