@@ -49,3 +49,4 @@ class RoleTitle:
     MEMBER = "Member"
     SUPERVISOR = "Supervisor"
     SECRETARY = "Secretary"
+    VICEPRESIDENT = "Vice President"
