@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Transcript Model" href="transcript_model.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>Contributing - cdp-backend 0.1.dev1+gb13bd79 documentation</title>
+        <title>Contributing - cdp-backend 0.1.dev1+g9028d52 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+gb13bd79 documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g9028d52 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb13bd79 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g9028d52 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -234,9 +234,17 @@ project as it will always be the most up-to-date.</p>
 </pre></div>
 </div>
 </li>
-<li><p>Install <a class="reference external" href="https://graphviz.org/download/">graphviz</a></p></li>
-<li><p>Install <a class="reference external" href="https://ffmpeg.org/download.html">ffmpeg</a></p></li>
-<li><p>Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):</p>
+<li><p>Install dependencies:</p>
+<ul>
+<li><p><a class="reference external" href="https://graphviz.org/download/">graphviz</a></p></li>
+<li><p><a class="reference external" href="https://ffmpeg.org/download.html">ffmpeg</a></p></li>
+<li><p><a class="reference external" href="https://rustup.rs">rust toolchain</a> (required by <a class="reference external" href="https://github.com/huggingface/tokenizers">tokenizers</a>)</p></li>
+<li><p><a class="reference external" href="https://github.com/casey/just">just</a></p>
+<p>After installation you may need to reload your shell.</p>
+</li>
+</ul>
+</li>
+<li><p>Install the project in editable mode. (It is also recommended to work in a <a class="reference external" href="https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments">virtualenv</a> or <a class="reference external" href="https://www.anaconda.com/products/distribution">anaconda</a> environment):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> cdp-backend/
 just install
 </pre></div>
