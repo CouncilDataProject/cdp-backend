@@ -601,7 +601,8 @@ def clip_and_reformat_video(
     import ffmpeg
 
     video_filepath = Path(video_filepath)
-    output_filepath = video_filepath.with_name(f"{video_filepath.name}-clip.{format}")
+    # output_filepath = video_filepath.with_name(f"{video_filepath.name}-clip.{format}")
+    output_filepath = "/tmp/clipped"
 
     ffmpeg_stdout, ffmpeg_stderr = (
         ffmpeg.input(video_filepath)

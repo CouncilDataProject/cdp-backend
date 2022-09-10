@@ -61,6 +61,7 @@ def generate_clip_http(request: Request) -> str:
     local_video = download_video_from_session_id(
         credentials_file=CREDENTIALS_PATH,
         session_id=session_id,
+        dest="/tmp/full-video"
     )
 
     # Clip it
