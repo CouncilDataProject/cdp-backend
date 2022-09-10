@@ -71,7 +71,6 @@ jobs:
         pip install .[pipeline,functions,test]
     - name: Run Tests
       run: |
-        just test-library
         just test-functions
     - name: Upload Codecov
       uses: codecov/codecov-action@v3
