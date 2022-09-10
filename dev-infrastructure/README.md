@@ -91,3 +91,10 @@ rerun `get-cdp-infrastructure-stack`.
 
 Note: the database indexes are store in the `cdp_backend/database/models.py` module
 with each collection model.
+
+## Google Cloud Functions
+
+Useful links for managing Cloud Functions:
+
+* [Pre-installed System Packages](https://cloud.google.com/functions/docs/reference/system-packages)
+* [Execution Environments](https://cloud.google.com/functions/docs/concepts/execution-environment)

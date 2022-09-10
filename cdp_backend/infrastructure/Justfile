@@ -90,8 +90,9 @@ deploy project cookiecutter_yaml=default_cookiecutter_yaml key=default_key:
 	cd {{justfile_directory()}}/gcloud-functions/generate-clip/ && \
 		cp {{key}} ./GOOGLE_CREDENTIALS.json && \
 		gcloud functions deploy generate_clip_http \
-			--runtime python310 \
+			--runtime python39 \
 			--trigger-http \
+			--memory=512MB \
 			--allow-unauthenticated
 
 # run both setup and deploy
