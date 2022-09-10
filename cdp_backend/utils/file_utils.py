@@ -615,4 +615,4 @@ def clip_and_reformat_video(
     if ffmpeg_stderr:
         log.error(ffmpeg_stderr)
 
-    return output_filepath
+    return Path(output_filepath)
