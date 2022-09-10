@@ -603,12 +603,10 @@ def clip_and_reformat_video(
     video_filepath = Path(video_filepath)
     output_filepath = video_filepath.with_name(f"{video_filepath.name}-clip.{format}")
 
-    print(output_filepath)
-
     ffmpeg_stdout, ffmpeg_stderr = (
         ffmpeg.input(video_filepath)
         .output(str(output_filepath), ss=start_time, to=end_time, format=format)
-        .run()
+        .run(quiet=True)
     )
 
     log.info("Finished clipping {} to {}".format(video_filepath, output_filepath))
