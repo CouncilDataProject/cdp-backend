@@ -84,11 +84,14 @@ def _copy_infra_files(output_dir: Path) -> None:
             "__pycache__",
             "__init__.py",
         ]:
+            out_ = output_dir / f.name
             if f.is_file():
-                shutil.copy(f, output_dir / f.name)
+                shutil.copy(f, out_)
                 log.info(f"Copied {f.name} to {output_dir}")
             elif f.is_dir():
-                shutil.copytree(f, output_dir / f.name)
+                if out_.exists():
+                    shutil.rmtree(out_)
+                shutil.copytree(f, out_)
                 log.info(f"Copied {f.name} to {output_dir}")
             else:
                 raise TypeError(
