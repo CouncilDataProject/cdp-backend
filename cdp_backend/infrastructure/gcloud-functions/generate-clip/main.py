@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-f
 
-import functions_framework
-from flask import Request, escape
+from pathlib import Path
 from typing import Dict
-from werkzeug.datastructures import MultiDict
 from uuid import uuid4
 
+import functions_framework
+from flask import Request, escape
+from werkzeug.datastructures import MultiDict
+
 from cdp_backend.file_store.functions import upload_file_and_return_link
-from cdp_backend.utils.file_utils import download_video_from_session_id
-from cdp_backend.utils.file_utils import clip_and_reformat_video
+from cdp_backend.utils.file_utils import (
+    clip_and_reformat_video,
+    download_video_from_session_id,
+)
 
 ###############################################################################
 
@@ -28,7 +32,7 @@ def _unpack_param(
         return request_json[param]
     if request_args and param in request_args:
         return request_args[param]
-    
+
     raise ValueError(f"No param with name: '{param}'")
 
 
@@ -61,7 +65,7 @@ def generate_clip_http(request: Request) -> str:
 
     # Clip it
     clip_path = clip_and_reformat_video(
-        video_filepath=local_video,
+        video_filepath=Path(local_video),
         start_time=start_time,
         end_time=end_time,
         out_format=out_format,
@@ -74,9 +78,11 @@ def generate_clip_http(request: Request) -> str:
     save_path = f"{CLIP_STORAGE}/{uuid4()}"
 
     # Generate the save name
-    return escape(upload_file_and_return_link(
-        credentials_file=CREDENTIALS_PATH,
-        bucket=bucket_name,
-        filepath=clip_path,
-        save_name=save_path,
-    ))
+    return escape(
+        upload_file_and_return_link(
+            credentials_file=CREDENTIALS_PATH,
+            bucket=bucket_name,
+            filepath=str(clip_path),
+            save_name=save_path,
+        )
+    )
