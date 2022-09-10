@@ -188,7 +188,7 @@ ignore = [
   ".cookiecutter.yaml",
   "*docs/*",
   "codecov.yml",
-  "dev-infrastructure/*",
+  "dev-infrastructure/**",
   "example-configs/*",
   "*_captions.vtt",
   "*_transcript.json",
@@ -198,7 +198,6 @@ ignore = [
   "*.parquet",
   "*fake_*",
   "*generated_*",
-  "*gcloud_functions/**",
 ]
 
 [tool.mypy]
