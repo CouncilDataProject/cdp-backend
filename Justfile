@@ -40,7 +40,7 @@ test-library:
 
 # run functions tests
 test-functions:
-	pytest gcloud_functions/
+	pytest cdp_backend/infrastructure/gcloud-functions/
 
 # run lint and then run tests
 build:

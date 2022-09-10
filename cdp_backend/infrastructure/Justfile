@@ -83,7 +83,7 @@ deploy project cookiecutter_yaml=default_cookiecutter_yaml:
 	store_cdp_metadata_document {{cookiecutter_yaml}}
 	gsutil cors set cors.json gs://{{project}}.appspot.com/
 	gsutil defacl ch -u AllUsers:R gs://{{project}}.appspot.com/
-	cd {{justfile_directory()}}/../gcloud_functions/hello-world/ && \
+	cd {{justfile_directory()}}/gcloud_functions/hello-world/ && \
 		gcloud functions deploy hello_http \
 			--runtime python310 \
 			--trigger-http \

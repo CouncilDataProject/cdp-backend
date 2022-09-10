@@ -159,6 +159,9 @@ exclude = ["*docs/*", "*tests/*"]
   "*infrastructure/*.rules",
   "*infrastructure/Justfile",
   "*infrastructure/*.json",
+  "*infrastructure/**/.gcloudignore",
+  "*infrastructure/**/requirements.txt",
+  "*infrastructure/**/README.md",
 ]
 
 # tools

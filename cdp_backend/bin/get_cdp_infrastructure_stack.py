@@ -84,8 +84,17 @@ def _copy_infra_files(output_dir: Path) -> None:
             "__pycache__",
             "__init__.py",
         ]:
-            shutil.copy(f, output_dir / f.name)
-            log.info(f"Copied {f.name} to {output_dir}")
+            if f.is_file():
+                shutil.copy(f, output_dir / f.name)
+                log.info(f"Copied {f.name} to {output_dir}")
+            elif f.is_dir():
+                shutil.copytree(f, output_dir / f.name)
+                log.info(f"Copied {f.name} to {output_dir}")
+            else:
+                raise TypeError(
+                    f"When copying files, encountered object that "
+                    f"isn't a file or directory: '{f}'"
+                )
 
 
 def main() -> None:
