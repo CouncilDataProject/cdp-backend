@@ -584,7 +584,7 @@ def clip_and_reformat_video(
     video_filepath: Path,
     start_time: str,
     end_time: str,
-    format: str = "mp4",
+    out_format: str = "mp4",
 ) -> Path:
     """
     Clip a video file to a specific time range.
@@ -605,7 +605,7 @@ def clip_and_reformat_video(
 
     ffmpeg_stdout, ffmpeg_stderr = (
         ffmpeg.input(video_filepath)
-        .output(str(output_filepath), ss=start_time, to=end_time, format=format)
+        .output(str(output_filepath), ss=start_time, to=end_time, format=out_format)
         .run(quiet=True)
     )
 
