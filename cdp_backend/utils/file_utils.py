@@ -10,9 +10,12 @@ from pathlib import Path
 from typing import Optional, Tuple, Union
 from uuid import uuid4
 
+import fireo
 import fsspec
 import requests
 from fsspec.core import url_to_fs
+
+from ..database import models as db_models
 
 ###############################################################################
 
@@ -535,3 +538,43 @@ def generate_file_storage_name(file_uri: str, suffix: str) -> str:
     """
     hash = hash_file_contents(file_uri)
     return f"{hash}-{suffix}"
+
+
+def download_video_from_session_id(
+    credentials_file: str,
+    session_id: str,
+    dest: Optional[Union[str, Path]] = None,
+) -> Union[str, Path]:
+    """
+    Using the session_id provided, pulls the associated
+    video, and places it the destination.
+
+    Parameters
+    ----------
+    credentials_file: str
+        The path to the Google Service Account credentials JSON file used
+        to initialize the file store connection.
+    session_id: str
+        The id of the session to retrive the video for.
+    dest: Optional[Union[str, Path]]
+        A destination to store the file to.
+        This is passed directly to the resource_copy function.
+
+    Returns
+    -------
+    Path
+        The destination path.
+
+    See Also
+    --------
+    cdp_backend.utils.file_utils.resource_copy
+        The function that downloads the video from remote host.
+    """
+    # Connect to the database
+    fireo.connection(from_file=credentials_file)
+
+    # Fetch session
+    session = db_models.Session.collection.get(session_id)
+
+    # Download
+    return resource_copy(session.video_uri, dest)
