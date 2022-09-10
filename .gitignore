@@ -136,6 +136,7 @@ dev-infrastructure/firestore.indexes.json
 dev-infrastructure/firestore.rules
 dev-infrastructure/storage.rules
 dev-infrastructure/Justfile
+dev-infrastructure/gcloud-functions/*
 
 # Common credentials directories
 .keys/

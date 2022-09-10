@@ -78,6 +78,10 @@ pipeline = [
   "yt-dlp>=2022.2.4",
   "vimeo_downloader~=0.4"
 ]
+functions = [
+  "flask==2.1.0",
+  "functions-framework==3.1.0",
+]
 lint = [
   "black>=22.3.0",
   "check-manifest>=0.48",
@@ -155,6 +159,9 @@ exclude = ["*docs/*", "*tests/*"]
   "*infrastructure/*.rules",
   "*infrastructure/Justfile",
   "*infrastructure/*.json",
+  "*infrastructure/**/.gcloudignore",
+  "*infrastructure/**/requirements.txt",
+  "*infrastructure/**/README.md",
 ]
 
 # tools
@@ -181,7 +188,7 @@ ignore = [
   ".cookiecutter.yaml",
   "*docs/*",
   "codecov.yml",
-  "dev-infrastructure/*",
+  "dev-infrastructure/**",
   "example-configs/*",
   "*_captions.vtt",
   "*_transcript.json",
