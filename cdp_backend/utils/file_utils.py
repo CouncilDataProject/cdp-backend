@@ -597,6 +597,7 @@ def clip_and_reformat_video(
         The start time of the clip.
     end_time: str
         The end time of the clip.
+    out_format: str
     """
     import ffmpeg
 
