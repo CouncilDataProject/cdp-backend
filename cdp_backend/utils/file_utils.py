@@ -578,3 +578,42 @@ def download_video_from_session_id(
 
     # Download
     return resource_copy(session.video_uri, dest)
+
+
+def clip_and_reformat_video(
+    video_filepath: Path,
+    start_time: str,
+    end_time: str,
+    format: str = "mp4",
+) -> Path:
+    """
+    Clip a video file to a specific time range.
+
+    Parameters
+    ----------
+    video_filepath: Path
+        The filepath of the video to clip.
+    start_time: str
+        The start time of the clip.
+    end_time: str
+        The end time of the clip.
+    """
+    import ffmpeg
+
+    video_filepath = Path(video_filepath)
+    output_filepath = video_filepath.with_name(f"{video_filepath.name}-clip.{format}")
+
+    print(output_filepath)
+
+    ffmpeg_stdout, ffmpeg_stderr = (
+        ffmpeg.input(video_filepath)
+        .output(str(output_filepath), ss=start_time, to=end_time, format=format)
+        .run()
+    )
+
+    log.info("Finished clipping {} to {}".format(video_filepath, output_filepath))
+    log.debug(ffmpeg_stdout)
+    if ffmpeg_stderr:
+        log.error(ffmpeg_stderr)
+
+    return output_filepath
