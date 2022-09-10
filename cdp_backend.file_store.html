@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.infrastructure package" href="cdp_backend.infrastructure.html" /><link rel="prev" title="cdp_backend.database package" href="cdp_backend.database.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.file_store package - cdp-backend 0.1.dev1+g9028d52 documentation</title>
+        <title>cdp_backend.file_store package - cdp-backend 0.1.dev1+g947a390 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g9028d52 documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g947a390 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g9028d52 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g947a390 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -336,6 +336,28 @@ to initialize the file store connection.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>uri: str</dt><dd><p>The uri of the uploaded file in the file store.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.file_store.functions.upload_file_and_return_link">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.file_store.functions.</span></span><span class="sig-name descname"><span class="pre">upload_file_and_return_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cdp_backend/file_store/functions.html#upload_file_and_return_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.file_store.functions.upload_file_and_return_link" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>credentials_file: str</strong></dt><dd><p>The path to the Google Service Account credentials JSON file used
+to initialize the file store connection.</p>
+</dd>
+<dt><strong>bucket: str</strong></dt><dd><p>The name of the file store bucket to upload to.</p>
+</dd>
+<dt><strong>filepath: str</strong></dt><dd><p>The filepath to the local file to upload.</p>
+</dd>
+<dt><strong>save_name: Optional[str]</strong></dt><dd><p>The name to save the file as in the file store.</p>
+</dd>
+<dt><strong>remove_local: bool</strong></dt><dd><p>If True, remove the local file upon successful upload.</p>
 </dd>
 </dl>
 </dd>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g9028d52 documentation</title>
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g947a390 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g9028d52 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g947a390 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g9028d52 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g947a390 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -226,9 +226,12 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
 
+<span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
+
+<span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -751,6 +754,46 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">hash</span> <span class="o">=</span> <span class="n">hash_file_contents</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">hash</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="download_video_from_session_id"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.download_video_from_session_id">[docs]</a><span class="k">def</span> <span class="nf">download_video_from_session_id</span><span class="p">(</span>
+    <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">dest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Using the session_id provided, pulls the associated</span>
+<span class="sd">    video, and places it the destination.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    credentials_file: str</span>
+<span class="sd">        The path to the Google Service Account credentials JSON file used</span>
+<span class="sd">        to initialize the file store connection.</span>
+<span class="sd">    session_id: str</span>
+<span class="sd">        The id of the session to retrive the video for.</span>
+<span class="sd">    dest: Optional[Union[str, Path]]</span>
+<span class="sd">        A destination to store the file to.</span>
+<span class="sd">        This is passed directly to the resource_copy function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Path</span>
+<span class="sd">        The destination path.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    cdp_backend.utils.file_utils.resource_copy</span>
+<span class="sd">        The function that downloads the video from remote host.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Connect to the database</span>
+    <span class="n">fireo</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">)</span>
+
+    <span class="c1"># Fetch session</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">db_models</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+
+    <span class="c1"># Download</span>
+    <span class="k">return</span> <span class="n">resource_copy</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span></div>
 </pre></div>
         </article>
       </div>
