@@ -48,3 +48,5 @@ class RoleTitle:
     ALTERNATE = "Alternate"
     MEMBER = "Member"
     SUPERVISOR = "Supervisor"
+    SECRETARY = "Secretary"
+    VICEPRESIDENT = "Vice President"
