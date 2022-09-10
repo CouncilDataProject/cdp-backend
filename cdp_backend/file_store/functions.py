@@ -172,3 +172,43 @@ def remove_local_file(filepath: Union[str, Path]) -> None:
     fs.rm(str(filepath))
 
     log.debug(f"Removed {filepath} from local file system.")
+
+
+def upload_file_and_return_link(
+    credentials_file: str,
+    bucket: str,
+    filepath: str,
+    save_name: Optional[str] = None,
+    remove_local: bool = False,
+) -> str:
+    """
+    Parameters
+    ----------
+    credentials_file: str
+        The path to the Google Service Account credentials JSON file used
+        to initialize the file store connection.
+    bucket: str
+        The name of the file store bucket to upload to.
+    filepath: str
+        The filepath to the local file to upload.
+    save_name: Optional[str]
+        The name to save the file as in the file store.
+    remove_local: bool
+        If True, remove the local file upon successful upload.
+    """
+    # Bucket doesn't need gs://
+    # It actually fails if it is included
+    if bucket.startswith("gs://"):
+        bucket = bucket.replace("gs://", "")
+
+    # Upload
+    uri = upload_file(
+        credentials_file=credentials_file,
+        bucket=bucket,
+        filepath=filepath,
+        save_name=save_name,
+        remove_local=remove_local,
+    )
+
+    # Return link (lasts until file deletion)
+    return get_open_url_for_gcs_file(credentials_file=credentials_file, uri=uri)
