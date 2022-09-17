@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g8ceeb9a documentation</title>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g3ae949c documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g8ceeb9a documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g3ae949c documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g8ceeb9a documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3ae949c documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -800,39 +800,48 @@
     <span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">out_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;clipped.mp4&quot;</span><span class="p">),</span>
+    <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Clip a video file to a specific time range.</span>
+<span class="sd">    Clip a video file to a specific time range and convert to requested output format.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    video_filepath: Path</span>
 <span class="sd">        The filepath of the video to clip.</span>
 <span class="sd">    start_time: str</span>
-<span class="sd">        The start time of the clip.</span>
+<span class="sd">        The start time of the clip in HH:MM:SS.</span>
 <span class="sd">    end_time: str</span>
-<span class="sd">        The end time of the clip.</span>
-<span class="sd">    out_format: str</span>
+<span class="sd">        The end time of the clip in HH:MM:SS.</span>
+<span class="sd">    output_path: Path</span>
+<span class="sd">        The output path to place the clip at.</span>
+<span class="sd">        Must include a suffix to use for the reformatting.</span>
+<span class="sd">        Default: &quot;clipped.mp4&quot;</span>
+<span class="sd">    output_format: str</span>
+<span class="sd">        The output format.</span>
+<span class="sd">        Default: &quot;mp4&quot;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Path:</span>
+<span class="sd">        The path where the new file was stored to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">ffmpeg</span>
 
     <span class="n">video_filepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
-    <span class="c1"># output_filepath = video_filepath.with_name(f&quot;{video_filepath.name}-clip.{format}&quot;)</span>
-    <span class="n">output_filepath</span> <span class="o">=</span> <span class="s2">&quot;/tmp/clipped&quot;</span>
-
     <span class="n">ffmpeg_stdout</span><span class="p">,</span> <span class="n">ffmpeg_stderr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">output_filepath</span><span class="p">),</span> <span class="n">ss</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">out_format</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">output_path</span><span class="p">),</span> <span class="n">ss</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
         <span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished clipping </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">,</span> <span class="n">output_filepath</span><span class="p">))</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished clipping </span><span class="si">{</span><span class="n">video_filepath</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">ffmpeg_stdout</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ffmpeg_stderr</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">ffmpeg_stderr</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_filepath</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">output_path</span></div>
 </pre></div>
         </article>
       </div>
