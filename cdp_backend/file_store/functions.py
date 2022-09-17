@@ -195,6 +195,11 @@ def upload_file_and_return_link(
         The name to save the file as in the file store.
     remove_local: bool
         If True, remove the local file upon successful upload.
+
+    Returns
+    -------
+    str
+        HTTPS link to the uploaded file.
     """
     # Bucket doesn't need gs://
     # It actually fails if it is included
