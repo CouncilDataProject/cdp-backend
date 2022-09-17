@@ -605,7 +605,7 @@ def clip_and_reformat_video(
     output_format: str
         The output format.
         Default: "mp4"
-    
+
     Returns
     -------
     Path:
