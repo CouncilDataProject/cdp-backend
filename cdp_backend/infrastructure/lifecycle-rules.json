@@ -1,0 +1,15 @@
+{
+    "lifecycle": {
+        "rule": [
+            {
+                "action": {
+                    "type": "Delete"
+                },
+                "condition": {
+                    "age": 3,
+                    "matchesPrefix": ["GENERATED_CLIPS/*"]
+                }
+            }
+        ]
+    }
+}
