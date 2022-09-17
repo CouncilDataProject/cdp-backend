@@ -137,6 +137,7 @@ dev-infrastructure/firestore.rules
 dev-infrastructure/storage.rules
 dev-infrastructure/Justfile
 dev-infrastructure/gcloud-functions/*
+dev-infrastructure/lifecycle-rules.json
 test-clipped.*
 
 # Common credentials directories
