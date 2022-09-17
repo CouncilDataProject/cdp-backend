@@ -24,6 +24,7 @@ clean:
 	rm -fr test.err
 	rm -fr test.out
 	rm -fr *-thumbnail.*
+	rm -fr test-clipped.*
 	
 
 # install with all deps

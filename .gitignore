@@ -137,6 +137,7 @@ dev-infrastructure/firestore.rules
 dev-infrastructure/storage.rules
 dev-infrastructure/Justfile
 dev-infrastructure/gcloud-functions/*
+test-clipped.*
 
 # Common credentials directories
 .keys/

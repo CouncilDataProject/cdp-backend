@@ -276,3 +276,39 @@ def test_invalid_uri() -> None:
         str(e.value)
         == "Could not extract video id from uri: 'https://vimeo.com/fakeuri'"
     )
+
+
+@pytest.mark.parametrize(
+    "start_time, end_time",
+    [
+        ("1:25", "1:35"),
+        ("1:25", "1:35"),
+        ("01:10", "01:14"),
+        ("00:01:01", "00:01:03"),
+    ],
+)
+@pytest.mark.parametrize(
+    "output_format",
+    ["mp4", "mp3"],
+)
+def test_clip_and_reformat_video(
+    resources_dir: Path,
+    start_time: str,
+    end_time: str,
+    output_format: str,
+) -> None:
+    expected_outfile = Path(f"test-clipped.{output_format}")
+    try:
+        os.remove(expected_outfile)
+    except FileNotFoundError:
+        pass
+    outfile = file_utils.clip_and_reformat_video(
+        resources_dir / EXAMPLE_VIDEO_FILENAME,
+        start_time=start_time,
+        end_time=end_time,
+        output_path=expected_outfile,
+        output_format=output_format,
+    )
+    assert outfile.exists()
+    assert outfile == expected_outfile
+    os.remove(outfile)

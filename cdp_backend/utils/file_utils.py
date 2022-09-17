@@ -584,36 +584,45 @@ def clip_and_reformat_video(
     video_filepath: Path,
     start_time: str,
     end_time: str,
-    out_format: str = "mp4",
+    output_path: Path = Path("clipped.mp4"),
+    output_format: str = "mp4",
 ) -> Path:
     """
-    Clip a video file to a specific time range.
+    Clip a video file to a specific time range and convert to requested output format.
 
     Parameters
     ----------
     video_filepath: Path
         The filepath of the video to clip.
     start_time: str
-        The start time of the clip.
+        The start time of the clip in HH:MM:SS.
     end_time: str
-        The end time of the clip.
-    out_format: str
+        The end time of the clip in HH:MM:SS.
+    output_path: Path
+        The output path to place the clip at.
+        Must include a suffix to use for the reformatting.
+        Default: "clipped.mp4"
+    output_format: str
+        The output format.
+        Default: "mp4"
+    
+    Returns
+    -------
+    Path:
+        The path where the new file was stored to.
     """
     import ffmpeg
 
     video_filepath = Path(video_filepath)
-    # output_filepath = video_filepath.with_name(f"{video_filepath.name}-clip.{format}")
-    output_filepath = "/tmp/clipped"
-
     ffmpeg_stdout, ffmpeg_stderr = (
         ffmpeg.input(video_filepath)
-        .output(str(output_filepath), ss=start_time, to=end_time, format=out_format)
+        .output(str(output_path), ss=start_time, to=end_time, format=output_format)
         .run(quiet=True)
     )
 
-    log.info("Finished clipping {} to {}".format(video_filepath, output_filepath))
+    log.info(f"Finished clipping {video_filepath} to {output_path}")
     log.debug(ffmpeg_stdout)
     if ffmpeg_stderr:
         log.error(ffmpeg_stderr)
 
-    return Path(output_filepath)
+    return output_path
