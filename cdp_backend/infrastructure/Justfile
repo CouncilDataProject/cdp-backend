@@ -95,6 +95,7 @@ deploy project cookiecutter_yaml=default_cookiecutter_yaml key=default_key regio
 		gcloud functions deploy generate-clip \
 			--gen2 \
 			--region={{ if region == "us-central" { "us-central1" } else { region } }} \
+			--timeout=300 \
 			--runtime python39 \
 			--entry-point=generate_clip \
 			--trigger-http \
