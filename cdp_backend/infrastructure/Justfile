@@ -99,7 +99,7 @@ deploy project cookiecutter_yaml=default_cookiecutter_yaml key=default_key regio
 			--runtime python39 \
 			--entry-point=generate_clip \
 			--trigger-http \
-			--memory=512MB \
+			--memory=1GiB \
 			--allow-unauthenticated
 
 # run both setup and deploy
