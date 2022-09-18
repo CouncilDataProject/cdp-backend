@@ -80,7 +80,7 @@ setup project region=default_region:
 	@ echo "----------------------------------------------------------------------------"
 
 # deploy the CDP specific firestore and storage requirements
-deploy project cookiecutter_yaml=default_cookiecutter_yaml key=default_key region=default_region:
+deploy project cookiecutter_yaml=default_cookiecutter_yaml:
 	just enable-services
 	firebase use --add {{project}}
 	firebase deploy --only firestore:rules
@@ -90,6 +90,9 @@ deploy project cookiecutter_yaml=default_cookiecutter_yaml key=default_key regio
 	gsutil cors set cors.json gs://{{project}}.appspot.com/
 	gsutil defacl ch -u AllUsers:R gs://{{project}}.appspot.com/
 	gsutil lifecycle set {{justfile_directory()}}/lifecycle-rules.json gs://{{project}}.appspot.com/
+
+deploy-clipping key=default_key region=default_region:
+	just enable-services
 	cd {{justfile_directory()}}/gcloud-functions/generate-clip/ && \
 		cp {{key}} ./GOOGLE_CREDENTIALS.json && \
 		gcloud functions deploy generate-clip \

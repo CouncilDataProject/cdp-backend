@@ -78,6 +78,18 @@ Example:
 just deploy cdp-eva-dev-001
 ```
 
+Enable video / audio clipping:
+
+```bash
+just deploy-clipping {key} {region}
+```
+
+Example:
+
+```bash
+just deploy-clipping /home/active/cdp/cdp-eva-dev-001.json us-central
+```
+
 ### All Commands
 
 -   See Justfile commands with `just` or open the Justfile.
