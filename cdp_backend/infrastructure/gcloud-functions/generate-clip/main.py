@@ -82,12 +82,17 @@ def generate_clip(request: Request) -> Union[str, NoReturn]:
         logging.error("Requested clip duration exceeds allowed maximum.")
         return abort(400)
 
+    # Path to store the local full video
+    local_full_video = f"/tmp/{uuid4()}"
+    # Path to store the local clip
+    local_clip = f"/tmp/{uuid4()}"
+
     # Download the session video
     try:
         local_video = download_video_from_session_id(
             credentials_file=CREDENTIALS_PATH,
             session_id=session_id,
-            dest="/tmp/full-video",
+            dest=local_full_video,
         )
     except Exception as e:
         logging.error(
@@ -101,7 +106,7 @@ def generate_clip(request: Request) -> Union[str, NoReturn]:
             video_filepath=Path(local_video),
             start_time=start_time,
             end_time=end_time,
-            output_path=Path("/tmp/clipped"),
+            output_path=Path(local_clip),
             output_format=output_format,
         )
     except Exception as e:
