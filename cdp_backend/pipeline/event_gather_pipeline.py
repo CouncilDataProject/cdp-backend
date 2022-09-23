@@ -160,7 +160,11 @@ def create_event_gather_flow(
                 if session.caption_uri is not None:
                     # If the caption doesn't exist, remove the property
                     # This will result in Speech-to-Text being used instead
-                    if not resource_exists(session.caption_uri):
+                    if not resource_exists(
+                        session.caption_uri
+                    ) or not file_utils.caption_is_valid(
+                        tmp_video_filepath, session.caption_uri
+                    ):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
