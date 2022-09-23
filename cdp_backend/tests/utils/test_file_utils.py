@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Optional
 from unittest import mock
 
+import ffmpeg
 import imageio
 import pytest
 from py._path.local import LocalPath
@@ -16,6 +17,7 @@ from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
     MAX_THUMBNAIL_HEIGHT,
     MAX_THUMBNAIL_WIDTH,
+    caption_is_valid,
     resource_copy,
 )
 
@@ -312,3 +314,26 @@ def test_clip_and_reformat_video(
     assert outfile.exists()
     assert outfile == expected_outfile
     os.remove(outfile)
+
+
+@pytest.mark.parametrize(
+    "video_uri, caption_uri, end_time, expected",
+    [
+        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, False),
+        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 60, True),
+    ],
+)
+def test_caption_is_valid(
+    resources_dir: Path, video_uri: str, caption_uri: str, end_time: int, expected: bool
+) -> None:
+    temp_video = "caption-test.mp4"
+    ffmpeg.input(str(bytes(resources_dir / video_uri), encoding="utf-8")).output(
+        temp_video, codec="copy", t=end_time
+    ).run(overwrite_output=True)
+
+    valid = caption_is_valid(
+        temp_video,
+        str(bytes(resources_dir / caption_uri), encoding="utf-8"),
+    )
+    os.remove(temp_video)
+    assert valid == expected
