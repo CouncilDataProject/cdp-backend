@@ -10,9 +10,11 @@ from pathlib import Path
 from typing import Optional, Tuple, Union
 from uuid import uuid4
 
+import ffmpeg
 import fireo
 import fsspec
 import requests
+import webvtt
 from fsspec.core import url_to_fs
 
 from ..database import models as db_models
@@ -626,3 +628,40 @@ def clip_and_reformat_video(
         log.error(ffmpeg_stderr)
 
     return output_path
+
+
+def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
+    """
+    Validate the caption file at the URI provided.
+
+    Parameters
+    ----------
+    video_uri: str
+        The URI for the the target video.
+    uri: str
+        The URI to validate caption file for.
+
+    Returns
+    -------
+    status: bool
+        The validation status.
+
+    Notes
+    -----
+    Duration of the video at video_uri
+    and the duration of the caption file are compared.
+    The caption file is accepted if the durations differ by no more than 20%.
+    """
+    try:
+        ffprobe = ffmpeg.probe(video_uri)
+    except ffmpeg.Error as e:
+        log.warning(f"ffprobe{video_uri}): {e.stderr}")
+        return False
+
+    caption_length = webvtt.read(caption_uri).total_length
+    similar_audio_streams = filter(
+        lambda s: s.get("codec_type", "") == "audio"
+        and math.isclose(float(s.get("duration", "0.0")), caption_length, rel_tol=0.2),
+        ffprobe.get("streams", []),
+    )
+    return any(similar_audio_streams)
