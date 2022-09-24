@@ -3,7 +3,6 @@
 
 import logging
 import math
-import os
 import random
 import re
 from hashlib import sha256
@@ -660,17 +659,16 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
         log.warning(f"ffprobe({video_uri}): {e.stderr}")
         return False
 
+    # Making sure temp copy of the caption file is deleted when finished
     with TemporaryDirectory() as dir_path:
         local_caption_path = resource_copy(caption_uri, dst=dir_path)
+        caption_length = webvtt.read(local_caption_path).total_length
 
-        try:
-            caption_length = webvtt.read(local_caption_path).total_length
-
-            similar_audio_streams = filter(
-                lambda s: s.get("codec_type", "") == "audio"
-                and math.isclose(float(s.get("duration", "0.0")), caption_length, rel_tol=0.2),
-                ffprobe.get("streams", []),
-            )
-            return any(similar_audio_streams)
-        finally:
-            os.remove(local_caption_path)
+        similar_audio_streams = filter(
+            lambda s: s.get("codec_type", "") == "audio"
+            and math.isclose(
+                float(s.get("duration", "0.0")), caption_length, rel_tol=0.2
+            ),
+            ffprobe.get("streams", []),
+        )
+        return any(similar_audio_streams)

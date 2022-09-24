@@ -5,6 +5,7 @@ import os
 import random
 import sys
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Optional
 from unittest import mock
 
@@ -321,20 +322,33 @@ def test_clip_and_reformat_video(
     [
         (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, True, False),
         (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 60, True, True),
-        (EXAMPLE_VIDEO_FILENAME, "https://gist.github.com/dphoria/d3f35b5509b784ccd14b7efdc67df752/raw/c18fc459c62ff7530536ba19d08021682627c18a/sample.vtt", 27, False, True),
+        (
+            EXAMPLE_VIDEO_FILENAME,
+            "https://gist.github.com/dphoria/d3f35b5509b784ccd14b7efdc67df752/raw/"
+            "c18fc459c62ff7530536ba19d08021682627c18a/sample.vtt",
+            27,
+            False,
+            True,
+        ),
     ],
 )
 def test_caption_is_valid(
-    resources_dir: Path, video_uri: str, caption_uri: str, end_time: int, is_resource: bool, expected: bool
+    resources_dir: Path,
+    video_uri: str,
+    caption_uri: str,
+    end_time: int,
+    is_resource: bool,
+    expected: bool,
 ) -> None:
-    temp_video = "caption-test.mp4"
-    ffmpeg.input(str(bytes(resources_dir / video_uri), encoding="utf-8")).output(
-        temp_video, codec="copy", t=end_time
-    ).run(overwrite_output=True)
+    with TemporaryDirectory() as dir_path:
+        temp_video = str(
+            bytes(Path(dir_path) / f"caption-test-{end_time}.mp4"), encoding="utf-8"
+        )
+        ffmpeg.input(str(bytes(resources_dir / video_uri), encoding="utf-8")).output(
+            temp_video, codec="copy", t=end_time
+        ).run(overwrite_output=True)
 
-    if is_resource:
-        caption_uri = str(bytes(resources_dir / caption_uri), encoding="utf-8")
+        if is_resource:
+            caption_uri = str(bytes(resources_dir / caption_uri), encoding="utf-8")
 
-    valid = caption_is_valid(temp_video, caption_uri)
-    os.remove(temp_video)
-    assert valid == expected
+        assert caption_is_valid(temp_video, caption_uri) == expected
