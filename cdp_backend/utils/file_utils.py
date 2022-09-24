@@ -3,10 +3,12 @@
 
 import logging
 import math
+import os
 import random
 import re
 from hashlib import sha256
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Optional, Tuple, Union
 from uuid import uuid4
 
@@ -655,13 +657,20 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
     try:
         ffprobe = ffmpeg.probe(video_uri)
     except ffmpeg.Error as e:
-        log.warning(f"ffprobe{video_uri}): {e.stderr}")
+        log.warning(f"ffprobe({video_uri}): {e.stderr}")
         return False
 
-    caption_length = webvtt.read(caption_uri).total_length
-    similar_audio_streams = filter(
-        lambda s: s.get("codec_type", "") == "audio"
-        and math.isclose(float(s.get("duration", "0.0")), caption_length, rel_tol=0.2),
-        ffprobe.get("streams", []),
-    )
-    return any(similar_audio_streams)
+    with TemporaryDirectory() as dir_path:
+        local_caption_path = resource_copy(caption_uri, dst=dir_path)
+
+        try:
+            caption_length = webvtt.read(local_caption_path).total_length
+
+            similar_audio_streams = filter(
+                lambda s: s.get("codec_type", "") == "audio"
+                and math.isclose(float(s.get("duration", "0.0")), caption_length, rel_tol=0.2),
+                ffprobe.get("streams", []),
+            )
+            return any(similar_audio_streams)
+        finally:
+            os.remove(local_caption_path)

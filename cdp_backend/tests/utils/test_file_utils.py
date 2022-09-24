@@ -317,23 +317,24 @@ def test_clip_and_reformat_video(
 
 
 @pytest.mark.parametrize(
-    "video_uri, caption_uri, end_time, expected",
+    "video_uri, caption_uri, end_time, is_resource, expected",
     [
-        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, False),
-        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 60, True),
+        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, True, False),
+        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 60, True, True),
+        (EXAMPLE_VIDEO_FILENAME, "https://gist.github.com/dphoria/d3f35b5509b784ccd14b7efdc67df752/raw/c18fc459c62ff7530536ba19d08021682627c18a/sample.vtt", 27, False, True),
     ],
 )
 def test_caption_is_valid(
-    resources_dir: Path, video_uri: str, caption_uri: str, end_time: int, expected: bool
+    resources_dir: Path, video_uri: str, caption_uri: str, end_time: int, is_resource: bool, expected: bool
 ) -> None:
     temp_video = "caption-test.mp4"
     ffmpeg.input(str(bytes(resources_dir / video_uri), encoding="utf-8")).output(
         temp_video, codec="copy", t=end_time
     ).run(overwrite_output=True)
 
-    valid = caption_is_valid(
-        temp_video,
-        str(bytes(resources_dir / caption_uri), encoding="utf-8"),
-    )
+    if is_resource:
+        caption_uri = str(bytes(resources_dir / caption_uri), encoding="utf-8")
+
+    valid = caption_is_valid(temp_video, caption_uri)
     os.remove(temp_video)
     assert valid == expected
