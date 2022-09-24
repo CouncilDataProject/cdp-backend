@@ -17,6 +17,11 @@ import fsspec
 import requests
 import webvtt
 from fsspec.core import url_to_fs
+from webvtt.exceptions import (
+    InvalidCaptionsError,
+    MalformedCaptionError,
+    MalformedFileError,
+)
 
 from ..database import models as db_models
 
@@ -662,7 +667,11 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
     # Making sure temp copy of the caption file is deleted when finished
     with TemporaryDirectory() as dir_path:
         local_caption_path = resource_copy(caption_uri, dst=dir_path)
-        caption_length = webvtt.read(local_caption_path).total_length
+        try:
+            caption_length = webvtt.read(local_caption_path).total_length
+        except (InvalidCaptionsError, MalformedCaptionError, MalformedFileError) as e:
+            log.warning(f"webvtt.read({caption_uri}): {str(e)}")
+            return False
 
         similar_audio_streams = filter(
             lambda s: s.get("codec_type", "") == "audio"
