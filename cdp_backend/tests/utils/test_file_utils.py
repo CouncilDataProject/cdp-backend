@@ -320,13 +320,15 @@ def test_clip_and_reformat_video(
 @pytest.mark.parametrize(
     "video_uri, caption_uri, end_time, is_resource, expected",
     [
+        # the video is about 3 minutes and boston_captions.vtt is about 1 minute
         (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, True, False),
         (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 60, True, True),
         (
             EXAMPLE_VIDEO_FILENAME,
+            # about 30 seconds
             "https://gist.github.com/dphoria/d3f35b5509b784ccd14b7efdc67df752/raw/"
             "c18fc459c62ff7530536ba19d08021682627c18a/sample.vtt",
-            27,
+            30,
             False,
             True,
         ),
