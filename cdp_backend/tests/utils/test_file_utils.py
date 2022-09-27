@@ -342,16 +342,14 @@ def test_caption_is_valid(
     is_resource: bool,
     expected: bool,
 ) -> None:
-    def path_as_str(path: Path) -> str:
-        return str(bytes(path), encoding="utf-8")
-
     with TemporaryDirectory() as dir_path:
-        temp_video = path_as_str(Path(dir_path) / f"caption-test-{end_time}.mp4")
-        ffmpeg.input(path_as_str(resources_dir / video_uri)).output(
+        temp_video = str(Path(dir_path) / f"caption-test-{end_time}.mp4")
+        ffmpeg.input(str(resources_dir / video_uri)).output(
             temp_video, codec="copy", t=end_time
         ).run(overwrite_output=True)
 
         if is_resource:
-            caption_uri = path_as_str(resources_dir / caption_uri)
+            caption_uri = str(resources_dir / caption_uri)
 
+        print(temp_video)
         assert caption_is_valid(temp_video, caption_uri) == expected
