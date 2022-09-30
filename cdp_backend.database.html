@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.file_store package" href="cdp_backend.file_store.html" /><link rel="prev" title="cdp_backend.bin package" href="cdp_backend.bin.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>cdp_backend.database package - cdp-backend 0.1.dev1+gab3a65d documentation</title>
+    <meta name="generator" content="sphinx-5.2.2, furo 2022.09.29"/>
+        <title>cdp_backend.database package - cdp-backend 0.1.dev1+g4b2007b documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+gab3a65d documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g4b2007b documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gab3a65d documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g4b2007b documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -200,7 +200,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -1949,11 +1950,387 @@ If does not exist, a LookupError is raised.</p>
             <ul>
 <li><a class="reference internal" href="#">cdp_backend.database package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.database.constants">cdp_backend.database.constants module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.database.functions">cdp_backend.database.functions module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.database.models">cdp_backend.database.models module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.database.types">cdp_backend.database.types module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.database.validators">cdp_backend.database.validators module</a></li>
+<li><a class="reference internal" href="#module-cdp_backend.database.constants">cdp_backend.database.constants module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.constants.EventMinutesItemDecision"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemDecision</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.constants.EventMinutesItemDecision.FAILED"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemDecision.FAILED</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.EventMinutesItemDecision.PASSED"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemDecision.PASSED</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.MatterStatusDecision"><code class="docutils literal notranslate"><span class="pre">MatterStatusDecision</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.constants.MatterStatusDecision.ADOPTED"><code class="docutils literal notranslate"><span class="pre">MatterStatusDecision.ADOPTED</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.MatterStatusDecision.IN_PROGRESS"><code class="docutils literal notranslate"><span class="pre">MatterStatusDecision.IN_PROGRESS</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.MatterStatusDecision.REJECTED"><code class="docutils literal notranslate"><span class="pre">MatterStatusDecision.REJECTED</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.Order"><code class="docutils literal notranslate"><span class="pre">Order</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.constants.Order.ASCENDING"><code class="docutils literal notranslate"><span class="pre">Order.ASCENDING</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.Order.DESCENDING"><code class="docutils literal notranslate"><span class="pre">Order.DESCENDING</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle"><code class="docutils literal notranslate"><span class="pre">RoleTitle</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.ALTERNATE"><code class="docutils literal notranslate"><span class="pre">RoleTitle.ALTERNATE</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.CHAIR"><code class="docutils literal notranslate"><span class="pre">RoleTitle.CHAIR</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.COUNCILMEMBER"><code class="docutils literal notranslate"><span class="pre">RoleTitle.COUNCILMEMBER</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.COUNCILPRESIDENT"><code class="docutils literal notranslate"><span class="pre">RoleTitle.COUNCILPRESIDENT</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.MEMBER"><code class="docutils literal notranslate"><span class="pre">RoleTitle.MEMBER</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.SECRETARY"><code class="docutils literal notranslate"><span class="pre">RoleTitle.SECRETARY</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.SUPERVISOR"><code class="docutils literal notranslate"><span class="pre">RoleTitle.SUPERVISOR</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.VICEPRESIDENT"><code class="docutils literal notranslate"><span class="pre">RoleTitle.VICEPRESIDENT</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.RoleTitle.VICE_CHAIR"><code class="docutils literal notranslate"><span class="pre">RoleTitle.VICE_CHAIR</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision"><code class="docutils literal notranslate"><span class="pre">VoteDecision</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.ABSENT_APPROVE"><code class="docutils literal notranslate"><span class="pre">VoteDecision.ABSENT_APPROVE</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.ABSENT_NON_VOTING"><code class="docutils literal notranslate"><span class="pre">VoteDecision.ABSENT_NON_VOTING</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.ABSENT_REJECT"><code class="docutils literal notranslate"><span class="pre">VoteDecision.ABSENT_REJECT</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN_APPROVE"><code class="docutils literal notranslate"><span class="pre">VoteDecision.ABSTAIN_APPROVE</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN_NON_VOTING"><code class="docutils literal notranslate"><span class="pre">VoteDecision.ABSTAIN_NON_VOTING</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.ABSTAIN_REJECT"><code class="docutils literal notranslate"><span class="pre">VoteDecision.ABSTAIN_REJECT</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.APPROVE"><code class="docutils literal notranslate"><span class="pre">VoteDecision.APPROVE</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.constants.VoteDecision.REJECT"><code class="docutils literal notranslate"><span class="pre">VoteDecision.REJECT</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.database.functions">cdp_backend.database.functions module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_body"><code class="docutils literal notranslate"><span class="pre">create_body()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_event"><code class="docutils literal notranslate"><span class="pre">create_event()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_event_minutes_item"><code class="docutils literal notranslate"><span class="pre">create_event_minutes_item()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_event_minutes_item_file"><code class="docutils literal notranslate"><span class="pre">create_event_minutes_item_file()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_file"><code class="docutils literal notranslate"><span class="pre">create_file()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_matter"><code class="docutils literal notranslate"><span class="pre">create_matter()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_matter_file"><code class="docutils literal notranslate"><span class="pre">create_matter_file()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_matter_sponsor"><code class="docutils literal notranslate"><span class="pre">create_matter_sponsor()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_matter_status"><code class="docutils literal notranslate"><span class="pre">create_matter_status()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_minimal_event_minutes_item"><code class="docutils literal notranslate"><span class="pre">create_minimal_event_minutes_item()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_minimal_person"><code class="docutils literal notranslate"><span class="pre">create_minimal_person()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_minutes_item"><code class="docutils literal notranslate"><span class="pre">create_minutes_item()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_person"><code class="docutils literal notranslate"><span class="pre">create_person()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_role"><code class="docutils literal notranslate"><span class="pre">create_role()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_seat"><code class="docutils literal notranslate"><span class="pre">create_seat()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_session"><code class="docutils literal notranslate"><span class="pre">create_session()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_transcript"><code class="docutils literal notranslate"><span class="pre">create_transcript()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.create_vote"><code class="docutils literal notranslate"><span class="pre">create_vote()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.generate_and_attach_doc_hash_as_id"><code class="docutils literal notranslate"><span class="pre">generate_and_attach_doc_hash_as_id()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.get_all_of_collection"><code class="docutils literal notranslate"><span class="pre">get_all_of_collection()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.functions.upload_db_model"><code class="docutils literal notranslate"><span class="pre">upload_db_model()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.database.models">cdp_backend.database.models module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body"><code class="docutils literal notranslate"><span class="pre">Body</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.Example"><code class="docutils literal notranslate"><span class="pre">Body.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.Meta"><code class="docutils literal notranslate"><span class="pre">Body.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Body.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.collection"><code class="docutils literal notranslate"><span class="pre">Body.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.collection_name"><code class="docutils literal notranslate"><span class="pre">Body.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.description"><code class="docutils literal notranslate"><span class="pre">Body.description</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.end_datetime"><code class="docutils literal notranslate"><span class="pre">Body.end_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.external_source_id"><code class="docutils literal notranslate"><span class="pre">Body.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.id"><code class="docutils literal notranslate"><span class="pre">Body.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.is_active"><code class="docutils literal notranslate"><span class="pre">Body.is_active</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.name"><code class="docutils literal notranslate"><span class="pre">Body.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Body.start_datetime"><code class="docutils literal notranslate"><span class="pre">Body.start_datetime</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.Example"><code class="docutils literal notranslate"><span class="pre">Event.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.Meta"><code class="docutils literal notranslate"><span class="pre">Event.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Event.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.agenda_uri"><code class="docutils literal notranslate"><span class="pre">Event.agenda_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.body_ref"><code class="docutils literal notranslate"><span class="pre">Event.body_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.collection"><code class="docutils literal notranslate"><span class="pre">Event.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.collection_name"><code class="docutils literal notranslate"><span class="pre">Event.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.event_datetime"><code class="docutils literal notranslate"><span class="pre">Event.event_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.external_source_id"><code class="docutils literal notranslate"><span class="pre">Event.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.hover_thumbnail_ref"><code class="docutils literal notranslate"><span class="pre">Event.hover_thumbnail_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.id"><code class="docutils literal notranslate"><span class="pre">Event.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.minutes_uri"><code class="docutils literal notranslate"><span class="pre">Event.minutes_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.set_validator_kwargs"><code class="docutils literal notranslate"><span class="pre">Event.set_validator_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Event.static_thumbnail_ref"><code class="docutils literal notranslate"><span class="pre">Event.static_thumbnail_ref</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.Example"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.Meta"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.collection"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.collection_name"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.decision"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.decision</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.event_ref"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.event_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.external_source_id"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.id"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.index"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItem.minutes_item_ref"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.minutes_item_ref</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.Example"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.Meta"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.collection"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.collection_name"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.event_minutes_item_ref"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.event_minutes_item_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.external_source_id"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.id"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.name"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.set_validator_kwargs"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.set_validator_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.EventMinutesItemFile.uri"><code class="docutils literal notranslate"><span class="pre">EventMinutesItemFile.uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File"><code class="docutils literal notranslate"><span class="pre">File</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.Example"><code class="docutils literal notranslate"><span class="pre">File.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.Meta"><code class="docutils literal notranslate"><span class="pre">File.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">File.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.collection"><code class="docutils literal notranslate"><span class="pre">File.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.collection_name"><code class="docutils literal notranslate"><span class="pre">File.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.description"><code class="docutils literal notranslate"><span class="pre">File.description</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.id"><code class="docutils literal notranslate"><span class="pre">File.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.media_type"><code class="docutils literal notranslate"><span class="pre">File.media_type</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.name"><code class="docutils literal notranslate"><span class="pre">File.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.set_validator_kwargs"><code class="docutils literal notranslate"><span class="pre">File.set_validator_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.File.uri"><code class="docutils literal notranslate"><span class="pre">File.uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.Example"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.Meta"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.collection"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.collection_name"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.context_span"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.context_span</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.datetime_weighted_value"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.datetime_weighted_value</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.event_ref"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.event_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.id"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.stemmed_gram"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.stemmed_gram</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.unstemmed_gram"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.unstemmed_gram</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.IndexedEventGram.value"><code class="docutils literal notranslate"><span class="pre">IndexedEventGram.value</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter"><code class="docutils literal notranslate"><span class="pre">Matter</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.Example"><code class="docutils literal notranslate"><span class="pre">Matter.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.Meta"><code class="docutils literal notranslate"><span class="pre">Matter.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Matter.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.collection"><code class="docutils literal notranslate"><span class="pre">Matter.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.collection_name"><code class="docutils literal notranslate"><span class="pre">Matter.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.external_source_id"><code class="docutils literal notranslate"><span class="pre">Matter.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.id"><code class="docutils literal notranslate"><span class="pre">Matter.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.matter_type"><code class="docutils literal notranslate"><span class="pre">Matter.matter_type</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.name"><code class="docutils literal notranslate"><span class="pre">Matter.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Matter.title"><code class="docutils literal notranslate"><span class="pre">Matter.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile"><code class="docutils literal notranslate"><span class="pre">MatterFile</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.Example"><code class="docutils literal notranslate"><span class="pre">MatterFile.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.Meta"><code class="docutils literal notranslate"><span class="pre">MatterFile.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">MatterFile.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.collection"><code class="docutils literal notranslate"><span class="pre">MatterFile.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.collection_name"><code class="docutils literal notranslate"><span class="pre">MatterFile.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.external_source_id"><code class="docutils literal notranslate"><span class="pre">MatterFile.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.id"><code class="docutils literal notranslate"><span class="pre">MatterFile.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.matter_ref"><code class="docutils literal notranslate"><span class="pre">MatterFile.matter_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.name"><code class="docutils literal notranslate"><span class="pre">MatterFile.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.set_validator_kwargs"><code class="docutils literal notranslate"><span class="pre">MatterFile.set_validator_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterFile.uri"><code class="docutils literal notranslate"><span class="pre">MatterFile.uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor"><code class="docutils literal notranslate"><span class="pre">MatterSponsor</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.Example"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.Meta"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.collection"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.collection_name"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.external_source_id"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.id"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.matter_ref"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.matter_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterSponsor.person_ref"><code class="docutils literal notranslate"><span class="pre">MatterSponsor.person_ref</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus"><code class="docutils literal notranslate"><span class="pre">MatterStatus</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.Example"><code class="docutils literal notranslate"><span class="pre">MatterStatus.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.Meta"><code class="docutils literal notranslate"><span class="pre">MatterStatus.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">MatterStatus.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.collection"><code class="docutils literal notranslate"><span class="pre">MatterStatus.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.collection_name"><code class="docutils literal notranslate"><span class="pre">MatterStatus.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.event_minutes_item_ref"><code class="docutils literal notranslate"><span class="pre">MatterStatus.event_minutes_item_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.external_source_id"><code class="docutils literal notranslate"><span class="pre">MatterStatus.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.id"><code class="docutils literal notranslate"><span class="pre">MatterStatus.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.matter_ref"><code class="docutils literal notranslate"><span class="pre">MatterStatus.matter_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.status"><code class="docutils literal notranslate"><span class="pre">MatterStatus.status</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MatterStatus.update_datetime"><code class="docutils literal notranslate"><span class="pre">MatterStatus.update_datetime</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem"><code class="docutils literal notranslate"><span class="pre">MinutesItem</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.Example"><code class="docutils literal notranslate"><span class="pre">MinutesItem.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.Meta"><code class="docutils literal notranslate"><span class="pre">MinutesItem.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">MinutesItem.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.collection"><code class="docutils literal notranslate"><span class="pre">MinutesItem.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.collection_name"><code class="docutils literal notranslate"><span class="pre">MinutesItem.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.description"><code class="docutils literal notranslate"><span class="pre">MinutesItem.description</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.external_source_id"><code class="docutils literal notranslate"><span class="pre">MinutesItem.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.id"><code class="docutils literal notranslate"><span class="pre">MinutesItem.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.matter_ref"><code class="docutils literal notranslate"><span class="pre">MinutesItem.matter_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.MinutesItem.name"><code class="docutils literal notranslate"><span class="pre">MinutesItem.name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person"><code class="docutils literal notranslate"><span class="pre">Person</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.Example"><code class="docutils literal notranslate"><span class="pre">Person.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.Meta"><code class="docutils literal notranslate"><span class="pre">Person.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Person.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.collection"><code class="docutils literal notranslate"><span class="pre">Person.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.collection_name"><code class="docutils literal notranslate"><span class="pre">Person.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.email"><code class="docutils literal notranslate"><span class="pre">Person.email</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.external_source_id"><code class="docutils literal notranslate"><span class="pre">Person.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.generate_router_string"><code class="docutils literal notranslate"><span class="pre">Person.generate_router_string()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.id"><code class="docutils literal notranslate"><span class="pre">Person.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.is_active"><code class="docutils literal notranslate"><span class="pre">Person.is_active</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.name"><code class="docutils literal notranslate"><span class="pre">Person.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.phone"><code class="docutils literal notranslate"><span class="pre">Person.phone</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.picture_ref"><code class="docutils literal notranslate"><span class="pre">Person.picture_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.router_string"><code class="docutils literal notranslate"><span class="pre">Person.router_string</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.set_validator_kwargs"><code class="docutils literal notranslate"><span class="pre">Person.set_validator_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.strip_accents"><code class="docutils literal notranslate"><span class="pre">Person.strip_accents()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Person.website"><code class="docutils literal notranslate"><span class="pre">Person.website</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role"><code class="docutils literal notranslate"><span class="pre">Role</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.Example"><code class="docutils literal notranslate"><span class="pre">Role.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.Meta"><code class="docutils literal notranslate"><span class="pre">Role.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Role.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.body_ref"><code class="docutils literal notranslate"><span class="pre">Role.body_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.collection"><code class="docutils literal notranslate"><span class="pre">Role.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.collection_name"><code class="docutils literal notranslate"><span class="pre">Role.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.end_datetime"><code class="docutils literal notranslate"><span class="pre">Role.end_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.external_source_id"><code class="docutils literal notranslate"><span class="pre">Role.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.id"><code class="docutils literal notranslate"><span class="pre">Role.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.person_ref"><code class="docutils literal notranslate"><span class="pre">Role.person_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.seat_ref"><code class="docutils literal notranslate"><span class="pre">Role.seat_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.start_datetime"><code class="docutils literal notranslate"><span class="pre">Role.start_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Role.title"><code class="docutils literal notranslate"><span class="pre">Role.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat"><code class="docutils literal notranslate"><span class="pre">Seat</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.Example"><code class="docutils literal notranslate"><span class="pre">Seat.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.Meta"><code class="docutils literal notranslate"><span class="pre">Seat.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Seat.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.collection"><code class="docutils literal notranslate"><span class="pre">Seat.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.collection_name"><code class="docutils literal notranslate"><span class="pre">Seat.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.electoral_area"><code class="docutils literal notranslate"><span class="pre">Seat.electoral_area</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.electoral_type"><code class="docutils literal notranslate"><span class="pre">Seat.electoral_type</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.external_source_id"><code class="docutils literal notranslate"><span class="pre">Seat.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.id"><code class="docutils literal notranslate"><span class="pre">Seat.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.image_ref"><code class="docutils literal notranslate"><span class="pre">Seat.image_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Seat.name"><code class="docutils literal notranslate"><span class="pre">Seat.name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.Example"><code class="docutils literal notranslate"><span class="pre">Session.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.Meta"><code class="docutils literal notranslate"><span class="pre">Session.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Session.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.caption_uri"><code class="docutils literal notranslate"><span class="pre">Session.caption_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.collection"><code class="docutils literal notranslate"><span class="pre">Session.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.collection_name"><code class="docutils literal notranslate"><span class="pre">Session.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.event_ref"><code class="docutils literal notranslate"><span class="pre">Session.event_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.external_source_id"><code class="docutils literal notranslate"><span class="pre">Session.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.id"><code class="docutils literal notranslate"><span class="pre">Session.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.session_content_hash"><code class="docutils literal notranslate"><span class="pre">Session.session_content_hash</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.session_datetime"><code class="docutils literal notranslate"><span class="pre">Session.session_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.session_index"><code class="docutils literal notranslate"><span class="pre">Session.session_index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.set_validator_kwargs"><code class="docutils literal notranslate"><span class="pre">Session.set_validator_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Session.video_uri"><code class="docutils literal notranslate"><span class="pre">Session.video_uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript"><code class="docutils literal notranslate"><span class="pre">Transcript</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.Example"><code class="docutils literal notranslate"><span class="pre">Transcript.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.Meta"><code class="docutils literal notranslate"><span class="pre">Transcript.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Transcript.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.collection"><code class="docutils literal notranslate"><span class="pre">Transcript.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.collection_name"><code class="docutils literal notranslate"><span class="pre">Transcript.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.confidence"><code class="docutils literal notranslate"><span class="pre">Transcript.confidence</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.created"><code class="docutils literal notranslate"><span class="pre">Transcript.created</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.file_ref"><code class="docutils literal notranslate"><span class="pre">Transcript.file_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.generator"><code class="docutils literal notranslate"><span class="pre">Transcript.generator</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.id"><code class="docutils literal notranslate"><span class="pre">Transcript.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Transcript.session_ref"><code class="docutils literal notranslate"><span class="pre">Transcript.session_ref</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote"><code class="docutils literal notranslate"><span class="pre">Vote</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.Example"><code class="docutils literal notranslate"><span class="pre">Vote.Example()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.Meta"><code class="docutils literal notranslate"><span class="pre">Vote.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.Meta.ignore_none_field"><code class="docutils literal notranslate"><span class="pre">Vote.Meta.ignore_none_field</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.collection"><code class="docutils literal notranslate"><span class="pre">Vote.collection</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.collection_name"><code class="docutils literal notranslate"><span class="pre">Vote.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.decision"><code class="docutils literal notranslate"><span class="pre">Vote.decision</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.event_minutes_item_ref"><code class="docutils literal notranslate"><span class="pre">Vote.event_minutes_item_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.event_ref"><code class="docutils literal notranslate"><span class="pre">Vote.event_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.external_source_id"><code class="docutils literal notranslate"><span class="pre">Vote.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.id"><code class="docutils literal notranslate"><span class="pre">Vote.id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.in_majority"><code class="docutils literal notranslate"><span class="pre">Vote.in_majority</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.matter_ref"><code class="docutils literal notranslate"><span class="pre">Vote.matter_ref</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.models.Vote.person_ref"><code class="docutils literal notranslate"><span class="pre">Vote.person_ref</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.database.types">cdp_backend.database.types module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.types.IndexedField"><code class="docutils literal notranslate"><span class="pre">IndexedField</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.types.IndexedField.fieldPath"><code class="docutils literal notranslate"><span class="pre">IndexedField.fieldPath</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.types.IndexedField.order"><code class="docutils literal notranslate"><span class="pre">IndexedField.order</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.types.IndexedFieldSet"><code class="docutils literal notranslate"><span class="pre">IndexedFieldSet</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.types.IndexedFieldSet.fields"><code class="docutils literal notranslate"><span class="pre">IndexedFieldSet.fields</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.database.validators">cdp_backend.database.validators module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.validators.UniquenessValidation"><code class="docutils literal notranslate"><span class="pre">UniquenessValidation</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.database.validators.UniquenessValidation.conflicting_models"><code class="docutils literal notranslate"><span class="pre">UniquenessValidation.conflicting_models</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.UniquenessValidation.is_unique"><code class="docutils literal notranslate"><span class="pre">UniquenessValidation.is_unique</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.create_constant_value_validator"><code class="docutils literal notranslate"><span class="pre">create_constant_value_validator()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.email_is_valid"><code class="docutils literal notranslate"><span class="pre">email_is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.is_secure_uri"><code class="docutils literal notranslate"><span class="pre">is_secure_uri()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.resource_exists"><code class="docutils literal notranslate"><span class="pre">resource_exists()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.router_string_is_valid"><code class="docutils literal notranslate"><span class="pre">router_string_is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.database.validators.try_url"><code class="docutils literal notranslate"><span class="pre">try_url()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-cdp_backend.database">Module contents</a></li>
 </ul>
 </li>
@@ -1971,6 +2348,7 @@ If does not exist, a LookupError is raised.</p>
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/furo.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>

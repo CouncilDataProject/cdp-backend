@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.sr_models package" href="cdp_backend.sr_models.html" /><link rel="prev" title="cdp_backend.infrastructure package" href="cdp_backend.infrastructure.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>cdp_backend.pipeline package - cdp-backend 0.1.dev1+gab3a65d documentation</title>
+    <meta name="generator" content="sphinx-5.2.2, furo 2022.09.29"/>
+        <title>cdp_backend.pipeline package - cdp-backend 0.1.dev1+g4b2007b documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+gab3a65d documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g4b2007b documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gab3a65d documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g4b2007b documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -200,7 +200,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -1474,13 +1475,231 @@ Default: None (no annotations)</p>
             <ul>
 <li><a class="reference internal" href="#">cdp_backend.pipeline package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.event_gather_pipeline">cdp_backend.pipeline.event_gather_pipeline module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.generate_event_index_pipeline">cdp_backend.pipeline.generate_event_index_pipeline module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.ingestion_models">cdp_backend.pipeline.ingestion_models module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.mock_get_events">cdp_backend.pipeline.mock_get_events module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.pipeline_config">cdp_backend.pipeline.pipeline_config module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.process_event_index_chunk_pipeline">cdp_backend.pipeline.process_event_index_chunk_pipeline module</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.transcript_model">cdp_backend.pipeline.transcript_model module</a></li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.event_gather_pipeline">cdp_backend.pipeline.event_gather_pipeline module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.audio_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.audio_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.hover_thumbnail_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.hover_thumbnail_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.session</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_content_hash"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.session_content_hash</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_video_hosted_url"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.session_video_hosted_url</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.static_thumbnail_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.static_thumbnail_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.transcript</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.transcript_uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow"><code class="docutils literal notranslate"><span class="pre">create_event_gather_flow()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.generate_transcript"><code class="docutils literal notranslate"><span class="pre">generate_transcript()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.import_get_events_func"><code class="docutils literal notranslate"><span class="pre">import_get_events_func()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.generate_event_index_pipeline">cdp_backend.pipeline.generate_event_index_pipeline module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.context_span"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram.context_span</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.event_datetime"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram.event_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.event_id"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram.event_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.stemmed_gram"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram.stemmed_gram</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.unstemmed_gram"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram.unstemmed_gram</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts"><code class="docutils literal notranslate"><span class="pre">EventTranscripts</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts.event_datetime"><code class="docutils literal notranslate"><span class="pre">EventTranscripts.event_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts.event_id"><code class="docutils literal notranslate"><span class="pre">EventTranscripts.event_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.EventTranscripts.transcript_db_files"><code class="docutils literal notranslate"><span class="pre">EventTranscripts.transcript_db_files</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager"><code class="docutils literal notranslate"><span class="pre">SentenceManager</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.cleaned_text"><code class="docutils literal notranslate"><span class="pre">SentenceManager.cleaned_text</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.n_grams"><code class="docutils literal notranslate"><span class="pre">SentenceManager.n_grams</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.SentenceManager.original_details"><code class="docutils literal notranslate"><span class="pre">SentenceManager.original_details</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.create_event_index_generation_pipeline"><code class="docutils literal notranslate"><span class="pre">create_event_index_generation_pipeline()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.ingestion_models">cdp_backend.pipeline.ingestion_models module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body"><code class="docutils literal notranslate"><span class="pre">Body</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body.description"><code class="docutils literal notranslate"><span class="pre">Body.description</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body.end_datetime"><code class="docutils literal notranslate"><span class="pre">Body.end_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body.external_source_id"><code class="docutils literal notranslate"><span class="pre">Body.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body.is_active"><code class="docutils literal notranslate"><span class="pre">Body.is_active</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body.name"><code class="docutils literal notranslate"><span class="pre">Body.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Body.start_datetime"><code class="docutils literal notranslate"><span class="pre">Body.start_datetime</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.agenda_uri"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.agenda_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.body"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.body</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.event_minutes_items"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.event_minutes_items</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.external_source_id"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.hover_thumbnail_uri"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.hover_thumbnail_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.minutes_uri"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.minutes_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.sessions"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.sessions</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel.static_thumbnail_uri"><code class="docutils literal notranslate"><span class="pre">EventIngestionModel.static_thumbnail_uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.decision"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.decision</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.index"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.matter"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.matter</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.minutes_item"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.minutes_item</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.supporting_files"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.supporting_files</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventMinutesItem.votes"><code class="docutils literal notranslate"><span class="pre">EventMinutesItem.votes</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.IngestionModel"><code class="docutils literal notranslate"><span class="pre">IngestionModel</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter"><code class="docutils literal notranslate"><span class="pre">Matter</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter.external_source_id"><code class="docutils literal notranslate"><span class="pre">Matter.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter.matter_type"><code class="docutils literal notranslate"><span class="pre">Matter.matter_type</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter.name"><code class="docutils literal notranslate"><span class="pre">Matter.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter.result_status"><code class="docutils literal notranslate"><span class="pre">Matter.result_status</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter.sponsors"><code class="docutils literal notranslate"><span class="pre">Matter.sponsors</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Matter.title"><code class="docutils literal notranslate"><span class="pre">Matter.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.MinutesItem"><code class="docutils literal notranslate"><span class="pre">MinutesItem</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.MinutesItem.description"><code class="docutils literal notranslate"><span class="pre">MinutesItem.description</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.MinutesItem.external_source_id"><code class="docutils literal notranslate"><span class="pre">MinutesItem.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.MinutesItem.name"><code class="docutils literal notranslate"><span class="pre">MinutesItem.name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person"><code class="docutils literal notranslate"><span class="pre">Person</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.email"><code class="docutils literal notranslate"><span class="pre">Person.email</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.external_source_id"><code class="docutils literal notranslate"><span class="pre">Person.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.is_active"><code class="docutils literal notranslate"><span class="pre">Person.is_active</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.name"><code class="docutils literal notranslate"><span class="pre">Person.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.phone"><code class="docutils literal notranslate"><span class="pre">Person.phone</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.picture_uri"><code class="docutils literal notranslate"><span class="pre">Person.picture_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.router_string"><code class="docutils literal notranslate"><span class="pre">Person.router_string</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.seat"><code class="docutils literal notranslate"><span class="pre">Person.seat</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Person.website"><code class="docutils literal notranslate"><span class="pre">Person.website</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Role"><code class="docutils literal notranslate"><span class="pre">Role</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Role.body"><code class="docutils literal notranslate"><span class="pre">Role.body</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Role.end_datetime"><code class="docutils literal notranslate"><span class="pre">Role.end_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Role.external_source_id"><code class="docutils literal notranslate"><span class="pre">Role.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Role.start_datetime"><code class="docutils literal notranslate"><span class="pre">Role.start_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Role.title"><code class="docutils literal notranslate"><span class="pre">Role.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat"><code class="docutils literal notranslate"><span class="pre">Seat</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat.electoral_area"><code class="docutils literal notranslate"><span class="pre">Seat.electoral_area</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat.electoral_type"><code class="docutils literal notranslate"><span class="pre">Seat.electoral_type</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat.external_source_id"><code class="docutils literal notranslate"><span class="pre">Seat.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat.image_uri"><code class="docutils literal notranslate"><span class="pre">Seat.image_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat.name"><code class="docutils literal notranslate"><span class="pre">Seat.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Seat.roles"><code class="docutils literal notranslate"><span class="pre">Seat.roles</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.caption_uri"><code class="docutils literal notranslate"><span class="pre">Session.caption_uri</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.external_source_id"><code class="docutils literal notranslate"><span class="pre">Session.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.session_datetime"><code class="docutils literal notranslate"><span class="pre">Session.session_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.session_index"><code class="docutils literal notranslate"><span class="pre">Session.session_index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.video_uri"><code class="docutils literal notranslate"><span class="pre">Session.video_uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.SupportingFile"><code class="docutils literal notranslate"><span class="pre">SupportingFile</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.SupportingFile.external_source_id"><code class="docutils literal notranslate"><span class="pre">SupportingFile.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.SupportingFile.name"><code class="docutils literal notranslate"><span class="pre">SupportingFile.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.SupportingFile.uri"><code class="docutils literal notranslate"><span class="pre">SupportingFile.uri</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Vote"><code class="docutils literal notranslate"><span class="pre">Vote</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Vote.decision"><code class="docutils literal notranslate"><span class="pre">Vote.decision</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Vote.external_source_id"><code class="docutils literal notranslate"><span class="pre">Vote.external_source_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Vote.person"><code class="docutils literal notranslate"><span class="pre">Vote.person</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.mock_get_events">cdp_backend.pipeline.mock_get_events module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.mock_get_events.filled_get_events"><code class="docutils literal notranslate"><span class="pre">filled_get_events()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.mock_get_events.get_events"><code class="docutils literal notranslate"><span class="pre">get_events()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.mock_get_events.many_get_events"><code class="docutils literal notranslate"><span class="pre">many_get_events()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.mock_get_events.min_get_events"><code class="docutils literal notranslate"><span class="pre">min_get_events()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.pipeline_config">cdp_backend.pipeline.pipeline_config module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.caption_confidence"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.caption_confidence</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.caption_new_speaker_turn_pattern"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.caption_new_speaker_turn_pattern</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.default_event_gather_from_days_timedelta"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.default_event_gather_from_days_timedelta</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.gcs_bucket_name"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.gcs_bucket_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.get_events_function_path"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.get_events_function_path</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.google_credentials_file"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.google_credentials_file</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig.validated_gcs_bucket_name"><code class="docutils literal notranslate"><span class="pre">EventGatherPipelineConfig.validated_gcs_bucket_name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig"><code class="docutils literal notranslate"><span class="pre">EventIndexPipelineConfig</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.datetime_weighting_days_decay"><code class="docutils literal notranslate"><span class="pre">EventIndexPipelineConfig.datetime_weighting_days_decay</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.gcs_bucket_name"><code class="docutils literal notranslate"><span class="pre">EventIndexPipelineConfig.gcs_bucket_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.google_credentials_file"><code class="docutils literal notranslate"><span class="pre">EventIndexPipelineConfig.google_credentials_file</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.local_storage_dir"><code class="docutils literal notranslate"><span class="pre">EventIndexPipelineConfig.local_storage_dir</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventIndexPipelineConfig.validated_gcs_bucket_name"><code class="docutils literal notranslate"><span class="pre">EventIndexPipelineConfig.validated_gcs_bucket_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.process_event_index_chunk_pipeline">cdp_backend.pipeline.process_event_index_chunk_pipeline module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.context_span"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram.context_span</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.datetime_weighted_value"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram.datetime_weighted_value</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.event_id"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram.event_id</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.stemmed_gram"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram.stemmed_gram</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.unstemmed_gram"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram.unstemmed_gram</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.AlmostCompleteIndexedEventGram.value"><code class="docutils literal notranslate"><span class="pre">AlmostCompleteIndexedEventGram.value</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.process_event_index_chunk_pipeline.create_event_index_upload_pipeline"><code class="docutils literal notranslate"><span class="pre">create_event_index_upload_pipeline()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cdp_backend.pipeline.transcript_model">cdp_backend.pipeline.transcript_model module</a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SectionAnnotation"><code class="docutils literal notranslate"><span class="pre">SectionAnnotation</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SectionAnnotation.description"><code class="docutils literal notranslate"><span class="pre">SectionAnnotation.description</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SectionAnnotation.generator"><code class="docutils literal notranslate"><span class="pre">SectionAnnotation.generator</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SectionAnnotation.name"><code class="docutils literal notranslate"><span class="pre">SectionAnnotation.name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SectionAnnotation.start_sentence_index"><code class="docutils literal notranslate"><span class="pre">SectionAnnotation.start_sentence_index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SectionAnnotation.stop_sentence_index"><code class="docutils literal notranslate"><span class="pre">SectionAnnotation.stop_sentence_index</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence"><code class="docutils literal notranslate"><span class="pre">Sentence</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.annotations"><code class="docutils literal notranslate"><span class="pre">Sentence.annotations</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.confidence"><code class="docutils literal notranslate"><span class="pre">Sentence.confidence</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.end_time"><code class="docutils literal notranslate"><span class="pre">Sentence.end_time</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.index"><code class="docutils literal notranslate"><span class="pre">Sentence.index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.speaker_index"><code class="docutils literal notranslate"><span class="pre">Sentence.speaker_index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.speaker_name"><code class="docutils literal notranslate"><span class="pre">Sentence.speaker_name</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.start_time"><code class="docutils literal notranslate"><span class="pre">Sentence.start_time</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.text"><code class="docutils literal notranslate"><span class="pre">Sentence.text</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Sentence.words"><code class="docutils literal notranslate"><span class="pre">Sentence.words</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.SentenceAnnotations"><code class="docutils literal notranslate"><span class="pre">SentenceAnnotations</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript"><code class="docutils literal notranslate"><span class="pre">Transcript</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript.annotations"><code class="docutils literal notranslate"><span class="pre">Transcript.annotations</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript.confidence"><code class="docutils literal notranslate"><span class="pre">Transcript.confidence</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript.created_datetime"><code class="docutils literal notranslate"><span class="pre">Transcript.created_datetime</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript.generator"><code class="docutils literal notranslate"><span class="pre">Transcript.generator</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript.sentences"><code class="docutils literal notranslate"><span class="pre">Transcript.sentences</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript.session_datetime"><code class="docutils literal notranslate"><span class="pre">Transcript.session_datetime</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.TranscriptAnnotations"><code class="docutils literal notranslate"><span class="pre">TranscriptAnnotations</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.TranscriptAnnotations.sections"><code class="docutils literal notranslate"><span class="pre">TranscriptAnnotations.sections</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Word"><code class="docutils literal notranslate"><span class="pre">Word</span></code></a><ul>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Word.annotations"><code class="docutils literal notranslate"><span class="pre">Word.annotations</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Word.end_time"><code class="docutils literal notranslate"><span class="pre">Word.end_time</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Word.index"><code class="docutils literal notranslate"><span class="pre">Word.index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Word.start_time"><code class="docutils literal notranslate"><span class="pre">Word.start_time</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Word.text"><code class="docutils literal notranslate"><span class="pre">Word.text</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.WordAnnotations"><code class="docutils literal notranslate"><span class="pre">WordAnnotations</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-cdp_backend.pipeline">Module contents</a></li>
 </ul>
 </li>
@@ -1498,6 +1717,7 @@ Default: None (no annotations)</p>
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/furo.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
