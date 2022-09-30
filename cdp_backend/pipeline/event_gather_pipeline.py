@@ -160,14 +160,21 @@ def create_event_gather_flow(
                 if session.caption_uri is not None:
                     # If the caption doesn't exist, remove the property
                     # This will result in Speech-to-Text being used instead
-                    if not resource_exists(
-                        session.caption_uri
-                    ) or not file_utils.caption_is_valid(
-                        tmp_video_filepath, session.caption_uri
-                    ):
+                    if not resource_exists(session.caption_uri):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
+                            f"Removing the referenced caption URI and will process "
+                            f"the session using Speech-to-Text."
+                        )
+                        session.caption_uri = None
+                    if not caption_is_valid_task(
+                        tmp_video_filepath, session.caption_uri
+                    ):
+                        log.warning(
+                            f"Provided caption file '{session.caption_uri}' seems to "
+                            f"be missing content from the meeting "
+                            f"(checked with video length). "
                             f"Removing the referenced caption URI and will process "
                             f"the session using Speech-to-Text."
                         )
@@ -762,6 +769,37 @@ def check_for_existing_transcript(
         transcript = None
 
     return (tmp_transcript_filepath, transcript_uri, transcript, transcript_exists)
+
+
+@task
+def caption_is_valid_task(
+    local_video_path: str,
+    caption_uri: str,
+) -> bool:
+    """
+    Wraps the caption_is_valid function to process as prefect Task.
+
+    Parameters
+    ----------
+    local_video_path: str
+        The string path to the local video file to compare caption duration against.
+    caption_uri: str
+        The URI to the caption file to check.
+
+    Returns
+    -------
+    bool
+        Caption is valid and roughly matches provided video duration.
+
+    See Also
+    --------
+    cdp_backend.utils.file_utils.caption_is_valid
+        The function this task wraps.
+    """
+    return file_utils.caption_is_valid(
+        local_video_path,
+        caption_uri,
+    )
 
 
 def generate_transcript(
