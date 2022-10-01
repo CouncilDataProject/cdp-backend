@@ -11,7 +11,6 @@ from tempfile import TemporaryDirectory
 from typing import Optional, Tuple, Union
 from uuid import uuid4
 
-import ffmpeg
 import fireo
 import fsspec
 import requests
@@ -658,6 +657,8 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
     and the duration of the caption file are compared.
     The caption file is accepted if the durations differ by no more than 20%.
     """
+    import ffmpeg
+
     try:
         ffprobe = ffmpeg.probe(video_uri)
     except ffmpeg.Error as e:
