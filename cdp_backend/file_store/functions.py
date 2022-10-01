@@ -67,6 +67,7 @@ def upload_file(
     filepath: str,
     save_name: Optional[str] = None,
     remove_local: bool = False,
+    overwrite: bool = False,
 ) -> str:
     """
     Uploads a file to a Google Cloud file store bucket.
@@ -88,6 +89,9 @@ def upload_file(
         The name to save the file as in the file store.
     remove_local: bool
         If True, remove the local file upon successful upload.
+    overwrite: bool
+        Boolean value indicating whether or not to overwrite the remote resource with
+        the same name if it already exists.
 
     Returns
     -------
@@ -107,7 +111,7 @@ def upload_file(
     uri = get_file_uri(bucket, save_name, credentials_file)
 
     # Return existing uri and remove local copy if desired
-    if uri:
+    if uri and not overwrite:
         if remove_local:
             remove_local_file(resolved_filepath)
 
