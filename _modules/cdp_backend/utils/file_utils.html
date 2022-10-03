@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+ge883508 documentation</title>
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g889e01a documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+ge883508 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g889e01a documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+ge883508 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g889e01a documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -230,13 +230,7 @@
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">webvtt</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
-<span class="kn">from</span> <span class="nn">webvtt.exceptions</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">InvalidCaptionsError</span><span class="p">,</span>
-    <span class="n">MalformedCaptionError</span><span class="p">,</span>
-    <span class="n">MalformedFileError</span><span class="p">,</span>
-<span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
 
@@ -874,6 +868,12 @@
 <span class="sd">    The caption file is accepted if the durations differ by no more than 20%.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">ffmpeg</span>
+    <span class="kn">import</span> <span class="nn">webvtt</span>
+    <span class="kn">from</span> <span class="nn">webvtt.exceptions</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">InvalidCaptionsError</span><span class="p">,</span>
+        <span class="n">MalformedCaptionError</span><span class="p">,</span>
+        <span class="n">MalformedFileError</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ffprobe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">video_uri</span><span class="p">)</span>
