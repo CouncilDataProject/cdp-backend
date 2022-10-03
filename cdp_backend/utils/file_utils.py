@@ -14,13 +14,7 @@ from uuid import uuid4
 import fireo
 import fsspec
 import requests
-import webvtt
 from fsspec.core import url_to_fs
-from webvtt.exceptions import (
-    InvalidCaptionsError,
-    MalformedCaptionError,
-    MalformedFileError,
-)
 
 from ..database import models as db_models
 
@@ -658,6 +652,12 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
     The caption file is accepted if the durations differ by no more than 20%.
     """
     import ffmpeg
+    import webvtt
+    from webvtt.exceptions import (
+        InvalidCaptionsError,
+        MalformedCaptionError,
+        MalformedFileError,
+    )
 
     try:
         ffprobe = ffmpeg.probe(video_uri)
