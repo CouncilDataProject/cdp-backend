@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>cdp_backend.file_store.functions - cdp-backend 0.1.dev1+g889e01a documentation</title>
+        <title>cdp_backend.file_store.functions - cdp-backend 0.1.dev1+g5bb5488 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g889e01a documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g5bb5488 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g889e01a documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g5bb5488 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -283,6 +283,7 @@
     <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">save_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">remove_local</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Uploads a file to a Google Cloud file store bucket.</span>
@@ -304,6 +305,9 @@
 <span class="sd">        The name to save the file as in the file store.</span>
 <span class="sd">    remove_local: bool</span>
 <span class="sd">        If True, remove the local file upon successful upload.</span>
+<span class="sd">    overwrite: bool</span>
+<span class="sd">        Boolean value indicating whether or not to overwrite the remote resource with</span>
+<span class="sd">        the same name if it already exists.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -323,7 +327,7 @@
     <span class="n">uri</span> <span class="o">=</span> <span class="n">get_file_uri</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">credentials_file</span><span class="p">)</span>
 
     <span class="c1"># Return existing uri and remove local copy if desired</span>
-    <span class="k">if</span> <span class="n">uri</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">uri</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">remove_local</span><span class="p">:</span>
             <span class="n">remove_local_file</span><span class="p">(</span><span class="n">resolved_filepath</span><span class="p">)</span>
 
