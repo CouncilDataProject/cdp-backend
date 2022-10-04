@@ -383,6 +383,7 @@ def chunk_index(
                 bucket=bucket_name,
                 filepath=str(local_chunk_path),
                 save_name=f"{REMOTE_INDEX_CHUNK_DIR}/{save_filename}",
+                overwrite=True,
             )
 
 

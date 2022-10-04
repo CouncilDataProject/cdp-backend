@@ -17,7 +17,7 @@ FILENAME = "file.txt"
 BUCKET = "bucket"
 FILEPATH = "fake/path/" + FILENAME
 SAVE_NAME = "fakeSaveName"
-EXISTING_FILE_URI = "gs://bucket/existing_file.json"
+EXISTING_FILE_URI = "gs://bucket/" + SAVE_NAME
 GCS_FILE_URI = functions.GCS_URI.format(bucket=BUCKET, filename=FILENAME)
 
 ###############################################################################
@@ -56,12 +56,68 @@ def test_get_file_uri(
 
 
 @pytest.mark.parametrize(
-    "bucket, filepath, save_name, remove_local, existing_file_uri, expected",
+    "bucket, filepath, save_name, remove_local, overwrite, existing_file_uri, expected",
     [
-        (BUCKET, FILEPATH, SAVE_NAME, True, EXISTING_FILE_URI, EXISTING_FILE_URI),
-        (BUCKET, FILEPATH, SAVE_NAME, False, EXISTING_FILE_URI, EXISTING_FILE_URI),
-        (BUCKET, FILEPATH, None, False, None, GCS_FILE_URI),
-        (BUCKET, FILEPATH, None, True, None, GCS_FILE_URI),
+        (
+            BUCKET,
+            FILEPATH,
+            SAVE_NAME,
+            True,
+            True,
+            EXISTING_FILE_URI,
+            EXISTING_FILE_URI,
+        ),
+        (
+            BUCKET,
+            FILEPATH,
+            SAVE_NAME,
+            True,
+            True,
+            None,
+            EXISTING_FILE_URI,
+        ),
+        (
+            BUCKET,
+            FILEPATH,
+            SAVE_NAME,
+            True,
+            False,
+            EXISTING_FILE_URI,
+            EXISTING_FILE_URI,
+        ),
+        (
+            BUCKET,
+            FILEPATH,
+            SAVE_NAME,
+            False,
+            True,
+            EXISTING_FILE_URI,
+            EXISTING_FILE_URI,
+        ),
+        (
+            BUCKET,
+            FILEPATH,
+            SAVE_NAME,
+            False,
+            True,
+            None,
+            EXISTING_FILE_URI,
+        ),
+        (
+            BUCKET,
+            FILEPATH,
+            SAVE_NAME,
+            False,
+            False,
+            EXISTING_FILE_URI,
+            EXISTING_FILE_URI,
+        ),
+        (BUCKET, FILEPATH, None, False, True, GCS_FILE_URI, GCS_FILE_URI),
+        (BUCKET, FILEPATH, None, False, True, None, GCS_FILE_URI),
+        (BUCKET, FILEPATH, None, False, False, None, GCS_FILE_URI),
+        (BUCKET, FILEPATH, None, True, True, GCS_FILE_URI, GCS_FILE_URI),
+        (BUCKET, FILEPATH, None, True, True, None, GCS_FILE_URI),
+        (BUCKET, FILEPATH, None, True, False, None, GCS_FILE_URI),
     ],
 )
 def test_upload_file(
@@ -69,6 +125,7 @@ def test_upload_file(
     filepath: str,
     save_name: Optional[str],
     remove_local: bool,
+    overwrite: bool,
     existing_file_uri: str,
     expected: str,
 ) -> None:
@@ -82,7 +139,12 @@ def test_upload_file(
                     mock_path.return_value.name = FILENAME
 
                     assert expected == functions.upload_file(
-                        "path/to/creds", bucket, filepath, save_name, remove_local
+                        "path/to/creds",
+                        bucket,
+                        filepath,
+                        save_name,
+                        remove_local,
+                        overwrite,
                     )
 
 
