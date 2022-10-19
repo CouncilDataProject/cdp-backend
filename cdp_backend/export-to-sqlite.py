@@ -32,6 +32,9 @@ from cdp_backend.database.constants import (
 connect_to_infrastructure(CDPInstances.Albuquerque)
 engine = create_engine("sqlite:///test.db", echo=True, future=True)
 
+# Create tables!
+sqlite_models.Base.metadata.create_all(engine, tables=None, checkfirst=True)
+
 model_list = [
     {BODY: db_models.Body},
     {EVENT: db_models.Event},
@@ -91,92 +94,81 @@ def get_sql_schema(model_name: str) -> Model:
 
 def get_schema_properties(sql_schema: Model, doc: Transaction) -> Model:
     model = sql_schema
+    model.id = doc.id
     if model.get_class_by_tablename() == type(sqlite_models.Body()):
         print("it works!!")
-        model.id = doc.id
         model.name = doc.name
         model.description = doc.description
         model.start_datetime = doc.start_datetime
         model.is_active = doc.is_active
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Event()):
-        model.id = doc.id
-        model.body_ref = doc.body_ref
-        model.static_thumbnail_ref = doc.static_thumbnail_ref
-        model.hover_thumbnail_ref = doc.hover_thumbnail_ref
+        print("modifying events!!")
+        model.body_id = doc.body_ref.getPath()
+        model.static_thumbnail_id = doc.static_thumbnail_ref.getPath()
+        model.hover_thumbnail_id = doc.hover_thumbnail_ref.getPath()
         model.agenda_uri = doc.agenda_uri
         model.minutes_uri = doc.minutes_uri
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.EventMinutesItem()):
-        model.id = doc.id
-        model.event_ref = doc.event_ref
-        model.minutes_item_ref = doc.minutes_item_ref
+        model.event_id = doc.event_ref
+        model.minutes_item_id = doc.minutes_item_ref
         model.index = doc.index
         model.decision = doc.decision
     elif model.get_class_by_tablename() == type(sqlite_models.EventMinutesItemFile()):
-        model.id = doc.id
-        model.event_minutes_item_ref = doc.event_minutes_item_ref
+        model.event_minutes_item_id = doc.event_minutes_item_ref
         model.name = doc.name
         model.uri = doc.uri
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.File()):
-        model.id = doc.id
         model.uri = doc.uri
         model.name = doc.name
         model.description = doc.description
         model.media_type = doc.media_type
     elif model.get_class_by_tablename() == type(sqlite_models.Matter()):
-        model.id = doc.id
         model.name = doc.name
         model.matter_type = doc.matter_type
         model.title = doc.title
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.MatterFile()):
-        model.id = doc.id
-        model.matter_ref = doc.matter_ref
+        model.matter_id = doc.matter_ref
         model.name = doc.name
         model.uri = doc.uri
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.MatterSponsor()):
-        model.id = doc.id
-        model.matter_ref = doc.matter_ref
-        model.person_ref = doc.person_ref
+        model.matter_id = doc.matter_ref
+        model.person_id = doc.person_ref
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.MatterStatus()):
-        model.id = doc.id
-        model.matter_ref = doc.matter_ref
-        model.event_minutes_item_ref = doc.event_minutes_item_ref
+        model.matter_id = doc.matter_ref
+        model.event_minutes_item_id = doc.event_minutes_item_ref
         model.status = doc.status
         model.update_datetime = doc.update_datetime
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.MinutesItem()):
-        model.id = doc.id
         model.name = doc.name
         model.description = doc.description
-        model.matter_ref = doc.matter_ref
+        model.matter_id = doc.matter_ref
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Person()):
-        model.id = doc.id
         model.name = doc.name
         model.router_string = doc.router_string
         model.email = doc.email
         model.phone = doc.phone
         model.website = doc.website
-        model.picture_ref = doc.picture_ref
+        model.picture_id = doc.picture_ref
         model.is_active = doc.is_active
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Role()):
-        model.id = doc.id
         model.title = doc.title
-        model.person_ref = doc.person_ref
-        model.body_ref = doc.body_ref
-        model.seat_ref = doc.seat_ref
+        model.person_id = doc.person_ref
+        model.body_id = doc.body_ref
+        model.seat_id = doc.seat_ref
         model.start_datetime = doc.start_datetime
         model.end_datetime = doc.end_datetime
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Session()):
-        model.id = doc.id
-        model.event_ref = doc.event_ref
+        model.event_id = doc.event_ref
         model.session_datetime = doc.session_datetime
         model.session_index = doc.session_index
         model.session_content_hash = doc.session_content_hash
@@ -184,25 +176,22 @@ def get_schema_properties(sql_schema: Model, doc: Transaction) -> Model:
         model.caption_uri = doc.caption_uri
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Seat()):
-        model.id = doc.id
         model.name = doc.name
         model.electoral_area = doc.electoral_area
         model.electoral_type = doc.electoral_type
-        model.image_ref = doc.image_ref
+        model.image_id = doc.image_ref
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Transcript()):
-        model.id = doc.id
-        model.session_ref = doc.session_ref
-        model.file_ref = doc.file_ref
+        model.session_id = doc.session_ref
+        model.file_id = doc.file_ref
         model.generator = doc.generator
         model.confidence = doc.confidence
         model.created = doc.created
     elif model.get_class_by_tablename() == type(sqlite_models.Vote()):
-        model.id = doc.id
-        model.matter_ref = doc.matter_ref
-        model.event_ref = doc.event_ref
+        model.matter_id = doc.matter_ref
+        model.event_id = doc.event_ref
         model.event_minutes_item_ref = doc.event_minutes_item_ref
-        model.person_ref = doc.person_ref
+        model.person_id = doc.person_ref
         model.decision = doc.decision
         model.in_majority = doc.in_majority
         model.external_source_id = doc.external_source_id
@@ -223,7 +212,7 @@ with Session(engine) as session:
         doc_idx = 0
         for doc in collection_iter:
             # print(f'{doc.id} => {doc.to_dict()}')
-            # if doc == 0:
+            # if element in doc is first
             sql_schema = get_sql_schema(model_name)
             # print(f'sql_schema => {sql_schema}')
             sql_model = get_schema_properties(sql_schema, doc)
@@ -235,12 +224,10 @@ with Session(engine) as session:
         print("COMMITTING INSERTS")
         session.commit()
 
-# def __repr__(self):
-#     return f"Matter(id={self.id!r}, name={self.name!r})"
 
-# from sqlalchemy import select
-# print("SELECTING ALL DATA")
-# with Session(engine) as session:
-#     stmt = select(Matter)
-#     for matter in session.scalars(stmt):
-#         print(matter)
+from sqlalchemy import select
+print("SELECTING ALL DATA")
+with Session(engine) as session:
+    stmt = select(sqlite_models.Matter)
+    for matter in session.scalars(stmt):
+        print(matter)

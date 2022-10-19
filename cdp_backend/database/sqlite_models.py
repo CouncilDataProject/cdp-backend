@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
 from cdp_backend.database import constants
@@ -18,6 +18,34 @@ class BaseModel:
 Base: DeclarativeMeta = declarative_base(cls=BaseModel)
 
 
+class File(Base):
+    __tablename__ = constants.FILE
+    id = Column(String, primary_key=True)
+    uri = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    description = Column(String)
+    media_type = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.FILE)
+
+
+class Person(Base):
+    __tablename__ = constants.PERSON
+    id = Column(String, primary_key=True)
+    name = Column(String, nullable=False)
+    router_string = Column(String, nullable=False)
+    email = Column(String)
+    phone = Column(String)
+    website = Column(String)
+    picture_id = Column(Integer, ForeignKey(File.id))
+    is_active = Column(Boolean, nullable=False)
+    external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.PERSON)
+
+
 class Body(Base):
     __tablename__ = constants.BODY
     id = Column(String, primary_key=True)
@@ -32,79 +60,67 @@ class Body(Base):
         return self.model_lookup_by_table_name(constants.BODY)
 
 
-class Event(Base):
-    __tablename__ = constants.EVENT
+class Seat(Base):
+    __tablename__ = constants.SEAT
     id = Column(String, primary_key=True)
-    body_ref = Column(String, nullable=False)
-    static_thumbnail_ref = Column(String)
-    hover_thumbnail_ref = Column(String)
-    agenda_uri = Column(String)
-    minutes_uri = Column(String)
-    external_source_id = Column(String)
-
-
-class EventMinutesItem(Base):
-    __tablename__ = constants.EVENT_MINUTES_ITEM
-    id = Column(String, primary_key=True)
-    event_ref = Column(String, nullable=False)
-    minutes_item_ref = Column(String, nullable=False)
-    index = Column(Integer, nullable=False)
-    decision = Column(String, nullable=False)
-    external_source_id = Column(String)
-
-
-class EventMinutesItemFile(Base):
-    __tablename__ = constants.EVENT_MINUTES_ITEM_FILE
-    id = Column(String, primary_key=True)
-    event_minutes_item_ref = Column(String, nullable=False)
     name = Column(String, nullable=False)
-    uri = Column(String, nullable=False)
+    electoral_area = Column(String)
+    electoral_type = Column(String)
+    image_id = Column(String, ForeignKey(File.id))
     external_source_id = Column(String)
 
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.SEAT)
 
-class File(Base):
-    __tablename__ = constants.FILE
+
+class Role(Base):
+    __tablename__ = constants.ROLE
     id = Column(String, primary_key=True)
-    uri = Column(String, nullable=False)
-    name = Column(String, nullable=False)
-    description = Column(String)
-    media_type = Column(String)
+    title = Column(String, nullable=False)
+    person_id = Column(String, ForeignKey(Person.id), nullable=False)
+    body_id = Column(String, ForeignKey(Body.id))
+    seat_id = Column(String, ForeignKey(Seat.id), nullable=False)
+    start_datetime = Column(String, nullable=False)
+    end_datetime = Column(DateTime)
+    external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.ROLE)
 
 
 class Matter(Base):
     __tablename__ = constants.MATTER
     id = Column(String, primary_key=True)
-    name = Column(String)
-    matter_type = Column(String)
-    title = Column(String)
+    name = Column(String, nullable=False)
+    matter_type = Column(String, nullable=False)
+    title = Column(String, nullable=False)
     external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.MATTER)
 
 
 class MatterFile(Base):
     __tablename__ = constants.MATTER_FILE
     id = Column(String, primary_key=True)
-    matter_ref = Column(String, nullable=False)
+    matter_id = Column(Integer, ForeignKey(Matter.id), nullable=False)
     name = Column(String, nullable=False)
-    uri = Column(String)
+    uri = Column(String, nullable=False)
     external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.MATTER_FILE)
 
 
 class MatterSponsor(Base):
     __tablename__ = constants.MATTER_SPONSOR
     id = Column(String, primary_key=True)
-    matter_ref = Column(String, nullable=False)
-    person_ref = Column(String, nullable=False)
+    matter_ref = Column(Integer, ForeignKey(Matter.id), nullable=False)
+    person_ref = Column(Integer, ForeignKey(Person.id), nullable=False)
     external_source_id = Column(String)
 
-
-class MatterStatus(Base):
-    __tablename__ = constants.MATTER_STATUS
-    id = Column(String, primary_key=True)
-    matter_ref = Column(String, nullable=False)
-    event_minutes_item_ref = Column(String)
-    status = Column(String, nullable=False)
-    update_datetime = Column(DateTime, nullable=False)
-    external_source_id = Column(String)
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.MATTER_SPONSOR)
 
 
 class MinutesItem(Base):
@@ -112,39 +128,31 @@ class MinutesItem(Base):
     id = Column(String, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String)
-    matter_ref = Column(String)
+    matter_id = Column(Integer, ForeignKey(Matter.id))
     external_source_id = Column(String)
 
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.MINUTES_ITEM)
 
-class Person(Base):
-    __tablename__ = constants.PERSON
+
+class Event(Base):
+    __tablename__ = constants.EVENT
     id = Column(String, primary_key=True)
-    name = Column(String, nullable=False)
-    router_string = Column(String)
-    email = Column(String)
-    phone = Column(String)
-    website = Column(String)
-    picture_ref = Column(String)
-    is_active = Column(Boolean, nullable=False)
+    body_id = Column(String, ForeignKey(Body.id), nullable=False)
+    static_thumbnail_id = Column(String, ForeignKey(File.id))
+    hover_thumbnail_id = Column(String, ForeignKey(File.id))
+    agenda_uri = Column(String)
+    minutes_uri = Column(String)
     external_source_id = Column(String)
 
-
-class Role(Base):
-    __tablename__ = constants.ROLE
-    id = Column(String, primary_key=True)
-    title = Column(String, nullable=False)
-    person_ref = Column(String, nullable=False)
-    body_ref = Column(String)
-    seat_ref = Column(String, nullable=False)
-    start_datetime = Column(String)
-    end_datetime = Column(DateTime)
-    external_source_id = Column(String)
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.EVENT)
 
 
 class Session(Base):
     __tablename__ = constants.SESSION
     id = Column(String, primary_key=True)
-    event_ref = Column(String, nullable=False)
+    event_id = Column(String, ForeignKey(Event.id), nullable=False)
     session_datetime = Column(DateTime, nullable=False)
     session_index = Column(Integer, nullable=False)
     session_content_hash = Column(String, nullable=False)
@@ -152,34 +160,71 @@ class Session(Base):
     caption_uri = Column(String)
     external_source_id = Column(String)
 
-
-class Seat(Base):
-    __tablename__ = constants.SEAT
-    id = Column(String, primary_key=True)
-    name = Column(String, nullable=False)
-    electoral_area = Column(String)
-    electoral_type = Column(String)
-    image_ref = Column(String)
-    external_source_id = Column(String)
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.SESSION)
 
 
 class Transcript(Base):
     __tablename__ = constants.TRANSCRIPT
     id = Column(String, primary_key=True)
-    session_ref = Column(String, nullable=False)
-    file_ref = Column(String, nullable=False)
+    session_id = Column(String, nullable=False)
+    file_id = Column(String, ForeignKey(File.id), nullable=False)
     generator = Column(String, nullable=False)
     confidence = Column(Integer, nullable=False)
     created = Column(DateTime, nullable=False)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.TRANSCRIPT)
+
+
+class EventMinutesItem(Base):
+    __tablename__ = constants.EVENT_MINUTES_ITEM
+    id = Column(String, primary_key=True)
+    event_id = Column(Integer, ForeignKey(Event.id), nullable=False)
+    minutes_item_id = Column(Integer, ForeignKey(MinutesItem.id), nullable=False)
+    index = Column(Integer, nullable=False)
+    decision = Column(String, nullable=False)
+    external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.EVENT_MINUTES_ITEM)
+
+
+class MatterStatus(Base):
+    __tablename__ = constants.MATTER_STATUS
+    id = Column(String, primary_key=True)
+    matter_id = Column(Integer, ForeignKey(Matter.id), nullable=False)
+    event_minutes_item_id = Column(Integer, ForeignKey(EventMinutesItem.id))
+    status = Column(String, nullable=False)
+    update_datetime = Column(DateTime, nullable=False)
+    external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.MATTER_STATUS)
+
+
+class EventMinutesItemFile(Base):
+    __tablename__ = constants.EVENT_MINUTES_ITEM_FILE
+    id = Column(String, primary_key=True)
+    event_minutes_item_id = Column(Integer, ForeignKey(EventMinutesItem.id), nullable=False)
+    name = Column(String, nullable=False)
+    uri = Column(String, nullable=False)
+    external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.EVENT_MINUTES_ITEM_FILE)
 
 
 class Vote(Base):
     __tablename__ = constants.VOTE
     id = Column(String, primary_key=True)
-    matter_ref = Column(String, nullable=False)
-    event_ref = Column(String, nullable=False)
-    event_minutes_item_ref = Column(String, nullable=False)
-    person_ref = Column(String, nullable=False)
+    matter_id = Column(String, ForeignKey(Matter.id), nullable=False)
+    event_id = Column(String, ForeignKey(Event.id), nullable=False)
+    event_minutes_item_id = Column(String, ForeignKey(EventMinutesItem.id), nullable=False)
+    person_id = Column(String, ForeignKey(Person.id), nullable=False)
     decision = Column(String, nullable=False)
     in_majority = Column(Boolean)
     external_source_id = Column(String)
+
+    def get_class_by_tablename(self):
+        return self.model_lookup_by_table_name(constants.VOTE)
