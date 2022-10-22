@@ -138,6 +138,7 @@ class MinutesItem(Base):
 class Event(Base):
     __tablename__ = constants.EVENT
     id = Column(String, primary_key=True)
+    event_datetime = Column(DateTime, nullable=False)
     body_id = Column(String, ForeignKey(Body.id), nullable=False)
     static_thumbnail_id = Column(String, ForeignKey(File.id))
     hover_thumbnail_id = Column(String, ForeignKey(File.id))
