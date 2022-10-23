@@ -107,6 +107,7 @@ model_list = [
 
 
 def get_sql_schema(model_name: str) -> Model:
+    print('Run get_sql_schema once')
     if model_name == BODY:
         return sqlite_models.Body()
     elif model_name == EVENT:
@@ -155,7 +156,7 @@ def get_schema_properties(sql_schema: Model, doc: Transaction) -> Model:
         model.external_source_id = doc.external_source_id
     elif model.get_class_by_tablename() == type(sqlite_models.Event()):
         model.body_id = doc.body_ref.get().id        
-        model.event_datetime = doc.event_datetime.get().id 
+        model.event_datetime = doc.event_datetime
         model.static_thumbnail_id = doc.static_thumbnail_ref.get().id 
         model.hover_thumbnail_id = doc.hover_thumbnail_ref.get().id 
         model.agenda_uri = doc.agenda_uri
@@ -252,21 +253,16 @@ def get_schema_properties(sql_schema: Model, doc: Transaction) -> Model:
 with Session(engine) as session:
     for model in model_list:
         name = model.get(MODEL_NAME)
+        sql_schema = get_sql_schema(name)
+
         print(f"STARTING INSERTS on modelname: {name}")
 
         collection_iter = model.get(ACTUAL_MODEL).collection.fetch()
 
-        sql_schema = None
-        doc_idx = 0
         for docRef in collection_iter:
-            # if element in doc is first
-            sql_schema = get_sql_schema(name)
-            # print(f'docRef:: {docRef}') # this appears to be a custom python object? expected a firestore document reference (maybe it is typed that way?)
             sql_model = get_schema_properties(sql_schema, docRef)
 
             session.add(sql_model)
-
-            doc_idx += 1
 
         print("COMMITTING INSERTS")
         session.commit()
