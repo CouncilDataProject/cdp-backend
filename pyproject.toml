@@ -55,6 +55,7 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
 pipeline = [
+  "bokeh",  # no pin, dask/distributed will figure it out
   "dask[distributed]>=2021.7.0",
   "ffmpeg-python==0.2.0",
   "google-cloud-speech~=2.13",
@@ -120,7 +121,6 @@ docs = [
   "prefect[viz]",
 ]
 dev = [
-  "bokeh>=2.3.2",
   "ipython>=8.4.0",
 ]
 
