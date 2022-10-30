@@ -12,7 +12,6 @@ from unittest import mock
 import ffmpeg
 import imageio
 import pytest
-from py._path.local import LocalPath
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
@@ -60,12 +59,14 @@ def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
     assert actual_result == expected_result
 
 
-def test_resource_copy(tmpdir: LocalPath, example_video: Path) -> None:
+# Type ignore because changing tmpdir typing
+def test_resource_copy(tmpdir, example_video: Path) -> None:  # type: ignore
     save_path = tmpdir / EXAMPLE_VIDEO_FILENAME
     resource_copy(str(example_video), save_path)
 
 
-def test_hash_file_contents(tmpdir: LocalPath) -> None:
+# Type ignore because changing tmpdir typing
+def test_hash_file_contents(tmpdir) -> None:  # type: ignore
     test_file = Path(tmpdir) / "a.txt"
 
     with open(test_file, "w") as open_f:
@@ -81,6 +82,7 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
     assert hash_a != hash_b
 
 
+# Type ignore because changing tmpdir typing
 @pytest.mark.parametrize(
     "audio_save_path",
     [
@@ -95,8 +97,8 @@ def test_hash_file_contents(tmpdir: LocalPath) -> None:
         ),
     ],
 )
-def test_split_audio(
-    tmpdir: LocalPath,
+def test_split_audio(  # type: ignore
+    tmpdir,
     example_video: str,
     audio_save_path: str,
 ) -> None:
