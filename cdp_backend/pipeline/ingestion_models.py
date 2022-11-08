@@ -139,6 +139,8 @@ class Session(IngestionModel, DataClassJsonMixin):
     session_datetime: datetime
     video_uri: str
     session_index: int
+    transcription_start_time: Optional[str] = None
+    transcription_end_time: Optional[str] = None
     caption_uri: Optional[str] = None
     external_source_id: Optional[str] = None
 
@@ -263,6 +265,8 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
             video_uri=(
                 "https://video.seattle.gov/media/council/council_113020_2022091V.mp4"
             ),
+            transcription_start_time=("00:00:00"),
+            transcription_end_time=("99:59:59"),
             caption_uri=(
                 "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt"  # noqa: E501
             ),

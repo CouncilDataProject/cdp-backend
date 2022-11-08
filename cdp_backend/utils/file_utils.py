@@ -249,6 +249,8 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
 
 def split_audio(
     video_read_path: str,
+    start_time: str,
+    end_time: str,
     audio_save_path: str,
     overwrite: bool = False,
 ) -> Tuple[str, str, str]:
@@ -259,6 +261,10 @@ def split_audio(
     ----------
     video_read_path: str
         Path to the video to split the audio from.
+    start_time: str
+        The start time of the clip in HH:MM:SS.
+    end_time: str
+        The end time of the clip in HH:MM:SS.
     audio_save_path: str
         Path to where the audio should be stored.
 
@@ -282,7 +288,11 @@ def split_audio(
         raise IsADirectoryError(resolved_audio_save_path)
 
     # Construct ffmpeg dag
-    stream = ffmpeg.input(resolved_video_read_path)
+    stream = ffmpeg.input(
+        resolved_video_read_path,
+        ss=start_time or "0",
+        to=end_time or "99:59:59",
+    )
     stream = ffmpeg.output(
         stream,
         filename=resolved_audio_save_path,

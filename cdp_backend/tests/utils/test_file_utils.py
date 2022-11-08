@@ -95,9 +95,20 @@ def test_hash_file_contents(tmpdir) -> None:  # type: ignore
         ),
     ],
 )
+@pytest.mark.parametrize(
+    "start_time, end_time",
+    [
+        (None, None),
+        ("1", "10"),
+        (None, "10"),
+        ("1", None),
+    ],
+)
 def test_split_audio(  # type: ignore
     tmpdir,
     example_video: str,
+    start_time: str,
+    end_time: str,
     audio_save_path: str,
 ) -> None:
     # Append save name to tmpdir
@@ -109,6 +120,8 @@ def test_split_audio(  # type: ignore
         try:
             audio_file, stdout_log, stderr_log = file_utils.split_audio(
                 video_read_path=example_video,
+                start_time=start_time,
+                end_time=end_time,
                 audio_save_path=str(tmp_dir_audio_save_path),
             )
 

@@ -152,6 +152,8 @@ def create_event_gather_flow(
                 audio_uri = split_audio(
                     session_content_hash=session_content_hash,
                     tmp_video_filepath=tmp_video_filepath,
+                    start_time=session.transcription_start_time,
+                    end_time=session.transcription_end_time,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
@@ -394,6 +396,8 @@ def convert_video_and_handle_host(
 def split_audio(
     session_content_hash: str,
     tmp_video_filepath: str,
+    start_time: str,
+    end_time: str,
     bucket: str,
     credentials_file: str,
 ) -> str:
@@ -406,6 +410,10 @@ def split_audio(
         The unique identifier for the session.
     tmp_video_filepath: str
         The local path for video file to generate a hash for.
+    start_time: str
+        The start time of the clip in HH:MM:SS.
+    end_time: str
+        The end time of the clip in HH:MM:SS.
     bucket: str
         The bucket to store the transcript to.
     credentials_file: str
@@ -433,6 +441,8 @@ def split_audio(
             tmp_audio_log_err_filepath,
         ) = file_utils.split_audio(
             video_read_path=tmp_video_filepath,
+            start_time=start_time,
+            end_time=start_time,
             audio_save_path=tmp_audio_filepath,
             overwrite=True,
         )
