@@ -82,6 +82,18 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
             "1",
             "2",
         ),
+        (
+            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
+            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
+            "1",
+            "0",
+        ),
+        (
+            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
+            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
+            "0",
+            "0",
+        ),
     ],
 )
 def test_split_audio(
