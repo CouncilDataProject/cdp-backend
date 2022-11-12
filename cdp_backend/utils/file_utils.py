@@ -304,10 +304,13 @@ def split_audio(
 
     # Run dag
     log.debug(f"Beginning audio separation for: {video_read_path}")
-    out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
+    try:
+        out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
+    except ffmpeg._run.Error as e:
+        log.error(e.stderr)
+        raise e
     log.debug(f"Completed audio separation for: {video_read_path}")
     log.debug(f"Stored audio: {audio_save_path}")
-
     # Store logs
     ffmpeg_stdout_path = resolved_audio_save_path.with_suffix(".out")
     ffmpeg_stderr_path = resolved_audio_save_path.with_suffix(".err")

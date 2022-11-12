@@ -442,7 +442,7 @@ def split_audio(
         ) = file_utils.split_audio(
             video_read_path=tmp_video_filepath,
             start_time=start_time,
-            end_time=start_time,
+            end_time=end_time,
             audio_save_path=tmp_audio_filepath,
             overwrite=True,
         )

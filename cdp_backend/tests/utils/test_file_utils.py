@@ -102,8 +102,6 @@ def test_hash_file_contents(tmpdir) -> None:  # type: ignore
         ("1", "10"),
         (None, "10"),
         ("1", None),
-        ("0", "0"),
-        ("1", "0"),
     ],
 )
 def test_split_audio(  # type: ignore

@@ -68,31 +68,24 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_file_uri")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @pytest.mark.parametrize(
-    "get_file_uri_value, audio_upload_file_return, start_time, end_time",
+    "start_time, end_time",
+    [
+        (None, None),
+        ("1", "2"),
+        pytest.param("1", "0", marks=pytest.mark.xfail),
+        pytest.param("0", "0", marks=pytest.mark.xfail),
+    ],
+)
+@pytest.mark.parametrize(
+    "get_file_uri_value, audio_upload_file_return",
     [
         (
             None,
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            None,
-            None,
         ),
         (
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
             f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            "1",
-            "2",
-        ),
-        (
-            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            "1",
-            "0",
-        ),
-        (
-            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            f"fake://{VIDEO_CONTENT_HASH}-audio.wav",
-            "0",
-            "0",
         ),
     ],
 )
