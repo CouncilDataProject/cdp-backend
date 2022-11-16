@@ -494,8 +494,8 @@ class Session(Model):
     session_index = fields.NumberField(required=True)
     session_content_hash = fields.TextField(required=True)
     video_uri = fields.TextField(required=True, validator=validators.resource_exists)
-    transcription_start_time = fields.TextField(validators.time_duration_is_valid)
-    transcription_end_time = fields.TextField(validators.time_duration_is_valid)
+    video_start_time = fields.TextField(validators.time_duration_is_valid)
+    video_end_time = fields.TextField(validators.time_duration_is_valid)
     caption_uri = fields.TextField(validator=validators.resource_exists)
     external_source_id = fields.TextField()
 
@@ -517,8 +517,8 @@ class Session(Model):
         session.video_uri = (
             "https://video.seattle.gov/media/council/brief_072219_2011957V.mp4"
         )
-        session.transcription_start_time = "00:00:00"
-        session.transcription_end_time = "99:59:59"
+        session.video_start_time = "01:00:00"
+        session.video_end_time = "99:59:59"
         session.session_content_hash = (
             "05bd857af7f70bf51b6aac1144046973bf3325c9101a554bc27dc9607dbbd8f5"
         )

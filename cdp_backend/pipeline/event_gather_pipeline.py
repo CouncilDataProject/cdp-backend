@@ -152,8 +152,6 @@ def create_event_gather_flow(
                 audio_uri = split_audio(
                     session_content_hash=session_content_hash,
                     tmp_video_filepath=tmp_video_filepath,
-                    start_time=session.transcription_start_time,
-                    end_time=session.transcription_end_time,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
                 )
@@ -332,19 +330,41 @@ def convert_video_and_handle_host(
     # Get file extension
     ext = Path(video_filepath).suffix.lower()
 
+    trim_video = bool(session.video_start_time or session.video_end_time)
+
     # Convert to mp4 if file isn't of approved web format
     cdp_will_host = False
     if ext not in [".mp4", ".webm"]:
         cdp_will_host = True
 
         # Convert video to mp4
-        mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
+        mp4_filepath = file_utils.convert_video_to_mp4(
+            video_filepath=Path(video_filepath),
+            start_time=session.video_start_time,
+            end_time=session.video_end_time,
+        )
 
-        # Remove old mkv file
         fs_functions.remove_local_file(video_filepath)
 
         # Update variable name for easier downstream typing
-        video_filepath = mp4_filepath
+        video_filepath = str(mp4_filepath)
+
+    # host trimmed videos because it's simpler than setting
+    # up transcription ranges and seamless front end UX
+    if trim_video:
+        cdp_will_host = True
+
+        # Convert video to mp4
+        trimmed_filepath = file_utils.clip_and_reformat_video(
+            video_filepath=Path(video_filepath),
+            start_time=session.video_start_time,
+            end_time=session.video_end_time,
+        )
+
+        fs_functions.remove_local_file(video_filepath)
+
+        # Update variable name for easier downstream typing
+        video_filepath = str(trimmed_filepath)
 
     # Check if original session video uri is a m3u8
     # We cant follow the normal coonvert video process from above
@@ -396,8 +416,6 @@ def convert_video_and_handle_host(
 def split_audio(
     session_content_hash: str,
     tmp_video_filepath: str,
-    start_time: str,
-    end_time: str,
     bucket: str,
     credentials_file: str,
 ) -> str:
@@ -441,8 +459,6 @@ def split_audio(
             tmp_audio_log_err_filepath,
         ) = file_utils.split_audio(
             video_read_path=tmp_video_filepath,
-            start_time=start_time,
-            end_time=end_time,
             audio_save_path=tmp_audio_filepath,
             overwrite=True,
         )

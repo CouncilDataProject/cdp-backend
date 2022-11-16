@@ -134,8 +134,8 @@ def _get_example_event() -> EventIngestionModel:
             session_datetime=datetime.utcnow() + (i * timedelta(hours=3)),
             session_index=i,
             video_uri=session[0],
-            transcription_start_time=session[2],
-            transcription_end_time=session[3],
+            video_start_time=session[2],
+            video_end_time=session[3],
             caption_uri=session[1],
         )
         for i, session in enumerate(random.sample(SESSIONS, random.randint(1, 3)))
