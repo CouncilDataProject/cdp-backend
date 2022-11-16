@@ -82,6 +82,7 @@ pipeline = [
 functions = [
   "flask==2.1.0",
   "functions-framework==3.1.0",
+  "ffmpeg-python==0.2.0",
 ]
 lint = [
   "black>=22.3.0",
