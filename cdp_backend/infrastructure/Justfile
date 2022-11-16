@@ -102,7 +102,7 @@ deploy-clipping key=default_key region=default_region:
 			--runtime python39 \
 			--entry-point=generate_clip \
 			--trigger-http \
-			--memory=2GiB \
+			--memory=1GiB \
 			--allow-unauthenticated
 
 # run both setup and deploy
