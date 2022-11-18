@@ -130,18 +130,13 @@ def create_event_gather_flow(
                 # Download video to local copy
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
-                # Get unique session identifier
-                session_content_hash = get_session_content_hash(
-                    tmp_video_filepath=resource_copy_filepath,
-                )
-
                 # Handle video conversion or non-secure resource
                 # hosting
                 (
                     tmp_video_filepath,
                     session_video_hosted_url,
+                    session_content_hash,
                 ) = convert_video_and_handle_host(
-                    session_content_hash=session_content_hash,
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
@@ -293,14 +288,13 @@ def get_session_content_hash(
     return file_utils.hash_file_contents(uri=tmp_video_filepath)
 
 
-@task(nout=2)
+@task(nout=3)
 def convert_video_and_handle_host(
-    session_content_hash: str,
     video_filepath: str,
     session: Session,
     credentials_file: str,
     bucket: str,
-) -> Tuple[str, str]:
+) -> Tuple[str, str, str]:
     """
     Convert a video to MP4 (if necessary), upload it to the file store, and remove
     the original non-MP4 file that was resource copied.
@@ -392,6 +386,11 @@ def convert_video_and_handle_host(
     else:
         hosted_video_media_url = session.video_uri
 
+    # Get unique session identifier
+    session_content_hash = get_session_content_hash(
+        tmp_video_filepath=video_filepath,
+    )
+
     # Upload and swap if cdp is hosting
     if cdp_will_host:
         # Upload to gcsfs
@@ -409,7 +408,7 @@ def convert_video_and_handle_host(
             uri=hosted_video_uri,
         )
 
-    return video_filepath, hosted_video_media_url
+    return video_filepath, hosted_video_media_url, session_content_hash
 
 
 @task
