@@ -387,9 +387,7 @@ def convert_video_and_handle_host(
         hosted_video_media_url = session.video_uri
 
     # Get unique session identifier
-    session_content_hash = get_session_content_hash(
-        tmp_video_filepath=video_filepath,
-    )
+    session_content_hash = file_utils.hash_file_contents(uri=video_filepath)
 
     # Upload and swap if cdp is hosting
     if cdp_will_host:
