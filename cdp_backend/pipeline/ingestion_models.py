@@ -145,7 +145,10 @@ class Session(IngestionModel, DataClassJsonMixin):
     external_source_id: Optional[str] = None
 
     def __post_init__(self) -> None:
+        # validate start/end time pair during ingestion
         if self.video_start_time and self.video_end_time:
+            # fill in potentially missing hh:mm:s
+            # for flexible input format [h[h:[m[m:[s]]]]]s
             start = list(map(int, ("00:00:0" + self.video_start_time).split(":")))
             end = list(map(int, ("00:00:0" + self.video_end_time).split(":")))
             start.reverse()

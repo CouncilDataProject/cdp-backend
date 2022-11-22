@@ -344,11 +344,11 @@ def convert_video_and_handle_host(
         video_filepath = str(mp4_filepath)
 
     # host trimmed videos because it's simpler than setting
-    # up transcription ranges and seamless front end UX
-    if trim_video:
+    # up transcription and playback ranges
+    elif trim_video:
         cdp_will_host = True
 
-        # Convert video to mp4
+        # Trim video
         trimmed_filepath = file_utils.clip_and_reformat_video(
             video_filepath=Path(video_filepath),
             start_time=session.video_start_time,

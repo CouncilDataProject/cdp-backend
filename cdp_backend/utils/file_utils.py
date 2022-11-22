@@ -708,13 +708,5 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
             ),
             ffprobe.get("streams", []),
         )
-        audio_streams = filter(
-            lambda s: s.get("codec_type", "") == "audio",
-            ffprobe.get("streams", []),
-        )
-        for s in audio_streams:
-            duration = s.get("duration", "0.0")
-            log.warning(f"stream length {duration}")
-        log.warning(f"caption length {caption_length}")
 
         return any(similar_audio_streams)
