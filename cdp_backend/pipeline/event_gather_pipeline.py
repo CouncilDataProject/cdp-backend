@@ -425,10 +425,6 @@ def split_audio(
         The unique identifier for the session.
     tmp_video_filepath: str
         The local path for video file to generate a hash for.
-    start_time: str
-        The start time of the clip in HH:MM:SS.
-    end_time: str
-        The end time of the clip in HH:MM:SS.
     bucket: str
         The bucket to store the transcript to.
     credentials_file: str
