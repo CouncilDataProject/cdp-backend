@@ -130,18 +130,13 @@ def create_event_gather_flow(
                 # Download video to local copy
                 resource_copy_filepath = resource_copy_task(uri=session.video_uri)
 
-                # Get unique session identifier
-                session_content_hash = get_session_content_hash(
-                    tmp_video_filepath=resource_copy_filepath,
-                )
-
                 # Handle video conversion or non-secure resource
                 # hosting
                 (
                     tmp_video_filepath,
                     session_video_hosted_url,
+                    session_content_hash,
                 ) = convert_video_and_handle_host(
-                    session_content_hash=session_content_hash,
                     video_filepath=resource_copy_filepath,
                     session=session,
                     credentials_file=config.google_credentials_file,
@@ -293,14 +288,13 @@ def get_session_content_hash(
     return file_utils.hash_file_contents(uri=tmp_video_filepath)
 
 
-@task(nout=2)
+@task(nout=3)
 def convert_video_and_handle_host(
-    session_content_hash: str,
     video_filepath: str,
     session: Session,
     credentials_file: str,
     bucket: str,
-) -> Tuple[str, str]:
+) -> Tuple[str, str, str]:
     """
     Convert a video to MP4 (if necessary), upload it to the file store, and remove
     the original non-MP4 file that was resource copied.
@@ -330,19 +324,41 @@ def convert_video_and_handle_host(
     # Get file extension
     ext = Path(video_filepath).suffix.lower()
 
+    trim_video = bool(session.video_start_time or session.video_end_time)
+
     # Convert to mp4 if file isn't of approved web format
     cdp_will_host = False
     if ext not in [".mp4", ".webm"]:
         cdp_will_host = True
 
         # Convert video to mp4
-        mp4_filepath = file_utils.convert_video_to_mp4(video_filepath)
+        mp4_filepath = file_utils.convert_video_to_mp4(
+            video_filepath=Path(video_filepath),
+            start_time=session.video_start_time,
+            end_time=session.video_end_time,
+        )
 
-        # Remove old mkv file
         fs_functions.remove_local_file(video_filepath)
 
         # Update variable name for easier downstream typing
-        video_filepath = mp4_filepath
+        video_filepath = str(mp4_filepath)
+
+    # host trimmed videos because it's simpler than setting
+    # up transcription and playback ranges
+    elif trim_video:
+        cdp_will_host = True
+
+        # Trim video
+        trimmed_filepath = file_utils.clip_and_reformat_video(
+            video_filepath=Path(video_filepath),
+            start_time=session.video_start_time,
+            end_time=session.video_end_time,
+        )
+
+        fs_functions.remove_local_file(video_filepath)
+
+        # Update variable name for easier downstream typing
+        video_filepath = str(trimmed_filepath)
 
     # Check if original session video uri is a m3u8
     # We cant follow the normal coonvert video process from above
@@ -370,6 +386,9 @@ def convert_video_and_handle_host(
     else:
         hosted_video_media_url = session.video_uri
 
+    # Get unique session identifier
+    session_content_hash = file_utils.hash_file_contents(uri=video_filepath)
+
     # Upload and swap if cdp is hosting
     if cdp_will_host:
         # Upload to gcsfs
@@ -387,7 +406,7 @@ def convert_video_and_handle_host(
             uri=hosted_video_uri,
         )
 
-    return video_filepath, hosted_video_media_url
+    return video_filepath, hosted_video_media_url, session_content_hash
 
 
 @task

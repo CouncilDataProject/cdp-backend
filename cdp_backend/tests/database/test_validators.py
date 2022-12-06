@@ -49,6 +49,39 @@ def test_router_string_is_valid(router_string: str, expected_result: bool) -> No
 
 
 @pytest.mark.parametrize(
+    "time_duration, expected_result",
+    [
+        (None, True),
+        ("1", True),
+        ("11", True),
+        ("1:11", True),
+        ("11:11", True),
+        ("1:11:11", True),
+        ("99:59:59", True),
+        ("0", True),
+        ("00", True),
+        ("0:00", True),
+        ("00:00", True),
+        ("0:00:00", True),
+        ("00:00:00", True),
+        ("111", False),
+        ("11:1", False),
+        ("111:11", False),
+        ("11:1:11", False),
+        ("11:11:1", False),
+        ("111:11:11", False),
+        ("60", False),
+        ("60:00", False),
+        ("1:60:00", False),
+        ("1:00:60", False),
+    ],
+)
+def test_time_duration_is_valid(time_duration: str, expected_result: bool) -> None:
+    actual_result = validators.time_duration_is_valid(time_duration)
+    assert actual_result == expected_result
+
+
+@pytest.mark.parametrize(
     "email, expected_result",
     [
         (None, True),

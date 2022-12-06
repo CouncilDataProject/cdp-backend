@@ -72,6 +72,34 @@ def router_string_is_valid(router_string: Optional[str]) -> bool:
     return False
 
 
+def time_duration_is_valid(time_duration: Optional[str]) -> bool:
+    """
+    Validate that the provided time duration string is acceptable to FFmpeg.
+    The validator is unnecessarily limited to HH:MM:SS. The spec is a little
+    more flexible.
+
+    None is a valid option.
+
+    Parameters
+    ----------
+    time_duration: Optional[str]
+        The time duration to validate.
+
+    Returns
+    -------
+    status: bool
+        The validation status.
+    """
+    if time_duration is None:
+        return True
+
+    # HH:MM:SS
+    if re.match(r"^((((\d{1,2}:)?[0-5])?\d:)?[0-5])?\d$", time_duration):
+        return True
+
+    return False
+
+
 def email_is_valid(email: Optional[str]) -> bool:
     """
     Validate that a valid email was provided.

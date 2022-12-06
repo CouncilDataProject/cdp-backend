@@ -281,23 +281,26 @@ def split_audio(
     if resolved_audio_save_path.is_dir():
         raise IsADirectoryError(resolved_audio_save_path)
 
-    # Construct ffmpeg dag
-    stream = ffmpeg.input(resolved_video_read_path)
-    stream = ffmpeg.output(
-        stream,
-        filename=resolved_audio_save_path,
-        format="wav",
-        acodec="pcm_s16le",
-        ac=1,
-        ar="16k",
-    )
-
     # Run dag
     log.debug(f"Beginning audio separation for: {video_read_path}")
-    out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
+    try:
+        # Construct ffmpeg dag
+        out, err = (
+            ffmpeg.input(resolved_video_read_path)
+            .output(
+                filename=resolved_audio_save_path,
+                format="wav",
+                acodec="pcm_s16le",
+                ac=1,
+                ar="16k",
+            )
+            .run(capture_stdout=True, capture_stderr=True)
+        )
+    except ffmpeg._run.Error as e:
+        log.error(e.stderr)
+        raise e
     log.debug(f"Completed audio separation for: {video_read_path}")
     log.debug(f"Stored audio: {audio_save_path}")
-
     # Store logs
     ffmpeg_stdout_path = resolved_audio_save_path.with_suffix(".out")
     ffmpeg_stderr_path = resolved_audio_save_path.with_suffix(".err")
@@ -498,7 +501,12 @@ def hash_file_contents(uri: str, buffer_size: int = 2**16) -> str:
     return hasher.hexdigest()
 
 
-def convert_video_to_mp4(video_filepath: str) -> str:
+def convert_video_to_mp4(
+    video_filepath: Path,
+    start_time: Optional[str],
+    end_time: Optional[str],
+    output_path: Path = None,
+) -> Path:
     """
     Converts a video to an equivalent MP4 file.
 
@@ -506,19 +514,31 @@ def convert_video_to_mp4(video_filepath: str) -> str:
     ----------
     video_filepath: str
         The filepath of the video to convert.
+    start_time: str
+        The start time to trim the video in HH:MM:SS.
+    end_time: str
+        The end time to trim the video in HH:MM:SS.
+    output_path: Path
+        The output path to place the clip at.
+        Must include a suffix to use for the reformatting.
 
     Returns
     -------
-    mp4_filepath: str
+    output_path: str
         The filepath of the converted MP4 video.
     """
-    import ffmpeg
 
-    mp4_filepath = str(Path(video_filepath).with_suffix(".mp4"))
-    ffmpeg.input(video_filepath).output(mp4_filepath).overwrite_output().run()
+    output_path = output_path or video_filepath.with_suffix(".mp4")
+    output_path = clip_and_reformat_video(
+        video_filepath=video_filepath,
+        start_time=start_time,
+        end_time=end_time,
+        output_path=output_path,
+        output_format="mp4",
+    )
     log.info("Finished converting {} to mp4".format(video_filepath))
 
-    return mp4_filepath
+    return output_path
 
 
 def generate_file_storage_name(file_uri: str, suffix: str) -> str:
@@ -583,8 +603,8 @@ def download_video_from_session_id(
 
 def clip_and_reformat_video(
     video_filepath: Path,
-    start_time: str,
-    end_time: str,
+    start_time: Optional[str],
+    end_time: Optional[str],
     output_path: Path = Path("clipped.mp4"),
     output_format: str = "mp4",
 ) -> Path:
@@ -614,12 +634,19 @@ def clip_and_reformat_video(
     """
     import ffmpeg
 
-    video_filepath = Path(video_filepath)
-    ffmpeg_stdout, ffmpeg_stderr = (
-        ffmpeg.input(video_filepath)
-        .output(str(output_path), ss=start_time, to=end_time, format=output_format)
-        .run(quiet=True)
-    )
+    try:
+        ffmpeg_stdout, ffmpeg_stderr = (
+            ffmpeg.input(
+                video_filepath,
+                ss=start_time or "0",
+                to=end_time or "99:59:59",
+            )
+            .output(filename=str(output_path), format=output_format)
+            .run(capture_stdout=True, capture_stderr=True)
+        )
+    except ffmpeg._run.Error as e:
+        log.error(e.stderr)
+        raise e
 
     log.info(f"Finished clipping {video_filepath} to {output_path}")
     log.debug(ffmpeg_stdout)
@@ -681,4 +708,5 @@ def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
             ),
             ffprobe.get("streams", []),
         )
+
         return any(similar_audio_streams)

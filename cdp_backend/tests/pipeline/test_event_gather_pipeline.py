@@ -580,6 +580,7 @@ EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_open_url_for_gcs_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
+@mock.patch(f"{PIPELINE_PATH}.file_utils.hash_file_contents")
 @mock.patch(f"{PIPELINE_PATH}.file_utils.convert_video_to_mp4")
 @pytest.mark.parametrize(
     "video_filepath, session, expected_filepath, expected_hosted_video_url",
@@ -618,6 +619,7 @@ EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST
 )
 def test_convert_video_and_handle_host(
     mock_convert_video_to_mp4: MagicMock,
+    mock_hash_file_contents: MagicMock,
     mock_remove_local_file: MagicMock,
     mock_generate_url: MagicMock,
     mock_upload_file: MagicMock,
@@ -629,12 +631,13 @@ def test_convert_video_and_handle_host(
     mock_upload_file.return_value = "file_store_uri"
     mock_generate_url.return_value = "hosted-video.mp4"
     mock_convert_video_to_mp4.return_value = expected_filepath
+    mock_hash_file_contents.return_value = "abc123"
 
     (
         mp4_filepath,
         session_video_hosted_url,
+        session_content_hash,
     ) = pipeline.convert_video_and_handle_host.run(
-        session_content_hash="abc123",
         video_filepath=video_filepath,
         session=session,
         credentials_file="fake/credentials.json",

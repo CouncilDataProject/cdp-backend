@@ -54,20 +54,33 @@ SESSIONS = [
     (
         "https://video.seattle.gov/media/council/council_010421_2022101V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2021/council_010421_2022101.vtt",  # noqa
+        None,
+        None,
     ),
     (
         "https://video.seattle.gov/media/council/council_113020_2022091V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt",  # noqa
+        "1",
+        "25:25",
     ),
     (
         "https://video.seattle.gov/media/council/council_112320_2022089V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt",  # noqa
+        None,
+        "2:58:14",
     ),
     (
         "https://video.seattle.gov/media/council/council_110920_2022085V.mp4",
         "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt",  # noqa
+        "1",
+        None,
     ),
-    ("https://video.seattle.gov/media/council/council_101220_2022077V.mp4", None),
+    (
+        "https://video.seattle.gov/media/council/council_101220_2022077V.mp4",
+        None,
+        None,
+        None,
+    ),
 ]
 
 
@@ -121,6 +134,8 @@ def _get_example_event() -> EventIngestionModel:
             session_datetime=datetime.utcnow() + (i * timedelta(hours=3)),
             session_index=i,
             video_uri=session[0],
+            video_start_time=session[2],
+            video_end_time=session[3],
             caption_uri=session[1],
         )
         for i, session in enumerate(random.sample(SESSIONS, random.randint(1, 3)))

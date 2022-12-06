@@ -80,6 +80,7 @@ def test_hash_file_contents(tmpdir) -> None:  # type: ignore
     assert hash_a != hash_b
 
 
+@pytest.mark.parametrize("video_filename", [(EXAMPLE_VIDEO_FILENAME)])
 # Type ignore because changing tmpdir typing
 @pytest.mark.parametrize(
     "audio_save_path",
@@ -96,12 +97,14 @@ def test_hash_file_contents(tmpdir) -> None:  # type: ignore
     ],
 )
 def test_split_audio(  # type: ignore
-    tmpdir,
-    example_video: str,
+    tmpdir: Path,
+    resources_dir: Path,
+    video_filename: str,
     audio_save_path: str,
 ) -> None:
     # Append save name to tmpdir
     tmp_dir_audio_save_path = Path(tmpdir) / Path(audio_save_path).resolve()
+    example_video = str(resources_dir / video_filename)
 
     # Mock split
     with mock.patch("ffmpeg.run") as mocked_ffmpeg:
@@ -116,6 +119,10 @@ def test_split_audio(  # type: ignore
             assert str(tmp_dir_audio_save_path.with_suffix(".out")) == stdout_log
             assert str(tmp_dir_audio_save_path.with_suffix(".err")) == stderr_log
 
+            os.remove(audio_file)
+            os.remove(stdout_log)
+            os.remove(stderr_log)
+
         except Exception as e:
             raise e
 
@@ -125,7 +132,7 @@ def test_split_audio(  # type: ignore
     reason="File removal for test cleanup sometimes fails on Windows",
 )
 @pytest.mark.parametrize(
-    "video_url, session_content_hash, seconds, expected",
+    "video_filename, session_content_hash, seconds, expected",
     [
         (EXAMPLE_VIDEO_FILENAME, "example2", 45, "example2-static-thumbnail.png"),
         (EXAMPLE_VIDEO_FILENAME, "example3", 999999, "example3-static-thumbnail.png"),
@@ -148,15 +155,15 @@ def test_split_audio(  # type: ignore
 )
 def test_static_thumbnail_generator(
     resources_dir: Path,
-    video_url: Path,
+    video_filename: str,
     session_content_hash: str,
     seconds: int,
     expected: str,
 ) -> None:
-    video_url = resources_dir / video_url
+    video_path = resources_dir / video_filename
 
     result = file_utils.get_static_thumbnail(
-        str(video_url), session_content_hash, seconds
+        str(video_path), session_content_hash, seconds
     )
     assert result == expected
 
@@ -174,7 +181,7 @@ def test_static_thumbnail_generator(
     reason="File removal for test cleanup sometimes fails on Windows",
 )
 @pytest.mark.parametrize(
-    "video_url, session_content_hash, num_frames, expected",
+    "video_filename, session_content_hash, num_frames, expected",
     [
         (EXAMPLE_VIDEO_FILENAME, "example2", 15, "example2-hover-thumbnail.gif"),
         (EXAMPLE_VIDEO_HD_FILENAME, "example3", 2, "example3-hover-thumbnail.gif"),
@@ -196,18 +203,18 @@ def test_static_thumbnail_generator(
 )
 def test_hover_thumbnail_generator(
     resources_dir: Path,
-    video_url: Path,
+    video_filename: str,
     session_content_hash: str,
     num_frames: int,
     expected: str,
 ) -> None:
-    video_url = resources_dir / video_url
+    video_path = resources_dir / video_filename
 
     # Set random seed to get consistent result
     random.seed(42)
 
     result = file_utils.get_hover_thumbnail(
-        str(video_url), session_content_hash, num_frames
+        str(video_path), session_content_hash, num_frames
     )
     assert result == expected
 
@@ -226,18 +233,32 @@ def test_hover_thumbnail_generator(
     reason="No internet connection",
 )
 @pytest.mark.parametrize(
-    "video_uri, expected",
+    "video_filename, expected",
     [
-        (EXAMPLE_MKV_VIDEO_FILENAME, EXAMPLE_VIDEO_FILENAME),
+        (EXAMPLE_MKV_VIDEO_FILENAME, "test-" + EXAMPLE_VIDEO_FILENAME),
+    ],
+)
+@pytest.mark.parametrize(
+    "start_time, end_time",
+    [
+        ("1", "3"),
+        (None, "3"),
+        ("2:58", None),
     ],
 )
 def test_convert_video_to_mp4(
     resources_dir: Path,
-    video_uri: str,
+    video_filename: str,
     expected: str,
+    start_time: Optional[str],
+    end_time: Optional[str],
 ) -> None:
-    filepath = str(resources_dir / video_uri)
-    assert file_utils.convert_video_to_mp4(filepath) == str(resources_dir / expected)
+    filepath = resources_dir / video_filename
+    outfile = resources_dir / expected
+    outfile = file_utils.convert_video_to_mp4(filepath, start_time, end_time, outfile)
+    assert outfile == resources_dir / expected
+    assert outfile.exists()
+    os.remove(outfile)
 
 
 @pytest.mark.skipif(
@@ -281,6 +302,7 @@ def test_invalid_uri() -> None:
     )
 
 
+@pytest.mark.parametrize("video_filename", [EXAMPLE_VIDEO_FILENAME])
 @pytest.mark.parametrize(
     "start_time, end_time",
     [
@@ -296,6 +318,7 @@ def test_invalid_uri() -> None:
 )
 def test_clip_and_reformat_video(
     resources_dir: Path,
+    video_filename: str,
     start_time: str,
     end_time: str,
     output_format: str,
@@ -318,7 +341,7 @@ def test_clip_and_reformat_video(
 
 
 @pytest.mark.parametrize(
-    "video_uri, caption_uri, end_time, is_resource, expected",
+    "video_filename, caption_uri, end_time, is_resource, expected",
     [
         # the video is about 3 minutes and boston_captions.vtt is about 1 minute
         (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, True, False),
@@ -336,7 +359,7 @@ def test_clip_and_reformat_video(
 )
 def test_caption_is_valid(
     resources_dir: Path,
-    video_uri: str,
+    video_filename: str,
     caption_uri: str,
     end_time: int,
     is_resource: bool,
@@ -344,7 +367,7 @@ def test_caption_is_valid(
 ) -> None:
     with TemporaryDirectory() as dir_path:
         temp_video = str(Path(dir_path) / f"caption-test-{end_time}.mp4")
-        ffmpeg.input(str(resources_dir / video_uri)).output(
+        ffmpeg.input(str(resources_dir / video_filename)).output(
             temp_video, codec="copy", t=end_time
         ).run(overwrite_output=True)
 

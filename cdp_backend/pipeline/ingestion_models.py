@@ -134,13 +134,38 @@ class Session(IngestionModel, DataClassJsonMixin):
     """
     A session is a working period for an event.
     For example, an event could have a morning and afternoon session.
+
+    Notes
+    -----
+    video_start_time is a duration relative to the beginning of the video in
+    HH:MM:SS format. It does not affect nor is relative to session_datetime
+    or any other datetime. If the portion of the video relavent to the session
+    begins 37m50s into the full video, video_start_time will be "37:50".
+    An absent start time is equivalent to the beginning of the video, and an
+    absent end time is equivalent to the end of the video, so either can be omitted.
     """
 
     session_datetime: datetime
     video_uri: str
     session_index: int
+    video_start_time: Optional[str] = None
+    video_end_time: Optional[str] = None
     caption_uri: Optional[str] = None
     external_source_id: Optional[str] = None
+
+    def __post_init__(self) -> None:
+        # validate start/end time pair during ingestion
+        if self.video_start_time and self.video_end_time:
+            # fill in potentially missing hh:mm:s
+            # for flexible input format [h[h:[m[m:[s]]]]]s
+            start = list(map(int, ("00:00:0" + self.video_start_time).split(":")))
+            end = list(map(int, ("00:00:0" + self.video_end_time).split(":")))
+            start.reverse()
+            end.reverse()
+            start_seconds = start[0] + start[1] * 60 + start[2] * 3600
+            end_seconds = end[0] + end[1] * 60 + end[2] * 3600
+            if start_seconds >= end_seconds:
+                raise ValueError("start_time must be less than end_time if both exist")
 
 
 @dataclass
@@ -263,6 +288,8 @@ EXAMPLE_FILLED_EVENT = EventIngestionModel(
             video_uri=(
                 "https://video.seattle.gov/media/council/council_113020_2022091V.mp4"
             ),
+            video_start_time=("00:00:00"),
+            video_end_time=("99:59:59"),
             caption_uri=(
                 "https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt"  # noqa: E501
             ),
