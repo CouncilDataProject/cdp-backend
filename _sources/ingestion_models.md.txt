@@ -31,7 +31,7 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2022, 11, 16, 6, 48, 41, 187148),
+ 'sessions': [{'session_datetime': datetime.datetime(2022, 12, 6, 20, 57, 23, 443826),
                'video_uri': 'https://video.seattle.gov/media/council/brief_072219_2011957V.mp4',
                'session_index': 0}]}
 ```
@@ -43,12 +43,14 @@ Note: while this looks like a Python `Dict`, these objects are of type:
 
 ```python
 {'body': {'name': 'Full Council', 'is_active': True},
- 'sessions': [{'session_datetime': datetime.datetime(2022, 11, 16, 6, 48, 41, 187161),
+ 'sessions': [{'session_datetime': datetime.datetime(2022, 12, 6, 20, 57, 23, 443841),
                'video_uri': 'https://video.seattle.gov/media/council/council_101220_2022077V.mp4',
                'session_index': 0},
-              {'session_datetime': datetime.datetime(2022, 11, 16, 6, 48, 41, 187163),
+              {'session_datetime': datetime.datetime(2022, 12, 6, 20, 57, 23, 443843),
                'video_uri': 'https://video.seattle.gov/media/council/council_113020_2022091V.mp4',
                'session_index': 1,
+               'video_start_time': '00:00:00',
+               'video_end_time': '99:59:59',
                'caption_uri': 'https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt'}],
  'event_minutes_items': [{'minutes_item': {'name': 'Inf 1656'}},
                          {'minutes_item': {'name': 'CB 119858'},

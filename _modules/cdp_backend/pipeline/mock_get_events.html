@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cdp_backend.pipeline.mock_get_events - cdp-backend 0.1.dev1+g2d080b4 documentation</title>
+        <title>cdp_backend.pipeline.mock_get_events - cdp-backend 0.1.dev1+gb00f378 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g2d080b4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gb00f378 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2d080b4 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb00f378 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -270,20 +270,33 @@
     <span class="p">(</span>
         <span class="s2">&quot;https://video.seattle.gov/media/council/council_010421_2022101V.mp4&quot;</span><span class="p">,</span>
         <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2021/council_010421_2022101.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="p">(</span>
         <span class="s2">&quot;https://video.seattle.gov/media/council/council_113020_2022091V.mp4&quot;</span><span class="p">,</span>
         <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;25:25&quot;</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="p">(</span>
         <span class="s2">&quot;https://video.seattle.gov/media/council/council_112320_2022089V.mp4&quot;</span><span class="p">,</span>
         <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/brief_112320_2012089.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;2:58:14&quot;</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="p">(</span>
         <span class="s2">&quot;https://video.seattle.gov/media/council/council_110920_2022085V.mp4&quot;</span><span class="p">,</span>
         <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_110920_2022085.vtt&quot;</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
     <span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;https://video.seattle.gov/media/council/council_101220_2022077V.mp4&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;https://video.seattle.gov/media/council/council_101220_2022077V.mp4&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
 <span class="p">]</span>
 
 
@@ -337,6 +350,8 @@
             <span class="n">session_datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">3</span><span class="p">)),</span>
             <span class="n">session_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
             <span class="n">video_uri</span><span class="o">=</span><span class="n">session</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">video_start_time</span><span class="o">=</span><span class="n">session</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">video_end_time</span><span class="o">=</span><span class="n">session</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
             <span class="n">caption_uri</span><span class="o">=</span><span class="n">session</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">session</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">SESSIONS</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>

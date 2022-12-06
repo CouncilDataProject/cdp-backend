@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cdp_backend.pipeline.ingestion_models - cdp-backend 0.1.dev1+g2d080b4 documentation</title>
+        <title>cdp_backend.pipeline.ingestion_models - cdp-backend 0.1.dev1+gb00f378 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g2d080b4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gb00f378 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2d080b4 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb00f378 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -350,13 +350,38 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A session is a working period for an event.</span>
 <span class="sd">    For example, an event could have a morning and afternoon session.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    video_start_time is a duration relative to the beginning of the video in</span>
+<span class="sd">    HH:MM:SS format. It does not affect nor is relative to session_datetime</span>
+<span class="sd">    or any other datetime. If the portion of the video relavent to the session</span>
+<span class="sd">    begins 37m50s into the full video, video_start_time will be &quot;37:50&quot;.</span>
+<span class="sd">    An absent start time is equivalent to the beginning of the video, and an</span>
+<span class="sd">    absent end time is equivalent to the end of the video, so either can be omitted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">session_datetime</span><span class="p">:</span> <span class="n">datetime</span>
     <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">session_index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">video_start_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">video_end_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">caption_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+    <span class="n">external_source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># validate start/end time pair during ingestion</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">video_start_time</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">video_end_time</span><span class="p">:</span>
+            <span class="c1"># fill in potentially missing hh:mm:s</span>
+            <span class="c1"># for flexible input format [h[h:[m[m:[s]]]]]s</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;00:00:0&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">video_start_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;00:00:0&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">video_end_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span>
+            <span class="n">start</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+            <span class="n">end</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+            <span class="n">start_seconds</span> <span class="o">=</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">start</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3600</span>
+            <span class="n">end_seconds</span> <span class="o">=</span> <span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">end</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3600</span>
+            <span class="k">if</span> <span class="n">start_seconds</span> <span class="o">&gt;=</span> <span class="n">end_seconds</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;start_time must be less than end_time if both exist&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body">[docs]</a><span class="nd">@dataclass</span>
@@ -479,6 +504,8 @@
             <span class="n">video_uri</span><span class="o">=</span><span class="p">(</span>
                 <span class="s2">&quot;https://video.seattle.gov/media/council/council_113020_2022091V.mp4&quot;</span>
             <span class="p">),</span>
+            <span class="n">video_start_time</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;00:00:00&quot;</span><span class="p">),</span>
+            <span class="n">video_end_time</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;99:59:59&quot;</span><span class="p">),</span>
             <span class="n">caption_uri</span><span class="o">=</span><span class="p">(</span>
                 <span class="s2">&quot;https://www.seattlechannel.org/documents/seattlechannel/closedcaption/2020/council_113020_2022091.vtt&quot;</span>  <span class="c1"># noqa: E501</span>
             <span class="p">),</span>

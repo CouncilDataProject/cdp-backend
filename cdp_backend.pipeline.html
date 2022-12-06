@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.sr_models package" href="cdp_backend.sr_models.html" /><link rel="prev" title="cdp_backend.infrastructure package" href="cdp_backend.infrastructure.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cdp_backend.pipeline package - cdp-backend 0.1.dev1+g2d080b4 documentation</title>
+        <title>cdp_backend.pipeline package - cdp-backend 0.1.dev1+gb00f378 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g2d080b4 documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+gb00f378 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2d080b4 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb00f378 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -810,10 +810,17 @@ The image will be uploaded or updated in the CDP file storage system.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Session">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.ingestion_models.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_datetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.ingestion_models.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_datetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/ingestion_models.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.IngestionModel" title="cdp_backend.pipeline.ingestion_models.IngestionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DataClassJsonMixin</span></code></p>
 <p>A session is a working period for an event.
 For example, an event could have a morning and afternoon session.</p>
+<p class="rubric">Notes</p>
+<p>video_start_time is a duration relative to the beginning of the video in
+HH:MM:SS format. It does not affect nor is relative to session_datetime
+or any other datetime. If the portion of the video relavent to the session
+begins 37m50s into the full video, video_start_time will be “37:50”.
+An absent start time is equivalent to the beginning of the video, and an
+absent end time is equivalent to the end of the video, so either can be omitted.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Session.caption_uri">
 <span class="sig-name descname"><span class="pre">caption_uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.caption_uri" title="Permalink to this definition">#</a></dt>
@@ -832,6 +839,16 @@ For example, an event could have a morning and afternoon session.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Session.session_index">
 <span class="sig-name descname"><span class="pre">session_index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.session_index" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Session.video_end_time">
+<span class="sig-name descname"><span class="pre">video_end_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.video_end_time" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cdp_backend.pipeline.ingestion_models.Session.video_start_time">
+<span class="sig-name descname"><span class="pre">video_start_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cdp_backend.pipeline.ingestion_models.Session.video_start_time" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1596,6 +1613,8 @@ Default: None (no annotations)</p>
 <li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.external_source_id"><code class="docutils literal notranslate"><span class="pre">Session.external_source_id</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.session_datetime"><code class="docutils literal notranslate"><span class="pre">Session.session_datetime</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.session_index"><code class="docutils literal notranslate"><span class="pre">Session.session_index</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.video_end_time"><code class="docutils literal notranslate"><span class="pre">Session.video_end_time</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.video_start_time"><code class="docutils literal notranslate"><span class="pre">Session.video_start_time</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session.video_uri"><code class="docutils literal notranslate"><span class="pre">Session.video_uri</span></code></a></li>
 </ul>
 </li>

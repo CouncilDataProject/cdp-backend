@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+g2d080b4 documentation</title>
+        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+gb00f378 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g2d080b4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gb00f378 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g2d080b4 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb00f378 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -346,18 +346,13 @@
                 <span class="c1"># Download video to local copy</span>
                 <span class="n">resource_copy_filepath</span> <span class="o">=</span> <span class="n">resource_copy_task</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">)</span>
 
-                <span class="c1"># Get unique session identifier</span>
-                <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">get_session_content_hash</span><span class="p">(</span>
-                    <span class="n">tmp_video_filepath</span><span class="o">=</span><span class="n">resource_copy_filepath</span><span class="p">,</span>
-                <span class="p">)</span>
-
                 <span class="c1"># Handle video conversion or non-secure resource</span>
                 <span class="c1"># hosting</span>
                 <span class="p">(</span>
                     <span class="n">tmp_video_filepath</span><span class="p">,</span>
                     <span class="n">session_video_hosted_url</span><span class="p">,</span>
+                    <span class="n">session_content_hash</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">=</span> <span class="n">convert_video_and_handle_host</span><span class="p">(</span>
-                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
                     <span class="n">video_filepath</span><span class="o">=</span><span class="n">resource_copy_filepath</span><span class="p">,</span>
                     <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
                     <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
@@ -509,14 +504,13 @@
     <span class="k">return</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
 
 
-<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nd">@task</span><span class="p">(</span><span class="n">nout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">convert_video_and_handle_host</span><span class="p">(</span>
-    <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">video_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a video to MP4 (if necessary), upload it to the file store, and remove</span>
 <span class="sd">    the original non-MP4 file that was resource copied.</span>
@@ -546,19 +540,41 @@
     <span class="c1"># Get file extension</span>
     <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
+    <span class="n">trim_video</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_start_time</span> <span class="ow">or</span> <span class="n">session</span><span class="o">.</span><span class="n">video_end_time</span><span class="p">)</span>
+
     <span class="c1"># Convert to mp4 if file isn&#39;t of approved web format</span>
     <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="s2">&quot;.webm&quot;</span><span class="p">]:</span>
         <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Convert video to mp4</span>
-        <span class="n">mp4_filepath</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">convert_video_to_mp4</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
+        <span class="n">mp4_filepath</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">convert_video_to_mp4</span><span class="p">(</span>
+            <span class="n">video_filepath</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">),</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_start_time</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_end_time</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="c1"># Remove old mkv file</span>
         <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
 
         <span class="c1"># Update variable name for easier downstream typing</span>
-        <span class="n">video_filepath</span> <span class="o">=</span> <span class="n">mp4_filepath</span>
+        <span class="n">video_filepath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mp4_filepath</span><span class="p">)</span>
+
+    <span class="c1"># host trimmed videos because it&#39;s simpler than setting</span>
+    <span class="c1"># up transcription and playback ranges</span>
+    <span class="k">elif</span> <span class="n">trim_video</span><span class="p">:</span>
+        <span class="n">cdp_will_host</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Trim video</span>
+        <span class="n">trimmed_filepath</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">clip_and_reformat_video</span><span class="p">(</span>
+            <span class="n">video_filepath</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">),</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_start_time</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">video_end_time</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">fs_functions</span><span class="o">.</span><span class="n">remove_local_file</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)</span>
+
+        <span class="c1"># Update variable name for easier downstream typing</span>
+        <span class="n">video_filepath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">trimmed_filepath</span><span class="p">)</span>
 
     <span class="c1"># Check if original session video uri is a m3u8</span>
     <span class="c1"># We cant follow the normal coonvert video process from above</span>
@@ -586,6 +602,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">hosted_video_media_url</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">video_uri</span>
 
+    <span class="c1"># Get unique session identifier</span>
+    <span class="n">session_content_hash</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">video_filepath</span><span class="p">)</span>
+
     <span class="c1"># Upload and swap if cdp is hosting</span>
     <span class="k">if</span> <span class="n">cdp_will_host</span><span class="p">:</span>
         <span class="c1"># Upload to gcsfs</span>
@@ -603,7 +622,7 @@
             <span class="n">uri</span><span class="o">=</span><span class="n">hosted_video_uri</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">video_filepath</span><span class="p">,</span> <span class="n">hosted_video_media_url</span>
+    <span class="k">return</span> <span class="n">video_filepath</span><span class="p">,</span> <span class="n">hosted_video_media_url</span><span class="p">,</span> <span class="n">session_content_hash</span>
 
 
 <span class="nd">@task</span>
