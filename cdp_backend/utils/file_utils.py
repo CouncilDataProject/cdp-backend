@@ -28,6 +28,82 @@ MAX_THUMBNAIL_HEIGHT = 540
 MAX_THUMBNAIL_WIDTH = 960
 
 
+def with_stem(path: Path, stem: str) -> Path:
+    """
+    Create a path with a new stem
+
+    Parameters
+    ----------
+    path: Path
+        The path to alter
+    stem: str
+        The string to be the new stem of the path
+
+    Returns
+    -------
+    path: Path
+        The new path with the replaced stem
+    """
+    return path.with_name(f"{stem}{path.suffix}")
+
+
+def append_to_stem(path: Path, addition: str) -> Path:
+    """
+    Rename a file with a string appended to the path stem
+
+    Parameters
+    ----------
+    path: Path
+        The path to alter
+    addition: str
+        The string to be appended to the path stem
+
+    Returns
+    -------
+    path: Path
+        The new path with the stem addition
+    """
+    return with_stem(path, f"{path.stem}{addition}")
+
+
+def rename_with_stem(path: Path, stem: str) -> Path:
+    """
+    Rename a file with a string appended to the path stem
+
+    Parameters
+    ----------
+    path: Path
+        The path to be renamed
+    stem: str
+        The string to become the new stem
+
+    Returns
+    -------
+    path: Path
+        The new path of the renamed file
+    """
+    return path.rename(with_stem(path, stem))
+
+
+def rename_append_to_stem(path: Path, addition: str) -> Path:
+    """
+    Rename a file with a string appended to the path stem
+
+    Parameters
+    ----------
+    path: Path
+        The path to be renamed
+    addition: str
+        The string to be appended to the path stem
+
+    Returns
+    -------
+    path: Path
+        The new path of the renamed file
+    """
+    return path.rename(append_to_stem(path, addition))
+
+
 def get_media_type(uri: str) -> Optional[str]:
     """
     Get the IANA media type for the provided URI.
@@ -520,7 +596,6 @@ def convert_video_to_mp4(
         The end time to trim the video in HH:MM:SS.
     output_path: Path
         The output path to place the clip at.
-        Must include a suffix to use for the reformatting.
 
     Returns
     -------
@@ -605,7 +680,7 @@ def clip_and_reformat_video(
     video_filepath: Path,
     start_time: Optional[str],
     end_time: Optional[str],
-    output_path: Path = Path("clipped.mp4"),
+    output_path: Path = None,
     output_format: str = "mp4",
 ) -> Path:
     """
@@ -621,8 +696,6 @@ def clip_and_reformat_video(
         The end time of the clip in HH:MM:SS.
     output_path: Path
         The output path to place the clip at.
-        Must include a suffix to use for the reformatting.
-        Default: "clipped.mp4"
     output_format: str
         The output format.
         Default: "mp4"
@@ -633,6 +706,8 @@ def clip_and_reformat_video(
         The path where the new file was stored to.
     """
     import ffmpeg
+
+    output_path = output_path or rename_append_to_stem(video_filepath, "_clipped")
 
     try:
         ffmpeg_stdout, ffmpeg_stderr = (

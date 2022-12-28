@@ -36,6 +36,58 @@ from ..conftest import (
 
 
 @pytest.mark.parametrize(
+    "path, stem, expected_result",
+    [
+        (Path("file.ext"), "new", "new.ext"),
+    ],
+)
+def test_with_stem(path: Path, stem: str, expected_result: str) -> None:
+    new_path = file_utils.with_stem(path, stem)
+    assert str(new_path) == expected_result
+
+
+@pytest.mark.parametrize(
+    "path, addition, expected_result",
+    [
+        (Path("file.ext"), "-new", "file-new.ext"),
+    ],
+)
+def test_append_to_stem(path: Path, addition: str, expected_result: str) -> None:
+    new_path = file_utils.append_to_stem(path, addition)
+    assert str(new_path) == expected_result
+
+
+@pytest.mark.parametrize(
+    "path, stem, expected_result",
+    [
+        (Path("file.ext"), "new", "new.ext"),
+    ],
+)
+def test_rename_with_stem(path: Path, stem: str, expected_result: str) -> None:
+    file = open(path, "w")
+    file.close()
+    new_path = file_utils.rename_with_stem(path, stem)
+    assert str(new_path) == expected_result
+    assert new_path.exists()
+    os.remove(new_path)
+
+
+@pytest.mark.parametrize(
+    "path, addition, expected_result",
+    [
+        (Path("file.ext"), "-new", "file-new.ext"),
+    ],
+)
+def test_rename_append_to_stem(path: Path, addition: str, expected_result: str) -> None:
+    file = open(path, "w")
+    file.close()
+    new_path = file_utils.rename_append_to_stem(path, addition)
+    assert str(new_path) == expected_result
+    assert new_path.exists()
+    os.remove(new_path)
+
+
+@pytest.mark.parametrize(
     "uri, expected_result",
     [
         ("https://some.site.co/index.html", "text/html"),

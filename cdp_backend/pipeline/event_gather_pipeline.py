@@ -7,6 +7,7 @@ from importlib import import_module
 from operator import attrgetter
 from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
+from uuid import uuid4
 
 from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
@@ -321,6 +322,14 @@ def convert_video_and_handle_host(
     hosted_video_uri: str
         The URI for the CDP hosted video.
     """
+    # Prevent path collision
+    video_filepath = str(
+        file_utils.rename_with_stem(
+            Path(video_filepath),
+            f"{str(uuid4())}_temp",
+        )
+    )
+
     # Get file extension
     ext = Path(video_filepath).suffix.lower()
 
@@ -389,14 +398,11 @@ def convert_video_and_handle_host(
     # Get unique session identifier
     session_content_hash = file_utils.hash_file_contents(uri=video_filepath)
 
-    # Rename file to prevent collisions
-    video_file = Path(video_filepath)
+    # Rename file for deterministic output
     video_filepath = str(
-        video_file.rename(
-            video_file.with_name(
-                f"{session_content_hash}_temp_video{video_file.suffix}"
-            )
-        )
+        file_utils.rename_with_stem(
+            Path(video_filepath), f"{session_content_hash}_temp"
+        ),
     )
 
     # Upload and swap if cdp is hosting
