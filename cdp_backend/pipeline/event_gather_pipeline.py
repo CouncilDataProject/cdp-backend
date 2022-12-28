@@ -136,6 +136,7 @@ def create_event_gather_flow(
                     tmp_video_filepath,
                     session_video_hosted_url,
                     session_content_hash,
+
                 ) = convert_video_and_handle_host(
                     video_filepath=resource_copy_filepath,
                     session=session,
@@ -388,6 +389,12 @@ def convert_video_and_handle_host(
 
     # Get unique session identifier
     session_content_hash = file_utils.hash_file_contents(uri=video_filepath)
+
+    # Rename file to prevent collisions
+    video_file = Path(video_filepath)
+    video_filepath = str(video_file.rename(video_file.with_stem(
+        f"{session_content_hash}_temp_video"
+    )))
 
     # Upload and swap if cdp is hosting
     if cdp_will_host:
