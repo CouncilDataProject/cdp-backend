@@ -129,7 +129,9 @@ def create_event_gather_flow(
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
                 # Download video to local copy
-                resource_copy_filepath = resource_copy_task(uri=session.video_uri)
+                resource_copy_filepath = resource_copy_task(
+                    uri=session.video_uri, dst=f"{str(uuid4())}_temp.mp4"
+                )
 
                 # Handle video conversion or non-secure resource
                 # hosting
@@ -230,7 +232,7 @@ def create_event_gather_flow(
 
 
 @task(max_retries=3, retry_delay=timedelta(seconds=120))
-def resource_copy_task(uri: str) -> str:
+def resource_copy_task(uri: str, dst: str = None) -> str:
     """
     Copy a file to a temporary location for processing.
 
@@ -251,6 +253,7 @@ def resource_copy_task(uri: str) -> str:
     """
     return file_utils.resource_copy(
         uri=uri,
+        dst=dst,
         overwrite=True,
     )
 
@@ -322,14 +325,6 @@ def convert_video_and_handle_host(
     hosted_video_uri: str
         The URI for the CDP hosted video.
     """
-    # Prevent path collision
-    video_filepath = str(
-        file_utils.rename_with_stem(
-            Path(video_filepath),
-            f"{str(uuid4())}_temp",
-        )
-    )
-
     # Get file extension
     ext = Path(video_filepath).suffix.lower()
 
