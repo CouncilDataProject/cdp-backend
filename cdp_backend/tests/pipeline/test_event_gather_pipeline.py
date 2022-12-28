@@ -577,7 +577,7 @@ EXISTING_REMOTE_M3U8_MINIMAL_EVENT = deepcopy(EXAMPLE_MINIMAL_EVENT)
 EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST_URI
 
 
-def path_rename(self: Path, newPath: Path):
+def path_rename(self: Path, newPath: Path) -> Path:
     return newPath
 
 
