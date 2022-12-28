@@ -128,7 +128,8 @@ def create_event_gather_flow(
         for event in events:
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
-                # Download video to local copy
+                # Download video to local copy making
+                # copy unique in case of shared session video
                 resource_copy_filepath = resource_copy_task(
                     uri=session.video_uri, dst=f"{str(uuid4())}_temp.mp4"
                 )
