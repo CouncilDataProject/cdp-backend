@@ -637,7 +637,7 @@ def test_convert_video_and_handle_host(
     mock_convert_video_to_mp4.return_value = expected_filepath
     mock_hash_file_contents.return_value = "abc123"
 
-    with patch.object(Path, 'rename', path_rename):
+    with patch.object(Path, "rename", path_rename):
 
         (
             mp4_filepath,
