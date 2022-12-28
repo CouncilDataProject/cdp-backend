@@ -136,7 +136,6 @@ def create_event_gather_flow(
                     tmp_video_filepath,
                     session_video_hosted_url,
                     session_content_hash,
-
                 ) = convert_video_and_handle_host(
                     video_filepath=resource_copy_filepath,
                     session=session,
