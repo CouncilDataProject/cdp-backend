@@ -391,8 +391,8 @@ def convert_video_and_handle_host(
 
     # Rename file to prevent collisions
     video_file = Path(video_filepath)
-    video_filepath = str(video_file.rename(video_file.with_stem(
-        f"{session_content_hash}_temp_video"
+    video_filepath = str(video_file.rename(video_file.with_name(
+        f"{session_content_hash}_temp_video{video_file.suffix}"
     )))
 
     # Upload and swap if cdp is hosting
