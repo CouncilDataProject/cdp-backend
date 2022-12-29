@@ -654,5 +654,5 @@ def test_convert_video_and_handle_host(
         if Path(video_filepath).suffix == ".mp4":
             assert not mock_convert_video_to_mp4.called
 
-        assert mp4_filepath == f"{session_content_hash}_temp.mp4"
+        assert mp4_filepath == str(Path(video_filepath).with_suffix('.mp4'))
         assert session_video_hosted_url == expected_hosted_video_url

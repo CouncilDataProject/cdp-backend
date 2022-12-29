@@ -394,13 +394,6 @@ def convert_video_and_handle_host(
     # Get unique session identifier
     session_content_hash = file_utils.hash_file_contents(uri=video_filepath)
 
-    # Rename file for deterministic output
-    video_filepath = str(
-        file_utils.rename_with_stem(
-            Path(video_filepath), f"{session_content_hash}_temp"
-        ),
-    )
-
     # Upload and swap if cdp is hosting
     if cdp_will_host:
         # Upload to gcsfs
