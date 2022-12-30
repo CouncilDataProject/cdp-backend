@@ -145,6 +145,7 @@ def get_media_type(uri: str) -> Optional[str]:
 def resource_copy(
     uri: str,
     dst: Optional[Union[str, Path]] = None,
+    copy_suffix: Optional[bool] = False,
     overwrite: bool = False,
 ) -> str:
     """
@@ -166,6 +167,7 @@ def resource_copy(
     saved_path: str
         The path of where the resource ended up getting copied to.
     """
+    uri_suffix = Path(uri.split("/")[-1].split("?")[0].split("#")[0]).suffix
     if dst is None:
         dst = uri.split("/")[-1]
 
@@ -179,10 +181,13 @@ def resource_copy(
             # Split by the last "/"
             dst = dst / uri.split("/")[-1]
 
+    if copy_suffix:
+        dst = dst.with_suffix(uri_suffix)
+
     # Ensure filename is less than 255 chars
     # Otherwise this can raise an OSError for too long of a filename
     if len(dst.name) > 255:
-        dst = Path(str(dst)[:255])
+        dst = with_stem(dst, dst.stem[: (255 - len(dst.suffix))])
 
     # Ensure dest isn't a file
     if dst.is_file() and not overwrite:

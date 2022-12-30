@@ -131,7 +131,9 @@ def create_event_gather_flow(
                 # Download video to local copy making
                 # copy unique in case of shared session video
                 resource_copy_filepath = resource_copy_task(
-                    uri=session.video_uri, dst=f"{str(uuid4())}_temp.mp4"
+                    uri=session.video_uri,
+                    dst=f"{str(uuid4())}_temp",
+                    copy_suffix=True,
                 )
 
                 # Handle video conversion or non-secure resource
@@ -233,7 +235,7 @@ def create_event_gather_flow(
 
 
 @task(max_retries=3, retry_delay=timedelta(seconds=120))
-def resource_copy_task(uri: str, dst: str = None) -> str:
+def resource_copy_task(uri: str, dst: str = None, copy_suffix: bool = None) -> str:
     """
     Copy a file to a temporary location for processing.
 
@@ -255,6 +257,7 @@ def resource_copy_task(uri: str, dst: str = None) -> str:
     return file_utils.resource_copy(
         uri=uri,
         dst=dst,
+        copy_suffix=copy_suffix,
         overwrite=True,
     )
 
