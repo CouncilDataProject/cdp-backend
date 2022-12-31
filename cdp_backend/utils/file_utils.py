@@ -713,19 +713,7 @@ def clip_and_reformat_video(
     """
     import ffmpeg
 
-    output_path = output_path or rename_append_to_stem(video_filepath, "_clipped")
-
-    log.info(f"Input video to trim: {str(video_filepath)}")
-    log.info(f"Input video exists: {video_filepath.exists()}")
-    if video_filepath.exists():
-        log.info(f"Input video stats: {video_filepath.stat()}")
-    log.info(f"Output video: {str(output_path)}")
-    log.info(f"Output video exists: {output_path.exists()}")
-    if video_filepath.exists():
-        log.info(f"Output video stats: {output_path.stat()}")
-    log.info("Directory contents:")
-    for file in video_filepath.parent.iterdir():
-        log.info(str(file))
+    output_path = output_path or append_to_stem(video_filepath, "_clipped")
 
     try:
         ffmpeg_stdout, ffmpeg_stderr = (
