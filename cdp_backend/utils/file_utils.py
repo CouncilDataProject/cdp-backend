@@ -238,10 +238,6 @@ def resource_copy(
                         timeout=1800,
                     ).content
                 )
-                log.info(f"File complete: {str(dst)}")
-                log.info(f"URI complete: {str(uri)}")
-                log.info(f"File exists: {dst.exists()}")
-                log.info(f"File stats: {dst.stat()}")
 
         else:
             # TODO: Add explicit use of GCS credentials until public read is fixed
@@ -718,6 +714,10 @@ def clip_and_reformat_video(
     import ffmpeg
 
     output_path = output_path or rename_append_to_stem(video_filepath, "_clipped")
+
+    log.info(f"File to trim: {str(video_filepath)}")
+    log.info(f"File exists: {video_filepath.exists()}")
+    log.info(f"File stats: {video_filepath.stat()}")
 
     try:
         ffmpeg_stdout, ffmpeg_stderr = (
