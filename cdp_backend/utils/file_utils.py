@@ -229,6 +229,7 @@ def resource_copy(
             # It was added because it's very common for SSL certs to be bad
             # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
             # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
+
             with open(dst, "wb") as open_dst:
                 open_dst.write(
                     requests.get(
@@ -237,6 +238,10 @@ def resource_copy(
                         timeout=1800,
                     ).content
                 )
+                log.info(f"File complete: {str(dst)}")
+                log.info(f"URI complete: {str(uri)}")
+                log.info(f"File exists: {dst.exists()}")
+                log.info(f"File stats: {dst.stat()}")
 
         else:
             # TODO: Add explicit use of GCS credentials until public read is fixed
