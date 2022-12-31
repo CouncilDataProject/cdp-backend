@@ -346,7 +346,7 @@ def convert_video_and_handle_host(
             end_time=session.video_end_time,
         )
 
-        # fs_functions.remove_local_file(video_filepath)
+        fs_functions.remove_local_file(video_filepath)
 
         # Update variable name for easier downstream typing
         video_filepath = str(mp4_filepath)
@@ -363,7 +363,7 @@ def convert_video_and_handle_host(
             end_time=session.video_end_time,
         )
 
-        # fs_functions.remove_local_file(video_filepath)
+        fs_functions.remove_local_file(video_filepath)
 
         # Update variable name for easier downstream typing
         video_filepath = str(trimmed_filepath)
