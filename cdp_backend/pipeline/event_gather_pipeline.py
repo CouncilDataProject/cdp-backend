@@ -334,11 +334,6 @@ def convert_video_and_handle_host(
 
     trim_video = bool(session.video_start_time or session.video_end_time)
 
-    log.info(f"File to trim: {video_filepath}")
-    log.info(f"File exists: {Path(video_filepath).exists()}")
-    if Path(video_filepath).exists():
-        log.info(f"File stats: {Path(video_filepath).stat()}")
-
     # Convert to mp4 if file isn't of approved web format
     cdp_will_host = False
     if ext not in [".mp4", ".webm"]:
@@ -351,7 +346,7 @@ def convert_video_and_handle_host(
             end_time=session.video_end_time,
         )
 
-        fs_functions.remove_local_file(video_filepath)
+        # fs_functions.remove_local_file(video_filepath)
 
         # Update variable name for easier downstream typing
         video_filepath = str(mp4_filepath)
@@ -368,7 +363,7 @@ def convert_video_and_handle_host(
             end_time=session.video_end_time,
         )
 
-        fs_functions.remove_local_file(video_filepath)
+        # fs_functions.remove_local_file(video_filepath)
 
         # Update variable name for easier downstream typing
         video_filepath = str(trimmed_filepath)

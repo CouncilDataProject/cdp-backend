@@ -609,6 +609,11 @@ def convert_video_to_mp4(
         The filepath of the converted MP4 video.
     """
 
+    log.info(f"File to trim: {str(video_filepath)}")
+    log.info(f"File exists: {video_filepath.exists()}")
+    if video_filepath.exists():
+        log.info(f"File stats: {video_filepath.stat()}")
+
     output_path = output_path or video_filepath.with_suffix(".mp4")
     output_path = clip_and_reformat_video(
         video_filepath=video_filepath,
