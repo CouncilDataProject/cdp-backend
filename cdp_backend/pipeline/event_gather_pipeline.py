@@ -334,9 +334,10 @@ def convert_video_and_handle_host(
 
     trim_video = bool(session.video_start_time or session.video_end_time)
 
-    log.info(f"File to trim: {str(video_filepath)}")
-    log.info(f"File exists: {video_filepath.exists()}")
-    log.info(f"File stats: {video_filepath.stat()}")
+    log.info(f"File to trim: {video_filepath}")
+    log.info(f"File exists: {Path(video_filepath).exists()}")
+    if Path(video_filepath).exists():
+        log.info(f"File stats: {Path(video_filepath).stat()}")
 
     # Convert to mp4 if file isn't of approved web format
     cdp_will_host = False
