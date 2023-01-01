@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cdp_backend.pipeline.ingestion_models - cdp-backend 0.1.dev1+gb00f378 documentation</title>
+    <!-- Generated with Sphinx 6.0.0 and Furo 2022.12.07 -->
+        <title>cdp_backend.pipeline.ingestion_models - cdp-backend 0.1.dev1+gaa8ff15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gb00f378 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gaa8ff15 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,10 +146,10 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb00f378 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gaa8ff15 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -229,7 +229,7 @@
 
 
 <div class="viewcode-block" id="IngestionModel"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.IngestionModel">[docs]</a><span class="k">class</span> <span class="nc">IngestionModel</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for IngestionModel type.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
@@ -239,7 +239,7 @@
 
 <div class="viewcode-block" id="Person"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Person">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Primarily the council members, this could technically include the mayor or city</span>
 <span class="sd">    manager, or any other &quot;normal&quot; presenters and attendees of meetings.</span>
 
@@ -268,7 +268,7 @@
 
 <div class="viewcode-block" id="Vote"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Vote">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Vote</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A reference tying a specific person and an event minutes item together.</span>
 
 <span class="sd">    Notes</span>
@@ -284,7 +284,7 @@
 
 <div class="viewcode-block" id="SupportingFile"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.SupportingFile">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SupportingFile</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A file related tied to a matter or minutes item.</span>
 
 <span class="sd">    Notes</span>
@@ -299,7 +299,7 @@
 
 <div class="viewcode-block" id="Matter"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Matter">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Matter</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A matter is a specific legislative document. A bill, resolution, initiative, etc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -313,7 +313,7 @@
 
 <div class="viewcode-block" id="MinutesItem"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.MinutesItem">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">MinutesItem</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An item referenced during a meeting.</span>
 <span class="sd">    This can be a matter but it can be a presentation or budget file, etc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -325,7 +325,7 @@
 
 <div class="viewcode-block" id="EventMinutesItem"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventMinutesItem">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EventMinutesItem</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Details about a specific item during an event.</span>
 
 <span class="sd">    Notes</span>
@@ -347,7 +347,7 @@
 
 <div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Session">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A session is a working period for an event.</span>
 <span class="sd">    For example, an event could have a morning and afternoon session.</span>
 
@@ -386,7 +386,7 @@
 
 <div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Body">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A meeting body. This can be full council, a subcommittee, or &quot;off-council&quot; matters</span>
 <span class="sd">    such as election debates.</span>
 
@@ -407,7 +407,7 @@
 
 <div class="viewcode-block" id="Role"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Role">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Role</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A role is a person&#39;s job for a period of time in the city council. A person can</span>
 <span class="sd">    (and should) have multiple roles. For example: a person has two terms as city</span>
 <span class="sd">    council member for district four then a term as city council member for a citywide</span>
@@ -431,7 +431,7 @@
 
 <div class="viewcode-block" id="Seat"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.Seat">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Seat</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An electable office on the City Council. I.E. &quot;Position 9&quot;.</span>
 
 <span class="sd">    Notes</span>
@@ -450,7 +450,7 @@
 
 <div class="viewcode-block" id="EventIngestionModel"><a class="viewcode-back" href="../../../cdp_backend.pipeline.html#cdp_backend.pipeline.ingestion_models.EventIngestionModel">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EventIngestionModel</span><span class="p">(</span><span class="n">IngestionModel</span><span class="p">,</span> <span class="n">DataClassJsonMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An event can be a normally scheduled meeting, a special event such as a press</span>
 <span class="sd">    conference or election debate, and, can be upcoming or historical.</span>
 
@@ -659,9 +659,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -674,9 +672,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>

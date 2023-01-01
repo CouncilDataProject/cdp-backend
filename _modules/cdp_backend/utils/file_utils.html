@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+gb00f378 documentation</title>
+    <!-- Generated with Sphinx 6.0.0 and Furo 2022.12.07 -->
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+gaa8ff15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gb00f378 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gaa8ff15 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,10 +146,10 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gb00f378 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gaa8ff15 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -244,8 +244,84 @@
 <span class="n">MAX_THUMBNAIL_WIDTH</span> <span class="o">=</span> <span class="mi">960</span>
 
 
+<div class="viewcode-block" id="with_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.with_stem">[docs]</a><span class="k">def</span> <span class="nf">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a path with a new stem</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The path to alter</span>
+<span class="sd">    stem: str</span>
+<span class="sd">        The string to be the new stem of the path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The new path with the replaced stem</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}{</span><span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="append_to_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.append_to_stem">[docs]</a><span class="k">def</span> <span class="nf">append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">addition</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rename a file with a string appended to the path stem</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The path to alter</span>
+<span class="sd">    addition: str</span>
+<span class="sd">        The string to be appended to the path stem</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The new path with the stem addition</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="si">}{</span><span class="n">addition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rename_with_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.rename_with_stem">[docs]</a><span class="k">def</span> <span class="nf">rename_with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rename a file with a string appended to the path stem</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The path to be renamed</span>
+<span class="sd">    stem: str</span>
+<span class="sd">        The string to become the new stem</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The new path of the renamed file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">stem</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="rename_append_to_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.rename_append_to_stem">[docs]</a><span class="k">def</span> <span class="nf">rename_append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">addition</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rename a file with a string appended to the path stem</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The path to be renamed</span>
+<span class="sd">    addition: str</span>
+<span class="sd">        The string to be appended to the path stem</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    path: Path</span>
+<span class="sd">        The new path of the renamed file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">addition</span><span class="p">))</span></div>
+
+
 <div class="viewcode-block" id="get_media_type"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">[docs]</a><span class="k">def</span> <span class="nf">get_media_type</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the IANA media type for the provided URI.</span>
 <span class="sd">    If one could not be found, return None.</span>
 
@@ -285,9 +361,10 @@
 <div class="viewcode-block" id="resource_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.resource_copy">[docs]</a><span class="k">def</span> <span class="nf">resource_copy</span><span class="p">(</span>
     <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">dst</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">copy_suffix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a resource (local or remote) to a local destination on the machine.</span>
 
 <span class="sd">    Parameters</span>
@@ -306,6 +383,7 @@
 <span class="sd">    saved_path: str</span>
 <span class="sd">        The path of where the resource ended up getting copied to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">uri_suffix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">suffix</span>
     <span class="k">if</span> <span class="n">dst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dst</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -319,10 +397,13 @@
             <span class="c1"># Split by the last &quot;/&quot;</span>
             <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="n">copy_suffix</span><span class="p">:</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">uri_suffix</span><span class="p">)</span>
+
     <span class="c1"># Ensure filename is less than 255 chars</span>
     <span class="c1"># Otherwise this can raise an OSError for too long of a filename</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="p">:</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)[:</span><span class="mi">255</span><span class="p">])</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">with_stem</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">dst</span><span class="o">.</span><span class="n">stem</span><span class="p">[:</span> <span class="p">(</span><span class="mi">255</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">suffix</span><span class="p">))])</span>
 
     <span class="c1"># Ensure dest isn&#39;t a file</span>
     <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
@@ -364,6 +445,7 @@
             <span class="c1"># It was added because it&#39;s very common for SSL certs to be bad</span>
             <span class="c1"># See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85</span>
             <span class="c1"># And: https://github.com/CouncilDataProject/seattle/runs/5957646032</span>
+
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_dst</span><span class="p">:</span>
                 <span class="n">open_dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                     <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -390,7 +472,7 @@
 
 
 <div class="viewcode-block" id="youtube_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.youtube_copy">[docs]</a><span class="k">def</span> <span class="nf">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a video from YouTube to a local destination on the machine.</span>
 
 <span class="sd">    Parameters</span>
@@ -423,7 +505,7 @@
 
 
 <div class="viewcode-block" id="vimeo_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.vimeo_copy">[docs]</a><span class="k">def</span> <span class="nf">vimeo_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a video from Vimeo to a local destination on the machine for analysis.</span>
 
 <span class="sd">    Parameters</span>
@@ -468,7 +550,7 @@
     <span class="n">audio_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split and store the audio from a video file using ffmpeg.</span>
 
 <span class="sd">    Parameters</span>
@@ -536,7 +618,7 @@
 <div class="viewcode-block" id="get_static_thumbnail"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">[docs]</a><span class="k">def</span> <span class="nf">get_static_thumbnail</span><span class="p">(</span>
     <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function that produces a png thumbnail image from a video file</span>
 
 <span class="sd">    Parameters</span>
@@ -593,7 +675,7 @@
     <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function that produces a gif hover thumbnail from an mp4 video file</span>
 
 <span class="sd">    Parameters</span>
@@ -654,7 +736,7 @@
 
 
 <div class="viewcode-block" id="find_proper_resize_ratio"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.find_proper_resize_ratio">[docs]</a><span class="k">def</span> <span class="nf">find_proper_resize_ratio</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the proper ratio to resize a thumbnail greater than 960 x 540 pixels.</span>
 
 <span class="sd">    Parameters</span>
@@ -688,7 +770,7 @@
 
 
 <div class="viewcode-block" id="hash_file_contents"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.hash_file_contents">[docs]</a><span class="k">def</span> <span class="nf">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the SHA256 hash of a file&#39;s content.</span>
 
 <span class="sd">    Parameters</span>
@@ -723,7 +805,7 @@
     <span class="n">end_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a video to an equivalent MP4 file.</span>
 
 <span class="sd">    Parameters</span>
@@ -736,7 +818,6 @@
 <span class="sd">        The end time to trim the video in HH:MM:SS.</span>
 <span class="sd">    output_path: Path</span>
 <span class="sd">        The output path to place the clip at.</span>
-<span class="sd">        Must include a suffix to use for the reformatting.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -758,7 +839,7 @@
 
 
 <div class="viewcode-block" id="generate_file_storage_name"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.generate_file_storage_name">[docs]</a><span class="k">def</span> <span class="nf">generate_file_storage_name</span><span class="p">(</span><span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a filename using the hash of the file contents and some provided suffix.</span>
 
 <span class="sd">    Parameters</span>
@@ -782,7 +863,7 @@
     <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">dest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Using the session_id provided, pulls the associated</span>
 <span class="sd">    video, and places it the destination.</span>
 
@@ -821,10 +902,10 @@
     <span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;clipped.mp4&quot;</span><span class="p">),</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clip a video file to a specific time range and convert to requested output format.</span>
 
 <span class="sd">    Parameters</span>
@@ -837,8 +918,6 @@
 <span class="sd">        The end time of the clip in HH:MM:SS.</span>
 <span class="sd">    output_path: Path</span>
 <span class="sd">        The output path to place the clip at.</span>
-<span class="sd">        Must include a suffix to use for the reformatting.</span>
-<span class="sd">        Default: &quot;clipped.mp4&quot;</span>
 <span class="sd">    output_format: str</span>
 <span class="sd">        The output format.</span>
 <span class="sd">        Default: &quot;mp4&quot;</span>
@@ -849,6 +928,8 @@
 <span class="sd">        The path where the new file was stored to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">ffmpeg</span>
+
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="ow">or</span> <span class="n">append_to_stem</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">,</span> <span class="s2">&quot;_clipped&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ffmpeg_stdout</span><span class="p">,</span> <span class="n">ffmpeg_stderr</span> <span class="o">=</span> <span class="p">(</span>
@@ -873,7 +954,7 @@
 
 
 <div class="viewcode-block" id="caption_is_valid"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.caption_is_valid">[docs]</a><span class="k">def</span> <span class="nf">caption_is_valid</span><span class="p">(</span><span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caption_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate the caption file at the URI provided.</span>
 
 <span class="sd">    Parameters</span>
@@ -946,9 +1027,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -961,9 +1040,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
