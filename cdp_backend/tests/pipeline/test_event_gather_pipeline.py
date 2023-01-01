@@ -7,7 +7,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import List, Optional
 from unittest import mock
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from prefect import Flow
@@ -577,6 +577,10 @@ EXISTING_REMOTE_M3U8_MINIMAL_EVENT = deepcopy(EXAMPLE_MINIMAL_EVENT)
 EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST_URI
 
 
+def path_rename(self: Path, newPath: Path) -> Path:
+    return newPath
+
+
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_open_url_for_gcs_file")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.remove_local_file")
@@ -633,20 +637,22 @@ def test_convert_video_and_handle_host(
     mock_convert_video_to_mp4.return_value = expected_filepath
     mock_hash_file_contents.return_value = "abc123"
 
-    (
-        mp4_filepath,
-        session_video_hosted_url,
-        session_content_hash,
-    ) = pipeline.convert_video_and_handle_host.run(
-        video_filepath=video_filepath,
-        session=session,
-        credentials_file="fake/credentials.json",
-        bucket="doesnt://matter",
-    )
+    with patch.object(Path, "rename", path_rename):
 
-    # Make sure mp4 files don't go through conversion
-    if Path(video_filepath).suffix == ".mp4":
-        assert not mock_convert_video_to_mp4.called
+        (
+            mp4_filepath,
+            session_video_hosted_url,
+            session_content_hash,
+        ) = pipeline.convert_video_and_handle_host.run(
+            video_filepath=video_filepath,
+            session=session,
+            credentials_file="fake/credentials.json",
+            bucket="doesnt://matter",
+        )
 
-    assert mp4_filepath == expected_filepath
-    assert session_video_hosted_url == expected_hosted_video_url
+        # Make sure mp4 files don't go through conversion
+        if Path(video_filepath).suffix == ".mp4":
+            assert not mock_convert_video_to_mp4.called
+
+        assert mp4_filepath == str(Path(video_filepath).with_suffix(".mp4"))
+        assert session_video_hosted_url == expected_hosted_video_url

@@ -7,6 +7,7 @@ from importlib import import_module
 from operator import attrgetter
 from pathlib import Path
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
+from uuid import uuid4
 
 from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
@@ -127,8 +128,13 @@ def create_event_gather_flow(
         for event in events:
             session_processing_results: List[SessionProcessingResult] = []
             for session in event.sessions:
-                # Download video to local copy
-                resource_copy_filepath = resource_copy_task(uri=session.video_uri)
+                # Download video to local copy making
+                # copy unique in case of shared session video
+                resource_copy_filepath = resource_copy_task(
+                    uri=session.video_uri,
+                    dst=f"{str(uuid4())}_temp",
+                    copy_suffix=True,
+                )
 
                 # Handle video conversion or non-secure resource
                 # hosting
@@ -229,7 +235,7 @@ def create_event_gather_flow(
 
 
 @task(max_retries=3, retry_delay=timedelta(seconds=120))
-def resource_copy_task(uri: str) -> str:
+def resource_copy_task(uri: str, dst: str = None, copy_suffix: bool = None) -> str:
     """
     Copy a file to a temporary location for processing.
 
@@ -250,6 +256,8 @@ def resource_copy_task(uri: str) -> str:
     """
     return file_utils.resource_copy(
         uri=uri,
+        dst=dst,
+        copy_suffix=copy_suffix,
         overwrite=True,
     )
 
