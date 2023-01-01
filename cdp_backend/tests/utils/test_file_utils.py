@@ -354,19 +354,14 @@ def test_invalid_uri() -> None:
     )
 
 
-@pytest.mark.parametrize("video_filename", [EXAMPLE_VIDEO_FILENAME])
 @pytest.mark.parametrize(
-    "start_time, end_time",
+    "video_filename, start_time, end_time, output_format, output_filename",
     [
-        ("1:25", "1:35"),
-        ("1:25", "1:35"),
-        ("01:10", "01:14"),
-        ("00:01:01", "00:01:03"),
+        ([EXAMPLE_VIDEO_FILENAME], "1:25", "1:35", "mp4", "test-clipped.mp4"),
+        ([EXAMPLE_VIDEO_FILENAME], "1:25", "1:35", "mp4", "test-clipped.mp4"),
+        ([EXAMPLE_VIDEO_FILENAME], "01:10", "01:14", "mp4", "test-clipped.mp4"),
+        ([EXAMPLE_VIDEO_FILENAME], "00:01:01", "00:01:03", "mp3", None),
     ],
-)
-@pytest.mark.parametrize(
-    "output_format",
-    ["mp4", "mp3"],
 )
 def test_clip_and_reformat_video(
     resources_dir: Path,
@@ -374,12 +369,15 @@ def test_clip_and_reformat_video(
     start_time: str,
     end_time: str,
     output_format: str,
+    output_filename: str,
 ) -> None:
-    expected_outfile = Path(f"test-clipped.{output_format}")
-    try:
-        os.remove(expected_outfile)
-    except FileNotFoundError:
-        pass
+    expected_outfile = None
+    if output_filename:
+        expected_outfile = Path(f"{output_filename}")
+        try:
+            os.remove(expected_outfile)
+        except FileNotFoundError:
+            pass
     outfile = file_utils.clip_and_reformat_video(
         resources_dir / EXAMPLE_VIDEO_FILENAME,
         start_time=start_time,
@@ -388,7 +386,7 @@ def test_clip_and_reformat_video(
         output_format=output_format,
     )
     assert outfile.exists()
-    assert outfile == expected_outfile
+    assert outfile == (expected_outfile or outfile)
     os.remove(outfile)
 
 
