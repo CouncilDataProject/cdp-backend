@@ -3,7 +3,7 @@
 
 from datetime import datetime
 from pathlib import Path
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 import logging
 
 from ..pipeline import transcript_model
@@ -18,12 +18,21 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
+MODEL_NAME_FAKE_CONFIDENCE_LUT = {
+    "tiny": 0.5,
+    "base": 0.6,
+    "small": 0.65,
+    "medium": 0.71,
+    "large": 0.72,
+}
+
+
 class WhisperModel(SRModel):
 
     def __init__(
         self,
         model_name: str = "medium",
-        confidence: float = 0.971,
+        confidence: Optional[float] = None,
         **kwargs: Any,
     ):
         """
@@ -34,9 +43,10 @@ class WhisperModel(SRModel):
         model_name: str
             The model version to use. Default: "medium"
             See: https://github.com/openai/whisper/tree/0b5dcfdef7ec04250b76e13f1630e32b0935ce76#available-models-and-languages
-        confidence: float
+        confidence: Optional[float]
             A confidence value to set for all transcripts produced by this SR Model.
             See source code for issues related to this.
+            Default: None (lookup a fake confidence to use depending on model selected)
         """
         self.model_name = model_name
 
@@ -45,7 +55,10 @@ class WhisperModel(SRModel):
         # conversion. We may want to get rid of confidence?
         # Our current confidence default is 0.001 higher than our old
         # WebVTT parser to ensure that these transcripts are chosen.
-        self.confidence = confidence
+        if confidence is not None:
+            self.confidence = confidence
+        else:
+            self.confidence = MODEL_NAME_FAKE_CONFIDENCE_LUT[model_name]
 
     def transcribe(
         self, file_uri: Union[str, Path], **kwargs: Any,
@@ -136,7 +149,7 @@ class WhisperModel(SRModel):
         
         # Return complete transcript object
         return transcript_model.Transcript(
-            generator=f"CDP Whisper Conversion -- CDP v{__version__}",
+            generator=f"CDP Whisper Conversion -- CDP v{__version__} -- Whisper Model Name '{self.model_name}'",
             confidence=self.confidence,
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
