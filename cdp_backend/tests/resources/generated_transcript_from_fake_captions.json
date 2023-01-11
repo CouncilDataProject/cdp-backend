@@ -1,0 +1,656 @@
+{
+    "confidence": 0.9699999999999999,
+    "generator": "CDP WebVTT Conversion -- CDP v3.0.0.dev5",
+    "session_datetime": null,
+    "created_datetime": "2021-07-23T03:51:34.370198",
+    "sentences": [
+        {
+            "index": 0,
+            "confidence": 0.97,
+            "start_time": 13.213,
+            "end_time": 14.948,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 13.213,
+                    "end_time": 13.791333333333332,
+                    "text": "okay",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 13.791333333333332,
+                    "end_time": 14.369666666666667,
+                    "text": "good",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 14.369666666666667,
+                    "end_time": 14.948,
+                    "text": "morning",
+                    "annotations": null
+                }
+            ],
+            "text": "Okay, good morning.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 1,
+            "confidence": 0.97,
+            "start_time": 14.948,
+            "end_time": 15.348,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 14.948,
+                    "end_time": 15.148,
+                    "text": "good",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 15.148,
+                    "end_time": 15.348,
+                    "text": "morning",
+                    "annotations": null
+                }
+            ],
+            "text": "Good morning.",
+            "speaker_index": 1,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 2,
+            "confidence": 0.97,
+            "start_time": 15.348,
+            "end_time": 20.12,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 19.753,
+                    "end_time": 19.783583333333333,
+                    "text": "thanks",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 19.783583333333333,
+                    "end_time": 19.814166666666665,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 19.814166666666665,
+                    "end_time": 19.84475,
+                    "text": "being",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 19.84475,
+                    "end_time": 19.875333333333334,
+                    "text": "here",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 19.875333333333334,
+                    "end_time": 19.905916666666666,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 19.905916666666666,
+                    "end_time": 19.936500000000002,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 19.936500000000002,
+                    "end_time": 19.967083333333335,
+                    "text": "regular",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 19.967083333333335,
+                    "end_time": 19.997666666666667,
+                    "text": "scheduled",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 19.997666666666667,
+                    "end_time": 20.02825,
+                    "text": "briefing",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 20.02825,
+                    "end_time": 20.058833333333332,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 20.058833333333332,
+                    "end_time": 20.08941666666667,
+                    "text": "july",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 20.08941666666667,
+                    "end_time": 20.12,
+                    "text": "15",
+                    "annotations": null
+                }
+            ],
+            "text": "Thanks for being here for our regular scheduled briefing on July 15.",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 3,
+            "confidence": 0.97,
+            "start_time": 20.12,
+            "end_time": 25.725,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 21.888,
+                    "end_time": 22.20775,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 22.20775,
+                    "end_time": 22.527500000000003,
+                    "text": "few",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 22.527500000000003,
+                    "end_time": 22.847250000000003,
+                    "text": "things",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 22.847250000000003,
+                    "end_time": 23.167,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 23.167,
+                    "end_time": 23.48675,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 23.48675,
+                    "end_time": 23.8065,
+                    "text": "mention",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 23.8065,
+                    "end_time": 24.126250000000002,
+                    "text": "before",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 24.126250000000002,
+                    "end_time": 24.446,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 24.446,
+                    "end_time": 24.76575,
+                    "text": "go",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 24.76575,
+                    "end_time": 25.085500000000003,
+                    "text": "around",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 25.085500000000003,
+                    "end_time": 25.405250000000002,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 25.405250000000002,
+                    "end_time": 25.725,
+                    "text": "table",
+                    "annotations": null
+                }
+            ],
+            "text": "A few things just to mention before we go around the table.",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 4,
+            "confidence": 0.97,
+            "start_time": 25.725,
+            "end_time": 30.597,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 30.13,
+                    "end_time": 30.172454545454546,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 30.172454545454546,
+                    "end_time": 30.21490909090909,
+                    "text": "were",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 30.21490909090909,
+                    "end_time": 30.257363636363635,
+                    "text": "joined",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 30.257363636363635,
+                    "end_time": 30.299818181818182,
+                    "text": "by",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 30.299818181818182,
+                    "end_time": 30.34227272727273,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 30.34227272727273,
+                    "end_time": 30.38472727272727,
+                    "text": "member",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 30.38472727272727,
+                    "end_time": 30.42718181818182,
+                    "text": "bagshaw",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 30.42718181818182,
+                    "end_time": 30.469636363636365,
+                    "text": "pacheco",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 30.469636363636365,
+                    "end_time": 30.51209090909091,
+                    "text": "juarez",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 30.51209090909091,
+                    "end_time": 30.554545454545455,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 30.554545454545455,
+                    "end_time": 30.597,
+                    "text": "gonzalez",
+                    "annotations": null
+                }
+            ],
+            "text": "We were joined by Council member Bagshaw, Pacheco, Juarez, and Gonzalez.",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 5,
+            "confidence": 0.97,
+            "start_time": 30.597,
+            "end_time": 37.57,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 36.536,
+                    "end_time": 36.600625,
+                    "text": "if",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 36.600625,
+                    "end_time": 36.66525,
+                    "text": "there's",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 36.66525,
+                    "end_time": 36.729875,
+                    "text": "no",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 36.729875,
+                    "end_time": 36.7945,
+                    "text": "objection",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 36.7945,
+                    "end_time": 36.859125,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 36.859125,
+                    "end_time": 36.92375,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 36.92375,
+                    "end_time": 36.988375,
+                    "text": "minutes",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 36.988375,
+                    "end_time": 37.053,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 37.053,
+                    "end_time": 37.117625000000004,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 37.117625000000004,
+                    "end_time": 37.18225,
+                    "text": "july",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 37.18225,
+                    "end_time": 37.246875,
+                    "text": "8",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 37.246875,
+                    "end_time": 37.3115,
+                    "text": "2019",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 37.3115,
+                    "end_time": 37.376125,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 37.376125,
+                    "end_time": 37.44075,
+                    "text": "it'll",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 37.44075,
+                    "end_time": 37.505375,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 37.505375,
+                    "end_time": 37.57,
+                    "text": "approved",
+                    "annotations": null
+                }
+            ],
+            "text": "If there's no objection to the minutes of the July 8, 2019 meeting, it'll be approved.",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 6,
+            "confidence": 0.97,
+            "start_time": 37.57,
+            "end_time": 42.942,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 41.808,
+                    "end_time": 41.94975,
+                    "text": "seeing",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 41.94975,
+                    "end_time": 42.091499999999996,
+                    "text": "no",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 42.091499999999996,
+                    "end_time": 42.23325,
+                    "text": "objections",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 42.23325,
+                    "end_time": 42.375,
+                    "text": "those",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 42.375,
+                    "end_time": 42.51675,
+                    "text": "minutes",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 42.51675,
+                    "end_time": 42.658500000000004,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 42.658500000000004,
+                    "end_time": 42.80025,
+                    "text": "being",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 42.80025,
+                    "end_time": 42.942,
+                    "text": "approved",
+                    "annotations": null
+                }
+            ],
+            "text": "Seeing no objections, those minutes are being approved.",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 7,
+            "confidence": 0.97,
+            "start_time": 42.942,
+            "end_time": 47.514,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 47.28,
+                    "end_time": 47.30925,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 47.30925,
+                    "end_time": 47.3385,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 47.3385,
+                    "end_time": 47.36775,
+                    "text": "want",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 47.36775,
+                    "end_time": 47.397000000000006,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 47.397000000000006,
+                    "end_time": 47.42625,
+                    "text": "mention",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 47.42625,
+                    "end_time": 47.4555,
+                    "text": "--",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 47.4555,
+                    "end_time": 47.484750000000005,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 47.484750000000005,
+                    "end_time": 47.514,
+                    "text": "sorry",
+                    "annotations": null
+                }
+            ],
+            "text": "I just want to mention--I'm sorry?",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 8,
+            "confidence": 0.97,
+            "start_time": 47.514,
+            "end_time": 49.516,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 47.514,
+                    "end_time": 47.9144,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 47.9144,
+                    "end_time": 48.3148,
+                    "text": "may",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 48.3148,
+                    "end_time": 48.7152,
+                    "text": "have",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 48.7152,
+                    "end_time": 49.1156,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 49.1156,
+                    "end_time": 49.516,
+                    "text": "objection",
+                    "annotations": null
+                }
+            ],
+            "text": "I may have an objection.",
+            "speaker_index": 3,
+            "speaker_name": null,
+            "annotations": null
+        }
+    ],
+    "annotations": null
+}

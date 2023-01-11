@@ -1,0 +1,1031 @@
+{
+    "confidence": 0.9699999999999999,
+    "generator": "CDP WebVTT Conversion -- CDP v3.0.0.dev6",
+    "session_datetime": null,
+    "created_datetime": "2021-08-12T18:43:27.445153",
+    "sentences": [
+        {
+            "index": 0,
+            "confidence": 0.97,
+            "start_time": 5.872,
+            "end_time": 14.581,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 13.847,
+                    "end_time": 13.903461538461539,
+                    "text": "good",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 13.903461538461539,
+                    "end_time": 13.959923076923076,
+                    "text": "morning",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 13.959923076923076,
+                    "end_time": 14.016384615384615,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 14.016384615384615,
+                    "end_time": 14.072846153846154,
+                    "text": "august",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 14.072846153846154,
+                    "end_time": 14.129307692307691,
+                    "text": "2nd",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 14.129307692307691,
+                    "end_time": 14.18576923076923,
+                    "text": "2021",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 14.18576923076923,
+                    "end_time": 14.242230769230769,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 14.242230769230769,
+                    "end_time": 14.298692307692308,
+                    "text": "briefing",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 14.298692307692308,
+                    "end_time": 14.355153846153845,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 14.355153846153845,
+                    "end_time": 14.411615384615384,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 14.411615384615384,
+                    "end_time": 14.468076923076923,
+                    "text": "come",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 14.468076923076923,
+                    "end_time": 14.52453846153846,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 14.52453846153846,
+                    "end_time": 14.581,
+                    "text": "order",
+                    "annotations": null
+                }
+            ],
+            "text": "Good morning the August 2ND, 2021 Council briefing meeting will come to order.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 1,
+            "confidence": 0.97,
+            "start_time": 14.647,
+            "end_time": 18.084,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 14.647,
+                    "end_time": 15.3344,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 15.3344,
+                    "end_time": 16.0218,
+                    "text": "time",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 16.0218,
+                    "end_time": 16.7092,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 16.7092,
+                    "end_time": 17.3966,
+                    "text": "931",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 17.3966,
+                    "end_time": 18.084,
+                    "text": "am",
+                    "annotations": null
+                }
+            ],
+            "text": "The time is 9:31 A.M.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 2,
+            "confidence": 0.97,
+            "start_time": 18.151,
+            "end_time": 38.471,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 37.303,
+                    "end_time": 37.32153968253968,
+                    "text": "before",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 37.32153968253968,
+                    "end_time": 37.34007936507936,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 37.34007936507936,
+                    "end_time": 37.358619047619044,
+                    "text": "clerk",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 37.358619047619044,
+                    "end_time": 37.377158730158726,
+                    "text": "call",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 37.377158730158726,
+                    "end_time": 37.39569841269841,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 37.39569841269841,
+                    "end_time": 37.41423809523809,
+                    "text": "roll",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 37.41423809523809,
+                    "end_time": 37.43277777777777,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 37.43277777777777,
+                    "end_time": 37.451317460317455,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 37.451317460317455,
+                    "end_time": 37.46985714285714,
+                    "text": "wanted",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 37.46985714285714,
+                    "end_time": 37.48839682539682,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 37.48839682539682,
+                    "end_time": 37.50693650793651,
+                    "text": "let",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 37.50693650793651,
+                    "end_time": 37.52547619047619,
+                    "text": "members",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 37.52547619047619,
+                    "end_time": 37.54401587301587,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 37.54401587301587,
+                    "end_time": 37.562555555555555,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 37.562555555555555,
+                    "end_time": 37.58109523809524,
+                    "text": "viewing",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 37.58109523809524,
+                    "end_time": 37.59963492063492,
+                    "text": "public",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 37.59963492063492,
+                    "end_time": 37.6181746031746,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 37.6181746031746,
+                    "end_time": 37.636714285714284,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 37.636714285714284,
+                    "end_time": 37.655253968253966,
+                    "text": "colleagues",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 37.655253968253966,
+                    "end_time": 37.67379365079365,
+                    "text": "no",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 37.67379365079365,
+                    "end_time": 37.69233333333333,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 37.69233333333333,
+                    "end_time": 37.71087301587301,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 37.71087301587301,
+                    "end_time": 37.729412698412695,
+                    "text": "did",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 37.729412698412695,
+                    "end_time": 37.74795238095238,
+                    "text": "receive",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 37.74795238095238,
+                    "end_time": 37.76649206349206,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 37.76649206349206,
+                    "end_time": 37.78503174603174,
+                    "text": "note",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 37.78503174603174,
+                    "end_time": 37.80357142857142,
+                    "text": "from",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 37.80357142857142,
+                    "end_time": 37.822111111111106,
+                    "text": "councilmember",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 37.822111111111106,
+                    "end_time": 37.84065079365079,
+                    "text": "sawant's",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 37.84065079365079,
+                    "end_time": 37.85919047619047,
+                    "text": "office",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 37.85919047619047,
+                    "end_time": 37.87773015873015,
+                    "text": "putting",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 37.87773015873015,
+                    "end_time": 37.89626984126984,
+                    "text": "me",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 37.89626984126984,
+                    "end_time": 37.914809523809524,
+                    "text": "know",
+                    "annotations": null
+                },
+                {
+                    "index": 33,
+                    "start_time": 37.914809523809524,
+                    "end_time": 37.933349206349206,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 34,
+                    "start_time": 37.933349206349206,
+                    "end_time": 37.95188888888889,
+                    "text": "she",
+                    "annotations": null
+                },
+                {
+                    "index": 35,
+                    "start_time": 37.95188888888889,
+                    "end_time": 37.97042857142857,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 36,
+                    "start_time": 37.97042857142857,
+                    "end_time": 37.98896825396825,
+                    "text": "unfortunately",
+                    "annotations": null
+                },
+                {
+                    "index": 37,
+                    "start_time": 37.98896825396825,
+                    "end_time": 38.007507936507935,
+                    "text": "not",
+                    "annotations": null
+                },
+                {
+                    "index": 38,
+                    "start_time": 38.007507936507935,
+                    "end_time": 38.02604761904762,
+                    "text": "going",
+                    "annotations": null
+                },
+                {
+                    "index": 39,
+                    "start_time": 38.02604761904762,
+                    "end_time": 38.0445873015873,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 40,
+                    "start_time": 38.0445873015873,
+                    "end_time": 38.06312698412698,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 41,
+                    "start_time": 38.06312698412698,
+                    "end_time": 38.08166666666666,
+                    "text": "able",
+                    "annotations": null
+                },
+                {
+                    "index": 42,
+                    "start_time": 38.08166666666666,
+                    "end_time": 38.100206349206346,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 43,
+                    "start_time": 38.100206349206346,
+                    "end_time": 38.11874603174603,
+                    "text": "join",
+                    "annotations": null
+                },
+                {
+                    "index": 44,
+                    "start_time": 38.11874603174603,
+                    "end_time": 38.13728571428571,
+                    "text": "us",
+                    "annotations": null
+                },
+                {
+                    "index": 45,
+                    "start_time": 38.13728571428571,
+                    "end_time": 38.15582539682539,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 46,
+                    "start_time": 38.15582539682539,
+                    "end_time": 38.174365079365074,
+                    "text": "morning",
+                    "annotations": null
+                },
+                {
+                    "index": 47,
+                    "start_time": 38.174365079365074,
+                    "end_time": 38.19290476190476,
+                    "text": "but",
+                    "annotations": null
+                },
+                {
+                    "index": 48,
+                    "start_time": 38.19290476190476,
+                    "end_time": 38.21144444444444,
+                    "text": "does",
+                    "annotations": null
+                },
+                {
+                    "index": 49,
+                    "start_time": 38.21144444444444,
+                    "end_time": 38.22998412698412,
+                    "text": "intend",
+                    "annotations": null
+                },
+                {
+                    "index": 50,
+                    "start_time": 38.22998412698412,
+                    "end_time": 38.2485238095238,
+                    "text": "--",
+                    "annotations": null
+                },
+                {
+                    "index": 51,
+                    "start_time": 38.2485238095238,
+                    "end_time": 38.267063492063485,
+                    "text": "she",
+                    "annotations": null
+                },
+                {
+                    "index": 52,
+                    "start_time": 38.267063492063485,
+                    "end_time": 38.285603174603175,
+                    "text": "does",
+                    "annotations": null
+                },
+                {
+                    "index": 53,
+                    "start_time": 38.285603174603175,
+                    "end_time": 38.30414285714286,
+                    "text": "intend",
+                    "annotations": null
+                },
+                {
+                    "index": 54,
+                    "start_time": 38.30414285714286,
+                    "end_time": 38.32268253968254,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 55,
+                    "start_time": 38.32268253968254,
+                    "end_time": 38.34122222222222,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 56,
+                    "start_time": 38.34122222222222,
+                    "end_time": 38.3597619047619,
+                    "text": "with",
+                    "annotations": null
+                },
+                {
+                    "index": 57,
+                    "start_time": 38.3597619047619,
+                    "end_time": 38.378301587301586,
+                    "text": "us",
+                    "annotations": null
+                },
+                {
+                    "index": 58,
+                    "start_time": 38.378301587301586,
+                    "end_time": 38.39684126984127,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 59,
+                    "start_time": 38.39684126984127,
+                    "end_time": 38.41538095238095,
+                    "text": "afternoon",
+                    "annotations": null
+                },
+                {
+                    "index": 60,
+                    "start_time": 38.41538095238095,
+                    "end_time": 38.43392063492063,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 61,
+                    "start_time": 38.43392063492063,
+                    "end_time": 38.452460317460314,
+                    "text": "200",
+                    "annotations": null
+                },
+                {
+                    "index": 62,
+                    "start_time": 38.452460317460314,
+                    "end_time": 38.471,
+                    "text": "pm",
+                    "annotations": null
+                }
+            ],
+            "text": "Before the clerk call the roll, I just wanted to let members of the viewing public and you, colleagues no that I did receive a note from Councilmember Sawant's office putting me know that she is unfortunately not going to be able to join us this morning, but does intend--she does intend to be with us this afternoon at 2:00 P.M.",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 3,
+            "confidence": 0.97,
+            "start_time": 38.538,
+            "end_time": 40.74,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 39.773,
+                    "end_time": 39.8609090909091,
+                    "text": "with",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 39.8609090909091,
+                    "end_time": 39.94881818181818,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 39.94881818181818,
+                    "end_time": 40.036727272727276,
+                    "text": "being",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 40.036727272727276,
+                    "end_time": 40.12463636363637,
+                    "text": "said",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 40.12463636363637,
+                    "end_time": 40.212545454545456,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 40.212545454545456,
+                    "end_time": 40.30045454545455,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 40.30045454545455,
+                    "end_time": 40.388363636363636,
+                    "text": "clerk",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 40.388363636363636,
+                    "end_time": 40.47627272727273,
+                    "text": "please",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 40.47627272727273,
+                    "end_time": 40.56418181818182,
+                    "text": "call",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 40.56418181818182,
+                    "end_time": 40.65209090909091,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 40.65209090909091,
+                    "end_time": 40.74,
+                    "text": "roll",
+                    "annotations": null
+                }
+            ],
+            "text": "With that being said, will the clerk please call the roll?",
+            "speaker_index": 0,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 4,
+            "confidence": 0.97,
+            "start_time": 40.807,
+            "end_time": 43.209,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 40.807,
+                    "end_time": 43.209,
+                    "text": "juarez",
+                    "annotations": null
+                }
+            ],
+            "text": "Juarez?",
+            "speaker_index": 1,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 5,
+            "confidence": 0.97,
+            "start_time": 43.276,
+            "end_time": 44.043,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 43.276,
+                    "end_time": 44.043,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": 2,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 6,
+            "confidence": 0.97,
+            "start_time": 44.11,
+            "end_time": 45.011,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 44.11,
+                    "end_time": 45.011,
+                    "text": "lewis",
+                    "annotations": null
+                }
+            ],
+            "text": "Lewis?",
+            "speaker_index": 3,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 7,
+            "confidence": 0.97,
+            "start_time": 45.078,
+            "end_time": 46.212,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 45.078,
+                    "end_time": 46.212,
+                    "text": "present",
+                    "annotations": null
+                }
+            ],
+            "text": "Present.",
+            "speaker_index": 4,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 8,
+            "confidence": 0.97,
+            "start_time": 46.279,
+            "end_time": 48.681,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 46.279,
+                    "end_time": 48.681,
+                    "text": "morales",
+                    "annotations": null
+                }
+            ],
+            "text": "Morales?",
+            "speaker_index": 5,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 9,
+            "confidence": 0.97,
+            "start_time": 48.748,
+            "end_time": 49.716,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 48.748,
+                    "end_time": 49.716,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": 6,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 10,
+            "confidence": 0.97,
+            "start_time": 49.783,
+            "end_time": 55.088,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 49.783,
+                    "end_time": 55.088,
+                    "text": "mosqueda",
+                    "annotations": null
+                }
+            ],
+            "text": "Mosqueda?",
+            "speaker_index": 7,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 11,
+            "confidence": 0.97,
+            "start_time": 55.155,
+            "end_time": 55.388,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 55.155,
+                    "end_time": 55.388,
+                    "text": "present",
+                    "annotations": null
+                }
+            ],
+            "text": "Present.",
+            "speaker_index": 8,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 12,
+            "confidence": 0.97,
+            "start_time": 55.455,
+            "end_time": 55.755,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 55.455,
+                    "end_time": 55.755,
+                    "text": "pedersen",
+                    "annotations": null
+                }
+            ],
+            "text": "Pedersen?",
+            "speaker_index": 9,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 13,
+            "confidence": 0.97,
+            "start_time": 55.822,
+            "end_time": 56.723,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 55.822,
+                    "end_time": 56.723,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": 10,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 14,
+            "confidence": 0.97,
+            "start_time": 56.79,
+            "end_time": 58.158,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 56.79,
+                    "end_time": 58.158,
+                    "text": "strauss",
+                    "annotations": null
+                }
+            ],
+            "text": "Strauss?",
+            "speaker_index": 11,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 15,
+            "confidence": 0.97,
+            "start_time": 58.224,
+            "end_time": 59.592,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 58.224,
+                    "end_time": 59.592,
+                    "text": "present",
+                    "annotations": null
+                }
+            ],
+            "text": "Present.",
+            "speaker_index": 12,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 16,
+            "confidence": 0.97,
+            "start_time": 59.659,
+            "end_time": 62.028,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 59.659,
+                    "end_time": 62.028,
+                    "text": "herbold",
+                    "annotations": null
+                }
+            ],
+            "text": "Herbold?",
+            "speaker_index": 13,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 17,
+            "confidence": 0.97,
+            "start_time": 62.095,
+            "end_time": 64.764,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 62.095,
+                    "end_time": 64.764,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": 14,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 18,
+            "confidence": 0.97,
+            "start_time": 64.831,
+            "end_time": 66.199,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 64.831,
+                    "end_time": 66.199,
+                    "text": "council",
+                    "annotations": null
+                }
+            ],
+            "text": "Council",
+            "speaker_index": 15,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 19,
+            "confidence": 0.97,
+            "start_time": 66.266,
+            "end_time": 67.2,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 66.266,
+                    "end_time": 67.2,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": 16,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 20,
+            "confidence": 0.97,
+            "start_time": 67.267,
+            "end_time": 72.972,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 67.267,
+                    "end_time": 70.11949999999999,
+                    "text": "eight",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 70.11949999999999,
+                    "end_time": 72.972,
+                    "text": "present",
+                    "annotations": null
+                }
+            ],
+            "text": "Eight present.",
+            "speaker_index": 16,
+            "speaker_name": null,
+            "annotations": null
+        }
+    ],
+    "annotations": null
+}
