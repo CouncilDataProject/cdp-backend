@@ -197,6 +197,7 @@ ignore = [
   "*.parquet",
   "*fake_*",
   "*generated_*",
+  "*.wav",
 ]
 
 [tool.mypy]
