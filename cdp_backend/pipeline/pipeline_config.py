@@ -27,10 +27,10 @@ class EventGatherPipelineConfig(DataClassJsonMixin):
     gcs_bucket_name: Optional[str]
         The name of the Google Storage bucket for CDP generated files.
         Default: None (parse from the Google Service Account Credentials JSON file)
-    caption_new_speaker_turn_pattern: Optional[str]
-        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
-    caption_confidence: Optional[float]
-        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
+    whisper_model_name: str
+        Passthrough to sr_models.whisper.WhisperModel.
+    whisper_model_confidence: Optional[float]
+        Passthrough to sr_models.whisper.WhisperModel.
     default_event_gather_from_days_timedelta: int
         Default number of days to subtract from current time to then pass to the
         provided get_events function as the `from_dt` datetime.
@@ -45,8 +45,8 @@ class EventGatherPipelineConfig(DataClassJsonMixin):
         repr=False,
         default=None,
     )
-    caption_new_speaker_turn_pattern: Optional[str] = None
-    caption_confidence: Optional[float] = None
+    whisper_model_name: str = "medium"
+    whisper_model_confidence: Optional[float] = None
     default_event_gather_from_days_timedelta: int = 2
 
     @property

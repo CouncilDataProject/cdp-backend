@@ -87,10 +87,16 @@ def test_split_audio(
     audio_upload_file_return: str,
     example_video: Path,
 ) -> None:
+    # Cleanup pre test
+    for suffix in ["err", "out", "wav"]:
+        gen_test_file = Path(f"{VIDEO_CONTENT_HASH}-audio.{suffix}")
+        if gen_test_file.exists():
+            os.remove(gen_test_file)
+
     mock_get_file_uri.return_value = get_file_uri_value
     mock_upload_file.return_value = audio_upload_file_return
 
-    audio_uri = pipeline.split_audio.run(
+    audio_uri, _ = pipeline.split_audio.run(
         session_content_hash=VIDEO_CONTENT_HASH,
         tmp_video_filepath=str(example_video),
         bucket="bucket",
@@ -158,72 +164,17 @@ def test_generate_thumbnails(
             os.remove(gen_test_file)
 
 
-@pytest.mark.parametrize(
-    "event, expected_phrases",
-    [
-        (deepcopy(EXAMPLE_MINIMAL_EVENT), ["Full Council"]),
-        (
-            deepcopy(EXAMPLE_FILLED_EVENT),
-            # Note: the order here is because under the hood, we are using a set and
-            # casting to a list.
-            # It's the item addition order that matters, not the order of the phrases
-            # So this is completely fine
-            [
-                "AN ORDINANCE relating to the financing of the West Seattle Bridge",
-                "Teresa Mosqueda",
-                "Andrew Lewis",
-                "Inf 1656",
-                "Full Council",
-                "M. Lorena González",
-                "Chair",
-                "Alex Pedersen",
-                "Council President",
-                "CB 119858",
-                "Vice Chair",
-            ],
-        ),
-    ],
-)
-def test_construct_speech_to_text_phrases_context(
-    event: EventIngestionModel, expected_phrases: List[str]
-) -> None:
-    phrases = pipeline.construct_speech_to_text_phrases_context.run(
-        event,
-    )
-
-    assert set(phrases) == set(expected_phrases)
-
-
-# Set up a session with the local captions file instead of a remote captions file
-# to ensure that no random errors happen to due remote service interruption
-LOCAL_CAPTIONS_SESSION = deepcopy(EXAMPLE_FILLED_EVENT.sessions[1])
-LOCAL_CAPTIONS_SESSION.caption_uri = str(
-    (Path(__file__).parent.parent / "resources" / "fake_caption.vtt").absolute()
-)
-
-
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_file_uri")
 @mock.patch(f"{PIPELINE_PATH}.use_speech_to_text_and_generate_transcript.run")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
 @pytest.mark.parametrize(
-    "mock_speech_to_text_return, "
-    "mock_upload_transcript_return, "
-    "session, "
-    "event",
+    "mock_speech_to_text_return, mock_upload_transcript_return, session",
     [
         # Testing no captions case
         (
             EXAMPLE_TRANSCRIPT,
             "ex://abc123-transcript.json",
             deepcopy(EXAMPLE_MINIMAL_EVENT.sessions[0]),
-            deepcopy(EXAMPLE_MINIMAL_EVENT),
-        ),
-        # Testing captions case
-        (
-            None,
-            "ex://abc123-transcript.json",
-            deepcopy(LOCAL_CAPTIONS_SESSION),
-            deepcopy(EXAMPLE_FILLED_EVENT),
         ),
     ],
 )
@@ -238,7 +189,6 @@ def test_generate_transcript(
     mock_speech_to_text_return: Transcript,
     mock_upload_transcript_return: str,
     session: Session,
-    event: EventIngestionModel,
 ) -> None:
     mock_get_transcript_uri.return_value = None
     mock_speech_to_text.return_value = mock_speech_to_text_return
@@ -247,9 +197,8 @@ def test_generate_transcript(
     with Flow("Test Generate Transcript") as flow:
         pipeline.generate_transcript(
             session_content_hash="abc123",
-            audio_uri="fake://doesn't-matter.wav",
+            audio_path="fake://doesn't-matter.wav",
             session=session,
-            event=event,
             bucket="bucket",
             credentials_file="fake/creds.json",
         )

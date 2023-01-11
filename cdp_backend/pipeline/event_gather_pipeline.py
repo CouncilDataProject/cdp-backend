@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
 from pathlib import Path
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Set, Tuple, Union
+from typing import Callable, Dict, List, NamedTuple, Optional, Tuple, Union
 from uuid import uuid4
 
 from aiohttp.client_exceptions import ClientResponseError
@@ -22,7 +22,7 @@ from ..database import functions as db_functions
 from ..database import models as db_models
 from ..database.validators import is_secure_uri, resource_exists, try_url
 from ..file_store import functions as fs_functions
-from ..sr_models import GoogleCloudSRModel, WebVTTSRModel
+from ..sr_models import WhisperModel
 from ..utils import constants_utils, file_utils
 from . import ingestion_models
 from .ingestion_models import EventIngestionModel, Session
@@ -150,7 +150,7 @@ def create_event_gather_flow(
                 )
 
                 # Split audio and store
-                audio_uri = split_audio(
+                (audio_uri, local_audio_path,) = split_audio(
                     session_content_hash=session_content_hash,
                     tmp_video_filepath=tmp_video_filepath,
                     bucket=config.validated_gcs_bucket_name,
@@ -159,40 +159,24 @@ def create_event_gather_flow(
 
                 # Check caption uri
                 if session.caption_uri is not None:
-                    # If the caption doesn't exist, remove the property
-                    # This will result in Speech-to-Text being used instead
+                    # If the caption doesn't exist, remove the value
                     if not resource_exists(session.caption_uri):
                         log.warning(
                             f"File not found using provided caption URI: "
                             f"'{session.caption_uri}'. "
-                            f"Removing the referenced caption URI and will process "
-                            f"the session using Speech-to-Text."
-                        )
-                        session.caption_uri = None
-                    if not caption_is_valid_task(
-                        tmp_video_filepath, session.caption_uri
-                    ):
-                        log.warning(
-                            f"Provided caption file '{session.caption_uri}' seems to "
-                            f"be missing content from the meeting "
-                            f"(checked with video length). "
-                            f"Removing the referenced caption URI and will process "
-                            f"the session using Speech-to-Text."
+                            f"Removing the referenced caption URI."
                         )
                         session.caption_uri = None
 
                 # Generate transcript
                 transcript_uri, transcript = generate_transcript(
                     session_content_hash=session_content_hash,
-                    audio_uri=audio_uri,
+                    audio_path=local_audio_path,
                     session=session,
-                    event=event,
                     bucket=config.validated_gcs_bucket_name,
                     credentials_file=config.google_credentials_file,
-                    caption_new_speaker_turn_pattern=(
-                        config.caption_new_speaker_turn_pattern
-                    ),
-                    caption_confidence=config.caption_confidence,
+                    whisper_model_name=config.whisper_model_name,
+                    whisper_model_confidence=config.whisper_model_confidence,
                 )
 
                 # Generate thumbnails
@@ -207,6 +191,10 @@ def create_event_gather_flow(
                 # Add audio uri and static thumbnail uri
                 resource_delete_task(
                     tmp_video_filepath, upstream_tasks=[audio_uri, static_thumbnail_uri]
+                )
+                resource_delete_task(
+                    local_audio_path,
+                    upstream_tasks=[transcript],
                 )
 
                 # Store all processed and provided data
@@ -417,13 +405,13 @@ def convert_video_and_handle_host(
     return video_filepath, hosted_video_media_url, session_content_hash
 
 
-@task
+@task(nout=2)
 def split_audio(
     session_content_hash: str,
     tmp_video_filepath: str,
     bucket: str,
     credentials_file: str,
-) -> str:
+) -> Tuple[str, str]:
     """
     Split the audio from a local video file.
 
@@ -442,12 +430,14 @@ def split_audio(
     -------
     audio_uri: str
         The URI to the uploaded audio file.
+    audio_local_path: str
+        The local path for the split audio.
     """
     # Check for existing audio
-    tmp_audio_filepath = f"{session_content_hash}-audio.wav"
+    local_audio_path = f"{session_content_hash}-audio.wav"
     audio_uri = fs_functions.get_file_uri(
         bucket=bucket,
-        filename=tmp_audio_filepath,
+        filename=local_audio_path,
         credentials_file=credentials_file,
     )
 
@@ -455,12 +445,12 @@ def split_audio(
     if audio_uri is None:
         # Split and store the audio in temporary file prior to upload
         (
-            tmp_audio_filepath,
+            local_audio_path,
             tmp_audio_log_out_filepath,
             tmp_audio_log_err_filepath,
         ) = file_utils.split_audio(
             video_read_path=tmp_video_filepath,
-            audio_save_path=tmp_audio_filepath,
+            audio_save_path=local_audio_path,
             overwrite=True,
         )
 
@@ -468,8 +458,7 @@ def split_audio(
         audio_uri = fs_functions.upload_file(
             credentials_file=credentials_file,
             bucket=bucket,
-            filepath=tmp_audio_filepath,
-            remove_local=True,
+            filepath=local_audio_path,
         )
         fs_functions.upload_file(
             credentials_file=credentials_file,
@@ -484,212 +473,40 @@ def split_audio(
             remove_local=True,
         )
 
-    return audio_uri
-
-
-@task
-def construct_speech_to_text_phrases_context(event: EventIngestionModel) -> List[str]:
-    """
-    Construct a list of phrases to use for Google Speech-to-Text speech adaption.
-
-    See: https://cloud.google.com/speech-to-text/docs/speech-adaptation
-
-    Parameters
-    ----------
-    event: EventIngestionModel
-        The event details to pull context from.
-
-    Returns
-    -------
-    phrases: List[str]
-        Compiled list of strings to act as target weights for the model.
-
-    Notes
-    -----
-    Phrases are added in order of importance until GCP phrase limits are met.
-    The order of importance is defined as:
-    1. body name
-    2. event minutes item names
-    3. councilmember names
-    4. matter titles
-    5. councilmember role titles
-    """
-    # Note: Google Speech-to-Text allows max 500 phrases
-    phrases: Set[str] = set()
-
-    PHRASE_LIMIT = 500
-    CUM_CHAR_LIMIT = 9900
-
-    # In line def for get character count
-    # Google Speech-to-Text allows cumulative max 9900 characters
-    def _get_total_char_count(phrases: Set[str]) -> int:
-        chars = 0
-        for phrase in phrases:
-            chars += len(phrase)
-
-        return chars
-
-    def _get_if_added_sum(phrases: Set[str], next_addition: str) -> int:
-        current_len = _get_total_char_count(phrases)
-        return current_len + len(next_addition)
-
-    def _within_limit(phrases: Set[str]) -> bool:
-        return (
-            _get_total_char_count(phrases) < CUM_CHAR_LIMIT
-            and len(phrases) < PHRASE_LIMIT
-        )
-
-    # Get body name
-    if _within_limit(phrases):
-        if _get_if_added_sum(phrases, event.body.name) < CUM_CHAR_LIMIT:
-            phrases.add(event.body.name)
-
-    # Extras from event minutes items
-    if event.event_minutes_items is not None:
-        # Get minutes item name
-        for event_minutes_item in event.event_minutes_items:
-            if _within_limit(phrases):
-                if (
-                    _get_if_added_sum(phrases, event_minutes_item.minutes_item.name)
-                    < CUM_CHAR_LIMIT
-                ):
-                    phrases.add(event_minutes_item.minutes_item.name)
-
-        # Get councilmember names from sponsors and votes
-        for event_minutes_item in event.event_minutes_items:
-            if event_minutes_item.matter is not None:
-                if event_minutes_item.matter.sponsors is not None:
-                    for sponsor in event_minutes_item.matter.sponsors:
-                        if _within_limit(phrases):
-                            if (
-                                _get_if_added_sum(phrases, sponsor.name)
-                                < CUM_CHAR_LIMIT
-                            ):
-                                phrases.add(sponsor.name)
-            if event_minutes_item.votes is not None:
-                for vote in event_minutes_item.votes:
-                    if _within_limit(phrases):
-                        if (
-                            _get_if_added_sum(phrases, vote.person.name)
-                            < CUM_CHAR_LIMIT
-                        ):
-                            phrases.add(vote.person.name)
-
-        # Get matter titles
-        for event_minutes_item in event.event_minutes_items:
-            if event_minutes_item.matter is not None:
-                if _within_limit(phrases):
-                    if (
-                        _get_if_added_sum(phrases, event_minutes_item.matter.title)
-                        < CUM_CHAR_LIMIT
-                    ):
-                        phrases.add(event_minutes_item.matter.title)
-
-        # Get councilmember role titles from sponsors and votes
-        for event_minutes_item in event.event_minutes_items:
-            if event_minutes_item.matter is not None:
-                if event_minutes_item.matter.sponsors is not None:
-                    for sponsor in event_minutes_item.matter.sponsors:
-                        if sponsor.seat is not None:
-                            if sponsor.seat.roles is not None:
-                                for role in sponsor.seat.roles:
-                                    if (
-                                        _get_if_added_sum(phrases, role.title)
-                                        < CUM_CHAR_LIMIT
-                                    ):
-                                        phrases.add(role.title)
-            if event_minutes_item.votes is not None:
-                for vote in event_minutes_item.votes:
-                    if vote.person.seat is not None:
-                        if vote.person.seat.roles is not None:
-                            for role in vote.person.seat.roles:
-                                if _within_limit(phrases):
-                                    if (
-                                        _get_if_added_sum(phrases, role.title)
-                                        < CUM_CHAR_LIMIT
-                                    ):
-                                        phrases.add(role.title)
-
-    return list(phrases)
+    return audio_uri, local_audio_path
 
 
 @task
 def use_speech_to_text_and_generate_transcript(
-    audio_uri: str,
-    credentials_file: str,
-    phrases: Optional[List[str]] = None,
+    audio_path: str,
+    model_name: str = "medium",
+    confidence: Optional[float] = None,
 ) -> Transcript:
     """
-    Pass the audio URI through to Google Speech-to-Text.
+    Pass the audio path to the speech recognition model.
 
     Parameters
     ----------
-    audio_uri: str
-        The URI to the audio path. The audio must already be stored in a GCS bucket.
-    credentials_file: str
-        Path to Google Service Account Credentials JSON file.
-    phrases: Optional[List[str]]
-        A list of strings to feed as targets to the model.
+    audio_path: str
+        The URI to the audio path. The audio must be on the local machine.
+    model_name: str
+        The whisper model to use for transcription.
+    confidence: Optional[float]
+        The confidence to set the produce transcript to.
 
     Returns
     -------
     transcript: Transcript
         The generated Transcript object.
+
+    Notes
+    -----
+    See the sr_models.whisper.WhisperModel code for more details about
+    pass through params.
     """
     # Init model
-    model = GoogleCloudSRModel(credentials_file=credentials_file)
-    return model.transcribe(file_uri=audio_uri, phrases=phrases)
-
-
-@task
-def get_captions_and_generate_transcript(
-    caption_uri: str,
-    new_turn_pattern: Optional[str] = None,
-    confidence: Optional[float] = None,
-) -> Transcript:
-    """
-    Download (or copy) a WebVTT closed caption file and convert to CDP Transcript model.
-
-    Parameters
-    ----------
-    caption_uri: str
-        The URI to the caption file to transform into the transcript.
-    new_turn_pattern: Optional[str]
-        New speaker turn pattern to pass through to the WebVTT transformer.
-    confidence: Optional[float]
-        Confidence to provide to the produced transcript.
-
-    Returns
-    -------
-    transcript: Transcript
-        The produced transcript.
-    """
-    # If value provided, passthrough, otherwise ignore
-    model_kwargs: Dict[str, Any] = {}
-    if new_turn_pattern is not None:
-        model_kwargs["new_turn_pattern"] = new_turn_pattern
-    if confidence is not None:
-        model_kwargs["confidence"] = confidence
-
-    # Init model
-    model = WebVTTSRModel(**model_kwargs)
-
-    # Download or copy resource to local
-    caption_filename = caption_uri.split("/")[-1]
-    local_captions = file_utils.resource_copy(
-        uri=caption_uri,
-        dst=f"caption-transcribing-{caption_filename}",
-        overwrite=True,
-    )
-
-    # Transcribe
-    transcript = model.transcribe(file_uri=local_captions)
-
-    # Remove temp file
-    fs_functions.remove_local_file(local_captions)
-
-    # Return generated transcript
-    return transcript
+    model = WhisperModel(model_name=model_name, confidence=confidence)
+    return model.transcribe(file_uri=audio_path)
 
 
 @task(nout=2)
@@ -798,46 +615,14 @@ def check_for_existing_transcript(
     return (tmp_transcript_filepath, transcript_uri, transcript, transcript_exists)
 
 
-@task
-def caption_is_valid_task(
-    local_video_path: str,
-    caption_uri: str,
-) -> bool:
-    """
-    Wraps the caption_is_valid function to process as prefect Task.
-
-    Parameters
-    ----------
-    local_video_path: str
-        The string path to the local video file to compare caption duration against.
-    caption_uri: str
-        The URI to the caption file to check.
-
-    Returns
-    -------
-    bool
-        Caption is valid and roughly matches provided video duration.
-
-    See Also
-    --------
-    cdp_backend.utils.file_utils.caption_is_valid
-        The function this task wraps.
-    """
-    return file_utils.caption_is_valid(
-        local_video_path,
-        caption_uri,
-    )
-
-
 def generate_transcript(
     session_content_hash: str,
-    audio_uri: str,
+    audio_path: str,
     session: Session,
-    event: EventIngestionModel,
     bucket: str,
     credentials_file: str,
-    caption_new_speaker_turn_pattern: Optional[str] = None,
-    caption_confidence: Optional[float] = None,
+    whisper_model_name: str = "medium",
+    whisper_model_confidence: Optional[float] = None,
 ) -> Tuple[str, Transcript]:
     """
     Route transcript generation to the correct processing.
@@ -846,25 +631,17 @@ def generate_transcript(
     ----------
     session_content_hash: str
         The unique key (SHA256 hash of video content) for this session processing.
-    audio_uri: str
-        The URI to the audio file to generate a transcript from.
+    audio_path: str
+        The path to the audio file to generate a transcript from.
     session: Session
         The specific session details to be used in final transcript upload and
         archival.
-        Additionally, if a closed caption URI is available on the session object,
-        the transcript produced from this function will have been created using WebVTT
-        caption transform rather than Google Speech-to-Text.
-    event: EventIngestionModel
-        The parent event of the session. If no captions are available,
-        speech context phrases will be pulled from the whole event details.
     bucket: str
         The name of the GCS bucket to upload the produced audio to.
-    credentials_file: str
-        Path to Google Service Account Credentials JSON file.
-    caption_new_speaker_turn_pattern: Optional[str]
-        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
-    caption_confidence: Optional[float]
-        Passthrough to sr_models.webvtt_sr_model.WebVTTSRModel.
+    whisper_model_name: str
+        The whisper model to use for transcription.
+    whisper_model_confidence: Optional[float]
+        The confidence to set the produce transcript to.
 
     Returns
     -------
@@ -887,22 +664,11 @@ def generate_transcript(
 
     # If no pre-existing transcript with the same parameters, generate
     with case(transcript_exists, False):
-        # If no captions, generate transcript with Google Speech-to-Text
-        if session.caption_uri is None:
-            phrases = construct_speech_to_text_phrases_context(event=event)
-            generated_transcript = use_speech_to_text_and_generate_transcript(
-                audio_uri=audio_uri,
-                credentials_file=credentials_file,
-                phrases=phrases,
-            )
-
-        # Process captions
-        else:
-            generated_transcript = get_captions_and_generate_transcript(
-                caption_uri=session.caption_uri,
-                new_turn_pattern=caption_new_speaker_turn_pattern,
-                confidence=caption_confidence,
-            )
+        generated_transcript = use_speech_to_text_and_generate_transcript(
+            audio_path=audio_path,
+            model_name=whisper_model_name,
+            confidence=whisper_model_confidence,
+        )
 
         # Add extra metadata and upload
         (
@@ -955,8 +721,7 @@ def generate_thumbnails(
     tmp_video_path: str
         The URI to the video file to generate thumbnails from.
     event: EventIngestionModel
-        The parent event of the session. If no captions are available,
-        speech context phrases will be pulled from the whole event details.
+        The parent event of the session.
     bucket: str
         The name of the GCS bucket to upload the produced audio to.
     credentials_file: str

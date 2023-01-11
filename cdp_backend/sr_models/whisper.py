@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, List, Optional, Union
-import logging
 
+import whisper
+
+from .. import __version__
 from ..pipeline import transcript_model
 from .sr_model import SRModel
-from .. import __version__
-import whisper
 
 ###############################################################################
 
@@ -28,7 +29,6 @@ MODEL_NAME_FAKE_CONFIDENCE_LUT = {
 
 
 class WhisperModel(SRModel):
-
     def __init__(
         self,
         model_name: str = "medium",
@@ -42,7 +42,8 @@ class WhisperModel(SRModel):
         ----------
         model_name: str
             The model version to use. Default: "medium"
-            See: https://github.com/openai/whisper/tree/0b5dcfdef7ec04250b76e13f1630e32b0935ce76#available-models-and-languages
+            See:
+            https://github.com/openai/whisper/tree/0b5dcfdef7ec04250b76e13f1630e32b0935ce76#available-models-and-languages
         confidence: Optional[float]
             A confidence value to set for all transcripts produced by this SR Model.
             See source code for issues related to this.
@@ -61,7 +62,9 @@ class WhisperModel(SRModel):
             self.confidence = MODEL_NAME_FAKE_CONFIDENCE_LUT[model_name]
 
     def transcribe(
-        self, file_uri: Union[str, Path], **kwargs: Any,
+        self,
+        file_uri: Union[str, Path],
+        **kwargs: Any,
     ) -> transcript_model.Transcript:
         """
         Transcribe audio from file and return a Transcript model.
@@ -96,7 +99,7 @@ class WhisperModel(SRModel):
         for segment in result["segments"]:
             # Update current state
             if current_sentence_start == -1.0:
-                    current_sentence_start = segment["start"]
+                current_sentence_start = segment["start"]
 
             seg_text = segment["text"]
 
@@ -116,14 +119,19 @@ class WhisperModel(SRModel):
                         transcript_model.Word(
                             index=word_index,
                             start_time=(
-                                # Linear words per second offset by start time of caption
+                                # Linear words per second
+                                # offset by start time of caption
                                 current_sentence_start
                                 + ((word_index / len(raw_words)) * sentence_duration)
                             ),
                             end_time=(
-                                # Linear words per second offset by start time of caption + 1
+                                # Linear words per second
+                                # offset by start time of caption + 1
                                 current_sentence_start
-                                + (((word_index + 1) / len(raw_words)) * sentence_duration)
+                                + (
+                                    ((word_index + 1) / len(raw_words))
+                                    * sentence_duration
+                                )
                             ),
                             text=WhisperModel._clean_word(word),
                         )
@@ -146,10 +154,14 @@ class WhisperModel(SRModel):
                 current_sentence_text = ""
             else:
                 current_sentence_text = safe_str_join(current_sentence_text, seg_text)
-        
+
         # Return complete transcript object
         return transcript_model.Transcript(
-            generator=f"CDP Whisper Conversion -- CDP v{__version__} -- Whisper Model Name '{self.model_name}'",
+            generator=(
+                f"CDP Whisper Conversion "
+                f"-- CDP v{__version__} "
+                f"-- Whisper Model Name '{self.model_name}'"
+            ),
             confidence=self.confidence,
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
