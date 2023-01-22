@@ -65,8 +65,6 @@ generate-docs:
 	create_cdp_transcript_model_doc \
 		-t docs/transcript_model.template \
 		-o docs/transcript_model.md
-	create_cdp_event_gather_flow_viz \
-		-o docs/_static/cdp_event_gather_flow_{ftype}.png
 	sphinx-apidoc -o docs cdp_backend **/tests
 	python -msphinx "docs" "docs/_build"
 

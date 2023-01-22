@@ -111,8 +111,6 @@ docs = [
   "sphinx-copybutton",
   # TODO: Pins
   "docutils>=0.18,<0.19",
-  # Pipeline viz
-  "prefect[viz]",
 ]
 dev = [
   "bokeh",  # Used in dask / distributed for dashboard
@@ -127,7 +125,6 @@ clean_cdp_filestore = "cdp_backend.bin.clean_cdp_filestore:main"
 create_cdp_database_uml = "cdp_backend.bin.create_cdp_database_uml:main"
 create_cdp_ingestion_models_doc = "cdp_backend.bin.create_cdp_ingestion_models_doc:main"
 create_cdp_transcript_model_doc = "cdp_backend.bin.create_cdp_transcript_model_doc:main"
-create_cdp_event_gather_flow_viz = "cdp_backend.bin.create_cdp_event_gather_flow_viz:main"
 run_cdp_event_gather = "cdp_backend.bin.run_cdp_event_gather:main"
 run_cdp_event_index_generation = "cdp_backend.bin.run_cdp_event_index_generation:main"
 process_cdp_event_index_chunk = "cdp_backend.bin.process_cdp_event_index_chunk:main"

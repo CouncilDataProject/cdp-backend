@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import List
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -150,8 +151,8 @@ session_three_transcript_one = apply_mocking_funcs_and_refs(
     ],
 )
 def test_get_highest_confidence_transcript_for_each_session(
-    transcripts: List[db_models.Transcript],
-    expected_selections: List[db_models.Transcript],
+    transcripts: list[db_models.Transcript],
+    expected_selections: list[db_models.Transcript],
 ) -> None:
     """All we are really testing here is that we are reducing the set properly."""
     result_selections = pipeline.get_highest_confidence_transcript_for_each_session.run(
@@ -203,8 +204,8 @@ def test_get_highest_confidence_transcript_for_each_session(
     ],
 )
 def test_get_transcripts_per_event(
-    transcripts: List[db_models.Transcript],
-    expected_selections: List[pipeline.EventTranscripts],
+    transcripts: list[db_models.Transcript],
+    expected_selections: list[pipeline.EventTranscripts],
 ) -> None:
     result_selections = pipeline.get_transcripts_per_event.run(transcripts)
     for result_et, expected_et in zip(result_selections, expected_selections):

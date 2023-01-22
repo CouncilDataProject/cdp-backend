@@ -26,20 +26,6 @@ This document gives visualizations of each and every step the event gather
 pipeline takes, starting immediately after the maintainer provided function
 returns the `List[EventIngestionModel]`.
 
-### Minimal Event Processing
-
-If any event is provided back with only a URI to a video and nothing else, the
-processing is incredibly simple.
-
-![minimal cdp event gather flow viz](./_static/cdp_event_gather_flow_minimal.png)
-
-### Filled Event Processing
-
-The major difference from the minimal event processing workflow is that the
-pipeline will process, prepare, and upload all of the attachments.
-
-![filled cdp event gather flow viz](./_static/cdp_event_gather_flow_filled.png)
-
 ### Workflow Management and Parallel Processing
 
 We utilize [Prefect Core](https://github.com/prefecthq/prefect) to generate and
@@ -54,11 +40,6 @@ events (i.e. processing historical events), we recommend attaching a
 [Dask Executor](https://docs.prefect.io/api/latest/executors.html#daskexecutor)
 to the flow for parallel event processing.
 [More details about Dask](https://dask.org/).
-
-I.E.
-If the result of the `get_events` function was a list of four
-`EventIngestionModel` objects, the resulting flow would look like the following:
-![parallel four wide equal minimal event flows](./_static/cdp_event_gather_flow_many.png)
 
 And, if a `DaskExecutor` is also provided, all single event processing workflows
 would process in parallel (provided enough compute resources).
