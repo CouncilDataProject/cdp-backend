@@ -86,10 +86,10 @@ class WhisperModel(SRModel):
         result = model.transcribe(file_uri, verbose=False)
 
         # A safe string joiner
-        # It ensures that strings are joined to each other with no\
+        # It ensures that strings are joined to each other with no
         # additional white spacing.
         def safe_str_join(str1: str, str2: str) -> str:
-            return " ".join([str1, str2.strip()]).strip()
+            return " ".join([str1.strip(), str2.strip()]).strip()
 
         # Split into sentences
         sentences: List[transcript_model.Sentence] = []
