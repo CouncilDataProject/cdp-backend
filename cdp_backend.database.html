@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.file_store package" href="cdp_backend.file_store.html" /><link rel="prev" title="cdp_backend.bin package" href="cdp_backend.bin.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.database package - cdp-backend 0.1.dev1+g3c42753 documentation</title>
+        <title>cdp_backend.database package - cdp-backend 0.1.dev1+g3457f0e documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g3c42753 documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g3457f0e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3c42753 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3457f0e documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -494,7 +494,7 @@ using the primary keys of the database model.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.database.functions.get_all_of_collection">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">get_all_of_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Model</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#get_all_of_collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.get_all_of_collection" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.functions.</span></span><span class="sig-name descname"><span class="pre">get_all_of_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">fireo.models.model.Model</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/database/functions.html#get_all_of_collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.functions.get_all_of_collection" title="Permalink to this definition">#</a></dt>
 <dd><p>Get all documents in a collection as a single list but request in batches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1751,7 +1751,7 @@ For example, An event could have a morning and afternoon session.</p>
 <span id="cdp-backend-database-validators-module"></span><h2>cdp_backend.database.validators module<a class="headerlink" href="#module-cdp_backend.database.validators" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="cdp_backend.database.validators.UniquenessValidation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">UniquenessValidation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conflicting_models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Model</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#UniquenessValidation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">UniquenessValidation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conflicting_models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">fireo.models.model.Model</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#UniquenessValidation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>An object containing uniqueness data of a database model object.</p>
 <dl class="field-list simple">
@@ -1767,7 +1767,7 @@ in the database collection.</p>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="cdp_backend.database.validators.UniquenessValidation.conflicting_models">
-<span class="sig-name descname"><span class="pre">conflicting_models</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Model</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation.conflicting_models" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">conflicting_models</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">fireo.models.model.Model</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#cdp_backend.database.validators.UniquenessValidation.conflicting_models" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1779,7 +1779,7 @@ in the database collection.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.database.validators.create_constant_value_validator">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">create_constant_value_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constant_cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#create_constant_value_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.create_constant_value_validator" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.database.validators.</span></span><span class="sig-name descname"><span class="pre">create_constant_value_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constant_cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/database/validators.html#create_constant_value_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.database.validators.create_constant_value_validator" title="Permalink to this definition">#</a></dt>
 <dd><p>Create a validator func that validates a value is one of the valid values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
