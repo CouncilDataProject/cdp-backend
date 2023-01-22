@@ -4,14 +4,6 @@ cdp\_backend.sr\_models package
 Submodules
 ----------
 
-cdp\_backend.sr\_models.google\_cloud\_sr\_model module
--------------------------------------------------------
-
-.. automodule:: cdp_backend.sr_models.google_cloud_sr_model
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 cdp\_backend.sr\_models.sr\_model module
 ----------------------------------------
 
@@ -20,10 +12,10 @@ cdp\_backend.sr\_models.sr\_model module
    :undoc-members:
    :show-inheritance:
 
-cdp\_backend.sr\_models.webvtt\_sr\_model module
-------------------------------------------------
+cdp\_backend.sr\_models.whisper module
+--------------------------------------
 
-.. automodule:: cdp_backend.sr_models.webvtt_sr_model
+.. automodule:: cdp_backend.sr_models.whisper
    :members:
    :undoc-members:
    :show-inheritance:
