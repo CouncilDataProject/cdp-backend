@@ -72,7 +72,7 @@ pipeline = [
   "tqdm~=4.62",
   "transformers~=4.16",
   "vimeo_downloader~=0.4",
-  "whisper @ git+https://github.com/openai/whisper@0b5dcfd",
+  "openai-whisper==20230117",
   "yt-dlp>=2022.2.4",
   
 ]
