@@ -5,11 +5,9 @@ import os
 import random
 import sys
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Optional
 from unittest import mock
 
-import ffmpeg
 import imageio
 import pytest
 
@@ -17,7 +15,6 @@ from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
     MAX_THUMBNAIL_HEIGHT,
     MAX_THUMBNAIL_WIDTH,
-    caption_is_valid,
     resource_copy,
 )
 
@@ -388,41 +385,3 @@ def test_clip_and_reformat_video(
     assert outfile.exists()
     assert outfile == (expected_outfile or outfile)
     os.remove(outfile)
-
-
-@pytest.mark.parametrize(
-    "video_filename, caption_uri, end_time, is_resource, expected",
-    [
-        # the video is about 3 minutes and boston_captions.vtt is about 1 minute
-        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 120, True, False),
-        (EXAMPLE_VIDEO_FILENAME, "boston_captions.vtt", 60, True, True),
-        (
-            EXAMPLE_VIDEO_FILENAME,
-            # about 30 seconds
-            "https://gist.github.com/dphoria/d3f35b5509b784ccd14b7efdc67df752/raw/"
-            "c18fc459c62ff7530536ba19d08021682627c18a/sample.vtt",
-            30,
-            False,
-            True,
-        ),
-    ],
-)
-def test_caption_is_valid(
-    resources_dir: Path,
-    video_filename: str,
-    caption_uri: str,
-    end_time: int,
-    is_resource: bool,
-    expected: bool,
-) -> None:
-    with TemporaryDirectory() as dir_path:
-        temp_video = str(Path(dir_path) / f"caption-test-{end_time}.mp4")
-        ffmpeg.input(str(resources_dir / video_filename)).output(
-            temp_video, codec="copy", t=end_time
-        ).run(overwrite_output=True)
-
-        if is_resource:
-            caption_uri = str(resources_dir / caption_uri)
-
-        print(temp_video)
-        assert caption_is_valid(temp_video, caption_uri) == expected

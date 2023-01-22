@@ -7,7 +7,6 @@ import random
 import re
 from hashlib import sha256
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Optional, Tuple, Union
 from uuid import uuid4
 
@@ -735,59 +734,3 @@ def clip_and_reformat_video(
         log.error(ffmpeg_stderr)
 
     return output_path
-
-
-def caption_is_valid(video_uri: str, caption_uri: str) -> bool:
-    """
-    Validate the caption file at the URI provided.
-
-    Parameters
-    ----------
-    video_uri: str
-        The URI for the the target video.
-    uri: str
-        The URI to validate caption file for.
-
-    Returns
-    -------
-    status: bool
-        The validation status.
-
-    Notes
-    -----
-    Duration of the video at video_uri
-    and the duration of the caption file are compared.
-    The caption file is accepted if the durations differ by no more than 20%.
-    """
-    import ffmpeg
-    import webvtt
-    from webvtt.exceptions import (
-        InvalidCaptionsError,
-        MalformedCaptionError,
-        MalformedFileError,
-    )
-
-    try:
-        ffprobe = ffmpeg.probe(video_uri)
-    except ffmpeg.Error as e:
-        log.warning(f"ffprobe({video_uri}): {e.stderr}")
-        return False
-
-    # Making sure temp copy of the caption file is deleted when finished
-    with TemporaryDirectory() as dir_path:
-        local_caption_path = resource_copy(caption_uri, dst=dir_path)
-        try:
-            caption_length = webvtt.read(local_caption_path).total_length
-        except (InvalidCaptionsError, MalformedCaptionError, MalformedFileError) as e:
-            log.warning(f"webvtt.read({caption_uri}): {str(e)}")
-            return False
-
-        similar_audio_streams = filter(
-            lambda s: s.get("codec_type", "") == "audio"
-            and math.isclose(
-                float(s.get("duration", "0.0")), caption_length, rel_tol=0.2
-            ),
-            ffprobe.get("streams", []),
-        )
-
-        return any(similar_audio_streams)

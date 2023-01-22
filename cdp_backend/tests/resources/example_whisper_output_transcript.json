@@ -1,0 +1,2567 @@
+{
+    "generator": "CDP Whisper Conversion -- CDP v3.2.12.dev1+g92b0484.d20230111",
+    "confidence": 0.6,
+    "session_datetime": null,
+    "created_datetime": "2023-01-11T05:28:03.154605",
+    "sentences": [
+        {
+            "index": 0,
+            "confidence": 0.6,
+            "start_time": 0.0,
+            "end_time": 26.64,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 0.0,
+                    "end_time": 8.879999999999999,
+                    "text": "good",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 8.879999999999999,
+                    "end_time": 17.759999999999998,
+                    "text": "morning",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 17.759999999999998,
+                    "end_time": 26.64,
+                    "text": "everyone",
+                    "annotations": null
+                }
+            ],
+            "text": "Good morning, everyone.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 1,
+            "confidence": 0.6,
+            "start_time": 26.64,
+            "end_time": 30.96,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 26.64,
+                    "end_time": 27.0,
+                    "text": "it",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 27.0,
+                    "end_time": 27.36,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 27.36,
+                    "end_time": 27.72,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 27.72,
+                    "end_time": 28.080000000000002,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 28.080000000000002,
+                    "end_time": 28.44,
+                    "text": "little",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 28.44,
+                    "end_time": 28.8,
+                    "text": "bit",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 28.8,
+                    "end_time": 29.16,
+                    "text": "after",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 29.16,
+                    "end_time": 29.52,
+                    "text": "930",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 29.52,
+                    "end_time": 29.880000000000003,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 29.880000000000003,
+                    "end_time": 30.240000000000002,
+                    "text": "thursday",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 30.240000000000002,
+                    "end_time": 30.6,
+                    "text": "october",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 30.6,
+                    "end_time": 30.96,
+                    "text": "5th",
+                    "annotations": null
+                }
+            ],
+            "text": "It is just a little bit after 9.30 on Thursday, October 5th.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 2,
+            "confidence": 0.6,
+            "start_time": 30.96,
+            "end_time": 33.96,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 30.96,
+                    "end_time": 31.26,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 31.26,
+                    "end_time": 31.560000000000002,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 31.560000000000002,
+                    "end_time": 31.86,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 31.86,
+                    "end_time": 32.160000000000004,
+                    "text": "special",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 32.160000000000004,
+                    "end_time": 32.46,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 32.46,
+                    "end_time": 32.76,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 32.76,
+                    "end_time": 33.06,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 33.06,
+                    "end_time": 33.36,
+                    "text": "seattle",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 33.36,
+                    "end_time": 33.660000000000004,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 33.660000000000004,
+                    "end_time": 33.96,
+                    "text": "council",
+                    "annotations": null
+                }
+            ],
+            "text": "This is a special meeting of the Seattle City Council.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 3,
+            "confidence": 0.6,
+            "start_time": 33.96,
+            "end_time": 34.96,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 33.96,
+                    "end_time": 34.29333333333334,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 34.29333333333334,
+                    "end_time": 34.626666666666665,
+                    "text": "rob",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 34.626666666666665,
+                    "end_time": 34.96,
+                    "text": "johnson",
+                    "annotations": null
+                }
+            ],
+            "text": "I'm Rob Johnson.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 4,
+            "confidence": 0.6,
+            "start_time": 34.96,
+            "end_time": 37.120000000000005,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 34.96,
+                    "end_time": 35.32,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 35.32,
+                    "end_time": 35.68,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 35.68,
+                    "end_time": 36.040000000000006,
+                    "text": "president",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 36.040000000000006,
+                    "end_time": 36.400000000000006,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 36.400000000000006,
+                    "end_time": 36.760000000000005,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 36.760000000000005,
+                    "end_time": 37.120000000000005,
+                    "text": "council",
+                    "annotations": null
+                }
+            ],
+            "text": "I'm the President of the Council.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 5,
+            "confidence": 0.6,
+            "start_time": 37.120000000000005,
+            "end_time": 39.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 37.120000000000005,
+                    "end_time": 37.43000000000001,
+                    "text": "madam",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 37.43000000000001,
+                    "end_time": 37.74,
+                    "text": "clerk",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 37.74,
+                    "end_time": 38.050000000000004,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 38.050000000000004,
+                    "end_time": 38.36,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 38.36,
+                    "end_time": 38.67,
+                    "text": "please",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 38.67,
+                    "end_time": 38.980000000000004,
+                    "text": "call",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 38.980000000000004,
+                    "end_time": 39.29,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 39.29,
+                    "end_time": 39.6,
+                    "text": "roll",
+                    "annotations": null
+                }
+            ],
+            "text": "Madam Clerk, will you please call the roll?",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 6,
+            "confidence": 0.6,
+            "start_time": 39.6,
+            "end_time": 40.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 39.6,
+                    "end_time": 40.1,
+                    "text": "what",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 40.1,
+                    "end_time": 40.6,
+                    "text": "is",
+                    "annotations": null
+                }
+            ],
+            "text": "What is?",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 7,
+            "confidence": 0.6,
+            "start_time": 40.6,
+            "end_time": 41.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 40.6,
+                    "end_time": 41.6,
+                    "text": "abrane",
+                    "annotations": null
+                }
+            ],
+            "text": "Abrane.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 8,
+            "confidence": 0.6,
+            "start_time": 41.6,
+            "end_time": 42.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 41.6,
+                    "end_time": 42.6,
+                    "text": "cwant",
+                    "annotations": null
+                }
+            ],
+            "text": "Cwant.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 9,
+            "confidence": 0.6,
+            "start_time": 42.6,
+            "end_time": 43.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 42.6,
+                    "end_time": 43.6,
+                    "text": "vakshah",
+                    "annotations": null
+                }
+            ],
+            "text": "Vakshah.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 10,
+            "confidence": 0.6,
+            "start_time": 43.6,
+            "end_time": 44.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 43.6,
+                    "end_time": 44.6,
+                    "text": "gonzales",
+                    "annotations": null
+                }
+            ],
+            "text": "Gonzales.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 11,
+            "confidence": 0.6,
+            "start_time": 44.6,
+            "end_time": 45.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 44.6,
+                    "end_time": 45.6,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 12,
+            "confidence": 0.6,
+            "start_time": 45.6,
+            "end_time": 46.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 45.6,
+                    "end_time": 46.6,
+                    "text": "herbal",
+                    "annotations": null
+                }
+            ],
+            "text": "Herbal.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 13,
+            "confidence": 0.6,
+            "start_time": 46.6,
+            "end_time": 47.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 46.6,
+                    "end_time": 46.800000000000004,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 46.800000000000004,
+                    "end_time": 47.0,
+                    "text": "president",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 47.0,
+                    "end_time": 47.2,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 47.2,
+                    "end_time": 47.4,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 47.4,
+                    "end_time": 47.6,
+                    "text": "council",
+                    "annotations": null
+                }
+            ],
+            "text": "Council President of the Council.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 14,
+            "confidence": 0.6,
+            "start_time": 47.6,
+            "end_time": 48.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 47.6,
+                    "end_time": 48.6,
+                    "text": "here",
+                    "annotations": null
+                }
+            ],
+            "text": "Here.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 15,
+            "confidence": 0.6,
+            "start_time": 48.6,
+            "end_time": 49.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 48.6,
+                    "end_time": 49.6,
+                    "text": "vakshah",
+                    "annotations": null
+                }
+            ],
+            "text": "Vakshah.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 16,
+            "confidence": 0.6,
+            "start_time": 49.6,
+            "end_time": 56.6,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 49.6,
+                    "end_time": 50.475,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 50.475,
+                    "end_time": 51.35,
+                    "text": "have",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 51.35,
+                    "end_time": 52.225,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 52.225,
+                    "end_time": 53.1,
+                    "text": "agenda",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 53.1,
+                    "end_time": 53.975,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 53.975,
+                    "end_time": 54.85,
+                    "text": "one",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 54.85,
+                    "end_time": 55.725,
+                    "text": "issue",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 55.725,
+                    "end_time": 56.6,
+                    "text": "today",
+                    "annotations": null
+                }
+            ],
+            "text": "We have an agenda of one issue today.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 17,
+            "confidence": 0.6,
+            "start_time": 56.6,
+            "end_time": 61.24,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 56.6,
+                    "end_time": 57.064,
+                    "text": "if",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 57.064,
+                    "end_time": 57.528,
+                    "text": "there",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 57.528,
+                    "end_time": 57.992000000000004,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 57.992000000000004,
+                    "end_time": 58.456,
+                    "text": "no",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 58.456,
+                    "end_time": 58.92,
+                    "text": "objection",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 58.92,
+                    "end_time": 59.384,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 59.384,
+                    "end_time": 59.848,
+                    "text": "agenda",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 59.848,
+                    "end_time": 60.312000000000005,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 60.312000000000005,
+                    "end_time": 60.776,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 60.776,
+                    "end_time": 61.24,
+                    "text": "adopted",
+                    "annotations": null
+                }
+            ],
+            "text": "If there is no objection, the agenda will be adopted.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 18,
+            "confidence": 0.6,
+            "start_time": 61.24,
+            "end_time": 63.88,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 61.24,
+                    "end_time": 61.61714285714286,
+                    "text": "hearing",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 61.61714285714286,
+                    "end_time": 61.994285714285716,
+                    "text": "no",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 61.994285714285716,
+                    "end_time": 62.371428571428574,
+                    "text": "objection",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 62.371428571428574,
+                    "end_time": 62.74857142857143,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 62.74857142857143,
+                    "end_time": 63.12571428571429,
+                    "text": "agenda",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 63.12571428571429,
+                    "end_time": 63.502857142857145,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 63.502857142857145,
+                    "end_time": 63.88,
+                    "text": "adopted",
+                    "annotations": null
+                }
+            ],
+            "text": "Hearing no objection, the agenda is adopted.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 19,
+            "confidence": 0.6,
+            "start_time": 63.88,
+            "end_time": 70.96000000000001,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 63.88,
+                    "end_time": 64.27333333333334,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 64.27333333333334,
+                    "end_time": 64.66666666666667,
+                    "text": "one",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 64.66666666666667,
+                    "end_time": 65.06,
+                    "text": "item",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 65.06,
+                    "end_time": 65.45333333333333,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 65.45333333333333,
+                    "end_time": 65.84666666666666,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 65.84666666666666,
+                    "end_time": 66.24000000000001,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 66.24000000000001,
+                    "end_time": 66.63333333333334,
+                    "text": "session",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 66.63333333333334,
+                    "end_time": 67.02666666666667,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 67.02666666666667,
+                    "end_time": 67.42,
+                    "text": "evaluate",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 67.42,
+                    "end_time": 67.81333333333333,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 67.81333333333333,
+                    "end_time": 68.20666666666668,
+                    "text": "qualification",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 68.20666666666668,
+                    "end_time": 68.60000000000001,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 68.60000000000001,
+                    "end_time": 68.99333333333334,
+                    "text": "candidates",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 68.99333333333334,
+                    "end_time": 69.38666666666667,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 69.38666666666667,
+                    "end_time": 69.78,
+                    "text": "appointment",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 69.78,
+                    "end_time": 70.17333333333335,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 70.17333333333335,
+                    "end_time": 70.56666666666668,
+                    "text": "elective",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 70.56666666666668,
+                    "end_time": 70.96000000000001,
+                    "text": "office",
+                    "annotations": null
+                }
+            ],
+            "text": "That one item is an executive session to evaluate the qualification of candidates for appointment to elective office.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 20,
+            "confidence": 0.6,
+            "start_time": 70.96000000000001,
+            "end_time": 78.76,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 70.96000000000001,
+                    "end_time": 71.26,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 71.26,
+                    "end_time": 71.56,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 71.56,
+                    "end_time": 71.86000000000001,
+                    "text": "moment",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 71.86000000000001,
+                    "end_time": 72.16000000000001,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 72.16000000000001,
+                    "end_time": 72.46000000000001,
+                    "text": "going",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 72.46000000000001,
+                    "end_time": 72.76,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 72.76,
+                    "end_time": 73.06,
+                    "text": "read",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 73.06,
+                    "end_time": 73.36000000000001,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 73.36000000000001,
+                    "end_time": 73.66000000000001,
+                    "text": "legal",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 73.66000000000001,
+                    "end_time": 73.96000000000001,
+                    "text": "ease",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 73.96000000000001,
+                    "end_time": 74.26,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 74.26,
+                    "end_time": 74.56,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 74.56,
+                    "end_time": 74.86000000000001,
+                    "text": "required",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 74.86000000000001,
+                    "end_time": 75.16000000000001,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 75.16000000000001,
+                    "end_time": 75.46000000000001,
+                    "text": "read",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 75.46000000000001,
+                    "end_time": 75.76,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 75.76,
+                    "end_time": 76.06,
+                    "text": "order",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 76.06,
+                    "end_time": 76.36,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 76.36,
+                    "end_time": 76.66000000000001,
+                    "text": "us",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 76.66000000000001,
+                    "end_time": 76.96000000000001,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 76.96000000000001,
+                    "end_time": 77.26,
+                    "text": "go",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 77.26,
+                    "end_time": 77.56,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 77.56,
+                    "end_time": 77.86,
+                    "text": "do",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 77.86,
+                    "end_time": 78.16000000000001,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 78.16000000000001,
+                    "end_time": 78.46000000000001,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 78.46000000000001,
+                    "end_time": 78.76,
+                    "text": "session",
+                    "annotations": null
+                }
+            ],
+            "text": "In a moment, I'm going to read the legal ease that I'm required to read and order for us to go and do an executive session.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 21,
+            "confidence": 0.6,
+            "start_time": 78.76,
+            "end_time": 89.72,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 78.76,
+                    "end_time": 79.09212121212121,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 79.09212121212121,
+                    "end_time": 79.42424242424242,
+                    "text": "want",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 79.42424242424242,
+                    "end_time": 79.75636363636364,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 79.75636363636364,
+                    "end_time": 80.08848484848485,
+                    "text": "remind",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 80.08848484848485,
+                    "end_time": 80.42060606060606,
+                    "text": "everyone",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 80.42060606060606,
+                    "end_time": 80.75272727272727,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 80.75272727272727,
+                    "end_time": 81.0848484848485,
+                    "text": "we'll",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 81.0848484848485,
+                    "end_time": 81.4169696969697,
+                    "text": "have",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 81.4169696969697,
+                    "end_time": 81.74909090909091,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 81.74909090909091,
+                    "end_time": 82.08121212121212,
+                    "text": "final",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 82.08121212121212,
+                    "end_time": 82.41333333333334,
+                    "text": "full",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 82.41333333333334,
+                    "end_time": 82.74545454545455,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 82.74545454545455,
+                    "end_time": 83.07757575757576,
+                    "text": "special",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 83.07757575757576,
+                    "end_time": 83.40969696969697,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 83.40969696969697,
+                    "end_time": 83.74181818181819,
+                    "text": "tomorrow",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 83.74181818181819,
+                    "end_time": 84.0739393939394,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 84.0739393939394,
+                    "end_time": 84.4060606060606,
+                    "text": "2",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 84.4060606060606,
+                    "end_time": 84.73818181818181,
+                    "text": "pm",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 84.73818181818181,
+                    "end_time": 85.07030303030304,
+                    "text": "here",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 85.07030303030304,
+                    "end_time": 85.40242424242425,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 85.40242424242425,
+                    "end_time": 85.73454545454545,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 85.73454545454545,
+                    "end_time": 86.06666666666666,
+                    "text": "chambers",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 86.06666666666666,
+                    "end_time": 86.39878787878789,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 86.39878787878789,
+                    "end_time": 86.7309090909091,
+                    "text": "deliberate",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 86.7309090909091,
+                    "end_time": 87.0630303030303,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 87.0630303030303,
+                    "end_time": 87.39515151515151,
+                    "text": "take",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 87.39515151515151,
+                    "end_time": 87.72727272727273,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 87.72727272727273,
+                    "end_time": 88.05939393939394,
+                    "text": "vote",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 88.05939393939394,
+                    "end_time": 88.39151515151515,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 88.39151515151515,
+                    "end_time": 88.72363636363636,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 88.72363636363636,
+                    "end_time": 89.05575757575758,
+                    "text": "position",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 89.05575757575758,
+                    "end_time": 89.38787878787879,
+                    "text": "8",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 89.38787878787879,
+                    "end_time": 89.72,
+                    "text": "vacancy",
+                    "annotations": null
+                }
+            ],
+            "text": "I want to remind everyone that we'll have our final full council special meeting tomorrow at 2 p.m. here at Council Chambers to deliberate and take a vote on the position 8 vacancy.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 22,
+            "confidence": 0.6,
+            "start_time": 89.72,
+            "end_time": 98.12,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 89.72,
+                    "end_time": 90.14,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 90.14,
+                    "end_time": 90.56,
+                    "text": "members",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 90.56,
+                    "end_time": 90.98,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 90.98,
+                    "end_time": 91.4,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 91.4,
+                    "end_time": 91.82,
+                    "text": "public",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 91.82,
+                    "end_time": 92.24,
+                    "text": "who",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 92.24,
+                    "end_time": 92.66,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 92.66,
+                    "end_time": 93.08,
+                    "text": "interested",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 93.08,
+                    "end_time": 93.5,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 93.5,
+                    "end_time": 93.92,
+                    "text": "sharing",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 93.92,
+                    "end_time": 94.34,
+                    "text": "their",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 94.34,
+                    "end_time": 94.76,
+                    "text": "comments",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 94.76,
+                    "end_time": 95.18,
+                    "text": "please",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 95.18,
+                    "end_time": 95.60000000000001,
+                    "text": "feel",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 95.60000000000001,
+                    "end_time": 96.02000000000001,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 96.02000000000001,
+                    "end_time": 96.44,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 96.44,
+                    "end_time": 96.86,
+                    "text": "email",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 96.86,
+                    "end_time": 97.28,
+                    "text": "us",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 97.28,
+                    "end_time": 97.7,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 97.7,
+                    "end_time": 98.12,
+                    "text": "councilatseattlegov",
+                    "annotations": null
+                }
+            ],
+            "text": "For members of the public who are interested in sharing their comments, please feel for to email us at councilatseattle.gov.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 23,
+            "confidence": 0.6,
+            "start_time": 98.12,
+            "end_time": 103.47999999999999,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 98.12,
+                    "end_time": 98.43529411764706,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 98.43529411764706,
+                    "end_time": 98.75058823529412,
+                    "text": "as",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 98.75058823529412,
+                    "end_time": 99.06588235294117,
+                    "text": "presiding",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 99.06588235294117,
+                    "end_time": 99.38117647058823,
+                    "text": "officer",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 99.38117647058823,
+                    "end_time": 99.6964705882353,
+                    "text": "i'm",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 99.6964705882353,
+                    "end_time": 100.01176470588236,
+                    "text": "announcing",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 100.01176470588236,
+                    "end_time": 100.32705882352941,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 100.32705882352941,
+                    "end_time": 100.64235294117647,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 100.64235294117647,
+                    "end_time": 100.95764705882353,
+                    "text": "seattle",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 100.95764705882353,
+                    "end_time": 101.27294117647058,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 101.27294117647058,
+                    "end_time": 101.58823529411764,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 101.58823529411764,
+                    "end_time": 101.9035294117647,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 101.9035294117647,
+                    "end_time": 102.21882352941176,
+                    "text": "now",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 102.21882352941176,
+                    "end_time": 102.53411764705882,
+                    "text": "convene",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 102.53411764705882,
+                    "end_time": 102.84941176470588,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 102.84941176470588,
+                    "end_time": 103.16470588235293,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 103.16470588235293,
+                    "end_time": 103.47999999999999,
+                    "text": "session",
+                    "annotations": null
+                }
+            ],
+            "text": "So as presiding officer, I'm announcing that the Seattle City Council will now convene an executive session.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 24,
+            "confidence": 0.6,
+            "start_time": 103.47999999999999,
+            "end_time": 115.16000000000001,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 103.47999999999999,
+                    "end_time": 103.84499999999998,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 103.84499999999998,
+                    "end_time": 104.21,
+                    "text": "purpose",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 104.21,
+                    "end_time": 104.57499999999999,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 104.57499999999999,
+                    "end_time": 104.94,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 104.94,
+                    "end_time": 105.30499999999999,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 105.30499999999999,
+                    "end_time": 105.66999999999999,
+                    "text": "session",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 105.66999999999999,
+                    "end_time": 106.035,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 106.035,
+                    "end_time": 106.39999999999999,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 106.39999999999999,
+                    "end_time": 106.765,
+                    "text": "evaluate",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 106.765,
+                    "end_time": 107.13,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 107.13,
+                    "end_time": 107.495,
+                    "text": "qualification",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 107.495,
+                    "end_time": 107.86,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 107.86,
+                    "end_time": 108.225,
+                    "text": "candidates",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 108.225,
+                    "end_time": 108.59,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 108.59,
+                    "end_time": 108.955,
+                    "text": "appointment",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 108.955,
+                    "end_time": 109.32,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 109.32,
+                    "end_time": 109.685,
+                    "text": "elective",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 109.685,
+                    "end_time": 110.05,
+                    "text": "office",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 110.05,
+                    "end_time": 110.415,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 110.415,
+                    "end_time": 110.78,
+                    "text": "fill",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 110.78,
+                    "end_time": 111.14500000000001,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 111.14500000000001,
+                    "end_time": 111.51,
+                    "text": "vacancy",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 111.51,
+                    "end_time": 111.875,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 111.875,
+                    "end_time": 112.24000000000001,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 112.24000000000001,
+                    "end_time": 112.605,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 112.605,
+                    "end_time": 112.97,
+                    "text": "position",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 112.97,
+                    "end_time": 113.33500000000001,
+                    "text": "8",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 113.33500000000001,
+                    "end_time": 113.7,
+                    "text": "previously",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 113.7,
+                    "end_time": 114.06500000000001,
+                    "text": "held",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 114.06500000000001,
+                    "end_time": 114.43,
+                    "text": "by",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 114.43,
+                    "end_time": 114.79500000000002,
+                    "text": "mayor",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 114.79500000000002,
+                    "end_time": 115.16000000000001,
+                    "text": "burgess",
+                    "annotations": null
+                }
+            ],
+            "text": "The purpose of the executive session is to evaluate the qualification of candidates for appointment to elective office to fill the vacancy in city council position 8, previously held by Mayor Burgess.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 25,
+            "confidence": 0.6,
+            "start_time": 115.16000000000001,
+            "end_time": 123.52000000000001,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 115.16000000000001,
+                    "end_time": 115.49440000000001,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 115.49440000000001,
+                    "end_time": 115.82880000000002,
+                    "text": "council's",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 115.82880000000002,
+                    "end_time": 116.16320000000002,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 116.16320000000002,
+                    "end_time": 116.4976,
+                    "text": "sessions",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 116.4976,
+                    "end_time": 116.83200000000001,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 116.83200000000001,
+                    "end_time": 117.16640000000001,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 117.16640000000001,
+                    "end_time": 117.50080000000001,
+                    "text": "opportunity",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 117.50080000000001,
+                    "end_time": 117.83520000000001,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 117.83520000000001,
+                    "end_time": 118.16960000000002,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 118.16960000000002,
+                    "end_time": 118.504,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 118.504,
+                    "end_time": 118.83840000000001,
+                    "text": "discuss",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 118.83840000000001,
+                    "end_time": 119.17280000000001,
+                    "text": "confidential",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 119.17280000000001,
+                    "end_time": 119.50720000000001,
+                    "text": "legal",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 119.50720000000001,
+                    "end_time": 119.84160000000001,
+                    "text": "matters",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 119.84160000000001,
+                    "end_time": 120.17600000000002,
+                    "text": "which",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 120.17600000000002,
+                    "end_time": 120.5104,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 120.5104,
+                    "end_time": 120.8448,
+                    "text": "attorneys",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 120.8448,
+                    "end_time": 121.17920000000001,
+                    "text": "with",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 121.17920000000001,
+                    "end_time": 121.51360000000001,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 121.51360000000001,
+                    "end_time": 121.84800000000001,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 121.84800000000001,
+                    "end_time": 122.18240000000002,
+                    "text": "attorneys",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 122.18240000000002,
+                    "end_time": 122.51680000000002,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 122.51680000000002,
+                    "end_time": 122.8512,
+                    "text": "authorized",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 122.8512,
+                    "end_time": 123.18560000000001,
+                    "text": "by",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 123.18560000000001,
+                    "end_time": 123.52000000000001,
+                    "text": "law",
+                    "annotations": null
+                }
+            ],
+            "text": "The council's executive sessions are an opportunity for the council discuss confidential legal matters which city attorneys with our city attorneys is authorized by law.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 26,
+            "confidence": 0.6,
+            "start_time": 123.52000000000001,
+            "end_time": 130.4,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 123.52000000000001,
+                    "end_time": 123.83272727272728,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 123.83272727272728,
+                    "end_time": 124.14545454545456,
+                    "text": "legal",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 124.14545454545456,
+                    "end_time": 124.45818181818183,
+                    "text": "monitor",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 124.45818181818183,
+                    "end_time": 124.7709090909091,
+                    "text": "from",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 124.7709090909091,
+                    "end_time": 125.08363636363637,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 125.08363636363637,
+                    "end_time": 125.39636363636365,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 125.39636363636365,
+                    "end_time": 125.70909090909092,
+                    "text": "attorney's",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 125.70909090909092,
+                    "end_time": 126.02181818181819,
+                    "text": "office",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 126.02181818181819,
+                    "end_time": 126.33454545454546,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 126.33454545454546,
+                    "end_time": 126.64727272727274,
+                    "text": "always",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 126.64727272727274,
+                    "end_time": 126.96000000000001,
+                    "text": "present",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 126.96000000000001,
+                    "end_time": 127.27272727272728,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 127.27272727272728,
+                    "end_time": 127.58545454545455,
+                    "text": "ensure",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 127.58545454545455,
+                    "end_time": 127.89818181818183,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 127.89818181818183,
+                    "end_time": 128.2109090909091,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 128.2109090909091,
+                    "end_time": 128.52363636363637,
+                    "text": "reserves",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 128.52363636363637,
+                    "end_time": 128.83636363636364,
+                    "text": "questions",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 128.83636363636364,
+                    "end_time": 129.14909090909092,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 129.14909090909092,
+                    "end_time": 129.4618181818182,
+                    "text": "policy",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 129.4618181818182,
+                    "end_time": 129.77454545454546,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 129.77454545454546,
+                    "end_time": 130.08727272727273,
+                    "text": "open",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 130.08727272727273,
+                    "end_time": 130.4,
+                    "text": "sessions",
+                    "annotations": null
+                }
+            ],
+            "text": "A legal monitor from the city attorney's office is always present to ensure the council reserves questions of policy for open sessions.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 27,
+            "confidence": 0.6,
+            "start_time": 130.4,
+            "end_time": 134.0,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 130.4,
+                    "end_time": 130.76,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 130.76,
+                    "end_time": 131.12,
+                    "text": "expect",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 131.12,
+                    "end_time": 131.48000000000002,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 131.48000000000002,
+                    "end_time": 131.84,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 131.84,
+                    "end_time": 132.2,
+                    "text": "session",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 132.2,
+                    "end_time": 132.56,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 132.56,
+                    "end_time": 132.92000000000002,
+                    "text": "end",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 132.92000000000002,
+                    "end_time": 133.28,
+                    "text": "by",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 133.28,
+                    "end_time": 133.64,
+                    "text": "11",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 133.64,
+                    "end_time": 134.0,
+                    "text": "am",
+                    "annotations": null
+                }
+            ],
+            "text": "I expect the executive session to end by 11 a.m.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 28,
+            "confidence": 0.6,
+            "start_time": 134.0,
+            "end_time": 141.08,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 134.0,
+                    "end_time": 134.33714285714285,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 134.33714285714285,
+                    "end_time": 134.6742857142857,
+                    "text": "if",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 134.6742857142857,
+                    "end_time": 135.01142857142858,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 135.01142857142858,
+                    "end_time": 135.34857142857143,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 135.34857142857143,
+                    "end_time": 135.68571428571428,
+                    "text": "session",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 135.68571428571428,
+                    "end_time": 136.02285714285713,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 136.02285714285713,
+                    "end_time": 136.36,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 136.36,
+                    "end_time": 136.69714285714286,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 136.69714285714286,
+                    "end_time": 137.03428571428572,
+                    "text": "extended",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 137.03428571428572,
+                    "end_time": 137.37142857142857,
+                    "text": "beyond",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 137.37142857142857,
+                    "end_time": 137.70857142857145,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 137.70857142857145,
+                    "end_time": 138.0457142857143,
+                    "text": "time",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 138.0457142857143,
+                    "end_time": 138.38285714285715,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 138.38285714285715,
+                    "end_time": 138.72,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 138.72,
+                    "end_time": 139.05714285714288,
+                    "text": "announce",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 139.05714285714288,
+                    "end_time": 139.39428571428573,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 139.39428571428573,
+                    "end_time": 139.73142857142858,
+                    "text": "extension",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 139.73142857142858,
+                    "end_time": 140.06857142857143,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 140.06857142857143,
+                    "end_time": 140.4057142857143,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 140.4057142857143,
+                    "end_time": 140.74285714285716,
+                    "text": "expected",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 140.74285714285716,
+                    "end_time": 141.08,
+                    "text": "duration",
+                    "annotations": null
+                }
+            ],
+            "text": "And if the executive session is to be extended beyond that time, I will announce the extension and the expected duration.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 29,
+            "confidence": 0.6,
+            "start_time": 141.08,
+            "end_time": 143.52,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 141.08,
+                    "end_time": 141.38500000000002,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 141.38500000000002,
+                    "end_time": 141.69,
+                    "text": "with",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 141.69,
+                    "end_time": 141.995,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 141.995,
+                    "end_time": 142.3,
+                    "text": "we'll",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 142.3,
+                    "end_time": 142.60500000000002,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 142.60500000000002,
+                    "end_time": 142.91000000000003,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 142.91000000000003,
+                    "end_time": 143.215,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 143.215,
+                    "end_time": 143.52,
+                    "text": "session",
+                    "annotations": null
+                }
+            ],
+            "text": "So with that, we'll be an executive session.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        }
+    ],
+    "annotations": null
+}
