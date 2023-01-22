@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Any
 
 import whisper
 
@@ -31,7 +33,7 @@ class WhisperModel(SRModel):
     def __init__(
         self,
         model_name: str = "medium",
-        confidence: Optional[float] = None,
+        confidence: float | None = None,
         **kwargs: Any,
     ):
         """
@@ -64,7 +66,7 @@ class WhisperModel(SRModel):
 
     def transcribe(
         self,
-        file_uri: Union[str, Path],
+        file_uri: str | Path,
         **kwargs: Any,
     ) -> transcript_model.Transcript:
         """
@@ -95,7 +97,7 @@ class WhisperModel(SRModel):
             return " ".join([str1.strip(), str2.strip()]).strip()
 
         # Split into sentences
-        sentences: List[transcript_model.Sentence] = []
+        sentences: list[transcript_model.Sentence] = []
         current_sentence_index = 0
         current_sentence_start = -1.0
         current_sentence_text = ""
@@ -115,7 +117,7 @@ class WhisperModel(SRModel):
                 sentence_duration = segment["end"] - current_sentence_start
 
                 # Create collection of words
-                words: List[transcript_model.Word] = []
+                words: list[transcript_model.Word] = []
                 raw_words = current_sentence_text.split(" ")
                 for word_index, word in enumerate(raw_words):
                     words.append(

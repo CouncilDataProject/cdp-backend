@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import os
 import sys
 from copy import deepcopy
 from pathlib import Path
-from typing import List, Optional
 from unittest import mock
 from unittest.mock import MagicMock, patch
 
@@ -367,7 +368,7 @@ passed_events_minutes_item = ingestion_models.EventMinutesItem(
 def test_calculate_in_majority(
     vote: ingestion_models.Vote,
     event_minutes_item: ingestion_models.EventMinutesItem,
-    expected: Optional[bool],
+    expected: bool | None,
 ) -> None:
     actual = pipeline._calculate_in_majority(
         vote=vote,
@@ -480,7 +481,7 @@ def test_store_event_processing_results(
     mock_upload_file: MagicMock,
     mock_resource_copy: MagicMock,
     event: EventIngestionModel,
-    session_processing_results: List[pipeline.SessionProcessingResult],
+    session_processing_results: list[pipeline.SessionProcessingResult],
     fail_file_uploads: bool,
     fail_try_url: bool,
 ) -> None:

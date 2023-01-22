@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 import pickle
 from datetime import datetime
 from hashlib import sha256
-from typing import Any, List, Optional
+from typing import Any
 
 import fireo
 from fireo.models import Model
@@ -76,8 +78,8 @@ def generate_and_attach_doc_hash_as_id(db_model: Model) -> Model:
 def upload_db_model(
     db_model: Model,
     credentials_file: str,
-    transaction: Optional[Transaction] = None,
-    batch: Optional[WriteBatch] = None,
+    transaction: Transaction | None = None,
+    batch: WriteBatch | None = None,
 ) -> Model:
     """
     Upload or update an existing database model.
@@ -109,7 +111,7 @@ def upload_db_model(
 
 def get_all_of_collection(
     db_model: Model, credentials_file: str, batch_size: int = 1000
-) -> List[Model]:
+) -> list[Model]:
     """
     Get all documents in a collection as a single list but request in batches.
 
@@ -131,7 +133,7 @@ def get_all_of_collection(
     fireo.connection(from_file=credentials_file)
 
     # Construct all documents list and fill as batches return
-    all_documents: List[Model] = []
+    all_documents: list[Model] = []
     paginator = db_model.collection.fetch(batch_size)
     all_documents_gathered = False
     while not all_documents_gathered:
@@ -145,14 +147,14 @@ def get_all_of_collection(
     return all_documents
 
 
-def _strip_field(field: Optional[str]) -> Optional[str]:
+def _strip_field(field: str | None) -> str | None:
     if isinstance(field, str):
         return field.strip()
 
     return field
 
 
-def _ensure_string_or_optional(field: Optional[Any]) -> Optional[str]:
+def _ensure_string_or_optional(field: Any | None) -> str | None:
     if field is not None:
         return str(field)
 
@@ -181,12 +183,12 @@ def create_body(
 def create_event(
     body_ref: db_models.Body,
     event_datetime: datetime,
-    static_thumbnail_ref: Optional[db_models.File] = None,
-    hover_thumbnail_ref: Optional[db_models.File] = None,
-    agenda_uri: Optional[str] = None,
-    minutes_uri: Optional[str] = None,
-    external_source_id: Optional[str] = None,
-    credentials_file: Optional[str] = None,
+    static_thumbnail_ref: db_models.File | None = None,
+    hover_thumbnail_ref: db_models.File | None = None,
+    agenda_uri: str | None = None,
+    minutes_uri: str | None = None,
+    external_source_id: str | None = None,
+    credentials_file: str | None = None,
 ) -> db_models.Event:
     db_event = db_models.Event()
 
@@ -214,7 +216,7 @@ def create_session(
     session_video_hosted_url: str,
     session_content_hash: str,
     event_ref: db_models.Event,
-    credentials_file: Optional[str] = None,
+    credentials_file: str | None = None,
 ) -> db_models.Session:
     db_session = db_models.Session()
 
@@ -241,7 +243,7 @@ def create_session(
 
 def create_file(
     uri: str,
-    credentials_file: Optional[str] = None,
+    credentials_file: str | None = None,
 ) -> db_models.File:
     db_file = db_models.File()
     db_file.name = uri.split("/")[-1]
@@ -288,8 +290,8 @@ def create_matter_status(
     matter_ref: db_models.Matter,
     status: str,
     update_datetime: datetime,
-    event_minutes_item_ref: Optional[db_models.EventMinutesItem] = None,
-    external_source_id: Optional[str] = None,
+    event_minutes_item_ref: db_models.EventMinutesItem | None = None,
+    external_source_id: str | None = None,
 ) -> db_models.Matter:
     db_matter_status = db_models.MatterStatus()
 
@@ -305,7 +307,7 @@ def create_matter_status(
 def create_matter_file(
     matter_ref: db_models.Matter,
     supporting_file: ingestion_models.SupportingFile,
-    credentials_file: Optional[str] = None,
+    credentials_file: str | None = None,
 ) -> db_models.MatterFile:
     db_matter_file = db_models.MatterFile()
 
@@ -345,7 +347,7 @@ def create_minimal_person(
 def create_matter_sponsor(
     matter_ref: db_models.Matter,
     person_ref: db_models.Person,
-    external_source_id: Optional[str] = None,
+    external_source_id: str | None = None,
 ) -> db_models.MatterSponsor:
     db_matter_sponsor = db_models.MatterSponsor()
 
@@ -360,8 +362,8 @@ def create_matter_sponsor(
 
 def create_person(
     person: ingestion_models.Person,
-    picture_ref: Optional[db_models.File] = None,
-    credentials_file: Optional[str] = None,
+    picture_ref: db_models.File | None = None,
+    credentials_file: str | None = None,
 ) -> db_models.Person:
     # Get minimal
     db_person = create_minimal_person(person=person)
@@ -386,7 +388,7 @@ def create_person(
 
 def create_seat(
     seat: ingestion_models.Seat,
-    image_ref: Optional[db_models.File],
+    image_ref: db_models.File | None,
 ) -> db_models.Seat:
     db_seat = db_models.Seat()
 
@@ -404,7 +406,7 @@ def create_role(
     person_ref: db_models.Person,
     seat_ref: db_models.Seat,
     start_datetime: datetime,
-    body_ref: Optional[db_models.Body] = None,
+    body_ref: db_models.Body | None = None,
 ) -> db_models.Role:
     db_role = db_models.Role()
 
@@ -424,7 +426,7 @@ def create_role(
 
 def create_minutes_item(
     minutes_item: ingestion_models.MinutesItem,
-    matter_ref: Optional[db_models.Matter] = None,
+    matter_ref: db_models.Matter | None = None,
 ) -> db_models.MinutesItem:
     db_minutes_item = db_models.MinutesItem()
 
@@ -472,7 +474,7 @@ def create_event_minutes_item(
 def create_event_minutes_item_file(
     event_minutes_item_ref: db_models.EventMinutesItem,
     supporting_file: ingestion_models.SupportingFile,
-    credentials_file: Optional[str] = None,
+    credentials_file: str | None = None,
 ) -> db_models.EventMinutesItemFile:
     db_event_minutes_item_file = db_models.EventMinutesItemFile()
 
@@ -497,8 +499,8 @@ def create_vote(
     event_minutes_item_ref: db_models.EventMinutesItem,
     person_ref: db_models.Person,
     decision: str,
-    in_majority: Optional[bool],
-    external_source_id: Optional[str] = None,
+    in_majority: bool | None,
+    external_source_id: str | None = None,
 ) -> db_models.Vote:
     db_vote = db_models.Vote()
 

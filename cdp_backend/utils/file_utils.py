@@ -1,12 +1,13 @@
 ##!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 import math
 import random
 import re
 from hashlib import sha256
 from pathlib import Path
-from typing import Optional, Tuple, Union
 from uuid import uuid4
 
 import fireo
@@ -102,7 +103,7 @@ def rename_append_to_stem(path: Path, addition: str) -> Path:
     return path.rename(append_to_stem(path, addition))
 
 
-def get_media_type(uri: str) -> Optional[str]:
+def get_media_type(uri: str) -> str | None:
     """
     Get the IANA media type for the provided URI.
     If one could not be found, return None.
@@ -142,7 +143,7 @@ def get_media_type(uri: str) -> Optional[str]:
 
 def resource_copy(  # noqa: C901
     uri: str,
-    dst: Optional[Union[str, Path]] = None,
+    dst: str | Path | None = None,
     copy_suffix: bool = False,
     overwrite: bool = False,
 ) -> str:
@@ -334,7 +335,7 @@ def split_audio(
     video_read_path: str,
     audio_save_path: str,
     overwrite: bool = False,
-) -> Tuple[str, str, str]:
+) -> tuple[str, str, str]:
     """
     Split and store the audio from a video file using ffmpeg.
 
@@ -589,8 +590,8 @@ def hash_file_contents(uri: str, buffer_size: int = 2**16) -> str:
 
 def convert_video_to_mp4(
     video_filepath: Path,
-    start_time: Optional[str],
-    end_time: Optional[str],
+    start_time: str | None,
+    end_time: str | None,
     output_path: Path = None,
 ) -> Path:
     """
@@ -648,8 +649,8 @@ def generate_file_storage_name(file_uri: str, suffix: str) -> str:
 def download_video_from_session_id(
     credentials_file: str,
     session_id: str,
-    dest: Optional[Union[str, Path]] = None,
-) -> Union[str, Path]:
+    dest: str | Path | None = None,
+) -> str | Path:
     """
     Using the session_id provided, pulls the associated
     video, and places it the destination.
@@ -687,8 +688,8 @@ def download_video_from_session_id(
 
 def clip_and_reformat_video(
     video_filepath: Path,
-    start_time: Optional[str],
-    end_time: Optional[str],
+    start_time: str | None,
+    end_time: str | None,
     output_path: Path = None,
     output_format: str = "mp4",
 ) -> Path:

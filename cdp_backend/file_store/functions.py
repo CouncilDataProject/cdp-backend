@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import Optional, Union
 
 from fsspec.implementations.local import LocalFileSystem
 from gcsfs import GCSFileSystem
@@ -33,7 +34,7 @@ def initialize_gcs_file_system(credentials_file: str) -> GCSFileSystem:
     return GCSFileSystem(token=str(credentials_file))
 
 
-def get_file_uri(bucket: str, filename: str, credentials_file: str) -> Optional[str]:
+def get_file_uri(bucket: str, filename: str, credentials_file: str) -> str | None:
     """
     Gets the file uri of a filename and bucket for a given Google Cloud file store.
 
@@ -64,7 +65,7 @@ def upload_file(
     credentials_file: str,
     bucket: str,
     filepath: str,
-    save_name: Optional[str] = None,
+    save_name: str | None = None,
     remove_local: bool = False,
     overwrite: bool = False,
 ) -> str:
@@ -162,7 +163,7 @@ def get_open_url_for_gcs_file(credentials_file: str, uri: str) -> str:
     return str(fs.url(uri))
 
 
-def remove_local_file(filepath: Union[str, Path]) -> None:
+def remove_local_file(filepath: str | Path) -> None:
     """
     Deletes a file from the local file system.
 
@@ -181,7 +182,7 @@ def upload_file_and_return_link(
     credentials_file: str,
     bucket: str,
     filepath: str,
-    save_name: Optional[str] = None,
+    save_name: str | None = None,
     remove_local: bool = False,
 ) -> str:
     """

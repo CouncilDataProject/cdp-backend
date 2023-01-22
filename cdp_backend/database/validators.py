@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any, Callable, List, Optional, Type
+from typing import Any, Callable
 
 import requests
 from fireo.models import Model
@@ -37,14 +39,14 @@ class UniquenessValidation:
     """
 
     is_unique: bool
-    conflicting_models: List[Model]
+    conflicting_models: list[Model]
 
 
 #############################################################################
 # Field Validators
 
 
-def router_string_is_valid(router_string: Optional[str]) -> bool:
+def router_string_is_valid(router_string: str | None) -> bool:
     """
     Validate that the provided router string contains only lowercase alphabetic
     characters and optionally include a hyphen.
@@ -71,7 +73,7 @@ def router_string_is_valid(router_string: Optional[str]) -> bool:
     return False
 
 
-def time_duration_is_valid(time_duration: Optional[str]) -> bool:
+def time_duration_is_valid(time_duration: str | None) -> bool:
     """
     Validate that the provided time duration string is acceptable to FFmpeg.
     The validator is unnecessarily limited to HH:MM:SS. The spec is a little
@@ -99,7 +101,7 @@ def time_duration_is_valid(time_duration: Optional[str]) -> bool:
     return False
 
 
-def email_is_valid(email: Optional[str]) -> bool:
+def email_is_valid(email: str | None) -> bool:
     """
     Validate that a valid email was provided.
 
@@ -124,7 +126,7 @@ def email_is_valid(email: Optional[str]) -> bool:
     return False
 
 
-def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:  # noqa: C901
+def resource_exists(uri: str | None, **kwargs: Any) -> bool:  # noqa: C901
     """
     Validate that the URI provided points to an existing file.
 
@@ -185,7 +187,7 @@ def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:  # noqa: C901
         return False
 
 
-def create_constant_value_validator(constant_cls: Type) -> Callable[[str], bool]:
+def create_constant_value_validator(constant_cls: type) -> Callable[[str], bool]:
     """
     Create a validator func that validates a value is one of the valid values.
 

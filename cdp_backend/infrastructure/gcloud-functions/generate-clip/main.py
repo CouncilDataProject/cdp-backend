@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import Dict, NoReturn, Tuple, Union
+from typing import NoReturn
 from uuid import uuid4
 
 import functions_framework
@@ -24,10 +26,10 @@ CREDENTIALS_PATH = "GOOGLE_CREDENTIALS.json"
 
 
 def _unpack_param(
-    request_json: Dict[str, str],
+    request_json: dict[str, str],
     request_args: MultiDict[str, str],
     param: str,
-) -> Union[str, NoReturn]:
+) -> str | NoReturn:
     if request_json and param in request_json:
         return request_json[param]
     if request_args and param in request_args:
@@ -38,7 +40,7 @@ def _unpack_param(
     return abort(400)
 
 
-def _hhmmss_as_seconds(time_str: str) -> Union[int, NoReturn]:
+def _hhmmss_as_seconds(time_str: str) -> int | NoReturn:
     try:
         hours, minutes, seconds = time_str.split(":")
         return int(hours) * 3600 + int(minutes) * 60 + int(seconds)
@@ -49,7 +51,7 @@ def _hhmmss_as_seconds(time_str: str) -> Union[int, NoReturn]:
 
 
 @functions_framework.http
-def generate_clip(request: Request) -> Union[Tuple[str, int, Dict[str, str]], NoReturn]:
+def generate_clip(request: Request) -> tuple[str, int, dict[str, str]] | NoReturn:
     """HTTP Cloud Function.
 
     Parameters

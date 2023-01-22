@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import random
 from bisect import bisect_left
 from datetime import datetime, timedelta
-from typing import Any, List
+from typing import Any
 
 from ..database.constants import (
     EventMinutesItemDecision,
@@ -233,7 +235,7 @@ def _get_example_event() -> EventIngestionModel:
     )
 
 
-def get_events(**kwargs: Any) -> List[EventIngestionModel]:
+def get_events(**kwargs: Any) -> list[EventIngestionModel]:
     """
     A mock get_events function that will generate entirely random events
     based off a set of permutation settings.
@@ -253,7 +255,7 @@ RANDOM_FLOW_CONFIG = EventGatherPipelineConfig(
 RANDOM_FLOW_CONFIG._validated_gcs_bucket_name = ""
 
 
-def min_get_events(**kwargs: Any) -> List[EventIngestionModel]:
+def min_get_events(**kwargs: Any) -> list[EventIngestionModel]:
     event = EXAMPLE_MINIMAL_EVENT
     event.sessions[0].session_datetime = datetime(2019, 4, 13)
     return [event]
@@ -267,7 +269,7 @@ MINIMAL_FLOW_CONFIG = EventGatherPipelineConfig(
 MINIMAL_FLOW_CONFIG._validated_gcs_bucket_name = ""
 
 
-def filled_get_events(**kwargs: Any) -> List[EventIngestionModel]:
+def filled_get_events(**kwargs: Any) -> list[EventIngestionModel]:
     event = EXAMPLE_FILLED_EVENT
     return [event]
 
@@ -280,7 +282,7 @@ FILLED_FLOW_CONFIG = EventGatherPipelineConfig(
 FILLED_FLOW_CONFIG._validated_gcs_bucket_name = ""
 
 
-def many_get_events(**kwargs: Any) -> List[EventIngestionModel]:
+def many_get_events(**kwargs: Any) -> list[EventIngestionModel]:
     event = EXAMPLE_MINIMAL_EVENT
     return [event] * 4
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Union
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -118,7 +119,7 @@ def test_config_construction(
     mock_gcsfs_ls: MagicMock,
     mock_google_credentials_connect: MagicMock,
     bucket_exists: bool,
-    config: Union[EventGatherPipelineConfig, EventIndexPipelineConfig],
+    config: EventGatherPipelineConfig | EventIndexPipelineConfig,
     expected_bucket_name: str,
 ) -> None:
     if bucket_exists:

@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime, timedelta
 from importlib import import_module
 from operator import attrgetter
 from pathlib import Path
-from typing import Callable, Dict, List, NamedTuple, Optional, Tuple, Union
+from typing import Callable, NamedTuple
 from uuid import uuid4
 
 from aiohttp.client_exceptions import ClientResponseError
@@ -55,9 +57,9 @@ def import_get_events_func(func_path: str) -> Callable:
 
 def create_event_gather_flow(
     config: EventGatherPipelineConfig,
-    from_dt: Optional[Union[str, datetime]] = None,
-    to_dt: Optional[Union[str, datetime]] = None,
-    prefetched_events: Optional[List[EventIngestionModel]] = None,
+    from_dt: str | datetime | None = None,
+    to_dt: str | datetime | None = None,
+    prefetched_events: list[EventIngestionModel] | None = None,
 ) -> Flow:
     """
     Provided a function to gather new event information, create the Prefect Flow object
@@ -128,7 +130,7 @@ def create_event_gather_flow(
         log.info(f"Processing {len(events)} events.")
 
         for event in events:
-            session_processing_results: List[SessionProcessingResult] = []
+            session_processing_results: list[SessionProcessingResult] = []
             for session in event.sessions:
                 # Download video to local copy making
                 # copy unique in case of shared session video
@@ -298,7 +300,7 @@ def convert_video_and_handle_host(
     session: Session,
     credentials_file: str,
     bucket: str,
-) -> Tuple[str, str, str]:
+) -> tuple[str, str, str]:
     """
     Convert a video to MP4 (if necessary), upload it to the file store, and remove
     the original non-MP4 file that was resource copied.
@@ -419,7 +421,7 @@ def split_audio(
     tmp_video_filepath: str,
     bucket: str,
     credentials_file: str,
-) -> Tuple[str, str]:
+) -> tuple[str, str]:
     """
     Split the audio from a local video file.
 
@@ -488,7 +490,7 @@ def split_audio(
 def use_speech_to_text_and_generate_transcript(
     audio_path: str,
     model_name: str = "medium",
-    confidence: Optional[float] = None,
+    confidence: float | None = None,
 ) -> Transcript:
     """
     Pass the audio path to the speech recognition model.
@@ -524,7 +526,7 @@ def finalize_and_archive_transcript(
     bucket: str,
     credentials_file: str,
     session: Session,
-) -> Tuple[str, Transcript]:
+) -> tuple[str, Transcript]:
     """
     Finalizes metadata for a Transcript object, stores the transcript as JSON to object
     storage and finally adds transcript and file objects to database.
@@ -572,7 +574,7 @@ def check_for_existing_transcript(
     session_content_hash: str,
     bucket: str,
     credentials_file: str,
-) -> Tuple[str, Optional[str], Optional[Transcript], bool]:
+) -> tuple[str, str | None, Transcript | None, bool]:
     """
     Check and load any existing transcript object.
 
@@ -630,8 +632,8 @@ def generate_transcript(
     bucket: str,
     credentials_file: str,
     whisper_model_name: str = "medium",
-    whisper_model_confidence: Optional[float] = None,
-) -> Tuple[str, Transcript]:
+    whisper_model_confidence: float | None = None,
+) -> tuple[str, Transcript]:
     """
     Route transcript generation to the correct processing.
 
@@ -720,7 +722,7 @@ def generate_thumbnails(
     event: EventIngestionModel,
     bucket: str,
     credentials_file: str,
-) -> Tuple[str, str]:
+) -> tuple[str, str]:
     """
     Creates static and hover thumbnails.
 
@@ -812,7 +814,7 @@ def _process_person_ingestion(  # noqa: C901
     default_session: Session,
     credentials_file: str,
     bucket: str,
-    upload_cache: Optional[Dict[str, db_models.Person]] = None,
+    upload_cache: dict[str, db_models.Person] | None = None,
 ) -> db_models.Person:
     # The JSON string of the whole person tree turns out to be a great cache key because
     # 1. we can hash strings (which means we can shove them into a dictionary)
@@ -829,7 +831,7 @@ def _process_person_ingestion(  # noqa: C901
 
     if person_cache_key not in upload_cache:
         # Store person picture file
-        person_picture_db_model: Optional[db_models.File]
+        person_picture_db_model: db_models.File | None
         if person.picture_uri is not None:
             try:
                 tmp_person_picture_path = file_utils.resource_copy(
@@ -900,7 +902,7 @@ def _process_person_ingestion(  # noqa: C901
         # Create seat
         if person.seat is not None:
             # Store seat picture file
-            person_seat_image_db_model: Optional[db_models.File]
+            person_seat_image_db_model: db_models.File | None
             try:
                 if person.seat.image_uri is not None:
                     tmp_person_seat_image_path = file_utils.resource_copy(
@@ -950,7 +952,7 @@ def _process_person_ingestion(  # noqa: C901
             if person.seat.roles is not None:
                 for person_role in person.seat.roles:
                     # Create any bodies for roles
-                    person_role_body_db_model: Optional[db_models.Body]
+                    person_role_body_db_model: db_models.Body | None
                     if person_role.body is not None:
                         # Use or default role body start_datetime
                         if person_role.body.start_datetime is None:
@@ -1001,7 +1003,7 @@ def _process_person_ingestion(  # noqa: C901
 def _calculate_in_majority(
     vote: ingestion_models.Vote,
     event_minutes_item: ingestion_models.EventMinutesItem,
-) -> Optional[bool]:
+) -> bool | None:
     # Voted to Approve or Approve-by-abstention-or-absence
     if vote.decision in [
         db_constants.VoteDecision.APPROVE,
@@ -1029,7 +1031,7 @@ def _calculate_in_majority(
 @task
 def store_event_processing_results(  # noqa: C901
     event: EventIngestionModel,
-    session_processing_results: List[SessionProcessingResult],
+    session_processing_results: list[SessionProcessingResult],
     credentials_file: str,
     bucket: str,
 ) -> None:
@@ -1167,7 +1169,7 @@ def store_event_processing_results(  # noqa: C901
         )
 
     # Add event metadata
-    processed_person_upload_cache: Dict[str, db_models.Person] = {}
+    processed_person_upload_cache: dict[str, db_models.Person] = {}
     if event.event_minutes_items is not None:
         for emi_index, event_minutes_item in enumerate(event.event_minutes_items):
             if event_minutes_item.matter is not None:

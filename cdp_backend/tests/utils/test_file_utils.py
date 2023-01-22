@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import os
 import random
 import sys
 from pathlib import Path
-from typing import Optional
 from unittest import mock
 
 import imageio
@@ -101,7 +102,7 @@ def test_rename_append_to_stem(path: Path, addition: str, expected_result: str) 
         ("file:///some/dir/image.unknownformat", None),
     ],
 )
-def test_get_media_type(uri: str, expected_result: Optional[str]) -> None:
+def test_get_media_type(uri: str, expected_result: str | None) -> None:
     actual_result = file_utils.get_media_type(uri)
     assert actual_result == expected_result
 
@@ -299,8 +300,8 @@ def test_convert_video_to_mp4(
     resources_dir: Path,
     video_filename: str,
     expected: str,
-    start_time: Optional[str],
-    end_time: Optional[str],
+    start_time: str | None,
+    end_time: str | None,
 ) -> None:
     filepath = resources_dir / video_filename
     outfile = resources_dir / expected
@@ -328,7 +329,7 @@ def test_convert_video_to_mp4(
 def test_remote_resource_copy(
     resources_dir: Path,
     uri: str,
-    expected: Optional[str],
+    expected: str | None,
 ) -> None:
     actual_uri = file_utils.resource_copy(uri, resources_dir, True)
     if expected:

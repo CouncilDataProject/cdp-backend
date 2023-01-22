@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import os.path
-from typing import Optional
 from unittest import mock
 
 import pytest
@@ -44,7 +45,7 @@ def test_get_file_uri(
     filename: str,
     bucket: str,
     exists: bool,
-    expected: Optional[str],
+    expected: str | None,
 ) -> None:
     with mock.patch("gcsfs.credentials.GoogleCredentials.connect"):
         with mock.patch("gcsfs.GCSFileSystem.exists") as mock_exists:
@@ -121,7 +122,7 @@ def test_get_file_uri(
 def test_upload_file(
     bucket: str,
     filepath: str,
-    save_name: Optional[str],
+    save_name: str | None,
     remove_local: bool,
     overwrite: bool,
     existing_file_uri: str,

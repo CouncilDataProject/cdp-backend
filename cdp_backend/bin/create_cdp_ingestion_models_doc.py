@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import argparse
 import logging
 import sys
@@ -7,7 +9,7 @@ import traceback
 from dataclasses import asdict
 from pathlib import Path
 from pprint import pformat
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from jinja2 import Template
 
@@ -62,7 +64,7 @@ class Args(argparse.Namespace):
 ###############################################################################
 
 
-def _filter_none_values(d: Union[Dict, Any]) -> Union[Dict, Any]:
+def _filter_none_values(d: dict | Any) -> dict | Any:
     if isinstance(d, Dict):
         return {k: _filter_none_values(v) for k, v in d.items() if v is not None}
     elif isinstance(d, List):

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
 
 from dataclasses_json import DataClassJsonMixin
 
@@ -75,16 +76,16 @@ class SectionAnnotation(DataClassJsonMixin):
 
     name: str
     start_sentence_index: int
-    stop_sentence_index: Optional[int]
+    stop_sentence_index: int | None
     generator: str
-    description: Optional[str] = None
+    description: str | None = None
 
 
 @dataclass
 class TranscriptAnnotations(DataClassJsonMixin):
     """Annotations that can appear (but are not guaranteed) for the whole transcript."""
 
-    sections: Optional[List[SectionAnnotation]] = None
+    sections: list[SectionAnnotation] | None = None
 
 
 ###############################################################################
@@ -114,7 +115,7 @@ class Word(DataClassJsonMixin):
     start_time: float
     end_time: float
     text: str
-    annotations: Optional[WordAnnotations] = None
+    annotations: WordAnnotations | None = None
 
 
 @dataclass
@@ -149,11 +150,11 @@ class Sentence(DataClassJsonMixin):
     confidence: float
     start_time: float
     end_time: float
-    words: List[Word]
+    words: list[Word]
     text: str
-    speaker_index: Optional[int] = None
-    speaker_name: Optional[str] = None
-    annotations: Optional[SentenceAnnotations] = None
+    speaker_index: int | None = None
+    speaker_name: str | None = None
+    annotations: SentenceAnnotations | None = None
 
 
 @dataclass
@@ -198,10 +199,10 @@ class Transcript(DataClassJsonMixin):
 
     generator: str
     confidence: float
-    session_datetime: Optional[str]
+    session_datetime: str | None
     created_datetime: str
-    sentences: List[Sentence]
-    annotations: Optional[TranscriptAnnotations] = None
+    sentences: list[Sentence]
+    annotations: TranscriptAnnotations | None = None
 
     def __repr__(self) -> str:
         """Print out shortform transcript details."""

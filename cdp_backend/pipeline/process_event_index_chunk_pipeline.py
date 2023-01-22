@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Dict, List, NamedTuple, Union
+from typing import NamedTuple
 
 import fireo
 import pandas as pd
@@ -43,7 +45,7 @@ def pull_chunk(
 def chunk_n_grams(
     chunk_path: str,
     upload_batch_size: int = 500,
-) -> List[List[AlmostCompleteIndexedEventGram]]:
+) -> list[list[AlmostCompleteIndexedEventGram]]:
     """
     Split the large n_grams dataframe into multiple lists of IndexedEventGram models
     for batched, mapped, upload.
@@ -58,9 +60,9 @@ def chunk_n_grams(
     ]
 
     # Convert each dataframe into a list of indexed event gram
-    event_gram_chunks: List[List[AlmostCompleteIndexedEventGram]] = []
+    event_gram_chunks: list[list[AlmostCompleteIndexedEventGram]] = []
     for n_gram_df_chunk in n_grams_dfs:
-        event_gram_chunk: List[AlmostCompleteIndexedEventGram] = []
+        event_gram_chunk: list[AlmostCompleteIndexedEventGram] = []
         for _, row in n_gram_df_chunk.iterrows():
             event_gram_chunk.append(
                 AlmostCompleteIndexedEventGram(
@@ -80,7 +82,7 @@ def chunk_n_grams(
 
 @task
 def store_n_gram_chunk(
-    n_gram_chunk: List[AlmostCompleteIndexedEventGram],
+    n_gram_chunk: list[AlmostCompleteIndexedEventGram],
     credentials_file: str,
 ) -> None:
     """
@@ -92,7 +94,7 @@ def store_n_gram_chunk(
     batch = fireo.batch()
 
     # Trigger upserts for all items
-    event_lut: Dict[str, db_models.Event] = {}
+    event_lut: dict[str, db_models.Event] = {}
     for almost_complete_ieg in n_gram_chunk:
         if almost_complete_ieg.event_id not in event_lut:
             event_lut[almost_complete_ieg.event_id] = db_models.Event.collection.get(
@@ -120,7 +122,7 @@ def store_n_gram_chunk(
 
 def create_event_index_upload_pipeline(
     config: EventIndexPipelineConfig,
-    index_chunk: Union[str, Path],
+    index_chunk: str | Path,
     upload_batch_size: int = 500,
 ) -> Flow:
     """

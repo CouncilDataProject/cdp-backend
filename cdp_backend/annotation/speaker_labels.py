@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import Dict, List, Union
 from uuid import uuid4
 
 import numpy as np
@@ -25,9 +26,9 @@ DEFAULT_MODEL = "trained-speakerbox"
 
 
 def annotate(  # noqa: C901
-    transcript: Union[str, Path, Transcript],
-    audio: Union[str, Path, AudioSegment],
-    model: Union[str, Pipeline] = DEFAULT_MODEL,
+    transcript: str | Path | Transcript,
+    audio: str | Path | AudioSegment,
+    model: str | Pipeline = DEFAULT_MODEL,
     min_intra_sentence_chunk_duration: float = 0.5,
     max_intra_sentence_chunk_duration: float = 2.0,
     min_sentence_mean_confidence: float = 0.985,
@@ -130,7 +131,7 @@ def annotate(  # noqa: C901
         desc="Sentences annotated",
     ):
         # Keep track of each sentence chunk classification and score
-        chunk_scores: Dict[str, List[float]] = {}
+        chunk_scores: dict[str, list[float]] = {}
 
         # Get audio slice for sentence
         sentence_start_millis = sentence.start_time * 1000
@@ -172,7 +173,7 @@ def annotate(  # noqa: C901
         # Create mean score
         sentence_speaker = None
         if len(chunk_scores) > 0:
-            mean_scores: Dict[str, float] = {}
+            mean_scores: dict[str, float] = {}
             for speaker, scores in chunk_scores.items():
                 mean_scores[speaker] = sum(scores) / len(scores)
 

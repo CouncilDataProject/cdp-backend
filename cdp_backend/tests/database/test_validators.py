@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from typing import Dict, Optional
+from __future__ import annotations
+
 from unittest import mock
 
 import pytest
@@ -151,8 +152,8 @@ def test_local_resource_exists(
 def test_remote_resource_exists(
     uri: str,
     expected_result: bool,
-    gcsfs_exists: Optional[bool],
-    kwargs: Optional[Dict],
+    gcsfs_exists: bool | None,
+    kwargs: dict | None,
 ) -> None:
     with mock.patch("gcsfs.credentials.GoogleCredentials.connect"):
         with mock.patch("gcsfs.GCSFileSystem.exists") as mock_exists:

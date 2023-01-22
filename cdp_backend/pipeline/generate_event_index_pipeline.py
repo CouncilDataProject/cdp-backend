@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import logging
 import math
 import shutil
@@ -7,7 +9,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Dict, List, NamedTuple, Tuple
+from typing import NamedTuple
 
 import pandas as pd
 import pytz
@@ -35,7 +37,7 @@ log = logging.getLogger(__name__)
 
 
 @task
-def get_transcripts(credentials_file: str) -> List[db_models.Transcript]:
+def get_transcripts(credentials_file: str) -> list[db_models.Transcript]:
     """
     Initialize fireo connection and pull all Transcript models.
 
@@ -67,8 +69,8 @@ def get_transcripts(credentials_file: str) -> List[db_models.Transcript]:
 
 @task
 def get_highest_confidence_transcript_for_each_session(
-    transcripts: List[db_models.Transcript],
-) -> List[db_models.Transcript]:
+    transcripts: list[db_models.Transcript],
+) -> list[db_models.Transcript]:
     """
     Filter down a list transcript documents to just a single transcript
     per session taking the highest confidence transcript document.
@@ -87,7 +89,7 @@ def get_highest_confidence_transcript_for_each_session(
     # We can't use pandas groupby because sessions objects can't be naively compared
     # Instead we create a Dict of session id to document model
     # We update as we iterate through list of all transcripts
-    selected_transcripts: Dict[str, pd.Series] = {}
+    selected_transcripts: dict[str, pd.Series] = {}
     for transcript in transcripts:
         referenced_session_id = transcript.session_ref.ref.id
         if referenced_session_id not in selected_transcripts:
@@ -107,19 +109,19 @@ def get_highest_confidence_transcript_for_each_session(
 class EventTranscripts(NamedTuple):
     event_id: str
     event_datetime: datetime
-    transcript_db_files: List[db_models.File]
+    transcript_db_files: list[db_models.File]
 
 
 @task
 def get_transcripts_per_event(
-    transcripts: List[db_models.Transcript],
-) -> List[EventTranscripts]:
+    transcripts: list[db_models.Transcript],
+) -> list[EventTranscripts]:
     """
     Group all transcripts related to a single event together into
     EventTranscripts objects.
     """
     # Create event transcripts as event id mapped to EventTranscripts object
-    event_transcripts: Dict[str, EventTranscripts] = {}
+    event_transcripts: dict[str, EventTranscripts] = {}
     for transcript in transcripts:
         # Add new event
         session = transcript.session_ref.get()
@@ -144,7 +146,7 @@ def get_transcripts_per_event(
 class SentenceManager(DataClassJsonMixin):
     original_details: Sentence
     cleaned_text: str
-    n_grams: List[Tuple[str]]
+    n_grams: list[tuple[str]]
 
 
 @dataclass
@@ -161,7 +163,7 @@ class ContextualizedGram(DataClassJsonMixin):
 @task
 def read_transcripts_and_generate_grams(
     event_transcripts: EventTranscripts, n_grams: int, credentials_file: str
-) -> List[ContextualizedGram]:
+) -> list[ContextualizedGram]:
     """
     Parse all documents and create a list of contextualized grams for later weighting.
 
@@ -182,7 +184,7 @@ def read_transcripts_and_generate_grams(
     fs = GCSFileSystem(token=credentials_file)
 
     # Store all n_gram results
-    event_n_grams: List[ContextualizedGram] = []
+    event_n_grams: list[ContextualizedGram] = []
 
     # Iter over each transcript
     for transcript_db_file in event_transcripts.transcript_db_files:
@@ -201,7 +203,7 @@ def read_transcripts_and_generate_grams(
                 transcript = Transcript.from_json(open_f.read())
 
             # Get cleaned sentences by removing stop words
-            cleaned_sentences: List[SentenceManager] = [
+            cleaned_sentences: list[SentenceManager] = [
                 SentenceManager(
                     original_details=sentence,
                     cleaned_text=string_utils.clean_text(
@@ -281,7 +283,7 @@ def read_transcripts_and_generate_grams(
 
 @task
 def convert_all_n_grams_to_dataframe(
-    all_events_n_grams: List[List[ContextualizedGram]],
+    all_events_n_grams: list[list[ContextualizedGram]],
 ) -> pd.DataFrame:
     """Flatten all n grams from all events into one single dataframe."""
     return pd.DataFrame(
