@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from cdp_backend.pipeline.transcript_model import EXAMPLE_TRANSCRIPT, Transcript
 

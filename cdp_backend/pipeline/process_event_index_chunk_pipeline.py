@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from pathlib import Path
 from typing import Dict, List, NamedTuple, Union
@@ -132,8 +131,8 @@ def create_event_index_upload_pipeline(
     ----------
     config: EventIndexPipelineConfig
         Configuration options for the pipeline.
-    n_grams: int
-        N number of terms to act as a unique entity. Default: 1
+    index_chunk: int
+        Path to the index chunk file to process.
     upload_batch_size: int
         Number of ngrams to upload to database in a single batch.
         Default: 500 (max)

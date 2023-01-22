@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import logging
@@ -52,7 +51,7 @@ def add_content_hash_to_sessions(google_creds_path: Path) -> None:
     sessions = Session.collection.fetch()
 
     # Sessions without a content hash
-    unfixed_sessions = set([s.id for s in sessions if not s.session_content_hash])
+    unfixed_sessions = {s.id for s in sessions if not s.session_content_hash}
 
     # Fetch all transcripts
     transcripts = Transcript.collection.fetch()

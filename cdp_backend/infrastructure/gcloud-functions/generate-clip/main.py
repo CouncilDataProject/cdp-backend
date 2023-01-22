@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-f
 
 import logging
 from pathlib import Path
@@ -52,10 +51,15 @@ def _hhmmss_as_seconds(time_str: str) -> Union[int, NoReturn]:
 @functions_framework.http
 def generate_clip(request: Request) -> Union[Tuple[str, int, Dict[str, str]], NoReturn]:
     """HTTP Cloud Function.
-    Args:
-        request (flask.Request): The request object.
+
+    Parameters
+    ----------
+    request: flask.Request
+        The request object.
         <https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data>
-    Returns:
+
+    Returns
+    -------
         The link to the process audio/video clip.
         <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
     """

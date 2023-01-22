@@ -7,4 +7,4 @@ default_context:
     python_slug: "cdp_backend"
     project_short_description: "Data storage utilities and processing pipelines used by CDP instances."
     hosting_pypi_username: "CouncilDataProject"
-    license: "MIT License"
+    license: "Apache v2 License"

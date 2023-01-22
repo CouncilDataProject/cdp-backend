@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 import math
@@ -198,7 +197,7 @@ def read_transcripts_and_generate_grams(
             )
 
             # Init transcript
-            with open(local_transcript_filepath, "r") as open_f:
+            with open(local_transcript_filepath) as open_f:
                 transcript = Transcript.from_json(open_f.read())
 
             # Get cleaned sentences by removing stop words
@@ -284,9 +283,7 @@ def read_transcripts_and_generate_grams(
 def convert_all_n_grams_to_dataframe(
     all_events_n_grams: List[List[ContextualizedGram]],
 ) -> pd.DataFrame:
-    """
-    Flatten all n grams from all events into one single dataframe.
-    """
+    """Flatten all n grams from all events into one single dataframe."""
     return pd.DataFrame(
         [
             n_gram.to_dict()
@@ -314,11 +311,11 @@ def compute_tfidf(
     n_grams = n_grams.drop_duplicates(["event_id", "stemmed_gram"])
 
     # Get idf
-    N = len(n_grams.event_id.unique())
+    n = len(n_grams.event_id.unique())
     n_grams["idf"] = (
         n_grams.groupby("stemmed_gram")
         .event_id.transform("count")
-        .apply(lambda df: math.log(N / df))
+        .apply(lambda df: math.log(n / df))
     )
 
     # Store tfidf
@@ -328,14 +325,14 @@ def compute_tfidf(
     n_grams = n_grams[n_grams.tfidf != 0]
 
     # Add datetime weighted tfidf
-    UTCNOW = datetime.utcnow()
-    UTCNOW = pytz.timezone("UTC").localize(UTCNOW)
+    utcnow = datetime.utcnow()
+    utcnow = pytz.timezone("UTC").localize(utcnow)
     n_grams["datetime_weighted_tfidf"] = n_grams.apply(
         # Unit of decay is in months (`/ 30`)
         # `+ 2` protects against divison by zero
         lambda row: row.tfidf
         / math.log(
-            ((UTCNOW - row.event_datetime).days / datetime_weighting_days_decay) + 2
+            ((utcnow - row.event_datetime).days / datetime_weighting_days_decay) + 2
         ),
         axis=1,
     )
@@ -350,7 +347,7 @@ def chunk_index(
     credentials_file: str,
     bucket_name: str,
     ngrams_per_chunk: int = 50_000,
-    storage_dir: Path = Path("index/"),
+    storage_dir: str | Path = "index/",
     store_remote: bool = False,
 ) -> None:
     """
@@ -402,8 +399,9 @@ def create_event_index_generation_pipeline(
     config: EventIndexPipelineConfig
         Configuration options for the pipeline.
     n_grams: int
-        N number of terms to act as a unique entity. Default: 1
-    ngrams_per_chunks: int
+        N number of terms to act as a unique entity.
+        Default: 1
+    ngrams_per_chunk: int
         The number of ngrams to store in a single chunk file.
         Default: 50_000
     store_remote: bool

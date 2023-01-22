@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import json
 from dataclasses import dataclass, field
@@ -51,13 +50,14 @@ class EventGatherPipelineConfig(DataClassJsonMixin):
 
     @property
     def validated_gcs_bucket_name(self) -> str:
+        """GCS bucket name after it has been validated to exist."""
         if self._validated_gcs_bucket_name is None:
             if self.gcs_bucket_name is not None:
                 bucket = self.gcs_bucket_name
 
             else:
                 # Open the key to get the project id
-                with open(self.google_credentials_file, "r") as open_resource:
+                with open(self.google_credentials_file) as open_resource:
                     creds = json.load(open_resource)
                     project_id = creds["project_id"]
 
@@ -70,10 +70,10 @@ class EventGatherPipelineConfig(DataClassJsonMixin):
                 fs.ls(bucket)
                 self._validated_gcs_bucket_name = bucket
 
-            except FileNotFoundError:
+            except FileNotFoundError as e:
                 raise ValueError(
                     f"Provided or infered GCS bucket name does not exist. ('{bucket}')"
-                )
+                ) from e
 
         return self._validated_gcs_bucket_name
 
@@ -111,13 +111,14 @@ class EventIndexPipelineConfig(DataClassJsonMixin):
 
     @property
     def validated_gcs_bucket_name(self) -> str:
+        """GCS bucket name after it has been validated to exist."""
         if self._validated_gcs_bucket_name is None:
             if self.gcs_bucket_name is not None:
                 bucket = self.gcs_bucket_name
 
             else:
                 # Open the key to get the project id
-                with open(self.google_credentials_file, "r") as open_resource:
+                with open(self.google_credentials_file) as open_resource:
                     creds = json.load(open_resource)
                     project_id = creds["project_id"]
 
@@ -130,9 +131,9 @@ class EventIndexPipelineConfig(DataClassJsonMixin):
                 fs.ls(bucket)
                 self._validated_gcs_bucket_name = bucket
 
-            except FileNotFoundError:
+            except FileNotFoundError as e:
                 raise ValueError(
                     f"Provided or infered GCS bucket name does not exist. ('{bucket}')"
-                )
+                ) from e
 
         return self._validated_gcs_bucket_name

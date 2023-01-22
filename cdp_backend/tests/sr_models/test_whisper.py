@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from pathlib import Path
 
@@ -8,6 +7,7 @@ from rapidfuzz import fuzz
 
 from cdp_backend.pipeline.transcript_model import Transcript
 from cdp_backend.sr_models import WhisperModel
+
 
 ###############################################################################
 

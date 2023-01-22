@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -16,16 +15,12 @@ from dataclasses_json import DataClassJsonMixin
 
 @dataclass
 class WordAnnotations(DataClassJsonMixin):
-    """
-    Annotations that can appear on an individual word level.
-    """
+    """Annotations that can appear on an individual word level."""
 
 
 @dataclass
 class SentenceAnnotations(DataClassJsonMixin):
-    """
-    Annotations that can appear on an individual sentence level.
-    """
+    """Annotations that can appear on an individual sentence level."""
 
 
 @dataclass
@@ -87,9 +82,7 @@ class SectionAnnotation(DataClassJsonMixin):
 
 @dataclass
 class TranscriptAnnotations(DataClassJsonMixin):
-    """
-    Annotations that can appear (but are not guaranteed) for the whole transcript.
-    """
+    """Annotations that can appear (but are not guaranteed) for the whole transcript."""
 
     sections: Optional[List[SectionAnnotation]] = None
 
@@ -211,6 +204,7 @@ class Transcript(DataClassJsonMixin):
     annotations: Optional[TranscriptAnnotations] = None
 
     def __repr__(self) -> str:
+        """Print out shortform transcript details."""
         output = "Transcript("
 
         # Use vars to maintain subclassing

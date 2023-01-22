@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import random
 from bisect import bisect_left
@@ -85,9 +84,7 @@ SESSIONS = [
 
 
 def _get_example_person(seat_num: int) -> Person:
-    """
-    Create a fake example person
-    """
+    """Create a fake example person."""
     # Create a list of roles
     roles = [
         Role(title=RoleTitle.COUNCILMEMBER, body=Body(name="Example Committee")),
@@ -119,9 +116,7 @@ def _get_example_person(seat_num: int) -> Person:
 
 
 def _get_example_event() -> EventIngestionModel:
-    """
-    Create a fake example event data
-    """
+    """Create a fake example event data."""
     # Create a body for the event
     body = Body(
         name=f"Example Committee {random.randint(*RAND_BODY_RANGE)}",

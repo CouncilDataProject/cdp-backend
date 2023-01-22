@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import os
 import random
@@ -28,6 +27,7 @@ from ..conftest import (
     EXAMPLE_YOUTUBE_VIDEO_PARAMETER,
     EXAMPLE_YOUTUBE_VIDEO_SHORT,
 )
+
 
 #############################################################################
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
+
 # cdp-backend documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
 #
@@ -20,16 +19,15 @@
 #
 import os
 import sys
+from typing import TYPE_CHECKING, List
 
 import cdp_backend
-
-sys.path.insert(0, os.path.abspath(".."))
-
-from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
     from sphinx.ext.autodoc import Options
+
+sys.path.insert(0, os.path.abspath(".."))
 
 
 # -- General configuration ---------------------------------------------
@@ -80,7 +78,7 @@ main_doc = "index"
 
 # General information about the project.
 project = "cdp-backend"
-copyright = "2022"
+copyright = "2023"
 author = "Eva Maxfield Brown, To Huynh, Isaac Na, Council Data Project Contributors"
 
 # The version info for the project you"re documenting, acts as replacement
@@ -138,20 +136,20 @@ htmlhelp_basename = "cdp_backenddoc"
 
 # -- Options for LaTeX output ------------------------------------------
 
-# latex_elements = {
-#     The paper size ("letterpaper" or "a4paper").
-
-#     "papersize": "letterpaper",
-#     The font size ("10pt", "11pt" or "12pt").
-
-#     "pointsize": "10pt",
-#     Additional stuff for the LaTeX preamble.
-
-#     "preamble": "",
-#     Latex figure (float) alignment
-
-#     "figure_align": "htbp",
-# }
+latex_elements = {
+    # The paper size ("letterpaper" or "a4paper").
+    #
+    # "papersize": "letterpaper",
+    # The font size ("10pt", "11pt" or "12pt").
+    #
+    # "pointsize": "10pt",
+    # Additional stuff for the LaTeX preamble.
+    #
+    # "preamble": "",
+    # Latex figure (float) alignment
+    #
+    # "figure_align": "htbp",
+}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass
@@ -186,6 +184,10 @@ texinfo_documents = [
         "cdp-backend Documentation",
         author,
         "cdp_backend",
+        (
+            "Data storage utilities and processing "
+            "pipelines used by CDP instances."
+        ),
     ),
 ]
 

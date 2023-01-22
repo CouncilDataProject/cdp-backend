@@ -36,6 +36,8 @@ Ready to contribute? Here's how to set up `cdp-backend` for local development.
     just install
     ```
 
+    If this doesn't work try: `pip install -e '.[pipeline,functions,lint,test,docs,dev]'`.
+
 5. Create a branch for local development:
 
     ```bash

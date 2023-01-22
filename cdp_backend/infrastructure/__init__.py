@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 The files required for setting up an infrastructure stack.
 

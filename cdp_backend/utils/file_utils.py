@@ -1,5 +1,4 @@
 ##!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 import math
@@ -29,7 +28,7 @@ MAX_THUMBNAIL_WIDTH = 960
 
 def with_stem(path: Path, stem: str) -> Path:
     """
-    Create a path with a new stem
+    Create a path with a new stem.
 
     Parameters
     ----------
@@ -48,7 +47,7 @@ def with_stem(path: Path, stem: str) -> Path:
 
 def append_to_stem(path: Path, addition: str) -> Path:
     """
-    Rename a file with a string appended to the path stem
+    Rename a file with a string appended to the path stem.
 
     Parameters
     ----------
@@ -67,7 +66,7 @@ def append_to_stem(path: Path, addition: str) -> Path:
 
 def rename_with_stem(path: Path, stem: str) -> Path:
     """
-    Rename a file with a string appended to the path stem
+    Rename a file with a string appended to the path stem.
 
     Parameters
     ----------
@@ -86,7 +85,7 @@ def rename_with_stem(path: Path, stem: str) -> Path:
 
 def rename_append_to_stem(path: Path, addition: str) -> Path:
     """
-    Rename a file with a string appended to the path stem
+    Rename a file with a string appended to the path stem.
 
     Parameters
     ----------
@@ -141,10 +140,10 @@ def get_media_type(uri: str) -> Optional[str]:
     return None
 
 
-def resource_copy(
+def resource_copy(  # noqa: C901
     uri: str,
     dst: Optional[Union[str, Path]] = None,
-    copy_suffix: Optional[bool] = False,
+    copy_suffix: bool = False,
     overwrite: bool = False,
 ) -> str:
     """
@@ -157,6 +156,9 @@ def resource_copy(
     dst: Optional[Union[str, Path]]
         A specific destination to where the copy should be placed. If None provided
         stores the resource in the current working directory.
+    copy_suffix: bool
+        Whether to copy the file suffix or not.
+        Default: False (do not copy with suffix)
     overwrite: bool
         Boolean value indicating whether or not to overwrite a local resource with
         the same name if it already exists.
@@ -269,7 +271,7 @@ def youtube_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
         the same name if it already exists.
 
     Returns
-    _______
+    -------
     dst: str
         The location of the downloaded file.
     """
@@ -302,7 +304,7 @@ def vimeo_copy(uri: str, dst: Path, overwrite: bool = False) -> str:
         the same name if it already exists.
 
     Returns
-    _______
+    -------
     dst: str
         The location of the downloaded file.
     """
@@ -342,6 +344,9 @@ def split_audio(
         Path to the video to split the audio from.
     audio_save_path: str
         Path to where the audio should be stored.
+    overwrite: bool
+        Whether to overwrite existing files or not.
+        Default: False (do not overwrite)
 
     Returns
     -------
@@ -402,7 +407,7 @@ def get_static_thumbnail(
     video_path: str, session_content_hash: str, seconds: int = 30
 ) -> str:
     """
-    A function that produces a png thumbnail image from a video file
+    A function that produces a png thumbnail image from a video file.
 
     Parameters
     ----------
@@ -459,7 +464,7 @@ def get_hover_thumbnail(
     duration: float = 6.0,
 ) -> str:
     """
-    A function that produces a gif hover thumbnail from an mp4 video file
+    A function that produces a gif hover thumbnail from an mp4 video file.
 
     Parameters
     ----------
@@ -607,7 +612,6 @@ def convert_video_to_mp4(
     output_path: str
         The filepath of the converted MP4 video.
     """
-
     output_path = output_path or video_filepath.with_suffix(".mp4")
     output_path = clip_and_reformat_video(
         video_filepath=video_filepath,
@@ -637,8 +641,8 @@ def generate_file_storage_name(file_uri: str, suffix: str) -> str:
     dst: str
         The name of the file as it should be on Google Cloud Storage.
     """
-    hash = hash_file_contents(file_uri)
-    return f"{hash}-{suffix}"
+    hash_str = hash_file_contents(file_uri)
+    return f"{hash_str}-{suffix}"
 
 
 def download_video_from_session_id(

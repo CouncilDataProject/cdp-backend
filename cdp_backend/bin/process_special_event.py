@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import logging
@@ -56,12 +55,12 @@ def main() -> None:
         args = Args()
 
         # Read pipeline config
-        with open(args.event_gather_config_file, "r") as open_resource:
+        with open(args.event_gather_config_file) as open_resource:
             config = EventGatherPipelineConfig.from_json(open_resource.read())
 
         log.info("Parsing event details...")
         # Convert event details file to EventIngestionModel
-        with open(args.event_details_file, "r") as open_resource:
+        with open(args.event_details_file) as open_resource:
             ingestion_model = EventIngestionModel.from_json(open_resource.read())
 
             for session in ingestion_model.sessions:

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import logging
@@ -163,7 +162,7 @@ def run_remote_search(query: str, sort_by: str, first: int = 4) -> None:
                 matching_events[referenced_event_id].append(matching_gram_result)
 
     compiled_events: List[EventMatch] = []
-    for event_id, matching_grams in matching_events.items():
+    for _event_id, matching_grams in matching_events.items():
         matching_event = matching_grams[0].event_ref.get()
         compiled_events.append(
             EventMatch(

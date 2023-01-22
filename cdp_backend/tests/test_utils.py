@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import socket
 
@@ -14,7 +13,7 @@ def internet_is_available(
     """
     Host: 8.8.8.8 (google-public-dns-a.google.com)
     OpenPort: 53/tcp
-    Service: domain (DNS/TCP)
+    Service: domain (DNS/TCP).
 
     Pulled from: https://stackoverflow.com/a/33117579/11396134
     """
@@ -22,5 +21,5 @@ def internet_is_available(
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
-    except socket.error:
+    except OSError:
         return False

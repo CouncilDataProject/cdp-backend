@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 from datetime import datetime
@@ -48,6 +47,8 @@ class WhisperModel(SRModel):
             A confidence value to set for all transcripts produced by this SR Model.
             See source code for issues related to this.
             Default: None (lookup a fake confidence to use depending on model selected)
+        kwargs: Any
+            Any extra arguments to catch.
         """
         self.model_name = model_name
 
@@ -73,6 +74,8 @@ class WhisperModel(SRModel):
         ----------
         file_uri: Union[str, Path]
             The uri to the audio file or caption file to transcribe.
+        kwargs: Any
+            Any extra arguments to catch.
 
         Returns
         -------

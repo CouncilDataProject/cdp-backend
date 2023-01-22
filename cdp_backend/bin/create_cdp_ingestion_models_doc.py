@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import logging
@@ -77,7 +76,7 @@ def _construct_ingestion_model_doc(template_file: Path, output_file: Path) -> Pa
     filled_event_data = _filter_none_values(asdict(EXAMPLE_FILLED_EVENT))
 
     # Read in the template
-    with open(template_file, "r") as open_resource:
+    with open(template_file) as open_resource:
         template = Template(open_resource.read())
 
     # Fill the template with values

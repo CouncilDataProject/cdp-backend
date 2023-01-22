@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
 from typing import List
@@ -11,7 +10,7 @@ from dataclasses_json import DataClassJsonMixin
 
 @dataclass
 class IndexedField(DataClassJsonMixin):
-    fieldPath: str
+    fieldPath: str  # noqa: N815
     order: str
 
 

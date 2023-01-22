@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import logging
@@ -84,7 +83,7 @@ class Args(argparse.Namespace):
 def main() -> None:
     try:
         args = Args()
-        with open(args.config_file, "r") as open_resource:
+        with open(args.config_file) as open_resource:
             config = EventIndexPipelineConfig.from_json(open_resource.read())
 
         # Get flow definition

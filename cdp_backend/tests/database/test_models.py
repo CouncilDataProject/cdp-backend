@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from pathlib import Path
 
@@ -52,10 +51,10 @@ def test_cdp_database_model_has_no_cyclic_dependencies(tmpdir: Path) -> None:
     _construct_dot_file(tmp_save_dot_path)
 
     # Read dot as networkx digraph
-    G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(tmp_save_dot_path))
+    g = nx.DiGraph(nx.drawing.nx_pydot.read_dot(tmp_save_dot_path))
 
     # Get cycles
-    cycles = list(nx.simple_cycles(G))
+    cycles = list(nx.simple_cycles(g))
 
     # Check for cycles
     if len(cycles) >= 1:

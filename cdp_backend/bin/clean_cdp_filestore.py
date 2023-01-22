@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import json
@@ -46,7 +45,7 @@ def _clean_cdp_filestore(google_creds_path: Path) -> None:
     fs = GCSFileSystem(token=str(google_creds_path))
 
     # Open the key to get the project id
-    with open(google_creds_path, "r") as open_resource:
+    with open(google_creds_path) as open_resource:
         creds = json.load(open_resource)
         project_id = creds["project_id"]
 

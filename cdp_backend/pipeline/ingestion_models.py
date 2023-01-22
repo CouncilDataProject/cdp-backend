@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
 
 from dataclasses_json import DataClassJsonMixin
 
@@ -13,9 +11,7 @@ from dataclasses_json import DataClassJsonMixin
 
 
 class IngestionModel:
-    """
-    Base class for IngestionModel type.
-    """
+    """Base class for IngestionModel type."""
 
 
 ###############################################################################
@@ -41,13 +37,13 @@ class Person(IngestionModel, DataClassJsonMixin):
 
     name: str
     is_active: bool = True
-    router_string: Optional[str] = None
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    website: Optional[str] = None
-    picture_uri: Optional[str] = None
-    seat: Optional[Seat] = None
-    external_source_id: Optional[str] = None
+    router_string: str | None = None
+    email: str | None = None
+    phone: str | None = None
+    website: str | None = None
+    picture_uri: str | None = None
+    seat: Seat | None = None
+    external_source_id: str | None = None
 
 
 @dataclass
@@ -63,7 +59,7 @@ class Vote(IngestionModel, DataClassJsonMixin):
 
     person: Person
     decision: str
-    external_source_id: Optional[str] = None
+    external_source_id: str | None = None
 
 
 @dataclass
@@ -78,21 +74,22 @@ class SupportingFile(IngestionModel, DataClassJsonMixin):
 
     name: str
     uri: str
-    external_source_id: Optional[str] = None
+    external_source_id: str | None = None
 
 
 @dataclass
 class Matter(IngestionModel, DataClassJsonMixin):
     """
-    A matter is a specific legislative document. A bill, resolution, initiative, etc.
+    A matter is a specific legislative document.
+    e.g. A bill, resolution, initiative, etc.
     """
 
     name: str
     matter_type: str
     title: str
-    result_status: Optional[str] = None
-    sponsors: Optional[List[Person]] = None
-    external_source_id: Optional[str] = None
+    result_status: str | None = None
+    sponsors: list[Person] | None = None
+    external_source_id: str | None = None
 
 
 @dataclass
@@ -103,8 +100,8 @@ class MinutesItem(IngestionModel, DataClassJsonMixin):
     """
 
     name: str
-    description: Optional[str] = None
-    external_source_id: Optional[str] = None
+    description: str | None = None
+    external_source_id: str | None = None
 
 
 @dataclass
@@ -122,11 +119,11 @@ class EventMinutesItem(IngestionModel, DataClassJsonMixin):
     """
 
     minutes_item: MinutesItem
-    index: Optional[int] = None
-    matter: Optional[Matter] = None
-    supporting_files: Optional[List[SupportingFile]] = None
-    decision: Optional[str] = None
-    votes: Optional[List[Vote]] = None
+    index: int | None = None
+    matter: Matter | None = None
+    supporting_files: list[SupportingFile] | None = None
+    decision: str | None = None
+    votes: list[Vote] | None = None
 
 
 @dataclass
@@ -148,12 +145,13 @@ class Session(IngestionModel, DataClassJsonMixin):
     session_datetime: datetime
     video_uri: str
     session_index: int
-    video_start_time: Optional[str] = None
-    video_end_time: Optional[str] = None
-    caption_uri: Optional[str] = None
-    external_source_id: Optional[str] = None
+    video_start_time: str | None = None
+    video_end_time: str | None = None
+    caption_uri: str | None = None
+    external_source_id: str | None = None
 
     def __post_init__(self) -> None:
+        """Operations to run after initialization."""
         # validate start/end time pair during ingestion
         if self.video_start_time and self.video_end_time:
             # fill in potentially missing hh:mm:s
@@ -183,10 +181,10 @@ class Body(IngestionModel, DataClassJsonMixin):
 
     name: str
     is_active: bool = True
-    start_datetime: Optional[datetime] = None
-    description: Optional[str] = None
-    end_datetime: Optional[datetime] = None
-    external_source_id: Optional[str] = None
+    start_datetime: datetime | None = None
+    description: str | None = None
+    end_datetime: datetime | None = None
+    external_source_id: str | None = None
 
 
 @dataclass
@@ -207,10 +205,10 @@ class Role(IngestionModel, DataClassJsonMixin):
     """
 
     title: str
-    body: Optional[Body] = None
-    start_datetime: Optional[datetime] = None
-    end_datetime: Optional[datetime] = None
-    external_source_id: Optional[str] = None
+    body: Body | None = None
+    start_datetime: datetime | None = None
+    end_datetime: datetime | None = None
+    external_source_id: str | None = None
 
 
 @dataclass
@@ -225,11 +223,11 @@ class Seat(IngestionModel, DataClassJsonMixin):
     """
 
     name: str
-    electoral_area: Optional[str] = None
-    electoral_type: Optional[str] = None
-    image_uri: Optional[str] = None
-    external_source_id: Optional[str] = None
-    roles: Optional[List[Role]] = None
+    electoral_area: str | None = None
+    electoral_type: str | None = None
+    image_uri: str | None = None
+    external_source_id: str | None = None
+    roles: list[Role] | None = None
 
 
 @dataclass
@@ -247,13 +245,13 @@ class EventIngestionModel(IngestionModel, DataClassJsonMixin):
     """
 
     body: Body
-    sessions: List[Session]
-    event_minutes_items: Optional[List[EventMinutesItem]] = None
-    agenda_uri: Optional[str] = None
-    minutes_uri: Optional[str] = None
-    static_thumbnail_uri: Optional[str] = None
-    hover_thumbnail_uri: Optional[str] = None
-    external_source_id: Optional[str] = None
+    sessions: list[Session]
+    event_minutes_items: list[EventMinutesItem] | None = None
+    agenda_uri: str | None = None
+    minutes_uri: str | None = None
+    static_thumbnail_uri: str | None = None
+    hover_thumbnail_uri: str | None = None
+    external_source_id: str | None = None
 
 
 ###############################################################################

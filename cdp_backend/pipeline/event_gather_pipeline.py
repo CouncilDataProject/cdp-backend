@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 from datetime import datetime, timedelta
@@ -76,6 +75,9 @@ def create_event_gather_flow(
         Optional ISO formatted string or datetime object to pass to the get_events
         function to act as the end point for event gathering.
         Default: None (now)
+    prefetched_events: Optional[List[EventIngestionModel]]
+        A list of events to process instead of running the scraper found in the config.
+        Default: None (use the scraper from the config)
 
     Returns
     -------
@@ -223,7 +225,7 @@ def create_event_gather_flow(
 
 
 @task(max_retries=3, retry_delay=timedelta(seconds=120))
-def resource_copy_task(uri: str, dst: str = None, copy_suffix: bool = None) -> str:
+def resource_copy_task(uri: str, dst: str = None, copy_suffix: bool = False) -> str:
     """
     Copy a file to a temporary location for processing.
 
@@ -231,6 +233,12 @@ def resource_copy_task(uri: str, dst: str = None, copy_suffix: bool = None) -> s
     ----------
     uri: str
         The URI to the file to copy.
+    dst: Optional[str]
+        An optional destination path for the file.
+        Default: None (place the file in the current directory with the same file name)
+    copy_suffix: bool
+        A bool for if the file suffix should be copied.
+        Default: False
 
     Returns
     -------
@@ -253,7 +261,7 @@ def resource_copy_task(uri: str, dst: str = None, copy_suffix: bool = None) -> s
 @task
 def resource_delete_task(uri: str) -> None:
     """
-    Remove local file
+    Remove local file.
 
     Parameters
     ----------
@@ -638,6 +646,8 @@ def generate_transcript(
         archival.
     bucket: str
         The name of the GCS bucket to upload the produced audio to.
+    credentials_file: str
+        Path to the GCS JSON credentials file.
     whisper_model_name: str
         The whisper model to use for transcription.
     whisper_model_confidence: Optional[float]
@@ -797,12 +807,12 @@ def compile_session_processing_result(
     )
 
 
-def _process_person_ingestion(
+def _process_person_ingestion(  # noqa: C901
     person: ingestion_models.Person,
     default_session: Session,
     credentials_file: str,
     bucket: str,
-    upload_cache: Dict[str, db_models.Person] = {},
+    upload_cache: Optional[Dict[str, db_models.Person]] = None,
 ) -> db_models.Person:
     # The JSON string of the whole person tree turns out to be a great cache key because
     # 1. we can hash strings (which means we can shove them into a dictionary)
@@ -810,6 +820,11 @@ def _process_person_ingestion(
     # So, if the same person is referenced multiple times in the ingestion model
     # but most of those references have the same data and only a few have different data
     # the produced JSON string will note the differences and run when it needs to.
+
+    # Create upload cache
+    if upload_cache is None:
+        upload_cache = {}
+
     person_cache_key = person.to_json()
 
     if person_cache_key not in upload_cache:
@@ -1012,7 +1027,7 @@ def _calculate_in_majority(
 
 
 @task
-def store_event_processing_results(
+def store_event_processing_results(  # noqa: C901
     event: EventIngestionModel,
     session_processing_results: List[SessionProcessingResult],
     credentials_file: str,

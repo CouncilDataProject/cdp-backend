@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import os
 import sys
@@ -526,8 +525,8 @@ EXISTING_REMOTE_M3U8_MINIMAL_EVENT = deepcopy(EXAMPLE_MINIMAL_EVENT)
 EXISTING_REMOTE_M3U8_MINIMAL_EVENT.sessions[0].video_uri = EXAMPLE_M3U8_PLAYLIST_URI
 
 
-def path_rename(self: Path, newPath: Path) -> Path:
-    return newPath
+def path_rename(self: Path, new_path: Path) -> Path:
+    return new_path
 
 
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
@@ -573,7 +572,7 @@ def path_rename(self: Path, newPath: Path) -> Path:
 def test_convert_video_and_handle_host(
     mock_convert_video_to_mp4: MagicMock,
     mock_hash_file_contents: MagicMock,
-    mock_remove_local_file: MagicMock,
+    _mock_remove_local_file: MagicMock,
     mock_generate_url: MagicMock,
     mock_upload_file: MagicMock,
     video_filepath: str,

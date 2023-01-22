@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 import re
@@ -125,7 +124,7 @@ def email_is_valid(email: Optional[str]) -> bool:
     return False
 
 
-def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:
+def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:  # noqa: C901
     """
     Validate that the URI provided points to an existing file.
 
@@ -135,13 +134,15 @@ def resource_exists(uri: Optional[str], **kwargs: Any) -> bool:
     ----------
     uri: Optional[str]
         The URI to validate resource existance for.
+    kwargs: Any
+        Any extra arguments needed for resource retrieval.
+        I.e. google_credentials_file.
 
     Returns
     -------
     status: bool
         The validation status.
     """
-
     if uri is None:
         return True
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 from pathlib import Path
@@ -25,7 +24,7 @@ DEFAULT_MODEL = "trained-speakerbox"
 ###############################################################################
 
 
-def annotate(
+def annotate(  # noqa: C901
     transcript: Union[str, Path, Transcript],
     audio: Union[str, Path, AudioSegment],
     model: Union[str, Pipeline] = DEFAULT_MODEL,
@@ -96,11 +95,11 @@ def annotate(
     no label is stored in the `speaker_name` sentence property (thresholded out).
     """
     # Generate random uuid filename for storing temp audio chunks
-    TMP_AUDIO_CHUNK_SAVE_PATH = f"tmp-audio-chunk--{str(uuid4())}.wav"
+    tmp_audio_chunk_save_path = f"tmp-audio-chunk--{str(uuid4())}.wav"
 
     # Load transcript
     if isinstance(transcript, (str, Path)):
-        with open(transcript, "r") as open_f:
+        with open(transcript) as open_f:
             loaded_transcript = Transcript.from_json(open_f.read())
     else:
         loaded_transcript = transcript
@@ -161,10 +160,10 @@ def annotate(
                 chunk = audio[chunk_start_millis:chunk_end_millis]
 
                 # Write to temp
-                chunk.export(TMP_AUDIO_CHUNK_SAVE_PATH, format="wav")
+                chunk.export(tmp_audio_chunk_save_path, format="wav")
 
                 # Predict and store scores for sentence
-                preds = classifier(TMP_AUDIO_CHUNK_SAVE_PATH, top_k=n_speakers)
+                preds = classifier(tmp_audio_chunk_save_path, top_k=n_speakers)
                 for pred in preds:
                     if pred["label"] not in chunk_scores:
                         chunk_scores[pred["label"]] = []
@@ -200,7 +199,7 @@ def annotate(
         sentence.speaker_name = sentence_speaker
 
     # Remove last made chunk file
-    Path(TMP_AUDIO_CHUNK_SAVE_PATH).unlink()
+    Path(tmp_audio_chunk_save_path).unlink()
     log.info(
         f"Total sentences: {len(loaded_transcript.sentences)}, "
         f"Sentences Annotated: {met_threshold}, "

@@ -1,5 +1,4 @@
 ##!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import logging
 import re
@@ -15,7 +14,7 @@ log = logging.getLogger(__name__)
 def remove_emojis(text: str) -> str:
     """
     Minor changes made from this answer on stackoverflow:
-    https://stackoverflow.com/a/58356570
+    https://stackoverflow.com/a/58356570.
     """
     emoj_patterns = re.compile(
         "["
@@ -80,7 +79,7 @@ def clean_text(
         try:
             from nltk.corpus import stopwords
 
-            STOPWORDS = stopwords.words("english")
+            stopwords_vocab = stopwords.words("english")
         except LookupError:
             import nltk
 
@@ -88,9 +87,9 @@ def clean_text(
             log.info("Downloaded nltk stopwords")
             from nltk.corpus import stopwords
 
-            STOPWORDS = stopwords.words("english")
+            stopwords_vocab = stopwords.words("english")
 
-        joined_stopwords = "|".join(STOPWORDS)
+        joined_stopwords = "|".join(stopwords_vocab)
         cleaned_text = re.sub(
             r"\b(" + joined_stopwords + r")\b",
             "",
@@ -132,7 +131,6 @@ def convert_gcs_json_url_to_gsutil_form(url: str) -> str:
         The url in gsutil form. Returns empty string if the input url doesn't
         match the form.
     """
-
     found_bucket, found_filename = None, None
 
     bucket = re.search("storage.googleapis.com/download/storage/v1/b/(.+?)/o", url)

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from dataclasses import asdict
 
@@ -10,6 +9,7 @@ from cdp_backend.pipeline.ingestion_models import (
     EXAMPLE_MINIMAL_EVENT,
     EventIngestionModel,
 )
+
 
 ###############################################################################
 

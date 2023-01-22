@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import re
 from abc import ABC, abstractmethod
@@ -23,6 +22,8 @@ class SRModel(ABC):
         ----------
         file_uri: Union[str, Path]
             The uri to the audio file or caption file to transcribe.
+        kwargs: Any
+            Any extra kwargs to use in this model's transcribe function.
 
         Returns
         -------

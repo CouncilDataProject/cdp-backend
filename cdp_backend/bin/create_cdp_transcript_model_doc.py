@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import json
@@ -64,7 +63,7 @@ def _construct_transcript_model_doc(template_file: Path, output_file: Path) -> P
     example_transcript_str = json.dumps(example_transcript_dict, indent=4)
 
     # Read in the template
-    with open(template_file, "r") as open_resource:
+    with open(template_file) as open_resource:
         template = Template(open_resource.read())
 
     # Fill the template with values

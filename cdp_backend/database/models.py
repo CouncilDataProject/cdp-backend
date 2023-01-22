@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# flake8: noqa
 
 import re
 import unicodedata
@@ -24,9 +24,7 @@ from .types import IndexedField, IndexedFieldSet
 
 
 class File(Model):
-    """
-    A file from the CDP file store.
-    """
+    """A file from the CDP file store."""
 
     id = fields.IDField()
     uri = fields.TextField(required=True, validator=validators.resource_exists)
@@ -151,9 +149,7 @@ class Body(Model):
 
 
 class Seat(Model):
-    """
-    An electable office on the City Council. I.E. "Position 9".
-    """
+    """An electable office on the City Council. I.E. "Position 9"."""
 
     id = fields.IDField()
     name = fields.TextField(required=True)
@@ -284,7 +280,8 @@ class Role(Model):
 
 class Matter(Model):
     """
-    A matter is a specific legislative document. A bill, resolution, initiative, etc.
+    A matter is a specific legislative document.
+    A bill, resolution, initiative, etc.
     """
 
     id = fields.IDField()
@@ -366,9 +363,7 @@ class MatterFile(Model):
 
 
 class MatterSponsor(Model):
-    """
-    A reference tying a specific person and a matter together.
-    """
+    """A reference tying a specific person and a matter together."""
 
     id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)
@@ -536,9 +531,7 @@ class Session(Model):
 
 
 class Transcript(Model):
-    """
-    A transcript is a document per-session.
-    """
+    """A transcript is a document per-session."""
 
     id = fields.IDField()
     session_ref = fields.ReferenceField(Session, required=True, auto_load=False)
@@ -578,9 +571,7 @@ class Transcript(Model):
 
 
 class EventMinutesItem(Model):
-    """
-    A reference tying a specific minutes item to a specific event.
-    """
+    """A reference tying a specific minutes item to a specific event."""
 
     id = fields.IDField()
     event_ref = fields.ReferenceField(Event, required=True, auto_load=False)
@@ -675,9 +666,7 @@ class MatterStatus(Model):
 
 
 class EventMinutesItemFile(Model):
-    """
-    Supporting files for an event minutes item.
-    """
+    """Supporting files for an event minutes item."""
 
     id = fields.IDField()
     event_minutes_item_ref = fields.ReferenceField(
@@ -720,9 +709,7 @@ class EventMinutesItemFile(Model):
 
 
 class Vote(Model):
-    """
-    A reference tying a specific person and an event minutes item together.
-    """
+    """A reference tying a specific person and an event minutes item together."""
 
     id = fields.IDField()
     matter_ref = fields.ReferenceField(Matter, required=True, auto_load=False)

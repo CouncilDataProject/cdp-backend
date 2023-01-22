@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import argparse
 import logging
@@ -47,7 +46,7 @@ def _store_cdp_metadata_document(
     cookiecutter_yaml: Path,
 ) -> None:
     # Read the cookiecutter file
-    with open(cookiecutter_yaml, "r") as open_f:
+    with open(cookiecutter_yaml) as open_f:
         cookiecutter_meta = yaml.load(open_f, Loader=yaml.FullLoader)["default_context"]
 
     # Open client and write doc
