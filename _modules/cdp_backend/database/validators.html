@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.database.validators - cdp-backend 0.1.dev1+g919567a documentation</title>
+        <title>cdp_backend.database.validators - cdp-backend 0.1.dev1+g3c42753 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g919567a documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g3c42753 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g919567a documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3c42753 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -215,7 +215,6 @@
         <article role="main">
           <h1>Source code for cdp_backend.database.validators</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -341,7 +340,7 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.resource_exists">[docs]</a><span class="k">def</span> <span class="nf">resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="resource_exists"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.resource_exists">[docs]</a><span class="k">def</span> <span class="nf">resource_exists</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>  <span class="c1"># noqa: C901</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate that the URI provided points to an existing file.</span>
 
@@ -351,13 +350,15 @@
 <span class="sd">    ----------</span>
 <span class="sd">    uri: Optional[str]</span>
 <span class="sd">        The URI to validate resource existance for.</span>
+<span class="sd">    kwargs: Any</span>
+<span class="sd">        Any extra arguments needed for resource retrieval.</span>
+<span class="sd">        I.e. google_credentials_file.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    status: bool</span>
 <span class="sd">        The validation status.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="n">uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 
@@ -484,7 +485,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022
+                Copyright &#169; 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

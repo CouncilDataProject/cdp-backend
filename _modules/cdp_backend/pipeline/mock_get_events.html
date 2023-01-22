@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.pipeline.mock_get_events - cdp-backend 0.1.dev1+g919567a documentation</title>
+        <title>cdp_backend.pipeline.mock_get_events - cdp-backend 0.1.dev1+g3c42753 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g919567a documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g3c42753 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g919567a documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3c42753 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -215,7 +215,6 @@
         <article role="main">
           <h1>Source code for cdp_backend.pipeline.mock_get_events</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">bisect</span> <span class="kn">import</span> <span class="n">bisect_left</span>
@@ -301,9 +300,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_example_person</span><span class="p">(</span><span class="n">seat_num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Person</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a fake example person</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a fake example person.&quot;&quot;&quot;</span>
     <span class="c1"># Create a list of roles</span>
     <span class="n">roles</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">Role</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">RoleTitle</span><span class="o">.</span><span class="n">COUNCILMEMBER</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">Body</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example Committee&quot;</span><span class="p">)),</span>
@@ -335,9 +332,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_example_event</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EventIngestionModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a fake example event data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a fake example event data.&quot;&quot;&quot;</span>
     <span class="c1"># Create a body for the event</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Example Committee </span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="n">RAND_BODY_RANGE</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -524,7 +519,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022
+                Copyright &#169; 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

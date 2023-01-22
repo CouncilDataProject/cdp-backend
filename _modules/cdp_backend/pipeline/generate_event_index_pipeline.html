@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.pipeline.generate_event_index_pipeline - cdp-backend 0.1.dev1+g919567a documentation</title>
+        <title>cdp_backend.pipeline.generate_event_index_pipeline - cdp-backend 0.1.dev1+g3c42753 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g919567a documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g3c42753 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g919567a documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3c42753 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -215,7 +215,6 @@
         <article role="main">
           <h1>Source code for cdp_backend.pipeline.generate_event_index_pipeline</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -414,7 +413,7 @@
             <span class="p">)</span>
 
             <span class="c1"># Init transcript</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">local_transcript_filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">local_transcript_filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_f</span><span class="p">:</span>
                 <span class="n">transcript</span> <span class="o">=</span> <span class="n">Transcript</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">open_f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
             <span class="c1"># Get cleaned sentences by removing stop words</span>
@@ -500,9 +499,7 @@
 <span class="k">def</span> <span class="nf">convert_all_n_grams_to_dataframe</span><span class="p">(</span>
     <span class="n">all_events_n_grams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ContextualizedGram</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flatten all n grams from all events into one single dataframe.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Flatten all n grams from all events into one single dataframe.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">n_gram</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
@@ -530,11 +527,11 @@
     <span class="n">n_grams</span> <span class="o">=</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stemmed_gram&quot;</span><span class="p">])</span>
 
     <span class="c1"># Get idf</span>
-    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_grams</span><span class="o">.</span><span class="n">event_id</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_grams</span><span class="o">.</span><span class="n">event_id</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
     <span class="n">n_grams</span><span class="p">[</span><span class="s2">&quot;idf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">n_grams</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;stemmed_gram&quot;</span><span class="p">)</span>
         <span class="o">.</span><span class="n">event_id</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="n">df</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">df</span><span class="p">))</span>
     <span class="p">)</span>
 
     <span class="c1"># Store tfidf</span>
@@ -544,14 +541,14 @@
     <span class="n">n_grams</span> <span class="o">=</span> <span class="n">n_grams</span><span class="p">[</span><span class="n">n_grams</span><span class="o">.</span><span class="n">tfidf</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Add datetime weighted tfidf</span>
-    <span class="n">UTCNOW</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-    <span class="n">UTCNOW</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">UTCNOW</span><span class="p">)</span>
+    <span class="n">utcnow</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+    <span class="n">utcnow</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">utcnow</span><span class="p">)</span>
     <span class="n">n_grams</span><span class="p">[</span><span class="s2">&quot;datetime_weighted_tfidf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_grams</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
         <span class="c1"># Unit of decay is in months (`/ 30`)</span>
         <span class="c1"># `+ 2` protects against divison by zero</span>
         <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">tfidf</span>
         <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="p">((</span><span class="n">UTCNOW</span> <span class="o">-</span> <span class="n">row</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="n">datetime_weighting_days_decay</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="p">((</span><span class="n">utcnow</span> <span class="o">-</span> <span class="n">row</span><span class="o">.</span><span class="n">event_datetime</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="n">datetime_weighting_days_decay</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
         <span class="p">),</span>
         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span>
@@ -566,7 +563,7 @@
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">bucket_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">ngrams_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50_000</span><span class="p">,</span>
-    <span class="n">storage_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;index/&quot;</span><span class="p">),</span>
+    <span class="n">storage_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s2">&quot;index/&quot;</span><span class="p">,</span>
     <span class="n">store_remote</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -618,8 +615,9 @@
 <span class="sd">    config: EventIndexPipelineConfig</span>
 <span class="sd">        Configuration options for the pipeline.</span>
 <span class="sd">    n_grams: int</span>
-<span class="sd">        N number of terms to act as a unique entity. Default: 1</span>
-<span class="sd">    ngrams_per_chunks: int</span>
+<span class="sd">        N number of terms to act as a unique entity.</span>
+<span class="sd">        Default: 1</span>
+<span class="sd">    ngrams_per_chunk: int</span>
 <span class="sd">        The number of ngrams to store in a single chunk file.</span>
 <span class="sd">        Default: 50_000</span>
 <span class="sd">    store_remote: bool</span>
@@ -704,7 +702,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022
+                Copyright &#169; 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
