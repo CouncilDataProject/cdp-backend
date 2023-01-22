@@ -36,14 +36,6 @@ cdp\_backend.bin.create\_cdp\_database\_uml module
    :undoc-members:
    :show-inheritance:
 
-cdp\_backend.bin.create\_cdp\_event\_gather\_flow\_viz module
--------------------------------------------------------------
-
-.. automodule:: cdp_backend.bin.create_cdp_event_gather_flow_viz
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 cdp\_backend.bin.create\_cdp\_ingestion\_models\_doc module
 -----------------------------------------------------------
 

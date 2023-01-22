@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="CDP Database Schema" href="database_schema.html" /><link rel="prev" title="Ingestion Models" href="ingestion_models.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>Event Gather Pipeline - cdp-backend 0.1.dev1+g3457f0e documentation</title>
+        <title>Event Gather Pipeline - cdp-backend 0.1.dev1+ga2f2078 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g3457f0e documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+ga2f2078 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g3457f0e documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+ga2f2078 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -241,18 +241,6 @@ how the event gather pipeline works step-by-step.</p>
 <p>This document gives visualizations of each and every step the event gather
 pipeline takes, starting immediately after the maintainer provided function
 returns the <code class="docutils literal notranslate"><span class="pre">List[EventIngestionModel]</span></code>.</p>
-<section id="minimal-event-processing">
-<h2>Minimal Event Processing<a class="headerlink" href="#minimal-event-processing" title="Permalink to this heading">#</a></h2>
-<p>If any event is provided back with only a URI to a video and nothing else, the
-processing is incredibly simple.</p>
-<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_minimal.png"><img alt="minimal cdp event gather flow viz" src="_images/cdp_event_gather_flow_minimal.png" /></a>
-</section>
-<section id="filled-event-processing">
-<h2>Filled Event Processing<a class="headerlink" href="#filled-event-processing" title="Permalink to this heading">#</a></h2>
-<p>The major difference from the minimal event processing workflow is that the
-pipeline will process, prepare, and upload all of the attachments.</p>
-<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_filled.png"><img alt="filled cdp event gather flow viz" src="_images/cdp_event_gather_flow_filled.png" /></a>
-</section>
 <section id="workflow-management-and-parallel-processing">
 <h2>Workflow Management and Parallel Processing<a class="headerlink" href="#workflow-management-and-parallel-processing" title="Permalink to this heading">#</a></h2>
 <p>We utilize <a class="reference external" href="https://github.com/prefecthq/prefect">Prefect Core</a> to generate and
@@ -266,10 +254,6 @@ events (i.e. processing historical events), we recommend attaching a
 <a class="reference external" href="https://docs.prefect.io/api/latest/executors.html#daskexecutor">Dask Executor</a>
 to the flow for parallel event processing.
 <a class="reference external" href="https://dask.org/">More details about Dask</a>.</p>
-<p>I.E.
-If the result of the <code class="docutils literal notranslate"><span class="pre">get_events</span></code> function was a list of four
-<code class="docutils literal notranslate"><span class="pre">EventIngestionModel</span></code> objects, the resulting flow would look like the following:</p>
-<a class="reference external image-reference" href="./_static/cdp_event_gather_flow_many.png"><img alt="parallel four wide equal minimal event flows" src="_images/cdp_event_gather_flow_many.png" /></a>
 <p>And, if a <code class="docutils literal notranslate"><span class="pre">DaskExecutor</span></code> is also provided, all single event processing workflows
 would process in parallel (provided enough compute resources).</p>
 </section>
@@ -339,8 +323,6 @@ configuration can be done with the options found in our
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Event Gather Pipeline</a><ul>
-<li><a class="reference internal" href="#minimal-event-processing">Minimal Event Processing</a></li>
-<li><a class="reference internal" href="#filled-event-processing">Filled Event Processing</a></li>
 <li><a class="reference internal" href="#workflow-management-and-parallel-processing">Workflow Management and Parallel Processing</a></li>
 <li><a class="reference internal" href="#pipeline-configuration">Pipeline Configuration</a></li>
 </ul>
