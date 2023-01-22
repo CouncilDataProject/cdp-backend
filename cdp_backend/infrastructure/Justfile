@@ -61,6 +61,10 @@ enable-services:
 		firebaserules.googleapis.com \
 		firebasestorage.googleapis.com \
 		cloudfunctions.googleapis.com \
+		compute.googleapis.com \
+		logging.googleapis.com \
+		monitoring.googleapis.com \
+		osconfig.googleapis.com \
 		cloudbuild.googleapis.com \
 		artifactregistry.googleapis.com \
 		run.googleapis.com
