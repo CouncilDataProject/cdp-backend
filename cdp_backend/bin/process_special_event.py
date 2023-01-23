@@ -66,22 +66,14 @@ def main() -> None:
             for session in ingestion_model.sessions:
                 # Copy if remote resource, otherwise use local file uri
                 fs, path = url_to_fs(session.video_uri)
-                if not isinstance(fs, LocalFileSystem):
-                    # Create tmp directory to save file in
-                    dirpath = tempfile.mkdtemp()
-                    dst = Path(dirpath)
-
-                    filepath = resource_copy(uri=session.video_uri, dst=dst)
-                else:
-                    filepath = session.video_uri
-
-                # Upload video file to file store
-                log.info(f"Uploading {session.video_uri}...")
-                video_uri = upload_file(
-                    credentials_file=config.google_credentials_file,
-                    bucket=config.validated_gcs_bucket_name,
-                    filepath=filepath,
-                )
+                if isinstance(fs, LocalFileSystem):
+                    # Upload video file to file store
+                    log.info(f"Uploading {session.video_uri}...")
+                    video_uri = upload_file(
+                        credentials_file=config.google_credentials_file,
+                        bucket=config.validated_gcs_bucket_name,
+                        filepath=session.video_uri,
+                    )
 
                 # Replace video_uri of session
                 session.video_uri = video_uri
