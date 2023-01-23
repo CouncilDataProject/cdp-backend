@@ -3,7 +3,6 @@
 import argparse
 import logging
 import sys
-import tempfile
 import traceback
 from pathlib import Path
 
@@ -14,7 +13,6 @@ from cdp_backend.file_store.functions import upload_file
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline.ingestion_models import EventIngestionModel
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
-from cdp_backend.utils.file_utils import resource_copy
 
 ###############################################################################
 
