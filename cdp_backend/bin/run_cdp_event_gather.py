@@ -6,9 +6,6 @@ import sys
 import traceback
 from pathlib import Path
 
-from distributed import LocalCluster
-from prefect import executors
-
 from cdp_backend.pipeline import event_gather_pipeline as pipeline
 from cdp_backend.pipeline.pipeline_config import EventGatherPipelineConfig
 
@@ -63,16 +60,6 @@ class Args(argparse.Namespace):
             ),
             dest="to_dt",
         )
-        p.add_argument(
-            "-p",
-            "--parallel",
-            action="store_true",
-            dest="parallel",
-            help=(
-                "Boolean option to spin up a local multi-threaded "
-                "Dask Distributed cluster for event processing."
-            ),
-        )
 
         p.parse_args(namespace=self)
 
@@ -90,30 +77,8 @@ def main() -> None:
             to_dt=args.to_dt,
         )
 
-        # Determine executor
-        if args.parallel:
-            # Create local cluster
-            log.info("Creating LocalCluster")
-            cluster = LocalCluster(processes=False)
-            log.info("Created LocalCluster")
-
-            # Set distributed_executor_address
-            distributed_executor_address = cluster.scheduler_address
-
-            # Log dashboard URI
-            log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
-
-            # Use dask cluster
-            state = flow.run(
-                executor=executors.DaskExecutor(address=distributed_executor_address),
-            )
-
-            # Shutdown cluster after run
-            cluster.close()
-
-        else:
-            state = flow.run()
-
+        # Run pipeline
+        state = flow.run()
         if state.is_failed():
             raise ValueError("Flow run failed.")
 

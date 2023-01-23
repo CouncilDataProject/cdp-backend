@@ -26,24 +26,6 @@ This document gives visualizations of each and every step the event gather
 pipeline takes, starting immediately after the maintainer provided function
 returns the `List[EventIngestionModel]`.
 
-### Workflow Management and Parallel Processing
-
-We utilize [Prefect Core](https://github.com/prefecthq/prefect) to generate and
-run the workflow. In general, and by default in our cookiecutter-cdp-deployment,
-we do not run any part of the workflow in parallel. But, this is simply because we
-generally don't need to. As all event gather pipelines are automated to run every day,
-or multiple times a day, it is rare for a pipeline to pick up more than one event
-to process.
-
-However, in the case where a maintainer is attempting to backfill large collections of
-events (i.e. processing historical events), we recommend attaching a
-[Dask Executor](https://docs.prefect.io/api/latest/executors.html#daskexecutor)
-to the flow for parallel event processing.
-[More details about Dask](https://dask.org/).
-
-And, if a `DaskExecutor` is also provided, all single event processing workflows
-would process in parallel (provided enough compute resources).
-
 ### Pipeline Configuration
 
 Pipeline configuration is generally quite simple but can be quite complex if you
