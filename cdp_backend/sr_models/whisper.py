@@ -7,7 +7,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import spacy
 import whisper
+from spacy.cli.download import download as download_spacy_model
 
 from .. import __version__
 from ..pipeline import transcript_model
@@ -16,6 +18,10 @@ from .sr_model import SRModel
 ###############################################################################
 
 log = logging.getLogger(__name__)
+
+###############################################################################
+
+spacy.prefer_gpu()
 
 ###############################################################################
 
@@ -64,6 +70,13 @@ class WhisperModel(SRModel):
         else:
             self.confidence = MODEL_NAME_FAKE_CONFIDENCE_LUT[model_name]
 
+        # Init spacy
+        try:
+            self.nlp = spacy.load("en_core_web_trf")
+        except Exception:
+            download_spacy_model("en_core_web_trf")
+            self.nlp = spacy.load("en_core_web_trf")
+
     def transcribe(
         self,
         file_uri: str | Path,
@@ -102,63 +115,78 @@ class WhisperModel(SRModel):
         current_sentence_start = -1.0
         current_sentence_text = ""
         for segment in result["segments"]:
-            # Update current state
             if current_sentence_start == -1.0:
                 current_sentence_start = segment["start"]
 
+            print("Current State:")
+            print(f"\tlen(sentences): {len(sentences)}")
+            print(f"\tsentences[-2:]: {[s.text for s in sentences[-2:]]}")
+            print(f"\tcurrent_sentence_index: {current_sentence_index}")
+            print(f"\tcurrent_sentence_text: '{current_sentence_text}'")
+
+            # Pull out just the text and combine with prior state
             seg_text = segment["text"]
+            seg_text_with_prior = safe_str_join(current_sentence_text, seg_text)
 
-            # Check if ending punctuation is present
-            if any(seg_text.endswith(punct) for punct in [".", "?", "!"]):
-                # Save str join
-                current_sentence_text = safe_str_join(current_sentence_text, seg_text)
+            # Segment duration and avg word duration
+            seg_duration = segment["end"] - current_sentence_start
+            seg_text_with_prior_as_words = seg_text_with_prior.split(" ")
+            avg_word_duration = seg_duration / len(seg_text_with_prior_as_words)
 
-                # Calc caption duration for linear interpolation of word time offsets
-                sentence_duration = segment["end"] - current_sentence_start
+            # Handle intra segment sentence
+            doc = self.nlp(seg_text_with_prior)
+            intra_segment_sentences = list(doc.sents)
 
-                # Create collection of words
-                words: list[transcript_model.Word] = []
-                raw_words = current_sentence_text.split(" ")
-                for word_index, word in enumerate(raw_words):
-                    words.append(
-                        transcript_model.Word(
-                            index=word_index,
-                            start_time=(
-                                # Linear words per second
-                                # offset by start time of caption
-                                current_sentence_start
-                                + ((word_index / len(raw_words)) * sentence_duration)
-                            ),
-                            end_time=(
-                                # Linear words per second
-                                # offset by start time of caption + 1
-                                current_sentence_start
-                                + (
-                                    ((word_index + 1) / len(raw_words))
-                                    * sentence_duration
-                                )
-                            ),
-                            text=WhisperModel._clean_word(word),
+            # Process all segment sentence chunks
+            # Note, the last chunk may not be a complete sentence
+            for intra_sent_index, intra_sent in enumerate(intra_segment_sentences):
+                # If it isn't the last sentence, just process it.
+                if intra_sent_index < len(intra_segment_sentences) - 1:
+                    # Calculate this intra sentence start time offset
+                    intra_sent_start_index = seg_text_with_prior.index(intra_sent.text)
+                    percent_progress_in_sentence = intra_sent_start_index / len(intra_sent.text)
+                    intra_sent_start_offset = (
+                        current_sentence_start
+                        + (percent_progress_in_sentence) * seg_duration
+                    )
+
+                    # Process words
+                    intra_sent_raw_words = intra_sent.text.split(" ")
+                    intra_sent_words: list[transcript_model.Word] = []
+                    for word_index, word in enumerate(intra_sent_raw_words):
+                        intra_sent_words.append(
+                            transcript_model.Word(
+                                index=word_index,
+                                start_time=(
+                                    intra_sent_start_offset
+                                    + (word_index * avg_word_duration)
+                                ),
+                                end_time=(
+                                    intra_sent_start_offset
+                                    + ((word_index + 1) * avg_word_duration)
+                                ),
+                                text=self._clean_word(word),
+                            )
+                        )
+                    
+                    # Add sentence to collection
+                    sentences.append(
+                        transcript_model.Sentence(
+                            index=current_sentence_index,
+                            confidence=self.confidence,
+                            start_time=current_sentence_start,
+                            end_time=intra_sent_words[-1].end_time,
+                            words=intra_sent_words,
+                            text=intra_sent.text,
                         )
                     )
-
-                sentences.append(
-                    transcript_model.Sentence(
-                        index=current_sentence_index,
-                        confidence=self.confidence,
-                        start_time=current_sentence_start,
-                        end_time=segment["end"],
-                        words=words,
-                        text=current_sentence_text,
-                    )
-                )
-
-                # Update for next loop
-                current_sentence_index += 1
-                current_sentence_start = -1.0
-                current_sentence_text = ""
-            else:
-                current_sentence_text = safe_str_join(current_sentence_text, seg_text)
+                    # Update for next loop
+                    current_sentence_index += 1
+                
+                # Store for next
+                else:
+                    current_sentence_text = intra_sent.text
+                    current_sentence_start = -1.0
 
         # Return complete transcript object
         return transcript_model.Transcript(
