@@ -144,7 +144,9 @@ class WhisperModel(SRModel):
                 if intra_sent_index < len(intra_segment_sentences) - 1:
                     # Calculate this intra sentence start time offset
                     intra_sent_start_index = seg_text_with_prior.index(intra_sent.text)
-                    percent_progress_in_sentence = intra_sent_start_index / len(intra_sent.text)
+                    percent_progress_in_sentence = intra_sent_start_index / len(
+                        intra_sent.text
+                    )
                     intra_sent_start_offset = (
                         current_sentence_start
                         + (percent_progress_in_sentence) * seg_duration
@@ -168,7 +170,7 @@ class WhisperModel(SRModel):
                                 text=self._clean_word(word),
                             )
                         )
-                    
+
                     # Add sentence to collection
                     sentences.append(
                         transcript_model.Sentence(
@@ -182,7 +184,7 @@ class WhisperModel(SRModel):
                     )
                     # Update for next loop
                     current_sentence_index += 1
-                
+
                 # Store for next
                 else:
                     current_sentence_text = intra_sent.text
