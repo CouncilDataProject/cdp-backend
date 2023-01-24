@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.sr_models package" href="cdp_backend.sr_models.html" /><link rel="prev" title="cdp_backend.infrastructure package" href="cdp_backend.infrastructure.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.pipeline package - cdp-backend 0.1.dev1+g6993d6c documentation</title>
+        <title>cdp_backend.pipeline package - cdp-backend 0.1.dev1+ge4e33af documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g6993d6c documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+ge4e33af documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g6993d6c documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+ge4e33af documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -220,135 +220,8 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="module-cdp_backend.pipeline.event_gather_pipeline">
-<span id="cdp-backend-pipeline-event-gather-pipeline-module"></span><h2>cdp_backend.pipeline.event_gather_pipeline module<a class="headerlink" href="#module-cdp_backend.pipeline.event_gather_pipeline" title="Permalink to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_gather_pipeline.</span></span><span class="sig-name descname"><span class="pre">SessionProcessingResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_video_hosted_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_content_hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript_uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_thumbnail_uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hover_thumbnail_uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_gather_pipeline.html#SessionProcessingResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
-<p>Create new instance of SessionProcessingResult(session, session_video_hosted_url, session_content_hash, audio_uri, transcript, transcript_uri, static_thumbnail_uri, hover_thumbnail_uri)</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.audio_uri">
-<span class="sig-name descname"><span class="pre">audio_uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.audio_uri" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 3</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.hover_thumbnail_uri">
-<span class="sig-name descname"><span class="pre">hover_thumbnail_uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.hover_thumbnail_uri" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 7</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session">
-<span class="sig-name descname"><span class="pre">session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session" title="cdp_backend.pipeline.ingestion_models.Session"><span class="pre">Session</span></a></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_content_hash">
-<span class="sig-name descname"><span class="pre">session_content_hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_content_hash" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_video_hosted_url">
-<span class="sig-name descname"><span class="pre">session_video_hosted_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_video_hosted_url" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.static_thumbnail_uri">
-<span class="sig-name descname"><span class="pre">static_thumbnail_uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.static_thumbnail_uri" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 6</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript">
-<span class="sig-name descname"><span class="pre">transcript</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript"><span class="pre">Transcript</span></a></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 4</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript_uri">
-<span class="sig-name descname"><span class="pre">transcript_uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript_uri" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 5</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_gather_pipeline.</span></span><span class="sig-name descname"><span class="pre">create_event_gather_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig" title="cdp_backend.pipeline.pipeline_config.EventGatherPipelineConfig"><span class="pre">EventGatherPipelineConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefetched_events</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.EventIngestionModel" title="cdp_backend.pipeline.ingestion_models.EventIngestionModel"><span class="pre">cdp_backend.pipeline.ingestion_models.EventIngestionModel</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Flow</span></span></span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_gather_pipeline.html#create_event_gather_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow" title="Permalink to this definition">#</a></dt>
-<dd><p>Provided a function to gather new event information, create the Prefect Flow object
-to preview, run, or visualize.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>config: EventGatherPipelineConfig</strong></dt><dd><p>Configuration options for the pipeline.</p>
-</dd>
-<dt><strong>from_dt: Optional[Union[str, datetime]]</strong></dt><dd><p>Optional ISO formatted string or datetime object to pass to the get_events
-function to act as the start point for event gathering.
-Default: None (two days ago)</p>
-</dd>
-<dt><strong>to_dt: Optional[Union[str, datetime]]</strong></dt><dd><p>Optional ISO formatted string or datetime object to pass to the get_events
-function to act as the end point for event gathering.
-Default: None (now)</p>
-</dd>
-<dt><strong>prefetched_events: Optional[List[EventIngestionModel]]</strong></dt><dd><p>A list of events to process instead of running the scraper found in the config.
-Default: None (use the scraper from the config)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>flow: Flow</dt><dd><p>The constructed CDP Event Gather Pipeline as a Prefect Flow.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.generate_transcript">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_gather_pipeline.</span></span><span class="sig-name descname"><span class="pre">generate_transcript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_content_hash</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cdp_backend.pipeline.ingestion_models.Session" title="cdp_backend.pipeline.ingestion_models.Session"><span class="pre">Session</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whisper_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'medium'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whisper_model_confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#cdp_backend.pipeline.transcript_model.Transcript" title="cdp_backend.pipeline.transcript_model.Transcript"><span class="pre">cdp_backend.pipeline.transcript_model.Transcript</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_gather_pipeline.html#generate_transcript"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.generate_transcript" title="Permalink to this definition">#</a></dt>
-<dd><p>Route transcript generation to the correct processing.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>session_content_hash: str</strong></dt><dd><p>The unique key (SHA256 hash of video content) for this session processing.</p>
-</dd>
-<dt><strong>audio_path: str</strong></dt><dd><p>The path to the audio file to generate a transcript from.</p>
-</dd>
-<dt><strong>session: Session</strong></dt><dd><p>The specific session details to be used in final transcript upload and
-archival.</p>
-</dd>
-<dt><strong>bucket: str</strong></dt><dd><p>The name of the GCS bucket to upload the produced audio to.</p>
-</dd>
-<dt><strong>credentials_file: str</strong></dt><dd><p>Path to the GCS JSON credentials file.</p>
-</dd>
-<dt><strong>whisper_model_name: str</strong></dt><dd><p>The whisper model to use for transcription.</p>
-</dd>
-<dt><strong>whisper_model_confidence: Optional[float]</strong></dt><dd><p>The confidence to set the produce transcript to.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>transcript_uri: str</dt><dd><p>The URI to the uploaded transcript file.</p>
-</dd>
-<dt>transcript: Transcript</dt><dd><p>The in-memory Transcript object.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cdp_backend.pipeline.event_gather_pipeline.import_get_events_func">
-<span class="sig-prename descclassname"><span class="pre">cdp_backend.pipeline.event_gather_pipeline.</span></span><span class="sig-name descname"><span class="pre">import_get_events_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="_modules/cdp_backend/pipeline/event_gather_pipeline.html#import_get_events_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.pipeline.event_gather_pipeline.import_get_events_func" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
+<section id="cdp-backend-pipeline-event-gather-pipeline-module">
+<h2>cdp_backend.pipeline.event_gather_pipeline module<a class="headerlink" href="#cdp-backend-pipeline-event-gather-pipeline-module" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="module-cdp_backend.pipeline.generate_event_index_pipeline">
 <span id="cdp-backend-pipeline-generate-event-index-pipeline-module"></span><h2>cdp_backend.pipeline.generate_event_index_pipeline module<a class="headerlink" href="#module-cdp_backend.pipeline.generate_event_index_pipeline" title="Permalink to this heading">#</a></h2>
@@ -1491,23 +1364,7 @@ Default: None (no annotations)</p>
             <ul>
 <li><a class="reference internal" href="#">cdp_backend.pipeline package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-cdp_backend.pipeline.event_gather_pipeline">cdp_backend.pipeline.event_gather_pipeline module</a><ul>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult</span></code></a><ul>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.audio_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.audio_uri</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.hover_thumbnail_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.hover_thumbnail_uri</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.session</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_content_hash"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.session_content_hash</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.session_video_hosted_url"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.session_video_hosted_url</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.static_thumbnail_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.static_thumbnail_uri</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.transcript</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.SessionProcessingResult.transcript_uri"><code class="docutils literal notranslate"><span class="pre">SessionProcessingResult.transcript_uri</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.create_event_gather_flow"><code class="docutils literal notranslate"><span class="pre">create_event_gather_flow()</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.generate_transcript"><code class="docutils literal notranslate"><span class="pre">generate_transcript()</span></code></a></li>
-<li><a class="reference internal" href="#cdp_backend.pipeline.event_gather_pipeline.import_get_events_func"><code class="docutils literal notranslate"><span class="pre">import_get_events_func()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#cdp-backend-pipeline-event-gather-pipeline-module">cdp_backend.pipeline.event_gather_pipeline module</a></li>
 <li><a class="reference internal" href="#module-cdp_backend.pipeline.generate_event_index_pipeline">cdp_backend.pipeline.generate_event_index_pipeline module</a><ul>
 <li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram</span></code></a><ul>
 <li><a class="reference internal" href="#cdp_backend.pipeline.generate_event_index_pipeline.ContextualizedGram.context_span"><code class="docutils literal notranslate"><span class="pre">ContextualizedGram.context_span</span></code></a></li>
