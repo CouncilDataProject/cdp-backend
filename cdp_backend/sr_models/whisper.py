@@ -112,12 +112,14 @@ class WhisperModel(SRModel):
             avg_word_duration = seg_duration / len(seg_text_as_words)
             for i, word in enumerate(seg_text_as_words):
                 if len(word.strip()) > 0:
-                    timestamped_words_with_meta.append({
-                        "text": word,
-                        "start": segment["start"] + (i * avg_word_duration),
-                        "end": segment["start"] + ((i + 1) * avg_word_duration),
-                    })
-        
+                    timestamped_words_with_meta.append(
+                        {
+                            "text": word,
+                            "start": segment["start"] + (i * avg_word_duration),
+                            "end": segment["start"] + ((i + 1) * avg_word_duration),
+                        }
+                    )
+
         # For some reason, whisper sometimes returns segments with
         # start and end times that are impossible
         # i.e. start and end of 185 second when the total audio duration is 180 seconds
@@ -145,10 +147,12 @@ class WhisperModel(SRModel):
         current_sentence_words_with_metas = []
         for word_with_meta in timestamped_words_with_meta:
             current_sentence_words_with_metas.append(word_with_meta)
-            joined_words = " ".join([
-                word_with_meta["text"]
-                for word_with_meta in current_sentence_words_with_metas
-            ])
+            joined_words = " ".join(
+                [
+                    word_with_meta["text"]
+                    for word_with_meta in current_sentence_words_with_metas
+                ]
+            )
 
             # Check for sentences
             doc = self.nlp(joined_words)
@@ -170,19 +174,19 @@ class WhisperModel(SRModel):
                     for first_sent_word in first_sent_joined_words.split(" ")
                     if len(first_sent_word.strip()) > 0
                 ]
-                first_sent_extract = (
-                    current_sentence_words_with_metas[:len(first_sent_words)]
-                )
+                first_sent_extract = current_sentence_words_with_metas[
+                    : len(first_sent_words)
+                ]
                 if len(first_sent_extract) > 0:
                     sentences.append(first_sent_extract)
                     current_sentence_words_with_metas = (
-                        current_sentence_words_with_metas[len(first_sent_words):]
+                        current_sentence_words_with_metas[len(first_sent_words) :]
                     )
-        
+
         # If there is anything remaining, add it to sentences
         if len(current_sentence_words_with_metas) > 0:
             sentences.append(current_sentence_words_with_metas)
-        
+
         # Reformat data to our structure
         structured_sentences: list[transcript_model.Sentence] = []
         for sent_index, sentence_with_word_metas in enumerate(sentences):
@@ -192,10 +196,12 @@ class WhisperModel(SRModel):
                     confidence=self.confidence,
                     start_time=sentence_with_word_metas[0]["start"],
                     end_time=sentence_with_word_metas[-1]["end"],
-                    text=" ".join([
-                        word_with_meta["text"]
-                        for word_with_meta in sentence_with_word_metas
-                    ]).strip(),
+                    text=" ".join(
+                        [
+                            word_with_meta["text"]
+                            for word_with_meta in sentence_with_word_metas
+                        ]
+                    ).strip(),
                     words=[
                         transcript_model.Word(
                             index=word_index,
