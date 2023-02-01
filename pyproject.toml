@@ -72,7 +72,7 @@ pipeline = [
   "tqdm~=4.62",
   "transformers~=4.16",
   "vimeo_downloader~=0.4",
-  "openai-whisper==20230117",
+  "openai-whisper>=20230117",
   "yt-dlp>=2022.2.4",
   
 ]

@@ -9,6 +9,7 @@ from typing import Any
 
 import spacy
 import whisper
+from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
 
 from .. import __version__
@@ -103,92 +104,111 @@ class WhisperModel(SRModel):
         log.info(f"Transcribing '{file_uri}'")
         result = model.transcribe(file_uri, verbose=False)
 
-        # A safe string joiner
-        # It ensures that strings are joined to each other with no
-        # additional white spacing.
-        def safe_str_join(str1: str, str2: str) -> str:
-            return " ".join([str1.strip(), str2.strip()]).strip()
-
-        # Split into sentences
-        sentences: list[transcript_model.Sentence] = []
-        current_sentence_index = 0
-        current_sentence_start = -1.0
-        current_sentence_text = ""
+        timestamped_words_with_meta = []
         for segment in result["segments"]:
-            if current_sentence_start == -1.0:
-                current_sentence_start = segment["start"]
-
-            print("Current State:")
-            print(f"\tlen(sentences): {len(sentences)}")
-            print(f"\tsentences[-2:]: {[s.text for s in sentences[-2:]]}")
-            print(f"\tcurrent_sentence_index: {current_sentence_index}")
-            print(f"\tcurrent_sentence_text: '{current_sentence_text}'")
-
-            # Pull out just the text and combine with prior state
             seg_text = segment["text"]
-            seg_text_with_prior = safe_str_join(current_sentence_text, seg_text)
+            seg_text_as_words = seg_text.split(" ")
+            seg_duration = segment["end"] - segment["start"]
+            avg_word_duration = seg_duration / len(seg_text_as_words)
+            for i, word in enumerate(seg_text_as_words):
+                if len(word.strip()) > 0:
+                    timestamped_words_with_meta.append({
+                        "text": word,
+                        "start": segment["start"] + (i * avg_word_duration),
+                        "end": segment["start"] + ((i + 1) * avg_word_duration),
+                    })
+        
+        # For some reason, whisper sometimes returns segments with
+        # start and end times that are impossible
+        # i.e. start and end of 185 second when the total audio duration is 180 seconds
+        # Fix all timestamps by rescaling to audio duration
+        # This is a hack -- but all of the word level timestamps are a hack anyway...
+        whisper_reported_duration = timestamped_words_with_meta[-1]["end"]
+        audio = AudioSegment.from_file(file_uri)
+        file_reported_duration = audio.duration_seconds
 
-            # Segment duration and avg word duration
-            seg_duration = segment["end"] - current_sentence_start
-            seg_text_with_prior_as_words = seg_text_with_prior.split(" ")
-            avg_word_duration = seg_duration / len(seg_text_with_prior_as_words)
+        # Scale to between 0 and 1
+        # Then rescale to real duration
+        for word_with_meta in timestamped_words_with_meta:
+            # Scale to between 0 and 1
+            word_with_meta["start"] = (
+                word_with_meta["start"] / whisper_reported_duration
+            )
+            word_with_meta["end"] = word_with_meta["end"] / whisper_reported_duration
 
-            # Handle intra segment sentence
-            doc = self.nlp(seg_text_with_prior)
-            intra_segment_sentences = list(doc.sents)
+            # Rescale to real duration
+            word_with_meta["start"] = word_with_meta["start"] * file_reported_duration
+            word_with_meta["end"] = word_with_meta["end"] * file_reported_duration
 
-            # Process all segment sentence chunks
-            # Note, the last chunk may not be a complete sentence
-            for intra_sent_index, intra_sent in enumerate(intra_segment_sentences):
-                # If it isn't the last sentence, just process it.
-                if intra_sent_index < len(intra_segment_sentences) - 1:
-                    # Calculate this intra sentence start time offset
-                    intra_sent_start_index = seg_text_with_prior.index(intra_sent.text)
-                    percent_progress_in_sentence = intra_sent_start_index / len(
-                        intra_sent.text
+        # Iteratively construct sentences
+        sentences = []
+        current_sentence_words_with_metas = []
+        for word_with_meta in timestamped_words_with_meta:
+            current_sentence_words_with_metas.append(word_with_meta)
+            joined_words = " ".join([
+                word_with_meta["text"]
+                for word_with_meta in current_sentence_words_with_metas
+            ])
+
+            # Check for sentences
+            doc = self.nlp(joined_words)
+            doc_sents = list(doc.sents)
+
+            # If there is more than one sentence
+            # Get the second sentence start index within the overall joined_words
+            # Then split the joined_words at that start index to just get the
+            # joined words in the first sentence
+            # Then split those words to see how many are in the first sentence
+            # The use that length to pull the same amount of words from the
+            # current_sentence_words_with_metas list.
+            if len(doc_sents) > 1:
+                second_sent = doc_sents[1]
+                second_sent_start_index = joined_words.index(second_sent.text)
+                first_sent_joined_words = joined_words[:second_sent_start_index]
+                first_sent_words = [
+                    first_sent_word
+                    for first_sent_word in first_sent_joined_words.split(" ")
+                    if len(first_sent_word.strip()) > 0
+                ]
+                first_sent_extract = (
+                    current_sentence_words_with_metas[:len(first_sent_words)]
+                )
+                if len(first_sent_extract) > 0:
+                    sentences.append(first_sent_extract)
+                    current_sentence_words_with_metas = (
+                        current_sentence_words_with_metas[len(first_sent_words):]
                     )
-                    intra_sent_start_offset = (
-                        current_sentence_start
-                        + (percent_progress_in_sentence) * seg_duration
-                    )
-
-                    # Process words
-                    intra_sent_raw_words = intra_sent.text.split(" ")
-                    intra_sent_words: list[transcript_model.Word] = []
-                    for word_index, word in enumerate(intra_sent_raw_words):
-                        intra_sent_words.append(
-                            transcript_model.Word(
-                                index=word_index,
-                                start_time=(
-                                    intra_sent_start_offset
-                                    + (word_index * avg_word_duration)
-                                ),
-                                end_time=(
-                                    intra_sent_start_offset
-                                    + ((word_index + 1) * avg_word_duration)
-                                ),
-                                text=self._clean_word(word),
-                            )
+        
+        # If there is anything remaining, add it to sentences
+        if len(current_sentence_words_with_metas) > 0:
+            sentences.append(current_sentence_words_with_metas)
+        
+        # Reformat data to our structure
+        structured_sentences: list[transcript_model.Sentence] = []
+        for sent_index, sentence_with_word_metas in enumerate(sentences):
+            structured_sentences.append(
+                transcript_model.Sentence(
+                    index=sent_index,
+                    confidence=self.confidence,
+                    start_time=sentence_with_word_metas[0]["start"],
+                    end_time=sentence_with_word_metas[-1]["end"],
+                    text=" ".join([
+                        word_with_meta["text"]
+                        for word_with_meta in sentence_with_word_metas
+                    ]).strip(),
+                    words=[
+                        transcript_model.Word(
+                            index=word_index,
+                            start_time=word_with_meta["start"],
+                            end_time=word_with_meta["end"],
+                            text=self._clean_word(word_with_meta["text"]),
                         )
-
-                    # Add sentence to collection
-                    sentences.append(
-                        transcript_model.Sentence(
-                            index=current_sentence_index,
-                            confidence=self.confidence,
-                            start_time=current_sentence_start,
-                            end_time=intra_sent_words[-1].end_time,
-                            words=intra_sent_words,
-                            text=intra_sent.text,
+                        for word_index, word_with_meta in enumerate(
+                            sentence_with_word_metas
                         )
-                    )
-                    # Update for next loop
-                    current_sentence_index += 1
-
-                # Store for next
-                else:
-                    current_sentence_text = intra_sent.text
-                    current_sentence_start = -1.0
+                    ],
+                )
+            )
 
         # Return complete transcript object
         return transcript_model.Transcript(
@@ -200,5 +220,5 @@ class WhisperModel(SRModel):
             confidence=self.confidence,
             session_datetime=None,
             created_datetime=datetime.utcnow().isoformat(),
-            sentences=sentences,
+            sentences=structured_sentences,
         )
