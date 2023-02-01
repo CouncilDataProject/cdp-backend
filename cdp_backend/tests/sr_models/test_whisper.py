@@ -16,6 +16,7 @@ from cdp_backend.sr_models import WhisperModel
     "audio_filename, expected_transcript_filename",
     [
         ("example_audio.wav", "example_whisper_output_transcript.json"),
+        ("example-seattle-briefing.wav", "expected-seattle-briefing-transcript.json"),
     ],
 )
 def test_transcribe(

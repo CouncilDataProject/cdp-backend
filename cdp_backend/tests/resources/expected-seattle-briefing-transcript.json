@@ -1,0 +1,3180 @@
+{
+    "generator": "CDP Whisper Conversion -- CDP v4.0.0rc1.dev0+g382de3e.d20230123 -- Whisper Model Name 'base'",
+    "confidence": 0.6,
+    "session_datetime": null,
+    "created_datetime": "2023-02-01T19:43:30.570689",
+    "sentences": [
+        {
+            "index": 0,
+            "confidence": 0.6,
+            "start_time": 1.4322087842138767,
+            "end_time": 4.2966263526416295,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 1.4322087842138767,
+                    "end_time": 2.8644175684277533,
+                    "text": "good",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 2.8644175684277533,
+                    "end_time": 4.2966263526416295,
+                    "text": "morning",
+                    "annotations": null
+                }
+            ],
+            "text": "Good morning.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 1,
+            "confidence": 0.6,
+            "start_time": 4.2966263526416295,
+            "end_time": 23.721621048164657,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 4.2966263526416295,
+                    "end_time": 5.728835136855507,
+                    "text": "thank",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 5.728835136855507,
+                    "end_time": 7.161043921069384,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 7.161043921069384,
+                    "end_time": 8.593252705283259,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 8.593252705283259,
+                    "end_time": 10.025461489497136,
+                    "text": "being",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 10.025461489497136,
+                    "end_time": 11.457670273711013,
+                    "text": "here",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 11.457670273711013,
+                    "end_time": 12.88987905792489,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 12.88987905792489,
+                    "end_time": 14.322087842138767,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 14.322087842138767,
+                    "end_time": 15.754296626352643,
+                    "text": "regular",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 15.754296626352643,
+                    "end_time": 17.186505410566518,
+                    "text": "schedule",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 17.186505410566518,
+                    "end_time": 18.618714194780395,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 18.618714194780395,
+                    "end_time": 20.050922978994272,
+                    "text": "briefing",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 20.050922978994272,
+                    "end_time": 21.48313176320815,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 21.48313176320815,
+                    "end_time": 22.915340547422026,
+                    "text": "july",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 23.318480797793338,
+                    "end_time": 23.721621048164657,
+                    "text": "22nd",
+                    "annotations": null
+                }
+            ],
+            "text": "Thank you for being here at our regular schedule council briefing on July 22nd.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 2,
+            "confidence": 0.6,
+            "start_time": 23.721621048164657,
+            "end_time": 54.397199236155316,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 23.721621048164657,
+                    "end_time": 24.124761298535965,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 24.124761298535965,
+                    "end_time": 24.527901548907284,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 24.527901548907284,
+                    "end_time": 24.931041799278592,
+                    "text": "describe",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 24.931041799278592,
+                    "end_time": 25.33418204964991,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 25.33418204964991,
+                    "end_time": 25.73732230002122,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 25.73732230002122,
+                    "end_time": 26.140462550392535,
+                    "text": "public",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 26.140462550392535,
+                    "end_time": 26.543602800763846,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 26.543602800763846,
+                    "end_time": 26.94674305113516,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 26.94674305113516,
+                    "end_time": 27.349883301506477,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 27.349883301506477,
+                    "end_time": 27.75302355187779,
+                    "text": "somewhat",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 27.75302355187779,
+                    "end_time": 28.156163802249104,
+                    "text": "pressed",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 28.156163802249104,
+                    "end_time": 28.559304052620416,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 28.559304052620416,
+                    "end_time": 28.96244430299173,
+                    "text": "time",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 28.96244430299173,
+                    "end_time": 29.365584553363043,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 29.365584553363043,
+                    "end_time": 29.768724803734354,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 29.768724803734354,
+                    "end_time": 30.171865054105666,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 30.545603346367194,
+                    "end_time": 30.919341638628715,
+                    "text": "have",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 30.919341638628715,
+                    "end_time": 31.293079930890247,
+                    "text": "two",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 31.293079930890247,
+                    "end_time": 31.666818223151775,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 31.666818223151775,
+                    "end_time": 32.04055651541329,
+                    "text": "sessions",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 32.04055651541329,
+                    "end_time": 32.41429480767482,
+                    "text": "scheduled",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 32.41429480767482,
+                    "end_time": 32.78803309993636,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 32.78803309993636,
+                    "end_time": 33.16177139219788,
+                    "text": "immediately",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 33.16177139219788,
+                    "end_time": 33.535509684459406,
+                    "text": "after",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 33.535509684459406,
+                    "end_time": 33.90924797672093,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 33.90924797672093,
+                    "end_time": 34.282986268982455,
+                    "text": "briefing",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 34.282986268982455,
+                    "end_time": 34.656724561243976,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 34.656724561243976,
+                    "end_time": 35.030462853505504,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 35.030462853505504,
+                    "end_time": 35.404201145767026,
+                    "text": "two",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 35.81340365554242,
+                    "end_time": 36.22260616531781,
+                    "text": "executive",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 36.22260616531781,
+                    "end_time": 36.63180867509321,
+                    "text": "sessions",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 36.63180867509321,
+                    "end_time": 37.0410111848686,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 37.0410111848686,
+                    "end_time": 37.450213694644,
+                    "text": "have",
+                    "annotations": null
+                },
+                {
+                    "index": 33,
+                    "start_time": 37.450213694644,
+                    "end_time": 37.85941620441939,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 34,
+                    "start_time": 37.85941620441939,
+                    "end_time": 38.26861871419479,
+                    "text": "select",
+                    "annotations": null
+                },
+                {
+                    "index": 35,
+                    "start_time": 38.26861871419479,
+                    "end_time": 38.67782122397018,
+                    "text": "committee",
+                    "annotations": null
+                },
+                {
+                    "index": 36,
+                    "start_time": 38.67782122397018,
+                    "end_time": 39.08702373374557,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 37,
+                    "start_time": 39.08702373374557,
+                    "end_time": 39.49622624352096,
+                    "text": "homelessness",
+                    "annotations": null
+                },
+                {
+                    "index": 38,
+                    "start_time": 39.49622624352096,
+                    "end_time": 39.905428753296356,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 39,
+                    "start_time": 39.905428753296356,
+                    "end_time": 40.314631263071746,
+                    "text": "affordability",
+                    "annotations": null
+                },
+                {
+                    "index": 40,
+                    "start_time": 40.314631263071746,
+                    "end_time": 40.723833772847144,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 41,
+                    "start_time": 40.723833772847144,
+                    "end_time": 41.13303628262254,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 42,
+                    "start_time": 41.37364735837047,
+                    "end_time": 41.6142584341184,
+                    "text": "want",
+                    "annotations": null
+                },
+                {
+                    "index": 43,
+                    "start_time": 41.6142584341184,
+                    "end_time": 41.85486950986633,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 44,
+                    "start_time": 41.85486950986633,
+                    "end_time": 42.09548058561426,
+                    "text": "start",
+                    "annotations": null
+                },
+                {
+                    "index": 45,
+                    "start_time": 42.09548058561426,
+                    "end_time": 42.3360916613622,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 46,
+                    "start_time": 42.3360916613622,
+                    "end_time": 42.576702737110125,
+                    "text": "1030",
+                    "annotations": null
+                },
+                {
+                    "index": 47,
+                    "start_time": 42.576702737110125,
+                    "end_time": 42.81731381285805,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 48,
+                    "start_time": 42.81731381285805,
+                    "end_time": 43.057924888605996,
+                    "text": "we're",
+                    "annotations": null
+                },
+                {
+                    "index": 49,
+                    "start_time": 43.057924888605996,
+                    "end_time": 43.29853596435392,
+                    "text": "really",
+                    "annotations": null
+                },
+                {
+                    "index": 50,
+                    "start_time": 43.29853596435392,
+                    "end_time": 43.53914704010185,
+                    "text": "cutting",
+                    "annotations": null
+                },
+                {
+                    "index": 51,
+                    "start_time": 43.53914704010185,
+                    "end_time": 43.77975811584979,
+                    "text": "it",
+                    "annotations": null
+                },
+                {
+                    "index": 52,
+                    "start_time": 43.77975811584979,
+                    "end_time": 44.020369191597716,
+                    "text": "short",
+                    "annotations": null
+                },
+                {
+                    "index": 53,
+                    "start_time": 44.020369191597716,
+                    "end_time": 44.260980267345644,
+                    "text": "because",
+                    "annotations": null
+                },
+                {
+                    "index": 54,
+                    "start_time": 44.260980267345644,
+                    "end_time": 44.50159134309358,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 55,
+                    "start_time": 44.50159134309358,
+                    "end_time": 44.742202418841515,
+                    "text": "if",
+                    "annotations": null
+                },
+                {
+                    "index": 56,
+                    "start_time": 44.742202418841515,
+                    "end_time": 44.982813494589436,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 57,
+                    "start_time": 44.982813494589436,
+                    "end_time": 45.22342457033737,
+                    "text": "look",
+                    "annotations": null
+                },
+                {
+                    "index": 58,
+                    "start_time": 45.22342457033737,
+                    "end_time": 45.46403564608531,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 59,
+                    "start_time": 45.46403564608531,
+                    "end_time": 45.704646721833235,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 60,
+                    "start_time": 45.704646721833235,
+                    "end_time": 45.94525779758117,
+                    "text": "timing",
+                    "annotations": null
+                },
+                {
+                    "index": 61,
+                    "start_time": 46.309144918311056,
+                    "end_time": 46.67303203904095,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 62,
+                    "start_time": 46.67303203904095,
+                    "end_time": 47.03691915977085,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 63,
+                    "start_time": 47.03691915977085,
+                    "end_time": 47.40080628050074,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 64,
+                    "start_time": 47.40080628050074,
+                    "end_time": 47.764693401230645,
+                    "text": "having",
+                    "annotations": null
+                },
+                {
+                    "index": 65,
+                    "start_time": 47.764693401230645,
+                    "end_time": 48.128580521960544,
+                    "text": "said",
+                    "annotations": null
+                },
+                {
+                    "index": 66,
+                    "start_time": 48.128580521960544,
+                    "end_time": 48.492467642690436,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 67,
+                    "start_time": 48.492467642690436,
+                    "end_time": 48.856354763420335,
+                    "text": "there",
+                    "annotations": null
+                },
+                {
+                    "index": 68,
+                    "start_time": 48.856354763420335,
+                    "end_time": 49.22024188415023,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 69,
+                    "start_time": 49.22024188415023,
+                    "end_time": 49.584129004880126,
+                    "text": "three",
+                    "annotations": null
+                },
+                {
+                    "index": 70,
+                    "start_time": 49.584129004880126,
+                    "end_time": 49.94801612561002,
+                    "text": "items",
+                    "annotations": null
+                },
+                {
+                    "index": 71,
+                    "start_time": 49.94801612561002,
+                    "end_time": 50.31190324633992,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 72,
+                    "start_time": 50.31190324633992,
+                    "end_time": 50.67579036706981,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 73,
+                    "start_time": 50.67579036706981,
+                    "end_time": 51.03967748779971,
+                    "text": "vote",
+                    "annotations": null
+                },
+                {
+                    "index": 74,
+                    "start_time": 51.03967748779971,
+                    "end_time": 51.4035646085296,
+                    "text": "relative",
+                    "annotations": null
+                },
+                {
+                    "index": 75,
+                    "start_time": 51.4035646085296,
+                    "end_time": 51.7674517292595,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 76,
+                    "start_time": 51.7674517292595,
+                    "end_time": 52.13133884998939,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 77,
+                    "start_time": 52.13133884998939,
+                    "end_time": 52.49522597071929,
+                    "text": "full",
+                    "annotations": null
+                },
+                {
+                    "index": 78,
+                    "start_time": 52.81222151495862,
+                    "end_time": 53.12921705919796,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 79,
+                    "start_time": 53.12921705919796,
+                    "end_time": 53.4462126034373,
+                    "text": "agenda",
+                    "annotations": null
+                },
+                {
+                    "index": 80,
+                    "start_time": 53.4462126034373,
+                    "end_time": 53.763208147676636,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 81,
+                    "start_time": 53.763208147676636,
+                    "end_time": 54.080203691915976,
+                    "text": "i'll",
+                    "annotations": null
+                },
+                {
+                    "index": 82,
+                    "start_time": 54.080203691915976,
+                    "end_time": 54.397199236155316,
+                    "text": "present",
+                    "annotations": null
+                }
+            ],
+            "text": "Just to describe to the public that we are somewhat pressed for time in that we have two executive sessions scheduled in immediately after this briefing and the two executive sessions we have a select committee on homelessness and affordability that we want to start at 10.30 so we're really cutting it short because of if you look at the timing of that so having said that there are three items that for vote relative on our full council agenda that I'll present.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 3,
+            "confidence": 0.6,
+            "start_time": 54.397199236155316,
+            "end_time": 80.61871419478041,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 54.397199236155316,
+                    "end_time": 54.71419478039465,
+                    "text": "we've",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 54.71419478039465,
+                    "end_time": 55.03119032463399,
+                    "text": "talked",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 55.03119032463399,
+                    "end_time": 55.34818586887333,
+                    "text": "about",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 55.34818586887333,
+                    "end_time": 55.66518141311267,
+                    "text": "these",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 55.66518141311267,
+                    "end_time": 55.982176957352,
+                    "text": "before",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 55.982176957352,
+                    "end_time": 56.29917250159134,
+                    "text": "when",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 56.29917250159134,
+                    "end_time": 56.61616804583068,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 56.61616804583068,
+                    "end_time": 56.933163590070016,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 56.933163590070016,
+                    "end_time": 57.25015913430936,
+                    "text": "skate",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 57.57479312539784,
+                    "end_time": 57.89942711648631,
+                    "text": "plaza",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 57.89942711648631,
+                    "end_time": 58.22406110757479,
+                    "text": "site",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 58.22406110757479,
+                    "end_time": 58.54869509866327,
+                    "text": "transfer",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 58.54869509866327,
+                    "end_time": 58.873329089751756,
+                    "text": "down",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 58.873329089751756,
+                    "end_time": 59.19796308084024,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 59.19796308084024,
+                    "end_time": 59.522597071928715,
+                    "text": "seattle",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 59.522597071928715,
+                    "end_time": 59.84723106301719,
+                    "text": "center",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 59.84723106301719,
+                    "end_time": 60.17186505410567,
+                    "text": "these",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 60.17186505410567,
+                    "end_time": 60.49649904519415,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 60.49649904519415,
+                    "end_time": 60.82113303628263,
+                    "text": "all",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 60.82113303628263,
+                    "end_time": 61.145767027371114,
+                    "text": "relative",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 61.145767027371114,
+                    "end_time": 61.4704010184596,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 61.4704010184596,
+                    "end_time": 61.795035009548066,
+                    "text": "kirin",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 61.795035009548066,
+                    "end_time": 62.11966900063655,
+                    "text": "about",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 62.11966900063655,
+                    "end_time": 62.44430299172503,
+                    "text": "that's",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 62.743475493316375,
+                    "end_time": 63.04264799490771,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 63.04264799490771,
+                    "end_time": 63.341820496499054,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 63.341820496499054,
+                    "end_time": 63.6409929980904,
+                    "text": "select",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 63.6409929980904,
+                    "end_time": 63.94016549968174,
+                    "text": "committee",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 63.94016549968174,
+                    "end_time": 64.23933800127308,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 64.23933800127308,
+                    "end_time": 64.53851050286443,
+                    "text": "most",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 64.53851050286443,
+                    "end_time": 64.83768300445577,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 64.83768300445577,
+                    "end_time": 65.1368555060471,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 65.1368555060471,
+                    "end_time": 65.43602800763846,
+                    "text": "attended",
+                    "annotations": null
+                },
+                {
+                    "index": 33,
+                    "start_time": 65.43602800763846,
+                    "end_time": 65.7352005092298,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 34,
+                    "start_time": 65.7352005092298,
+                    "end_time": 66.03437301082114,
+                    "text": "select",
+                    "annotations": null
+                },
+                {
+                    "index": 35,
+                    "start_time": 66.03437301082114,
+                    "end_time": 66.33354551241248,
+                    "text": "committee",
+                    "annotations": null
+                },
+                {
+                    "index": 36,
+                    "start_time": 66.33354551241248,
+                    "end_time": 66.63271801400383,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 37,
+                    "start_time": 66.63271801400383,
+                    "end_time": 66.93189051559516,
+                    "text": "civic",
+                    "annotations": null
+                },
+                {
+                    "index": 38,
+                    "start_time": 66.93189051559516,
+                    "end_time": 67.2310630171865,
+                    "text": "arenas",
+                    "annotations": null
+                },
+                {
+                    "index": 39,
+                    "start_time": 67.2310630171865,
+                    "end_time": 67.53023551877784,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 40,
+                    "start_time": 67.53023551877784,
+                    "end_time": 67.82940802036919,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 41,
+                    "start_time": 68.17586614531236,
+                    "end_time": 68.52232427025552,
+                    "text": "first",
+                    "annotations": null
+                },
+                {
+                    "index": 42,
+                    "start_time": 68.52232427025552,
+                    "end_time": 68.86878239519869,
+                    "text": "one",
+                    "annotations": null
+                },
+                {
+                    "index": 43,
+                    "start_time": 68.86878239519869,
+                    "end_time": 69.21524052014186,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 44,
+                    "start_time": 69.21524052014186,
+                    "end_time": 69.56169864508503,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 45,
+                    "start_time": 69.56169864508503,
+                    "end_time": 69.9081567700282,
+                    "text": "skate",
+                    "annotations": null
+                },
+                {
+                    "index": 46,
+                    "start_time": 69.9081567700282,
+                    "end_time": 70.25461489497135,
+                    "text": "plaza",
+                    "annotations": null
+                },
+                {
+                    "index": 47,
+                    "start_time": 70.25461489497135,
+                    "end_time": 70.60107301991452,
+                    "text": "site",
+                    "annotations": null
+                },
+                {
+                    "index": 48,
+                    "start_time": 70.60107301991452,
+                    "end_time": 70.94753114485769,
+                    "text": "transfer",
+                    "annotations": null
+                },
+                {
+                    "index": 49,
+                    "start_time": 70.94753114485769,
+                    "end_time": 71.29398926980086,
+                    "text": "where",
+                    "annotations": null
+                },
+                {
+                    "index": 50,
+                    "start_time": 71.29398926980086,
+                    "end_time": 71.64044739474403,
+                    "text": "we're",
+                    "annotations": null
+                },
+                {
+                    "index": 51,
+                    "start_time": 71.64044739474403,
+                    "end_time": 71.9869055196872,
+                    "text": "basically",
+                    "annotations": null
+                },
+                {
+                    "index": 52,
+                    "start_time": 71.9869055196872,
+                    "end_time": 72.33336364463037,
+                    "text": "transferring",
+                    "annotations": null
+                },
+                {
+                    "index": 53,
+                    "start_time": 72.33336364463037,
+                    "end_time": 72.67982176957354,
+                    "text": "jurisdiction",
+                    "annotations": null
+                },
+                {
+                    "index": 54,
+                    "start_time": 73.07023127519628,
+                    "end_time": 73.46064078081902,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 55,
+                    "start_time": 73.46064078081902,
+                    "end_time": 73.85105028644176,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 56,
+                    "start_time": 73.85105028644176,
+                    "end_time": 74.2414597920645,
+                    "text": "vacated",
+                    "annotations": null
+                },
+                {
+                    "index": 57,
+                    "start_time": 74.2414597920645,
+                    "end_time": 74.63186929768727,
+                    "text": "area",
+                    "annotations": null
+                },
+                {
+                    "index": 58,
+                    "start_time": 74.63186929768727,
+                    "end_time": 75.02227880331,
+                    "text": "around",
+                    "annotations": null
+                },
+                {
+                    "index": 59,
+                    "start_time": 75.02227880331,
+                    "end_time": 75.41268830893274,
+                    "text": "broad",
+                    "annotations": null
+                },
+                {
+                    "index": 60,
+                    "start_time": 75.41268830893274,
+                    "end_time": 75.8030978145555,
+                    "text": "street",
+                    "annotations": null
+                },
+                {
+                    "index": 61,
+                    "start_time": 75.8030978145555,
+                    "end_time": 76.19350732017826,
+                    "text": "from",
+                    "annotations": null
+                },
+                {
+                    "index": 62,
+                    "start_time": 76.19350732017826,
+                    "end_time": 76.583916825801,
+                    "text": "estat",
+                    "annotations": null
+                },
+                {
+                    "index": 63,
+                    "start_time": 76.583916825801,
+                    "end_time": 76.97432633142373,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 64,
+                    "start_time": 76.97432633142373,
+                    "end_time": 77.36473583704648,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 65,
+                    "start_time": 77.36473583704648,
+                    "end_time": 77.75514534266922,
+                    "text": "shell",
+                    "annotations": null
+                },
+                {
+                    "index": 66,
+                    "start_time": 77.75514534266922,
+                    "end_time": 78.14555484829198,
+                    "text": "center",
+                    "annotations": null
+                },
+                {
+                    "index": 67,
+                    "start_time": 78.14555484829198,
+                    "end_time": 78.53596435391471,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 68,
+                    "start_time": 78.53596435391471,
+                    "end_time": 78.92637385953746,
+                    "text": "continue",
+                    "annotations": null
+                },
+                {
+                    "index": 69,
+                    "start_time": 78.92637385953746,
+                    "end_time": 79.3167833651602,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 70,
+                    "start_time": 79.3167833651602,
+                    "end_time": 79.70719287078295,
+                    "text": "skating",
+                    "annotations": null
+                },
+                {
+                    "index": 71,
+                    "start_time": 80.16295353278169,
+                    "end_time": 80.61871419478041,
+                    "text": "activity",
+                    "annotations": null
+                }
+            ],
+            "text": "We've talked about these before when is the skate plaza site transfer down at Seattle Center these are all relative to Kirin about that's on our select committee so most of you attended the select committee for civic arenas so the first one is the skate plaza site transfer where we're basically transferring jurisdiction on the vacated area around Broad Street from Estat to the Shell Center to continue the skating activity.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 4,
+            "confidence": 0.6,
+            "start_time": 80.61871419478041,
+            "end_time": 140.4328453214513,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 80.61871419478041,
+                    "end_time": 81.07447485677913,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 81.07447485677913,
+                    "end_time": 81.53023551877787,
+                    "text": "second",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 81.53023551877787,
+                    "end_time": 81.9859961807766,
+                    "text": "piece",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 81.9859961807766,
+                    "end_time": 82.44175684277532,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 82.44175684277532,
+                    "end_time": 82.89751750477404,
+                    "text": "legislation",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 82.89751750477404,
+                    "end_time": 83.35327816677275,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 83.35327816677275,
+                    "end_time": 83.80903882877149,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 83.80903882877149,
+                    "end_time": 84.26479949077022,
+                    "text": "storm",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 84.26479949077022,
+                    "end_time": 84.72056015276894,
+                    "text": "key",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 84.72056015276894,
+                    "end_time": 85.17632081476768,
+                    "text": "arena",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 85.17632081476768,
+                    "end_time": 85.6320814767664,
+                    "text": "facility",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 85.6320814767664,
+                    "end_time": 86.08784213876513,
+                    "text": "use",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 86.08784213876513,
+                    "end_time": 86.54360280076385,
+                    "text": "agreement",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 86.81768824652713,
+                    "end_time": 87.09177369229042,
+                    "text": "basically",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 87.09177369229042,
+                    "end_time": 87.36585913805371,
+                    "text": "where",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 87.36585913805371,
+                    "end_time": 87.639944583817,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 87.639944583817,
+                    "end_time": 87.91403002958027,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 87.91403002958027,
+                    "end_time": 88.18811547534355,
+                    "text": "incentivizing",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 88.18811547534355,
+                    "end_time": 88.46220092110684,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 88.46220092110684,
+                    "end_time": 88.73628636687012,
+                    "text": "great",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 88.73628636687012,
+                    "end_time": 89.01037181263341,
+                    "text": "team",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 89.01037181263341,
+                    "end_time": 89.28445725839669,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 89.28445725839669,
+                    "end_time": 89.55854270415999,
+                    "text": "storm",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 89.55854270415999,
+                    "end_time": 89.83262814992325,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 89.83262814992325,
+                    "end_time": 90.10671359568654,
+                    "text": "stay",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 90.10671359568654,
+                    "end_time": 90.38079904144982,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 90.38079904144982,
+                    "end_time": 90.6548844872131,
+                    "text": "town",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 90.6548844872131,
+                    "end_time": 90.9289699329764,
+                    "text": "as",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 90.9289699329764,
+                    "end_time": 91.20305537873968,
+                    "text": "opposed",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 91.5186438406647,
+                    "end_time": 91.83423230258973,
+                    "text": "going",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 91.83423230258973,
+                    "end_time": 92.14982076451474,
+                    "text": "far",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 92.14982076451474,
+                    "end_time": 92.46540922643976,
+                    "text": "north",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 92.46540922643976,
+                    "end_time": 92.78099768836479,
+                    "text": "like",
+                    "annotations": null
+                },
+                {
+                    "index": 33,
+                    "start_time": 92.78099768836479,
+                    "end_time": 93.09658615028982,
+                    "text": "ever",
+                    "annotations": null
+                },
+                {
+                    "index": 34,
+                    "start_time": 93.09658615028982,
+                    "end_time": 93.41217461221484,
+                    "text": "it",
+                    "annotations": null
+                },
+                {
+                    "index": 35,
+                    "start_time": 93.41217461221484,
+                    "end_time": 93.72776307413986,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 36,
+                    "start_time": 93.72776307413986,
+                    "end_time": 94.04335153606486,
+                    "text": "it",
+                    "annotations": null
+                },
+                {
+                    "index": 37,
+                    "start_time": 94.04335153606486,
+                    "end_time": 94.35893999798989,
+                    "text": "doesn't",
+                    "annotations": null
+                },
+                {
+                    "index": 38,
+                    "start_time": 94.35893999798989,
+                    "end_time": 94.67452845991494,
+                    "text": "increase",
+                    "annotations": null
+                },
+                {
+                    "index": 39,
+                    "start_time": 94.67452845991494,
+                    "end_time": 94.99011692183994,
+                    "text": "our",
+                    "annotations": null
+                },
+                {
+                    "index": 40,
+                    "start_time": 94.99011692183994,
+                    "end_time": 95.30570538376496,
+                    "text": "liability",
+                    "annotations": null
+                },
+                {
+                    "index": 41,
+                    "start_time": 95.30570538376496,
+                    "end_time": 95.62129384568999,
+                    "text": "as",
+                    "annotations": null
+                },
+                {
+                    "index": 42,
+                    "start_time": 95.62129384568999,
+                    "end_time": 95.93688230761501,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 43,
+                    "start_time": 95.93688230761501,
+                    "end_time": 96.25247076954004,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 44,
+                    "start_time": 96.25247076954004,
+                    "end_time": 96.56805923146506,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 45,
+                    "start_time": 96.56805923146506,
+                    "end_time": 96.88364769339009,
+                    "text": "think",
+                    "annotations": null
+                },
+                {
+                    "index": 46,
+                    "start_time": 96.88364769339009,
+                    "end_time": 97.1992361553151,
+                    "text": "it's",
+                    "annotations": null
+                },
+                {
+                    "index": 47,
+                    "start_time": 97.55145342669213,
+                    "end_time": 97.90367069806918,
+                    "text": "still",
+                    "annotations": null
+                },
+                {
+                    "index": 48,
+                    "start_time": 97.90367069806918,
+                    "end_time": 98.25588796944622,
+                    "text": "26",
+                    "annotations": null
+                },
+                {
+                    "index": 49,
+                    "start_time": 98.25588796944622,
+                    "end_time": 98.60810524082328,
+                    "text": "million",
+                    "annotations": null
+                },
+                {
+                    "index": 50,
+                    "start_time": 98.60810524082328,
+                    "end_time": 98.9603225122003,
+                    "text": "but",
+                    "annotations": null
+                },
+                {
+                    "index": 51,
+                    "start_time": 98.9603225122003,
+                    "end_time": 99.31253978357735,
+                    "text": "it",
+                    "annotations": null
+                },
+                {
+                    "index": 52,
+                    "start_time": 99.31253978357735,
+                    "end_time": 99.66475705495439,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 53,
+                    "start_time": 99.66475705495439,
+                    "end_time": 100.01697432633145,
+                    "text": "sort",
+                    "annotations": null
+                },
+                {
+                    "index": 54,
+                    "start_time": 100.01697432633145,
+                    "end_time": 100.36919159770848,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 55,
+                    "start_time": 100.36919159770848,
+                    "end_time": 100.7214088690855,
+                    "text": "redefines",
+                    "annotations": null
+                },
+                {
+                    "index": 56,
+                    "start_time": 100.7214088690855,
+                    "end_time": 101.07362614046255,
+                    "text": "cost",
+                    "annotations": null
+                },
+                {
+                    "index": 57,
+                    "start_time": 101.07362614046255,
+                    "end_time": 101.4258434118396,
+                    "text": "versus",
+                    "annotations": null
+                },
+                {
+                    "index": 58,
+                    "start_time": 101.4258434118396,
+                    "end_time": 101.77806068321664,
+                    "text": "revenue",
+                    "annotations": null
+                },
+                {
+                    "index": 59,
+                    "start_time": 101.77806068321664,
+                    "end_time": 102.1302779545937,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 60,
+                    "start_time": 102.1302779545937,
+                    "end_time": 102.48249522597072,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 61,
+                    "start_time": 102.48249522597072,
+                    "end_time": 102.83471249734777,
+                    "text": "was",
+                    "annotations": null
+                },
+                {
+                    "index": 62,
+                    "start_time": 102.83471249734777,
+                    "end_time": 103.18692976872481,
+                    "text": "an",
+                    "annotations": null
+                },
+                {
+                    "index": 63,
+                    "start_time": 103.18692976872481,
+                    "end_time": 103.53914704010187,
+                    "text": "agreed",
+                    "annotations": null
+                },
+                {
+                    "index": 64,
+                    "start_time": 103.87810311903249,
+                    "end_time": 104.21705919796311,
+                    "text": "upon",
+                    "annotations": null
+                },
+                {
+                    "index": 65,
+                    "start_time": 104.21705919796311,
+                    "end_time": 104.5560152768937,
+                    "text": "arrangement",
+                    "annotations": null
+                },
+                {
+                    "index": 66,
+                    "start_time": 104.5560152768937,
+                    "end_time": 104.89497135582432,
+                    "text": "again",
+                    "annotations": null
+                },
+                {
+                    "index": 67,
+                    "start_time": 104.89497135582432,
+                    "end_time": 105.23392743475495,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 68,
+                    "start_time": 105.23392743475495,
+                    "end_time": 105.57288351368555,
+                    "text": "incentivize",
+                    "annotations": null
+                },
+                {
+                    "index": 69,
+                    "start_time": 105.57288351368555,
+                    "end_time": 105.91183959261618,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 70,
+                    "start_time": 105.91183959261618,
+                    "end_time": 106.2507956715468,
+                    "text": "storm",
+                    "annotations": null
+                },
+                {
+                    "index": 71,
+                    "start_time": 106.2507956715468,
+                    "end_time": 106.58975175047742,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 72,
+                    "start_time": 106.58975175047742,
+                    "end_time": 106.92870782940804,
+                    "text": "play",
+                    "annotations": null
+                },
+                {
+                    "index": 73,
+                    "start_time": 106.92870782940804,
+                    "end_time": 107.26766390833866,
+                    "text": "locally",
+                    "annotations": null
+                },
+                {
+                    "index": 74,
+                    "start_time": 107.26766390833866,
+                    "end_time": 107.60661998726928,
+                    "text": "by",
+                    "annotations": null
+                },
+                {
+                    "index": 75,
+                    "start_time": 107.60661998726928,
+                    "end_time": 107.94557606619989,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 76,
+                    "start_time": 107.94557606619989,
+                    "end_time": 108.2845321451305,
+                    "text": "way",
+                    "annotations": null
+                },
+                {
+                    "index": 77,
+                    "start_time": 108.2845321451305,
+                    "end_time": 108.62348822406112,
+                    "text": "they",
+                    "annotations": null
+                },
+                {
+                    "index": 78,
+                    "start_time": 108.62348822406112,
+                    "end_time": 108.96244430299174,
+                    "text": "played",
+                    "annotations": null
+                },
+                {
+                    "index": 79,
+                    "start_time": 109.31220476397871,
+                    "end_time": 109.66196522496566,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 80,
+                    "start_time": 109.66196522496566,
+                    "end_time": 110.01172568595265,
+                    "text": "hecked",
+                    "annotations": null
+                },
+                {
+                    "index": 81,
+                    "start_time": 110.01172568595265,
+                    "end_time": 110.36148614693963,
+                    "text": "a",
+                    "annotations": null
+                },
+                {
+                    "index": 82,
+                    "start_time": 110.36148614693963,
+                    "end_time": 110.71124660792657,
+                    "text": "couple",
+                    "annotations": null
+                },
+                {
+                    "index": 83,
+                    "start_time": 110.71124660792657,
+                    "end_time": 111.06100706891354,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 84,
+                    "start_time": 111.06100706891354,
+                    "end_time": 111.41076752990051,
+                    "text": "days",
+                    "annotations": null
+                },
+                {
+                    "index": 85,
+                    "start_time": 111.41076752990051,
+                    "end_time": 111.76052799088748,
+                    "text": "ago",
+                    "annotations": null
+                },
+                {
+                    "index": 86,
+                    "start_time": 111.76052799088748,
+                    "end_time": 112.11028845187445,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 87,
+                    "start_time": 112.11028845187445,
+                    "end_time": 112.46004891286142,
+                    "text": "one",
+                    "annotations": null
+                },
+                {
+                    "index": 88,
+                    "start_time": 112.46004891286142,
+                    "end_time": 112.8098093738484,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 89,
+                    "start_time": 112.8098093738484,
+                    "end_time": 113.15956983483534,
+                    "text": "my",
+                    "annotations": null
+                },
+                {
+                    "index": 90,
+                    "start_time": 113.15956983483534,
+                    "end_time": 113.50933029582231,
+                    "text": "family",
+                    "annotations": null
+                },
+                {
+                    "index": 91,
+                    "start_time": 113.50933029582231,
+                    "end_time": 113.8590907568093,
+                    "text": "attended",
+                    "annotations": null
+                },
+                {
+                    "index": 92,
+                    "start_time": 113.8590907568093,
+                    "end_time": 114.20885121779625,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 93,
+                    "start_time": 114.20885121779625,
+                    "end_time": 114.55861167878322,
+                    "text": "game",
+                    "annotations": null
+                },
+                {
+                    "index": 94,
+                    "start_time": 114.55861167878322,
+                    "end_time": 114.9083721397702,
+                    "text": "but",
+                    "annotations": null
+                },
+                {
+                    "index": 95,
+                    "start_time": 114.9083721397702,
+                    "end_time": 115.25813260075715,
+                    "text": "i",
+                    "annotations": null
+                },
+                {
+                    "index": 96,
+                    "start_time": 115.25813260075715,
+                    "end_time": 115.60789306174412,
+                    "text": "couldn't",
+                    "annotations": null
+                },
+                {
+                    "index": 97,
+                    "start_time": 116.008911521324,
+                    "end_time": 116.4099299809039,
+                    "text": "make",
+                    "annotations": null
+                },
+                {
+                    "index": 98,
+                    "start_time": 116.4099299809039,
+                    "end_time": 116.81094844048378,
+                    "text": "it",
+                    "annotations": null
+                },
+                {
+                    "index": 99,
+                    "start_time": 116.81094844048378,
+                    "end_time": 117.21196690006366,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 100,
+                    "start_time": 117.21196690006366,
+                    "end_time": 117.61298535964353,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 101,
+                    "start_time": 117.61298535964353,
+                    "end_time": 118.01400381922343,
+                    "text": "last",
+                    "annotations": null
+                },
+                {
+                    "index": 102,
+                    "start_time": 118.01400381922343,
+                    "end_time": 118.41502227880332,
+                    "text": "legislation",
+                    "annotations": null
+                },
+                {
+                    "index": 103,
+                    "start_time": 118.41502227880332,
+                    "end_time": 118.8160407383832,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 104,
+                    "start_time": 118.8160407383832,
+                    "end_time": 119.2170591979631,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 105,
+                    "start_time": 119.2170591979631,
+                    "end_time": 119.61807765754298,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 106,
+                    "start_time": 119.61807765754298,
+                    "end_time": 120.01909611712286,
+                    "text": "seattle",
+                    "annotations": null
+                },
+                {
+                    "index": 107,
+                    "start_time": 120.01909611712286,
+                    "end_time": 120.42011457670276,
+                    "text": "center",
+                    "annotations": null
+                },
+                {
+                    "index": 108,
+                    "start_time": 120.42011457670276,
+                    "end_time": 120.82113303628263,
+                    "text": "arena",
+                    "annotations": null
+                },
+                {
+                    "index": 109,
+                    "start_time": 120.82113303628263,
+                    "end_time": 121.22215149586252,
+                    "text": "sign",
+                    "annotations": null
+                },
+                {
+                    "index": 110,
+                    "start_time": 121.22215149586252,
+                    "end_time": 121.62316995544239,
+                    "text": "overlay",
+                    "annotations": null
+                },
+                {
+                    "index": 111,
+                    "start_time": 121.62316995544239,
+                    "end_time": 122.0241884150223,
+                    "text": "district",
+                    "annotations": null
+                },
+                {
+                    "index": 112,
+                    "start_time": 122.28479424869884,
+                    "end_time": 122.54540008237541,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 113,
+                    "start_time": 122.54540008237541,
+                    "end_time": 122.80600591605197,
+                    "text": "thank",
+                    "annotations": null
+                },
+                {
+                    "index": 114,
+                    "start_time": 122.80600591605197,
+                    "end_time": 123.06661174972852,
+                    "text": "all",
+                    "annotations": null
+                },
+                {
+                    "index": 115,
+                    "start_time": 123.06661174972852,
+                    "end_time": 123.3272175834051,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 116,
+                    "start_time": 123.3272175834051,
+                    "end_time": 123.58782341708167,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 117,
+                    "start_time": 123.58782341708167,
+                    "end_time": 123.84842925075824,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 118,
+                    "start_time": 123.84842925075824,
+                    "end_time": 124.1090350844348,
+                    "text": "participating",
+                    "annotations": null
+                },
+                {
+                    "index": 119,
+                    "start_time": 124.1090350844348,
+                    "end_time": 124.36964091811136,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 120,
+                    "start_time": 124.36964091811136,
+                    "end_time": 124.63024675178794,
+                    "text": "many",
+                    "annotations": null
+                },
+                {
+                    "index": 121,
+                    "start_time": 124.63024675178794,
+                    "end_time": 124.8908525854645,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 122,
+                    "start_time": 124.8908525854645,
+                    "end_time": 125.15145841914105,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 123,
+                    "start_time": 125.15145841914105,
+                    "end_time": 125.41206425281763,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 124,
+                    "start_time": 125.41206425281763,
+                    "end_time": 125.6726700864942,
+                    "text": "participating",
+                    "annotations": null
+                },
+                {
+                    "index": 125,
+                    "start_time": 125.6726700864942,
+                    "end_time": 125.93327592017074,
+                    "text": "in",
+                    "annotations": null
+                },
+                {
+                    "index": 126,
+                    "start_time": 125.93327592017074,
+                    "end_time": 126.19388175384731,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 127,
+                    "start_time": 126.19388175384731,
+                    "end_time": 126.45448758752389,
+                    "text": "discussion",
+                    "annotations": null
+                },
+                {
+                    "index": 128,
+                    "start_time": 126.73531283933052,
+                    "end_time": 127.01613809113718,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 129,
+                    "start_time": 127.01613809113718,
+                    "end_time": 127.29696334294381,
+                    "text": "we're",
+                    "annotations": null
+                },
+                {
+                    "index": 130,
+                    "start_time": 127.29696334294381,
+                    "end_time": 127.57778859475046,
+                    "text": "just",
+                    "annotations": null
+                },
+                {
+                    "index": 131,
+                    "start_time": 127.57778859475046,
+                    "end_time": 127.8586138465571,
+                    "text": "making",
+                    "annotations": null
+                },
+                {
+                    "index": 132,
+                    "start_time": 127.8586138465571,
+                    "end_time": 128.13943909836374,
+                    "text": "sure",
+                    "annotations": null
+                },
+                {
+                    "index": 133,
+                    "start_time": 128.13943909836374,
+                    "end_time": 128.42026435017038,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 134,
+                    "start_time": 128.42026435017038,
+                    "end_time": 128.70108960197703,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 135,
+                    "start_time": 128.70108960197703,
+                    "end_time": 128.98191485378368,
+                    "text": "monitoring",
+                    "annotations": null
+                },
+                {
+                    "index": 136,
+                    "start_time": 128.98191485378368,
+                    "end_time": 129.2627401055903,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 137,
+                    "start_time": 129.2627401055903,
+                    "end_time": 129.54356535739697,
+                    "text": "regulating",
+                    "annotations": null
+                },
+                {
+                    "index": 138,
+                    "start_time": 129.54356535739697,
+                    "end_time": 129.8243906092036,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 139,
+                    "start_time": 129.8243906092036,
+                    "end_time": 130.10521586101024,
+                    "text": "signs",
+                    "annotations": null
+                },
+                {
+                    "index": 140,
+                    "start_time": 130.10521586101024,
+                    "end_time": 130.38604111281688,
+                    "text": "down",
+                    "annotations": null
+                },
+                {
+                    "index": 141,
+                    "start_time": 130.38604111281688,
+                    "end_time": 130.6668663646235,
+                    "text": "there",
+                    "annotations": null
+                },
+                {
+                    "index": 142,
+                    "start_time": 130.6668663646235,
+                    "end_time": 130.94769161643018,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 143,
+                    "start_time": 130.94769161643018,
+                    "end_time": 131.2285168682368,
+                    "text": "way",
+                    "annotations": null
+                },
+                {
+                    "index": 144,
+                    "start_time": 131.55076384468492,
+                    "end_time": 131.87301082113308,
+                    "text": "finding",
+                    "annotations": null
+                },
+                {
+                    "index": 145,
+                    "start_time": 131.87301082113308,
+                    "end_time": 132.19525779758115,
+                    "text": "during",
+                    "annotations": null
+                },
+                {
+                    "index": 146,
+                    "start_time": 132.19525779758115,
+                    "end_time": 132.5175047740293,
+                    "text": "all",
+                    "annotations": null
+                },
+                {
+                    "index": 147,
+                    "start_time": 132.5175047740293,
+                    "end_time": 132.83975175047743,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 148,
+                    "start_time": 132.83975175047743,
+                    "end_time": 133.16199872692553,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 149,
+                    "start_time": 133.16199872692553,
+                    "end_time": 133.48424570337366,
+                    "text": "activity",
+                    "annotations": null
+                },
+                {
+                    "index": 150,
+                    "start_time": 133.48424570337366,
+                    "end_time": 133.80649267982176,
+                    "text": "around",
+                    "annotations": null
+                },
+                {
+                    "index": 151,
+                    "start_time": 133.80649267982176,
+                    "end_time": 134.1287396562699,
+                    "text": "kirin",
+                    "annotations": null
+                },
+                {
+                    "index": 152,
+                    "start_time": 134.1287396562699,
+                    "end_time": 134.450986632718,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 153,
+                    "start_time": 134.450986632718,
+                    "end_time": 134.77323360916614,
+                    "text": "i'll",
+                    "annotations": null
+                },
+                {
+                    "index": 154,
+                    "start_time": 134.77323360916614,
+                    "end_time": 135.0954805856143,
+                    "text": "present",
+                    "annotations": null
+                },
+                {
+                    "index": 155,
+                    "start_time": 135.0954805856143,
+                    "end_time": 135.41772756206242,
+                    "text": "those",
+                    "annotations": null
+                },
+                {
+                    "index": 156,
+                    "start_time": 135.41772756206242,
+                    "end_time": 135.73997453851052,
+                    "text": "three",
+                    "annotations": null
+                },
+                {
+                    "index": 157,
+                    "start_time": 135.73997453851052,
+                    "end_time": 136.06222151495865,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 158,
+                    "start_time": 136.06222151495865,
+                    "end_time": 136.38446849140675,
+                    "text": "afternoon",
+                    "annotations": null
+                },
+                {
+                    "index": 159,
+                    "start_time": 136.7218332272438,
+                    "end_time": 137.05919796308086,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 160,
+                    "start_time": 137.05919796308086,
+                    "end_time": 137.3965626989179,
+                    "text": "with",
+                    "annotations": null
+                },
+                {
+                    "index": 161,
+                    "start_time": 137.3965626989179,
+                    "end_time": 137.73392743475495,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 162,
+                    "start_time": 137.73392743475495,
+                    "end_time": 138.071292170592,
+                    "text": "i'll",
+                    "annotations": null
+                },
+                {
+                    "index": 163,
+                    "start_time": 138.071292170592,
+                    "end_time": 138.40865690642903,
+                    "text": "turn",
+                    "annotations": null
+                },
+                {
+                    "index": 164,
+                    "start_time": 138.40865690642903,
+                    "end_time": 138.74602164226607,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 165,
+                    "start_time": 138.74602164226607,
+                    "end_time": 139.0833863781031,
+                    "text": "mic",
+                    "annotations": null
+                },
+                {
+                    "index": 166,
+                    "start_time": 139.0833863781031,
+                    "end_time": 139.42075111394016,
+                    "text": "over",
+                    "annotations": null
+                },
+                {
+                    "index": 167,
+                    "start_time": 139.42075111394016,
+                    "end_time": 139.75811584977723,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 168,
+                    "start_time": 139.75811584977723,
+                    "end_time": 140.09548058561427,
+                    "text": "councilmember",
+                    "annotations": null
+                },
+                {
+                    "index": 169,
+                    "start_time": 140.09548058561427,
+                    "end_time": 140.4328453214513,
+                    "text": "soan",
+                    "annotations": null
+                }
+            ],
+            "text": "The second piece of legislation is the storm key arena facility use agreement basically where we are incentivizing our great team to storm to stay in town as opposed going far north like ever it so it doesn't increase our liability as a city I think it's still 2.6 million but it just sort of redefines cost versus revenue and that was an agreed upon arrangement again to incentivize the storm to play locally by the way they played at HECKED a couple of days ago and one so my family attended that game but I couldn't make it and the last legislation is just the Seattle Center arena sign overlay district and thank all of you for participating in many of you for participating in the discussion and we're just making sure we are monitoring and regulating the signs down there for way finding during all of the activity around Kirin so I'll present those three this afternoon and with that I'll turn the mic over to Councilmember Soan.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 5,
+            "confidence": 0.6,
+            "start_time": 140.68586887332907,
+            "end_time": 142.4570337364736,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 140.68586887332907,
+                    "end_time": 140.93889242520686,
+                    "text": "thank",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 140.93889242520686,
+                    "end_time": 141.19191597708468,
+                    "text": "you",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 141.19191597708468,
+                    "end_time": 141.44493952896244,
+                    "text": "president",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 141.44493952896244,
+                    "end_time": 141.69796308084022,
+                    "text": "harold",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 141.69796308084022,
+                    "end_time": 141.950986632718,
+                    "text": "good",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 141.950986632718,
+                    "end_time": 142.20401018459583,
+                    "text": "morning",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 142.20401018459583,
+                    "end_time": 142.4570337364736,
+                    "text": "everyone",
+                    "annotations": null
+                }
+            ],
+            "text": "Thank you President Harold good morning everyone.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        },
+        {
+            "index": 6,
+            "confidence": 0.6,
+            "start_time": 142.4570337364736,
+            "end_time": 180.0,
+            "words": [
+                {
+                    "index": 0,
+                    "start_time": 142.4570337364736,
+                    "end_time": 142.71005728835135,
+                    "text": "there",
+                    "annotations": null
+                },
+                {
+                    "index": 1,
+                    "start_time": 142.71005728835135,
+                    "end_time": 142.96308084022917,
+                    "text": "are",
+                    "annotations": null
+                },
+                {
+                    "index": 2,
+                    "start_time": 142.96308084022917,
+                    "end_time": 143.21610439210696,
+                    "text": "no",
+                    "annotations": null
+                },
+                {
+                    "index": 3,
+                    "start_time": 143.21610439210696,
+                    "end_time": 143.46912794398474,
+                    "text": "items",
+                    "annotations": null
+                },
+                {
+                    "index": 4,
+                    "start_time": 143.46912794398474,
+                    "end_time": 143.7221514958625,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 5,
+                    "start_time": 143.7221514958625,
+                    "end_time": 143.9751750477403,
+                    "text": "today's",
+                    "annotations": null
+                },
+                {
+                    "index": 6,
+                    "start_time": 143.9751750477403,
+                    "end_time": 144.22819859961808,
+                    "text": "city",
+                    "annotations": null
+                },
+                {
+                    "index": 7,
+                    "start_time": 144.22819859961808,
+                    "end_time": 144.48122215149587,
+                    "text": "council",
+                    "annotations": null
+                },
+                {
+                    "index": 8,
+                    "start_time": 144.75402382467945,
+                    "end_time": 145.0268254978631,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 9,
+                    "start_time": 145.0268254978631,
+                    "end_time": 145.29962717104667,
+                    "text": "agenda",
+                    "annotations": null
+                },
+                {
+                    "index": 10,
+                    "start_time": 145.29962717104667,
+                    "end_time": 145.57242884423025,
+                    "text": "from",
+                    "annotations": null
+                },
+                {
+                    "index": 11,
+                    "start_time": 145.57242884423025,
+                    "end_time": 145.84523051741385,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 12,
+                    "start_time": 145.84523051741385,
+                    "end_time": 146.11803219059743,
+                    "text": "human",
+                    "annotations": null
+                },
+                {
+                    "index": 13,
+                    "start_time": 146.11803219059743,
+                    "end_time": 146.39083386378104,
+                    "text": "services",
+                    "annotations": null
+                },
+                {
+                    "index": 14,
+                    "start_time": 146.39083386378104,
+                    "end_time": 146.66363553696462,
+                    "text": "equitable",
+                    "annotations": null
+                },
+                {
+                    "index": 15,
+                    "start_time": 146.66363553696462,
+                    "end_time": 146.93643721014826,
+                    "text": "development",
+                    "annotations": null
+                },
+                {
+                    "index": 16,
+                    "start_time": 146.93643721014826,
+                    "end_time": 147.20923888333184,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 17,
+                    "start_time": 147.20923888333184,
+                    "end_time": 147.48204055651541,
+                    "text": "renter's",
+                    "annotations": null
+                },
+                {
+                    "index": 18,
+                    "start_time": 147.48204055651541,
+                    "end_time": 147.754842229699,
+                    "text": "rights",
+                    "annotations": null
+                },
+                {
+                    "index": 19,
+                    "start_time": 147.754842229699,
+                    "end_time": 148.02764390288263,
+                    "text": "committee",
+                    "annotations": null
+                },
+                {
+                    "index": 20,
+                    "start_time": 148.02764390288263,
+                    "end_time": 148.3004455760662,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 21,
+                    "start_time": 148.67338151046542,
+                    "end_time": 149.04631744486466,
+                    "text": "next",
+                    "annotations": null
+                },
+                {
+                    "index": 22,
+                    "start_time": 149.04631744486466,
+                    "end_time": 149.41925337926386,
+                    "text": "meeting",
+                    "annotations": null
+                },
+                {
+                    "index": 23,
+                    "start_time": 149.41925337926386,
+                    "end_time": 149.7921893136631,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 24,
+                    "start_time": 149.7921893136631,
+                    "end_time": 150.1651252480623,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 25,
+                    "start_time": 150.1651252480623,
+                    "end_time": 150.53806118246152,
+                    "text": "committee",
+                    "annotations": null
+                },
+                {
+                    "index": 26,
+                    "start_time": 150.53806118246152,
+                    "end_time": 150.91099711686076,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 27,
+                    "start_time": 150.91099711686076,
+                    "end_time": 151.28393305125996,
+                    "text": "scheduled",
+                    "annotations": null
+                },
+                {
+                    "index": 28,
+                    "start_time": 151.28393305125996,
+                    "end_time": 151.6568689856592,
+                    "text": "for",
+                    "annotations": null
+                },
+                {
+                    "index": 29,
+                    "start_time": 151.6568689856592,
+                    "end_time": 152.0298049200584,
+                    "text": "its",
+                    "annotations": null
+                },
+                {
+                    "index": 30,
+                    "start_time": 152.0298049200584,
+                    "end_time": 152.40274085445765,
+                    "text": "regular",
+                    "annotations": null
+                },
+                {
+                    "index": 31,
+                    "start_time": 152.40274085445765,
+                    "end_time": 152.77567678885686,
+                    "text": "time",
+                    "annotations": null
+                },
+                {
+                    "index": 32,
+                    "start_time": 152.77567678885686,
+                    "end_time": 153.14861272325606,
+                    "text": "tomorrow",
+                    "annotations": null
+                },
+                {
+                    "index": 33,
+                    "start_time": 153.14861272325606,
+                    "end_time": 153.5215486576553,
+                    "text": "july",
+                    "annotations": null
+                },
+                {
+                    "index": 34,
+                    "start_time": 153.5215486576553,
+                    "end_time": 153.8944845920545,
+                    "text": "22nd",
+                    "annotations": null
+                },
+                {
+                    "index": 35,
+                    "start_time": 153.8944845920545,
+                    "end_time": 154.26742052645375,
+                    "text": "at",
+                    "annotations": null
+                },
+                {
+                    "index": 36,
+                    "start_time": 154.26742052645375,
+                    "end_time": 154.64035646085296,
+                    "text": "2pm",
+                    "annotations": null
+                },
+                {
+                    "index": 37,
+                    "start_time": 154.98886059834498,
+                    "end_time": 155.33736473583704,
+                    "text": "where",
+                    "annotations": null
+                },
+                {
+                    "index": 38,
+                    "start_time": 155.33736473583704,
+                    "end_time": 155.6858688733291,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 39,
+                    "start_time": 155.6858688733291,
+                    "end_time": 156.03437301082113,
+                    "text": "human",
+                    "annotations": null
+                },
+                {
+                    "index": 40,
+                    "start_time": 156.03437301082113,
+                    "end_time": 156.38287714831316,
+                    "text": "services",
+                    "annotations": null
+                },
+                {
+                    "index": 41,
+                    "start_time": 156.38287714831316,
+                    "end_time": 156.7313812858052,
+                    "text": "department",
+                    "annotations": null
+                },
+                {
+                    "index": 42,
+                    "start_time": 156.7313812858052,
+                    "end_time": 157.07988542329727,
+                    "text": "will",
+                    "annotations": null
+                },
+                {
+                    "index": 43,
+                    "start_time": 157.07988542329727,
+                    "end_time": 157.42838956078933,
+                    "text": "present",
+                    "annotations": null
+                },
+                {
+                    "index": 44,
+                    "start_time": 157.42838956078933,
+                    "end_time": 157.77689369828136,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 45,
+                    "start_time": 157.77689369828136,
+                    "end_time": 158.1253978357734,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 46,
+                    "start_time": 158.1253978357734,
+                    "end_time": 158.47390197326544,
+                    "text": "out",
+                    "annotations": null
+                },
+                {
+                    "index": 47,
+                    "start_time": 158.47390197326544,
+                    "end_time": 158.82240611075747,
+                    "text": "of",
+                    "annotations": null
+                },
+                {
+                    "index": 48,
+                    "start_time": 158.82240611075747,
+                    "end_time": 159.17091024824953,
+                    "text": "school",
+                    "annotations": null
+                },
+                {
+                    "index": 49,
+                    "start_time": 159.17091024824953,
+                    "end_time": 159.51941438574158,
+                    "text": "time",
+                    "annotations": null
+                },
+                {
+                    "index": 50,
+                    "start_time": 159.51941438574158,
+                    "end_time": 159.86791852323358,
+                    "text": "meals",
+                    "annotations": null
+                },
+                {
+                    "index": 51,
+                    "start_time": 159.86791852323358,
+                    "end_time": 160.21642266072564,
+                    "text": "program",
+                    "annotations": null
+                },
+                {
+                    "index": 52,
+                    "start_time": 160.41412363799753,
+                    "end_time": 160.6118246152694,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 53,
+                    "start_time": 160.6118246152694,
+                    "end_time": 160.8095255925413,
+                    "text": "as",
+                    "annotations": null
+                },
+                {
+                    "index": 54,
+                    "start_time": 160.8095255925413,
+                    "end_time": 161.00722656981316,
+                    "text": "we",
+                    "annotations": null
+                },
+                {
+                    "index": 55,
+                    "start_time": 161.00722656981316,
+                    "end_time": 161.20492754708502,
+                    "text": "know",
+                    "annotations": null
+                },
+                {
+                    "index": 56,
+                    "start_time": 161.20492754708502,
+                    "end_time": 161.4026285243569,
+                    "text": "during",
+                    "annotations": null
+                },
+                {
+                    "index": 57,
+                    "start_time": 161.4026285243569,
+                    "end_time": 161.6003295016288,
+                    "text": "the",
+                    "annotations": null
+                },
+                {
+                    "index": 58,
+                    "start_time": 161.6003295016288,
+                    "end_time": 161.79803047890067,
+                    "text": "school",
+                    "annotations": null
+                },
+                {
+                    "index": 59,
+                    "start_time": 161.79803047890067,
+                    "end_time": 161.99573145617254,
+                    "text": "year",
+                    "annotations": null
+                },
+                {
+                    "index": 60,
+                    "start_time": 161.99573145617254,
+                    "end_time": 162.1934324334444,
+                    "text": "many",
+                    "annotations": null
+                },
+                {
+                    "index": 61,
+                    "start_time": 162.1934324334444,
+                    "end_time": 162.3911334107163,
+                    "text": "seattle",
+                    "annotations": null
+                },
+                {
+                    "index": 62,
+                    "start_time": 162.3911334107163,
+                    "end_time": 162.5888343879882,
+                    "text": "students",
+                    "annotations": null
+                },
+                {
+                    "index": 63,
+                    "start_time": 162.5888343879882,
+                    "end_time": 162.78653536526005,
+                    "text": "depend",
+                    "annotations": null
+                },
+                {
+                    "index": 64,
+                    "start_time": 162.78653536526005,
+                    "end_time": 162.98423634253191,
+                    "text": "on",
+                    "annotations": null
+                },
+                {
+                    "index": 65,
+                    "start_time": 162.98423634253191,
+                    "end_time": 163.1819373198038,
+                    "text": "free",
+                    "annotations": null
+                },
+                {
+                    "index": 66,
+                    "start_time": 163.1819373198038,
+                    "end_time": 163.37963829707567,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 67,
+                    "start_time": 163.37963829707567,
+                    "end_time": 163.57733927434757,
+                    "text": "reduced",
+                    "annotations": null
+                },
+                {
+                    "index": 68,
+                    "start_time": 163.9414385741566,
+                    "end_time": 164.30553787396562,
+                    "text": "lunches",
+                    "annotations": null
+                },
+                {
+                    "index": 69,
+                    "start_time": 164.30553787396562,
+                    "end_time": 164.66963717377467,
+                    "text": "during",
+                    "annotations": null
+                },
+                {
+                    "index": 70,
+                    "start_time": 164.66963717377467,
+                    "end_time": 165.0337364735837,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 71,
+                    "start_time": 165.0337364735837,
+                    "end_time": 165.39783577339276,
+                    "text": "summer",
+                    "annotations": null
+                },
+                {
+                    "index": 72,
+                    "start_time": 165.39783577339276,
+                    "end_time": 165.7619350732018,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 73,
+                    "start_time": 165.7619350732018,
+                    "end_time": 166.12603437301084,
+                    "text": "nutritional",
+                    "annotations": null
+                },
+                {
+                    "index": 74,
+                    "start_time": 166.12603437301084,
+                    "end_time": 166.49013367281987,
+                    "text": "support",
+                    "annotations": null
+                },
+                {
+                    "index": 75,
+                    "start_time": 166.49013367281987,
+                    "end_time": 166.8542329726289,
+                    "text": "is",
+                    "annotations": null
+                },
+                {
+                    "index": 76,
+                    "start_time": 166.8542329726289,
+                    "end_time": 167.21833227243795,
+                    "text": "not",
+                    "annotations": null
+                },
+                {
+                    "index": 77,
+                    "start_time": 167.21833227243795,
+                    "end_time": 167.582431572247,
+                    "text": "available",
+                    "annotations": null
+                },
+                {
+                    "index": 78,
+                    "start_time": 167.582431572247,
+                    "end_time": 167.94653087205603,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 79,
+                    "start_time": 167.94653087205603,
+                    "end_time": 168.31063017186506,
+                    "text": "so",
+                    "annotations": null
+                },
+                {
+                    "index": 80,
+                    "start_time": 168.31063017186506,
+                    "end_time": 168.67472947167408,
+                    "text": "this",
+                    "annotations": null
+                },
+                {
+                    "index": 81,
+                    "start_time": 168.67472947167408,
+                    "end_time": 169.03882877148314,
+                    "text": "program",
+                    "annotations": null
+                },
+                {
+                    "index": 82,
+                    "start_time": 169.9522597071929,
+                    "end_time": 170.86569064290262,
+                    "text": "attempts",
+                    "annotations": null
+                },
+                {
+                    "index": 83,
+                    "start_time": 170.86569064290262,
+                    "end_time": 171.77912157861235,
+                    "text": "to",
+                    "annotations": null
+                },
+                {
+                    "index": 84,
+                    "start_time": 171.77912157861235,
+                    "end_time": 172.69255251432207,
+                    "text": "fill",
+                    "annotations": null
+                },
+                {
+                    "index": 85,
+                    "start_time": 172.69255251432207,
+                    "end_time": 173.60598345003183,
+                    "text": "that",
+                    "annotations": null
+                },
+                {
+                    "index": 86,
+                    "start_time": 173.60598345003183,
+                    "end_time": 174.51941438574156,
+                    "text": "void",
+                    "annotations": null
+                },
+                {
+                    "index": 87,
+                    "start_time": 174.51941438574156,
+                    "end_time": 175.4328453214513,
+                    "text": "and",
+                    "annotations": null
+                },
+                {
+                    "index": 88,
+                    "start_time": 175.4328453214513,
+                    "end_time": 176.34627625716104,
+                    "text": "we'll",
+                    "annotations": null
+                },
+                {
+                    "index": 89,
+                    "start_time": 176.34627625716104,
+                    "end_time": 177.25970719287076,
+                    "text": "be",
+                    "annotations": null
+                },
+                {
+                    "index": 90,
+                    "start_time": 177.25970719287076,
+                    "end_time": 178.17313812858055,
+                    "text": "talking",
+                    "annotations": null
+                },
+                {
+                    "index": 91,
+                    "start_time": 178.17313812858055,
+                    "end_time": 179.08656906429025,
+                    "text": "about",
+                    "annotations": null
+                },
+                {
+                    "index": 92,
+                    "start_time": 179.08656906429025,
+                    "end_time": 180.0,
+                    "text": "that",
+                    "annotations": null
+                }
+            ],
+            "text": "There are no items on today's city council meeting agenda from the Human Services Equitable Development and Renter's Rights Committee the next meeting of the committee is scheduled for its regular time tomorrow July 22nd at 2pm where the Human Services Department will present on the out of school time meals program and as we know during the school year many Seattle students depend on free and reduced lunches during this summer that nutritional support is not available and so this program attempts to fill that void and we'll be talking about that.",
+            "speaker_index": null,
+            "speaker_name": null,
+            "annotations": null
+        }
+    ],
+    "annotations": null
+}
