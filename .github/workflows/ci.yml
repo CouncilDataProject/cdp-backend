@@ -69,9 +69,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[pipeline,functions,test]
-    - name: Run Tests
+    - name: Run Lib Tests
       run: |
         just test-library
+    - name: Run Func Tests
+      run: |
         just test-functions
     - name: Upload Codecov
       uses: codecov/codecov-action@v3

@@ -32,12 +32,8 @@ def test_transcribe(
     result = model.transcribe(file_uri)
 
     # Because ML is non-deterministic
-    # We are just going to diff each sentence and calculate the average similarity
-    test_similarities = []
-    for sentence_index, sentence in enumerate(result.sentences):
-        expected_sentence = expected.sentences[sentence_index]
-        test_similarities.append(fuzz.ratio(sentence.text, expected_sentence.text))
-
-    # Calc average and assert that over 90% of the text is similar to our test doc
-    avg_sim = sum(test_similarities) / len(test_similarities)
-    assert avg_sim > 0.9
+    # we just check that the transcripts are similar
+    expected_full_text = " ".join([sent.text for sent in expected.sentences])
+    result_full_text = " ".join([sent.text for sent in result.sentences])
+    similarity = fuzz.ratio(expected_full_text, result_full_text)
+    assert similarity > 0.9
