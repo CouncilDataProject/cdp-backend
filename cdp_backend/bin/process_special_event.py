@@ -63,7 +63,7 @@ def main() -> None:
 
             for session in ingestion_model.sessions:
                 # Copy if remote resource, otherwise use local file uri
-                fs, path = url_to_fs(session.video_uri)
+                fs, _ = url_to_fs(session.video_uri)
                 if isinstance(fs, LocalFileSystem):
                     # Upload video file to file store
                     log.info(f"Uploading {session.video_uri}...")
@@ -73,8 +73,8 @@ def main() -> None:
                         filepath=session.video_uri,
                     )
 
-                # Replace video_uri of session
-                session.video_uri = video_uri
+                    # Replace video_uri of session
+                    session.video_uri = video_uri
 
         # Create event gather pipeline flow
         log.info("Beginning processing...")
