@@ -69,6 +69,7 @@ pipeline = [
   "pydub~=0.25.1",
   "rapidfuzz~=2.0",
   "spacy~=3.4",
+  "spacy-transformers~=1.1",
   "torch~=1.10",
   "tqdm~=4.62",
   "transformers~=4.16",
