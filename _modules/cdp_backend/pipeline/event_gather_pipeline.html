@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+g311ee4b documentation</title>
+        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+ga79be80 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g311ee4b documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+ga79be80 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g311ee4b documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+ga79be80 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -278,8 +278,7 @@
     <span class="n">prefetched_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Provided a function to gather new event information, create the Prefect Flow object</span>
-<span class="sd">    to preview, run, or visualize.</span>
+<span class="sd">    Create the Prefect Flow object to preview, run, or visualize.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -698,6 +697,14 @@
             <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_err_filepath</span><span class="p">,</span>
             <span class="n">remove_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
+    <span class="c1"># Download to ensure we have it for later</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">local_audio_path</span> <span class="o">=</span> <span class="n">fs_functions</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+            <span class="n">credentials_file</span><span class="o">=</span><span class="n">credentials_file</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span>
+            <span class="n">remote_filepath</span><span class="o">=</span><span class="n">local_audio_path</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="n">local_audio_path</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">audio_uri</span><span class="p">,</span> <span class="n">local_audio_path</span>
 
@@ -744,8 +751,7 @@
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Transcript</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Finalizes metadata for a Transcript object, stores the transcript as JSON to object</span>
-<span class="sd">    storage and finally adds transcript and file objects to database.</span>
+<span class="sd">    Finalize and store the transcript to GCP.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -940,7 +946,7 @@
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates static and hover thumbnails.</span>
+<span class="sd">    Create static and hover thumbnails.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
