@@ -104,6 +104,7 @@ class WhisperModel(SRModel):
         log.info(f"Transcribing '{file_uri}'")
         result = model.transcribe(file_uri, verbose=False)
 
+        log.info("Converting whisper segments to words with metadata")
         timestamped_words_with_meta = []
         for segment in result["segments"]:
             seg_text = segment["text"]
@@ -131,6 +132,7 @@ class WhisperModel(SRModel):
 
         # Scale to between 0 and 1
         # Then rescale to real duration
+        log.info("Calculating word durations")
         for word_with_meta in timestamped_words_with_meta:
             # Scale to between 0 and 1
             word_with_meta["start"] = (
@@ -145,6 +147,7 @@ class WhisperModel(SRModel):
         # Iteratively construct sentences
         sentences = []
         current_sentence_words_with_metas = []
+        log.info("Constructing sentences from words with meta")
         for word_with_meta in timestamped_words_with_meta:
             current_sentence_words_with_metas.append(word_with_meta)
             joined_words = " ".join(
@@ -189,6 +192,7 @@ class WhisperModel(SRModel):
 
         # Reformat data to our structure
         structured_sentences: list[transcript_model.Sentence] = []
+        log.info("Converting sentence data to CDP Transcript format")
         for sent_index, sentence_with_word_metas in enumerate(sentences):
             structured_sentences.append(
                 transcript_model.Sentence(
