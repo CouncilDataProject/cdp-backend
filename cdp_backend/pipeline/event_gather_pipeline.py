@@ -62,8 +62,7 @@ def create_event_gather_flow(
     prefetched_events: list[EventIngestionModel] | None = None,
 ) -> Flow:
     """
-    Provided a function to gather new event information, create the Prefect Flow object
-    to preview, run, or visualize.
+    Create the Prefect Flow object to preview, run, or visualize.
 
     Parameters
     ----------
@@ -482,6 +481,14 @@ def split_audio(
             filepath=tmp_audio_log_err_filepath,
             remove_local=True,
         )
+    # Download to ensure we have it for later
+    else:
+        local_audio_path = fs_functions.download_file(
+            credentials_file=credentials_file,
+            bucket=bucket,
+            remote_filepath=local_audio_path,
+            save_path=local_audio_path,
+        )
 
     return audio_uri, local_audio_path
 
@@ -528,8 +535,7 @@ def finalize_and_archive_transcript(
     session: Session,
 ) -> tuple[str, Transcript]:
     """
-    Finalizes metadata for a Transcript object, stores the transcript as JSON to object
-    storage and finally adds transcript and file objects to database.
+    Finalize and store the transcript to GCP.
 
     Parameters
     ----------
@@ -724,7 +730,7 @@ def generate_thumbnails(
     credentials_file: str,
 ) -> tuple[str, str]:
     """
-    Creates static and hover thumbnails.
+    Create static and hover thumbnails.
 
     Parameters
     ----------
