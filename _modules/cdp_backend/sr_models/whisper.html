@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.sr_models.whisper - cdp-backend 0.1.dev1+gc770cfc documentation</title>
+        <title>cdp_backend.sr_models.whisper - cdp-backend 0.1.dev1+g5264bc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gc770cfc documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g5264bc4 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gc770cfc documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g5264bc4 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -227,7 +227,6 @@
 <span class="kn">import</span> <span class="nn">whisper</span>
 <span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
 <span class="kn">from</span> <span class="nn">spacy.cli.download</span> <span class="kn">import</span> <span class="n">download</span> <span class="k">as</span> <span class="n">download_spacy_model</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">__version__</span>
 <span class="kn">from</span> <span class="nn">..pipeline</span> <span class="kn">import</span> <span class="n">transcript_model</span>
@@ -381,7 +380,8 @@
         <span class="c1"># Process sentences</span>
         <span class="n">sentences_with_word_metas</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">current_word_index_start</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">doc_sent</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">doc_sents</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Constructing sentences&quot;</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Constructing sentences with word metadata&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">doc_sent</span> <span class="ow">in</span> <span class="n">doc_sents</span><span class="p">:</span>
             <span class="c1"># Split the sentence</span>
             <span class="n">doc_sent_words</span> <span class="o">=</span> <span class="n">doc_sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
 
@@ -396,11 +396,18 @@
             <span class="c1"># Increase the current word index start</span>
             <span class="n">current_word_index_start</span> <span class="o">=</span> <span class="n">current_word_index_start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_sent_words</span><span class="p">)</span>
 
+        <span class="c1"># Remove any length zero sentences</span>
+        <span class="n">sentences_with_word_metas</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">sentence_with_word_metas</span>
+            <span class="k">for</span> <span class="n">sentence_with_word_metas</span> <span class="ow">in</span> <span class="n">sentences_with_word_metas</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence_with_word_metas</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="p">]</span>
+
         <span class="c1"># Reformat data to our structure</span>
         <span class="n">structured_sentences</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">transcript_model</span><span class="o">.</span><span class="n">Sentence</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">sent_index</span><span class="p">,</span> <span class="n">sentence_with_word_metas</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
-            <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentences_with_word_metas</span><span class="p">),</span>
-            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Converting sentences to transcript format&quot;</span><span class="p">,</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Converting sentences with word meta to transcript format&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sent_index</span><span class="p">,</span> <span class="n">sentence_with_word_metas</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="n">sentences_with_word_metas</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="n">structured_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">transcript_model</span><span class="o">.</span><span class="n">Sentence</span><span class="p">(</span>
