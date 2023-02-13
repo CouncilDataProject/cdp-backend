@@ -165,7 +165,8 @@ class WhisperModel(SRModel):
         # Process sentences
         sentences_with_word_metas = []
         current_word_index_start = 0
-        for doc_sent in tqdm(doc_sents, desc="Constructing sentences"):
+        log.info("Constructing sentences with word metadata")
+        for doc_sent in doc_sents:
             # Split the sentence
             doc_sent_words = doc_sent.text.split(" ")
 
@@ -180,11 +181,18 @@ class WhisperModel(SRModel):
             # Increase the current word index start
             current_word_index_start = current_word_index_start + len(doc_sent_words)
 
+        # Remove any length zero sentences
+        sentences_with_word_metas = [
+            sentence_with_word_metas
+            for sentence_with_word_metas in sentences_with_word_metas
+            if len(sentence_with_word_metas) > 0
+        ]
+
         # Reformat data to our structure
         structured_sentences: list[transcript_model.Sentence] = []
-        for sent_index, sentence_with_word_metas in tqdm(
-            enumerate(sentences_with_word_metas),
-            desc="Converting sentences to transcript format",
+        log.info("Converting sentences with word meta to transcript format")
+        for sent_index, sentence_with_word_metas in enumerate(
+            sentences_with_word_metas,
         ):
             structured_sentences.append(
                 transcript_model.Sentence(
