@@ -155,58 +155,35 @@ class WhisperModel(SRModel):
             word_with_meta["start"] = word_with_meta["start"] * file_reported_duration
             word_with_meta["end"] = word_with_meta["end"] * file_reported_duration
 
-        # Iteratively construct sentences
-        sentences = []
-        current_sentence_words_with_metas = []
-        for word_with_meta in tqdm(
-            timestamped_words_with_meta,
-            desc="Constructing sentences from words with meta",
-        ):
-            current_sentence_words_with_metas.append(word_with_meta)
-            joined_words = " ".join(
-                [
-                    word_with_meta["text"]
-                    for word_with_meta in current_sentence_words_with_metas
+        # Process all text
+        all_words = " ".join(
+            [word_with_meta["text"] for word_with_meta in timestamped_words_with_meta]
+        )
+        doc = self.nlp(all_words)
+        doc_sents = list(doc.sents)
+
+        # Process sentences
+        sentences_with_word_metas = []
+        current_word_index_start = 0
+        for doc_sent in tqdm(doc_sents, desc="Constructing sentences"):
+            # Split the sentence
+            doc_sent_words = doc_sent.text.split(" ")
+
+            # Append the words
+            sentences_with_word_metas.append(
+                timestamped_words_with_meta[
+                    current_word_index_start : current_word_index_start
+                    + len(doc_sent_words)
                 ]
             )
 
-            # Check for sentences
-            doc = self.nlp(joined_words)
-            doc_sents = list(doc.sents)
-
-            # If there is more than one sentence
-            # Get the second sentence start index within the overall joined_words
-            # Then split the joined_words at that start index to just get the
-            # joined words in the first sentence
-            # Then split those words to see how many are in the first sentence
-            # The use that length to pull the same amount of words from the
-            # current_sentence_words_with_metas list.
-            if len(doc_sents) > 1:
-                second_sent = doc_sents[1]
-                second_sent_start_index = joined_words.index(second_sent.text)
-                first_sent_joined_words = joined_words[:second_sent_start_index]
-                first_sent_words = [
-                    first_sent_word
-                    for first_sent_word in first_sent_joined_words.split(" ")
-                    if len(first_sent_word.strip()) > 0
-                ]
-                first_sent_extract = current_sentence_words_with_metas[
-                    : len(first_sent_words)
-                ]
-                if len(first_sent_extract) > 0:
-                    sentences.append(first_sent_extract)
-                    current_sentence_words_with_metas = (
-                        current_sentence_words_with_metas[len(first_sent_words) :]
-                    )
-
-        # If there is anything remaining, add it to sentences
-        if len(current_sentence_words_with_metas) > 0:
-            sentences.append(current_sentence_words_with_metas)
+            # Increase the current word index start
+            current_word_index_start = current_word_index_start + len(doc_sent_words)
 
         # Reformat data to our structure
         structured_sentences: list[transcript_model.Sentence] = []
         for sent_index, sentence_with_word_metas in tqdm(
-            enumerate(sentences),
+            enumerate(sentences_with_word_metas),
             desc="Converting sentences to transcript format",
         ):
             structured_sentences.append(
