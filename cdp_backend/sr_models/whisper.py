@@ -11,6 +11,7 @@ import spacy
 import whisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
+from tqdm import tqdm
 
 from .. import __version__
 from ..pipeline import transcript_model
@@ -73,7 +74,17 @@ class WhisperModel(SRModel):
 
         # Init spacy
         try:
-            self.nlp = spacy.load("en_core_web_trf")
+            self.nlp = spacy.load(
+                "en_core_web_trf",
+                # Only keep the parser
+                # We are only using this for sentence parsing
+                disable=[
+                    "tagger",
+                    "ner",
+                    "lemmatizer",
+                    "textcat",
+                ],
+            )
         except Exception:
             download_spacy_model("en_core_web_trf")
             self.nlp = spacy.load("en_core_web_trf")
@@ -147,8 +158,10 @@ class WhisperModel(SRModel):
         # Iteratively construct sentences
         sentences = []
         current_sentence_words_with_metas = []
-        log.info("Constructing sentences from words with meta")
-        for word_with_meta in timestamped_words_with_meta:
+        for word_with_meta in tqdm(
+            timestamped_words_with_meta,
+            desc="Constructing sentences from words with meta",
+        ):
             current_sentence_words_with_metas.append(word_with_meta)
             joined_words = " ".join(
                 [
@@ -192,8 +205,10 @@ class WhisperModel(SRModel):
 
         # Reformat data to our structure
         structured_sentences: list[transcript_model.Sentence] = []
-        log.info("Converting sentence data to CDP Transcript format")
-        for sent_index, sentence_with_word_metas in enumerate(sentences):
+        for sent_index, sentence_with_word_metas in tqdm(
+            enumerate(sentences),
+            desc="Converting sentences to transcript format",
+        ):
             structured_sentences.append(
                 transcript_model.Sentence(
                     index=sent_index,
