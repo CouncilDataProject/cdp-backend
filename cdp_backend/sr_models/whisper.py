@@ -11,7 +11,6 @@ import spacy
 import whisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
-from tqdm import tqdm
 
 from .. import __version__
 from ..pipeline import transcript_model
