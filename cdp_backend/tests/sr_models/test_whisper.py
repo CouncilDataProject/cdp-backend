@@ -36,4 +36,4 @@ def test_transcribe(
     expected_full_text = " ".join([sent.text for sent in expected.sentences])
     result_full_text = " ".join([sent.text for sent in result.sentences])
     similarity = fuzz.ratio(expected_full_text, result_full_text)
-    assert similarity > 0.9
+    assert similarity > 95
