@@ -67,6 +67,7 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
 )
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.get_file_uri")
 @mock.patch(f"{PIPELINE_PATH}.fs_functions.upload_file")
+@mock.patch(f"{PIPELINE_PATH}.fs_functions.download_file")
 @pytest.mark.parametrize(
     "get_file_uri_value, audio_upload_file_return",
     [
@@ -81,6 +82,7 @@ def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
     ],
 )
 def test_split_audio(
+    mock_download_file: MagicMock,
     mock_upload_file: MagicMock,
     mock_get_file_uri: MagicMock,
     get_file_uri_value: str,
@@ -95,6 +97,7 @@ def test_split_audio(
 
     mock_get_file_uri.return_value = get_file_uri_value
     mock_upload_file.return_value = audio_upload_file_return
+    mock_download_file.return_value = f"{VIDEO_CONTENT_HASH}-audio.wav"
 
     audio_uri, _ = pipeline.split_audio.run(
         session_content_hash=VIDEO_CONTENT_HASH,
