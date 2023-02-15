@@ -97,36 +97,6 @@ jobs:
         pip install .[lint]
     - name: Lint
       run: just lint
-  
-  release-docker:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Metadata (tags, labels) for Docker
-      id: docker-meta
-      uses: docker/metadata-action@v4
-      with:
-        images: ghcr.io/${{ github.repository }}
-
-    - name: Build and Push Docker Image to GitHub Container Registry
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        push: true
-        tags: ${{ steps.docker-meta.outputs.tags }}
-        labels: ${{ steps.docker-meta.outputs.labels }}
 
   # Publish to PyPI if test, lint, and manifest checks passed
   publish:
