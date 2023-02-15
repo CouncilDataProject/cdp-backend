@@ -25,11 +25,11 @@ clean:
 	rm -fr test.out
 	rm -fr *-thumbnail.*
 	rm -fr test-clipped.*
-	
 
 # install with all deps
 install:
 	pip install -e '.[pipeline,functions,lint,test,docs,dev]'
+	pip install 'faster-whisper @ git+https://github.com/guillaumekln/faster-whisper.git'
 
 # lint, format, and check all files
 lint:
