@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -155,10 +156,11 @@ class WhisperModel(SRModel):
             word_with_meta["end"] = word_with_meta["end"] * file_reported_duration
 
         # Process all text
-        all_words = " ".join(
+        joined_all_words = " ".join(
             [word_with_meta["text"] for word_with_meta in timestamped_words_with_meta]
         )
-        doc = self.nlp(all_words)
+        joined_all_words = re.sub(r" +", " ", joined_all_words)
+        doc = self.nlp(joined_all_words)
         doc_sents = list(doc.sents)
 
         # Process sentences
