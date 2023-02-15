@@ -56,6 +56,7 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 [project.optional-dependencies]
 pipeline = [
   "dask[distributed]>=2021.7.0",
+  "faster-whisper @ git+https://github.com/guillaumekln/faster-whisper.git@main",
   "ffmpeg-python==0.2.0",
   "graphviz~=0.16",
   "imageio~=2.18",
@@ -63,6 +64,7 @@ pipeline = [
   "m3u8-To-MP4==0.1.10",
   "nltk~=3.6",
   "numpy~=1.0",
+  "openai-whisper>=20230117",
   "pandas~=1.2",
   "prefect~=1.2",
   "pyarrow~=8.0",
@@ -74,9 +76,7 @@ pipeline = [
   "tqdm~=4.62",
   "transformers~=4.16",
   "vimeo_downloader~=0.4",
-  "openai-whisper>=20230117",
   "yt-dlp>=2022.2.4",
-  
 ]
 functions = [
   "flask==2.1.0",
@@ -219,6 +219,7 @@ ignore = [
   "*fake_*",
   "*generated_*",
   "*.wav",
+  "Dockerfile",
 ]
 
 [tool.mypy]

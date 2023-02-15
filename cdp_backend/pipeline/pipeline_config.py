@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-from __future__ import annotations
-
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Optional, Union
 
 from dataclasses_json import DataClassJsonMixin
 from gcsfs import GCSFileSystem
@@ -39,14 +38,14 @@ class EventGatherPipelineConfig(DataClassJsonMixin):
 
     google_credentials_file: str
     get_events_function_path: str
-    gcs_bucket_name: str | None = None
-    _validated_gcs_bucket_name: str | None = field(
+    gcs_bucket_name: Optional[str] = None
+    _validated_gcs_bucket_name: Optional[str] = field(
         init=False,
         repr=False,
         default=None,
     )
     whisper_model_name: str = "medium"
-    whisper_model_confidence: float | None = None
+    whisper_model_confidence: Optional[float] = None
     default_event_gather_from_days_timedelta: int = 2
 
     @property
@@ -101,14 +100,14 @@ class EventIndexPipelineConfig(DataClassJsonMixin):
     """
 
     google_credentials_file: str
-    gcs_bucket_name: str | None = None
-    _validated_gcs_bucket_name: str | None = field(
+    gcs_bucket_name: Optional[str] = None
+    _validated_gcs_bucket_name: Optional[str] = field(
         init=False,
         repr=False,
         default=None,
     )
     datetime_weighting_days_decay: int = 30
-    local_storage_dir: str | Path = "index/"
+    local_storage_dir: Union[str, Path] = "index/"
 
     @property
     def validated_gcs_bucket_name(self) -> str:
