@@ -9,9 +9,11 @@ from pathlib import Path
 from typing import Any
 
 import spacy
-import whisper
+from ctranslate2.converters import TransformersConverter
+from faster_whisper import WhisperModel as FasterWhisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
+from tqdm import tqdm
 
 from .. import __version__
 from ..pipeline import transcript_model
@@ -33,7 +35,7 @@ MODEL_NAME_FAKE_CONFIDENCE_LUT = {
     "base": 0.6,
     "small": 0.65,
     "medium": 0.71,
-    "large": 0.72,
+    "large-v2": 0.72,
 }
 
 
@@ -60,7 +62,22 @@ class WhisperModel(SRModel):
         kwargs: Any
             Any extra arguments to catch.
         """
+        # Handle large -> large v2
+        if model_name == "large":
+            model_name = "large-v2"
         self.model_name = model_name
+
+        # Convert whisper to faster whisper
+        transformer_converter = TransformersConverter(
+            f"openai/whisper-{self.model_name}"
+        )
+        self.converted_faster_whisper_model_path = transformer_converter.convert(
+            output_dir=str(
+                Path(f"~/faster-whisper-models/{model_name}/").expanduser().resolve()
+            ),
+            quantization="float16",
+            force=True,
+        )
 
         # TODO: whisper doesn't provide a confidence value
         # Additionally, we have been overloading confidence with webvtt
@@ -110,25 +127,25 @@ class WhisperModel(SRModel):
             The transcript model for the supplied media file.
         """
         log.info(f"Loading '{self.model_name}' whisper model to use for transcription.")
-        model = whisper.load_model(self.model_name)
+        model = FasterWhisper(self.converted_faster_whisper_model_path)
 
         log.info(f"Transcribing '{file_uri}'")
-        result = model.transcribe(file_uri, verbose=False)
+        segments, _ = model.transcribe(file_uri)
 
         log.info("Converting whisper segments to words with metadata")
         timestamped_words_with_meta = []
-        for segment in result["segments"]:
-            seg_text = segment["text"]
+        for segment in tqdm(segments, desc="Transcribing segment..."):
+            seg_text = segment.text
             seg_text_as_words = seg_text.split(" ")
-            seg_duration = segment["end"] - segment["start"]
+            seg_duration = segment.end - segment.start
             avg_word_duration = seg_duration / len(seg_text_as_words)
             for i, word in enumerate(seg_text_as_words):
                 if len(word.strip()) > 0:
                     timestamped_words_with_meta.append(
                         {
                             "text": word,
-                            "start": segment["start"] + (i * avg_word_duration),
-                            "end": segment["start"] + ((i + 1) * avg_word_duration),
+                            "start": segment.start + (i * avg_word_duration),
+                            "end": segment.start + ((i + 1) * avg_word_duration),
                         }
                     )
 
