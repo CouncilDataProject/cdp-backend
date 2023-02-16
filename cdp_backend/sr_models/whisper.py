@@ -73,7 +73,7 @@ class WhisperModel(SRModel):
         )
         self.converted_faster_whisper_model_path = transformer_converter.convert(
             output_dir=str(
-                Path(f"~/faster-whisper-models/{model_name}/").expanduser().resolve()
+                Path(f"./faster-whisper-models/{model_name}/").expanduser().resolve()
             ),
             quantization="float16",
             force=True,
@@ -185,16 +185,19 @@ class WhisperModel(SRModel):
         current_word_index_start = 0
         log.info("Constructing sentences with word metadata")
         for doc_sent in doc_sents:
+            print(f"Doc sent: '{doc_sent}'")
             # Split the sentence
             doc_sent_words = doc_sent.text.split(" ")
 
+            # Find the words
+            word_subset = timestamped_words_with_meta[
+                current_word_index_start : current_word_index_start
+                + len(doc_sent_words)
+            ]
+            print(f"\tWords: {[w_w_m['text'] for w_w_m in word_subset]}")
+
             # Append the words
-            sentences_with_word_metas.append(
-                timestamped_words_with_meta[
-                    current_word_index_start : current_word_index_start
-                    + len(doc_sent_words)
-                ]
-            )
+            sentences_with_word_metas.append(word_subset)
 
             # Increase the current word index start
             current_word_index_start = current_word_index_start + len(doc_sent_words)
