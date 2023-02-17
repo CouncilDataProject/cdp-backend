@@ -43,7 +43,6 @@ MODEL_NAME_FAKE_CONFIDENCE_LUT = {
 
 
 class WhisperModel(SRModel):
-
     @staticmethod
     def _load_spacy_model() -> "Language":
         return spacy.load(
@@ -84,16 +83,14 @@ class WhisperModel(SRModel):
         if model_name == "large":
             model_name = "large-v2"
         self.model_name = model_name
-        
+
         # Try load or convert Whisper
         log.info(f"Loading '{self.model_name}' whisper model to use for transcription.")
-        self.converted_faster_whisper_model_path = Path(
-            f"./faster-whisper-models/{model_name}/"
-        ).expanduser().resolve()
+        self.converted_faster_whisper_model_path = (
+            Path(f"./faster-whisper-models/{model_name}/").expanduser().resolve()
+        )
         try:
-            self.model = FasterWhisper(
-                str(self.converted_faster_whisper_model_path)
-            )
+            self.model = FasterWhisper(str(self.converted_faster_whisper_model_path))
         except Exception:
             # Have to convert model first
             # Convert whisper to faster whisper
@@ -106,9 +103,7 @@ class WhisperModel(SRModel):
                 quantization="float16",
                 force=True,
             )
-            self.model = FasterWhisper(
-                str(self.converted_faster_whisper_model_path)
-            )
+            self.model = FasterWhisper(str(self.converted_faster_whisper_model_path))
 
         # TODO: whisper doesn't provide a confidence value
         # Additionally, we have been overloading confidence with webvtt
