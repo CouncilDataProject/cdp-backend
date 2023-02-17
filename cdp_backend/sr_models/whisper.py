@@ -143,12 +143,14 @@ class WhisperModel(SRModel):
             The transcript model for the supplied media file.
         """
         log.info(f"Transcribing '{file_uri}'")
-        segments, _ = self.model.transcribe(file_uri, beam_size=3)
+        segments, _ = self.model.transcribe(file_uri, beam_size=5)
 
         log.info("Converting whisper segments to words with metadata")
         timestamped_words_with_meta = []
         for segment in tqdm(segments, desc="Transcribing segment..."):
-            seg_text = segment.text
+            seg_text = segment.text.strip()
+            seg_text = re.sub(r" +", " ", seg_text)
+            seg_text = re.sub(r" \.", ".", seg_text)
             seg_text_as_words = seg_text.split(" ")
             seg_duration = segment.end - segment.start
             avg_word_duration = seg_duration / len(seg_text_as_words)
@@ -199,6 +201,8 @@ class WhisperModel(SRModel):
         log.info("Constructing sentences with word metadata")
         for doc_sent in doc_sents:
             doc_sent_text = doc_sent.text.strip()
+            doc_sent_text = re.sub(r" +", " ", doc_sent_text)
+            doc_sent_text = re.sub(r" \.", ".", doc_sent_text)
             # Sometimes spacy produces a doc sentence that is just a period
             # This sentence is attached to the end of the word
             # in the timestamped words with metas list
@@ -206,7 +210,7 @@ class WhisperModel(SRModel):
             if doc_sent_text == ".":
                 continue
 
-            log.debug(f"Doc sent: '{doc_sent_text}'")
+            log.info(f"Doc sent: '{doc_sent_text}'")
             # Split the sentence
             doc_sent_words = doc_sent_text.split(" ")
 
@@ -215,7 +219,7 @@ class WhisperModel(SRModel):
                 current_word_index_start : current_word_index_start
                 + len(doc_sent_words)
             ]
-            log.debug(f"\tWords: {[w_w_m['text'] for w_w_m in word_subset]}")
+            log.info(f"\tWords: {[w_w_m['text'] for w_w_m in word_subset]}")
 
             # Append the words
             sentences_with_word_metas.append(word_subset)
