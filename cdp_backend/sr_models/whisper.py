@@ -143,7 +143,7 @@ class WhisperModel(SRModel):
             The transcript model for the supplied media file.
         """
         log.info(f"Transcribing '{file_uri}'")
-        segments, _ = self.model.transcribe(file_uri)
+        segments, _ = self.model.transcribe(file_uri, beam_size=3)
 
         log.info("Converting whisper segments to words with metadata")
         timestamped_words_with_meta = []
@@ -198,16 +198,17 @@ class WhisperModel(SRModel):
         current_word_index_start = 0
         log.info("Constructing sentences with word metadata")
         for doc_sent in doc_sents:
+            doc_sent_text = doc_sent.text.strip()
             # Sometimes spacy produces a doc sentence that is just a period
             # This sentence is attached to the end of the word
             # in the timestamped words with metas list
             # We can simply ignore those odd sentences
-            if doc_sent == ".":
+            if doc_sent_text == ".":
                 continue
 
-            log.debug(f"Doc sent: '{doc_sent}'")
+            log.debug(f"Doc sent: '{doc_sent_text}'")
             # Split the sentence
-            doc_sent_words = doc_sent.text.strip().split(" ")
+            doc_sent_words = doc_sent_text.split(" ")
 
             # Find the words
             word_subset = timestamped_words_with_meta[
