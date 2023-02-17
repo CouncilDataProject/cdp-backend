@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.sr_models.whisper - cdp-backend 0.1.dev1+g8978e77 documentation</title>
+        <title>cdp_backend.sr_models.whisper - cdp-backend 0.1.dev1+g0f849fa documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g8978e77 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g0f849fa documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g8978e77 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g0f849fa documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -359,7 +359,7 @@
 <span class="sd">            The transcript model for the supplied media file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transcribing &#39;</span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-        <span class="n">segments</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
+        <span class="n">segments</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">file_uri</span><span class="p">,</span> <span class="n">beam_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Converting whisper segments to words with metadata&quot;</span><span class="p">)</span>
         <span class="n">timestamped_words_with_meta</span> <span class="o">=</span> <span class="p">[]</span>
@@ -414,16 +414,17 @@
         <span class="n">current_word_index_start</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Constructing sentences with word metadata&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">doc_sent</span> <span class="ow">in</span> <span class="n">doc_sents</span><span class="p">:</span>
+            <span class="n">doc_sent_text</span> <span class="o">=</span> <span class="n">doc_sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="c1"># Sometimes spacy produces a doc sentence that is just a period</span>
             <span class="c1"># This sentence is attached to the end of the word</span>
             <span class="c1"># in the timestamped words with metas list</span>
             <span class="c1"># We can simply ignore those odd sentences</span>
-            <span class="k">if</span> <span class="n">doc_sent</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">doc_sent_text</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Doc sent: &#39;</span><span class="si">{</span><span class="n">doc_sent</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Doc sent: &#39;</span><span class="si">{</span><span class="n">doc_sent_text</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
             <span class="c1"># Split the sentence</span>
-            <span class="n">doc_sent_words</span> <span class="o">=</span> <span class="n">doc_sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">doc_sent_words</span> <span class="o">=</span> <span class="n">doc_sent_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
 
             <span class="c1"># Find the words</span>
             <span class="n">word_subset</span> <span class="o">=</span> <span class="n">timestamped_words_with_meta</span><span class="p">[</span>
