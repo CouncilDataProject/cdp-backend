@@ -251,7 +251,9 @@ class WhisperModel(SRModel):
                             word_with_meta["text"]
                             for word_with_meta in sentence_with_word_metas
                         ]
-                    ).strip().capitalize(),
+                    )
+                    .strip()
+                    .capitalize(),
                     words=[
                         transcript_model.Word(
                             index=word_index,
