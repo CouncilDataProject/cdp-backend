@@ -240,20 +240,24 @@ class WhisperModel(SRModel):
         for sent_index, sentence_with_word_metas in enumerate(
             sentences_with_word_metas,
         ):
+            # Join all the sentence text
+            sentence_text = " ".join(
+                [word_with_meta["text"] for word_with_meta in sentence_with_word_metas]
+            ).strip()
+
+            # Make sure the first letter is capitalized
+            # NOTE: we cannot use the `capitalize` string function
+            # because it will lowercase the rest of the text
+            sentence_text = sentence_text[0].upper() + sentence_text[1:]
+
+            # Create the sentence object
             structured_sentences.append(
                 transcript_model.Sentence(
                     index=sent_index,
                     confidence=self.confidence,
                     start_time=sentence_with_word_metas[0]["start"],
                     end_time=sentence_with_word_metas[-1]["end"],
-                    text=" ".join(
-                        [
-                            word_with_meta["text"]
-                            for word_with_meta in sentence_with_word_metas
-                        ]
-                    )
-                    .strip()
-                    .capitalize(),
+                    text=sentence_text,
                     words=[
                         transcript_model.Word(
                             index=word_index,
