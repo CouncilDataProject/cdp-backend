@@ -6,7 +6,7 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import spacy
 from ctranslate2.converters import TransformersConverter
@@ -18,6 +18,9 @@ from tqdm import tqdm
 from .. import __version__
 from ..pipeline import transcript_model
 from .sr_model import SRModel
+
+if TYPE_CHECKING:
+    from spacy.language import Language
 
 ###############################################################################
 
@@ -40,6 +43,21 @@ MODEL_NAME_FAKE_CONFIDENCE_LUT = {
 
 
 class WhisperModel(SRModel):
+
+    @staticmethod
+    def _load_spacy_model() -> "Language":
+        return spacy.load(
+            "en_core_web_trf",
+            # Only keep the parser
+            # We are only using this for sentence parsing
+            disable=[
+                "tagger",
+                "ner",
+                "lemmatizer",
+                "textcat",
+            ],
+        )
+
     def __init__(
         self,
         model_name: str = "medium",
@@ -66,18 +84,31 @@ class WhisperModel(SRModel):
         if model_name == "large":
             model_name = "large-v2"
         self.model_name = model_name
-
-        # Convert whisper to faster whisper
-        transformer_converter = TransformersConverter(
-            f"openai/whisper-{self.model_name}"
-        )
-        self.converted_faster_whisper_model_path = transformer_converter.convert(
-            output_dir=str(
-                Path(f"./faster-whisper-models/{model_name}/").expanduser().resolve()
-            ),
-            quantization="float16",
-            force=True,
-        )
+        
+        # Try load or convert Whisper
+        log.info(f"Loading '{self.model_name}' whisper model to use for transcription.")
+        self.converted_faster_whisper_model_path = Path(
+            f"./faster-whisper-models/{model_name}/"
+        ).expanduser().resolve()
+        try:
+            self.model = FasterWhisper(
+                str(self.converted_faster_whisper_model_path)
+            )
+        except Exception:
+            # Have to convert model first
+            # Convert whisper to faster whisper
+            log.info("Converting original model to 'FasterWhisper' model.")
+            transformer_converter = TransformersConverter(
+                f"openai/whisper-{self.model_name}"
+            )
+            transformer_converter.convert(
+                output_dir=str(self.converted_faster_whisper_model_path),
+                quantization="float16",
+                force=True,
+            )
+            self.model = FasterWhisper(
+                str(self.converted_faster_whisper_model_path)
+            )
 
         # TODO: whisper doesn't provide a confidence value
         # Additionally, we have been overloading confidence with webvtt
@@ -91,20 +122,10 @@ class WhisperModel(SRModel):
 
         # Init spacy
         try:
-            self.nlp = spacy.load(
-                "en_core_web_trf",
-                # Only keep the parser
-                # We are only using this for sentence parsing
-                disable=[
-                    "tagger",
-                    "ner",
-                    "lemmatizer",
-                    "textcat",
-                ],
-            )
+            self.nlp = self._load_spacy_model()
         except Exception:
             download_spacy_model("en_core_web_trf")
-            self.nlp = spacy.load("en_core_web_trf")
+            self.nlp = self._load_spacy_model()
 
     def transcribe(
         self,
@@ -126,11 +147,8 @@ class WhisperModel(SRModel):
         outputs: transcript_model.Transcript
             The transcript model for the supplied media file.
         """
-        log.info(f"Loading '{self.model_name}' whisper model to use for transcription.")
-        model = FasterWhisper(self.converted_faster_whisper_model_path)
-
         log.info(f"Transcribing '{file_uri}'")
-        segments, _ = model.transcribe(file_uri)
+        segments, _ = self.model.transcribe(file_uri)
 
         log.info("Converting whisper segments to words with metadata")
         timestamped_words_with_meta = []
@@ -185,16 +203,23 @@ class WhisperModel(SRModel):
         current_word_index_start = 0
         log.info("Constructing sentences with word metadata")
         for doc_sent in doc_sents:
-            print(f"Doc sent: '{doc_sent}'")
+            # Sometimes spacy produces a doc sentence that is just a period
+            # This sentence is attached to the end of the word
+            # in the timestamped words with metas list
+            # We can simply ignore those odd sentences
+            if doc_sent == ".":
+                continue
+
+            log.debug(f"Doc sent: '{doc_sent}'")
             # Split the sentence
-            doc_sent_words = doc_sent.text.split(" ")
+            doc_sent_words = doc_sent.text.strip().split(" ")
 
             # Find the words
             word_subset = timestamped_words_with_meta[
                 current_word_index_start : current_word_index_start
                 + len(doc_sent_words)
             ]
-            print(f"\tWords: {[w_w_m['text'] for w_w_m in word_subset]}")
+            log.debug(f"\tWords: {[w_w_m['text'] for w_w_m in word_subset]}")
 
             # Append the words
             sentences_with_word_metas.append(word_subset)
