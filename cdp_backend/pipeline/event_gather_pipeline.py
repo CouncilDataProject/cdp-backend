@@ -493,7 +493,7 @@ def split_audio(
     return audio_uri, local_audio_path
 
 
-@task
+@task(max_retries=2, retry_delay=timedelta(seconds=10))
 def use_speech_to_text_and_generate_transcript(
     audio_path: str,
     model_name: str = "medium",
