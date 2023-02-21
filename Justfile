@@ -85,15 +85,6 @@ serve-docs:
 	just generate-docs
 	python -mwebbrowser -t "file://{{project_uri}}/docs/_build/index.html"
 
-# build the docker image for pipeline running
-DOCKER_IMAGE_NAME := 'councildataproject/cdp-backend'
-docker-build:
-	docker build --progress=plain -t {{ DOCKER_IMAGE_NAME }} .
-
-# run the docker image locally
-docker-run:
-	docker run --rm -it --gpus all {{ DOCKER_IMAGE_NAME }} bash
-
 # tag a new version
 tag-for-release version:
 	git tag -a "{{version}}" -m "{{version}}"

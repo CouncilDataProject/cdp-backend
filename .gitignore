@@ -139,6 +139,7 @@ dev-infrastructure/Justfile
 dev-infrastructure/gcloud-functions/*
 dev-infrastructure/lifecycle-rules.json
 test-clipped.*
+faster-whisper-models/
 
 # Common credentials directories
 .keys/

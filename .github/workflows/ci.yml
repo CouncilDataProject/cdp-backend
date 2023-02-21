@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10"]
+        python-version: [3.8, 3.9, "3.10"]
         os: [ubuntu-latest]
 
     steps:
@@ -69,9 +69,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         just install
-    # - name: Run Lib Tests
-    #   run: |
-    #     just test-library
+    - name: Run Lib Tests
+      run: |
+        just test-library
     - name: Run Func Tests
       run: |
         just test-functions
@@ -129,29 +129,3 @@ jobs:
       with:
         user: CouncilDataProject
         password: ${{ secrets.PYPI_TOKEN }}
-    
-    # Build and release cdp-backend Docker image
-    - name: Sleep for PyPI Indexing Time
-      run: |
-        sleep 120
-
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Metadata (tags, labels) for Docker
-      id: docker-meta
-      uses: docker/metadata-action@v4
-      with:
-        images: ghcr.io/${{ github.repository }}
-
-    - name: Build and Push Docker Image to GitHub Container Registry
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        push: true
-        tags: ${{ steps.docker-meta.outputs.tags }}
-        labels: ${{ steps.docker-meta.outputs.labels }}
