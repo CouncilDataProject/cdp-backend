@@ -13,6 +13,8 @@ from ctranslate2.converters import TransformersConverter
 from faster_whisper import WhisperModel as FasterWhisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
+from spacy.tokenizer import Tokenizer
+from spacy.util import compile_infix_regex
 from tqdm import tqdm
 
 from .. import __version__
@@ -45,7 +47,7 @@ MODEL_NAME_FAKE_CONFIDENCE_LUT = {
 class WhisperModel(SRModel):
     @staticmethod
     def _load_spacy_model() -> "Language":
-        return spacy.load(
+        nlp = spacy.load(
             "en_core_web_trf",
             # Only keep the parser
             # We are only using this for sentence parsing
@@ -56,6 +58,30 @@ class WhisperModel(SRModel):
                 "textcat",
             ],
         )
+
+        # Do not split hyphenated words and numbers
+        # "re-upping" should not be split into ["re", "-", "upping"].
+        # Credit: https://stackoverflow.com/a/59996153
+        def custom_tokenizer(nlp: "Language") -> Tokenizer:
+            inf = list(nlp.Defaults.infixes)
+            inf.remove(r"(?<=[0-9])[+\-\*^](?=[0-9-])")
+            infixes = (*inf, r"(?<=[0-9])[+*^](?=[0-9-])", r"(?<=[0-9])-(?=-)")
+            infixes = tuple(
+                [x for x in infixes if "-|–|—|--|---|——|~" not in x]  # noqa: RUF001
+            )
+            infix_re = compile_infix_regex(infixes)
+
+            return Tokenizer(
+                nlp.vocab,
+                prefix_search=nlp.tokenizer.prefix_search,
+                suffix_search=nlp.tokenizer.suffix_search,
+                infix_finditer=infix_re.finditer,
+                token_match=nlp.tokenizer.token_match,
+                rules=nlp.Defaults.tokenizer_exceptions,
+            )
+
+        nlp.tokenizer = custom_tokenizer(nlp)
+        return nlp
 
     def __init__(
         self,
