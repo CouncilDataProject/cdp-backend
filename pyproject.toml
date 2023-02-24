@@ -56,6 +56,7 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
 pipeline = [
+  "backoff>=2.2",
   "dask[distributed]>=2021.7.0",
   # We can't ship faster-whisper until they release a pypi package
   # Install will have to make it a separate command

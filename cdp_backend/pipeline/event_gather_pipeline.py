@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
+import http.client
 import logging
 from datetime import datetime, timedelta
-from functools import partial
 from importlib import import_module
 from operator import attrgetter
 from pathlib import Path
 from typing import Callable, NamedTuple
 from uuid import uuid4
 
+import backoff
 from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
 from gcsfs import GCSFileSystem
@@ -56,9 +57,17 @@ def import_get_events_func(func_path: str) -> Callable:
     return getattr(mod, func_name)
 
 
-@task(max_retries=2, retry_delay=timedelta(seconds=180))
-def get_events_task(func: Callable) -> list[ingestion_models.EventIngestionModel]:
-    return func()
+@backoff.on_exception(
+    backoff.expo,
+    http.client.HTTPException,
+    max_tries=3,
+)
+def get_events_with_backoff(
+    func: Callable,
+    start_dt: datetime,
+    end_dt: datetime,
+) -> list[ingestion_models.EventIngestionModel]:
+    return func(from_dt=start_dt, to_dt=end_dt)
 
 
 def create_event_gather_flow(
@@ -124,21 +133,18 @@ def create_event_gather_flow(
             events = prefetched_events
 
         else:
-            # Construct the partial function with the arguments
-            get_events_func = partial(
+            # Run the get events
+            events = get_events_with_backoff(
                 get_events_func,
-                from_dt=from_datetime,
-                to_dt=to_datetime,
+                start_dt=from_datetime,
+                end_dt=to_datetime,
             )
-
-            # Run the get events task with retries
-            events = get_events_task(get_events_func)
 
         # Safety measure catch
         if events is None:
             events = []
-        log.info(f"Processing {len(events)} events.")
 
+        log.info(f"Processing {len(events)} events.")
         for event in events:
             session_processing_results: list[SessionProcessingResult] = []
             for session in event.sessions:
