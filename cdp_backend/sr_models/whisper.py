@@ -175,10 +175,10 @@ class WhisperModel(SRModel):
         timestamped_words_with_meta = []
         for segment in tqdm(segments, desc="Transcribing segment..."):
             seg_text = segment.text
-            seg_text = re.sub(r" +", " ", seg_text)
-            seg_text = re.sub(r" \.", ".", seg_text)
             seg_text = seg_text.replace("♪", "")
             seg_text = seg_text.replace("≫", "")
+            seg_text = re.sub(r" +", " ", seg_text)
+            seg_text = re.sub(r" \.", ".", seg_text)
             seg_text = seg_text.strip()
 
             seg_text_as_words = seg_text.split(" ")
