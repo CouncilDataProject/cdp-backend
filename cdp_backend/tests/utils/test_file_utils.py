@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import random
 import sys
+import time
 from pathlib import Path
 from unittest import mock
 
@@ -340,6 +341,8 @@ def test_remote_resource_copy(
     assert Path(actual_uri).is_file()
 
     os.remove(actual_uri)
+
+    time.sleep(5)
 
 
 def test_invalid_uri() -> None:
