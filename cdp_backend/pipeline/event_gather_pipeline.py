@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timedelta
+from functools import partial
 from importlib import import_module
 from operator import attrgetter
 from pathlib import Path
 from typing import Callable, NamedTuple
 from uuid import uuid4
-from functools import partial
 
 from aiohttp.client_exceptions import ClientResponseError
 from fireo.fields.errors import FieldValidationFailed, InvalidFieldType, RequiredField
