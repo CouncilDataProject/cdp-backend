@@ -230,11 +230,11 @@ class WhisperModel(SRModel):
         log.info("Constructing sentences with word metadata")
         for doc_sent in doc.sents:
             doc_sent_text = doc_sent.text.strip()
-            # Sometimes spacy produces a doc sentence that is just a period
+            # Sometimes spacy produces a doc sentence that is just a period or comma.
             # This sentence is attached to the end of the word
             # in the timestamped words with metas list
             # We can simply ignore those odd sentences
-            if doc_sent_text == ".":
+            if any([c == doc_sent_text for c in [".", ","]]):
                 continue
 
             log.info(f"Doc sent: '{doc_sent_text}'")
