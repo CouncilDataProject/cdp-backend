@@ -7,6 +7,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Callable
 
+import backoff
 import requests
 from fireo.models import Model
 from fsspec.core import url_to_fs
@@ -126,6 +127,11 @@ def email_is_valid(email: str | None) -> bool:
     return False
 
 
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.ConnectTimeout,
+    max_tries=3,
+)
 def resource_exists(uri: str | None, **kwargs: Any) -> bool:  # noqa: C901
     """
     Validate that the URI provided points to an existing file.
