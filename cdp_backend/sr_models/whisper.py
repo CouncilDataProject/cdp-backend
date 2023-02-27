@@ -178,7 +178,7 @@ class WhisperModel(SRModel):
             seg_text = seg_text.replace("♪", "")
             seg_text = seg_text.replace("≫", "")
             seg_text = re.sub(r" +", " ", seg_text)
-            seg_text = re.sub(r" \.", ".", seg_text)
+            seg_text = re.sub(r"( +)(\.)", ".", seg_text)
             seg_text = seg_text.strip()
 
             seg_text_as_words = seg_text.split(" ")
@@ -221,18 +221,15 @@ class WhisperModel(SRModel):
         joined_all_words = " ".join(
             [word_with_meta["text"] for word_with_meta in timestamped_words_with_meta]
         )
-        joined_all_words = re.sub(r" +", " ", joined_all_words)
+        joined_all_words = re.sub(r" +", " ", joined_all_words).strip()
         doc = self.nlp(joined_all_words)
-        doc_sents = list(doc.sents)
 
         # Process sentences
         sentences_with_word_metas = []
         current_word_index_start = 0
         log.info("Constructing sentences with word metadata")
-        for doc_sent in doc_sents:
+        for doc_sent in doc.sents:
             doc_sent_text = doc_sent.text.strip()
-            doc_sent_text = re.sub(r" +", " ", doc_sent_text)
-            doc_sent_text = re.sub(r" \.", ".", doc_sent_text)
             # Sometimes spacy produces a doc sentence that is just a period
             # This sentence is attached to the end of the word
             # in the timestamped words with metas list
