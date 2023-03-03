@@ -39,7 +39,7 @@ dependencies = [
   "aiohttp>=3.8.1",
   "backoff>=2.2",
   "dataclasses-json>=0.5",
-  "fireo>=1.5",
+  "fireo~=1.5",
   "fsspec",  # Version pin set by gcsfs
   "gcsfs>=2022.7.1",
   "google-cloud-firestore",  # Version pin set by fireo
