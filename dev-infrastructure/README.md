@@ -126,4 +126,6 @@ If you receive a `firebase: not found` error at any point in the deployment proc
 
 `Invalid project selection, please verify project cdp-isaac-dev-2023 exists and you have access.`
 - Run `firebase projects:list` and check whether your project is listed
-- Run `firebase projects:addfirebase {{project-name}}
+- Run `firebase projects:addfirebase {{project-name}}`
+
+If you are running into issues with various packages or tools not being installed, it is highly recommended to start a fresh virtual env.
