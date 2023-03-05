@@ -1,0 +1,13 @@
+default_context:
+    municipality: "CDP Dev Muni"
+    iana_timezone: "America/Los_Angeles"
+    governing_body_type: "other"
+    municipality_slug: "cdp-dev-muni"
+    python_municipality_slug: "cdp_dev_muni"
+    infrastructure_slug: "cdp_dev_muni_000001"
+    maintainer_or_org_full_name: "evamaxfield"
+    hosting_github_username_or_org: "CouncilDataProject"
+    hosting_github_repo_name: "cdp-dev-muni"
+    hosting_github_url: "https://github.com/CouncilDataProject/cdp-dev-muni"
+    hosting_web_app_address: "https://councildataproject.github.io/cdp-dev-muni"
+    firestore_region: "us-central"

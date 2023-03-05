@@ -25,10 +25,10 @@ found in our
 
 ## Dependencies
 
-Deploying the CDP infrastructure requires having `cdp-backend` installed.
+Deploying the CDP infrastructure requires having `cdp-backend` installed along with the contributor tools.
 
 For more detailed information please see the
-[project installation details](https://github.com/CouncilDataProject/cdp-backend#installation).
+[project installation details](https://github.com/CouncilDataProject/cdp-backend#installation) and [contributing details](https://github.com/CouncilDataProject/cdp-backend/blob/main/CONTRIBUTING.md).
 
 ## Account Setup
 
@@ -48,9 +48,14 @@ restart your terminal after installation._
 ## Create a New Project and Deploy the Infrastructure
 
 ```bash
-get_cdp_infrastructure_stack {OPTIONAL: dir path to store to}
+get_cdp_infrastructure_stack {dir path to store to}
 just login
 just init {project-name}
+```
+
+Attach your billing account to the GCP project you just created in the [GCP console](https://console.cloud.google.com/).
+
+```
 just setup-and-deploy {project-name} {OPTIONAL: region}
 ```
 
@@ -68,12 +73,18 @@ just setup-and-deploy cdp-eva-dev-001
 
 ```bash
 just deploy {project-name}
+
+Optionally passing cookiecutter yaml
+just deploy {project-name} cookiecutter-yaml={path to yaml file}
 ```
 
 Example:
 
 ```bash
 just deploy cdp-eva-dev-001
+
+Optionally passing cookiecutter yaml
+just deploy cdp-eva-dev-001 cookiecutter-yaml='some/fakepath.yaml'
 ```
 
 Enable video / audio clipping:
