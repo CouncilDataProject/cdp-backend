@@ -45,13 +45,11 @@ sure the [`gcloud` SDK](https://cloud.google.com/sdk/install) is installed.
 _If this was the first time installing either of those packages, it is recommended to
 restart your terminal after installation._
 
-After `gcloud` has both been installed and terminal restarted, run the
-following commands to log in to gcloud: `just login`
-
 ## Create a New Project and Deploy the Infrastructure
 
 ```bash
 get_cdp_infrastructure_stack {OPTIONAL: dir path to store to}
+just login
 just init {project-name}
 just setup-and-deploy {project-name} {OPTIONAL: region}
 ```
@@ -110,3 +108,11 @@ Useful links for managing Cloud Functions:
 
 * [Pre-installed System Packages](https://cloud.google.com/functions/docs/reference/system-packages)
 * [Execution Environments](https://cloud.google.com/functions/docs/concepts/execution-environment)
+
+## Troubleshooting
+
+If you receive a `firebase: not found` error at any point in the deployment process, make sure that you have the Firebase CLI installed.
+
+`Invalid project selection, please verify project cdp-isaac-dev-2023 exists and you have access.`
+- Run `firebase projects:list` and check whether your project is listed
+- Run `firebase projects:addfirebase {{project-name}}
