@@ -68,7 +68,7 @@ pipeline = [
   "m3u8-To-MP4==0.1.10",
   "nltk>=3.6",
   "numpy>=1.0",
-  "openai-whisper>=20230117",
+  "openai-whisper==20230124",
   "pandas>=1.2",
   "prefect>=1.2,<2",
   "pyarrow>=8.0",
