@@ -73,8 +73,10 @@ just setup-and-deploy cdp-eva-dev-001
 
 ```bash
 just deploy {project-name}
+```
 
-Optionally passing cookiecutter yaml
+Or optionally passing cookiecutter yaml
+```bash
 just deploy {project-name} cookiecutter-yaml={path to yaml file}
 ```
 
@@ -82,8 +84,10 @@ Example:
 
 ```bash
 just deploy cdp-eva-dev-001
+```
 
-Optionally passing cookiecutter yaml
+Or optionally passing cookiecutter yaml
+```bash
 just deploy cdp-eva-dev-001 cookiecutter-yaml='some/fakepath.yaml'
 ```
 
