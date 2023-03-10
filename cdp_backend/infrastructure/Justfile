@@ -109,9 +109,9 @@ deploy-clipping key=default_key region=default_region:
 			--allow-unauthenticated
 
 # run both setup and deploy
-setup-and-deploy project region=default_region:
+setup-and-deploy project region=default_region cookiecutter_yaml=default_cookiecutter_yaml:
 	just setup {{region}}
-	just deploy {{project}}
+	just deploy {{project}} cookiecutter_yaml={{cookiecutter_yaml}}
 
 # fully teardown project
 destroy project:

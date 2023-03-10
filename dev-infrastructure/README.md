@@ -25,10 +25,10 @@ found in our
 
 ## Dependencies
 
-Deploying the CDP infrastructure requires having `cdp-backend` installed.
+Deploying the CDP infrastructure requires having `cdp-backend` installed along with the contributor tools.
 
 For more detailed information please see the
-[project installation details](https://github.com/CouncilDataProject/cdp-backend#installation).
+[project installation details](https://github.com/CouncilDataProject/cdp-backend#installation) and [contributing details](https://github.com/CouncilDataProject/cdp-backend/blob/main/CONTRIBUTING.md).
 
 ## Account Setup
 
@@ -45,14 +45,17 @@ sure the [`gcloud` SDK](https://cloud.google.com/sdk/install) is installed.
 _If this was the first time installing either of those packages, it is recommended to
 restart your terminal after installation._
 
-After `gcloud` has both been installed and terminal restarted, run the
-following commands to log in to gcloud: `just login`
-
 ## Create a New Project and Deploy the Infrastructure
 
 ```bash
-get_cdp_infrastructure_stack {OPTIONAL: dir path to store to}
+get_cdp_infrastructure_stack {dir path to store to}
+just login
 just init {project-name}
+```
+
+Attach your billing account to the GCP project you just created in the [GCP console](https://console.cloud.google.com/).
+
+```
 just setup-and-deploy {project-name} {OPTIONAL: region}
 ```
 
@@ -72,10 +75,20 @@ just setup-and-deploy cdp-eva-dev-001
 just deploy {project-name}
 ```
 
+Or optionally passing cookiecutter yaml
+```bash
+just deploy {project-name} cookiecutter-yaml={path to yaml file}
+```
+
 Example:
 
 ```bash
 just deploy cdp-eva-dev-001
+```
+
+Or optionally passing cookiecutter yaml
+```bash
+just deploy cdp-eva-dev-001 cookiecutter-yaml='some/fakepath.yaml'
 ```
 
 Enable video / audio clipping:
@@ -110,3 +123,13 @@ Useful links for managing Cloud Functions:
 
 * [Pre-installed System Packages](https://cloud.google.com/functions/docs/reference/system-packages)
 * [Execution Environments](https://cloud.google.com/functions/docs/concepts/execution-environment)
+
+## Troubleshooting
+
+If you receive a `firebase: not found` error at any point in the deployment process, make sure that you have the Firebase CLI installed.
+
+`Invalid project selection, please verify project cdp-isaac-dev-2023 exists and you have access.`
+- Run `firebase projects:list` and check whether your project is listed
+- Run `firebase projects:addfirebase {{project-name}}`
+
+If you are running into issues with various packages or tools not being installed, it is highly recommended to start a fresh virtual env.
