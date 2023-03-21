@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+
 import logging
 import math
 import random
@@ -14,6 +15,10 @@ import fireo
 import fsspec
 import requests
 from fsspec.core import url_to_fs
+
+import io
+import zipfile
+import xml.dom.minidom
 
 from ..database import models as db_models
 
@@ -739,3 +744,59 @@ def clip_and_reformat_video(
         log.error(ffmpeg_stderr)
 
     return output_path
+
+
+def parse_document(document_uri: str) -> list[str]:
+    """
+    Extract text from a .doc, .docx, or .ppt matter file.
+
+    Parameters
+    ----------
+    document_uri: str
+        The matter file uri.
+
+    Returns
+    -------
+    list[str]:
+        A list of all words in the matter file.
+    """
+
+    return [""]
+
+def parse_docx_file(document_uri: str) -> list[str]:
+    """
+    Extract text from a .docx matter file.
+
+    Parameters
+    ----------
+    document_uri: str
+        The matter file uri.
+
+    Returns
+    -------
+    list[str]:
+        A list of all text in the .docx file.
+    """
+    
+    # Fetch 
+    zip_archive_raw = requests.get(document_uri, stream=True).content
+    zip_archive_bytes = io.BytesIO(zip_archive)
+    zip_archive = zipfile.ZipFile(zip_archive_bytes) 
+    archive_members = zip_archive.namelist()
+
+    xml_regex_pattern = "^.*\.xml$"
+    text = []
+
+    for file in archive_members:
+        # text found in .xml files not .rels
+         if re.search(xml_regex_pattern,file): 
+            file_stream = io.BytesIO(zip_archive.read(file))  
+            parsed_xml = xml.dom.minidom.parse(file_stream)
+
+            root = parsed_xml.documentElement
+            text_nodes = root.getElementsByTagName('w:t')
+
+            for node in text_nodes:
+                   text.append(node.firstChild.nodeValue)
+
+    return text
