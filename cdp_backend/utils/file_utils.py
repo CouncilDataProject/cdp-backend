@@ -19,6 +19,7 @@ from fsspec.core import url_to_fs
 import io
 import zipfile
 import xml.dom.minidom
+import pypdf
 
 from ..database import models as db_models
 
@@ -746,7 +747,7 @@ def clip_and_reformat_video(
     return output_path
 
 
-def parse_document(document_uri: str) -> list[str]:
+def parse_document(document_uri: str) -> str:
     """
     Extract text from a .doc, .docx, or .ppt matter file.
 
@@ -757,13 +758,21 @@ def parse_document(document_uri: str) -> list[str]:
 
     Returns
     -------
-    list[str]:
-        A list of all words in the matter file.
+    str:
+        A string of all text in the matter file.
     """
 
-    return [""]
+    docx_pattern = "\.docx$"
+    pdf_pattern = "\.pdf$"
 
-def parse_docx_file(document_uri: str) -> list[str]:
+    if re.search(docx_pattern,document_uri):
+        return parse_docx_file(document_uri)
+    elif (re.search(pdf_pattern,document_uri)):
+        return parse_pdf_file(document_uri)
+
+    return ""
+
+def parse_docx_file(document_uri: str) -> str:
     """
     Extract text from a .docx matter file.
 
@@ -774,13 +783,13 @@ def parse_docx_file(document_uri: str) -> list[str]:
 
     Returns
     -------
-    list[str]:
-        A list of all text in the .docx file.
+    str:
+        A str of all text in the .docx file.
     """
     
     # Fetch 
     zip_archive_raw = requests.get(document_uri, stream=True).content
-    zip_archive_bytes = io.BytesIO(zip_archive)
+    zip_archive_bytes = io.BytesIO(zip_archive_raw)
     zip_archive = zipfile.ZipFile(zip_archive_bytes) 
     archive_members = zip_archive.namelist()
 
@@ -798,5 +807,31 @@ def parse_docx_file(document_uri: str) -> list[str]:
 
             for node in text_nodes:
                    text.append(node.firstChild.nodeValue)
+
+    return " ".join(text)
+
+def parse_pdf_file(document_uri: str) -> str:
+    """
+    Extract text from a .pdf matter file.
+
+    Parameters
+    ----------
+    document_uri: str
+        The matter file uri.
+
+    Returns
+    -------
+    str:
+        A str of all text in the .pdf file.
+    """
+    pdf_request = requests.get(document_uri, stream=True).content
+    pdfReader = pypdf.PdfReader(io.BytesIO(pdf_request))
+    text = ""
+
+    count = 0;
+    while count <len(pdfReader.pages):
+       current_page = pdfReader.pages[count]
+       text += current_page.extract_text()
+       count += 1
 
     return text
