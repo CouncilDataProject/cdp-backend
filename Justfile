@@ -29,8 +29,6 @@ clean:
 # install with all deps
 install:
 	pip install --no-cache-dir -e '.[pipeline,functions,lint,test,docs,dev]'
-	pip install --no-cache-dir --force-reinstall --upgrade \
-		'faster-whisper @ git+https://github.com/guillaumekln/faster-whisper.git'
 
 # lint, format, and check all files
 lint:
