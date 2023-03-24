@@ -345,6 +345,8 @@ def convert_video_and_handle_host(
     """
     # Get file extension
     ext = Path(video_filepath).suffix.lower()
+    log.info(f"Original video uri: '{session.video_uri}'")
+    log.info(f"Handling video conversion and hosting for video: '{video_filepath}'")
 
     trim_video = bool(session.video_start_time or session.video_end_time)
 
@@ -390,6 +392,7 @@ def convert_video_and_handle_host(
 
     # Store if the original host isn't https
     elif not is_secure_uri(session.video_uri):
+        log.info("Handling secure video URI")
         try:
             resource_uri = try_url(session.video_uri)
         except LookupError:
@@ -405,7 +408,17 @@ def convert_video_and_handle_host(
                 hosted_video_media_url = resource_uri
             else:
                 cdp_will_host = True
+
+    # Try with www
+    elif not resource_exists(session.video_url):
+        log.info("Handling www URL problems")
+        www_url = session.video_url.replace("://", "://www.")
+        if resource_exists(www_url):
+            hosted_video_media_url = www_url
+
+    # All good
     else:
+        log.info(f"Video URI '{session.video_uri}' passed all checks.")
         hosted_video_media_url = session.video_uri
 
     # Get unique session identifier
@@ -428,6 +441,7 @@ def convert_video_and_handle_host(
             uri=hosted_video_uri,
         )
 
+    log.info(f"Verified video URL: '{hosted_video_media_url}")
     return video_filepath, hosted_video_media_url, session_content_hash
 
 
