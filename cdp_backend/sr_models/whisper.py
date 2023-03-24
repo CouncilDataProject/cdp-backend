@@ -12,6 +12,8 @@ import spacy
 from faster_whisper import WhisperModel as FasterWhisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
+from spacy.tokenizer import Tokenizer
+from spacy.util import compile_infix_regex
 from tqdm import tqdm
 
 from .. import __version__
