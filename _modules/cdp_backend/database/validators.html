@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.1.3 and Furo 2023.03.23 -->
-        <title>cdp_backend.database.validators - cdp-backend 0.1.dev1+g0b860f5 documentation</title>
+        <title>cdp_backend.database.validators - cdp-backend 0.1.dev1+gf049747 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g0b860f5 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gf049747 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g0b860f5 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gf049747 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -469,14 +469,16 @@
 <span class="sd">        The url with the correct protocol based on where the resource exists.</span>
 <span class="sd">        If does not exist, a LookupError is raised.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Try secure</span>
     <span class="n">secure_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolve_func</span><span class="p">(</span><span class="n">secure_url</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">secure_url</span>
 
+    <span class="c1"># Try at all</span>
     <span class="k">if</span> <span class="n">resolve_func</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">url</span>
 
-    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;the resource </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> could not be found&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The resource </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> could not be found&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="is_secure_uri"><a class="viewcode-back" href="../../../cdp_backend.database.html#cdp_backend.database.validators.is_secure_uri">[docs]</a><span class="k">def</span> <span class="nf">is_secure_uri</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
