@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cdp_backend.sr_models.whisper - cdp-backend 0.1.dev1+g200d0e7 documentation</title>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2023.03.23 -->
+        <title>cdp_backend.sr_models.whisper - cdp-backend 0.1.dev1+g9f27054 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g200d0e7 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g9f27054 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g200d0e7 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g9f27054 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -225,12 +225,9 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">spacy</span>
-<span class="kn">from</span> <span class="nn">ctranslate2.converters</span> <span class="kn">import</span> <span class="n">TransformersConverter</span>
 <span class="kn">from</span> <span class="nn">faster_whisper</span> <span class="kn">import</span> <span class="n">WhisperModel</span> <span class="k">as</span> <span class="n">FasterWhisper</span>
 <span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
 <span class="kn">from</span> <span class="nn">spacy.cli.download</span> <span class="kn">import</span> <span class="n">download</span> <span class="k">as</span> <span class="n">download_spacy_model</span>
-<span class="kn">from</span> <span class="nn">spacy.tokenizer</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
-<span class="kn">from</span> <span class="nn">spacy.util</span> <span class="kn">import</span> <span class="n">compile_infix_regex</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">__version__</span>
@@ -326,26 +323,8 @@
             <span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;large-v2&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
 
-        <span class="c1"># Try load or convert Whisper</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&#39; whisper model to use for transcription.&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">converted_faster_whisper_model_path</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;./faster-whisper-models/</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-        <span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">FasterWhisper</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converted_faster_whisper_model_path</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="c1"># Have to convert model first</span>
-            <span class="c1"># Convert whisper to faster whisper</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Converting original model to &#39;FasterWhisper&#39; model.&quot;</span><span class="p">)</span>
-            <span class="n">transformer_converter</span> <span class="o">=</span> <span class="n">TransformersConverter</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;openai/whisper-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="n">transformer_converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
-                <span class="n">output_dir</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converted_faster_whisper_model_path</span><span class="p">),</span>
-                <span class="n">quantization</span><span class="o">=</span><span class="s2">&quot;float16&quot;</span><span class="p">,</span>
-                <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">FasterWhisper</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converted_faster_whisper_model_path</span><span class="p">))</span>
+        <span class="c1"># Load whisper model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">FasterWhisper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
 
         <span class="c1"># TODO: whisper doesn&#39;t provide a confidence value</span>
         <span class="c1"># Additionally, we have been overloading confidence with webvtt</span>
@@ -385,28 +364,22 @@
 <span class="sd">            The transcript model for the supplied media file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transcribing &#39;</span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-        <span class="n">segments</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">file_uri</span><span class="p">,</span> <span class="n">beam_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Converting whisper segments to words with metadata&quot;</span><span class="p">)</span>
+        <span class="n">segments</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">file_uri</span><span class="p">,</span> <span class="n">word_timestamps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">timestamped_words_with_meta</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Transcribing segment...&quot;</span><span class="p">):</span>
-            <span class="n">seg_text</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">text</span>
-            <span class="n">seg_text</span> <span class="o">=</span> <span class="n">seg_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;♪&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">seg_text</span> <span class="o">=</span> <span class="n">seg_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;≫&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">seg_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; +&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">seg_text</span><span class="p">)</span>
-            <span class="n">seg_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;( +)(\.)&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">seg_text</span><span class="p">)</span>
-            <span class="n">seg_text</span> <span class="o">=</span> <span class="n">seg_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-            <span class="n">seg_text_as_words</span> <span class="o">=</span> <span class="n">seg_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-            <span class="n">seg_duration</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">segment</span><span class="o">.</span><span class="n">start</span>
-            <span class="n">avg_word_duration</span> <span class="o">=</span> <span class="n">seg_duration</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">seg_text_as_words</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seg_text_as_words</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">segment</span><span class="o">.</span><span class="n">words</span><span class="p">:</span>
+                <span class="n">word_text</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span>
+                <span class="n">word_text</span> <span class="o">=</span> <span class="n">word_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;♪&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">word_text</span> <span class="o">=</span> <span class="n">word_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;≫&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">word_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; +&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">word_text</span><span class="p">)</span>
+                <span class="n">word_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;( +)(\.)&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">word_text</span><span class="p">)</span>
+                <span class="n">word_text</span> <span class="o">=</span> <span class="n">word_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">timestamped_words_with_meta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="p">{</span>
-                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">word</span><span class="p">,</span>
-                            <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">segment</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">avg_word_duration</span><span class="p">),</span>
-                            <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">segment</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">avg_word_duration</span><span class="p">),</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">word_text</span><span class="p">,</span>
+                            <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">word</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+                            <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">word</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
                         <span class="p">}</span>
                     <span class="p">)</span>
 
@@ -416,12 +389,11 @@
         <span class="c1"># Fix all timestamps by rescaling to audio duration</span>
         <span class="c1"># This is a hack -- but all of the word level timestamps are a hack anyway...</span>
         <span class="n">whisper_reported_duration</span> <span class="o">=</span> <span class="n">timestamped_words_with_meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;end&quot;</span><span class="p">]</span>
-        <span class="n">audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
-        <span class="n">file_reported_duration</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">duration_seconds</span>
+        <span class="n">file_reported_duration</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span><span class="o">.</span><span class="n">duration_seconds</span>
 
         <span class="c1"># Scale to between 0 and 1</span>
         <span class="c1"># Then rescale to real duration</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculating word durations&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ensuring timestamps fit within audio&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">word_with_meta</span> <span class="ow">in</span> <span class="n">timestamped_words_with_meta</span><span class="p">:</span>
             <span class="c1"># Scale to between 0 and 1</span>
             <span class="n">word_with_meta</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
