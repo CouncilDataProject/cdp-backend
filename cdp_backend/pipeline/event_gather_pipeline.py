@@ -311,7 +311,7 @@ def get_session_content_hash(
 
 
 @task(nout=3)
-def convert_video_and_handle_host(
+def convert_video_and_handle_host(  # noqa: C901
     video_filepath: str,
     session: Session,
     credentials_file: str,
@@ -410,9 +410,9 @@ def convert_video_and_handle_host(
                 cdp_will_host = True
 
     # Try with www
-    elif not resource_exists(session.video_url):
+    elif not resource_exists(session.video_uri):
         log.info("Handling www URL problems")
-        www_url = session.video_url.replace("://", "://www.")
+        www_url = session.video_uri.replace("://", "://www.")
         if resource_exists(www_url):
             hosted_video_media_url = www_url
 
