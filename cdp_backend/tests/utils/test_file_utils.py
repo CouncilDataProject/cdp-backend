@@ -16,6 +16,7 @@ from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
     MAX_THUMBNAIL_HEIGHT,
     MAX_THUMBNAIL_WIDTH,
+    parse_document,
     resource_copy,
 )
 
@@ -389,3 +390,14 @@ def test_clip_and_reformat_video(
     assert outfile.exists()
     assert outfile == (expected_outfile or outfile)
     os.remove(outfile)
+
+
+def test_parse_document() -> None:
+    document_uri = "test_documents/one_word.docx"
+
+    with mock.patch("requests.get") as mocked_requests_get:
+        mocked_requests_get.return_value = open(document_uri, "rb").read()
+
+        parsed_doc = parse_document(document_uri)
+
+        assert parsed_doc == "first"
