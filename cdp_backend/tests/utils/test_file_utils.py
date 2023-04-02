@@ -22,6 +22,7 @@ from cdp_backend.utils.file_utils import (
 
 from .. import test_utils
 from ..conftest import (
+    EXAMPLE_DOCX_FILE,
     EXAMPLE_MKV_VIDEO_FILENAME,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
@@ -392,11 +393,17 @@ def test_clip_and_reformat_video(
     os.remove(outfile)
 
 
-def test_parse_document() -> None:
-    document_uri = "test_documents/one_word.docx"
+def test_parse_document(resources_dir: Path) -> None:
+
+    document_uri = str(resources_dir / EXAMPLE_DOCX_FILE)
 
     with mock.patch("requests.get") as mocked_requests_get:
-        mocked_requests_get.return_value = open(document_uri, "rb").read()
+
+        class MockResponse:
+            def __init__(self) -> None:
+                self.content = open(document_uri, "rb").read()
+
+        mocked_requests_get.return_value = MockResponse()
 
         parsed_doc = parse_document(document_uri)
 

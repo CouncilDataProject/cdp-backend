@@ -2,24 +2,22 @@
 
 from __future__ import annotations
 
-
+import io
 import logging
 import math
 import random
 import re
+import xml.dom.minidom
+import zipfile
 from hashlib import sha256
 from pathlib import Path
 from uuid import uuid4
 
 import fireo
 import fsspec
+import pypdf
 import requests
 from fsspec.core import url_to_fs
-
-import io
-import zipfile
-import xml.dom.minidom
-import pypdf
 
 from ..database import models as db_models
 
@@ -761,16 +759,16 @@ def parse_document(document_uri: str) -> str:
     str:
         A string of all text in the matter file.
     """
-
     docx_pattern = "\.docx$"
     pdf_pattern = "\.pdf$"
 
-    if re.search(docx_pattern,document_uri):
+    if re.search(docx_pattern, document_uri):
         return parse_docx_file(document_uri)
-    elif (re.search(pdf_pattern,document_uri)):
+    elif re.search(pdf_pattern, document_uri):
         return parse_pdf_file(document_uri)
 
     return ""
+
 
 def parse_docx_file(document_uri: str) -> str:
     """
@@ -786,11 +784,10 @@ def parse_docx_file(document_uri: str) -> str:
     str:
         A str of all text in the .docx file.
     """
-    
-    # Fetch 
+    # Fetch
     zip_archive_raw = requests.get(document_uri, stream=True).content
     zip_archive_bytes = io.BytesIO(zip_archive_raw)
-    zip_archive = zipfile.ZipFile(zip_archive_bytes) 
+    zip_archive = zipfile.ZipFile(zip_archive_bytes)
     archive_members = zip_archive.namelist()
 
     xml_regex_pattern = "^.*\.xml$"
@@ -798,17 +795,18 @@ def parse_docx_file(document_uri: str) -> str:
 
     for file in archive_members:
         # text found in .xml files not .rels
-         if re.search(xml_regex_pattern,file): 
-            file_stream = io.BytesIO(zip_archive.read(file))  
+        if re.search(xml_regex_pattern, file):
+            file_stream = io.BytesIO(zip_archive.read(file))
             parsed_xml = xml.dom.minidom.parse(file_stream)
 
             root = parsed_xml.documentElement
-            text_nodes = root.getElementsByTagName('w:t')
+            text_nodes = root.getElementsByTagName("w:t")
 
             for node in text_nodes:
-                   text.append(node.firstChild.nodeValue)
+                text.append(node.firstChild.nodeValue)
 
     return " ".join(text)
+
 
 def parse_pdf_file(document_uri: str) -> str:
     """
@@ -825,13 +823,19 @@ def parse_pdf_file(document_uri: str) -> str:
         A str of all text in the .pdf file.
     """
     pdf_request = requests.get(document_uri, stream=True).content
-    pdfReader = pypdf.PdfReader(io.BytesIO(pdf_request))
+    pdf_reader = pypdf.PdfReader(io.BytesIO(pdf_request))
     text = ""
 
-    count = 0;
-    while count <len(pdfReader.pages):
-       current_page = pdfReader.pages[count]
-       text += current_page.extract_text()
-       count += 1
+    count = 0
+    while count < len(pdf_reader.pages):
+        current_page = pdf_reader.pages[count]
+        text += current_page.extract_text()
+        count += 1
 
     return text
+
+
+def parse_pptx_file(document_uri: str) -> str:
+    requests.get(document_uri, stream=True).content
+
+    return ""
