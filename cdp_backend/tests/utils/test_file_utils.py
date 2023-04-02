@@ -402,6 +402,7 @@ def test_parse_document(resources_dir: Path) -> None:
         class MockResponse:
             def __init__(self) -> None:
                 self.content = open(document_uri, "rb").read()
+                self.status_code = 200
 
         mocked_requests_get.return_value = MockResponse()
 

@@ -759,35 +759,46 @@ def parse_document(document_uri: str) -> str:
     str:
         A string of all text in the matter file.
     """
-    docx_pattern = "\.docx$"
-    pdf_pattern = "\.pdf$"
+    response = requests.get(document_uri, stream=True)
+    if response.status_code != 200:
+        log.error(
+            "Request to " + document_uri + " failed with: " + str(response.status_code)
+        )
+    else:
+        document_raw = response.content
 
-    if re.search(docx_pattern, document_uri):
-        return parse_docx_file(document_uri)
-    elif re.search(pdf_pattern, document_uri):
-        return parse_pdf_file(document_uri)
+        docx_pattern = "\.docx$"
+        pdf_pattern = "\.pdf$"
+        pptx_pattern = "\.pptx$"
+
+        if re.search(docx_pattern, document_uri):
+            return parse_docx_file(document_raw)
+        elif re.search(pdf_pattern, document_uri):
+            return parse_pdf_file(document_raw)
+        elif re.search(pptx_pattern, document_uri):
+            return parse_pptx_file(document_raw)
+
+        log.error("Unsupported document type: " + document_uri)
 
     return ""
 
 
-def parse_docx_file(document_uri: str) -> str:
+def parse_docx_file(zip_archive_bytes: bytes) -> str:
     """
     Extract text from a .docx matter file.
 
     Parameters
     ----------
-    document_uri: str
-        The matter file uri.
+    zip_archive_bytes: bytes
+        The raw document to be parsed. Word docx files are zip archives.
 
     Returns
     -------
     str:
         A str of all text in the .docx file.
     """
-    # Fetch
-    zip_archive_raw = requests.get(document_uri, stream=True).content
-    zip_archive_bytes = io.BytesIO(zip_archive_raw)
-    zip_archive = zipfile.ZipFile(zip_archive_bytes)
+    zip_archive_stream = io.BytesIO(zip_archive_bytes)
+    zip_archive = zipfile.ZipFile(zip_archive_stream)
     archive_members = zip_archive.namelist()
 
     xml_regex_pattern = "^.*\.xml$"
@@ -808,13 +819,13 @@ def parse_docx_file(document_uri: str) -> str:
     return " ".join(text)
 
 
-def parse_pdf_file(document_uri: str) -> str:
+def parse_pdf_file(document_raw: bytes) -> str:
     """
     Extract text from a .pdf matter file.
 
     Parameters
     ----------
-    document_uri: str
+    document_raw: bytes
         The matter file uri.
 
     Returns
@@ -822,8 +833,7 @@ def parse_pdf_file(document_uri: str) -> str:
     str:
         A str of all text in the .pdf file.
     """
-    pdf_request = requests.get(document_uri, stream=True).content
-    pdf_reader = pypdf.PdfReader(io.BytesIO(pdf_request))
+    pdf_reader = pypdf.PdfReader(io.BytesIO(document_raw))
     text = ""
 
     count = 0
@@ -835,7 +845,7 @@ def parse_pdf_file(document_uri: str) -> str:
     return text
 
 
-def parse_pptx_file(document_uri: str) -> str:
-    requests.get(document_uri, stream=True).content
+def parse_pptx_file(document_raw: bytes) -> str:
+    # requests.get(document_raw, stream=True).content
 
     return ""
