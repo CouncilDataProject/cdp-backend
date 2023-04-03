@@ -18,6 +18,7 @@ import fsspec
 import pypdf
 import requests
 from fsspec.core import url_to_fs
+from tika import parser
 
 from ..database import models as db_models
 
@@ -768,11 +769,14 @@ def parse_document(document_uri: str) -> str:
         document_raw = response.content
 
         docx_pattern = "\.docx$"
+        doc_pattern = "\.doc$"
         pdf_pattern = "\.pdf$"
         pptx_pattern = "\.pptx$"
 
         if re.search(docx_pattern, document_uri):
             return parse_docx_file(document_raw)
+        elif re.search(doc_pattern, document_uri):
+            return parse_doc_file(document_raw)
         elif re.search(pdf_pattern, document_uri):
             return parse_pdf_file(document_raw)
         elif re.search(pptx_pattern, document_uri):
@@ -819,6 +823,26 @@ def parse_docx_file(zip_archive_bytes: bytes) -> str:
     return " ".join(text)
 
 
+def parse_doc_file(document_raw: bytes) -> str:
+    """
+    Extract text from a .doc matter file.
+
+    Parameters
+    ----------
+    document_raw: bytes
+        The raw document.
+
+    Returns
+    -------
+    str:
+        A str of all text in the .doc file.
+    """
+    parsed_content = parser.from_file(document_raw)["content"]
+    text = re.sub("\s+", " ", parsed_content)
+
+    return text
+
+
 def parse_pdf_file(document_raw: bytes) -> str:
     """
     Extract text from a .pdf matter file.
@@ -826,7 +850,7 @@ def parse_pdf_file(document_raw: bytes) -> str:
     Parameters
     ----------
     document_raw: bytes
-        The matter file uri.
+        The raw document.
 
     Returns
     -------
@@ -846,6 +870,20 @@ def parse_pdf_file(document_raw: bytes) -> str:
 
 
 def parse_pptx_file(document_raw: bytes) -> str:
-    # requests.get(document_raw, stream=True).content
+    """
+    Extract text from a .pdf matter file.
 
-    return ""
+    Parameters
+    ----------
+    document_raw: bytes
+    The raw document.
+
+    Returns
+    -------
+    str:
+    A str of all text in the .pdf file.
+    """
+    parsed_pptx = parser.from_file(document_raw)["content"]
+    text = re.sub("\s+", " ", parsed_pptx)
+
+    return text
