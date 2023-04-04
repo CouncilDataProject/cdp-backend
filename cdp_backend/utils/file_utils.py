@@ -876,7 +876,7 @@ def parse_pptx_file(document_raw: bytes) -> str:
     Parameters
     ----------
     document_raw: bytes
-    The raw document.
+        The raw document.
 
     Returns
     -------
