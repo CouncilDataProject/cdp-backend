@@ -226,6 +226,7 @@ ignore = [
   "*generated_*",
   "*.wav",
   "Dockerfile",
+  "*example_*.docx",
 ]
 
 [tool.mypy]
