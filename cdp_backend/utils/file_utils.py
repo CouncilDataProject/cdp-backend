@@ -881,7 +881,7 @@ def parse_pptx_file(document_raw: bytes) -> str:
     Returns
     -------
     str:
-    A str of all text in the .pdf file.
+        A str of all text in the .pdf file.
     """
     parsed_pptx = parser.from_file(document_raw)["content"]
     text = re.sub("\s+", " ", parsed_pptx)
