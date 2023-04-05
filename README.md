@@ -23,7 +23,7 @@ The central goal is to create a single library that manages the whole backend of
 ## Installation
 
 **Stable Release (with just data access dependencies):** `pip install cdp-backend`<br/>
-**Stable Release (with full pipeline dependencies except faster-whisper):** `pip install cdp-backend[pipeline]`
+**Stable Release (with full pipeline dependencies):** `pip install cdp-backend[pipeline]`
 
 **Development Head:** `pip install git+https://github.com/CouncilDataProject/cdp-backend.git`
 

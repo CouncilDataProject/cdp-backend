@@ -253,14 +253,16 @@ def try_url(url: str, resolve_func: Callable = resource_exists) -> str:
         The url with the correct protocol based on where the resource exists.
         If does not exist, a LookupError is raised.
     """
+    # Try secure
     secure_url = url.replace("http://", "https://")
     if resolve_func(secure_url):
         return secure_url
 
+    # Try at all
     if resolve_func(url):
         return url
 
-    raise LookupError(f"the resource {url} could not be found")
+    raise LookupError(f"The resource {url} could not be found")
 
 
 def is_secure_uri(url: str) -> bool:
