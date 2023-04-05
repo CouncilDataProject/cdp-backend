@@ -58,9 +58,7 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 [project.optional-dependencies]
 pipeline = [
   "dask[distributed]>=2021.7.0",
-  # We can't ship faster-whisper until they release a pypi package
-  # Install will have to make it a separate command
-  # "faster-whisper @ git+https://github.com/guillaumekln/faster-whisper.git",
+  "faster-whisper==0.3.0",
   "ffmpeg-python>=0.2.0",
   "graphviz>=0.16",
   "imageio>=2.18",
@@ -68,7 +66,6 @@ pipeline = [
   "m3u8-To-MP4==0.1.10",
   "nltk>=3.6",
   "numpy>=1.0",
-  "openai-whisper==20230124",
   "pandas>=1.2",
   "prefect>=1.2,<2",
   "pyarrow>=8.0",

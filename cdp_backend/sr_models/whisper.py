@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import spacy
-from ctranslate2.converters import TransformersConverter
 from faster_whisper import WhisperModel as FasterWhisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
@@ -110,26 +109,8 @@ class WhisperModel(SRModel):
             model_name = "large-v2"
         self.model_name = model_name
 
-        # Try load or convert Whisper
-        log.info(f"Loading '{self.model_name}' whisper model to use for transcription.")
-        self.converted_faster_whisper_model_path = (
-            Path(f"./faster-whisper-models/{model_name}/").expanduser().resolve()
-        )
-        try:
-            self.model = FasterWhisper(str(self.converted_faster_whisper_model_path))
-        except Exception:
-            # Have to convert model first
-            # Convert whisper to faster whisper
-            log.info("Converting original model to 'FasterWhisper' model.")
-            transformer_converter = TransformersConverter(
-                f"openai/whisper-{self.model_name}"
-            )
-            transformer_converter.convert(
-                output_dir=str(self.converted_faster_whisper_model_path),
-                quantization="float16",
-                force=True,
-            )
-            self.model = FasterWhisper(str(self.converted_faster_whisper_model_path))
+        # Load whisper model
+        self.model = FasterWhisper(self.model_name)
 
         # TODO: whisper doesn't provide a confidence value
         # Additionally, we have been overloading confidence with webvtt
@@ -169,28 +150,22 @@ class WhisperModel(SRModel):
             The transcript model for the supplied media file.
         """
         log.info(f"Transcribing '{file_uri}'")
-        segments, _ = self.model.transcribe(file_uri, beam_size=5)
-
-        log.info("Converting whisper segments to words with metadata")
+        segments, _ = self.model.transcribe(file_uri, word_timestamps=True)
         timestamped_words_with_meta = []
         for segment in tqdm(segments, desc="Transcribing segment..."):
-            seg_text = segment.text
-            seg_text = seg_text.replace("♪", "")
-            seg_text = seg_text.replace("≫", "")
-            seg_text = re.sub(r" +", " ", seg_text)
-            seg_text = re.sub(r"( +)(\.)", ".", seg_text)
-            seg_text = seg_text.strip()
-
-            seg_text_as_words = seg_text.split(" ")
-            seg_duration = segment.end - segment.start
-            avg_word_duration = seg_duration / len(seg_text_as_words)
-            for i, word in enumerate(seg_text_as_words):
-                if len(word.strip()) > 0:
+            for word in segment.words:
+                word_text = word.word
+                word_text = word_text.replace("♪", "")
+                word_text = word_text.replace("≫", "")
+                word_text = re.sub(r" +", " ", word_text)
+                word_text = re.sub(r"( +)(\.)", ".", word_text)
+                word_text = word_text.strip()
+                if len(word_text) > 0:
                     timestamped_words_with_meta.append(
                         {
-                            "text": word,
-                            "start": segment.start + (i * avg_word_duration),
-                            "end": segment.start + ((i + 1) * avg_word_duration),
+                            "text": word_text,
+                            "start": word.start,
+                            "end": word.end,
                         }
                     )
 
@@ -200,12 +175,11 @@ class WhisperModel(SRModel):
         # Fix all timestamps by rescaling to audio duration
         # This is a hack -- but all of the word level timestamps are a hack anyway...
         whisper_reported_duration = timestamped_words_with_meta[-1]["end"]
-        audio = AudioSegment.from_file(file_uri)
-        file_reported_duration = audio.duration_seconds
+        file_reported_duration = AudioSegment.from_file(file_uri).duration_seconds
 
         # Scale to between 0 and 1
         # Then rescale to real duration
-        log.info("Calculating word durations")
+        log.info("Ensuring timestamps fit within audio")
         for word_with_meta in timestamped_words_with_meta:
             # Scale to between 0 and 1
             word_with_meta["start"] = (
