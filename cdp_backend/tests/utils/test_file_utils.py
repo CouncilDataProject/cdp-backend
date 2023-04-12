@@ -26,6 +26,7 @@ from ..conftest import (
     EXAMPLE_DOCX,
     EXAMPLE_MKV_VIDEO_FILENAME,
     EXAMPLE_PDF,
+    EXAMPLE_PPTX,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
     EXAMPLE_VIMEO,
@@ -417,6 +418,12 @@ def test_clip_and_reformat_video(
             "Word1 Word2 Word3 Word4 Word5 Word6 "
             + "OH 007 A 001 Word7 word8 Word9 Word10 Word12 Word11 "
             + "Word14 Word16 we Word13 Word15 Word17 Word18 Word19 ",
+        ),
+        (
+            EXAMPLE_PPTX,
+            " Title Word1 word2 word3 word4 Word5 word6 "
+            + "1 word7 word8 word9 word10 word11 Word12 word13 word14 "
+            + "/docProps/thumbnail.jpeg ",
         ),
     ],
 )

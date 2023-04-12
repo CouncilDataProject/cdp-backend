@@ -45,13 +45,7 @@ EXAMPLE_VIMEO_SHOWCASE = "https://vimeo.com/showcase/6277394/video/722690793"
 EXAMPLE_DOCX = "example_docx.docx"
 EXAMPLE_DOC = "example_doc.doc"
 EXAMPLE_PDF = "example_pdf.pdf"
-EXAMPLE_PPTX = "example_pptx.pdf"
-EXPECTED_DOCX_STRING = (
-    "Word9 Word10 Word12 Word11 Word14 Word16 "
-    + "we Word13 Word15 Word17 Word18 Word19 "
-    + "Word1 Word2 Word3 Word4 Word5 "
-    + "Word6 OH 007 A 001 Word7 word8"
-)
+EXAMPLE_PPTX = "example_pptx.pptx"
 
 
 @pytest.fixture
