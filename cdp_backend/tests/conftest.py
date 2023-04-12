@@ -42,7 +42,10 @@ EXAMPLE_VIMEO = "https://vimeo.com/503166067"
 # City of Chicago, Illinois
 EXAMPLE_VIMEO_SHOWCASE = "https://vimeo.com/showcase/6277394/video/722690793"
 
-EXAMPLE_DOCX_FILE = "example_docx_one_word.docx"
+EXAMPLE_DOCX_ONE_WORD = "example_one_word.docx"
+EXAMPLE_DOCX_HEADER = "example_header_only.docx"
+EXAMPLE_DOCX_FOOTER = "example_footer_only.docx"
+EXAMPLE_DOCX_LARGE = "example_multi_page.docx"
 
 
 @pytest.fixture

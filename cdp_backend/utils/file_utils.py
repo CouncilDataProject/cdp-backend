@@ -820,7 +820,9 @@ def parse_docx_file(zip_archive_bytes: bytes) -> str:
             for node in text_nodes:
                 text.append(node.firstChild.nodeValue)
 
-    return " ".join(text)
+    parsed_text = " ".join(text)
+    text_remove_extra_space = re.sub("\s+", " ", parsed_text)
+    return text_remove_extra_space
 
 
 def parse_doc_file(document_raw: bytes) -> str:

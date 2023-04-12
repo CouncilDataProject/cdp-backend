@@ -22,7 +22,10 @@ from cdp_backend.utils.file_utils import (
 
 from .. import test_utils
 from ..conftest import (
-    EXAMPLE_DOCX_FILE,
+    EXAMPLE_DOCX_FOOTER,
+    EXAMPLE_DOCX_HEADER,
+    EXAMPLE_DOCX_LARGE,
+    EXAMPLE_DOCX_ONE_WORD,
     EXAMPLE_MKV_VIDEO_FILENAME,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
@@ -393,19 +396,42 @@ def test_clip_and_reformat_video(
     os.remove(outfile)
 
 
-def test_parse_document(resources_dir: Path) -> None:
+@pytest.mark.parametrize(
+    "document_uri, expected",
+    [
+        (EXAMPLE_DOCX_ONE_WORD, "first"),
+        (
+            EXAMPLE_DOCX_HEADER,
+            "2021 Seattle City Council Budget Action Council Budget Action: "
+            + "Agenda Tab Action Option Version OH 007 A 001",
+        ),
+        (
+            EXAMPLE_DOCX_FOOTER,
+            "Nov 16, 2020 11:07 PM Seattle City Council Budget Action Page 1 of 1",
+        ),
+        (
+            EXAMPLE_DOCX_LARGE,
+            "Summary of Dollar Effect See the following pages for "
+            + "detailed technical information 2021 Increase (Decrease) "
+            + "2022 Increase (Decrease) General Fund General Fund Revenues $0 "
+            + "General Fund Expenditures $0 Net Balance Effect "
+            + "$0 Total Budget Balance Effect $0 "
+            + "For businesses whose total payroll is from "
+            + "$ Salaries over $400,000 annually: +0.009%",
+        ),
+    ],
+)
+def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -> None:
 
-    document_uri = str(resources_dir / EXAMPLE_DOCX_FILE)
+    actual_uri = str(resources_dir / document_uri)
 
     with mock.patch("requests.get") as mocked_requests_get:
 
         class MockResponse:
             def __init__(self) -> None:
-                self.content = open(document_uri, "rb").read()
+                self.content = open(actual_uri, "rb").read()
                 self.status_code = 200
 
         mocked_requests_get.return_value = MockResponse()
-
-        parsed_doc = parse_document(document_uri)
-
-        assert parsed_doc == "first"
+        parsed_doc = parse_document(actual_uri)
+        assert parsed_doc == expected
