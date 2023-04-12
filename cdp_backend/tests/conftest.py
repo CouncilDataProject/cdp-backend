@@ -42,15 +42,16 @@ EXAMPLE_VIMEO = "https://vimeo.com/503166067"
 # City of Chicago, Illinois
 EXAMPLE_VIMEO_SHOWCASE = "https://vimeo.com/showcase/6277394/video/722690793"
 
-EXAMPLE_DOCX_ONE_WORD = "example_one_word.docx"
-EXAMPLE_DOCX_HEADER = "example_header_only.docx"
-EXAMPLE_DOCX_FOOTER = "example_footer_only.docx"
-EXAMPLE_DOCX_LARGE = "example_multi_page.docx"
-EXAMPLE_DOC_LARGE = "example_multi_page.doc"
-EXAMPLE_DOC_FOOTER = "example_footer_only.doc"
-EXAMPLE_PPTX_ONE_SLIDE = "example_one_slide.pptx"
-EXAMPLE_PPTX_LARGE = "example_multi_slide.pptx"
-EXAMPLE_PDF_ONE_WORD = "example_one_word.pdf"
+EXAMPLE_DOCX = "example_docx.docx"
+EXAMPLE_DOC = "example_doc.doc"
+EXAMPLE_PDF = "example_pdf.pdf"
+EXAMPLE_PPTX = "example_pptx.pdf"
+EXPECTED_DOCX_STRING = (
+    "Word9 Word10 Word12 Word11 Word14 Word16 "
+    + "we Word13 Word15 Word17 Word18 Word19 "
+    + "Word1 Word2 Word3 Word4 Word5 "
+    + "Word6 OH 007 A 001 Word7 word8"
+)
 
 
 @pytest.fixture
