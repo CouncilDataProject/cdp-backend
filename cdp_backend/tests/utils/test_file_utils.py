@@ -460,5 +460,4 @@ def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -
 
         mocked_requests_get.return_value = MockResponse()
         parsed_doc = parse_document(actual_uri)
-        print(parsed_doc)
         assert parsed_doc == expected
