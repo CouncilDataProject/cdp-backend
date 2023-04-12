@@ -46,6 +46,11 @@ EXAMPLE_DOCX_ONE_WORD = "example_one_word.docx"
 EXAMPLE_DOCX_HEADER = "example_header_only.docx"
 EXAMPLE_DOCX_FOOTER = "example_footer_only.docx"
 EXAMPLE_DOCX_LARGE = "example_multi_page.docx"
+EXAMPLE_DOC_LARGE = "example_multi_page.doc"
+EXAMPLE_DOC_FOOTER = "example_footer_only.doc"
+EXAMPLE_PPTX_ONE_SLIDE = "example_one_slide.pptx"
+EXAMPLE_PPTX_LARGE = "example_multi_slide.pptx"
+EXAMPLE_PDF_ONE_WORD = "example_one_word.pdf"
 
 
 @pytest.fixture

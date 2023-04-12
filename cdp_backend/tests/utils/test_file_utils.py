@@ -22,11 +22,16 @@ from cdp_backend.utils.file_utils import (
 
 from .. import test_utils
 from ..conftest import (
+    EXAMPLE_DOC_FOOTER,
+    EXAMPLE_DOC_LARGE,
     EXAMPLE_DOCX_FOOTER,
     EXAMPLE_DOCX_HEADER,
     EXAMPLE_DOCX_LARGE,
     EXAMPLE_DOCX_ONE_WORD,
     EXAMPLE_MKV_VIDEO_FILENAME,
+    EXAMPLE_PDF_ONE_WORD,
+    EXAMPLE_PPTX_LARGE,
+    EXAMPLE_PPTX_ONE_SLIDE,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
     EXAMPLE_VIMEO,
@@ -419,6 +424,27 @@ def test_clip_and_reformat_video(
             + "For businesses whose total payroll is from "
             + "$ Salaries over $400,000 annually: +0.009%",
         ),
+        (
+            EXAMPLE_DOC_LARGE,
+            " Map is for informational purposes only Attachment A UW "
+            + "6th Tunnel Area Map And is not intended to modify or "
+            + "supplement the legal description(s) in the Ordinance. ",
+        ),
+        (EXAMPLE_DOC_FOOTER, " Tab Action Option Version OH 007 A 001 "),
+        (
+            EXAMPLE_PPTX_ONE_SLIDE,
+            " Title Title Legislative Analysts Finance & Housing Committee 2022 "
+            + "Enter department name/issue area, your name and "
+            + "the date of the presentation 1 image1.png "
+            + "\ \ SEATTLE CITY COUNCIL jl) CENTRAL STAFF /docProps/thumbnail.jpeg ",
+        ),
+        (
+            EXAMPLE_PPTX_LARGE,
+            " Title Foo Legislative Analyst 2019 CB13290 "
+            + "Text here Indent Indent Slide3 Written "
+            + "communication /docProps/thumbnail.jpeg Foo ",
+        ),
+        (EXAMPLE_PDF_ONE_WORD, "communication "),
     ],
 )
 def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -> None:
@@ -434,4 +460,5 @@ def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -
 
         mocked_requests_get.return_value = MockResponse()
         parsed_doc = parse_document(actual_uri)
+        print(parsed_doc)
         assert parsed_doc == expected

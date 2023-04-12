@@ -821,8 +821,7 @@ def parse_docx_file(zip_archive_bytes: bytes) -> str:
                 text.append(node.firstChild.nodeValue)
 
     parsed_text = " ".join(text)
-    text_remove_extra_space = re.sub("\s+", " ", parsed_text)
-    return text_remove_extra_space
+    return remove_duplicate_space(parsed_text)
 
 
 def parse_doc_file(document_raw: bytes) -> str:
@@ -839,10 +838,8 @@ def parse_doc_file(document_raw: bytes) -> str:
     str:
         A str of all text in the .doc file.
     """
-    parsed_content = parser.from_file(document_raw)["content"]
-    text = re.sub("\s+", " ", parsed_content)
-
-    return text
+    parsed_content = parser.from_buffer(document_raw)["content"]
+    return remove_duplicate_space(parsed_content)
 
 
 def parse_pdf_file(document_raw: bytes) -> str:
@@ -868,7 +865,7 @@ def parse_pdf_file(document_raw: bytes) -> str:
         text += current_page.extract_text()
         count += 1
 
-    return text
+    return remove_duplicate_space(text)
 
 
 def parse_pptx_file(document_raw: bytes) -> str:
@@ -885,7 +882,22 @@ def parse_pptx_file(document_raw: bytes) -> str:
     str:
         A str of all text in the .pdf file.
     """
-    parsed_pptx = parser.from_file(document_raw)["content"]
-    text = re.sub("\s+", " ", parsed_pptx)
+    parsed_pptx = parser.from_buffer(document_raw)["content"]
+    return remove_duplicate_space(parsed_pptx)
 
-    return text
+
+def remove_duplicate_space(parsed_text: str) -> str:
+    """
+    Remove all duplicate whitespace characters and replace with a single space.
+
+    Parameters
+    ----------
+    parsed_text: str
+       The parsed text from the document.
+
+    Returns
+    -------
+    str:
+       A string with no more than one consecutive space.
+    """
+    return re.sub("\s+", " ", parsed_text)
