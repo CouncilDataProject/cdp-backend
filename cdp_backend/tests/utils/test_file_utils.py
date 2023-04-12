@@ -425,6 +425,7 @@ def test_clip_and_reformat_video(
             + "1 word7 word8 word9 word10 word11 Word12 word13 word14 "
             + "/docProps/thumbnail.jpeg ",
         ),
+        (EXAMPLE_VIDEO_FILENAME, ""),
     ],
 )
 def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -> None:
@@ -441,3 +442,17 @@ def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -
         mocked_requests_get.return_value = MockResponse()
         parsed_doc = parse_document(actual_uri)
         assert parsed_doc == expected
+
+
+def test_parse_document_bad_uri() -> None:
+
+    with mock.patch("requests.get") as mocked_requests_get:
+
+        class MockResponse:
+            def __init__(self) -> None:
+                self.content = None
+                self.status_code = 404
+
+        mocked_requests_get.return_value = MockResponse()
+        parsed_doc = parse_document("some/bad/uri")
+        assert parsed_doc == ""
