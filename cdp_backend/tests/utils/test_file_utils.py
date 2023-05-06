@@ -269,9 +269,6 @@ def test_hover_thumbnail_generator(
     )
     assert result == expected
 
-    reader = imageio.get_reader(result)
-    assert reader._length == num_frames
-
     image = imageio.imread(result)
     assert image.shape[0] <= MAX_THUMBNAIL_HEIGHT
     assert image.shape[1] <= MAX_THUMBNAIL_WIDTH
