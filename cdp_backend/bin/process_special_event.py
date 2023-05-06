@@ -98,11 +98,9 @@ def main() -> None:
 
         # Handle errors
         if len(errored_states) > 0:
-            log.error(f"{len(errored_states)} / {len(flows)} failed.")
-            for state in errored_states:
-                log.error(state)
-
+            log.error(f"{len(errored_states)} / {len(flows)} flows failed.")
             raise ValueError("Flow run failed.")
+
         else:
             log.info(f"{len(states)} flows ran successfully.")
 
