@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 6.1.3 and Furo 2023.03.23 -->
-        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+gad09d9c documentation</title>
+    <!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
+        <title>cdp_backend.pipeline.event_gather_pipeline - cdp-backend 0.1.dev1+g6c1c1ff documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gad09d9c documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g6c1c1ff documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gad09d9c documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g6c1c1ff documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -291,7 +291,7 @@
     <span class="n">from_dt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">to_dt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">prefetched_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EventIngestionModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Flow</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Flow</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create the Prefect Flow object to preview, run, or visualize.</span>
 
@@ -313,8 +313,8 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    flow: Flow</span>
-<span class="sd">        The constructed CDP Event Gather Pipeline as a Prefect Flow.</span>
+<span class="sd">    flows: list[Flow]</span>
+<span class="sd">        The constructed CDP Event Gather Pipelines as a Prefect Flows.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Load get_events_func</span>
     <span class="n">get_events_func</span> <span class="o">=</span> <span class="n">import_get_events_func</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_events_function_path</span><span class="p">)</span>
@@ -337,33 +337,34 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">to_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 
-    <span class="c1"># Create flow</span>
-    <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;CDP Event Gather Pipeline&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Gathering events to process. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">from_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">to_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="c1"># Gather events</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Gathering events to process. &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">from_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">to_datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># Use prefetched events instead of get_events_func if provided</span>
+    <span class="k">if</span> <span class="n">prefetched_events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">prefetched_events</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Run the get events</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">get_events_with_backoff</span><span class="p">(</span>
+            <span class="n">get_events_func</span><span class="p">,</span>
+            <span class="n">start_dt</span><span class="o">=</span><span class="n">from_datetime</span><span class="p">,</span>
+            <span class="n">end_dt</span><span class="o">=</span><span class="n">to_datetime</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># Use prefetched events instead of get_events_func if provided</span>
-        <span class="k">if</span> <span class="n">prefetched_events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">events</span> <span class="o">=</span> <span class="n">prefetched_events</span>
+    <span class="c1"># Safety measure catch</span>
+    <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Run the get events</span>
-            <span class="n">events</span> <span class="o">=</span> <span class="n">get_events_with_backoff</span><span class="p">(</span>
-                <span class="n">get_events_func</span><span class="p">,</span>
-                <span class="n">start_dt</span><span class="o">=</span><span class="n">from_datetime</span><span class="p">,</span>
-                <span class="n">end_dt</span><span class="o">=</span><span class="n">to_datetime</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="c1"># Safety measure catch</span>
-        <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
-            <span class="n">session_processing_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SessionProcessingResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
+    <span class="c1"># Create each session flow</span>
+    <span class="n">flows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating flows for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">)</span><span class="si">}</span><span class="s2"> sessions.&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;cdp-session-processing&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
                 <span class="c1"># Download video to local copy making</span>
                 <span class="c1"># copy unique in case of shared session video</span>
                 <span class="n">resource_copy_filepath</span> <span class="o">=</span> <span class="n">resource_copy_task</span><span class="p">(</span>
@@ -434,28 +435,28 @@
                 <span class="p">)</span>
 
                 <span class="c1"># Store all processed and provided data</span>
-                <span class="n">session_processing_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">compile_session_processing_result</span><span class="p">(</span>
-                        <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
-                        <span class="n">session_video_hosted_url</span><span class="o">=</span><span class="n">session_video_hosted_url</span><span class="p">,</span>
-                        <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
-                        <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
-                        <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">,</span>
-                        <span class="n">transcript_uri</span><span class="o">=</span><span class="n">transcript_uri</span><span class="p">,</span>
-                        <span class="n">static_thumbnail_uri</span><span class="o">=</span><span class="n">static_thumbnail_uri</span><span class="p">,</span>
-                        <span class="n">hover_thumbnail_uri</span><span class="o">=</span><span class="n">hover_thumbnail_uri</span><span class="p">,</span>
-                    <span class="p">)</span>
+                <span class="n">session_processing_result</span> <span class="o">=</span> <span class="n">compile_session_processing_result</span><span class="p">(</span>
+                    <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+                    <span class="n">session_video_hosted_url</span><span class="o">=</span><span class="n">session_video_hosted_url</span><span class="p">,</span>
+                    <span class="n">session_content_hash</span><span class="o">=</span><span class="n">session_content_hash</span><span class="p">,</span>
+                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
+                    <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">,</span>
+                    <span class="n">transcript_uri</span><span class="o">=</span><span class="n">transcript_uri</span><span class="p">,</span>
+                    <span class="n">static_thumbnail_uri</span><span class="o">=</span><span class="n">static_thumbnail_uri</span><span class="p">,</span>
+                    <span class="n">hover_thumbnail_uri</span><span class="o">=</span><span class="n">hover_thumbnail_uri</span><span class="p">,</span>
                 <span class="p">)</span>
 
-            <span class="c1"># Process all metadata and store event</span>
-            <span class="n">store_event_processing_results</span><span class="p">(</span>
-                <span class="n">event</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
-                <span class="n">session_processing_results</span><span class="o">=</span><span class="n">session_processing_results</span><span class="p">,</span>
-                <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
-                <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
-            <span class="p">)</span>
+                <span class="c1"># Store just this result</span>
+                <span class="n">store_event_processing_results</span><span class="p">(</span>
+                    <span class="n">event</span><span class="o">=</span><span class="n">event</span><span class="p">,</span>
+                    <span class="n">session_processing_results</span><span class="o">=</span><span class="p">[</span><span class="n">session_processing_result</span><span class="p">],</span>
+                    <span class="n">credentials_file</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">google_credentials_file</span><span class="p">,</span>
+                    <span class="n">bucket</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">validated_gcs_bucket_name</span><span class="p">,</span>
+                <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">flow</span></div>
+            <span class="n">flows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">flows</span></div>
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_delay</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">120</span><span class="p">))</span>
