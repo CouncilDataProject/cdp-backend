@@ -146,6 +146,7 @@ def create_event_gather_flow(
     flows = []
     log.info(f"Processing {len(events)} events.")
     for event in events:
+        log.info(f"Creating flows for {len(event.sessions)} sessions.")
         for session in event.sessions:
             with Flow("cdp-session-processing") as flow:
                 # Download video to local copy making
