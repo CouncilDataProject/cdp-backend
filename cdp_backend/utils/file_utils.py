@@ -465,7 +465,7 @@ def get_hover_thumbnail(
     duration: float = 6.0,
 ) -> str:
     """
-    A function that produces a gif hover thumbnail from an mp4 video file.
+    Produce a gif hover thumbnail from an mp4 video file.
 
     Parameters
     ----------
@@ -500,7 +500,7 @@ def get_hover_thumbnail(
     width = sample.shape[1]
     final_ratio = find_proper_resize_ratio(height, width)
 
-    with imageio.get_writer(gif_path, mode="I", fps=(num_frames / duration)) as writer:
+    with imageio.get_writer(gif_path, mode="I", duration=duration * 1000) as writer:
         selected_frames = 0
         for frame in reader:
             # 1% chance to use the frame

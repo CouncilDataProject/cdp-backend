@@ -75,7 +75,7 @@ def create_event_gather_flow(
     from_dt: str | datetime | None = None,
     to_dt: str | datetime | None = None,
     prefetched_events: list[EventIngestionModel] | None = None,
-) -> Flow:
+) -> list[Flow]:
     """
     Create the Prefect Flow object to preview, run, or visualize.
 
@@ -97,8 +97,8 @@ def create_event_gather_flow(
 
     Returns
     -------
-    flow: Flow
-        The constructed CDP Event Gather Pipeline as a Prefect Flow.
+    flows: list[Flow]
+        The constructed CDP Event Gather Pipelines as a Prefect Flows.
     """
     # Load get_events_func
     get_events_func = import_get_events_func(config.get_events_function_path)
@@ -121,33 +121,33 @@ def create_event_gather_flow(
     else:
         to_datetime = datetime.utcnow()
 
-    # Create flow
-    with Flow("CDP Event Gather Pipeline") as flow:
-        log.info(
-            f"Gathering events to process. "
-            f"({from_datetime.isoformat()} - {to_datetime.isoformat()})"
+    # Gather events
+    log.info(
+        f"Gathering events to process. "
+        f"({from_datetime.isoformat()} - {to_datetime.isoformat()})"
+    )
+    # Use prefetched events instead of get_events_func if provided
+    if prefetched_events is not None:
+        events = prefetched_events
+
+    else:
+        # Run the get events
+        events = get_events_with_backoff(
+            get_events_func,
+            start_dt=from_datetime,
+            end_dt=to_datetime,
         )
 
-        # Use prefetched events instead of get_events_func if provided
-        if prefetched_events is not None:
-            events = prefetched_events
+    # Safety measure catch
+    if events is None:
+        events = []
 
-        else:
-            # Run the get events
-            events = get_events_with_backoff(
-                get_events_func,
-                start_dt=from_datetime,
-                end_dt=to_datetime,
-            )
-
-        # Safety measure catch
-        if events is None:
-            events = []
-
-        log.info(f"Processing {len(events)} events.")
-        for event in events:
-            session_processing_results: list[SessionProcessingResult] = []
-            for session in event.sessions:
+    # Create each session flow
+    flows = []
+    log.info(f"Processing {len(events)} events.")
+    for event in events:
+        for session in event.sessions:
+            with Flow("cdp-session-processing") as flow:
                 # Download video to local copy making
                 # copy unique in case of shared session video
                 resource_copy_filepath = resource_copy_task(
@@ -218,28 +218,28 @@ def create_event_gather_flow(
                 )
 
                 # Store all processed and provided data
-                session_processing_results.append(
-                    compile_session_processing_result(
-                        session=session,
-                        session_video_hosted_url=session_video_hosted_url,
-                        session_content_hash=session_content_hash,
-                        audio_uri=audio_uri,
-                        transcript=transcript,
-                        transcript_uri=transcript_uri,
-                        static_thumbnail_uri=static_thumbnail_uri,
-                        hover_thumbnail_uri=hover_thumbnail_uri,
-                    )
+                session_processing_result = compile_session_processing_result(
+                    session=session,
+                    session_video_hosted_url=session_video_hosted_url,
+                    session_content_hash=session_content_hash,
+                    audio_uri=audio_uri,
+                    transcript=transcript,
+                    transcript_uri=transcript_uri,
+                    static_thumbnail_uri=static_thumbnail_uri,
+                    hover_thumbnail_uri=hover_thumbnail_uri,
                 )
 
-            # Process all metadata and store event
-            store_event_processing_results(
-                event=event,
-                session_processing_results=session_processing_results,
-                credentials_file=config.google_credentials_file,
-                bucket=config.validated_gcs_bucket_name,
-            )
+                # Store just this result
+                store_event_processing_results(
+                    event=event,
+                    session_processing_results=[session_processing_result],
+                    credentials_file=config.google_credentials_file,
+                    bucket=config.validated_gcs_bucket_name,
+                )
 
-    return flow
+            flows.append(flow)
+
+    return flows
 
 
 @task(max_retries=3, retry_delay=timedelta(seconds=120))

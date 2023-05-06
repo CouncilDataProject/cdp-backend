@@ -78,14 +78,30 @@ def main() -> None:
 
         # Create event gather pipeline flow
         log.info("Beginning processing...")
-        flow = pipeline.create_event_gather_flow(
+
+        # Get all flow definitions
+        flows = pipeline.create_event_gather_flow(
             config=config,
             prefetched_events=[ingestion_model],
         )
 
-        # Run flow
-        state = flow.run()
-        if state.is_failed():
+        # Run each pipeline
+        states = []
+        for flow in flows:
+            states.append(flow.run())
+
+        # Track errored states
+        errored_states = []
+        for state in states:
+            if state.is_failed():
+                errored_states.append(state)
+
+        # Handle errors
+        if len(errored_states) > 0:
+            log.error(f"{len(errored_states)} / {len(flows)} failed.")
+            for state in errored_states:
+                log.error(state)
+
             raise ValueError("Flow run failed.")
 
     except Exception as e:

@@ -70,16 +70,30 @@ def main() -> None:
         with open(args.config_file) as open_resource:
             config = EventGatherPipelineConfig.from_json(open_resource.read())
 
-        # Get flow definition
-        flow = pipeline.create_event_gather_flow(
+        # Get all flow definitions
+        flows = pipeline.create_event_gather_flow(
             config=config,
             from_dt=args.from_dt,
             to_dt=args.to_dt,
         )
 
-        # Run pipeline
-        state = flow.run()
-        if state.is_failed():
+        # Run each pipeline
+        states = []
+        for flow in flows:
+            states.append(flow.run())
+
+        # Track errored states
+        errored_states = []
+        for state in states:
+            if state.is_failed():
+                errored_states.append(state)
+
+        # Handle errors
+        if len(errored_states) > 0:
+            log.error(f"{len(errored_states)} / {len(flows)} failed.")
+            for state in errored_states:
+                log.error(state)
+
             raise ValueError("Flow run failed.")
 
     except Exception as e:
