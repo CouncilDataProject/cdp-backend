@@ -1,5 +1,22 @@
 #!/usr/bin/env python
 
+BODY = "body"
+EVENT = "event"
+EVENT_MINUTES_ITEM = "eventMinutesItem"
+EVENT_MINUTES_ITEM_FILE = "eventMinutesItemFile"
+FILE = "file"
+MATTER = "matter"
+MATTER_FILE = "matterFile"
+MATTER_SPONSOR = "matterSponsor"
+MATTER_STATUS = "matterStatus"
+MINUTES_ITEM = "minutesItem"
+PERSON = "person"
+ROLE = "role"
+SESSION = "session"
+SEAT = "seat"
+TRANSCRIPT = "transcript"
+VOTE = "vote"
+
 
 class Order:
     ASCENDING = "ASCENDING"
