@@ -103,6 +103,8 @@ def main() -> None:
                 log.error(state)
 
             raise ValueError("Flow run failed.")
+        else:
+            log.info(f"{len(states)} flows ran successfully.")
 
     except Exception as e:
         log.error("=============================================")
