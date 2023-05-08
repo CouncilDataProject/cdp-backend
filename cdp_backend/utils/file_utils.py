@@ -721,9 +721,6 @@ def clip_and_reformat_video(
 
     out_args = {"format": output_format}
 
-    if should_copy_video(video_filepath):
-        out_args["codec"] = "copy"
-
     try:
         ffmpeg_stdout, ffmpeg_stderr = (
             ffmpeg.input(
@@ -731,7 +728,12 @@ def clip_and_reformat_video(
                 ss=start_time or "0",
                 to=end_time or "99:59:59",
             )
-            .output(filename=str(output_path), out_args=out_args)
+            .output(
+                filename=str(output_path),
+                **dict(out_args, codec="copy")
+                if should_copy_video(video_filepath)
+                else out_args,
+            )
             .run(capture_stdout=True, capture_stderr=True)
         )
     except ffmpeg._run.Error as e:
