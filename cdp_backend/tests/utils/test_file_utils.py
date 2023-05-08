@@ -386,3 +386,36 @@ def test_clip_and_reformat_video(
     assert outfile.exists()
     assert outfile == (expected_outfile or outfile)
     os.remove(outfile)
+
+
+@pytest.mark.parametrize(
+    "videofile_path, codec_type, codec_name, expected",
+    [
+        (Path("video.mp4"), "video", "h264", True),
+        (Path("video.MP4"), "video", "h264", True),
+        (Path("video.mp4"), "video", "mpeg4", False),
+        (Path("video.mkv"), "video", "h264", False),
+        (Path("video.MKV"), "video", "h264", False),
+        (Path("video.avi"), "video", "mpeg4", False),
+        (Path("video.avi"), "audio", "mp3", False),
+    ],
+)
+def test_should_copy_video(
+    videofile_path: Path, codec_type: str, codec_name: str, expected: bool
+) -> None:
+    with mock.patch("ffmpeg.probe") as ffmpeg_probe:
+        ffmpeg_probe.return_value = {
+            "streams": [{"codec_type": codec_type, "codec_name": codec_name}]
+        }
+        if expected:
+            assert file_utils.should_copy_video(videofile_path)
+        else:
+            assert not file_utils.should_copy_video(videofile_path)
+
+
+def test_should_copy_video_exception() -> None:
+    with mock.patch("ffmpeg.probe") as ffmpeg_probe:
+        import ffmpeg
+
+        ffmpeg_probe.side_effect = ffmpeg.Error("boom", "boom", "boom")
+        assert not file_utils.should_copy_video(Path("video.mp4"))
