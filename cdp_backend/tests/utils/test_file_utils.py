@@ -386,3 +386,41 @@ def test_clip_and_reformat_video(
     assert outfile.exists()
     assert outfile == (expected_outfile or outfile)
     os.remove(outfile)
+
+
+@pytest.mark.parametrize(
+    "video_filepath, output_format, codec_type, codec_name, expected",
+    [
+        (Path("video.mp4"), "mp4", "video", "h264", True),
+        (Path("video.MP4"), "mp4", "video", "h264", True),
+        (Path("video.mp4"), "mp4", "video", "mpeg4", False),
+        (Path("video.mkv"), "mp4", "video", "h264", False),
+        (Path("video.MKV"), "mp4", "video", "h264", False),
+        (Path("video.avi"), "mp4", "video", "mpeg4", False),
+        (Path("video.avi"), "mp4", "audio", "mp3", False),
+        (Path("video.mp4"), "mp3", "video", "h264", False),
+    ],
+)
+def test_should_copy_video(
+    video_filepath: Path,
+    output_format: str,
+    codec_type: str,
+    codec_name: str,
+    expected: bool,
+) -> None:
+    with mock.patch("ffmpeg.probe") as ffmpeg_probe:
+        ffmpeg_probe.return_value = {
+            "streams": [{"codec_type": codec_type, "codec_name": codec_name}]
+        }
+        if expected:
+            assert file_utils.should_copy_video(video_filepath, output_format)
+        else:
+            assert not file_utils.should_copy_video(video_filepath, output_format)
+
+
+def test_should_copy_video_exception() -> None:
+    with mock.patch("ffmpeg.probe") as ffmpeg_probe:
+        import ffmpeg
+
+        ffmpeg_probe.side_effect = ffmpeg.Error("ffprobe", "nothing", "nothing good")
+        assert not file_utils.should_copy_video(Path("unknown_video.mp4"))
