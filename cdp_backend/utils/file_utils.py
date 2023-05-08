@@ -719,7 +719,9 @@ def clip_and_reformat_video(
 
     output_path = output_path or append_to_stem(video_filepath, "_clipped")
 
-    out_args = {"format": output_format}
+    output_kwargs = {"format": output_format}
+    if should_copy_video(video_filepath, output_format):
+        output_kwargs["codec"] = "copy"
 
     try:
         ffmpeg_stdout, ffmpeg_stderr = (
@@ -730,9 +732,7 @@ def clip_and_reformat_video(
             )
             .output(
                 filename=str(output_path),
-                **dict(out_args, codec="copy")
-                if should_copy_video(video_filepath)
-                else out_args,
+                **output_kwargs,
             )
             .run(capture_stdout=True, capture_stderr=True)
         )
@@ -748,14 +748,22 @@ def clip_and_reformat_video(
     return output_path
 
 
-def should_copy_video(video_filepath: Path) -> bool:
+def should_copy_video(video_filepath: Path, output_format: str = "mp4") -> bool:
     """
-    Check if the video should be copied or re-encoded.
+    Check if the video should be copied using ffmpeg StreamCopy codec or if it should
+    be re-encoded as h264.
+
+    A video will be copied iff the following conditions are met:
+    - The video at video_filepath has a .mp4 extension
+    - The desired output format is mp4
+    - The video at video_filepath has a video stream with a codec of h264
 
     Parameters
     ----------
     video_filepath: Path
         The filepath of the video under scrutiny.
+    output_format: str
+        The desired output format of the video at video_filepath.
 
     Returns
     -------
@@ -763,6 +771,9 @@ def should_copy_video(video_filepath: Path) -> bool:
         True if the video should be copied, False if it should be re-encoded.
     """
     if video_filepath.suffix.lower() != ".mp4":
+        return False
+
+    if output_format.lower() != "mp4":
         return False
 
     import ffmpeg
