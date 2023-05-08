@@ -721,6 +721,10 @@ def clip_and_reformat_video(
 
     output_kwargs = {"format": output_format}
     if should_copy_video(video_filepath, output_format):
+        log.info(
+            f"Video {video_filepath} is already h264, "
+            "it will be clipped and copied instead of clipped and re-encoded."
+        )
         output_kwargs["codec"] = "copy"
 
     try:
