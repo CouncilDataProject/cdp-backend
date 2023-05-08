@@ -719,12 +719,10 @@ def clip_and_reformat_video(
 
     output_path = output_path or append_to_stem(video_filepath, "_clipped")
 
-    out_args = {
-        'format': output_format
-    }
+    out_args = {"format": output_format}
 
     if should_copy_video(video_filepath):
-        out_args['codec'] = 'copy'
+        out_args["codec"] = "copy"
 
     try:
         ffmpeg_stdout, ffmpeg_stderr = (
@@ -747,6 +745,7 @@ def clip_and_reformat_video(
 
     return output_path
 
+
 def should_copy_video(video_filepath: Path) -> bool:
     """
     Check if the video should be copied or re-encoded.
@@ -762,19 +761,22 @@ def should_copy_video(video_filepath: Path) -> bool:
         True if the video should be copied, False if it should be re-encoded.
     """
 
-    if video_filepath.suffix.lower() != '.mp4':
+    if video_filepath.suffix.lower() != ".mp4":
         return False
 
     import ffmpeg
+
     try:
-        streams = ffmpeg.probe(video_filepath)['streams']
+        streams = ffmpeg.probe(video_filepath)["streams"]
     except ffmpeg.Error as e:
-        log.warning(f"Failed to probe {video_filepath}, unable to determine if video should be copied or re-encoded. Falling back to re-encoding. ffmpeg error: {e.stderr}")
+        log.warning(
+            f"Failed to probe {video_filepath}, unable to determine if video should be copied or re-encoded. Falling back to re-encoding. ffmpeg error: {e.stderr}"
+        )
         return False
 
     should_copy_video = False
     for stream in streams:
-        if stream['codec_type'] == 'video' and stream['codec_name'] == 'h264':
+        if stream["codec_type"] == "video" and stream["codec_name"] == "h264":
             should_copy_video = True
             break
 
