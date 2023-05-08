@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cdp_backend.utils.resources package" href="cdp_backend.utils.resources.html" /><link rel="prev" title="cdp_backend.sr_models package" href="cdp_backend.sr_models.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
-        <title>cdp_backend.utils package - cdp-backend 0.1.dev1+g6c1c1ff documentation</title>
+        <title>cdp_backend.utils package - cdp-backend 0.1.dev1+g0982830 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g6c1c1ff documentation</div></a>
+      <a href="index.html"><div class="brand">cdp-backend 0.1.dev1+g0982830 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g6c1c1ff documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g0982830 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -588,6 +588,33 @@ the same name if it already exists.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cdp_backend.utils.file_utils.should_copy_video">
+<span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">should_copy_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mp4'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#should_copy_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.should_copy_video" title="Permalink to this definition">#</a></dt>
+<dd><p>Check if the video should be copied using ffmpeg StreamCopy codec or if it should
+be re-encoded as h264.</p>
+<p>A video will be copied iff the following conditions are met:
+- The video at video_filepath has a .mp4 extension
+- The desired output format is mp4
+- The video at video_filepath has a video stream with a codec of h264</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>video_filepath: Path</strong></dt><dd><p>The filepath of the video under scrutiny.</p>
+</dd>
+<dt><strong>output_format: str</strong></dt><dd><p>The desired output format of the video at video_filepath.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool:</dt><dd><p>True if the video should be copied, False if it should be re-encoded.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cdp_backend.utils.file_utils.split_audio">
 <span class="sig-prename descclassname"><span class="pre">cdp_backend.utils.file_utils.</span></span><span class="sig-name descname"><span class="pre">split_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_read_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cdp_backend/utils/file_utils.html#split_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cdp_backend.utils.file_utils.split_audio" title="Permalink to this definition">#</a></dt>
 <dd><p>Split and store the audio from a video file using ffmpeg.</p>
@@ -828,6 +855,7 @@ match the form.</p>
 <li><a class="reference internal" href="#cdp_backend.utils.file_utils.rename_append_to_stem"><code class="docutils literal notranslate"><span class="pre">rename_append_to_stem()</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.utils.file_utils.rename_with_stem"><code class="docutils literal notranslate"><span class="pre">rename_with_stem()</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.utils.file_utils.resource_copy"><code class="docutils literal notranslate"><span class="pre">resource_copy()</span></code></a></li>
+<li><a class="reference internal" href="#cdp_backend.utils.file_utils.should_copy_video"><code class="docutils literal notranslate"><span class="pre">should_copy_video()</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.utils.file_utils.split_audio"><code class="docutils literal notranslate"><span class="pre">split_audio()</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.utils.file_utils.vimeo_copy"><code class="docutils literal notranslate"><span class="pre">vimeo_copy()</span></code></a></li>
 <li><a class="reference internal" href="#cdp_backend.utils.file_utils.with_stem"><code class="docutils literal notranslate"><span class="pre">with_stem()</span></code></a></li>

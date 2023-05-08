@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g6c1c1ff documentation</title>
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g0982830 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g6c1c1ff documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g0982830 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g6c1c1ff documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g0982830 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -935,6 +935,14 @@
 
     <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="ow">or</span> <span class="n">append_to_stem</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">,</span> <span class="s2">&quot;_clipped&quot;</span><span class="p">)</span>
 
+    <span class="n">output_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="n">output_format</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">should_copy_video</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">,</span> <span class="n">output_format</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Video </span><span class="si">{</span><span class="n">video_filepath</span><span class="si">}</span><span class="s2"> is already h264, &quot;</span>
+            <span class="s2">&quot;it will be clipped and copied instead of clipped and re-encoded.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">output_kwargs</span><span class="p">[</span><span class="s2">&quot;codec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;copy&quot;</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ffmpeg_stdout</span><span class="p">,</span> <span class="n">ffmpeg_stderr</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span>
@@ -942,7 +950,10 @@
                 <span class="n">ss</span><span class="o">=</span><span class="n">start_time</span> <span class="ow">or</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
                 <span class="n">to</span><span class="o">=</span><span class="n">end_time</span> <span class="ow">or</span> <span class="s2">&quot;99:59:59&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">output_path</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">output</span><span class="p">(</span>
+                <span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">output_path</span><span class="p">),</span>
+                <span class="o">**</span><span class="n">output_kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">capture_stdout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_stderr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">_run</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -955,6 +966,55 @@
         <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">ffmpeg_stderr</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">output_path</span></div>
+
+
+<div class="viewcode-block" id="should_copy_video"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.should_copy_video">[docs]</a><span class="k">def</span> <span class="nf">should_copy_video</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the video should be copied using ffmpeg StreamCopy codec or if it should</span>
+<span class="sd">    be re-encoded as h264.</span>
+
+<span class="sd">    A video will be copied iff the following conditions are met:</span>
+<span class="sd">    - The video at video_filepath has a .mp4 extension</span>
+<span class="sd">    - The desired output format is mp4</span>
+<span class="sd">    - The video at video_filepath has a video stream with a codec of h264</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    video_filepath: Path</span>
+<span class="sd">        The filepath of the video under scrutiny.</span>
+<span class="sd">    output_format: str</span>
+<span class="sd">        The desired output format of the video at video_filepath.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool:</span>
+<span class="sd">        True if the video should be copied, False if it should be re-encoded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">video_filepath</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">output_format</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="kn">import</span> <span class="nn">ffmpeg</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">streams</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">)[</span><span class="s2">&quot;streams&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed to probe </span><span class="si">{</span><span class="n">video_filepath</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Unable to determine if video should be copied or re-encoded.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Falling back to re-encoding. ffmpeg error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">should_copy_video</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stream</span><span class="p">[</span><span class="s2">&quot;codec_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;video&quot;</span> <span class="ow">and</span> <span class="n">stream</span><span class="p">[</span><span class="s2">&quot;codec_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;h264&quot;</span><span class="p">:</span>
+            <span class="n">should_copy_video</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">should_copy_video</span></div>
 </pre></div>
         </article>
       </div>
