@@ -760,7 +760,6 @@ def should_copy_video(video_filepath: Path) -> bool:
     bool:
         True if the video should be copied, False if it should be re-encoded.
     """
-
     if video_filepath.suffix.lower() != ".mp4":
         return False
 
@@ -770,7 +769,9 @@ def should_copy_video(video_filepath: Path) -> bool:
         streams = ffmpeg.probe(video_filepath)["streams"]
     except ffmpeg.Error as e:
         log.warning(
-            f"Failed to probe {video_filepath}, unable to determine if video should be copied or re-encoded. Falling back to re-encoding. ffmpeg error: {e.stderr}"
+            f"Failed to probe {video_filepath}. "
+            "Unable to determine if video should be copied or re-encoded."
+            f"Falling back to re-encoding. ffmpeg error: {e.stderr}"
         )
         return False
 
