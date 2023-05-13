@@ -6,9 +6,9 @@ import logging
 import math
 import random
 import re
+import shutil
 from hashlib import sha256
 from pathlib import Path
-import shutil
 from uuid import uuid4
 
 import fireo
