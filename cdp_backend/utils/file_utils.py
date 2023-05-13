@@ -8,6 +8,7 @@ import random
 import re
 from hashlib import sha256
 from pathlib import Path
+import shutil
 from uuid import uuid4
 
 import fireo
@@ -225,21 +226,19 @@ def resource_copy(  # noqa: C901
             )
             return str(dst)
 
-        # Set custom timeout for http resources
+        # Common case: http(s) URI
         if uri.startswith("http"):
             # The verify=False is passed to any http URIs
             # It was added because it's very common for SSL certs to be bad
             # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
             # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
 
-            with open(dst, "wb") as open_dst:
-                open_dst.write(
-                    requests.get(
-                        uri,
-                        verify=False,
-                        timeout=1800,
-                    ).content
-                )
+            # Use stream=True to avoid downloading the entire file into memory
+            # See: https://github.com/CouncilDataProject/cdp-backend/issues/235
+            with requests.get(uri, stream=True, verify=False, timeout=1800) as r:
+                r.raise_for_status()
+                with open(dst, "wb") as open_dst:
+                    shutil.copyfileobj(r.raw, open_dst, length=64 * 1024 * 1024) # 64MB chunks
 
         else:
             # TODO: Add explicit use of GCS credentials until public read is fixed
