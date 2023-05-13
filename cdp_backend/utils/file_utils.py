@@ -235,12 +235,18 @@ def resource_copy(  # noqa: C901
 
             # Use stream=True to avoid downloading the entire file into memory
             # See: https://github.com/CouncilDataProject/cdp-backend/issues/235
-            with requests.get(uri, stream=True, verify=False, timeout=1800) as r:
-                r.raise_for_status()
+            try:
+                # This response must be closed after the copy is done. But using
+                # `with requests.get() as response` fails mypy type checking.
+                # See: https://requests.readthedocs.io/en/latest/user/advanced/#body-content-workflow
+                response = requests.get(uri, stream=True, verify=False, timeout=1800)
+                response.raise_for_status()
                 with open(dst, "wb") as open_dst:
                     shutil.copyfileobj(
-                        r.raw, open_dst, length=64 * 1024 * 1024  # 64MB chunks
+                        response.raw, open_dst, length=64 * 1024 * 1024  # 64MB chunks
                     )
+            finally:
+                response.close()
 
         else:
             # TODO: Add explicit use of GCS credentials until public read is fixed
