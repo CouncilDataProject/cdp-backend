@@ -238,7 +238,9 @@ def resource_copy(  # noqa: C901
             with requests.get(uri, stream=True, verify=False, timeout=1800) as r:
                 r.raise_for_status()
                 with open(dst, "wb") as open_dst:
-                    shutil.copyfileobj(r.raw, open_dst, length=64 * 1024 * 1024) # 64MB chunks
+                    shutil.copyfileobj(
+                        r.raw, open_dst, length=64 * 1024 * 1024  # 64MB chunks
+                    )
 
         else:
             # TODO: Add explicit use of GCS credentials until public read is fixed
