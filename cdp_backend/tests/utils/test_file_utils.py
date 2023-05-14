@@ -11,6 +11,7 @@ from unittest import mock
 
 import imageio
 import pytest
+import requests_mock
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
@@ -112,6 +113,19 @@ def test_get_media_type(uri: str, expected_result: str | None) -> None:
 def test_resource_copy(tmpdir, example_video: Path) -> None:  # type: ignore
     save_path = tmpdir / EXAMPLE_VIDEO_FILENAME
     resource_copy(str(example_video), save_path)
+
+
+def test_resource_copy_https(tmpdir, example_video: Path) -> None:  # type: ignore
+    with requests_mock.Mocker() as mock:
+        example_video_file = imageio.read(example_video)
+        mock.get("https://example.com/example_video.mp4", body=example_video_file)
+        dest = tmpdir / "example_video.mp4"
+        saved_path = resource_copy(
+            "https://example.com/example_video.mp4",
+            dest,
+        )
+        assert saved_path == dest
+        example_video_file.close()
 
 
 # Type ignore because changing tmpdir typing
