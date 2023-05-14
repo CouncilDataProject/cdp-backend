@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.03.27 -->
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g0982830 documentation</title>
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g703d7f1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g0982830 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g703d7f1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g0982830 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g703d7f1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -222,6 +222,7 @@
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
@@ -441,21 +442,27 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
 
-        <span class="c1"># Set custom timeout for http resources</span>
+        <span class="c1"># Common case: http(s) URI</span>
         <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
             <span class="c1"># The verify=False is passed to any http URIs</span>
             <span class="c1"># It was added because it&#39;s very common for SSL certs to be bad</span>
             <span class="c1"># See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85</span>
             <span class="c1"># And: https://github.com/CouncilDataProject/seattle/runs/5957646032</span>
 
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_dst</span><span class="p">:</span>
-                <span class="n">open_dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                    <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                        <span class="n">uri</span><span class="p">,</span>
-                        <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span>
-                    <span class="p">)</span><span class="o">.</span><span class="n">content</span>
-                <span class="p">)</span>
+            <span class="c1"># Use stream=True to avoid downloading the entire file into memory</span>
+            <span class="c1"># See: https://github.com/CouncilDataProject/cdp-backend/issues/235</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># This response must be closed after the copy is done. But using</span>
+                <span class="c1"># `with requests.get() as response` fails mypy type checking.</span>
+                <span class="c1"># See: https://requests.readthedocs.io/en/latest/user/advanced/#body-content-workflow</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">)</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_dst</span><span class="p">:</span>
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span>
+                        <span class="n">response</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="n">open_dst</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>  <span class="c1"># 64MB chunks</span>
+                    <span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># TODO: Add explicit use of GCS credentials until public read is fixed</span>
