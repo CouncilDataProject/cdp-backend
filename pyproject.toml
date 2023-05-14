@@ -103,6 +103,7 @@ test = [
   # Extras
   "networkx>=2.5",
   "pydot>=1.4",
+  "requests-mock>=1.10.0"
 ]
 docs = [
   # Sphinx + Doc Gen + Styling
