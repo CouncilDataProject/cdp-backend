@@ -248,6 +248,11 @@ def read_transcripts_and_generate_grams(
                             closest_term = term
                             closest_term_score = similarity
 
+                    # If the closest term is blank, skip processing this item
+                    # Otherwise this throws an error 
+                    if closest_term == "":
+                        continue
+
                     # Get surrounding terms
                     terms = sm.original_details.text.split()
                     target_term_index = terms.index(closest_term)
