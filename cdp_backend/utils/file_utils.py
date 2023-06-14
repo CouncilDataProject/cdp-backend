@@ -7,9 +7,9 @@ import logging
 import math
 import random
 import re
+import shutil
 import xml.dom.minidom
 import zipfile
-import shutil
 from hashlib import sha256
 from pathlib import Path
 from uuid import uuid4
@@ -780,9 +780,7 @@ def parse_document(document_uri: str) -> str:
     """
     response = requests.get(document_uri, stream=True)
     if response.status_code != 200:
-        log.error(
-            "Request to " + document_uri + " failed with: " + str(response.status_code)
-        )
+        response.raise_for_status()
     else:
         document_raw = response.content
 
@@ -919,6 +917,8 @@ def remove_duplicate_space(parsed_text: str) -> str:
        A string with no more than one consecutive space.
     """
     return re.sub("\s+", " ", parsed_text)
+
+
 def should_copy_video(video_filepath: Path, output_format: str = "mp4") -> bool:
     """
     Check if the video should be copied using ffmpeg StreamCopy codec or if it should

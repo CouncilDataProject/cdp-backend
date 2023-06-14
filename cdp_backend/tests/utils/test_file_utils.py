@@ -12,6 +12,7 @@ from unittest import mock
 import imageio
 import pytest
 import requests_mock
+from requests import HTTPError
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
@@ -464,9 +465,19 @@ def test_parse_document_bad_uri() -> None:
                 self.content = None
                 self.status_code = 404
 
+            def raise_for_status(self) -> None:
+                raise HTTPError
+
         mocked_requests_get.return_value = MockResponse()
-        parsed_doc = parse_document("some/bad/uri")
+        try:
+            parsed_doc = parse_document("some/bad/uri")
+        except HTTPError:
+            assert True
+            return
+
         assert parsed_doc == ""
+        raise AssertionError()
+
 
 @pytest.mark.parametrize(
     "video_filepath, output_format, codec_type, codec_name, expected",
