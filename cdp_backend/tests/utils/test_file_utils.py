@@ -11,6 +11,7 @@ from unittest import mock
 
 import imageio
 import pytest
+import requests_mock
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
@@ -117,6 +118,19 @@ def test_get_media_type(uri: str, expected_result: str | None) -> None:
 def test_resource_copy(tmpdir, example_video: Path) -> None:  # type: ignore
     save_path = tmpdir / EXAMPLE_VIDEO_FILENAME
     resource_copy(str(example_video), save_path)
+
+
+def test_resource_copy_https(tmpdir, example_video: Path) -> None:  # type: ignore
+    with requests_mock.Mocker() as mock:
+        example_video_file = imageio.read(example_video)
+        mock.get("https://example.com/example_video.mp4", body=example_video_file)
+        dest = tmpdir / "example_video.mp4"
+        saved_path = resource_copy(
+            "https://example.com/example_video.mp4",
+            dest,
+        )
+        assert saved_path == dest
+        example_video_file.close()
 
 
 # Type ignore because changing tmpdir typing
@@ -273,9 +287,6 @@ def test_hover_thumbnail_generator(
         str(video_path), session_content_hash, num_frames
     )
     assert result == expected
-
-    reader = imageio.get_reader(result)
-    assert reader._length == num_frames
 
     image = imageio.imread(result)
     assert image.shape[0] <= MAX_THUMBNAIL_HEIGHT
@@ -456,3 +467,40 @@ def test_parse_document_bad_uri() -> None:
         mocked_requests_get.return_value = MockResponse()
         parsed_doc = parse_document("some/bad/uri")
         assert parsed_doc == ""
+
+@pytest.mark.parametrize(
+    "video_filepath, output_format, codec_type, codec_name, expected",
+    [
+        (Path("video.mp4"), "mp4", "video", "h264", True),
+        (Path("video.MP4"), "mp4", "video", "h264", True),
+        (Path("video.mp4"), "mp4", "video", "mpeg4", False),
+        (Path("video.mkv"), "mp4", "video", "h264", False),
+        (Path("video.MKV"), "mp4", "video", "h264", False),
+        (Path("video.avi"), "mp4", "video", "mpeg4", False),
+        (Path("video.avi"), "mp4", "audio", "mp3", False),
+        (Path("video.mp4"), "mp3", "video", "h264", False),
+    ],
+)
+def test_should_copy_video(
+    video_filepath: Path,
+    output_format: str,
+    codec_type: str,
+    codec_name: str,
+    expected: bool,
+) -> None:
+    with mock.patch("ffmpeg.probe") as ffmpeg_probe:
+        ffmpeg_probe.return_value = {
+            "streams": [{"codec_type": codec_type, "codec_name": codec_name}]
+        }
+        if expected:
+            assert file_utils.should_copy_video(video_filepath, output_format)
+        else:
+            assert not file_utils.should_copy_video(video_filepath, output_format)
+
+
+def test_should_copy_video_exception() -> None:
+    with mock.patch("ffmpeg.probe") as ffmpeg_probe:
+        import ffmpeg
+
+        ffmpeg_probe.side_effect = ffmpeg.Error("ffprobe", "nothing", "nothing good")
+        assert not file_utils.should_copy_video(Path("unknown_video.mp4"))

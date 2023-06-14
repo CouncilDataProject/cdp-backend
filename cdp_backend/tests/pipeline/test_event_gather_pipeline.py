@@ -57,8 +57,9 @@ VIDEO_CONTENT_HASH = "7490ea6cf56648d60a40dd334e46e5d7de0f31dde0c7ce4d85747896fd
     [FILLED_FLOW_CONFIG, MANY_FLOW_CONFIG, MINIMAL_FLOW_CONFIG, RANDOM_FLOW_CONFIG],
 )
 def test_create_event_gather_flow(config: EventGatherPipelineConfig) -> None:
-    flow = pipeline.create_event_gather_flow(config=config)
-    assert isinstance(flow, Flow)
+    flows = pipeline.create_event_gather_flow(config=config)
+    assert isinstance(flows, list)
+    assert all(isinstance(f, Flow) for f in flows)
 
 
 @pytest.mark.skipif(

@@ -73,7 +73,7 @@ enable-services:
 setup project region=default_region:
 	just enable-services
 	gcloud app create --region={{replace(region, "us-central1", "us-central")}}
-	gcloud firestore databases create --region={{replace(region, "us-central1", "nam5")}}
+	gcloud firestore databases create --location={{replace(region, "us-central1", "nam5")}}
 	firebase projects:addfirebase {{project}}
 	firebase use --add {{project}}
 	@ echo "----------------------------------------------------------------------------"

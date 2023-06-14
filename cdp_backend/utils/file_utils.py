@@ -9,6 +9,7 @@ import random
 import re
 import xml.dom.minidom
 import zipfile
+import shutil
 from hashlib import sha256
 from pathlib import Path
 from uuid import uuid4
@@ -230,21 +231,27 @@ def resource_copy(  # noqa: C901
             )
             return str(dst)
 
-        # Set custom timeout for http resources
+        # Common case: http(s) URI
         if uri.startswith("http"):
             # The verify=False is passed to any http URIs
             # It was added because it's very common for SSL certs to be bad
             # See: https://github.com/CouncilDataProject/cdp-scrapers/pull/85
             # And: https://github.com/CouncilDataProject/seattle/runs/5957646032
 
-            with open(dst, "wb") as open_dst:
-                open_dst.write(
-                    requests.get(
-                        uri,
-                        verify=False,
-                        timeout=1800,
-                    ).content
-                )
+            # Use stream=True to avoid downloading the entire file into memory
+            # See: https://github.com/CouncilDataProject/cdp-backend/issues/235
+            try:
+                # This response must be closed after the copy is done. But using
+                # `with requests.get() as response` fails mypy type checking.
+                # See: https://requests.readthedocs.io/en/latest/user/advanced/#body-content-workflow
+                response = requests.get(uri, stream=True, verify=False, timeout=1800)
+                response.raise_for_status()
+                with open(dst, "wb") as open_dst:
+                    shutil.copyfileobj(
+                        response.raw, open_dst, length=64 * 1024 * 1024  # 64MB chunks
+                    )
+            finally:
+                response.close()
 
         else:
             # TODO: Add explicit use of GCS credentials until public read is fixed
@@ -470,7 +477,7 @@ def get_hover_thumbnail(
     duration: float = 6.0,
 ) -> str:
     """
-    A function that produces a gif hover thumbnail from an mp4 video file.
+    Produce a gif hover thumbnail from an mp4 video file.
 
     Parameters
     ----------
@@ -505,7 +512,7 @@ def get_hover_thumbnail(
     width = sample.shape[1]
     final_ratio = find_proper_resize_ratio(height, width)
 
-    with imageio.get_writer(gif_path, mode="I", fps=(num_frames / duration)) as writer:
+    with imageio.get_writer(gif_path, mode="I", duration=duration * 1000) as writer:
         selected_frames = 0
         for frame in reader:
             # 1% chance to use the frame
@@ -724,6 +731,14 @@ def clip_and_reformat_video(
 
     output_path = output_path or append_to_stem(video_filepath, "_clipped")
 
+    output_kwargs = {"format": output_format}
+    if should_copy_video(video_filepath, output_format):
+        log.info(
+            f"Video {video_filepath} is already h264, "
+            "it will be clipped and copied instead of clipped and re-encoded."
+        )
+        output_kwargs["codec"] = "copy"
+
     try:
         ffmpeg_stdout, ffmpeg_stderr = (
             ffmpeg.input(
@@ -731,7 +746,10 @@ def clip_and_reformat_video(
                 ss=start_time or "0",
                 to=end_time or "99:59:59",
             )
-            .output(filename=str(output_path), format=output_format)
+            .output(
+                filename=str(output_path),
+                **output_kwargs,
+            )
             .run(capture_stdout=True, capture_stderr=True)
         )
     except ffmpeg._run.Error as e:
@@ -901,3 +919,50 @@ def remove_duplicate_space(parsed_text: str) -> str:
        A string with no more than one consecutive space.
     """
     return re.sub("\s+", " ", parsed_text)
+def should_copy_video(video_filepath: Path, output_format: str = "mp4") -> bool:
+    """
+    Check if the video should be copied using ffmpeg StreamCopy codec or if it should
+    be re-encoded as h264.
+
+    A video will be copied iff the following conditions are met:
+    - The video at video_filepath has a .mp4 extension
+    - The desired output format is mp4
+    - The video at video_filepath has a video stream with a codec of h264
+
+    Parameters
+    ----------
+    video_filepath: Path
+        The filepath of the video under scrutiny.
+    output_format: str
+        The desired output format of the video at video_filepath.
+
+    Returns
+    -------
+    bool:
+        True if the video should be copied, False if it should be re-encoded.
+    """
+    if video_filepath.suffix.lower() != ".mp4":
+        return False
+
+    if output_format.lower() != "mp4":
+        return False
+
+    import ffmpeg
+
+    try:
+        streams = ffmpeg.probe(video_filepath)["streams"]
+    except ffmpeg.Error as e:
+        log.warning(
+            f"Failed to probe {video_filepath}. "
+            "Unable to determine if video should be copied or re-encoded."
+            f"Falling back to re-encoding. ffmpeg error: {e.stderr}"
+        )
+        return False
+
+    should_copy_video = False
+    for stream in streams:
+        if stream["codec_type"] == "video" and stream["codec_name"] == "h264":
+            should_copy_video = True
+            break
+
+    return should_copy_video
