@@ -70,9 +70,11 @@ pipeline = [
   "prefect>=1.2,<2",
   "pyarrow>=8.0",
   "pydub>=0.25.1",
+  "pypdf>=2.0",
   "rapidfuzz>=2.0",
   "spacy>=3.4",
   "spacy-transformers>=1.1",
+  "tika==2.6.0",
   "torch>=1.10",
   "tqdm>=4.62",
   "transformers>=4.16",
@@ -222,6 +224,10 @@ ignore = [
   "*generated_*",
   "*.wav",
   "Dockerfile",
+  "*example_*.docx",
+  "*example_*.doc",
+  "*example_*.pptx",
+  "*example_*.pdf",
 ]
 
 [tool.mypy]

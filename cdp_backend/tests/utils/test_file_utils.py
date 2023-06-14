@@ -12,17 +12,23 @@ from unittest import mock
 import imageio
 import pytest
 import requests_mock
+from requests import HTTPError
 
 from cdp_backend.utils import file_utils
 from cdp_backend.utils.file_utils import (
     MAX_THUMBNAIL_HEIGHT,
     MAX_THUMBNAIL_WIDTH,
+    parse_document,
     resource_copy,
 )
 
 from .. import test_utils
 from ..conftest import (
+    EXAMPLE_DOC,
+    EXAMPLE_DOCX,
     EXAMPLE_MKV_VIDEO_FILENAME,
+    EXAMPLE_PDF,
+    EXAMPLE_PPTX,
     EXAMPLE_VIDEO_FILENAME,
     EXAMPLE_VIDEO_HD_FILENAME,
     EXAMPLE_VIMEO,
@@ -400,6 +406,77 @@ def test_clip_and_reformat_video(
     assert outfile.exists()
     assert outfile == (expected_outfile or outfile)
     os.remove(outfile)
+
+
+@pytest.mark.parametrize(
+    "document_uri, expected",
+    [
+        (
+            EXAMPLE_DOCX,
+            "Word9 Word10 Word12 Word11 Word14 Word16 "
+            + "we Word13 Word15 Word17 Word18 Word19 "
+            + "Word1 Word2 Word3 Word4 Word5 "
+            + "Word6 OH 007 A 001 Word7 word8",
+        ),
+        (
+            EXAMPLE_DOC,
+            " Word1 Word2 Word3 Word4 "
+            + "Word5 Word6 OH 007 A 001 Word9 Word10 "
+            + "Word12 Word11 Word14 Word16 we Word13 "
+            + "Word15 Word17 Word18 Word19 Word7 word8 ",
+        ),
+        (
+            EXAMPLE_PDF,
+            "Word1 Word2 Word3 Word4 Word5 Word6 "
+            + "OH 007 A 001 Word7 word8 Word9 Word10 Word12 Word11 "
+            + "Word14 Word16 we Word13 Word15 Word17 Word18 Word19 ",
+        ),
+        (
+            EXAMPLE_PPTX,
+            " Title Word1 word2 word3 word4 Word5 word6 "
+            + "1 word7 word8 word9 word10 word11 Word12 word13 word14 "
+            + "/docProps/thumbnail.jpeg ",
+        ),
+        (EXAMPLE_VIDEO_FILENAME, ""),
+    ],
+)
+def test_parse_document(resources_dir: Path, document_uri: str, expected: str) -> None:
+
+    actual_uri = str(resources_dir / document_uri)
+
+    with mock.patch("requests.get") as mocked_requests_get:
+
+        class MockResponse:
+            def __init__(self) -> None:
+                self.content = open(actual_uri, "rb").read()
+                self.status_code = 200
+
+        mocked_requests_get.return_value = MockResponse()
+        parsed_doc = parse_document(actual_uri)
+        assert parsed_doc == expected
+
+
+def test_parse_document_bad_uri() -> None:
+
+    with mock.patch("requests.get") as mocked_requests_get:
+
+        class MockResponse:
+            def __init__(self) -> None:
+                self.content = None
+                self.status_code = 404
+
+            def raise_for_status(self) -> None:
+                raise HTTPError
+
+        mocked_requests_get.return_value = MockResponse()
+        try:
+            parsed_doc = parse_document("some/bad/uri")
+        except HTTPError:
+            assert True
+            return
+
+        assert parsed_doc == ""
+        raise AssertionError()
 
 
 @pytest.mark.parametrize(

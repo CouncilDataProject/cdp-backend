@@ -2,19 +2,24 @@
 
 from __future__ import annotations
 
+import io
 import logging
 import math
 import random
 import re
 import shutil
+import xml.dom.minidom
+import zipfile
 from hashlib import sha256
 from pathlib import Path
 from uuid import uuid4
 
 import fireo
 import fsspec
+import pypdf
 import requests
 from fsspec.core import url_to_fs
+from tika import parser
 
 from ..database import models as db_models
 
@@ -757,6 +762,161 @@ def clip_and_reformat_video(
         log.error(ffmpeg_stderr)
 
     return output_path
+
+
+def parse_document(document_uri: str) -> str:
+    """
+    Extract text from a .doc, .docx, or .ppt matter file.
+
+    Parameters
+    ----------
+    document_uri: str
+        The matter file uri.
+
+    Returns
+    -------
+    str:
+        A string of all text in the matter file.
+    """
+    response = requests.get(document_uri, stream=True)
+    if response.status_code != 200:
+        response.raise_for_status()
+    else:
+        document_raw = response.content
+
+        docx_pattern = "\.docx$"
+        doc_pattern = "\.doc$"
+        pdf_pattern = "\.pdf$"
+        pptx_pattern = "\.pptx$"
+
+        if re.search(docx_pattern, document_uri):
+            return parse_docx_file(document_raw)
+        elif re.search(doc_pattern, document_uri):
+            return parse_doc_file(document_raw)
+        elif re.search(pdf_pattern, document_uri):
+            return parse_pdf_file(document_raw)
+        elif re.search(pptx_pattern, document_uri):
+            return parse_pptx_file(document_raw)
+
+        log.error("Unsupported document type: " + document_uri)
+
+    return ""
+
+
+def parse_docx_file(zip_archive_bytes: bytes) -> str:
+    """
+    Extract text from a .docx matter file.
+
+    Parameters
+    ----------
+    zip_archive_bytes: bytes
+        The raw document to be parsed. Word docx files are zip archives.
+
+    Returns
+    -------
+    str:
+        A str of all text in the .docx file.
+    """
+    zip_archive_stream = io.BytesIO(zip_archive_bytes)
+    zip_archive = zipfile.ZipFile(zip_archive_stream)
+    archive_members = zip_archive.namelist()
+
+    xml_regex_pattern = "^.*\.xml$"
+    text = []
+
+    for file in archive_members:
+        # text found in .xml files not .rels
+        if re.search(xml_regex_pattern, file):
+            file_stream = io.BytesIO(zip_archive.read(file))
+            parsed_xml = xml.dom.minidom.parse(file_stream)
+
+            root = parsed_xml.documentElement
+            text_nodes = root.getElementsByTagName("w:t")
+
+            for node in text_nodes:
+                text.append(node.firstChild.nodeValue)
+
+    parsed_text = " ".join(text)
+    return remove_duplicate_space(parsed_text)
+
+
+def parse_doc_file(document_raw: bytes) -> str:
+    """
+    Extract text from a .doc matter file.
+
+    Parameters
+    ----------
+    document_raw: bytes
+        The raw document.
+
+    Returns
+    -------
+    str:
+        A str of all text in the .doc file.
+    """
+    parsed_content = parser.from_buffer(document_raw)["content"]
+    return remove_duplicate_space(parsed_content)
+
+
+def parse_pdf_file(document_raw: bytes) -> str:
+    """
+    Extract text from a .pdf matter file.
+
+    Parameters
+    ----------
+    document_raw: bytes
+        The raw document.
+
+    Returns
+    -------
+    str:
+        A str of all text in the .pdf file.
+    """
+    pdf_reader = pypdf.PdfReader(io.BytesIO(document_raw))
+    text = ""
+
+    count = 0
+    while count < len(pdf_reader.pages):
+        current_page = pdf_reader.pages[count]
+        text += current_page.extract_text()
+        count += 1
+
+    return remove_duplicate_space(text)
+
+
+def parse_pptx_file(document_raw: bytes) -> str:
+    """
+    Extract text from a .pdf matter file.
+
+    Parameters
+    ----------
+    document_raw: bytes
+        The raw document.
+
+    Returns
+    -------
+    str:
+        A str of all text in the .pdf file.
+    """
+    parsed_pptx = parser.from_buffer(document_raw)["content"]
+    return remove_duplicate_space(parsed_pptx)
+
+
+def remove_duplicate_space(parsed_text: str) -> str:
+    """
+    Remove all duplicate whitespace characters and replace with a single space.
+
+    Parameters
+    ----------
+    parsed_text: str
+       The parsed text from the document.
+
+    Returns
+    -------
+    str:
+       A string with no more than one consecutive space.
+    """
+    return re.sub("\s+", " ", parsed_text)
 
 
 def should_copy_video(video_filepath: Path, output_format: str = "mp4") -> bool:
