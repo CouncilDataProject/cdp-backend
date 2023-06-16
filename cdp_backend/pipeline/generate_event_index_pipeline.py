@@ -249,7 +249,7 @@ def read_transcripts_and_generate_grams(
                             closest_term_score = similarity
 
                     # If the closest term is blank, skip processing this item
-                    # Otherwise this throws an error 
+                    # Otherwise this throws an error
                     if closest_term == "":
                         continue
 
