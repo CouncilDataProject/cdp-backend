@@ -16,10 +16,8 @@ from uuid import uuid4
 
 import fireo
 import fsspec
-import pypdf
 import requests
 from fsspec.core import url_to_fs
-from tika import parser
 
 from ..database import models as db_models
 
@@ -854,6 +852,8 @@ def parse_doc_file(document_raw: bytes) -> str:
     str:
         A str of all text in the .doc file.
     """
+    from tika import parser
+
     parsed_content = parser.from_buffer(document_raw)["content"]
     return remove_duplicate_space(parsed_content)
 
@@ -872,6 +872,8 @@ def parse_pdf_file(document_raw: bytes) -> str:
     str:
         A str of all text in the .pdf file.
     """
+    import pypdf
+
     pdf_reader = pypdf.PdfReader(io.BytesIO(document_raw))
     text = ""
 
@@ -898,6 +900,8 @@ def parse_pptx_file(document_raw: bytes) -> str:
     str:
         A str of all text in the .pdf file.
     """
+    from tika import parser
+
     parsed_pptx = parser.from_buffer(document_raw)["content"]
     return remove_duplicate_space(parsed_pptx)
 
