@@ -1,15 +1,15 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20 -->
-        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+g69ff775 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>cdp_backend.utils.file_utils - cdp-backend 0.1.dev1+gd2f025b documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+g69ff775 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cdp-backend 0.1.dev1+gd2f025b documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+g69ff775 documentation</span>
+  <span class="sidebar-brand-text">cdp-backend 0.1.dev1+gd2f025b documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -232,10 +232,8 @@
 
 <span class="kn">import</span> <span class="nn">fireo</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
-<span class="kn">import</span> <span class="nn">pypdf</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">fsspec.core</span> <span class="kn">import</span> <span class="n">url_to_fs</span>
-<span class="kn">from</span> <span class="nn">tika</span> <span class="kn">import</span> <span class="n">parser</span>
 
 <span class="kn">from</span> <span class="nn">..database</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">db_models</span>
 
@@ -249,7 +247,9 @@
 <span class="n">MAX_THUMBNAIL_WIDTH</span> <span class="o">=</span> <span class="mi">960</span>
 
 
-<div class="viewcode-block" id="with_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.with_stem">[docs]</a><span class="k">def</span> <span class="nf">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<div class="viewcode-block" id="with_stem">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.with_stem">[docs]</a>
+<span class="k">def</span> <span class="nf">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a path with a new stem.</span>
 
@@ -268,7 +268,10 @@
     <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}{</span><span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="append_to_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.append_to_stem">[docs]</a><span class="k">def</span> <span class="nf">append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">addition</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+
+<div class="viewcode-block" id="append_to_stem">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.append_to_stem">[docs]</a>
+<span class="k">def</span> <span class="nf">append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">addition</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rename a file with a string appended to the path stem.</span>
 
@@ -287,7 +290,10 @@
     <span class="k">return</span> <span class="n">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="si">}{</span><span class="n">addition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="rename_with_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.rename_with_stem">[docs]</a><span class="k">def</span> <span class="nf">rename_with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+
+<div class="viewcode-block" id="rename_with_stem">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.rename_with_stem">[docs]</a>
+<span class="k">def</span> <span class="nf">rename_with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rename a file with a string appended to the path stem.</span>
 
@@ -306,7 +312,10 @@
     <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">with_stem</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">stem</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="rename_append_to_stem"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.rename_append_to_stem">[docs]</a><span class="k">def</span> <span class="nf">rename_append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">addition</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+
+<div class="viewcode-block" id="rename_append_to_stem">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.rename_append_to_stem">[docs]</a>
+<span class="k">def</span> <span class="nf">rename_append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">addition</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rename a file with a string appended to the path stem.</span>
 
@@ -325,7 +334,10 @@
     <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">append_to_stem</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">addition</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="get_media_type"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">[docs]</a><span class="k">def</span> <span class="nf">get_media_type</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_media_type">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_media_type">[docs]</a>
+<span class="k">def</span> <span class="nf">get_media_type</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the IANA media type for the provided URI.</span>
 <span class="sd">    If one could not be found, return None.</span>
@@ -363,7 +375,10 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="resource_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.resource_copy">[docs]</a><span class="k">def</span> <span class="nf">resource_copy</span><span class="p">(</span>  <span class="c1"># noqa: C901</span>
+
+<div class="viewcode-block" id="resource_copy">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.resource_copy">[docs]</a>
+<span class="k">def</span> <span class="nf">resource_copy</span><span class="p">(</span>  <span class="c1"># noqa: C901</span>
     <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">copy_suffix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -485,7 +500,10 @@
         <span class="k">raise</span> <span class="n">e</span></div>
 
 
-<div class="viewcode-block" id="youtube_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.youtube_copy">[docs]</a><span class="k">def</span> <span class="nf">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="youtube_copy">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.youtube_copy">[docs]</a>
+<span class="k">def</span> <span class="nf">youtube_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a video from YouTube to a local destination on the machine.</span>
 
@@ -518,7 +536,10 @@
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vimeo_copy"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.vimeo_copy">[docs]</a><span class="k">def</span> <span class="nf">vimeo_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="vimeo_copy">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.vimeo_copy">[docs]</a>
+<span class="k">def</span> <span class="nf">vimeo_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy a video from Vimeo to a local destination on the machine for analysis.</span>
 
@@ -559,7 +580,10 @@
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.mp4&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="split_audio"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.split_audio">[docs]</a><span class="k">def</span> <span class="nf">split_audio</span><span class="p">(</span>
+
+<div class="viewcode-block" id="split_audio">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.split_audio">[docs]</a>
+<span class="k">def</span> <span class="nf">split_audio</span><span class="p">(</span>
     <span class="n">video_read_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">audio_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -632,7 +656,10 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_static_thumbnail"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">[docs]</a><span class="k">def</span> <span class="nf">get_static_thumbnail</span><span class="p">(</span>
+
+<div class="viewcode-block" id="get_static_thumbnail">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_static_thumbnail">[docs]</a>
+<span class="k">def</span> <span class="nf">get_static_thumbnail</span><span class="p">(</span>
     <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -686,7 +713,10 @@
     <span class="k">return</span> <span class="n">png_path</span></div>
 
 
-<div class="viewcode-block" id="get_hover_thumbnail"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_hover_thumbnail">[docs]</a><span class="k">def</span> <span class="nf">get_hover_thumbnail</span><span class="p">(</span>
+
+<div class="viewcode-block" id="get_hover_thumbnail">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.get_hover_thumbnail">[docs]</a>
+<span class="k">def</span> <span class="nf">get_hover_thumbnail</span><span class="p">(</span>
     <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">session_content_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
@@ -752,7 +782,10 @@
     <span class="k">return</span> <span class="n">gif_path</span></div>
 
 
-<div class="viewcode-block" id="find_proper_resize_ratio"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.find_proper_resize_ratio">[docs]</a><span class="k">def</span> <span class="nf">find_proper_resize_ratio</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="find_proper_resize_ratio">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.find_proper_resize_ratio">[docs]</a>
+<span class="k">def</span> <span class="nf">find_proper_resize_ratio</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the proper ratio to resize a thumbnail greater than 960 x 540 pixels.</span>
 
@@ -786,7 +819,10 @@
     <span class="k">return</span> <span class="mi">2</span></div>
 
 
-<div class="viewcode-block" id="hash_file_contents"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.hash_file_contents">[docs]</a><span class="k">def</span> <span class="nf">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="hash_file_contents">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.hash_file_contents">[docs]</a>
+<span class="k">def</span> <span class="nf">hash_file_contents</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the SHA256 hash of a file&#39;s content.</span>
 
@@ -816,7 +852,10 @@
     <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="convert_video_to_mp4"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.convert_video_to_mp4">[docs]</a><span class="k">def</span> <span class="nf">convert_video_to_mp4</span><span class="p">(</span>
+
+<div class="viewcode-block" id="convert_video_to_mp4">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.convert_video_to_mp4">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_video_to_mp4</span><span class="p">(</span>
     <span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -854,7 +893,10 @@
     <span class="k">return</span> <span class="n">output_path</span></div>
 
 
-<div class="viewcode-block" id="generate_file_storage_name"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.generate_file_storage_name">[docs]</a><span class="k">def</span> <span class="nf">generate_file_storage_name</span><span class="p">(</span><span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="generate_file_storage_name">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.generate_file_storage_name">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_file_storage_name</span><span class="p">(</span><span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a filename using the hash of the file contents and some provided suffix.</span>
 
@@ -874,7 +916,10 @@
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hash_str</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
-<div class="viewcode-block" id="download_video_from_session_id"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.download_video_from_session_id">[docs]</a><span class="k">def</span> <span class="nf">download_video_from_session_id</span><span class="p">(</span>
+
+<div class="viewcode-block" id="download_video_from_session_id">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.download_video_from_session_id">[docs]</a>
+<span class="k">def</span> <span class="nf">download_video_from_session_id</span><span class="p">(</span>
     <span class="n">credentials_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -914,7 +959,10 @@
     <span class="k">return</span> <span class="n">resource_copy</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="clip_and_reformat_video"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.clip_and_reformat_video">[docs]</a><span class="k">def</span> <span class="nf">clip_and_reformat_video</span><span class="p">(</span>
+
+<div class="viewcode-block" id="clip_and_reformat_video">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.clip_and_reformat_video">[docs]</a>
+<span class="k">def</span> <span class="nf">clip_and_reformat_video</span><span class="p">(</span>
     <span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -980,7 +1028,10 @@
     <span class="k">return</span> <span class="n">output_path</span></div>
 
 
-<div class="viewcode-block" id="parse_document"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_document">[docs]</a><span class="k">def</span> <span class="nf">parse_document</span><span class="p">(</span><span class="n">document_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="parse_document">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_document">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_document</span><span class="p">(</span><span class="n">document_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract text from a .doc, .docx, or .ppt matter file.</span>
 
@@ -1019,7 +1070,10 @@
     <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="parse_docx_file"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_docx_file">[docs]</a><span class="k">def</span> <span class="nf">parse_docx_file</span><span class="p">(</span><span class="n">zip_archive_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="parse_docx_file">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_docx_file">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_docx_file</span><span class="p">(</span><span class="n">zip_archive_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract text from a .docx matter file.</span>
 
@@ -1056,7 +1110,10 @@
     <span class="k">return</span> <span class="n">remove_duplicate_space</span><span class="p">(</span><span class="n">parsed_text</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_doc_file"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_doc_file">[docs]</a><span class="k">def</span> <span class="nf">parse_doc_file</span><span class="p">(</span><span class="n">document_raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="parse_doc_file">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_doc_file">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_doc_file</span><span class="p">(</span><span class="n">document_raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract text from a .doc matter file.</span>
 
@@ -1070,11 +1127,16 @@
 <span class="sd">    str:</span>
 <span class="sd">        A str of all text in the .doc file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">tika</span> <span class="kn">import</span> <span class="n">parser</span>
+
     <span class="n">parsed_content</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">document_raw</span><span class="p">)[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">remove_duplicate_space</span><span class="p">(</span><span class="n">parsed_content</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_pdf_file"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_pdf_file">[docs]</a><span class="k">def</span> <span class="nf">parse_pdf_file</span><span class="p">(</span><span class="n">document_raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="parse_pdf_file">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_pdf_file">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_pdf_file</span><span class="p">(</span><span class="n">document_raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract text from a .pdf matter file.</span>
 
@@ -1088,6 +1150,8 @@
 <span class="sd">    str:</span>
 <span class="sd">        A str of all text in the .pdf file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pypdf</span>
+
     <span class="n">pdf_reader</span> <span class="o">=</span> <span class="n">pypdf</span><span class="o">.</span><span class="n">PdfReader</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">document_raw</span><span class="p">))</span>
     <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -1100,7 +1164,10 @@
     <span class="k">return</span> <span class="n">remove_duplicate_space</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_pptx_file"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_pptx_file">[docs]</a><span class="k">def</span> <span class="nf">parse_pptx_file</span><span class="p">(</span><span class="n">document_raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="parse_pptx_file">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.parse_pptx_file">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_pptx_file</span><span class="p">(</span><span class="n">document_raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract text from a .pdf matter file.</span>
 
@@ -1114,11 +1181,16 @@
 <span class="sd">    str:</span>
 <span class="sd">        A str of all text in the .pdf file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">tika</span> <span class="kn">import</span> <span class="n">parser</span>
+
     <span class="n">parsed_pptx</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">document_raw</span><span class="p">)[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">remove_duplicate_space</span><span class="p">(</span><span class="n">parsed_pptx</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="remove_duplicate_space"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.remove_duplicate_space">[docs]</a><span class="k">def</span> <span class="nf">remove_duplicate_space</span><span class="p">(</span><span class="n">parsed_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="remove_duplicate_space">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.remove_duplicate_space">[docs]</a>
+<span class="k">def</span> <span class="nf">remove_duplicate_space</span><span class="p">(</span><span class="n">parsed_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove all duplicate whitespace characters and replace with a single space.</span>
 
@@ -1135,7 +1207,10 @@
     <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">parsed_text</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="should_copy_video"><a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.should_copy_video">[docs]</a><span class="k">def</span> <span class="nf">should_copy_video</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="should_copy_video">
+<a class="viewcode-back" href="../../../cdp_backend.utils.html#cdp_backend.utils.file_utils.should_copy_video">[docs]</a>
+<span class="k">def</span> <span class="nf">should_copy_video</span><span class="p">(</span><span class="n">video_filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp4&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if the video should be copied using ffmpeg StreamCopy codec or if it should</span>
 <span class="sd">    be re-encoded as h264.</span>
@@ -1182,6 +1257,7 @@
             <span class="k">break</span>
 
     <span class="k">return</span> <span class="n">should_copy_video</span></div>
+
 </pre></div>
         </article>
       </div>
@@ -1214,11 +1290,11 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/scripts/furo.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
+</div><script src="../../../_static/documentation_options.js?v=2af203cd"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=30646c52"></script>
     </body>
 </html>
