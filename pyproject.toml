@@ -57,6 +57,7 @@ Documentation = "https://CouncilDataProject.github.io/cdp-backend"
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
 pipeline = [
+  "curated-transformers>=0.1.1",
   "dask[distributed]>=2021.7.0",
   "faster-whisper==0.3.0",
   "ffmpeg-python>=0.2.0",
@@ -75,7 +76,7 @@ pipeline = [
   "spacy>=3.4",
   "spacy-transformers>=1.1",
   "tika==2.6.0",
-  "torch>=1.10",
+  "torch>=1.10,<2",
   "tqdm>=4.62",
   "transformers>=4.16",
   "vimeo_downloader>=0.4",
