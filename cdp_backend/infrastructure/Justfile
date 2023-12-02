@@ -73,7 +73,7 @@ enable-services:
 setup project region=default_region:
 	just enable-services
 	gcloud app create --region={{replace(region, "us-central1", "us-central")}}
-	gcloud firestore databases create --location={{replace(region, "us-central1", "nam5")}}
+	gcloud alpha firestore databases update --type=firestore-native
 	firebase projects:addfirebase {{project}}
 	firebase use --add {{project}}
 	@ echo "----------------------------------------------------------------------------"
@@ -81,6 +81,10 @@ setup project region=default_region:
 	@ echo "https://console.firebase.google.com/u/1/project/{{project}}/storage"
 	@ echo "Default settings ('start in Production mode' and region) are fine."
 	@ echo "----------------------------------------------------------------------------"
+	@ echo "----------------------------------------------------------------------------"
+	@ echo "Sleeping for thirty seconds while resources set up"
+	@ echo "----------------------------------------------------------------------------"
+	sleep 30
 
 # deploy the CDP specific firestore and storage requirements
 deploy project cookiecutter_yaml=default_cookiecutter_yaml:
