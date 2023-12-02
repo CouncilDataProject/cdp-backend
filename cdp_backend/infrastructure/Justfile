@@ -87,6 +87,7 @@ deploy project cookiecutter_yaml=default_cookiecutter_yaml:
 	just enable-services
 	firebase use --add {{project}}
 	firebase deploy --only firestore:rules
+	gcloud alpha firestore databases update --type=firestore-native
 	firebase deploy --only firestore:indexes
 	firebase deploy --only storage
 	store_cdp_metadata_document {{cookiecutter_yaml}}
