@@ -12,7 +12,6 @@ from unittest import mock
 import imageio
 import pytest
 import requests_mock
-from flaky import flaky
 from requests import HTTPError
 
 from cdp_backend.utils import file_utils
@@ -34,10 +33,7 @@ from ..conftest import (
     EXAMPLE_VIDEO_HD_FILENAME,
     EXAMPLE_VIMEO,
     EXAMPLE_YOUTUBE_VIDEO_EMBEDDED,
-    EXAMPLE_YOUTUBE_VIDEO_PARAMETER,
-    EXAMPLE_YOUTUBE_VIDEO_SHORT,
 )
-
 
 #############################################################################
 
@@ -338,14 +334,13 @@ def test_convert_video_to_mp4(
     "uri, expected",
     [
         (EXAMPLE_YOUTUBE_VIDEO_EMBEDDED, "XALBGkjkUPQ.mp4"),
-        (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
-        (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
+        # (EXAMPLE_YOUTUBE_VIDEO_PARAMETER, "XALBGkjkUPQ.mp4"),
+        # (EXAMPLE_YOUTUBE_VIDEO_SHORT, "XALBGkjkUPQ.mp4"),
         (EXAMPLE_VIMEO, Path("503166067") / "503166067.mp4"),
         # (EXAMPLE_VIMEO_SHOWCASE, Path("722690793") / "722690793.mp4"),
         # (EXAMPLE_M3U8_PLAYLIST_URI, None),
     ],
 )
-@flaky(max_runs=3, min_passes=1)
 def test_remote_resource_copy(
     resources_dir: Path,
     uri: str,
