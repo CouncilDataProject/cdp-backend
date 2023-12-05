@@ -12,6 +12,7 @@ from unittest import mock
 import imageio
 import pytest
 import requests_mock
+from flaky import flaky
 from requests import HTTPError
 
 from cdp_backend.utils import file_utils
@@ -344,6 +345,7 @@ def test_convert_video_to_mp4(
         # (EXAMPLE_M3U8_PLAYLIST_URI, None),
     ],
 )
+@flaky(max_runs=3, min_passes=1)
 def test_remote_resource_copy(
     resources_dir: Path,
     uri: str,
@@ -359,7 +361,7 @@ def test_remote_resource_copy(
 
     os.remove(actual_uri)
 
-    time.sleep(5)
+    time.sleep(10)
 
 
 def test_invalid_uri() -> None:
