@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import spacy
+import spacy_transformers  # noqa: F401
 from faster_whisper import WhisperModel as FasterWhisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
