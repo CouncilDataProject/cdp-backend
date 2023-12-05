@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import spacy
-import spacy_transformers  # noqa: F401
 from faster_whisper import WhisperModel as FasterWhisper
 from pydub import AudioSegment
 from spacy.cli.download import download as download_spacy_model
@@ -30,6 +29,7 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
+DEFAULT_SPACY_MODEL = "en_core_web_lg"
 spacy.prefer_gpu()
 
 ###############################################################################
@@ -48,7 +48,7 @@ class WhisperModel(SRModel):
     @staticmethod
     def _load_spacy_model() -> "Language":
         nlp = spacy.load(
-            "en_core_web_trf",
+            DEFAULT_SPACY_MODEL,
             # Only keep the parser
             # We are only using this for sentence parsing
             disable=[
@@ -127,7 +127,7 @@ class WhisperModel(SRModel):
         try:
             self.nlp = self._load_spacy_model()
         except Exception:
-            download_spacy_model("en_core_web_trf")
+            download_spacy_model(DEFAULT_SPACY_MODEL)
             self.nlp = self._load_spacy_model()
 
     def transcribe(
