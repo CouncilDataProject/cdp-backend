@@ -96,7 +96,7 @@ def time_duration_is_valid(time_duration: str | None) -> bool:
         return True
 
     # HH:MM:SS
-    if re.match(r"^((((\d{1,2}:)?[0-5])?\d:)?[0-5])?\d$", time_duration):
+    if re.match(r"^\d{1,2}:\d{2}:\d{2}$", time_duration):
         return True
 
     return False
